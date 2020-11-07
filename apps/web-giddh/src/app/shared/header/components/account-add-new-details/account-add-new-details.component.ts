@@ -3,7 +3,6 @@ import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {
     AfterViewInit,
-    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -33,7 +32,6 @@ import {CommonActions} from '../../../../actions/common.actions';
 import {GeneralActions} from "../../../../actions/general/general.actions";
 import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
-import * as googleLibphonenumber from 'google-libphonenumber';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
@@ -107,7 +105,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
-        private changeDetectorRef: ChangeDetectorRef,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
@@ -375,7 +372,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 })
             ]),
-            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: ['', Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });
@@ -675,7 +672,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (event) {
             this.activeGroupUniqueName = event.value;
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
-
             // let parent = event.additional;
             // if (parent[1]) {
             //     this.isParentDebtorCreditor(parent[1].uniqueName);
@@ -886,7 +882,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             i++;
         }
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
-        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -969,7 +964,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return false;
     }
 
-     /**
+    /**
      * API call to get custom field data
      *
      * @memberof AccountAddNewDetailsComponent
@@ -1010,7 +1005,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
-
 
     /**
      * To initialize custom field form

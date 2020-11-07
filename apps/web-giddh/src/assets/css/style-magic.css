@@ -5254,7 +5254,7 @@ form#groupDetailForm {
 /* responsive */
 
 @media (min-width: 768px) {
-    .form-inline.financial-selectYear .form-group {
+    .form-inline.financial-select-year .form-group {
         min-width: 195px;
     }
 }

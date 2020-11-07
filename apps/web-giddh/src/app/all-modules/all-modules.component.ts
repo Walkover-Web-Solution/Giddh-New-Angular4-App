@@ -83,8 +83,8 @@ export class AllModulesComponent implements OnInit, OnDestroy {
             this.activeCompanyForDb.name = selectedCmp.name;
             this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
         });
-
-        this.getSharedAllModules();
+        // commenting for later use
+        // this.getSharedAllModules();
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "All Modules";
         currentPageObj.url = "";

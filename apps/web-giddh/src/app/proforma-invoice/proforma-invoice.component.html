@@ -207,7 +207,7 @@
 
                                         <ng-container *ngIf="isCashInvoice">
                                             <img src="assets/images/new/search_customer_Cash Invoice.svg"
-                                                class="img-responsive  cash-invoice-tip-Img search-arrow-image "
+                                                class="img-responsive  cash-invoice-tip-img search-arrow-image "
                                                 *ngIf="!invFormData.voucherDetails.customerName" />
                                         </ng-container>
                                         <!-- endregion -->
@@ -434,7 +434,7 @@
                             <!-- endregion-->
 
                             <!-- region email -->
-                            <div class="row mTB1">
+                            <div class="row mt-1">
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Email Id</label>
                                 </div>
@@ -450,7 +450,7 @@
                             <!-- endregion-->
 
                             <!-- region mobile no -->
-                            <div class="row mTB1">
+                            <div class="row mt-1">
 
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Mobile Number</label>
@@ -466,7 +466,7 @@
                             </div>
                             <!-- endregion-->
                             <!-- warehouse selection -->
-                            <div class="row mTB1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
+                            <div class="row mt-1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Warehouse</label>
                                 </div>
@@ -591,7 +591,7 @@
                                     </section>
                                 </div>
                             </div>
-                            <div class="row mTB1" *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))">
+                            <div class="row mt-1" *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))">
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Link Purchase Order</label>
                                 </div>
@@ -621,7 +621,7 @@
                             <!-- end Link purchase order -->
 
                             <!-- region invoice no, invoice date, Expiry date -->
-                            <div class="row mTB1">
+                            <div class="row mt-1">
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label> {{ invoiceNoLabel }} </label>
                                 </div>
@@ -715,7 +715,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mTB1" *ngIf="isMobileScreen">
+                            <div class="row mt-1" *ngIf="isMobileScreen">
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>{{ invoiceDateLabel }}</label>
                                 </div>
@@ -737,7 +737,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mTB1"
+                            <div class="row mt-1"
                                 *ngIf="isMobileScreen && (isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice)">
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>{{ invoiceDueDateLabel }}</label>
@@ -758,7 +758,7 @@
 
                             <!-- reverse charge transction start -->
                             <!-- for purchase record start -->
-                            <div class="row mTB1" *ngIf="isPurchaseInvoice">
+                            <div class="row mt-1" *ngIf="isPurchaseInvoice">
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12" *ngIf="!isMobileView">
                                     <label></label>
                                 </div>
@@ -783,7 +783,7 @@
                             <!-- For Tourist Scheme start -->
                             <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                             <ng-container *ngIf="companyCountryCode === 'AE'">
-                                <div class="row mTB1" *ngIf="isSalesInvoice || isCashInvoice">
+                                <div class="row mt-1" *ngIf="isSalesInvoice || isCashInvoice">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12" *ngIf="!isMobileView">
                                         <label></label>
                                     </div>
@@ -801,7 +801,7 @@
                                 </div>
 
                                 <!-- endregion -->
-                                <div class="row mTB1 "
+                                <div class="row mt-1 "
                                     *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable ">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                         <label>Passport Number</label>
