@@ -98,7 +98,7 @@
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
                                     <a popover="{{ option?.address }}" placement="right" popover
-                                        popoverTitle="{{option?.label}}"
+                                        popoverTitle="{{option?.label}}" container="sh-select-menu"
                                         triggers="mouseenter:mouseleave" (click)="selectAddress(option)"
                                         href="javascript:void(0)" class="list-item d-flex">
                                         <span><input type="checkbox"
@@ -135,7 +135,7 @@
             </div>
             <div class="footer-btn row">
                 <div class="button-group">
-                    <button type="reset" class="btn btn-primary mr-15">Clear</button>
+                    <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-15">Clear</button>
                     <button type="submit" [disabled]="warehouseForm?.invalid" class="btn btn-success">Create
                         Warehouse</button>
                 </div>
