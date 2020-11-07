@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -26,7 +26,7 @@ import { OrganizationProfile, SettingsAsideFormType } from '../constants/setting
         ]),
     ]
 })
-export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
+export class AddressSettingsComponent implements OnInit, OnDestroy {
     /** Stores the confirmation modal instance */
     @ViewChild('deleteAddressConfirmationModal', {static: true}) public deleteAddressConfirmationModal: ModalDirective;
 
@@ -156,10 +156,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchAddress.emit(this.addressSearchRequest);
             }
         });
-    }
-
-    ngOnChanges(simpleChanges: SimpleChanges): void {
-        console.log('Change happened: ', this.closeSidePane);
     }
 
     /**
