@@ -19,7 +19,6 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { createSelector } from 'reselect';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
@@ -1291,10 +1290,10 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public clearSelectedContacts(resetPage:boolean = true): void {
-        this.searchStr = '';
-        this.selectedCheckedContacts = [];
-        this.selectedAccountsList = [];
-        this.allSelectionModel = false;
+        //this.searchStr = '';
+        //this.selectedCheckedContacts = [];
+        //this.selectedAccountsList = [];
+        //this.allSelectionModel = false;
 
         if(resetPage) {
             this.checkboxInfo = {
