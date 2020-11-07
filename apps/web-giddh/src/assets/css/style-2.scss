@@ -9661,6 +9661,10 @@ span#HW_badge_cont:nth-child(3) {
 .sub-branch-option .bs-tooltip-top{
     left: -25px !important;
 }
+.switch-branch-wrapper .branch-icon-tooltip .bs-tooltip-top{
+    left: 8px !important;
+    right: 8px !important;
+}
 .sub-branch-option .bs-tooltip-top .arrow::before{
     right: -22px;
 }
@@ -10606,6 +10610,12 @@ input.mat-input-element{
 }
 
 @media (max-width: 575px) {
+    .linked-add .popover{
+        width: 180px;
+        transform: none !important;
+        right: 0;
+        left: auto !important;
+    }
     .daterangepicker.ltr .ranges {
         float: left;
         ul{

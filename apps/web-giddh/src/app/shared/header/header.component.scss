@@ -818,6 +818,7 @@ ul.sub-list {
             overflow-y: auto;
             padding-top: 0;
             border-top: none;
+            overflow-x: hidden;
             li{
                 a{
                     padding: 6px 10px;
@@ -829,6 +830,7 @@ ul.sub-list {
                     &.dropdown-item.active-branch {
                         color: $chetwode-blue;
                         font-weight: bold;
+
                     }
                 }
             }
