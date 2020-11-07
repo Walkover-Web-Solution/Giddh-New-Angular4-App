@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -222,6 +222,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /** This will hold if it's default load */
     public isDefaultLoad: boolean = true;
+    /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
+    public isMoreDetailsOpened: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -767,6 +769,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
+                this.isMoreDetailsOpened = false;
                 this.getTransactionData();
                 // this.getCurrencyRate();
                 this.resetBlankTransaction();
@@ -1171,6 +1174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
+        this.isMoreDetailsOpened = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
@@ -1237,6 +1241,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        this.isMoreDetailsOpened = false;
         this.lc.showNewLedgerPanel = false;
     }
 
@@ -1267,12 +1272,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.selectedTxnUniqueName = txn.entryUniqueName;
         this.loadUpdateLedgerComponent();
         this.updateLedgerModal.show();
+        document.querySelector('body').classList.add('update-ledger-overlay');
     }
-
     public hideUpdateLedgerModal() {
         this.showUpdateLedgerForm = false;
         this.updateLedgerModal.hide();
         this._loaderService.show();
+        document.querySelector('body').classList.remove('update-ledger-overlay');
     }
 
     /**
@@ -1471,6 +1477,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.hideUpdateLedgerModal();
         });
 
+        componentInstance.moreDetailOpen.subscribe((isOpened: boolean) => {
+            this.isMoreDetailsOpened = isOpened;
+            this._cdRf.detectChanges();
+        });
+
         this.updateLedgerModal.onHidden.pipe(take(1)).subscribe(() => {
             if (this.showUpdateLedgerForm) {
                 this.hideUpdateLedgerModal();
@@ -1480,6 +1491,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.activeAccountParentGroupsUniqueName = res.parentGroups[1].uniqueName;
                 });
             }
+            this.isMoreDetailsOpened = false;
             this.entryManipulated();
             this.updateLedgerComponentInstance = null;
             componentRef.destroy();
@@ -2178,6 +2190,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
             this.selectedDate(value);
         }
+    }
+
+    /**
+     * Handler for more detail open in CREATE ledger
+     *
+     * @param {boolean} isOpened True, if more detail is opened while creating new ledger entry
+     * @memberof LedgerComponent
+     */
+    public handleOpenMoreDetail(isOpened: boolean): void {
+        this.isMoreDetailsOpened = isOpened;
     }
 
     /**
