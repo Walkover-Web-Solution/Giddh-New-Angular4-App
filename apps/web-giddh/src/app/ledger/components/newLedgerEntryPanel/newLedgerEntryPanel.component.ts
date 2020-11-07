@@ -133,6 +133,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     /** Emit event for getting invoice list for credit note linking */
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
@@ -1310,6 +1312,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
         this.adjustPaymentModal.hide();
+    }
+
+    /**
+     * Toggles the more detail section
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public toggleMoreDetail(): void {
+        this.showAdvanced = !this.showAdvanced;
+        this.moreDetailOpen.emit(this.showAdvanced);
     }
 
     /**

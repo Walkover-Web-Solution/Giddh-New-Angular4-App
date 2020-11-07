@@ -81,6 +81,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
     @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
 
     @Input() isPettyCash: boolean = false;
     @Input() pettyCashEntry: any;
@@ -2121,6 +2123,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         this.adjustPaymentModal.hide();
+    }
+
+    /**
+     * Toggles the more detail section
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public toggleMoreDetail(): void {
+        this.showAdvanced = !this.showAdvanced;
+        this.moreDetailOpen.emit(this.showAdvanced);
     }
 
     /**
