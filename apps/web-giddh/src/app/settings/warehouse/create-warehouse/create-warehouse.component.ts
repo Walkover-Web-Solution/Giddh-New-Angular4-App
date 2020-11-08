@@ -199,7 +199,7 @@ export class CreateWarehouseComponent implements OnInit {
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
             this.warehouseForm.get('address').patchValue([
-                ...this.warehouseForm.get('address').value,
+                ...(this.warehouseForm.get('address').value || []),
                 option.value
             ]);
         }
@@ -233,6 +233,19 @@ export class CreateWarehouseComponent implements OnInit {
                 } else {
                     this.toastService.errorToast(response.message);
                 }
+            }
+        });
+    }
+
+    /**
+     * Clears the address default value on form clear
+     *
+     * @memberof CreateWarehouseComponent
+     */
+    public handleFormClear(): void {
+        this.addresses.forEach(address => {
+            if (address) {
+                address.isDefault = false;
             }
         });
     }

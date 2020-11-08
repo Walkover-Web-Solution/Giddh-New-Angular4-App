@@ -211,7 +211,7 @@ export class CreateBranchComponent implements OnInit {
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
             this.branchForm.get('address').patchValue([
-                ...this.branchForm.get('address').value,
+                ...(this.branchForm.get('address').value || []),
                 option.value
             ]);
         }
@@ -240,6 +240,19 @@ export class CreateBranchComponent implements OnInit {
                 } else {
                     this.toastService.errorToast(response.message);
                 }
+            }
+        });
+    }
+
+    /**
+     * Clears the address default value on form clear
+     *
+     * @memberof CreateBranchComponent
+     */
+    public handleFormClear(): void {
+        this.addresses.forEach(address => {
+            if (address) {
+                address.isDefault = false;
             }
         });
     }

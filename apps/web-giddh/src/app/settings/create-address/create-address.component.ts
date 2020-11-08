@@ -91,7 +91,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                         state: [this.addressToUpdate.stateCode, Validators.required],
-                        address: [this.addressToUpdate.address],
+                        address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber ? [Validators.required] : []],
                         linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity.uniqueName)]
                     });
                     const linkedEntity = [...this.addressToUpdate.linkedEntities];
@@ -180,15 +180,26 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
+        if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
+            const taxField = this.addressForm.get('taxNumber');
+            if (taxField.value && taxField.valid) {
+                // Tax is valid and has value then address is mandatory
+                const addresssValue = (this.addressForm.get('address').value || '').trim();
+                this.addressForm.get('address').setValue(addresssValue);
+                if (!addresssValue) {
+                    return;
+                }
+            }
+        }
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             this.saveAddress.emit({
-                formValue: this.addressForm.value,
+                formValue: this.addressForm.getRawValue(),
                 addressDetails: this.addressConfiguration
             });
         } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.EditBranch ||
             this.addressConfiguration.type === SettingsAsideFormType.EditWarehouse) {
             this.updateAddress.emit({
-                formValue: this.addressForm.value,
+                formValue: this.addressForm.getRawValue(),
                 addressDetails: this.addressConfiguration
             });
         }

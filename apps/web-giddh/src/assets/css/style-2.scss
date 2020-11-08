@@ -9646,6 +9646,10 @@ span#HW_badge_cont:nth-child(3) {
 .sub-branch-option .bs-tooltip-top{
     left: -25px !important;
 }
+.switch-branch-wrapper .branch-icon-tooltip .bs-tooltip-top{
+    left: 8px !important;
+    right: 8px !important;
+}
 .sub-branch-option .bs-tooltip-top .arrow::before{
     right: -22px;
 }
@@ -9658,8 +9662,10 @@ span#HW_badge_cont:nth-child(3) {
         width:268px;
         font-family: inherit;
         border-radius: 4px;
+        position: absolute !important;
+        left: 280px !important;
         box-shadow: 0 3px 6px $black-russian;
-        top: 20% !important;
+        top: 10% !important;
         .popover-arrow{
             display:none;
         }
@@ -9797,7 +9803,6 @@ input.mat-input-element{
     .delete-modal-overlay {
         z-index: 9992; /*for delete custom zIndex modal*/
     }
-
     /* responsive */
 
     @media (max-width: 1440px) {
@@ -10619,6 +10624,12 @@ input.mat-input-element{
     }
 
     @media (max-width: 575px) {
+        .linked-add .popover{
+            width: 180px;
+            transform: none !important;
+            right: 0;
+            left: auto !important;
+        }
         .daterangepicker.ltr .ranges {
             float: left;
 
