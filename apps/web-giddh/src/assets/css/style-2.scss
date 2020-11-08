@@ -9676,10 +9676,13 @@ span#HW_badge_cont:nth-child(3) {
         width:268px;
         font-family: inherit;
         border-radius: 4px;
-        position: absolute !important;
-        left: 280px !important;
         box-shadow: 0 3px 6px $black-russian;
-        top: 10% !important;
+        top: 20% !important;
+        &.outside-popover {
+            position: absolute !important;
+            left: 280px !important;
+            top: 10% !important;
+        }
         .popover-arrow{
             display:none;
         }

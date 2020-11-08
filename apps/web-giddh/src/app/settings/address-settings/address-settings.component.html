@@ -154,6 +154,9 @@
                     </div>
                 </div>
             </div>
+            <div class="no-data" *ngIf="addresses.length === 0">
+                <h1>No addresses found within given criteria.</h1>
+            </div>
         </div>
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center">
