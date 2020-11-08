@@ -14,7 +14,7 @@
                         <div class="form-group">
                             <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)"
                                 formControlName="selectedDateOption" [isFilterEnabled]="true"
-                                [placeholder]="'Select Option'" [showClear]="false" [ItemHeight]="33" width="120px">
+                                [placeholder]="'Select Option'" [showClear]="false" [ItemHeight]="33" width="100%">
                             </sh-select>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
             <div class="col-xl-3 col-lg-12 col-md-12 download-data-icon">
 
                 <a (click)="refreshData()" tooltip="Reload data">
-                    <span class="icon-refrsh"></span>
+                    <span class="icon-refresh"></span>
                 </a>
 
                 <div class="ml-1">

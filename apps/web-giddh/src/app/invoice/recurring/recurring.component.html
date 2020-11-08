@@ -49,10 +49,7 @@
                         <div class="form-group">
                             <label class="d-block">Last Invoice Date</label>
                             <div>
-                                <input class="w-100" name="lastInvoiceDate" placeholder="Select Date"
-                                    [(ngModel)]="filter.lastInvoiceDate" type="text"
-                                    [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off" class="form-control"
-                                    bsDatepicker required>
+                                <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate" [placeholder]="'Select Date'"></giddh-datepicker>
                             </div>
                         </div>
                         <div class="form-group search-invoice-filed">
@@ -79,7 +76,7 @@
                         <div class="form-group">
                             <button class="btn btn-success btn-sm">Search</button>
                             <a class="cp" href="javascript: void 0">
-                                <i aria-hidden="true" class="icon-refrsh"
+                                <i aria-hidden="true" class="icon-refresh"
                                     tooltip="Reset Filter" *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
                             </a>
                         </div>
@@ -122,9 +119,7 @@
                 <div class="form-group mrR1">
                     <label class="d-block mr-15">Last Invoice Date</label>
                     <div class="input-group">
-                        <input name="lastInvoiceDate" placeholder="Select Date" [(ngModel)]="filter.lastInvoiceDate" type="text"
-                            [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off" class="form-control" bsDatepicker
-                            required>
+                        <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate" [placeholder]="'Select Date'"></giddh-datepicker>
                     </div>
                 </div>
 
@@ -153,7 +148,7 @@
                     <label class="d-block">&nbsp;</label>
                     <button class="btn btn-success btn-sm">Search</button>
                     <a class="cp" href="javascript: void 0">
-                        <i aria-hidden="true" class="icon-refrsh" tooltip="Reset Filter" *ngIf="showResetFilterButton"
+                        <i aria-hidden="true" class="icon-refresh" tooltip="Reset Filter" *ngIf="showResetFilterButton"
                             (click)="resetFilter()"></i>
                     </a>
                 </div>

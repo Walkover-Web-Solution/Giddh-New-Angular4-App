@@ -121,13 +121,13 @@
             </table>
         </div>
         <div class="paginationWrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
-            <pagination [totalItems]="reverseChargeReportResults.totalPages"
+            <pagination [totalItems]="reverseChargeReportResults.totalItems"
                 [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true"
                 [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
-    <div class=" mt-5 invoice-footer">
-        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
+    <div class="mt-5 invoice-footer">
+        <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
             <div class="col-sm-6 total-due-sale">
                 <h3>Total Taxable Value: </h3>
                 <h1>{{activeCompany?.baseCurrencySymbol}}

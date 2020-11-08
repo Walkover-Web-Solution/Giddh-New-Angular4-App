@@ -20,6 +20,9 @@ input {
     display: flex;
     align-items: center;
 }
+ table.ledger-footer-1 td[class*="col-"]{
+    justify-content: flex-end;
+}
 .ledg-head table td.pdR25imp {
     padding-right: 25px !important;
 }
@@ -43,14 +46,46 @@ input {
 .ledg-head.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
-.ledg-head .ledger-main td[class*="col-"] {
-    padding: 0px !important;
+.transaction-mapped-table{
+    .top-head-table{
+        border-top: none;
+    }
+    thead{
+        th{
+            border-bottom: none;
+        }
+    }
+    .transaction-mapped-head{
+        border-top:none !important
+    }
+    .ledger-main {
+        .ledger-row.row{
+            td, th{
+                border-bottom: 1px solid $gainsboro !important;
+                border-top: none !important;
+            }
+            td[class*="col-"]{
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
+    }
+    .row{
+        margin-left: 0;
+        margin-right: 0 ;
+    }
+    .ledger-head{
+        th{
+            padding-left: 15px;
+        }
+    }
+    tr{
+        td.upper-td {
+            padding: 0 !important;
+            border: none !important;
+        }
+    }
 }
-// table th[class*=col-]:last-child,
-// .ledger-main tr td:last-child,
-// table td[class*=col-]:last-child {
-//     border-right: 0 !important;
-// }
 .total-col td {
     border: 0 !important;
 }
@@ -254,7 +289,7 @@ input {
 .dateStep {
     padding: 0 !important;
     font-size: 13px;
-    height: 41px;
+    height: 48px;
     line-height: 1;
 }
 input[type="date"]::-webkit-inner-spin-button,
@@ -485,17 +520,17 @@ sh-select:focus {
     text-decoration-style: none;
     background-image: url(../../assets/images/calender-icon.svg) !important;
     background-size: 17px !important;
-    background-position: 15px 8px !important;
+    background-position: 15px 9px !important;
     background-repeat: no-repeat !important;
     padding-left: 35px !important;
     position: relative;
     z-index: 99;
     cursor: default;
-    top: 1px;
+    top: 0;
     font-size: 14px;
     padding-right: 10px !important;
     height: 36px;
-    min-width: 220px !important;
+    min-width: 225px !important;
     border-radius: 30px;
     &:focus {
         border-color: $chetwode-blue;
@@ -569,7 +604,11 @@ sh-select:focus {
             border: none;
             padding-top: 10px;
             &:first-child {
-                padding-right: 12px;
+                padding-right: 15px;
+                border-left: 1px solid $gainsboro;
+            }
+            &:last-child{
+                border-right: 1px solid $gainsboro;
             }
         }
     }
@@ -602,6 +641,21 @@ sh-select:focus {
         border-bottom: none;
     }
 }
+.ledger-book.fade:not(.show){
+    opacity: 1 !important;
+}
+.multicurrency-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end !important;
+    justify-content: flex-end;
+    text-align: right;
+    white-space: normal;
+}
+.ledg-head table .ledger-main .ledger-row:last-child td[class*="col-"]{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;
@@ -617,6 +671,9 @@ sh-select:focus {
     background-color: $alice-blue-light;
     padding-left: 5px;
 }
+.show-if-ledger-open{
+    height: 230px;
+}
 @media only screen and (max-width: 1540px) {
     .modal-ledger {
         width: 85%;
@@ -628,6 +685,9 @@ sh-select:focus {
         width: 100%;
         margin: 0 auto;
         padding: 15px;
+    }
+    .show-if-update-ledger-open{
+        height: 230px;
     }
 }
 
@@ -816,7 +876,6 @@ sh-select:focus {
     }
     .search-ledger-field {
         margin-right: 0 !important;
-        justify-content: space-between;
         .ledger-datepicker {
             width: 36px;
             height: 36px;
@@ -826,7 +885,7 @@ sh-select:focus {
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            display: none;
+            //display: none;
         }
     }
     .ledger-ellipse {
@@ -917,8 +976,8 @@ sh-select:focus {
         }
     }
     .ledger-ellipse {
-        top: 0;
-        right: 0px;
+        top: 50px;
+        right: 10px;
         position: fixed;
         .btn {
             background-color: transparent;
@@ -982,6 +1041,15 @@ sh-select:focus {
     .ledg-head {
         .single-search-box {
             margin-right: 5px;
+        }
+    }
+}
+
+
+@media (min-width:768px) and (max-width: 991px){
+    .ledger-datepicker{
+        img{
+            padding-top: 5px;
         }
     }
 }

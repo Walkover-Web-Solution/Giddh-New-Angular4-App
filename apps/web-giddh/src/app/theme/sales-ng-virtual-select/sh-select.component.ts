@@ -41,7 +41,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
     @Input() public ItemHeight: number = 41;
-    @Input() public NoFoundMsgHeight: number = 30;
+    @Input() public NoFoundMsgHeight: number = 34;
     @Input() public NoFoundLinkHeight: number = 30;
     @Input() public dropdownMinHeight: number = 35;
     @Input() public customFilter: (term: string, options: IOption) => boolean;
@@ -63,6 +63,8 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any[]> = new EventEmitter<any[]>();
+    /** Emits rest of the values when single selection is cleared */
+    @Output() public clearSingleItem: EventEmitter<any> = new EventEmitter<any>();
     @Output() public selected = new EventEmitter<any>();
     @Output() public noOptionsFound = new EventEmitter<boolean>();
     @Output() public noResultsClicked = new EventEmitter<null>();
@@ -437,6 +439,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
         this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+        this.clearSingleItem.emit(this.selectedValues);
         this.onChange();
     }
 
@@ -527,9 +530,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
             this.stopDynamicSearch$ = new ReplaySubject(1);
             this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
-                if (query) {
-                    this.dynamicSearchedQuery.emit(query);
-                }
+                this.dynamicSearchedQuery.emit(query);
             });
         }
     }

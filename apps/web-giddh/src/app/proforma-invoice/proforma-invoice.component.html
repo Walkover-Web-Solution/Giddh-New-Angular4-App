@@ -119,7 +119,7 @@
                                                         [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('customer')"
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
                                                         [notFoundMsg]="noResultsFoundLabel"
-                                                        [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
+                                                        [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults(true, 'customer')"
                                                         (selected)="onSelectCustomer($event);"
                                                         [placeholder]="customerPlaceHolder" [notFoundLink]="true"
                                                         [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
@@ -537,7 +537,7 @@
                                                 <!-- region shipping address -->
                                                 <div class="col-sm-12 col-xl-6 col-md-10  bill-add">
 
-                                                    <div class="form-group p0 width100">
+                                                    <div class="form-group p-0 width100">
                                                         <label>
                                                             <input type="checkbox" autocomplete="None"
                                                                 name="autoFillCompanyShipping"
@@ -639,14 +639,14 @@
 
                                             <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
-                                                    [forceClearReactive]="invoiceForceClearReactive$ | async"
-                                                    [notFoundLink]="false" [(ngModel)]="selectedInvoice"
-                                                    [ngModelOptions]="{standalone: true}"
+                                                    [forceClearReactive]="invoiceForceClearReactive$ | async" class="linking-dropdown"
+                                                    [notFoundLink]="false" [(ngModel)]="selectedInvoice" name="invoiceLinking"
                                                     (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
                                                     [ItemHeight]="67" [showClear]="false">
-                                                    <ng-template *ngIf="invoiceList?.length" #optionTemplate
+                                                    <ng-template #optionTemplate
                                                         let-option="option">
-                                                        <a href="javascript:void(0)" class="list-item sh-template">
+                                                        <a *ngIf="option" href="javascript:void(0)" class="linking-item list-item
+                                                         sh-template">
                                                             <div class="item">{{ option.label }}
                                                             </div>
                                                             <div class="item-unique">
@@ -1067,7 +1067,7 @@
 
                                 <!-- region dynamic entries-->
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                                <tr [hidden]="activeIndx !== entryIdx" class="entriesTr defaultActive"
+                                <tr *ngIf="activeIndx === entryIdx" class="entriesTr defaultActive"
                                     (click)="$event.stopPropagation();">
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">{{ entryIdx + 1 }}</td>
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">
@@ -1142,7 +1142,7 @@
                                                                     [disabled]="isUpdateMode"
                                                                     (onShown)="hsnDropdownShow = false;"
                                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                                    #dp="bsDatepicker" />
+                                                                    #dp="bsDatepicker" placement="right" />
                                                                 <span class="edit-icon cp" (click)="dp.toggle()"
                                                                     [attr.aria-expanded]="dp.isOpen">
                                                                     <img src="assets/images/edit-pencilicon.svg">
@@ -1173,7 +1173,7 @@
                                                                 </span>
                                                             </div>
 
-                                                            <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                                            <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
                                                                 <label>HSN/SAC</label>
                                                                 <input type="text" maxLength="10"
                                                                     placeholder="HSN/SAC Number"
@@ -1286,7 +1286,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeTaxControlPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
+                                    <td (click)="closeDiscountPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
                                                 <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
@@ -1424,10 +1424,9 @@
                                                 <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
                                                     <div class="row">
                                                     <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                        <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel"
-                                                            bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate"
-                                                            class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                            [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                                            <giddh-datepicker #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
+                                                            </giddh-datepicker>
+
                                                         <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                                             Invalid Date
                                                         </p>
@@ -1947,7 +1946,7 @@
                                                             [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
                                                             (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
                                                             [notFoundMsg]="noResultsFoundLabel"
-                                                            [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
+                                                            [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults(true, 'item')"
                                                             [forceClearReactive]="forceClear$ | async"
                                                             (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false"
                                                             [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)"
@@ -1995,7 +1994,7 @@
                                                     <div class="dateHsnCode">
 
                                                         <div class="row">
-                                                            <div class="col-xs-6 pdR0">
+                                                            <div class="col-xs-6 col-sm-6 pdR0">
                                                                 <div class="entryDate">
                                                                     <label>Entry Date: </label>
 
@@ -2021,7 +2020,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-xs-6 pdL0">
+                                                            <div class="col-xs-6 col-sm-6 pdL0">
                                                                 <div class="wrap-hsnBox">
                                                                     <div class="hsnCode text-right"
                                                                         (click)="toggleHsnSacDropDown(transaction)">
@@ -2038,7 +2037,7 @@
                                                                         </span>
                                                                     </div>
 
-                                                                    <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                                                    <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
                                                                         <label>HSN/SAC</label>
                                                                         <input type="text" maxLength="10" placeholder="HSN/SAC Number"
                                                                             name="transaction.hsnNumber_{{entryIdx}}"
@@ -2287,7 +2286,7 @@
                                     </div>
                                 </div>
 
-                                <div class="saveCard-data pointer">
+                                <div class="saveCard-data pointer" (click)="handleOutsideClick()">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 </div>
 
@@ -2301,11 +2300,11 @@
 
                     </div>
 
-                    <div class="add-btn" (click)="addBlankRow(null)">
-                        <button class="btn btn-sm btn-success">Add More</button>
+                    <div class="add-btn">
+                        <button class="btn btn-sm btn-success" (click)="addBlankRow(null)">Add More</button>
                     </div>
 
-                    <div class="otherDetail-card">
+                    <div class="other-detail-card">
                         <div>
                             <div class="collapse-pane clearfix">
                                 <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
@@ -2322,11 +2321,10 @@
                                     <div class="row">
 
                                         <div class="form-group col-12 col-sm-4 mb-0">
-                                            <input type="text" #shippingDate="ngModel"
-                                                [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate"
-                                                [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control"
-                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                            <giddh-datepicker #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" name="shippingDate"
+                                                [(ngModel)]="invFormData.templateDetails.other.shippingDate"
+                                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
+                                            </giddh-datepicker>
                                             <p class="text-danger"
                                                 *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                                 Invalid Date</p>
@@ -2368,7 +2366,7 @@
                             </div>
 
                             <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
-                                <label class="mr-b1">Message</label>
+                                <label class="mr-b1">Note</label>
                                 <textarea style="height:120px" class="form-control" name="message2"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>

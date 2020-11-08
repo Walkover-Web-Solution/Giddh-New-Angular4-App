@@ -1,7 +1,8 @@
 @import "../../../../../assets/css/color.scss";
-.invoice-preview-sidebar{
+.invoice-preview-sidebar {
     z-index: 200;
 }
+
 .invoice-modal-content:after {
     position: fixed;
     content: "";
@@ -201,6 +202,9 @@
     margin-bottom: 35px;
     z-index: -9;
     height: 100%;
+    .relative {
+        height: 100%;
+    }
     .expand-button {
         position: relative;
         right: 15px;
@@ -221,16 +225,17 @@
         margin: 0 auto;
         color: #ff0d0d;
     }
-
-    .image-collapsed{
-        height: 400px;
+    .img-expand-collapse{
+        padding: 50px 50px 0 50px;
     }
-
-    .img-expand {
-        width: 100%;
-        padding: 50px;
+    .image-collapsed {
+        max-height: 130px;
+        overflow: hidden;
+    
+        img{
+            height:auto;
+        }
     }
-
     .preview-not-supported-attachment {
         font-size: 18px;
         margin: 16px;
@@ -240,6 +245,7 @@
         // margin: 15px 200px;
         // border: 2px dashed #d9d9d9;
         // padding: 10px;
+        margin-top: 50px;
     }
 }
 
@@ -332,7 +338,7 @@ span.close-modal.cp.pull-right {
     display: inline-block !important;
 }
 
-.dropdown-menu > li > a:hover {
+.dropdown-menu>li>a:hover {
     color: $chetwode-blue;
     background: #e5e5e5;
 }
@@ -452,13 +458,13 @@ label.labeled {
     overflow-y: auto !important;
 }
 
-.expand-file{
+.expand-file {
     position: absolute;
     right: 15px;
     font-size: 14px;
     margin: 15px;
-    top:0;
-    a{
+    top: 0;
+    a {
         color: $gray;
         span {
             margin-right: 5px;
@@ -466,7 +472,7 @@ label.labeled {
     }
 }
 
-.collapse-icon{
+.collapse-icon {
     transform: rotate(180deg);
 }
 
@@ -531,6 +537,7 @@ label.labeled {
         }
     }
 }
+
 .linked-purchase-order {
     padding: 0 15px;
     .purchase-order-number {
@@ -538,9 +545,9 @@ label.labeled {
         .aqua-color {
             color: $deep-sky-blue;
             cursor: pointer;
-            span{
+            span {
                 color: $very-light-gray;
-                margin:0 10px;
+                margin: 0 10px;
             }
         }
     }
@@ -598,44 +605,60 @@ label.labeled {
 .file-input-wrapper img {
     width: 100px;
 }
+
+
 /*invoice table*/
 
 .strong {
     font-weight: bold;
 }
+
 .font-11 {
     font-size: 11px !important;
 }
+
 .font-10 {
     font-size: 10px !important;
 }
+
+
 /*
   .font-12 {
   font-size: 12px !important;
   } */
+
 .pb-1 {
     padding-bottom: 10px;
 }
+
 p {
     line-height: 17px;
 }
+
+
 /* heading */
+
 #default header h1 {
     /* color: #df4927; */
     font-size: 14px;
 }
+
 #default header h2 {
     /* color: #df4927; */
     font-size: 14px;
     font-weight: bold;
 }
+
+
 /* table */
+
 #default table {
     /* font-size: 93%; */
     table-layout: fixed;
     width: 100%;
     border-collapse: inherit;
 }
+
 
 /* page */
 
@@ -653,16 +676,21 @@ p {
     width: 5px;
 }
 
+
 /* Track */
+
 #default::-webkit-scrollbar-track {
     background: $white-smoke;
 }
 
+
 /* Handle */
+
 #default::-webkit-scrollbar-thumb {
     background: $nobel;
     border-radius: 20px;
 }
+
 #default body {
     box-sizing: border-box;
     font-size: 12px;
@@ -673,6 +701,7 @@ p {
     background: $white;
     border-radius: 1px;
 }
+
 
 /* header */
 
@@ -719,6 +748,7 @@ p {
     padding: 6px 0;
     line-height: 1.3rem;
 }
+
 #default header figure {
     margin: 0 0 0.3em 0;
     width: 100%;
@@ -749,6 +779,7 @@ p {
     vertical-align: baseline;
 }
 
+
 /* article */
 
 #default article {
@@ -778,6 +809,7 @@ p {
 .text-left {
     text-align: left;
 }
+
 .warehouse-table {
     width: 100%;
     border-bottom: 1px solid $light-gray;
@@ -789,9 +821,12 @@ p {
         border-bottom: none;
     }
 }
+
 .warehouse-table tbody tr td {
     padding: 0px 20px 5px 10px;
 }
+
+
 /* table items */
 
 #default table.item {
@@ -808,22 +843,28 @@ p {
     background-color: $white-smoke;
     font-size: 12px;
 }
+
 #default table.item tfoot tr th {
     padding-right: 7px;
     border-top: 1px solid $light-gray;
 }
+
+
 /* tcs */
+
 .tcs hr {
     margin-top: 50px;
     width: 100%;
     border-bottom: 1px solid $cinnabar-orange;
 }
+
 .tcs table {
     margin: 50px 0px;
     clear: both;
     width: 100%;
     border-collapse: collapse !important;
 }
+
 .tcs table td,
 .tcs table th {
     border-radius: 0;
@@ -868,6 +909,7 @@ p {
     font-size: 20px;
     font-family: "opensans-semibold";
 }
+
 #default table.item td {
     border-radius: 0;
     padding: 7px;
@@ -894,6 +936,7 @@ p {
     /* font-size: 11px; */
 }
 
+
 /* aside */
 
 #default aside h1 {
@@ -907,6 +950,7 @@ p {
     border-bottom-style: solid;
 }
 
+
 /*footer*/
 
 #default footer {
@@ -915,11 +959,13 @@ p {
     margin: 8px 0 0;
     background: $white;
 }
+
 #default .company-address p {
     max-width: 400px;
     margin: 0 auto;
     width: 100%;
 }
+
 #default aside {
     line-height: 1.5rem;
 }
@@ -1006,12 +1052,15 @@ p {
 strong {
     font-weight: bold;
 }
-.invoice-preview-sidebar{
+
+.invoice-preview-sidebar {
     padding-right: 0;
 }
-.invoice-detail-wrapper{
+
+.invoice-detail-wrapper {
     padding-left: 0;
 }
+
 @media (max-width: 767px) {
     .center-block .btn-sm {
         float: none !important;
@@ -1023,10 +1072,12 @@ strong {
     }
 }
 
+
 /*responsive*/
-@media(max-width:1199px){
+
+@media(max-width:1199px) {
     .invoice-search-box input {
-     max-width: 180px;
+        max-width: 180px;
     }
 }
 
@@ -1038,10 +1089,10 @@ strong {
         width: 100%;
         max-width: 100%;
     }
-    .invoice-search-box  {
-        .btn-group{
+    .invoice-search-box {
+        .btn-group {
             display: flex;
-            button{
+            button {
                 margin-left: 0;
                 padding: 5px 16px;
                 vertical-align: top;
@@ -1052,7 +1103,7 @@ strong {
                 align-items: center;
             }
         }
-        button{
+        button {
             text-align: center;
             justify-content: center;
             display: flex;
@@ -1071,9 +1122,8 @@ strong {
 }
 
 @media (max-width: 991px) {
-
     .invoice-modal-content,
-    .invoice-modal-content:after{
+    .invoice-modal-content:after {
         top: 60px !important;
     }
     .invoice-sidebar .invoice-number-date {
@@ -1082,7 +1132,7 @@ strong {
     .invoice-sidebar .invoice-number-date span.invoice-date {
         display: block;
         position: relative;
-        margin-left:0;
+        margin-left: 0;
     }
     .invoice-sidebar .invoice-number-date span.invoice-date:before {
         position: absolute;
@@ -1092,20 +1142,17 @@ strong {
         height: 12px;
         top: 3px;
     }
-    .invoice-sidebar
-        li.activeItem
-        .invoice-number-date
-        span.invoice-date:before {
+    .invoice-sidebar li.activeItem .invoice-number-date span.invoice-date:before {
         background-color: #f0f0f0;
     }
-    .invoice-preview-sidebar{
+    .invoice-preview-sidebar {
         padding-right: 15px;
     }
-    .invoice-detail-wrapper{
+    .invoice-detail-wrapper {
         padding-left: 15px;
     }
-    .invoice-detail-header{
-        .edit-change-status{
+    .invoice-detail-header {
+        .edit-change-status {
             display: flex;
             justify-content: flex-start;
             flex-direction: row-reverse;
@@ -1119,8 +1166,9 @@ strong {
         top: 90px !important;
     }
 }
+
 @media (max-width: 991px) {
-    .invoice-preview-sidebar{
+    .invoice-preview-sidebar {
         display: none;
     }
     .invoice-sidebar {
@@ -1151,37 +1199,37 @@ strong {
         margin-bottom: 40px;
         float: left;
     }
-    .wrap-edit-history-btn{
-         display:flex;
-         align-items: center;
-     }
-
+    .wrap-edit-history-btn {
+        display: flex;
+        align-items: center;
+    }
 }
 
-@media(max-width:575px){
-    .wrap-edit-history-btn{
+@media(max-width:575px) {
+    .wrap-edit-history-btn {
         float: none;
         display: flex;
         width: 100%;
         padding-top: 10px;
     }
-    .changeStatus-dropdown{
+    .changeStatus-dropdown {
         float: left;
     }
-    span.close-modal.cp.pull-right{
+    span.close-modal.cp.pull-right {
         position: absolute !important;
         top: -42px;
         right: 30px;
     }
-    .invoice-detail-header{
-        .edit-change-status{
+    .invoice-detail-header {
+        .edit-change-status {
             flex-direction: column;
-            .wrap-edit-history-btn{
+            .wrap-edit-history-btn {
                 justify-content: space-between;
             }
         }
     }
 }
+
 @media (max-width: 375px) {
     .invoice-modal-content:after,
     .invoice-modal-content {
@@ -1189,7 +1237,7 @@ strong {
     }
 }
 
-@media (min-width: 992px){
+@media (min-width: 992px) {
     .po-preview-modal {
         width: 1003px !important;
     }

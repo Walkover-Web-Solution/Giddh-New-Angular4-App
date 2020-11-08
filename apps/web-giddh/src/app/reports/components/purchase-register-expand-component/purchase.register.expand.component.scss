@@ -164,7 +164,8 @@ ul.list-unstyled li a {
     bottom: 0;
     width: 90%;
     z-index: 2;
-    width: calc(100% - 200px);
+    padding-right: 90px !important;
+    width: calc(100% - 215px);
 }
 
 .responsive {
@@ -311,9 +312,8 @@ table th {
     padding-right: 5px;
     padding-left: 5px;
 }
-
-@media (max-width: 1366px) {
-    .sales-register {
+@media(max-width:1019px){
+    .sales-register{
         width: 100%;
     }
 }

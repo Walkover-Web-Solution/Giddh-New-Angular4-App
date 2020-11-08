@@ -36,7 +36,7 @@
             </div>
         </tab>
 
-        <tab (select)="loadEmailData($event)">
+        <tab (selectTab)="loadEmailData($event)">
             <ng-template tabHeading>
                 <span class="icon-mail"></span> Email
             </ng-template>
@@ -100,7 +100,7 @@
 
         </tab>
 
-        <tab (select)="loadCollectionData($event)">
+        <tab (selectTab)="loadCollectionData($event)">
             <ng-template tabHeading>
                 <span class="icon-card"></span> Collection
             </ng-template>
@@ -305,7 +305,7 @@
             </div>
         </tab>
 
-        <tab (select)="loadEcommerceData($event)">
+        <tab (selectTab)="loadEcommerceData($event)">
             <ng-template tabHeading>
                 <span class="icon-ecomm"></span> E-Comm
             </ng-template>
@@ -342,7 +342,8 @@
                                         <input class="form-control" type="text" placeholder="Secret key" required autocomplete="off" formControlName="secretKey" [disabled]="i !== amazonEditItemIdx" />
                                     </div>
                                     <div class="pull-left edit-save-button">
-                                        <div class="button-wrapper" [ngClass]="{'mrT3': f}">
+                                        <label class="d-flex">&nbsp;</label>
+                                        <div class="button-wrapper">
                                             <button type="button" class="btn btn-default" (click)="saveAmazonSeller(item)" *ngIf="l"><i
                                                     class="fa fa-check"></i></button>
                                             <button type="button" class="btn btn-default" (click)="updateAmazonSeller(item)" *ngIf="i === amazonEditItemIdx && !l"><i
@@ -638,13 +639,13 @@
                     </div>
                     <br/>
                 </div>
-                <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
+                <!-- <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
-                    <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentForm)">
+                    <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentFormObj)">
                         <div class="row">
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <div class="">
-                                    <label>Corporate ID <span class="required">*</span></label>
+                                    <label>Corporate ID<span class="required">*</span></label>
                                     <br>
                                     <input type="text" placeholder="Enter Corporate ID" class="form-control" [(ngModel)]="paymentFormObj.corpId" name="corpId" required autocomplete="off" />
                                 </div>
@@ -688,8 +689,7 @@
                                         <br></ng-container>
                                     <div class="d-flex">
                                         <div class="mr-05 custom-select cust select-caret pos-rel">
-                                            <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)"
-                                                name="maxBankLimit{{index}}">
+                                            <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)" name="maxBankLimit{{index}}">
                                             </sh-select>
                                         </div>
                                         <div class="ml-05">
@@ -763,11 +763,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
-               <!-- Create or add bank account end -->
+                </div> -->
+                <!-- Create or add bank account end -->
                 <div *ngIf="openNewRegistration" class="box clearfix mb-2">
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
-                    <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
+                    <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
                         <div class="row">
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <div class="">

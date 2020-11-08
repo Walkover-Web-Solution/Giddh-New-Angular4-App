@@ -26,10 +26,11 @@
 
             <!-- Invoice filter section ends -->
             <div class="clear-filter visible-on-desktop" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
-                <button class="btn btn-default">
+                <button class="btn btn-filter mr-0">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
             </div>
+
             <div class="d-flex add-invoice">
 
 
@@ -235,9 +236,9 @@
                         <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
                             <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
-                                    (click)="toggleAllItems(true)">
+                                    (click)="toggleAllItems(true, true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
-                                    (click)="toggleAllItems(false)">
+                                    (click)="toggleAllItems(false, true)">
                             </div>
                         </th>
 
@@ -316,9 +317,9 @@
                         <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
                             <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
-                                    (click)="toggleAllItems(true)">
+                                    (click)="toggleAllItems(true, true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
-                                    (click)="toggleAllItems(false)">
+                                    (click)="toggleAllItems(false, true)">
                             </div>
                         </th>
 
@@ -401,10 +402,9 @@
 
                         <!-- Invoice No. -->
                         <td>
-                            <div [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
+                            <div (click)="onSelectInvoice(item)" [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
                                 style="position: relative" class="d-flex">
-                                <a href="javascript:void(0);" class="btn-link-2"
-                                    (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
+                                <a href="javascript:void(0);" class="btn-link-2">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
                             <span *ngIf="item.dueDays !== null">
@@ -502,10 +502,11 @@
                             <span>{{ item.balanceStatus}}</span>
                         </td>
 
-                        <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex status-mobile pt-0 pb-0 flex-column mw-th-260">
+                        <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex status-mobile flex-column mw-th-260">
                             <div class="d-flex flex-row align-items-center">
                                 <span class="d-flex balance-status">{{ item.balanceStatus}}</span>
-                                <div class="action-icon ml-auto" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
+                                <!-- *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected" -->
+                                <div class="action-icon ml-auto" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" >
                                     <a tooltip="Send Email"
                                     (click)="openSendMailModal(sendEmailModal, item)">
                                         <span class="icon-envelope font-12"></span>
@@ -871,8 +872,8 @@
         <!-- region invoice-preview-details -->
         <div *ngIf="selectedInvoiceForDetails">
             <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails"
-                [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice($event)"
-                (sendEmail)="sendEmail($event)" (closeEvent)="invoicePreviewClosed()"
+                [invoiceSetting]="invoiceSetting" [invoiceSearch]="invoiceSearch" (deleteVoucher)="deleteConfirmedInvoice($event)"
+                (sendEmail)="sendEmail($event)" (invoiceSearchEvent)="invoiceSearch = $event;" (closeEvent)="invoicePreviewClosed()"
                 (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)"
                 (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher"
                 (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen"

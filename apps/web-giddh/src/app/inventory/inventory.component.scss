@@ -39,12 +39,6 @@
     color: $deep-sky-blue !important;
     border-bottom: 4px solid $deep-sky-blue !important;
 }
-
-//.inventory-control .invoice-nav.navbar-nav > li > a.active {
-//  background-color: #fff;
-//
-//}
-
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -89,7 +83,8 @@
     .inventory-control ::ng-deep.nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 100px;
+        top: 90px;
+        padding-top: 10px !important;
     }
 }
 @media(max-width:1024px){
@@ -119,4 +114,9 @@
 }
 }
 
-
+@media(max-width:325px){
+.inventory-control ::ng-deep.nav.nav-tabs {
+    display: inline-block;
+    white-space: nowrap;
+    }
+}

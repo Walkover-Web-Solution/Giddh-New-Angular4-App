@@ -440,8 +440,16 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             companyUniqueName: this.activeCompanyUniqueName,
             from: moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT),
             to: moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT),
-            count: PAGINATION_LIMIT
+            count: PAGINATION_LIMIT,
+            receiptTypes: this.searchQueryParams.receiptTypes,
+            receiptNumber: this.searchQueryParams.receiptNumber,
+            baseAccountName: this.searchQueryParams.baseAccountName,
+            particularName: this.searchQueryParams.particularName,
+            invoiceNumber: this.searchQueryParams.invoiceNumber,
+            sort: this.searchQueryParams.sort,
+            sortBy: this.searchQueryParams.sortBy
         }
+
         const optionalParams = cloneDeep(additionalRequestParameters);
         if (optionalParams) {
             for (let key in optionalParams) {

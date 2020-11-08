@@ -5,13 +5,10 @@
 }
 
 .dropdown-menu {
-    padding: 10px;
-    max-height: 130px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .dropdown-menu li {
-    margin-bottom: 5px;
     font-size: 14px;
 }
 
@@ -48,16 +45,16 @@
     padding-left: 35px !important;
     width: 210px;
 }
-.content-view  {
+.content-view {
     display: flex;
     align-items: center;
     font-size: 14px;
 }
 .branch-card {
-    background-color: #eeeff1;
-    min-height: 365px;
+    background-color: $white;
     margin-bottom: 15px;
     font-size: 14px;
+    border: 1px solid $gainsboro;
 }
 .card-basic-details span:first-child {
     width: 60px;
@@ -69,6 +66,17 @@
     margin-bottom: 10px;
     color: #1c1c1c;
 }
+.clearfix {
+    .icon-favorite-selected {
+        color: $rich-blue;
+    }
+    .icon-branch-icon,
+    .icon-company-HO {
+        padding: 4px 5px 0 0;
+        color: $midnight-blue;
+        font-size: 12px;
+    }
+}
 .card-basic-details h2 {
     font-size: 16px;
     color: #1a237e;
@@ -77,19 +85,25 @@
     white-space: normal;
     word-break: break-all;
     text-overflow: ellipsis;
-    width: 85%;
+    margin-right: 15px;
+    margin-bottom: 0;
 }
 .card-basic-details {
-    padding: 20px;
-    border-bottom: 1px solid $gainsboro;
+    padding: 15px;
 }
-.branchSalesDetails {
-    padding: 20px;
+.branch-sales-details {
+    border-top: 1px solid $gainsboro;
+    padding-top: 20px;
+    label {
+        font-family: "opensans-semibold";
+        margin-bottom: 10px;
+        color: $extra-dark-gray;
+    }
+    .total-amount {
+        width: 70%;
+    }
 }
-.branchSalesDetails label {
-    font-family: "opensans-semibold";
-    margin-bottom: 10px;
-}
+
 .unlink a {
     color: #5b64c9 !important;
     cursor: pointer;
@@ -106,88 +120,321 @@
 }
 .card-basic-details .dropdown-menu > li > a {
     padding: 5px 10px;
-    cursor: default;
+    cursor: pointer;
 }
 .card-basic-details a#button-basic {
-    color: #333;
-    font-size: 16px;
+    color: $gray;
+    font-size: 20px;
     width: 32px;
     height: 32px;
     display: inline-block;
     text-align: center;
     align-items: center;
     vertical-align: middle;
-    line-height: 2;
+    line-height: 2.8;
+    position: relative;
+    right: -15px;
 }
 .branch-views {
     cursor: pointer;
 }
-.btn-link{
-    border-width:0px!important;
-    background: $white!important;
+.btn-link {
+    border-width: 0px !important;
+    background: $white !important;
 }
 
-.wd-900{
-    width:900px !important;
+.modal-width {
+    width: 900px !important;
+}
+
+.search-branch-box{
+    max-width: 220px;
+    width: 100%;
+    margin-right: 8px;
+    input{
+        background-image: url('../../../assets/images/searchIcon.svg') !important;
+        background-repeat: no-repeat !important;
+        padding-left: 30px !important;
+        background-position: 7px 9px !important;
+        background-size: 15px !important;
+        width: 100% !important;
+    }
+}
+.search-field {
+    display: flex;
+    flex-direction: row;
+    .clear-filter-btn {
+        color: $midnight-blue;
+        font-size: 14px;
+        border: 1px solid $midnight-blue;
+        border-radius: 20px;
+        padding: 0 15px;
+        width: 150px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $white;
+        i {
+            font-size: 12px;
+            padding-right: 8px;
+            top: 0;
+            color: $midnight-blue;
+        }
+    }
+}
+
+.advance-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    border-radius: 2px;
+    background: $white;
+    margin-right: 15px;
+
+    li {
+        padding-top: 5px;
+        &:hover {
+            background-color: $lavender;
+            color: $jacksons-purple;
+        }
+    }
+}
+
+.branch-sales-collapsed {
+    display: none;
+}
+
+.active-status {
+    color: $light-green;
+}
+
+.status-bullet {
+    &:before {
+        content: " \2022";
+        font-size: 34px;
+    }
+}
+
+.parent-branch {
+    color: $gray;
+}
+
+.star-radio {
+    visibility: hidden;
+    font-size: 30px;
+    cursor: pointer;
+    top: -3px;
+    position: relative;
+    margin-right: 10px;
+
+    &:before {
+        content: "\2606";
+        position: absolute;
+        visibility: visible;
+    }
+
+    &:checked {
+        &:before {
+            content: "\2605";
+            position: absolute;
+            border-color: $chetwode-blue;
+            color: $chetwode-blue;
+        }
+    }
+}
+
+.btn-group.more-btn.open.show {
+    display: inline-block !important;
+}
+
+.icon-advance-search {
+    font-size: 18px;
+    color: $gray;
+}
+
+.more-btn {
+    margin-left: 20px;
+    .btn-default {
+        min-width: 100px;
+    }
+    .dropdown-menu {
+        min-width: 100px;
+    }
+    li {
+        padding: 5px;
+        cursor: default;
+        &:hover {
+            background-color: $lavender;
+            color: $jacksons-purple;
+        }
+    }
+}
+
+.advance-search-list {
+    min-width: 123px;
+    .search-checkbox {
+        label {
+            padding-bottom: 5px;
+            padding-left: 5px;
+        }
+    }
+}
+
+.btn-primary.active,
+.btn-primary:active,
+.open > .dropdown-toggle.btn-primary {
+    color: $extra-dark-gray;
+    background-color: $lavender-dark;
+    border-color: $lavender-dark;
+    box-shadow: none !important;
+}
+
+.linked-add {
+    margin-bottom: 5px;
+    display: flex;
+    align-items: baseline;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.right-card-section {
+    margin-top: -15px;
+}
+.branch-vector{
+    text-align: right;
+    position: absolute;
+    bottom: 8px;
+    right: 90px;
 }
 @media (max-width: 375px) {
-    .grey-clr button.btn.btn-default {
+    .grey-color button.btn.btn-default {
         margin-left: 0;
         margin-top: 5px;
     }
 }
-@media(max-width:768px){
-    .content-view{
+@media (max-width: 768px) {
+    .content-view {
         display: none;
     }
 }
-@media(max-width:767px){
-    .branch-card{
+@media (max-width: 767px) {
+    .branch-card {
         min-height: auto;
     }
-    .branch-header-content{
-        margin-right: 0;
+    .branch-header-content {
+        margin-right: 0 !important;
         flex-direction: column;
         .content-view {
             margin-left: 0;
         }
-        .input-group{
+        .input-group {
             display: flex;
             justify-content: space-between;
-            button{
+            button {
                 margin-right: 0;
             }
         }
-
-    }
-    .input-group-date-range-picker {
-        width: 66%;
-        .form-group{
-            margin-bottom:0;
-        }
-    }
-}
-@media(max-width:370px){
-    .date-advance-search{
-        display: block;
-        .input-group-date-range-picker {
-            width: 70%;
-            .form-group{
-                margin-bottom:0;
+        .search-field{
+            margin-right: 0;
+            .search-branch-box{
+                max-width: 180px;
+            }
+            .clear-filter-btn{
+                width: 122px !important;
+                padding: 0 12px;
             }
         }
-        .btn{
+    }
+    .input-group-date-range-picker {
+        width: 100%;
+        .form-group {
+            margin-bottom: 0;
+        }
+    }
+    .btn-sky-blue.pull-right{
+        float: none;
+        margin-bottom: 15px;
+    }
+}
+@media (max-width: 370px) {
+    .date-advance-search {
+        display: block;
+        .input-group-date-range-picker {
+            .form-group {
+                margin-bottom: 0;
+            }
+        }
+        .btn {
             float: left !important;
         }
     }
+    .branch-header-content {
+        margin-right: 0;
+        .search-field{
+            margin-right: 0;
+            .search-branch-box{
+                max-width: 160px;
+            }
+            .clear-filter-btn{
+                width: 122px !important;
+                padding: 0 6px;
+            }
+        }
+
+    }
 }
 
-@media(min-width:992px) and (max-width:1359px){
-    .branch-card-view{
-        .col-lg-4{
+@media (min-width: 992px) and (max-width: 1359px) {
+    .branch-card-view {
+        .col-lg-4 {
             flex: 0 0 50% !important;
             max-width: 50% !important;
         }
     }
 }
 
+@media (min-width: 1020px) and (max-width: 1092px) {
+    .form-top-fields {
+        .input-addon {
+            top: 18px;
+        }
+    }
+}
+
+@media (min-width: 575px) and (max-width: 991px) {
+    .select-branch {
+        margin-top: -35px;
+    }
+}
+
+
+@media (max-width: 950px){
+    .modal-width {
+        width: auto !important;
+    }
+}
+
+
+@media(max-width:575px){
+    .date-advance-search {
+        .input-group-date-range-picker {
+            width:100%;
+        }
+    }
+    .branch-header{
+        flex-direction: column;
+        .search-branch-box{
+            max-width: 100%;
+            margin-bottom: 15px;
+        }
+    }
+
+    .search-field{
+        .clear-filter-btn {
+            padding: 0px 8px;
+            font-size: 12px;
+            height: 36px;
+        }
+    } 
+}

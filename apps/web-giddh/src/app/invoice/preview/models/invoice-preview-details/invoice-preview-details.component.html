@@ -195,7 +195,7 @@
                                         <!-- endregion -->
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-grps pull-right">
-                                                <span *ngIf="!isMobileView">
+                                                <span>
                                                     <a href="javascript:void 0" tooltip="Edit" placement="top"
                                                         (click)="toggleEditMode()"><i class="icon-edit-pencil"></i></a>
                                                 </span>
@@ -336,7 +336,7 @@
                             <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
                         </div>
 
-                            <div *ngIf="!shouldShowUploadAttachment && selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
+                            <div *ngIf="!shouldShowUploadAttachment && selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" class="img-expand-collapse" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
                                 <img
                                     class="image-preview img-expand" [src]="imagePreviewSource"/>
                             </div>

@@ -1,9 +1,9 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
@@ -27,7 +27,7 @@ import { SettingsDiscountActions } from '../actions/settings/discount/settings.d
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, orderBy, uniq } from '../lodash-optimized';
-import { AccountResponse } from '../models/api-models/Account';
+import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
@@ -72,7 +72,7 @@ import { SearchService } from '../services/search.service';
 export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('updateledgercomponent', {static: true}) public updateledgercomponent: ElementViewContainerRef;
     @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
     @ViewChild('sharLedger', {static: true}) public sharLedger: ShareLedgerComponent;
     @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
 
@@ -194,21 +194,36 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerRanges: any;
+    public datePickerRanges: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the search results */
     public searchResults: Array<IOption> = [];
+    /** Default search suggestion list to be shown for search */
+    public defaultSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
         page: 0,
         totalPages: 0,
         query: ''
     };
+    /** Stores the default search results pagination details (required only for passing
+     * default search pagination details to Update ledger component) */
+    public defaultResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
+    /** This will hold if it's default load */
+    public isDefaultLoad: boolean = true;
+    /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
+    public isMoreDetailsOpened: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -552,13 +567,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(stores => stores.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerRanges = config;
-            }
-        });
-
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
@@ -574,7 +582,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.todaySelected = resp[2];
 
             // check if params have from and to, this means ledger has been opened from other account-details-component
-            if (params['from'] && params['to']) {
+            if (params['from'] && params['to'] && this.isDefaultLoad) {
                 let from = params['from'];
                 let to = params['to'];
                 // Set date range to component date picker
@@ -594,6 +602,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.trxRequest.from = from;
                 this.trxRequest.to = to;
                 this.trxRequest.page = 0;
+                this.isDefaultLoad = false;
             } else {
                 // means ledger is opened normally
                 if (dateObj && !this.todaySelected) {
@@ -760,6 +769,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
+                this.isMoreDetailsOpened = false;
                 this.getTransactionData();
                 // this.getCurrencyRate();
                 this.resetBlankTransaction();
@@ -781,6 +791,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (data[0] && data[1]) {
                 let profile = cloneDeep(data[1]);
                 this.lc.activeAccount = data[0];
+                this.loadDefaultSearchSuggestions();
                 this.profileObj = profile;
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.entryUniqueNamesForBulkAction = [];
@@ -792,7 +803,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 //     stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
                 // }
 
-                let accountDetails: AccountResponse = data[0];
+                let accountDetails: AccountResponse | AccountResponseV2 = data[0];
                 let parentOfAccount = accountDetails.parentGroups[0];
 
                 this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name, accountDetails.parentGroups);
@@ -809,8 +820,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
 
                 this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
-                this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
-
+                if (accountDetails.currency && profile.baseCurrency) {
+                    this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
+                } else {
+                    this.isLedgerAccountAllowsMultiCurrency = false;
+                }
                 this.foreignCurrencyDetails = { code: profile.baseCurrency, symbol: profile.baseCurrencySymbol };
                 if (this.isLedgerAccountAllowsMultiCurrency) {
                     this.baseCurrencyDetails = { code: accountDetails.currency, symbol: accountDetails.currencySymbol };
@@ -1160,6 +1174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
+        this.isMoreDetailsOpened = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
@@ -1226,6 +1241,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        this.isMoreDetailsOpened = false;
         this.lc.showNewLedgerPanel = false;
     }
 
@@ -1256,12 +1272,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.selectedTxnUniqueName = txn.entryUniqueName;
         this.loadUpdateLedgerComponent();
         this.updateLedgerModal.show();
+        document.querySelector('body').classList.add('update-ledger-overlay');
     }
-
     public hideUpdateLedgerModal() {
         this.showUpdateLedgerForm = false;
         this.updateLedgerModal.hide();
         this._loaderService.show();
+        document.querySelector('body').classList.remove('update-ledger-overlay');
     }
 
     /**
@@ -1272,7 +1289,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public handleScrollEnd(): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
-            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
+            this.onSearchQueryChanged(
+                this.searchResultsPaginationData.query,
+                this.searchResultsPaginationData.page + 1,
+                this.searchResultsPaginationData.query ? true : false,
+                (response) => {
+                    if (!this.searchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                                label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                                additional: result
+                            }
+                        }) || [];
+                        this.defaultSuggestions = this.defaultSuggestions.concat(...results);
+                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
+                    }
+            });
         }
     }
 
@@ -1382,7 +1416,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
-        let activeAccount: AccountResponse;
+        let activeAccount: AccountResponse | AccountResponseV2;
         let groupWithAccountsList: GroupsWithAccountsResponse[];
         this.lc.activeAccount$.pipe(take(1)).subscribe(a => activeAccount = a);
         this.lc.groupsArray$.pipe(take(1)).subscribe(a => groupWithAccountsList = a);
@@ -1432,13 +1466,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
         componentInstance.tcsOrTds = this.tcsOrTds;
         this.updateLedgerComponentInstance = componentInstance;
-
+        this.updateLedgerComponentInstance.defaultSuggestions = [...this.defaultSuggestions];
+        this.updateLedgerComponentInstance.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
+        this.updateLedgerComponentInstance.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
         componentInstance.toggleOtherTaxesAsideMenu.subscribe(res => {
             this.toggleOtherTaxesAsidePane(res);
         });
 
         componentInstance.closeUpdateLedgerModal.subscribe(() => {
             this.hideUpdateLedgerModal();
+        });
+
+        componentInstance.moreDetailOpen.subscribe((isOpened: boolean) => {
+            this.isMoreDetailsOpened = isOpened;
+            this._cdRf.detectChanges();
         });
 
         this.updateLedgerModal.onHidden.pipe(take(1)).subscribe(() => {
@@ -1450,6 +1491,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.activeAccountParentGroupsUniqueName = res.parentGroups[1].uniqueName;
                 });
             }
+            this.isMoreDetailsOpened = false;
             this.entryManipulated();
             this.updateLedgerComponentInstance = null;
             componentRef.destroy();
@@ -1480,43 +1522,60 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @param {string} query Search query
      * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
      * @memberof LedgerComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1): void {
+    public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
         this.searchResultsPaginationData.query = query;
-        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
-        // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
-        const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-            this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
-            '';
-        const requestObject = {
-            q: encodeURIComponent(query),
-            page,
-            withStocks: true,
-            stockAccountUniqueName: encodeURIComponent(accountUniqueName)
-        }
-        this.searchService.searchAccount(requestObject).subscribe(data => {
-            if (data && data.body && data.body.results) {
-                const searchResults = data.body.results.map(result => {
-                    return {
-                        value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
-                        label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
-                        additional: result
-                    }
-                }) || [];
-                this.noResultsFoundLabel = SearchResultText.NotFound;
-                if (page === 1) {
-                    this.searchResults = searchResults;
-                } else {
-                    this.searchResults = [
-                        ...this.searchResults,
-                        ...searchResults
-                    ];
-                }
-                this.searchResultsPaginationData.page = data.body.page;
-                this.searchResultsPaginationData.totalPages = data.body.totalPages;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+            // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
+            const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+                this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+                '';
+            const requestObject = {
+                q: encodeURIComponent(query),
+                page,
+                withStocks,
+                stockAccountUniqueName: encodeURIComponent(accountUniqueName) || undefined
             }
-        });
+            this.searchService.searchAccount(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                            label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                            additional: result
+                        }
+                    }) || [];
+                    this.noResultsFoundLabel = SearchResultText.NotFound;
+                    if (page === 1) {
+                        this.searchResults = searchResults;
+                    } else {
+                        this.searchResults = [
+                            ...this.searchResults,
+                            ...searchResults
+                        ];
+                    }
+                    this.searchResultsPaginationData.page = data.body.page;
+                    this.searchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.searchResults = [...this.defaultSuggestions];
+            this.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
+            this.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
     }
 
     /**
@@ -1525,7 +1584,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public resetPreviousSearchResults(): void {
-        this.searchResults = [];
+        this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
             page: 0,
             totalPages: 0,
@@ -2112,7 +2171,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof LedgerComponent
      */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
@@ -2127,5 +2190,38 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
             this.selectedDate(value);
         }
+    }
+
+    /**
+     * Handler for more detail open in CREATE ledger
+     *
+     * @param {boolean} isOpened True, if more detail is opened while creating new ledger entry
+     * @memberof LedgerComponent
+     */
+    public handleOpenMoreDetail(isOpened: boolean): void {
+        this.isMoreDetailsOpened = isOpened;
+    }
+
+    /**
+     * Loads the default search suggestion when ledger module is loaded and
+     * when ledger is changed
+     *
+     * @private
+     * @memberof LedgerComponent
+     */
+    private loadDefaultSearchSuggestions(): void {
+        this.onSearchQueryChanged('', 1, false, (response) => {
+            this.defaultSuggestions = response.map(result => {
+                return {
+                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                    additional: result
+                }
+            }) || [];
+            this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+            this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
+            this.searchResults = [...this.defaultSuggestions];
+            this.noResultsFoundLabel = SearchResultText.NotFound;
+        });
     }
 }

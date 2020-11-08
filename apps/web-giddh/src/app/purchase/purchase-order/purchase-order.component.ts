@@ -8,7 +8,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil, filter } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
@@ -43,7 +43,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Moment object */
     public moment = moment;
     /* Selected range label */
@@ -122,11 +122,16 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public bulkUpdatePostParams: any = {};
     /* This will hold giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** This will hold checked invoices */
+    public selectedPo: any[] = [];
+    /* Observable for selected PO applied */
+    public selectedPo$: Observable<any>;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.purchaseOrderListFilters$ = this.store.pipe(select(state => state.purchaseOrder.listFilters), (takeUntil(this.destroyed$)));
+        this.selectedPo$ = this.store.pipe(select(state => state.purchaseOrder.selectedPo), (takeUntil(this.destroyed$)));
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params && params['purchaseOrderUniqueName']) {
@@ -155,7 +160,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             if (event instanceof NavigationStart) {
                 this.pageUrl = event.url;
                 if (event.url.includes('/purchase-order/new') || event.url.includes('/purchase-orders/preview') || event.url.includes('/purchase-order/edit') || event.url.includes('/purchase-management/purchase')) {
-                    this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({ getRequest: this.purchaseOrderGetRequest, postRequest: this.purchaseOrderPostRequest }));
+                    this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({ getRequest: this.purchaseOrderGetRequest, postRequest: this.purchaseOrderPostRequest, selectedPo: this.selectedPo }));
                 } else {
                     this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
                 }
@@ -178,6 +183,12 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.selectedPo$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
+                this.selectedPo = response;
+            }
+        });
+
         /* Observer to store universal from/to date */
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -197,13 +208,6 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                     this.useStoreFilters = false;
                     this.getAllPurchaseOrders(true);
                 }
-            }
-        });
-
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
             }
         });
 
@@ -274,7 +278,17 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                     this.isLoading = false;
                     if (res.status === 'success') {
                         this.allItemsSelected = false;
-                        this.purchaseOrders = res.body;
+
+                        let purchaseOrders = _.cloneDeep(res.body);
+
+                        if(purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
+                            purchaseOrders.items.map(item => {
+                                item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item.uniqueName);
+                                return item;
+                            });
+                        }
+
+                        this.purchaseOrders = purchaseOrders;
                     } else {
                         this.toaster.errorToast(res.message);
                     }
@@ -323,7 +337,11 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof PurchaseOrderComponent
      */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
@@ -467,6 +485,12 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
         this.purchaseOrders.items.forEach(item => {
             item.isSelected = type;
+
+            if (this.allItemsSelected) {
+                this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item.uniqueName);
+            } else {
+                this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item.uniqueName);
+            }
         });
     }
 
@@ -479,7 +503,10 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public toggleItem(item: any, action: boolean): void {
         item.isSelected = action;
-        if (!action) {
+        if (action) {
+            this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item.uniqueName);
+        } else {
+            this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item.uniqueName);
             this.allItemsSelected = false;
         }
     }

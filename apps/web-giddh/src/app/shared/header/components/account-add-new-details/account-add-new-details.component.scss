@@ -1,5 +1,4 @@
 @import "../../../../../assets/css/color.scss";
-
 .form-header {
     padding: 20px 15px;
     background: #1a237e;
@@ -69,7 +68,11 @@ span.dr-label {
             border-left: 1px solid $very-light-gray !important;
         }
         input{
-            border-left: none !important;
+            border-left: 1px solid $very-light-gray !important;
+            border-right: none !important;
+            &:focus{
+                border-left: 1px solid $chetwode-blue !important;
+            }
         }
     }
 }
@@ -108,16 +111,30 @@ form.gstinForm {
     flex-direction: row-reverse;
     justify-content: flex-end;
 }
+
 .mobile-number-sh-select {
     width: 90px;
     margin-right: 10px;
 }
+
 a.btn-remove {
     padding: 3px 10px;
     background-color: $white;
     color: $nero;
     border: 1px solid $very-light-gray;
 }
+
+.name-of-field {
+    display: flex;
+    align-items: center;
+    label {
+        margin-bottom: 0;
+        margin-right: 10px;
+        min-width: 120px;
+        line-height: 2.3;
+    }
+}
+
 @media (max-width: 767px) {
     .upper-form .selectGroup {
         margin-bottom: 15px;

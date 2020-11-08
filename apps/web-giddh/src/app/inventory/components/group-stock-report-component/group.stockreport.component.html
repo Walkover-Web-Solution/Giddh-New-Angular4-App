@@ -160,8 +160,8 @@
             <div class="d-flex wrap-head-report">
                 <h2 class="mr-2 head-report" *ngIf="groupStockReport">
                     <span>{{groupStockReport.stockGroupName}}</span> (Group)</h2>
-                <div class="advance-icon cursor-pointer" tooltip="Advance Search">
-                    <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
+                <div class="advance-icon cursor-pointer" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
+                    <span class="icon-advance-filter"></span>
                 </div>
                 <!-- <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i> -->
             </div>
@@ -196,7 +196,7 @@
         </div>
     </div>
 
-    <section>
+    <section class="bottom-button-display">
         <div class="mobile-card-wrapper">
             <table class="table basic table-border inventory-stock-table on-mobile-view table-responsive" [ngClass]="{'mB100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
                 <thead>

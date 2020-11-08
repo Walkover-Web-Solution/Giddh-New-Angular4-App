@@ -8,6 +8,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
 import { find } from '../lodash-optimized';
+import { OrganizationType } from '../models/user-login-state';
 
 @Injectable()
 export class GeneralService {
@@ -16,6 +17,10 @@ export class GeneralService {
     // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Stores the branch unique name */
+    public currentBranchUniqueName: string;
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -58,7 +63,6 @@ export class GeneralService {
         ]
     };
 
-
     get user(): UserDetails {
         return this._user;
     }
@@ -98,7 +102,6 @@ export class GeneralService {
 
     set currencyType(currencyType: string) {
         this._currencyType = currencyType;
-
     }
 
     get createNewCompany(): CompanyCreateRequest {
@@ -548,7 +551,7 @@ export class GeneralService {
     public getRevisionField(type: any): string {
         return type.replace(/_/g, " ");
     }
-    
+
     /**
      * Returns the account category
      *
@@ -598,5 +601,128 @@ export class GeneralService {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Stores data in session storage
+     *
+     * @param {string} name
+     * @param {*} value
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public setSessionStorage(name: string, value: any): void {
+        sessionStorage.setItem(name, value);
+    }
+
+    /**
+     * Returns data from session storage
+     *
+     * @param {string} name
+     * @returns {any}
+     * @memberof GeneralService
+     */
+    public getSessionStorage(name: string): any {
+        return sessionStorage.getItem(name);
+    }
+
+    /**
+     * Removes data from session storage
+     *
+     * @param {string} name
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public removeSessionStorage(name: string): void {
+        sessionStorage.removeItem(name);
+    }
+
+    /**
+     * This will add value in array if doesn't exists
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public addValueInArray(array: Array<string>, value: any): Array<string> {
+        let exists = false;
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item === value) {
+                    exists = true;
+                }
+            });
+        }
+
+        if (!exists) {
+            array.push(value);
+        }
+
+        return array;
+    }
+
+    /**
+     * This will check if value exists in array
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkIfValueExistsInArray(array: Array<string>, value: any): boolean {
+        let exists = false;
+
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item === value) {
+                    exists = true;
+                }
+            });
+        }
+
+        return exists;
+    }
+
+    /**
+     * This will remove value from array
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public removeValueFromArray(array: Array<string>, value: any): Array<string> {
+        let index = -1;
+        if (array && array.length > 0) {
+            let loop = 0;
+            array.forEach(item => {
+                if (item === value) {
+                    index = loop;
+                }
+                loop++;
+            });
+        }
+
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+
+        return array;
+    }
+
+    /**
+     * This will set global cookie for main domain
+     *
+     * @param {string} cookieName
+     * @param {*} cookieValue
+     * @param {number} expiryDays
+     * @memberof GeneralService
+     */
+    public setCookie(cookieName: string, cookieValue: any, expiryDays: number): void {
+        const date = new Date();
+        date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
     }
 }

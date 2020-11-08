@@ -54,7 +54,7 @@
                         <a class="cp mr-l1 clear-filter-btn"
                             *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen" href="javascript:;"
                             (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
-                            <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
+                            <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
                         </a>
                     </div>
 
@@ -70,14 +70,14 @@
                             [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker" />
                     </span>
-                    <span *ngIf="!isMobileScreen" id="advance-filter" (click)="onOpenAdvanceSearch()" class="advance-icon d-flex advance-search-filter pointer"
+                    <span id="advance-filter" (click)="onOpenAdvanceSearch()" class="advance-icon d-flex advance-search-filter pointer"
                         [tooltip]="'Advance Search'" [placement]="'top'"
                         [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
                         <span class="icon-advance-filter"></span>
                     </span>
                     <a class="cp mr-l1 clear-filter-btn" id="clear-filter" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
                         href="javascript:;" (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
-                        <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
+                        <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
                     </a>
                     <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 && !isMobileScreen">
 
@@ -100,7 +100,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-12 col-sm-12  col-xs-12 text-center col-xs-12 daterngoption" *ngIf="!isMobileScreen">
+            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center daterngoption" *ngIf="!isMobileScreen">
                 <!-- (hideDaterangepicker)="selectedDate($event)"  -->
                 <div class="advanceSearchByDate date-advance-search">
                     <!-- <span class="icon-calender "></span> -->
@@ -145,7 +145,7 @@
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
                             <i class="fa icon-ledger-path" style="line-height: 0px"></i>
                         </a>
-                        <a class="icomoon_ico d-flex align-items-center" id="export-ledger" href="javascript:void(0)" title=""
+                        <a class="icomoon_ico d-flex align-items-center mr-0" id="export-ledger" href="javascript:void(0)" title=""
                             [tooltip]="'Export'" [placement]="'top'" (click)="showExportLedgerModal()">
                             <i class="icon-ledger-union-5" style="line-height: 0px"></i>
                         </a>
@@ -202,7 +202,7 @@
 
                 <table class="table ledgerTable transaction-mapped-table" style="margin-bottom:0">
                     <thead>
-                        <th class="nopad" colspan="6">
+                        <th class="nopad top-head-table" colspan="6">
                             <div class="clearfix ldgTheadL">
                                 <h3 class="ledgerHead">
                                     <span>Transactions from mapped account</span>
@@ -225,11 +225,11 @@
                             <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
-                                        <tr class="dgreyBg">
-                                            <th class="col-xs-3 col-md-3 col-lg-3">Date
+                                        <tr class="dgreyBg row">
+                                            <th class="col-3 col-md-3 col-lg-3">Date
                                             </th>
-                                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
-                                            <th class="col-xs-4 col-md-3 col-lg-3 alR" class="alR">Amount</th>
+                                            <th class="col-5 col-md-6 col-lg-6">Particular</th>
+                                            <th class="col-4 col-md-3 col-lg-3 alR">Amount</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -238,11 +238,11 @@
                             <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
-                                        <tr>
-                                            <th class="col-xs-3 col-md-3 col-lg-3">Date
+                                        <tr class="row">
+                                            <th class="col-3 col-md-3 col-lg-3">Date
                                             </th>
-                                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
-                                            <th class="col-xs-4 col-md-3 col-lg-3 alR">Amount</th>
+                                            <th class="col-5 col-md-6 col-lg-6">Particular</th>
+                                            <th class="col-4 col-md-3 col-lg-3 alR">Amount</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -258,12 +258,12 @@
                                     <ng-container *ngFor="let txn of item.transactions;">
                                         <ng-container *ngIf="txn.type === 'DEBIT'">
                                         <tr>
-                                            <td class="width100 pos-rel">
+                                            <td class="width100 pos-rel upper-td">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
-                                                        <tr class="ledger-row"
+                                                        <tr class="ledger-row row"
                                                             [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
-                                                            <td class="col-xs-3 col-md-3 col-lg-3">
+                                                            <td class="col-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center"
                                                                      >
                                                                     <span class="pl-05">
@@ -278,8 +278,8 @@
                                                                 </div>
                                                             </td>
                                                             <td
-                                                                class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger">
-                                                                <div *ngIf="txn.type === 'DEBIT'"
+                                                                class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger">
+                                                                <div class="w-100" *ngIf="txn.type === 'DEBIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
                                                                     <sh-select [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
@@ -332,7 +332,7 @@
                                                                 </div>
                                                             </td>
 
-                                                            <td class="col-xs-4 col-md-3 col-lg-3  pos-rel">
+                                                            <td class="col-4 col-md-3 col-lg-3  pos-rel">
                                                                 <input class="form-control alR" type="text" id="{{'enter-amount-dr-' + i}}"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
@@ -351,6 +351,7 @@
                                                         [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                         [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
                                                         [needToReCalculate]="needToReCalculate"
+                                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                         (changeTransactionType)="toggleTransactionType($event)"
                                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                         (saveBlankLedger)="saveBankTransaction()"
@@ -378,11 +379,11 @@
                                     <ng-container *ngFor="let txn of item.transactions;" >
                                         <ng-container *ngIf="txn.type === 'CREDIT'">
                                         <tr >
-                                            <td class="width100 pos-rel">
+                                            <td class="width100 pos-rel upper-td">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
-                                                        <tr class="ledger-row">
-                                                            <td class="col-xs-3 col-md-3 col-lg-3">
+                                                        <tr class="ledger-row row">
+                                                            <td class="col-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center"
                                                                     >
                                                                     <span class="pl-05">
@@ -401,8 +402,8 @@
                                                                 </div>
                                                             </td>
                                                             <td
-                                                                class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
-                                                                <div *ngIf="txn.type === 'CREDIT'"
+                                                                class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
+                                                                <div class="w-100" *ngIf="txn.type === 'CREDIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
                                                                     <sh-select [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
@@ -456,7 +457,7 @@
                                                                 </div>
                                                             </td>
 
-                                                            <td class="col-xs-4 col-md-3 col-lg-3 pos-rel">
+                                                            <td class="col-4 col-md-3 col-lg-3 pos-rel">
                                                                 <input class="form-control alR" type="text"  id="{{'enter-amount-cr-' + i}}"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
@@ -475,6 +476,7 @@
                                                         [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                         [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
                                                         [needToReCalculate]="needToReCalculate"
+                                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                         (changeTransactionType)="toggleTransactionType($event)"
                                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                         (saveBlankLedger)="saveBankTransaction()"
@@ -597,13 +599,13 @@
             </table>
             <!-- region pagination -->
             <div class="text-center mr-t2 page-count pa">
-                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
+                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions, </span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination>
+</pagination> -->
                 </div>
 
             </div>
@@ -740,7 +742,7 @@
                                 </div>
                             </td>
 
-                            <td class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right" data-title="Amount">
+                            <td  [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"  class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right" data-title="Amount">
                                 {{ txn.currencySymbol }}{{ txn.amount | giddhCurrency }}
 
                                 <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -860,6 +862,7 @@
                                     <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
+                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
                                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                         [selectedCurrency]="selectedCurrency"
@@ -1014,7 +1017,7 @@
                                 </div>
                             </td>
 
-                            <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right">
+                            <td  [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"  data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right">
                                 {{ txn.currencySymbol }} {{txn.amount | giddhCurrency}}
                                 <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount | giddhCurrency}}
@@ -1140,6 +1143,7 @@
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                         [selectedCurrency]="selectedCurrency"
                                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                         [selectedPrefixForCurrency]="selectedPrefixForCurrency"
@@ -1262,13 +1266,12 @@
 
             <!-- region pagination -->
             <div class="text-center mr-t2 page-count pa">
-                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
+                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions, </span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
-
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination>
+</pagination> -->
                 </div>
 
             </div>
@@ -1277,7 +1280,6 @@
         <!--endregion-->
     </div>
     <!-- endregion -->
-
 </section>
 
 <div class="container" *ngIf="!isShowLedgerColumnarReportTable">
@@ -1431,6 +1433,9 @@
         </section>
     </div>
 </div>
+
+<div class="show-if-ledger-open" *ngIf="isMoreDetailsOpened">
+</div>
 <!-- modal sections -->
 
 <div *ngIf="isShowLedgerColumnarReportTable">
@@ -1451,12 +1456,15 @@
 <!-- aside menu section -->
 
 <!-- update ladger entry popup -->
-<div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard: true}" tabindex="-1">
+<div bsModal #updateLedgerModal="bs-modal" class="modal fade update-ledger-modal" role="dialog"
+[config]="{keyboard: true}"tabindex="-1">
     <div class="modal-dialog modal-xl modal-ledger">
         <div class="modal-content">
             <div element-view-container-ref #updateledgercomponent=elementviewcontainerref>
             </div>
         </div>
+    </div>
+    <div class="show-if-update-ledger-open">
     </div>
 </div>
 <!-- update ladger entry popup -->
@@ -1487,7 +1495,7 @@
 
 <!--quick account popup -->
 <div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-sm" style="width: 298px">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
         </div>
@@ -1594,7 +1602,7 @@
         <div class="modal-body">
             <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
-                [ranges]="datePickerRanges.ranges" [selectedRangeLabel]="selectedRangeLabel"
+                [ranges]="datePickerRanges" [selectedRangeLabel]="selectedRangeLabel"
                 [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
                 [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"

@@ -19,7 +19,7 @@ import {digitsOnly} from '../../../helpers';
 import {AccountsAction} from '../../../../actions/accounts.actions';
 import {AppState} from '../../../../store';
 import {select, Store} from '@ngrx/store';
-import {AccountRequestV2} from '../../../../models/api-models/Account';
+import {AccountRequestV2, CustomFieldsData} from '../../../../models/api-models/Account';
 import {CompanyService} from '../../../../services/companyService.service';
 import {ToasterService} from '../../../../services/toaster.service';
 import {CompanyResponse, StateList, StatesRequest} from '../../../../models/api-models/Company';
@@ -33,6 +33,9 @@ import {CommonActions} from '../../../../actions/common.actions';
 import {GeneralActions} from "../../../../actions/general/general.actions";
 import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
+import * as googleLibphonenumber from 'google-libphonenumber';
+import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
 @Component({
     selector: 'account-add-new-details',
@@ -67,7 +70,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public activeCompany: CompanyResponse;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
-    public isMultipleCurrency: boolean = false;
     public companyCurrency: string;
     public isIndia: boolean = false;
     public companyCountry: string = '';
@@ -91,6 +93,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isStateRequired: boolean = false;
     public bankIbanNumberMaxLength: string = '18';
     public bankIbanNumberMinLength: string = '9';
+    /** company custom fields list */
+    public companyCustomFields: any[] = [];
+    /** Observable for selected active group  */
+    private activeGroup$: Observable<any>;
 
     constructor(
         private _fb: FormBuilder,
@@ -101,10 +107,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
-        private changeDetectorRef: ChangeDetectorRef) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private groupService: GroupService,
+        private groupWithAccountsAction: GroupWithAccountsAction) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
-
+        this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup),takeUntil(this.destroyed$));
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
@@ -128,6 +136,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.showBankDetail = true;
         }
         this.initializeNewForm();
+        this.activeGroup$.subscribe(response => {
+            if (response) {
+                if (response.parentGroups && response.parentGroups.length) {
+                    let parent = response.parentGroups;
+                    if (parent.length > 1 && parent[1]) {
+                        this.isParentDebtorCreditor(parent[1].uniqueName);
+                    } else if (parent.length === 1) {
+                        this.isParentDebtorCreditor(response.uniqueName);
+                    }
+                }
+            }
+        });
+        this.getCompanyCustomField();
 
         this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
@@ -191,7 +212,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                     }
                     this.companyCurrency = _.clone(this.activeCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(this.activeCompany.isMultipleCurrency);
                 });
             }
         });
@@ -244,6 +264,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
         this.getCurrency();
+
+        this.isStateRequired = this.checkActiveGroupCountry();
     }
 
     public ngAfterViewInit() {
@@ -353,8 +375,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 })
             ]),
-            closingBalanceTriggerAmount: ['', Validators.compose([digitsOnly])],
-            closingBalanceTriggerAmountType: ['CREDIT']
+            closingBalanceTriggerAmount: ['',Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmountType: ['CREDIT'],
+            customFields: this._fb.array([])
         });
     }
 
@@ -555,6 +578,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         if (!accountRequest.mobileNo) {
             accountRequest.mobileCode = '';
+        } else {
+            if(!this.isMobileNumberValid) {
+                this._toaster.errorToast('Invalid Contact number');
+                return false;
+            }
         }
         if (this.isHsnSacEnabledAcc) {
             // delete accountRequest['country'];
@@ -646,10 +674,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
-            let parent = event.additional;
-            if (parent[1]) {
-                this.isParentDebtorCreditor(parent[1].uniqueName);
-            }
+            this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+
+            // let parent = event.additional;
+            // if (parent[1]) {
+            //     this.isParentDebtorCreditor(parent[1].uniqueName);
+            // }
             this.isGroupSelected.emit(event.value);
             this.toggleStateRequired();
         }
@@ -831,8 +861,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value &&
-            this.isCreditorOrDebtor(this.activeGroupUniqueName)) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors')) {
             return true;
         } else {
             return false;
@@ -933,12 +962,97 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
             if (groupDetails) {
                 return groupDetails.additional.some((parentGroup) => {
-                    const groups = [parentGroup.uniqueName, groupDetails.value]
+                    const groups = [parentGroup.uniqueName, groupDetails.value];
                     return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
                 });
             }
             return false;
         }
         return false;
+    }
+
+     /**
+     * API call to get custom field data
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public getCompanyCustomField(): void {
+        this.groupService.getCompanyCustomField().subscribe(response => {
+            if (response && response.status === 'success') {
+                this.companyCustomFields = response.body;
+                this.createDynamicCustomFieldForm(this.companyCustomFields);
+            } else {
+                this._toaster.errorToast(response.message);
+            }
+        });
+    }
+
+    /**
+     * To create blank dynamic custom field row
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public addBlankCustomFieldForm(): void {
+        const customField = this.addAccountForm.get('customFields') as FormArray;
+        if (customField.value.length === 0) {
+            customField.push(this.initialCustomFieldDetailsForm(null));
+        }
+    }
+
+    /**
+     * To render custom field form
+     *
+     * @param {*} obj
+     * @param {*} customFieldLength
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
+        const customField = this.addAccountForm.get('customFields') as FormArray;
+        if (customField.length < customFieldLength) {
+            customField.push(this.initialCustomFieldDetailsForm(obj));
+        }
+    }
+
+
+    /**
+     * To initialize custom field form
+     *
+     * @param {CustomFieldsData} [value=null]
+     * @returns {FormGroup}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
+        let customFields = this._fb.group({
+            uniqueName: [''],
+            value: [''],
+        });
+        if (value) {
+            customFields.patchValue(value);
+        }
+        return customFields;
+    }
+
+    /**
+     * To create dynamic custom field form
+     *
+     * @param {*} customFieldForm
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public createDynamicCustomFieldForm(customFieldForm: any): void {
+        customFieldForm.map(item => {
+            this.renderCustomFieldDetails(item, customFieldForm.length);
+        });
+    }
+
+    /**
+     * To set boolean type custom field value
+     *
+     * @param {string} isChecked to check boolean custom field true or false
+     * @param {number} index index number
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public selectedBooleanCustomField(isChecked: string, index: number): void {
+        const customField = this.addAccountForm.get('customFields') as FormArray;
+        customField.controls[index].get('value').setValue(isChecked);
     }
 }

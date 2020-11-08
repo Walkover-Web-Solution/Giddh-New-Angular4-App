@@ -30,7 +30,7 @@
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span
-                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'dateOfSupply' || (branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
@@ -58,7 +58,7 @@
                         </th>
                         <th width="10%" (click)="sortBranchTransferList('totalAmount')" class="text-right">Total Amount
                             <span
-                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': !branchTransferGetRequestParams.sort || branchTransferGetRequestParams.sort === 'asc', 'icon-sort-dsc': branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'totalAmount' || (branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="10%">Action</th>
                     </tr>
@@ -77,12 +77,12 @@
                         <td data-title="Total Amount" class="text-right">{{activeCompany.baseCurrencySymbol}}
                             {{ item.totalAmount | giddhCurrency }}</td>
                         <td data-title="Action">
-                            <div class="btn-group" dropdown [autoClose]="true">
+                            <div class="btn-group" container="body" dropdown [autoClose]="true">
                                 <button id="button-basic" dropdownToggle type="button"
                                     class="dropdown-toggle select-action-button" aria-controls="dropdown-basic"><span
                                         class="text-light-2">Select Action</span> <span
                                         class="icon-dots-three-vertical"></span></button>
-                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu action-dropdown" role="menu"
                                     aria-labelledby="button-basic">
                                     <!-- <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:;">Received</a>
@@ -107,7 +107,7 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
+                <tbody class="on-mobile-view no-records" *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
                         <td *ngIf="!isLoading" colspan="8" align="center">No records found.</td>
                         <td *ngIf="isLoading" colspan="8">

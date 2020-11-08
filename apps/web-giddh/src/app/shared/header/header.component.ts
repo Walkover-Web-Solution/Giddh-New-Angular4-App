@@ -43,11 +43,13 @@ import {
     CompanyCountry,
     CompanyCreateRequest,
     CompanyResponse,
-    StatesRequest
+    StatesRequest,
+    Organization,
+    OrganizationDetails
 } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
@@ -63,14 +65,17 @@ import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Accoun
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
-import { userLoginStateEnum } from '../../models/user-login-state';
+import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
+import { RESTRICTED_BRANCH_ROUTES, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { CompanyService } from '../../services/companyService.service';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { AccountsAction } from '../../actions/accounts.actions';
 
 @Component({
     selector: 'app-header',
@@ -126,56 +131,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         { name: 'DUTCH', value: 'nl' }
     ];
     public activeFinancialYear: ActiveFinancialYear;
-    // public datePickerOptions: any = {
-    //     hideOnEsc: true,
-    //     opens: 'left',
-    //     locale: {
-    //         applyClass: 'btn-green',
-    //         applyLabel: 'Go',
-    //         fromLabel: 'From',
-    //         format: 'D-MMM-YY',
-    //         toLabel: 'To',
-    //         cancelLabel: 'Cancel',
-    //         customRangeLabel: 'Custom range'
-    //     },
-    //     ranges: {
-    //         'This Month to Date': [
-    //             moment().startOf('month'),
-    //             moment()
-    //         ],
-    //         'This Quarter to Date': [
-    //             moment().quarter(moment().quarter()).startOf('quarter'),
-    //             moment()
-    //         ],
-    //         'This Financial Year to Date': [
-    //             moment().startOf('year').subtract(9, 'year'),
-    //             moment()
-    //         ],
-    //         'This Year to Date': [
-    //             moment().startOf('year'),
-    //             moment()
-    //         ],
-    //         'Last Month': [
-    //             moment().subtract(1, 'month').startOf('month'),
-    //             moment().subtract(1, 'month').endOf('month')
-    //         ],
-    //         'Last Quarter': [
-    //             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-    //             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-    //         ],
-    //         'Last Financial Year': [
-    //             moment().startOf('year').subtract(10, 'year'),
-    //             moment().endOf('year').subtract(10, 'year')
-    //         ],
-    //         'Last Year': [
-    //             moment().subtract(1, 'year').startOf('year'),
-    //             moment().subtract(1, 'year').endOf('year')
-    //         ]
-    //     },
-    //     startDate: moment().subtract(30, 'days'),
-    //     endDate: moment()
-    // };
-
     public sideMenu: { isopen: boolean } = { isopen: false };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isCompanyRefreshInProcess$: Observable<boolean>;
@@ -184,6 +139,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     public companies$: Observable<CompanyResponse[]>;
     public selectedCompany: Observable<CompanyResponse>;
+    /** Stores the active company details */
+    public selectedCompanyDetails: CompanyResponse;
     public seletedCompanywithBranch: string = '';
     public selectedCompanyCountry: string;
     public markForDeleteCompany: CompanyResponse;
@@ -252,7 +209,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -265,18 +222,52 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
-    /** To check all module menu open */
-    public isAllModuleOpen: boolean = false;
 
     /** update IndexDb flags observable **/
     public updateIndexDbInProcess$: Observable<boolean>;
     public updateIndexDbSuccess$: Observable<boolean>;
     /* This will hold if resolution is less than 768 to consider as mobile screen */
     public isMobileScreen: boolean = false;
+    /* This will hold current page url */
+    public currentPageUrl: string = '';
+
+    /** Stores the details of the current branch */
+    public currentBranch: any;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Search query to search branch */
+    public searchBranchQuery: string;
+    /** Current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Version of lated mac app  */
+    public macAppVersion: string;
+
 
     /**
+     * Returns whether the account section needs to be displayed or not
      *
+     * @readonly
+     * @type {boolean} True, if either branch is switched or company is switched and only HO is there (single branch)
+     * @memberof HeaderComponent
      */
+    public get shouldShowAccounts(): boolean {
+        return this.currentOrganizationType === OrganizationType.Branch ||
+            (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
+    }
+
+    /**
+     * Returns whether the back button in header should be displayed or not
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof HeaderComponent
+     */
+    public get shouldShowBackButton(): boolean {
+        return this.router.url && (ROUTES_WITH_HEADER_BACK_BUTTON.includes(this.router.url));
+    }
+
     // tslint:disable-next-line:no-empty
     constructor(
         private commonService: CommonService,
@@ -299,27 +290,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private location: Location,
         private settingsProfileService: SettingsProfileService,
-        private companyService: CompanyService
+        private settingsProfileAction: SettingsProfileActions,
+        private companyService: CompanyService,
+        private settingsBranchAction: SettingsBranchActions,
+        private accountsAction: AccountsAction,
+        public location: Location
     ) {
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                let configDatePicker = cloneDeep(config);
-                if (configDatePicker && configDatePicker.ranges) {
-                    let modifiedRanges = [];
-                    configDatePicker.ranges.forEach(item => {
-                        if (item.name !== 'Today' && item.name !== 'Yesterday') {
-                            modifiedRanges.push(item);
-                        }
-                    });
-                    configDatePicker.ranges = modifiedRanges;
-                }
-                this.datePickerOptions = configDatePicker;
-            }
-        });
-
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
@@ -333,9 +310,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
+                if((this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")) && !this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
+                }
+
+                if(!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.removeSessionStorage("previousPage");
+                }
                 this.addClassInBodyIfPageHasTabs();
             }
             if (event instanceof NavigationEnd) {
+                if(!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
+                    this.currentPageUrl = this.router.url;
+                }
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
 
@@ -377,12 +364,31 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return user.user;
             }
         })).pipe(takeUntil(this.destroyed$));
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            if (organization && organization.details && organization.details.branchDetails) {
+                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
+                this.generalService.currentOrganizationType = organization.type;
+                this.currentOrganizationType = organization.type;
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                        }
+                    });
+                }
+            } else {
+                this.generalService.currentOrganizationType = OrganizationType.Company;
+                this.currentOrganizationType = OrganizationType.Company;
+            }
+        });
 
         this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
         this.updateIndexDbInProcess$ = this.store.pipe(select(p => p.general.updateIndexDbInProcess), takeUntil(this.destroyed$))
         this.updateIndexDbSuccess$ = this.store.pipe(select(p => p.general.updateIndexDbComplete), takeUntil(this.destroyed$))
+
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies) {
                 return;
@@ -391,7 +397,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return;
             }
 
-            let orderedCompanies = orderBy(companies, 'name');
+            let orderedCompanies = _.orderBy(companies, 'name');
             this.companies$ = observableOf(orderedCompanies);
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
@@ -409,7 +415,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (selectedCmp) {
                 this.selectedCompany = observableOf(selectedCmp);
-
+                this.selectedCompanyDetails = selectedCmp;
                 let selectedCompanyArray = selectedCmp.name.split(" ");
                 let companyInitials = [];
                 for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
@@ -429,17 +435,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 } else {
                     this.seletedCompanywithBranch = selectedCmp.name;
                 }
-                //commenting due to new date picker option
-                // if (this.activeFinancialYear) {
-                //     this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
-                //         moment()
-                //     ];
-                //     this.datePickerOptions.ranges['Last Financial Year'] = [
-                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                //         moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
-                //     ];
-                // }
 
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = selectedCmp.name;
@@ -473,11 +468,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.removeCompanySessionData();
             }
         });
+
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response;
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentBranch = response.find(branch =>
+                        (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                } else {
+                    this.currentBranch = '';
+                }
+            }
+        });
     }
 
     public ngOnInit() {
         this.getCurrentCompanyData();
-        
+
         this._breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -492,8 +499,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
+
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
+        this.getElectronMacAppVersion();
+
         this.store.dispatch(this.companyActions.GetApplicationDate());
 
         this.user$.pipe(take(1)).subscribe((u) => {
@@ -541,6 +551,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
+        this.loadCompanyBranches();
 
         // region creating list for cmd+g modal
         combineLatest(
@@ -637,6 +648,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             .subscribe(a => {
                 if (a instanceof NavigationStart) {
                     this.navigationEnd = false;
+                }
+                if (a instanceof NavigationCancel) {
+                    this.navigationEnd = true;
+                    let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+                        return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
+                    });
+                    if (menuItem) {
+                        this._dbService.removeItem(this.generalService.companyUniqueName, 'menus', menuItem.uniqueName).then((dbResult) => {
+                            this.findListFromDb(dbResult);
+                            this._generalActions.updateUiFromDb();
+                        });
+                    }
                 }
                 if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
                     this.navigationEnd = true;
@@ -735,6 +758,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getCurrentCompanyData(): void {
         this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
+                this.store.dispatch(this.settingsProfileAction.handleCompanyProfileResponse(response));
                 let res = response.body;
                 if (res.countryV2 !== null && res.countryV2 !== undefined) {
                     this.getStates(res.countryV2.alpha2CountryCode);
@@ -805,23 +829,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Get universal date
         this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj && dateObj.length) {
-                //  Commented may be use later for new datepicker
-                // if (!this.isDateRangeSelected) {
-                // this.datePickerOptions.startDate = moment(dateObj[0]);
-                // this.datePickerOptions.endDate = moment(dateObj[1]);
-                // this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
-                // const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-                // const to: any = moment().format(GIDDH_DATE_FORMAT);
-                // const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                // const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
-
-                // if (from === fromFromStore && to === toFromStore) {
-                //     this.isTodaysDateSelected = true;
-                // }
+                this.isTodaysDateSelected = !dateObj[3];  //entry-setting API date response in case of today fromDate/toDate will be null
                 if (this.isTodaysDateSelected) {
                     let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRangeUi = 'Today';
+
                 } else {
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1080,10 +1094,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 10);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 15) : slice(this.menuItemsFromIndexDB, 0, 10);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 7);
             } else {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 12) : slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 5);
             }
 
@@ -1102,7 +1116,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 10) : slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
             }
         }
@@ -1118,6 +1132,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
             if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
                 this.store.dispatch(this._generalActions.addAndManageClosed());
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
             }
         });
 
@@ -1147,8 +1162,52 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public changeCompany(selectedCompanyUniqueName: string) {
         this.companyDropdown.isOpen = false;
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        this.setOrganizationDetails(OrganizationType.Company, details);
         this.toggleBodyScroll();
         this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
+    }
+
+    /**
+     * Switches to branch mode
+     *
+     * @param {string} branchUniqueName Branch uniqueName
+     * @memberof HeaderComponent
+     */
+    public switchToBranch(branchUniqueName: string, event: any): void {
+        event.stopPropagation();
+        this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.currentBranch = response.find(branch => branch.uniqueName === branchUniqueName);
+            }
+        });
+        event.preventDefault();
+        this.companyDropdown.isOpen = false;
+        this.toggleBodyScroll();
+        const details = {
+            branchDetails: {
+                uniqueName: branchUniqueName
+            }
+        };
+        this.setOrganizationDetails(OrganizationType.Branch, details);
+        if (!RESTRICTED_BRANCH_ROUTES.includes(this.router.url)) {
+            window.location.reload();
+        } else {
+            window.location.href = '/pages/home';
+        }
+    }
+
+    /**
+     * Switches to company view from branch view
+     *
+     * @memberof HeaderComponent
+     */
+    public goToCompany(): void {
+        this.changeCompany(this.selectedCompanyDetails.uniqueName);
     }
 
     public deleteCompany(e: Event) {
@@ -1256,7 +1315,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         if (event) {
             document.querySelector('body').classList.add('hide-scroll-body')
-        } else {
+        }
+        else {
             document.querySelector('body').classList.remove('hide-scroll-body')
         }
         this.menuStateChange.emit(event);
@@ -1283,43 +1343,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.flyAccounts.next(false);
     }
-
-    // public setApplicationDate(ev) {
-    //     let data = ev ? cloneDeep(ev) : null;
-    //     if (data && data.picker) {
-    //         let dates = {
-    //             fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-    //             toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT),
-    //             chosenLabel: data.picker.chosenLabel
-    //         };
-    //         if (data.picker.chosenLabel === 'This Financial Year to Date') {
-    //           data.picker.startDate = moment(clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-    //           dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-    //         }
-    //         if (data.picker.chosenLabel === 'Last Financial Year') {
-    //           data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
-    //           data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
-    //           dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-    //           dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-    //         }
-    //         this.isTodaysDateSelected = false;
-    //         this.store.dispatch(this.companyActions.SetApplicationDate(dates));
-    //     } else {
-    //         this.isTodaysDateSelected = true;
-    //         let today = cloneDeep([moment(), moment()]);
-    //         // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
-    //         this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-    //         this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-    //         let dates = {
-    //             fromDate: null,
-    //             toDate: null,
-    //             duration: null,
-    //             period: null,
-    //             noOfTransactions: null
-    //         };
-    //         this.store.dispatch(this.companyActions.SetApplicationDate(dates));
-    //     }
-    // }
 
     public openDateRangePicker() {
         this.isTodaysDateSelected = false;
@@ -1417,6 +1440,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase());
             }
         });
+    }
+
+    /**
+     * Filters the branches based on text provided
+     *
+     * @param {string} branchName Branch name query entered by the user
+     * @memberof HeaderComponent
+     */
+    public filterBranch(branchName: string): void {
+        let branches = [];
+        this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+            branches = response || [];
+        });
+        if (branchName) {
+            this.currentCompanyBranches = branches.filter(branch => {
+                if (!branch.alias) {
+                    return branch.name.toLowerCase().includes(branchName.toLowerCase());
+                } else {
+                    return branch.name.toLowerCase().includes(branchName.toLowerCase()) || branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                }
+            });
+        } else {
+            this.currentCompanyBranches = branches;
+        }
     }
 
     public closeUserMenu(ev) {
@@ -1546,7 +1593,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen).then((res) => {
+            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen, this.currentOrganizationType === OrganizationType.Company).then((res) => {
                 if (res) {
                     this.findListFromDb(res);
                 }
@@ -1770,7 +1817,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            } else {
+            }
+            else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1813,6 +1861,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof ProfitLossComponent
      */
     public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
@@ -1833,9 +1885,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
             this.isTodaysDateSelected = true;
             let today = cloneDeep([moment(), moment()]);
-            // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
+
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRangeUi = 'Today';
+
             let dates = {
                 fromDate: null,
                 toDate: null,
@@ -1870,17 +1924,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * Toggle all module to previous selected module
+     * Navigate to all module
      *
      * @memberof HeaderComponent
      */
     public navigateToAllModules(): void {
-        if (this.isAllModuleOpen) {
-            this.location.back();
-        } else {
-            this.router.navigate(['/pages/all-modules']);
+        this.router.navigate(['/pages/all-modules']);
+    }
+
+    /**
+     * Loads company branches
+     *
+     * @memberof HeaderComponent
+     */
+    public loadCompanyBranches(): void {
+        if (this.generalService.companyUniqueName) {
+            // Avoid API call if new user is onboarded
+            this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
         }
-        this.isAllModuleOpen = !this.isAllModuleOpen;
     }
 
     /**
@@ -1907,5 +1968,48 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if(window['Headway'] !== undefined) {
             window['Headway'].init();
         }
+    }
+
+    /**
+     * Navigates to previous page
+     *
+     * @memberof HeaderComponent
+     */
+    public navigateToPreviousRoute(): void {
+        this.location.back();
+    }
+
+    /**
+     * Sets the organization details
+     *
+     * @private
+     * @param {OrganizationType} type Type of the organization
+     * @param {OrganizationDetails} branchDetails Branch details of an organization
+     * @memberof HeaderComponent
+     */
+    private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
+        const organization: Organization = {
+            type, // Mode to which user is switched to
+            uniqueName: this.selectedCompanyDetails ? this.selectedCompanyDetails.uniqueName : '',
+            details: branchDetails
+        };
+        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+    }
+
+
+    /**
+     * To get latest version of mac app
+     *
+     * @private
+     * @memberof HeaderComponent
+     */
+    private getElectronMacAppVersion(): void {
+        this.authService.getElectronMacAppVersion().subscribe((res: string) => {
+            if (res && typeof res === 'string') {
+                let version = res.split('files')[0];
+                let versNum = version.split(' ')[1];
+                this.macAppVersion = versNum;
+            }
+        });
     }
 }

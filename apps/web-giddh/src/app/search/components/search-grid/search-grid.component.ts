@@ -460,8 +460,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                         this.checkboxInfo = {
                             selectedPage: 1
                         };
-                        this.selectedItems = [];
-                        this.isAllChecked = false;
                     });
             } else if (this.messageBody.btn.set === 'Send Sms') {
                 let temp = request;
@@ -472,8 +470,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                         this.checkboxInfo = {
                             selectedPage: 1
                         };
-                        this.selectedItems = [];
-                        this.isAllChecked = false;
                     });
             }
         });

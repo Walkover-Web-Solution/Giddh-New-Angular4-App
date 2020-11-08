@@ -54,6 +54,7 @@ import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { SearchService } from '../../../services/search.service';
+import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -80,6 +81,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
     @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
 
     @Input() isPettyCash: boolean = false;
     @Input() pettyCashEntry: any;
@@ -211,8 +214,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public adjustVoucherConfiguration: any;
     /** Stores the search results */
     public searchResults: Array<IOption> = [];
+    /** Default search suggestion list to be shown for search */
+    public defaultSuggestions: Array<IOption> = [];
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the default search results pagination details (required only for passing
+     * default search pagination details to Update ledger component) */
+    public defaultResultsPaginationData = {
         page: 0,
         totalPages: 0,
         query: ''
@@ -240,7 +252,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private settingsUtilityService: SettingsUtilityService,
         private store: Store<AppState>,
         private searchService: SearchService,
-        private _toasty: ToasterService
+        private _toasty: ToasterService,
+        private warehouseActions: WarehouseActions
     ) {
 
         this.vm = new UpdateLedgerVm();
@@ -283,11 +296,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
 
-        this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
-                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                this.defaultWarehouse = (warehouseData.defaultWareßhouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+            } else {
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
             }
         });
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
@@ -380,6 +395,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // so it means it's other account entry of petty cash
                     // so for that we have to add a dummy account in flatten account array
                     if (this.isPettyCash) {
+                        // this.loadDefaultSearchSuggestions();
                         if (resp[0].othersCategory) {
                             // check we already have others account in flatten account, then don't do anything
                             const isThereOthersAcc = this.vm.flatternAccountList.some(d => d.uniqueName === 'others');
@@ -687,6 +703,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         }
                     });
                     // this.vm.flatternAccountList4Select = observableOf(orderBy(initialAccounts, 'label'));
+                    initialAccounts.push(...this.defaultSuggestions);
                     this.searchResults = orderBy(initialAccounts, 'label');
                     this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
@@ -901,7 +918,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private prepareMultiCurrencyObject(accountDetails: any) {
         if (this.isPettyCash) {
             // In case of petty cash account unique name will be received
-            this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === accountDetails));
+            this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === accountDetails.uniqueName));
         } else {
             // In other cases account will be received
             this.multiCurrencyAccDetails = {
@@ -1302,7 +1319,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
         requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
-        if (!this.taxOnlyTransactions) {
+        if (!this.isRcmEntry && !this.isAdvanceReceipt && !this.taxOnlyTransactions) {
             requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
         }
         requestObj.transactions.map((transaction: any) => {
@@ -1755,7 +1772,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public handleScrollEnd(): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
-            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
+            this.onSearchQueryChanged(
+                this.searchResultsPaginationData.query,
+                this.searchResultsPaginationData.page + 1,
+                this.searchResultsPaginationData.query ? true : false,
+                (response) => {
+                    if (!this.searchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                                label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                                additional: result
+                            }
+                        }) || [];
+                        this.defaultSuggestions = this.defaultSuggestions.concat(...results);
+                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
+                    }
+            });
         }
     }
 
@@ -1764,43 +1798,52 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @param {string} query Search query
      * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1): void {
-        this.searchResultsPaginationData.query = query;
-        const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount.uniqueName) : '';
-        // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
-        const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-            this.activeAccount ? this.activeAccount.uniqueName : '' :
-            '';
-        const requestObject = {
-            q: encodeURIComponent(query),
-            page,
-            withStocks: true,
-            accountUniqueName: encodeURIComponent(accountUniqueName)
-        }
-        this.searchService.searchAccount(requestObject).subscribe(data => {
-            if (data && data.body && data.body.results) {
-                const searchResults = data.body.results.map(result => {
-                    return {
-                        value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
-                        label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
-                        additional: result
-                    }
-                }) || [];
-                this.noResultsFoundLabel = SearchResultText.NotFound;
-                if (page === 1) {
-                    this.searchResults = searchResults;
-                } else {
-                    this.searchResults = [
-                        ...this.searchResults,
-                        ...searchResults
-                    ];
-                }
-                this.searchResultsPaginationData.page = data.body.page;
-                this.searchResultsPaginationData.totalPages = data.body.totalPages;
+    public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+        if (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback) {
+            this.searchResultsPaginationData.query = query;
+            const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount.uniqueName) : '';
+            // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
+            const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+                this.activeAccount ? this.activeAccount.uniqueName : '' :
+                '';
+            const requestObject = {
+                q: encodeURIComponent(query),
+                page,
+                withStocks,
+                accountUniqueName: encodeURIComponent(accountUniqueName)
             }
-        });
+            this.searchService.searchAccount(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                            label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                            additional: result
+                        }
+                    }) || [];
+                    this.noResultsFoundLabel = SearchResultText.NotFound;
+                    if (page === 1) {
+                        this.searchResults = searchResults;
+                    } else {
+                        this.searchResults = [
+                            ...this.searchResults,
+                            ...searchResults
+                        ];
+                    }
+                    this.searchResultsPaginationData.page = data.body.page;
+                    this.searchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.searchResults = [...this.defaultSuggestions];
+        }
     }
 
     /**
@@ -1809,7 +1852,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public resetPreviousSearchResults(): void {
-        this.searchResults = [];
+        this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
             page: 0,
             totalPages: 0,
@@ -2083,6 +2126,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
+     * Toggles the more detail section
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public toggleMoreDetail(): void {
+        this.showAdvanced = !this.showAdvanced;
+        this.moreDetailOpen.emit(this.showAdvanced);
+    }
+
+    /**
      * Prepares the voucher adjustment configuration
      *
      * @private
@@ -2151,5 +2204,27 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.isAdjustReceiptSelected = true;
             }
         }
+    }
+
+    /**
+     * Loads the default search suggestion when petty cash is opened
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private loadDefaultSearchSuggestions(): void {
+        this.onSearchQueryChanged('', 1, false, (response) => {
+            this.defaultSuggestions = response.map(result => {
+                return {
+                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                    additional: result
+                }
+            }) || [];
+            this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+            this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
+            this.searchResults = [...this.defaultSuggestions];
+            this.noResultsFoundLabel = SearchResultText.NotFound;
+        });
     }
 }

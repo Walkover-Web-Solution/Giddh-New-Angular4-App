@@ -42,7 +42,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
     @Input() public ItemHeight: number = 41;
-    @Input() public NoFoundMsgHeight: number = 30;
+    @Input() public NoFoundMsgHeight: number = 34;
     @Input() public NoFoundLinkHeight: number = 30;
     @Input() public dropdownMinHeight: number = 35;
     @Input() public customFilter: (term: string, options: IOption) => boolean;
@@ -77,6 +77,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>(); // emits last cleared value
+    /** Emits rest of the values when single selection is cleared */
+    @Output() public clearSingleItem: EventEmitter<any> = new EventEmitter<any>();
+
     @Output() public selected = new EventEmitter<any>();
     @Output() public previousChange = new EventEmitter<any>(); // emits when selected option changes, only applicable in single select for now
     @Output() public noOptionsFound = new EventEmitter<boolean>();
@@ -340,6 +343,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                     }
                 }
                 // this.selectHighlightedOption();
+
             } else if (key === this.KEYS.UP) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
@@ -466,9 +470,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.stopDynamicSearch$ = new ReplaySubject(1);
             this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
-                if (query) {
-                    this.dynamicSearchedQuery.emit(query);
-                }
+                this.dynamicSearchedQuery.emit(query);
             });
         }
     }
@@ -540,6 +542,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
         this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+        this.clearSingleItem.emit(this.selectedValues);
         this.onChange();
     }
     public openListIfNotOpened(ev) {

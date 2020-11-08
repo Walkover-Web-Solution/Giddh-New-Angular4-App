@@ -1,5 +1,4 @@
-<form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm" name="groupDetailForm"
-    novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
+<form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm" name="groupDetailForm" novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
     <div class="container-fluid mr-t1">
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6">
@@ -51,9 +50,7 @@
             <button class="btn btn-danger" type="button" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">Delete
             </button>
 
-            <button class="btn btn-primary mr-l1" type="submit" *ngIf="(showEditGroup$ | async)"
-                [ladda]="isUpdateGroupInProcess$ | async"
-                [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
+            <button class="btn btn-primary mr-l1" type="submit" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
             </button>
 
         </div>
@@ -107,10 +104,9 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'"
-                            [options]="companyTaxDropDown | async" [multiple]="true">
+                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown" [multiple]="true">
                         </sh-select>
-                        <span class="input-group-btn pdL2"> <button type="submit"
+                        <span class="input-group-btn pdL2"> <button [disabled]="!taxGroupForm?.get('taxes')?.value?.length" type="submit"
                                 class="btn btn-success">Save</button></span>
                     </div>
                 </div>
@@ -136,23 +132,23 @@
     <!-- taxes container -->
 </div>
 
-<div class="horizontal-form mr1" *ngIf="isDebtorCreditorGroups">
-    <div class="mb-2 selectBox">
+<div class="horizontal-form" *ngIf="isDebtorCreditorGroups">
+    <div class="mb-2 selectBox container-fluid mt-1">
         <div class="form-group ">
             <label>Default Discounts <span
                         class="primary-color"></span></label>
             <div class="clearfix">
                 <span>
-                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" (ngModelChange)="applyDiscounts()" placeholder="Select discounts"></sh-select>
                     </span>
-                <span class="pull-right">
+                <!-- <span class="pull-right">
                         <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
-                    </span>
+                    </span> -->
 
             </div>
         </div>
     </div>
-    <div class="edit-tax-section">
+    <div class="edit-tax-section container-fluid mt-1">
         <div class="form-group">
             <div class="tax-label">
                 <label>All Inherited Discounts</label>

@@ -59,7 +59,7 @@
     border-radius: 90px;
     border: 1px solid $dark-gray;
 }
-.accountAsideMenuState2 {
+.account-aside-menu-state {
     position: fixed;
     left: auto;
     top: 0;
@@ -423,6 +423,17 @@
         padding-bottom: 10px;
         .overall-plans{
             margin-bottom: 20px;
+        }
+    }
+    .plan-footer {
+        .success-btn {
+            padding: 6px 15px;
+            margin: 10px auto;
+            display: flex;
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
         }
     }
 }
