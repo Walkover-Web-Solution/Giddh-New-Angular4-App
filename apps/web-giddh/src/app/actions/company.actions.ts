@@ -147,7 +147,7 @@ export class CompanyActions {
             })));
 
 
-    // CreateNewCompany Response
+    // CreateNewCompanyPage Response
 
     public createNewCompanyResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(

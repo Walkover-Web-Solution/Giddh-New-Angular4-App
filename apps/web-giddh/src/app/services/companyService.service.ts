@@ -56,7 +56,7 @@ export class CompanyService {
     }
 
 	/**
-	 * CreateNewCompany
+	 * CreateNewCompanyPage
 	 */
     public CreateNewCompany(company: CompanyCreateRequest): Observable<BaseResponse<CompanyResponse, CompanyCreateRequest>> {
         return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_COMPANY, company).pipe(
