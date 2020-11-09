@@ -78,9 +78,9 @@
                             <td data-title="State">
                                 <div>{{address.stateCode}} - {{address.stateName}}</div>
                             </td>
-                            <td data-title="Linked with">
+                            <td data-title="Linked with" width="25%">
                                 <div class="d-flex">
-                                    <div class="d-flex flex-column linked-with">
+                                    <div class="d-flex flex-column linked-with w-100">
                                         <span *ngFor="let entity of address.linkedEntities" class="pb-1">
                                             <i tooltip="HO Branch" *ngIf="entity.isHeadQuarter"
                                                 class="icon-company-HO"></i>
@@ -88,7 +88,7 @@
                                                 class="icon-branch-icon"></i>
                                             <i tooltip="Warehouse" *ngIf="entity.isWarehouse"
                                                 class="icon-warehouse-icon"></i>
-                                            {{entity.alias || entity.name}}
+                                           <span class="entity-alias"> {{entity.alias || entity.name}} </span>
                                         </span>
                                     </div>
 
