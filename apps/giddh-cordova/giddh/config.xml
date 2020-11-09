@@ -24,7 +24,7 @@
         <preference name="android-c" value="stateVisible|adjustResize" />
         <preference name="fullscreen" value="false" />
         <preference name="android-minSdkVersion" value="19" />
-        <preference name="android-targetSdkVersion" value="28" />
+        <preference name="android-targetSdkVersion" value="30" />
         <preference name="android-compileSdkVersion" value="26" />
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
