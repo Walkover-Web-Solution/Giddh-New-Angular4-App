@@ -74,7 +74,7 @@ class AppDatabase extends Dexie {
             }
             let arr: IUlist[] = res.aidata[entity];
             let isFound = false;
-            const limit = isCompany ? 10 : 7;
+            const limit = isCompany ? 17 : 7;
 
             if (entity === 'menus') {
                 // if any fromInvalidState remove it and replace it with new menu
@@ -140,15 +140,15 @@ class AppDatabase extends Dexie {
                             if (index > -1) {
                                 arr[originalIndex] = arr[index];
                                 arr[index] = Object.assign({}, model, { isRemoved: true, pIndex: sorted[0].pIndex });
-                                this.clonedMenus = this.clonedMenus.map(m => {
-                                    if (m.pIndex === sorted[0].pIndex) {
-                                        m.isRemoved = true;
-                                    }
-                                    return m;
-                                });
                             } else {
                                 arr.push(Object.assign({}, model, { isRemoved: true, pIndex: sorted[0].pIndex }));
                             }
+                            this.clonedMenus = this.clonedMenus.map(m => {
+                                if (m.pIndex === sorted[0].pIndex) {
+                                    m.isRemoved = true;
+                                }
+                                return m;
+                            });
                         }
                     } else {
                         let originalDuplicateIndex = duplicateIndex;
@@ -181,7 +181,7 @@ class AppDatabase extends Dexie {
                 arr = orderBy(arr, ['time'], ['desc']);
             }
 
-            res.aidata[entity] = this.getSlicedResult(entity, arr);
+            res.aidata[entity] = this.getSlicedResult(entity, arr, isCompany);
 
             // do entry in db and return all data
             return this.companies.put(res).then(() => {
@@ -192,7 +192,7 @@ class AppDatabase extends Dexie {
         });
     }
 
-    public removeItem(key: any, entity: string, uniqueName: string): Promise<ICompAidata> {
+    public removeItem(key: any, entity: string, uniqueName: string, isCompany: boolean): Promise<ICompAidata> {
         return this.companies.get(key).then((res: CompAidataModel) => {
             if (!res) {
                 return;
@@ -206,7 +206,7 @@ class AppDatabase extends Dexie {
             });
             // order by name
             arr = orderBy(arr, ['time'], ['desc']);
-            res.aidata[entity] = this.getSlicedResult(entity, arr);
+            res.aidata[entity] = this.getSlicedResult(entity, arr, isCompany);
             // do entry in db and return all data
             return this.companies.put(res).then(() => {
                 setTimeout(() => {
@@ -218,10 +218,10 @@ class AppDatabase extends Dexie {
         });
     }
 
-    private getSlicedResult(entity: string, arr: IUlist[]): any[] {
+    private getSlicedResult(entity: string, arr: IUlist[], isCompany: boolean): any[] {
         let endCount: number = 0;
         if (entity === 'menus') {
-            endCount = 15;
+            endCount = isCompany ? 17 : 15;
         } else if (entity === 'groups') {
             endCount = 40;
         } else if (entity === 'accounts') {
@@ -231,7 +231,7 @@ class AppDatabase extends Dexie {
     }
 
     private smallScreenHandler(index, isCompany: boolean) {
-        const limit = isCompany ? 10 : 7
+        const limit = isCompany ? 17 : 7
         /*
         *  if we detect that it's a small screen then check if index is grater then 7 ( because we are showing 8 items in small screen )
         *  then we need to increase set index to index - 1 for displaying searched menu at last

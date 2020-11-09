@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { GIDDH_DB } from '../models/db';
 import { ICompAidata, Igtbl, IUlist } from '../models/interfaces/ulist.interface';
+import { OrganizationType } from '../models/user-login-state';
+import { GeneralService } from './general.service';
 
 @Injectable()
 export class DbService {
-    constructor() {
+    constructor(
+        private generalService: GeneralService
+    ) {
         //
     }
 
@@ -31,7 +35,7 @@ export class DbService {
         return GIDDH_DB.addItem(key, entity, model, fromInvalidState, isSmallScreen, isCompany);
     }
     public removeItem(key: string, entity: string, uniqueName: string) {
-        return GIDDH_DB.removeItem(key, entity, uniqueName);
+        return GIDDH_DB.removeItem(key, entity, uniqueName, this.generalService.currentOrganizationType === OrganizationType.Company);
     }
     public deleteAllData(): void {
         GIDDH_DB.forceDeleteDB();
