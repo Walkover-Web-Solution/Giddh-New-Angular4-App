@@ -49,7 +49,7 @@ import {
 } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
@@ -550,10 +550,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.loadCompanyBranches();
 
         // region creating list for cmd+g modal
-        combineLatest(
+        combineLatest([
             this.store.select(p => p.general.flattenGroups).pipe(takeUntil(this.destroyed$)),
             this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$))
-        )
+        ])
             .subscribe((resp: any[]) => {
                 let menuList = cloneDeep(NAVIGATION_ITEM_LIST);
                 let grpList = cloneDeep(resp[0]);
@@ -645,7 +645,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (a instanceof NavigationStart) {
                     this.navigationEnd = false;
                 }
-                if (a instanceof NavigationCancel) {
+                if (a instanceof NavigationError) {
                     this.navigationEnd = true;
                     let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                         return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
@@ -1090,10 +1090,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 15) : slice(this.menuItemsFromIndexDB, 0, 10);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 17) : slice(this.menuItemsFromIndexDB, 0, 10);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 7);
             } else {
-                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 12) : slice(this.menuItemsFromIndexDB, 0, 8);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 17) : slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 5);
             }
 
@@ -1203,6 +1203,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public goToCompany(): void {
+        if (!localStorage.getItem('isNewArchitecture')) {
+            console.log('Clearing data');
+            this._dbService.clearAllData();
+            localStorage.setItem('isNewArchitecture', String(true));
+        }
         this.changeCompany(this.selectedCompanyDetails.uniqueName);
     }
 
