@@ -350,6 +350,7 @@
                                                         [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                         [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
                                                         [needToReCalculate]="needToReCalculate"
+                                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                         (changeTransactionType)="toggleTransactionType($event)"
                                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                         (saveBlankLedger)="saveBankTransaction()"
@@ -474,6 +475,7 @@
                                                         [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                         [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
                                                         [needToReCalculate]="needToReCalculate"
+                                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                         (changeTransactionType)="toggleTransactionType($event)"
                                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                         (saveBlankLedger)="saveBankTransaction()"
@@ -859,6 +861,7 @@
                                     <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
+                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
                                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                         [selectedCurrency]="selectedCurrency"
@@ -1139,6 +1142,7 @@
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                         [selectedCurrency]="selectedCurrency"
                                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                         [selectedPrefixForCurrency]="selectedPrefixForCurrency"
@@ -1275,7 +1279,6 @@
         <!--endregion-->
     </div>
     <!-- endregion -->
-
 </section>
 
 <div class="container" *ngIf="!isShowLedgerColumnarReportTable">
@@ -1429,6 +1432,9 @@
         </section>
     </div>
 </div>
+
+<div class="show-if-ledger-open" *ngIf="isMoreDetailsOpened">
+</div>
 <!-- modal sections -->
 
 <div *ngIf="isShowLedgerColumnarReportTable">
@@ -1449,12 +1455,15 @@
 <!-- aside menu section -->
 
 <!-- update ladger entry popup -->
-<div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard: true}" tabindex="-1">
+<div bsModal #updateLedgerModal="bs-modal" class="modal fade update-ledger-modal" role="dialog"
+[config]="{keyboard: true}"tabindex="-1">
     <div class="modal-dialog modal-xl modal-ledger">
         <div class="modal-content">
             <div element-view-container-ref #updateledgercomponent=elementviewcontainerref>
             </div>
         </div>
+    </div>
+    <div class="show-if-update-ledger-open">
     </div>
 </div>
 <!-- update ladger entry popup -->

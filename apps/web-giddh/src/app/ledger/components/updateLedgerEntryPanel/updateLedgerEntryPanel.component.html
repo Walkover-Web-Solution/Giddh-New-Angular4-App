@@ -845,7 +845,7 @@
                     <table class="width100">
                         <tbody>
                             <tr>
-                                <td class="primary-color" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
+                                <td class="primary-color" (click)="getInvoiveLists(); toggleMoreDetail()">
                                     <i class="fa cp"
                                         [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
                                     <button class="no-btn pdL0">&nbsp; More Details</button>
@@ -1113,11 +1113,8 @@
 
         </div>
     </div>
-
 </div>
 <!-- endregion -->
-
-
 <!-- region modals -->
 <!--deleteAttachedFile  -->
 <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">

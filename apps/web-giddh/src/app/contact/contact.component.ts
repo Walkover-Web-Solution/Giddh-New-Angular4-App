@@ -374,7 +374,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order);
                 }
             });
-            
+
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -496,7 +496,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             if(this.universalDate) {
                 this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
                 this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-            
+
                 this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
@@ -935,7 +935,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal.creditTotal = request.amount;
             this.setAmountType(category, request.amountType);
         }
-        
+
         switch (request.amountType) {
             case 'GreaterThan':
                 this.advanceSearchRequestModal[category + 'GreaterThan'] = true;
@@ -1291,15 +1291,14 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public clearSelectedContacts(resetPage:boolean = true): void {
-        this.searchStr = '';
-        this.selectedCheckedContacts = [];
-        this.selectedAccountsList = [];
-        this.allSelectionModel = false;
-
         if(resetPage) {
             this.checkboxInfo = {
                 selectedPage: 1
             };
+            this.searchStr = '';
+            this.selectedCheckedContacts = [];
+            this.selectedAccountsList = [];
+            this.allSelectionModel = false;
         }
 
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);

@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -40,7 +40,7 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     @Input() public paginationConfig: any;
     /** True if API is in progress */
     @Input() public shouldShowLoader: boolean;
-    /** Tre, if create/update address is in progress */
+    /** True, if create/update address is in progress */
     @Input() public isAddressChangeInProgress: boolean;
     /** Address configuration */
     @Input() public addressConfiguration: any;
@@ -84,6 +84,10 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     @Output() public unLinkAddress: EventEmitter<any> = new EventEmitter<any>();
     /** Set default address event emitter */
     @Output() public setDefaultAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits if create/update address is in progress */
+    @Output() public isAddressChangeInProgressChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Emits if aside pane needs to be closed */
+    @Output() public closeSidePaneChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     /** Search address name input field form control */
     public searchAddressNameInput: FormControl = new FormControl();
@@ -203,6 +207,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.closeSidePane = false;
         this.isAddressChangeInProgress = false;
+        this.isAddressChangeInProgressChange.emit(this.isAddressChangeInProgress);
+        this.closeSidePaneChange.emit(this.closeSidePane);
         if (this.accountAsideMenuState === 'out') {
             this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
         }

@@ -211,7 +211,7 @@
         </tab>
         <tab (selectTab)="handleTabChanged('address')" heading="{{companyProfileObj?.taxType ? ('Address/' + companyProfileObj?.taxType) : 'Address/es' }}">
             <address-settings *ngIf="currentTab === 'address'" [addresses]="addresses"
-                [isAddressChangeInProgress]="isAddressChangeInProgress" [closeSidePane]="closeAddressSidePane"
+                [(isAddressChangeInProgress)]="isAddressChangeInProgress" [(closeSidePane)]="closeAddressSidePane"
                 [currentOrganizationUniqueName]="currentOrganizationUniqueName"
                 (searchAddress)="handleSearchInAddress($event)" (pageChanged)="handlePageChanged($event)"
                 [addressConfiguration]="addressConfiguration" (saveNewAddress)="createNewAddress($event)"

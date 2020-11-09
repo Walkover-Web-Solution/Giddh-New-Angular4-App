@@ -104,12 +104,12 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     @ViewChild('rejectedListComponent', { read: RejectedListComponent, static: false }) public rejectedListComponent: RejectedListComponent;
     /** This will hold sort params of pending tab */
     public pendingTabSortOptions: any = {
-        sort: "", 
+        sort: "",
         sortBy: ""
     };
     /** This will hold sort params of rejected tab */
     public rejectedTabSortOptions: any = {
-        sort: "", 
+        sort: "",
         sortBy: ""
     };
 
@@ -192,6 +192,13 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public selectedRowInput(item: ExpenseResults) {
+        if(this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+            this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
+            this.rejectedTabSortOptions.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
+        } else if(this.currentSelectedTab === "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+            this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
+            this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
+        }
         this.selectedRowItem = item;
     }
 
@@ -205,13 +212,41 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public closeDetailedMode(e) {
         this.isSelectedRow = !e;
+
+        setTimeout(() => {
+            if(this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
+                this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
+                this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
+            } else if(this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
+                this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
+                this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
+            }
+        }, 500);
     }
 
     public refreshPendingItem(e) {
         if (e) {
+            if(this.pendingTabSortOptions) {
+                this.pettycashRequest.sort = this.pendingTabSortOptions.sort;
+                this.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
+            }
             this.getPettyCashPendingReports(this.pettycashRequest);
+
+            if(this.rejectedTabSortOptions) {
+                this.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
+                this.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
+            }
             this.getPettyCashRejectedReports(this.pettycashRequest);
+            
             setTimeout(() => {
+                if(this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
+                    this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
+                    this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
+                } else if(this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
+                    this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
+                    this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
+                }
+
                 this.detectChanges();
             }, 600);
         }
@@ -289,7 +324,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
             this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
         }
-            
+
         this.currentSelectedTab = tab;
 
         setTimeout(() => {

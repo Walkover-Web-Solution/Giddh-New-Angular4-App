@@ -166,7 +166,6 @@
     }
 }
 .search-field {
-    margin-right: 15px;
     display: flex;
     flex-direction: row;
     .clear-filter-btn {
@@ -329,7 +328,7 @@
         min-height: auto;
     }
     .branch-header-content {
-        margin-right: 0;
+        margin-right: 0 !important;
         flex-direction: column;
         .content-view {
             margin-left: 0;
@@ -341,9 +340,14 @@
                 margin-right: 0;
             }
         }
+        .search-field{
+            margin-right: 0;
+            .clear-filter-btn{
+                padding: 0 8px;
+            }
+        }
     }
     .input-group-date-range-picker {
-        width: 66%;
         .form-group {
             margin-bottom: 0;
         }
@@ -357,7 +361,6 @@
     .date-advance-search {
         display: block;
         .input-group-date-range-picker {
-            width: 70%;
             .form-group {
                 margin-bottom: 0;
             }
@@ -365,6 +368,20 @@
         .btn {
             float: left !important;
         }
+    }
+    .branch-header-content {
+        margin-right: 0;
+        .search-field{
+            margin-right: 0;
+            .search-branch-box{
+                max-width: 160px;
+            }
+            .clear-filter-btn{
+                width: 122px !important;
+                padding: 0 6px;
+            }
+        }
+
     }
 }
 
@@ -396,4 +413,28 @@
     .modal-width {
         width: auto !important;
     }
+}
+
+
+@media(max-width:575px){
+    .date-advance-search {
+        .input-group-date-range-picker {
+            width:100%;
+        }
+    }
+    .branch-header{
+        flex-direction: column;
+        .search-branch-box{
+            max-width: 100%;
+            margin-bottom: 15px;
+        }
+    }
+
+    .search-field{
+        .clear-filter-btn {
+            padding: 0px 8px;
+            font-size: 12px;
+            height: 36px;
+        }
+    } 
 }
