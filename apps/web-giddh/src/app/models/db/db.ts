@@ -67,6 +67,18 @@ class AppDatabase extends Dexie {
         });
     }
 
+    /**
+     * Adds the item from indexDB
+     *
+     * @param {*} key Unique name of indexDB
+     * @param {string} entity Entity to be deleted
+     * @param {IUlist} model Entity model data
+     * @param {{ next: IUlist, previous: IUlist }} fromInvalidState Invalid state
+     * @param {*} isSmallScreen True, if small screen
+     * @param {boolean} isCompany True, if company mode is switched and the company has more than HO branch in it (branch count > 1)
+     * @returns {Promise<any>}
+     * @memberof AppDatabase
+     */
     public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen, isCompany: boolean): Promise<any> {
         return this.companies.get(key).then((res: CompAidataModel) => {
             if (!res) {
@@ -192,6 +204,16 @@ class AppDatabase extends Dexie {
         });
     }
 
+    /**
+     * Removes the item from indexDB
+     *
+     * @param {*} key Unique name of indexDB
+     * @param {string} entity Entity to be deleted
+     * @param {string} uniqueName Unique name of the entity
+     * @param {boolean} isCompany True, if company mode is switched and the company has more than HO branch in it (branch count > 1)
+     * @returns {Promise<ICompAidata>}
+     * @memberof AppDatabase
+     */
     public removeItem(key: any, entity: string, uniqueName: string, isCompany: boolean): Promise<ICompAidata> {
         return this.companies.get(key).then((res: CompAidataModel) => {
             if (!res) {

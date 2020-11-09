@@ -272,7 +272,12 @@ export class AllModulesComponent implements OnInit, OnDestroy {
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen, this.generalService.currentOrganizationType === OrganizationType.Company);;
+            let branches = [];
+            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+                branches = response || [];
+            });
+            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
+                this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
         }
     }
 }
