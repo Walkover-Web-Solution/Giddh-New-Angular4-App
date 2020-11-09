@@ -56,7 +56,6 @@
     border: 1px solid $gainsboro;
 }
 .warehouse-options {
-    min-width: 180px;
     text-align: right;
 }
 .warehouse-options {
@@ -234,4 +233,11 @@ span.setAsDefault {
             margin-bottom: 15px;
         }
     }
+    .search-container{
+        .clear-filter-btn {
+            padding: 0px 8px;
+            font-size: 12px;
+            height: 36px;
+        }
+    } 
 }

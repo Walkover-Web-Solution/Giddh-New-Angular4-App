@@ -161,7 +161,6 @@
     }
 }
 .search-field {
-    margin-right: 15px;
     display: flex;
     flex-direction: row;
     .clear-filter-btn {
@@ -169,7 +168,7 @@
         font-size: 14px;
         border: 1px solid $midnight-blue;
         border-radius: 20px;
-        padding: 0 15px;
+        padding: 0 12px;
         width: 150px !important;
         display: flex;
         align-items: center;
@@ -324,7 +323,7 @@
         min-height: auto;
     }
     .branch-header-content {
-        margin-right: 0;
+        margin-right: 0 !important;
         flex-direction: column;
         .content-view {
             margin-left: 0;
@@ -352,7 +351,6 @@
     .date-advance-search {
         display: block;
         .input-group-date-range-picker {
-            width: 70%;
             .form-group {
                 margin-bottom: 0;
             }
@@ -391,4 +389,27 @@
     .modal-width {
         width: auto !important;
     }
+}
+
+@media(max-width:575px){
+    .date-advance-search {
+        .input-group-date-range-picker {
+            width:100%;
+        }
+    }
+    .branch-header{
+        flex-direction: column;
+        .search-branch-box{
+            max-width: 100%;
+            margin-bottom: 15px;
+        }
+    }
+
+    .search-field{
+        .clear-filter-btn {
+            padding: 0px 8px;
+            font-size: 12px;
+            height: 36px;
+        }
+    } 
 }
