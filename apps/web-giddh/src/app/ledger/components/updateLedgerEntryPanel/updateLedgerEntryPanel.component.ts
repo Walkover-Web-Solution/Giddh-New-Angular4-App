@@ -81,6 +81,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
     @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
 
     @Input() isPettyCash: boolean = false;
     @Input() pettyCashEntry: any;
@@ -1317,7 +1319,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
         requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
-        if (!this.taxOnlyTransactions) {
+        if (!this.isRcmEntry && !this.isAdvanceReceipt && !this.taxOnlyTransactions) {
             requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
         }
         requestObj.transactions.map((transaction: any) => {
@@ -2121,6 +2123,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         this.adjustPaymentModal.hide();
+    }
+
+    /**
+     * Toggles the more detail section
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public toggleMoreDetail(): void {
+        this.showAdvanced = !this.showAdvanced;
+        this.moreDetailOpen.emit(this.showAdvanced);
     }
 
     /**

@@ -285,11 +285,14 @@ span.eligible-ITC {
 .left-col-new .row, .right-col-new .row , .ledger-head .row{
     margin: 0;
 }
+.show-if-ledger-open{
+    height: 275px;
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
     .ledger-bottom {
-        display: block;
+        display: flex;
     }
 }
 

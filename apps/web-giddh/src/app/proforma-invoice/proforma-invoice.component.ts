@@ -4092,13 +4092,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                     let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                    taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                    taxableValue = (rawAmount + entry.taxSum);
                 }
                 entry.otherTaxType = 'tcs';
             } else {
                 taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 entry.otherTaxType = 'tds';
             }
+
 
             totalTaxes += tax.taxDetail[0].taxValue;
 
@@ -4208,7 +4209,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private parseEntriesFromResponse(entries: SalesEntryClass[]) {
         return entries.map((entry, index) => {
             this.activeIndx = index;
-            entry.otherTaxModal = new SalesOtherTaxesModal();
+            if(!entry.otherTaxModal) {
+                entry.otherTaxModal = new SalesOtherTaxesModal();
+            }
             entry.entryDate = (entry.entryDate) ? moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate() : this.universalDate || new Date();
 
             entry.discounts = this.parseDiscountFromResponse(entry);
@@ -4312,7 +4315,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                        taxableValue = (rawAmount + entry.taxSum);
                     }
 
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
@@ -4439,8 +4442,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             salesEntryClass.uniqueName = e.uniqueName;
             salesEntryClass.description = e.description;
             salesEntryClass.date = e.entryDate;
+            let calculationMethod = (e.otherTaxModal && e.otherTaxModal.tcsCalculationMethod) ? e.otherTaxModal.tcsCalculationMethod : "";
             e.taxList.forEach(t => {
-                salesEntryClass.taxes.push({uniqueName: t});
+                salesEntryClass.taxes.push({uniqueName: t, calculationMethod: calculationMethod});
             });
             if(this.isPurchaseInvoice) {
                 salesEntryClass.purchaseOrderItemMapping = e.purchaseOrderItemMapping;
@@ -5970,13 +5974,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         }
+        // applicableDiscounts: accounts applicable discounts list and inheritedDiscounts: parent group's discount list
         if (data && data.applicableDiscounts && data.applicableDiscounts.length) {
             this.accountAssignedApplicableDiscounts = [...data.applicableDiscounts];
-            if (data.inheritedDiscounts && data.inheritedDiscounts.length) {
-                data.inheritedDiscounts.forEach(element => {
-                    this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
-                });
-            }
+        } else if (data.inheritedDiscounts && data.inheritedDiscounts.length) {
+            data.inheritedDiscounts.forEach(element => {
+                this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
+            });
         }
     }
 

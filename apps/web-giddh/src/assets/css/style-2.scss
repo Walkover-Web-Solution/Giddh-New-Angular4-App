@@ -9655,7 +9655,7 @@ span#HW_badge_cont:nth-child(3) {
     right: -22px;
 }
 #rcw-p91-widget-button{
-    z-index: 98;
+    z-index: 992;
 }
 
 .linked-add{
@@ -9713,6 +9713,12 @@ span#HW_badge_cont:nth-child(3) {
     .tooltip-inner{
         white-space: nowrap;
     }
+}
+.rcm-entry .popover{
+    max-width: 600px;
+}
+.update-ledger-overlay .modal-backdrop.show{
+    z-index: 991 !important;
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {
@@ -10200,6 +10206,9 @@ input.mat-input-element{
         }
         #dashboard .panel-heading i {
             margin-left: 10px;
+        }
+        .rcm-entry .popover{
+            max-width: 550px;
         }
     }
 

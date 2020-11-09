@@ -241,6 +241,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public searchBranchQuery: string;
     /** Current organization type */
     public currentOrganizationType: OrganizationType;
+    /** Version of lated mac app  */
+    public macAppVersion: string;
+
 
     /**
      * Returns whether the account section needs to be displayed or not
@@ -499,6 +502,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
+        this.getElectronMacAppVersion();
 
         this.store.dispatch(this.companyActions.GetApplicationDate());
 
@@ -2005,5 +2009,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             details: branchDetails
         };
         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+    }
+
+
+    /**
+     * To get latest version of mac app
+     *
+     * @private
+     * @memberof HeaderComponent
+     */
+    private getElectronMacAppVersion(): void {
+        this.authService.getElectronMacAppVersion().subscribe((res: string) => {
+            if (res && typeof res === 'string') {
+                let version = res.split('files')[0];
+                let versNum = version.split(' ')[1];
+                this.macAppVersion = versNum;
+            }
+        });
     }
 }
