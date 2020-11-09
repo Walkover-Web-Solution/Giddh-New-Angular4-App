@@ -160,13 +160,14 @@
                                         <div class="form-group">
                                             <sh-select [options]="addressConfiguration?.linkedEntities"
                                                 name="linkedEntities" formControlName="linkedEntity"
-                                                (clearSingleItem)="handleFinalSelection($event)" [ItemHeight]="67"
+                                                (clearSingleItem)="handleFinalSelection($event)" [ItemHeight]="200"
                                                 [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
                                                         <a popover="{{ option?.address }}" placement="top" popover
                                                             popoverTitle="{{option?.label}}"
                                                             triggers="mouseenter:mouseleave"
+                                                            containerClass="outside-popover"
                                                             (click)="selectEntity(option)" href="javascript:void(0)"
                                                             class="list-item d-flex">
                                                             <span><input type="checkbox"

@@ -4454,6 +4454,7 @@ form label {
     padding-bottom: 0;
     font-size: 14px;
     line-height: 2.3;
+    margin-bottom: 0 !important;
 }
 
 label {
@@ -9689,7 +9690,7 @@ span#HW_badge_cont:nth-child(3) {
             font-size: 14px;
             background-color: transparent;
             border-bottom: none;
-            font-weight: bold;
+            font-family: 'opensans-semibold';
         }
         .popover-body {
             padding: 0 15px 15px 15px;
@@ -10167,6 +10168,16 @@ input.mat-input-element{
 }
 
 @media (max-width: 1280px) {
+    .linked-add{
+        .popover{
+            width: 150px;
+            &.outside-popover {
+                position: absolute !important;
+                left: 160px !important;
+                top: 10% !important;
+            }
+        }
+    }
     .multi-select input.form-control {
         padding-right: 18px !important;
     }
@@ -10671,6 +10682,14 @@ input.mat-input-element{
 }
 
 @media (max-width: 375px) {
+    .linked-add{
+        .popover{
+            &.outside-popover {
+                left: 100px !important;
+                top: auto !important;
+            }
+        }
+    }
     #rcw-p91-widget-chats{
         min-width: 300px !important;
     }
