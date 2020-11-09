@@ -250,6 +250,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isCreateCompanyInProgress = data;
         });
 
+        this.store.pipe(select(appState => appState.session.isCompanyCreationInProcess), takeUntil(this.destroyed$)).subscribe(data => {
+            this.isCreateCompanyInProgress = data;
+        });
+
         if (this.isItemUpdateInProgress) {
             this.company.name = (this.itemDetails && this.itemDetails.name) ? this.itemDetails.name : '';
             this.company.phoneCode = (this.itemDetails && this.itemDetails.mobileNumber) ? this.getCallingCode(this.itemDetails.mobileNumber) : '';

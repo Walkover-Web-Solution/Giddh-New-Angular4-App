@@ -7,10 +7,9 @@ import {
     OnInit,
     SimpleChanges,
 } from '@angular/core';
-import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router, NavigationCancel } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { LoaderState } from './loader';
 import { LoaderService } from './loader.service';
 
@@ -51,6 +50,10 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
             } else if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
                 this.navigationEnd$ = of(true);
                 this.cdref.detectChanges();
+            }
+
+            if (a instanceof NavigationCancel) {
+                return this.navigationEnd$ = of(true);
             }
         });
     }
