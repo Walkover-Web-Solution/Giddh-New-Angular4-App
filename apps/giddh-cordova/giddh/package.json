@@ -20,6 +20,7 @@
   "dependencies": {
     "@ionic-native/file-chooser": "^5.17.0",
     "@ionic-native/user-agent": "^5.21.5",
+    "@types/node": "12.19.3",
     "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
     "cordova-ios": "^5.1.1",
