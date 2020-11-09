@@ -41,8 +41,8 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
     @Input() public ItemHeight: number = 41;
-    @Input() public NoFoundMsgHeight: number = 30;
-    @Input() public NoFoundLinkHeight: number = 30;
+    @Input() public NoFoundMsgHeight: number = 35;
+    @Input() public NoFoundLinkHeight: number = 35;
     @Input() public dropdownMinHeight: number = 35;
     @Input() public customFilter: (term: string, options: IOption) => boolean;
     @Input() public customSorting: (a: IOption, b: IOption) => number;
@@ -63,6 +63,8 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any[]> = new EventEmitter<any[]>();
+    /** Emits rest of the values when single selection is cleared */
+    @Output() public clearSingleItem: EventEmitter<any> = new EventEmitter<any>();
     @Output() public selected = new EventEmitter<any>();
     @Output() public noOptionsFound = new EventEmitter<boolean>();
     @Output() public noResultsClicked = new EventEmitter<null>();
@@ -437,6 +439,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
         this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+        this.clearSingleItem.emit(this.selectedValues);
         this.onChange();
     }
 

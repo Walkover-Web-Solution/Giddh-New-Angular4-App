@@ -1,5 +1,6 @@
 import { ITax, ITaxDetail } from '../interfaces/tax.interface';
 import { INameUniqueName } from './Inventory';
+import { OrganizationType } from '../user-login-state';
 
 export class CompanyRequest {
     public name: string;
@@ -52,6 +53,8 @@ export class Addresses {
     public isDefault: boolean;
     public stateName: string;
     public taxNumber: string;
+    public name?: string;
+    public taxType?: string;
 }
 
 export class CompanyTotals {
@@ -67,6 +70,17 @@ export class CompanyTotals {
         amount: any;
         type: any;
     };
+}
+
+export interface ParentBranch {
+    addresses: Addresses[];
+    alias: string;
+    businessNature: string;
+    businessType: string;
+    name: string;
+    parentBranch: ParentBranch;
+    parentBranchUniqueName: string;
+    uniqueName: string;
 }
 
 export class CompanyResponse {
@@ -103,6 +117,9 @@ export class CompanyResponse {
     public balanceDecimalPlaces?: string;
     public baseCurrencySymbol?: string;
     public companyTotals: CompanyTotals;
+    public branches?: Array<any>;
+    public parentBranch?: ParentBranch;
+    public warehouseResource?: Array<any>;
 }
 
 export interface UserEntityRole {
@@ -355,4 +372,17 @@ export class StateList {
 export class BranchFilterRequest {
     from: string;
     to: string;
+    query?: string;
+}
+
+export interface OrganizationDetails {
+    branchDetails: {
+        uniqueName: string;
+    };
+}
+
+export interface Organization {
+    type: OrganizationType;
+    uniqueName: string;
+    details: OrganizationDetails;
 }

@@ -50,14 +50,14 @@
 
                             <div class="row">
 
-                                <div class="col-lg-4 col-sm-12">
+                                <div class="col-xl-4 col-lg-3 col-sm-12">
                                     <div class="invoice-number-holder">
                                         <h3 class="invoice-number">{{purchaseOrder?.number}}</h3>
                                         <p class="account-holder-name">{{purchaseOrder?.account?.name}}</p>
                                     </div>
                                 </div>
 
-                                <div class="col-lg-8 col-sm-12">
+                                <div class="col-xl-8 col-lg-9 col-sm-12">
                                     <div class="edit-change-status">
 
                                         <span class="close-modal cp pull-right"
@@ -82,7 +82,7 @@
                                                 <li>
                                                     <a class="cp" href="javascript:void(0)"
                                                         (click)="statusUpdate('cancelled')"
-                                                        *ngIf="purchaseOrder.status === 'OPEN'">Cancel</a>
+                                                        *ngIf="purchaseOrder.status !== 'CANCELLED'">Cancel</a>
                                                     <a class="cp" href="javascript:void(0)"
                                                         (click)="statusUpdate('open')"
                                                         *ngIf="purchaseOrder.status === 'CANCELLED' || purchaseOrder.status === 'EXPIRED'">Open</a>

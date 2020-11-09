@@ -11,6 +11,7 @@ import { CashFlowStatementService } from '../../../services/cashflowstatement.se
 import { GeneralService } from '../../../services/general.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from "file-saver";
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
     selector: 'cash-flow-statement-component',
@@ -30,7 +31,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Moment object */
     public moment = moment;
     /* Selected from date */
@@ -86,13 +87,6 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
 
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-            }
-        });
-
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
             }
         });
 
@@ -152,7 +146,11 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof CashFlowStatementComponent
      */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

@@ -70,7 +70,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public activeCompany: CompanyResponse;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
-    public isMultipleCurrency: boolean = false;
     public companyCurrency: string;
     public isIndia: boolean = false;
     public companyCountry: string = '';
@@ -213,7 +212,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                     }
                     this.companyCurrency = _.clone(this.activeCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(this.activeCompany.isMultipleCurrency);
                 });
             }
         });
@@ -377,7 +375,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 })
             ]),
-            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: ['',Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });

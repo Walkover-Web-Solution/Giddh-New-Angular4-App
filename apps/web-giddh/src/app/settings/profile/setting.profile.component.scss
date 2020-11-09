@@ -19,17 +19,26 @@
 .custom-select{
     padding:0 !important;
 }
-.form-group{
-    .input-group {
-        .input-group-addon {
-        border-left: 1px solid $very-light-gray !important;
-    }
-    input{
-            border-left: none !important;
-            border-right: none !important;
-        }
-    }
 
+.profile-form{
+    .form-group{
+        .input-group {
+            .input-group-addon {
+            border-left: 1px solid $very-light-gray !important;
+        }
+        input{
+                border-left: none !important;
+                border-right: none !important;
+            }
+        }
+
+    }
+}
+.branch-vector{
+    text-align: right;
+    position: absolute;
+    bottom: 8px;
+    right: 90px;
 }
 @media(max-width:768px){
     .multicurrency-checkbox{
@@ -55,3 +64,6 @@
         display: flex;
     }
 }
+
+
+

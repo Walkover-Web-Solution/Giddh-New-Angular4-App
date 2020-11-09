@@ -7,6 +7,7 @@
    Don't touch this table css (If any body work on that contact shalinee..)
 */
 
+
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,
 .basic > tfoot > tr > td,
@@ -155,6 +156,11 @@
     .on-mobile-view tbody td {
         padding: 5px 10px 5px 53% !important;
     }
+}
+body{
+    font-family: "opensans-regular";
+    font-display: block;
+    -webkit-font-smoothing: auto;
 }
 /* table css need to removed at last (finish)*/
 .modal-header .close{
@@ -445,7 +451,6 @@ input {
     line-height: 15px;
     font-size: 12px;
     color: $white;
-    font-family: Trebuchet, Arial, sans-serif;
     font-weight: bold;
     box-sizing: border-box;
     background: #f1f1f1;
@@ -600,6 +605,13 @@ input {
 
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
+}
+.invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+    .profile-tab-container {
+        .nav.nav-tabs {
+            padding-left: 0 !important;
+        }
+    }
 }
 
 .navbar {
@@ -923,11 +935,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
 }
 
 .font-bold {
-    font-family: $opensans-bold;
+    font-family: 'opensans-bold';
 }
 
 .modal-open {
@@ -957,7 +969,7 @@ ul.sub-list {
 
 .top-heading > h4 {
     font-size: 18px;
-    font-family: "" opensans-semibold "";
+    font-family: "opensans-semibold";
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -1225,7 +1237,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: $opensans-regular !important;
+    font-family: 'opensans-regular' !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -1464,7 +1476,10 @@ ul.sub-list {
 modal-container.modal.fade.show {
     opacity: 1;
 }
+.modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
 
+    z-index: 999999 !important;
+}
 modal-container.modal {
     .warehouse-welcome-modal {
         margin: 0;
@@ -1569,7 +1584,14 @@ modal-container.modal {
     padding-left: 10px;
     padding-bottom: 10px;
 }
-
+.voucher-type.dropdown-menu {
+    li{
+        label{
+            padding-left: 0;
+            padding-bottom: 0;
+        }
+    }
+}
 .paymentMode sh-select {
     float: right;
     width: 129px;
@@ -2914,7 +2936,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: $opensans-semibold;
+     font-family: 'opensans-semibold';
 }
 
 .box2 {
@@ -4227,7 +4249,7 @@ input[type=radio]:checked:after {
 }
 
 .form-group.mrB,
-.mrBChldLbl .form-group label {
+.margin-child-label .form-group label {
     margin-bottom: 5px;
 }
 
@@ -4433,8 +4455,10 @@ select.form-control {
 form label {
     color: $nero;
     font-weight: normal;
-    padding-bottom: 5px;
+    padding-bottom: 0;
     font-size: 14px;
+    line-height: 2.3;
+    margin-bottom: 0 !important;
 }
 
 label {
@@ -5084,7 +5108,7 @@ label {
     top: 50px;
 }
 
-.grey-clr {
+.grey-color {
     color: #6d6d6d;
 }
 
@@ -5804,7 +5828,7 @@ input[type="checkbox"][disabled] {
 
 .section-head {
     padding-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -6576,7 +6600,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     text-transform: capitalize;
 }
 
@@ -6715,7 +6739,7 @@ table td[class*=col-]:last-child {
 
 .form-header h3 {
     font-size: 18px;
-    font-family: "opensans-bold";
+    font-family: "opensans-semibold";
 }
 
 .form_body {
@@ -6749,6 +6773,7 @@ table td[class*=col-]:last-child {
 .universal-date {
     float: none !important;
     display: inline-block;
+    padding-top: 12px;
 }
 
 .divide-ico {
@@ -6798,7 +6823,7 @@ table td[class*=col-]:last-child {
 
 .app-list > ul h6 {
     margin-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 13px;
 }
 
@@ -7278,7 +7303,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $midnight-blue;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     vertical-align: middle;
 }
 
@@ -8129,7 +8154,7 @@ app-header {
     border-radius: 0;
 }
 
-.accountAsideMenuState2 #close {
+.account-aside-menu-state #close {
     display: block;
     position: fixed;
     right: 472px;
@@ -8260,7 +8285,7 @@ div#getGroupModal {
     animation-fill-mode: both;
 }
 
-.accountAsideMenuState2 .horizontal-form {
+.account-aside-menu-state .horizontal-form {
     padding-bottom: 110px;
 }
 
@@ -8595,7 +8620,7 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     background-color: inherit;
 }
 
@@ -8910,7 +8935,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.accountAsideMenuState2 #close {
+.account-aside-menu-state #close {
     display: block;
     position: absolute;
     right: 10px;
@@ -9215,6 +9240,7 @@ input:placeholder-shown {
 .select2-parent.select2-ledger .update-ledger-account sh-select .header input {
     padding-left: 3px !important;
     font-size: 13px !important;
+    padding-right:27px !important;
 }
 
 .select2-parent.select2-ledger
@@ -9320,7 +9346,7 @@ ngx-daterangepicker-material {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     z-index: 1;
     width: 100% !important;
-    max-width: 462px !important;
+    max-width: 544px !important;
 }
 
 .edit-modal {
@@ -9644,10 +9670,80 @@ span#HW_badge_cont:nth-child(3) {
 .daterangepicker{
     z-index: 9992 !important;
 }
+.sub-branch-option .bs-tooltip-top{
+    left: -25px !important;
+}
+.switch-branch-wrapper .branch-icon-tooltip .bs-tooltip-top{
+    left: 8px !important;
+    right: 8px !important;
+}
+.sub-branch-option .bs-tooltip-top .arrow::before{
+    right: -22px;
+}
 #rcw-p91-widget-button{
-    z-index: 98;
+    z-index: 992;
 }
 
+.linked-add{
+    .popover{
+        width:268px;
+        font-family: inherit;
+        border-radius: 4px;
+        position: absolute !important;
+        left: 280px !important;
+        box-shadow: 0 3px 6px $black-russian;
+        top: 10% !important;
+        .popover-arrow{
+            display:none;
+        }
+        .popover-header {
+            padding: 15px 15px 0 15px;
+            margin-bottom: 0;
+            font-size: 14px;
+            background-color: transparent;
+            border-bottom: none;
+            font-family: 'opensans-semibold';
+        }
+        .popover-body {
+            padding: 0 15px 15px 15px;
+        }
+    }
+    &.create .popover {
+        .popover-body {
+            padding: 8px 15px;
+        }
+    }
+}
+
+.settings-profile-tabs{
+    .tab-container{
+        .nav-tabs{
+            .nav-item{
+                .nav-link{
+                    font-size: 16px !important;
+                    color: $midnight-blue !important;
+                }
+            }
+            .active{
+                > .nav-link{
+                    color: $midnight-blue !important;
+                }
+            }
+        }
+    }
+}
+.customer-form-inline{
+    .tooltip-inner{
+        white-space: nowrap;
+    }
+}
+.rcm-entry .popover{
+    max-width: 600px;
+}
+.update-ledger-overlay .modal-backdrop.show{
+    z-index: 991 !important;
+}
+/* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
     right: -40px !important;
@@ -9656,6 +9752,10 @@ ul.dropdown-menu.action-dropdown {
 /*material datepicker css starts*/
 .recurring-form  .mat-form-field{
     max-width: 170px;
+}
+.collapse-pane  .mat-form-field{
+    min-width: 147px;
+    max-width: 147px;
 }
 .mat-form-field{
     min-width: 170px;
@@ -9711,6 +9811,14 @@ input.mat-input-element{
 .mat-calendar-body-selected{
     background-color: $midnight-blue;
 }
+.giddh-limit {
+    &.single-line-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
 /*material datepicker css end*/
 
     .master-custom-tabs.custom-tabs {
@@ -9728,7 +9836,6 @@ input.mat-input-element{
     .delete-modal-overlay {
         z-index: 9992; /*for delete custom zIndex modal*/
     }
-
     /* responsive */
 
     @media (max-width: 1440px) {
@@ -9970,6 +10077,7 @@ input.mat-input-element{
         #setting-tab .tab-integraton .nav-tabs > li {
             width: 70px;
             margin-bottom: 15px;
+            margin-top: 15px;
         }
         .aging-table tr td:first-child,
         .aging-table tr th:first-child,
@@ -10138,6 +10246,9 @@ input.mat-input-element{
                 height: 30px;
             }
         }
+        .rcm-entry .popover{
+            max-width: 550px;
+        }
     }
 }
     @media (max-width: 1199px) {
@@ -10147,6 +10258,25 @@ input.mat-input-element{
     }
 
     @media (max-width: 767px) {
+        .settings-profile-tabs {
+            .tab-content{
+                padding-top: 45px;
+            }
+        }
+        .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+            .profile-tab-container {
+                .nav.nav-tabs {
+                    padding-left: 15px !important;
+                    left: 0;
+                }
+            }
+        }
+        .universal-date {
+            padding-top: 0;
+        }
+        #inventory-sidebar{
+            padding: 15px 0;
+        }
         bs-datepicker-container {
             position: fixed !important;
             left: 50% !important;
@@ -10433,6 +10563,9 @@ input.mat-input-element{
         body.hide-scroll-body {
             overflow-y: hidden !important;
         }
+        body.hide-scroll-body.on-setting-page {
+            overflow-y: auto !important;
+        }
         .panel-block .card-body {
             min-height: auto;
         }
@@ -10550,6 +10683,12 @@ input.mat-input-element{
     }
 
     @media (max-width: 575px) {
+        .linked-add .popover{
+            width: 180px;
+            transform: none !important;
+            right: 0;
+            left: auto !important;
+        }
         .daterangepicker.ltr .ranges {
             float: left;
 
@@ -10559,6 +10698,11 @@ input.mat-input-element{
                     padding: 3px 4px;
                 }
             }
+        }
+
+        .mat-form-field{
+            min-width: auto;
+
         }
         .custom-tabs .top-bar {
             padding-top: 10px;
@@ -10586,6 +10730,17 @@ input.mat-input-element{
     }
 
     @media (max-width: 375px) {
+        .linked-add{
+            .popover{
+                &.outside-popover {
+                    left: 100px !important;
+                    top: auto !important;
+                }
+            }
+        }
+        #rcw-p91-widget-chats{
+            min-width: 300px !important;
+        }
         .aside-pane-form .custom-tabs .nav.nav-tabs > li {
             padding-right: 20px;
         }
@@ -10792,6 +10947,14 @@ input.mat-input-element{
         .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
             margin-top: 5px;
         }
+        .HW_frame_cont.HW_visible.HW_bottom{
+            max-width: 300px;
+        }
+        .edit-modal{
+            .modal-content{
+                max-width: 300px;
+                }
+            }
     }
 
     @media (min-width: 576px) {
@@ -10831,7 +10994,7 @@ input.mat-input-element{
     }
     @media(min-width: 480px) and (max-width: 667px) {
         .edit-modal {
-            margin: 20px auto;
+            margin: 0 auto;
             padding-top: 0;
 
             .edit-date-modal {
@@ -11012,16 +11175,18 @@ input.mat-input-element{
 
     *::-webkit-scrollbar {
         width: 10px;
+        height: 5px;
     }
 
-    /* Track */
+
     *::-webkit-scrollbar-track {
         background: $white-smoke;
     }
 
-    /* Handle */
+
     *::-webkit-scrollbar-thumb {
         background: $nobel;
         border-radius: 5px;
         min-height: 60px;
     }
+

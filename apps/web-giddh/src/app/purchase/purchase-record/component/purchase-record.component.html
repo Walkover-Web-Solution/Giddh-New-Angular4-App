@@ -1,5 +1,5 @@
 <div class="relative">
-    <hamburger-menu></hamburger-menu>
+    <hamburger-menu [pageHeading]="''"></hamburger-menu>
     <div class="invoice-control" id="purchase-tab">
         <tabset class="purchase-tabset">
             <tab heading="Purchase Order" [active]="activeTab == 'order'" (selectTab)="onTabChanged('order')">

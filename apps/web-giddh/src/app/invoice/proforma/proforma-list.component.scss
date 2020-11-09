@@ -299,7 +299,7 @@ span.icon-advance-filter {
     .select-all-proformas-on-mobile-view{
         display: flex;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 0;
         line-height: 1;
         font-size: 14px;
         min-height: 20px;
@@ -336,6 +336,13 @@ span.icon-advance-filter {
     .proforma-container {
         padding-top: 55px;
     }
+
+    .date-advance-search {
+        margin-top: 0;
+        margin-bottom: 15px;
+        display: block;
+        flex-direction: column;
+    }
 }
 @media (max-width: 420px) {
     .smallLoading {
@@ -353,10 +360,6 @@ span.icon-advance-filter {
         justify-content: center;
         margin-bottom: 5px;
         font-size: 14px;
-    }
-    .date-advance-search {
-        display: block;
-        flex-direction: column;
     }
     .form-group div {
         display: block;

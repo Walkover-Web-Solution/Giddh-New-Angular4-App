@@ -38,6 +38,8 @@ import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 import { SharedModule } from '../shared/shared.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+
 @NgModule({
     declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
         GstComponent, FilingComponent, FilingHeaderComponent, FilingOverviewComponent,
@@ -66,7 +68,8 @@ import { SharedModule } from '../shared/shared.module';
         PerfectScrollbarModule,
         CurrencyModule,
         ConfirmModalModule,
-        SharedModule
+        SharedModule,
+        ShSelectModule
     ],
     providers: [],
     entryComponents: [

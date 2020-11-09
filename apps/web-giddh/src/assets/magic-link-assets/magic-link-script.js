@@ -193,7 +193,7 @@ var app = new Vue({
                         if((from && to) || (e && e.response && e.response.data && e.response.data.code !== "NOT_FOUND")) {
                             this.$toaster.error(msg);
                         }
-                    });    
+                    });
             } else {
                 this.$toaster.error('Magic link ID not found.');
             }
@@ -364,6 +364,8 @@ var app = new Vue({
             switch (window.location.hostname) {
                 case 'localhost':
                 case 'dev.giddh.com':
+                    apiBaseUrl = 'https://apidev.giddh.com/';
+                    break;
                 case 'test.giddh.com':
                 case 'stage.giddh.com':
                     apiBaseUrl = 'https://apirelease.giddh.com/';

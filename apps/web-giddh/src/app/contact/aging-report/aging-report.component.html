@@ -9,11 +9,11 @@
                         <i class="icon-search"></i>
                     </span>
                 </div>
-                <div class="cp advance-clear-filter-icons">
+                <div class="cp advance-clear-filter-icons d-flex">
                     <div class="advance-icon" (click)="toggleAdvanceSearchPopup()" tooltip="Advance Search">
                         <span class="icon-advance-filter"></span>
                     </div>
-                    <span style="line-height: 2.1" class="ml-1" *ngIf="isAdvanceSearchApplied">
+                    <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
                         <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
                             <i aria-hidden="true" class="icon-refresh" tooltip="Reset Filter"></i>
                         </a>
@@ -43,10 +43,10 @@
     </div>
 </div>
 <div class="result-total">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="customer-right-wrap col-md-12">
-                <div class="text-right xs-left pl-2 pr-2">
+    <div>
+        <div>
+            <div class="customer-right-wrap">
+                <div class="text-right total-result xs-left pl-2 pr-2">
                     <h4 class="mb-1 pr-1">Result Total </h4>
                 </div>
                 <div class="bg-white customer-right clearfix" style="width: 100%;">
@@ -71,7 +71,7 @@
 <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <app-contact-advance-search-component [request]="commonRequest" [advanceSearch4]="'agingReport'"
+            <app-contact-advance-search-component #agingReportAdvanceSearch [request]="commonRequest" [advanceSearch4]="'agingReport'"
                 (applyAdvanceSearchEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
             </app-contact-advance-search-component>
         </div>

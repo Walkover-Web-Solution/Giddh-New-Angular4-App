@@ -2,7 +2,7 @@
 :host {
     position: fixed;
     left: auto;
-    top: 55px;
+    top: 61px;
     right: 0;
     bottom: 0;
     max-width: 330px;
@@ -123,7 +123,8 @@
         text-align: center;
         img{
             display: block;
-            margin: 15px auto 30px;
+            margin: 0px auto 15px;
+            max-width: 100px;
         }
         p{
             font-size: 14px;
@@ -166,7 +167,7 @@
     :host {
         position: fixed;
         left: auto;
-        top:  86px;
+        top:  90px;
     }
 }
 @media (max-width: 575px) {

@@ -336,7 +336,7 @@
                         </div>
                         <!-- endregion -->
                     </div>
-                    <div class="row mb-1 height-row">
+                    <div class="row mb-5 height-row">
                         <!-- region customer name -->
                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                             <div>
@@ -863,11 +863,8 @@
                                 <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
                                     <div class="row">
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                            <input type="text" #shippingDate="ngModel" placeholder="Ship Date"
-                                                bsDatepicker name="shippingDate"
-                                                [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
-                                                class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate" [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors &&(shippingDate.dirty || shippingDate.touched)">
+                                                </giddh-datepicker>
                                             <p class="text-danger"
                                                 *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                                 Invalid Date
@@ -1472,7 +1469,7 @@
                         </div>
                     </div>
 
-                    <div class="save-card-data pointer">
+                    <div class="save-card-data pointer" (click)="handleOutsideClick()">
                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </div>
                     <div class="del-card pointer" (click)="removeTransaction(entryIdx)">
@@ -1506,7 +1503,8 @@
                         <div class="row">
 
                             <div class="form-group col-xs-4">
-                                <input type="text" #shippingDate="ngModel" placeholder="Ship Date" bsDatepicker name="shippingDate" [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate" [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty ||shippingDate.touched)">
+                                </giddh-datepicker>
                                 <p class="text-danger"
                                     *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                     Invalid Date</p>

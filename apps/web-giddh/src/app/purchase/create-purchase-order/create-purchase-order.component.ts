@@ -50,6 +50,7 @@ import { INameUniqueName } from '../../models/api-models/Inventory';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { OrganizationType } from '../../models/user-login-state';
 
 const THEAD_ARR_READONLY = [
     {
@@ -1007,6 +1008,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public onSelectWarehouse(warehouse: any): void {
         this.autoFillCompanyShipping = false;
         this.autoFillWarehouseAddress(warehouse);
+        this.autoFillCompanyShipping = false;
+
+        if(this.purchaseOrder.company && this.purchaseOrder.company.billingDetails && this.purchaseOrder.company.shippingDetails && (this.purchaseOrder.company.billingDetails.address && this.purchaseOrder.company.billingDetails.address[0]) === (this.purchaseOrder.company.shippingDetails.address && this.purchaseOrder.company.shippingDetails.address[0]) && this.purchaseOrder.company.billingDetails.stateCode === this.purchaseOrder.company.shippingDetails.stateCode && this.purchaseOrder.company.billingDetails.gstNumber === this.purchaseOrder.company.shippingDetails.gstNumber) {
+            this.autoFillCompanyShipping = true;
+        }
     }
 
     /**
@@ -1017,19 +1023,39 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public autoFillWarehouseAddress(warehouse: any): void {
         if (warehouse) {
-            this.purchaseOrder.company.shippingDetails.address = [];
-            this.purchaseOrder.company.shippingDetails.address.push(warehouse.address);
-            this.purchaseOrder.company.shippingDetails.state.code = warehouse.stateCode;
-            this.purchaseOrder.company.shippingDetails.stateCode = warehouse.stateCode;
-            this.purchaseOrder.company.shippingDetails.state.name = warehouse.stateName;
-            this.purchaseOrder.company.shippingDetails.stateName = warehouse.stateName;
+            if (warehouse.addresses && warehouse.addresses.length) {
+                // Search the default linked address of warehouse
+                const defaultAddress = warehouse.addresses.find(address => address.isDefault);
+                if (defaultAddress) {
+                    this.purchaseOrder.company.shippingDetails.address = [];
+                    this.purchaseOrder.company.shippingDetails.address.push(defaultAddress.address);
+                    this.purchaseOrder.company.shippingDetails.state.code = defaultAddress.stateCode;
+                    this.purchaseOrder.company.shippingDetails.stateCode = defaultAddress.stateCode;
+                    this.purchaseOrder.company.shippingDetails.state.name = defaultAddress.stateName;
+                    this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
+                } else {
+                    this.resetShippingAddress();
+                }
+            } else {
+                this.resetShippingAddress();
+            }
         } else {
-            this.purchaseOrder.company.shippingDetails.address = [];
-            this.purchaseOrder.company.shippingDetails.state.code = "";
-            this.purchaseOrder.company.shippingDetails.stateCode = "";
-            this.purchaseOrder.company.shippingDetails.state.name = "";
-            this.purchaseOrder.company.shippingDetails.stateName = "";
+            this.resetShippingAddress();
         }
+    }
+
+    /**
+     * Resets the shipping address if no default linked address is
+     * found in a warehouse
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public resetShippingAddress(): void {
+        this.purchaseOrder.company.shippingDetails.address = [];
+        this.purchaseOrder.company.shippingDetails.state.code = "";
+        this.purchaseOrder.company.shippingDetails.stateCode = "";
+        this.purchaseOrder.company.shippingDetails.state.name = "";
+        this.purchaseOrder.company.shippingDetails.stateName = "";
     }
 
     /**
@@ -1824,7 +1850,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                        taxableValue = (rawAmount + entry.taxSum);
                     }
                     entry.otherTaxType = 'tcs';
                 } else {
@@ -2407,20 +2433,30 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (this.purchaseOrderUniqueName && event === "fill") {
             return;
         }
-
-        if (this.companyAddresses) {
-            this.companyAddresses.forEach(address => {
-                if (address.isDefault === true) {
-                    this.purchaseOrder.company.billingDetails.address = [];
-                    this.purchaseOrder.company.billingDetails.address.push(address.address);
-                    this.purchaseOrder.company.billingDetails.state.code = address.stateCode;
-                    this.purchaseOrder.company.billingDetails.state.name = address.stateName;
-                    this.purchaseOrder.company.billingDetails.stateCode = address.stateCode;
-                    this.purchaseOrder.company.billingDetails.stateName = address.stateName;
-                    this.purchaseOrder.company.billingDetails.gstNumber = address.taxNumber;
-                    this.purchaseOrder.company.shippingDetails.gstNumber = address.taxNumber;
-                }
-            });
+        let branches = [];
+        let currentBranch;
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            if (response && response.length) {
+                branches = response;
+            }
+        });
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+            // Find the current checked out branch
+            currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+        } else {
+            // Find the HO branch
+            currentBranch =  branches.find(branch => !branch.parentBranch);
+        }
+        if (currentBranch && currentBranch.addresses) {
+            const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+            this.purchaseOrder.company.billingDetails.address = [];
+            this.purchaseOrder.company.billingDetails.address.push(defaultAddress ? defaultAddress.address : '');
+            this.purchaseOrder.company.billingDetails.state.code = defaultAddress ? defaultAddress.stateCode : '';
+            this.purchaseOrder.company.billingDetails.state.name = defaultAddress ? defaultAddress.stateName : '';
+            this.purchaseOrder.company.billingDetails.stateCode = defaultAddress ? defaultAddress.stateCode : '';
+            this.purchaseOrder.company.billingDetails.stateName = defaultAddress ? defaultAddress.stateName : '';
+            this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
+            this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
         }
     }
 

@@ -100,10 +100,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public isTaxableAccount$: Observable<boolean>;
     public companiesList$: Observable<CompanyResponse[]>;
-    public companyTaxDropDown: Observable<IOption[]>;
+    public companyTaxDropDown$: Observable<IOption[]>;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
-    public isMultipleCurrency: boolean = false;
     public companyCurrency: string;
     public isIndia: boolean = false;
     public companyCountry: string = '';
@@ -187,7 +186,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         this.companyCountry = currentCompany.countryV2.alpha2CountryCode;
                     }
                     this.companyCurrency = _.clone(currentCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
                 }
             }
         });
@@ -502,7 +500,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public prepareTaxDropdown() {
         // prepare drop down for taxes
-        this.companyTaxDropDown = this.store.select(createSelector([
+        this.companyTaxDropDown$ = this.store.select(createSelector([
             (state: AppState) => state.groupwithaccounts.activeAccount,
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
             (state: AppState) => state.company.taxes],
@@ -1569,5 +1567,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedBooleanCustomField(isChecked: string, index: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         customField.controls[index].get('value').setValue(isChecked);
+    }
+
+    /**
+     * To capture selected/de-select discounts list update
+     *
+     * @param {*} event
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public selecteDiscountChanged(event: any) {
+
+        if (event) {
+            this.applyDiscounts();
+        }
     }
 }

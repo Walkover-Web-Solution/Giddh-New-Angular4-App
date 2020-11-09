@@ -1,5 +1,5 @@
 <div class="relative">
-<hamburger-menu *ngIf="activeTab !== 'vendor'"></hamburger-menu>
+<hamburger-menu [pageHeading]="''" *ngIf="activeTab !== 'vendor'"></hamburger-menu>
 <hamburger-menu [pageHeading]="'Vendor'" *ngIf="activeTab === 'vendor'"></hamburger-menu>
 <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <!-- region Customer/Vendor -->
@@ -297,14 +297,14 @@
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
+    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
         (getUpdateList)="getUpdatedList($event)">
     </aside-menu-account>
 </div>
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
 <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-    <payment-aside class="accountAsideMenuState2 transinherit" [selectedAccForPayment]="selectedAccForPayment" (closeAsideEvent)="togglePaymentPane($event)">
+    <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment">
     </payment-aside>
 </div>
 
@@ -320,12 +320,6 @@
                             <strong>Due as on </strong>
                             <span class="italic underline">
                                 <input type="text" (click)="showGiddhDatepicker($event)" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
-
-<!--                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
-<!--                                    (hideDaterangepicker)="selectedDate($event)"-->
-<!--                                    (applyDaterangepicker)="selectedDate($event)"-->
-<!--                                    class="form-control date-range-picker" />-->
-
                             </span>
                         </p>
                     </td>
@@ -597,7 +591,7 @@
                                 {{item.value || '-' }}</td>
                         </ng-container>
                     </tr>
-                    <tr >
+                    <tr>
                         <td [attr.colspan]="colspanLength" *ngIf="!(sundryDebtorsAccounts).length " class="text-center empty-table ">
                             <h1>No Record Found !!</h1>
                         </td>
@@ -663,7 +657,7 @@
                                                             </li>
 
                                                             <li class="li-link" *ngIf="!isMobileScreen">
-                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Generate Invoice
+                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Record Bill
                                                                 </a>
                                                             </li>
 
@@ -829,7 +823,7 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
                 [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="selectedDate($event)" (datesUpdated)="selectedDate($event)" [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>

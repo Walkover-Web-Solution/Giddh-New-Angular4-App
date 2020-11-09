@@ -56,7 +56,7 @@ export class CompanyService {
     }
 
 	/**
-	 * CreateNewCompany
+	 * CreateNewCompanyPage
 	 */
     public CreateNewCompany(company: CompanyCreateRequest): Observable<BaseResponse<CompanyResponse, CompanyCreateRequest>> {
         return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_COMPANY, company).pipe(
@@ -489,5 +489,58 @@ export class CompanyService {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, '')));
+    }
+
+    /**
+     * Creates a new branch
+     *
+     * @param {string} companyUniqueName Company unique name under which a branch is created
+     * @param {*} requestObject Request payload for branch createion
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof CompanyService
+     */
+    public createNewBranch(companyUniqueName: string, requestObject: any): Observable<any> {
+        const requestPayload = {
+            name: requestObject.name,
+            uniqueName: requestObject.uniqueName,
+            alias: requestObject.nameAlias,
+            parent_branch_unique_name: '',
+            businessType: requestObject.businessType || '',
+            businessNature: requestObject.businessNature || '',
+            addresses: []
+        }
+        if (requestObject.addresses && requestObject.addresses.length) {
+            const addressDetails = requestObject.addresses[0];
+            requestPayload.addresses = [
+                {
+                    taxNumber: addressDetails.taxNumber,
+                    isDefault: true,
+                    stateCode: addressDetails.stateCode,
+                    stateName: addressDetails.stateName,
+                    address: addressDetails.address
+                }
+            ];
+        }
+        return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_NEW_BRANCH
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), requestPayload).pipe(
+                catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
+    }
+
+    /**
+     * Updates the branch
+     *
+     * @param {*} requestObject Request payload for API
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof CompanyService
+     */
+    public updateBranch(requestObject: any): Observable<any> {
+        const contextPath = `${this.config.apiUrl}${COMPANY_API.CREATE_NEW_BRANCH}/${requestObject.branchUniqueName}`;
+        const requestPayload = {
+            name: requestObject.name,
+            alias: requestObject.alias
+        };
+        return this._http.put(contextPath
+            .replace(':companyUniqueName', encodeURIComponent(requestObject.companyUniqueName)), requestPayload).pipe(
+                catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
     }
 }

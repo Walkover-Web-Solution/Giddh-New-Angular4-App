@@ -17,6 +17,8 @@ import { ReplaySubject } from 'rxjs';
 import { DbService } from '../services/db.service';
 import { NAVIGATION_ITEM_LIST } from '../models/defaultMenus';
 import { find } from '../lodash-optimized';
+import { OrganizationType } from '../models/user-login-state';
+import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     selector: 'all-modules',
@@ -82,6 +84,10 @@ export class AllModulesComponent implements OnInit, OnDestroy {
         });
 
         this.getSharedAllModules();
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "All Modules";
+        currentPageObj.url = "";
+        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 
     /**
@@ -265,7 +271,7 @@ export class AllModulesComponent implements OnInit, OnDestroy {
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen);
+            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen, this.generalService.currentOrganizationType === OrganizationType.Company);;
         }
     }
 }

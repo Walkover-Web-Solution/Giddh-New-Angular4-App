@@ -236,9 +236,9 @@
                         <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
                             <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
-                                    (click)="toggleAllItems(true)">
+                                    (click)="toggleAllItems(true, true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
-                                    (click)="toggleAllItems(false)">
+                                    (click)="toggleAllItems(false, true)">
                             </div>
                         </th>
 
@@ -317,9 +317,9 @@
                         <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
                             <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
-                                    (click)="toggleAllItems(true)">
+                                    (click)="toggleAllItems(true, true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
-                                    (click)="toggleAllItems(false)">
+                                    (click)="toggleAllItems(false, true)">
                             </div>
                         </th>
 
@@ -872,8 +872,8 @@
         <!-- region invoice-preview-details -->
         <div *ngIf="selectedInvoiceForDetails">
             <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails"
-                [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice($event)"
-                (sendEmail)="sendEmail($event)" (closeEvent)="invoicePreviewClosed()"
+                [invoiceSetting]="invoiceSetting" [invoiceSearch]="invoiceSearch" (deleteVoucher)="deleteConfirmedInvoice($event)"
+                (sendEmail)="sendEmail($event)" (invoiceSearchEvent)="invoiceSearch = $event;" (closeEvent)="invoicePreviewClosed()"
                 (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)"
                 (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher"
                 (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen"

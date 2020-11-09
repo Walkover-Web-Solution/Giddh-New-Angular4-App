@@ -40,13 +40,13 @@
 
             <table class="w-100 ledger-head mr-t1 hidden-xs">
                 <thead>
-                    <tr>
-                        <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
+                    <tr class="row">
+                        <th [ngClass]="Shown ? 'active' : ''" class="col-6 hidden-xs">
 
                             {{vm.ledgerUnderStandingObj.text.dr}}
                             <span class="dr-cr-category pull-right text-gray">Dr</span>
                         </th>
-                        <th class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.cr}}
+                        <th class="col-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.cr}}
                             <span class="dr-cr-category pull-right text-gray">Cr</span>
                         </th>
                     </tr>
@@ -72,27 +72,27 @@
                     <table class="width100 card-table">
 
                         <thead class="hidden-xs">
-                            <tr class="t-h-bg1">
+                            <tr class="t-h-bg1 row">
 
-                                <th class="col-xs-2" style="border-top:none">
+                                <th class="col-3" style="border-top:none">
                                     <span class="cursor-pointer">
                                         Date
                                     </span>
                                 </th>
-                                <th class="col-xs-6" style="border-top:none">Particular</th>
+                                <th class="col-5" style="border-top:none">Particular</th>
 
-                                <th class="col-xs-2 text-right" style="border-top:none">
+                                <th class="col-4 text-right" style="border-top:none">
                                     Amount
                                 </th>
                             </tr>
                         </thead>
 
                         <tbody class="ledger-main">
-                            <tr class="debit-blank-row"
+                            <tr class="debit-blank-row row"
                                 *ngFor="let txn of vm.selectedLedger.transactions; let i = index; ">
                                 <ng-container *ngIf="txn.type === 'DEBIT'">
 
-                                    <td class="col-xs-2" data-title="Date">
+                                    <td class="col-3" data-title="Date">
                                         <input id="{{'giddh-datepicker-left-' + i}}" type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
                                             [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
@@ -102,7 +102,7 @@
 
                                     <td data-title="Particular" id="{{'debit-id-' + i}}"
                                         [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
-                                        class="col-xs-6 pos-rel select2-parent select2-ledger">
+                                        class="col-5 pos-rel select2-parent select2-ledger">
 
 
                                         <ng-template [ngIf]="!txn.isDiscount">
@@ -192,7 +192,7 @@
 
                                     </td>
 
-                                    <td class="col-xs-2 text-right" data-title="Amount">
+                                    <td class="col-4 text-right" data-title="Amount">
 
                                         <input id="{{'update-ledger-amount-dr-' + i}}" type="text" [(ngModel)]="txn.amount" class="form-control text-right"
                                             name="{{txn[i]}}.amount" [mask]="vm.inputMaskFormat"
@@ -219,9 +219,9 @@
                     <table class="ledger-footer-1">
 
                         <tbody>
-                            <tr class="total-col">
+                            <tr class="total-col row">
 
-                                <td colspan="12" class="col-xs-12 col-sm-12 text-right h32">
+                                <td colspan="12" class="col-12 col-sm-12 text-right h32">
                                     <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
                                         [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
                                         C/F: CR {{ vm.baseCurrencyDetails?.symbol}} {{ vm.compoundTotal | giddhCurrency}}
@@ -230,9 +230,9 @@
 
                             </tr>
 
-                            <tr class="total-col">
+                            <tr class="total-col row">
                                 <!-- reckoning -->
-                                <td colspan="12" class="col-xs-12 col-sm-12 text-right h32">
+                                <td colspan="12" class="col-12 col-sm-12 text-right h32">
 
                                     <span class="bdrT pr-1 pl-1 width-200">
                                         {{ vm.baseCurrencyDetails?.symbol}} {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal)
@@ -262,24 +262,24 @@
                     <!-- region credit transaction header -->
                     <table class="width100 card-table">
                         <thead class="xs-hidden">
-                            <tr class="t-h-bg1">
-                                <th class="col-xs-2" style="border-top:none">
+                            <tr class="t-h-bg1 row">
+                                <th class="col-3" style="border-top:none">
                                     <span class="cursor-pointer">
                                         Date
                                     </span>
 
                                 </th>
-                                <th class="col-xs-6" style="border-top:none">Particular</th>
-                                <th class="col-xs-2 text-right" style="border-top:none">Amount</th>
+                                <th class="col-5" style="border-top:none">Particular</th>
+                                <th class="col-4 text-right" style="border-top:none">Amount</th>
                             </tr>
                         </thead>
 
                         <tbody class="ledger-main">
 
-                            <tr *ngFor="let txn of vm.selectedLedger.transactions; let i = index" class="credit-blank-row">
+                            <tr *ngFor="let txn of vm.selectedLedger.transactions; let i = index" class="credit-blank-row row">
                                 <ng-container *ngIf="txn.type == 'CREDIT'">
 
-                                    <td data-title="Date" class="col-xs-2">
+                                    <td data-title="Date" class="col-3">
                                         <input id="{{'giddh-datepicker-right-' + i }}" class="form-control" autocomplete="off" name="datepic" type="text"
                                             [(ngModel)]="vm.selectedLedger.entryDate"
                                             (click)="addBlankTrx('CREDIT', txn, $event)" #cbs='bsDatepicker'
@@ -287,7 +287,7 @@
                                     </td>
 
                                     <td data-title="Particular" id="{{'credit-id-' + i}}"
-                                        class="pos-rel col-xs-6 select2-parent select2-ledger"
+                                        class="pos-rel col-5 select2-parent select2-ledger"
                                         [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
 
                                         <ng-template [ngIf]="!txn?.isDiscount">
@@ -372,7 +372,7 @@
                                         </span>
                                     </td>
 
-                                    <td data-title="Amount" class="col-xs-2 text-right">
+                                    <td data-title="Amount" class="col-4 text-right">
                                         <input id="{{'update-ledger-amount-cr-' + i}}" class="form-control text-right" type="text" [(ngModel)]="txn.amount"
                                             [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="txn.amount"
@@ -395,19 +395,19 @@
                     <!-- region credit transaction footer -->
                     <table class="ledger-footer-1">
                         <tbody>
-                            <tr class="total-col">
-                                <td colspan="12" class="col-xs-12  col-sm-12 text-right h32">
+                            <tr class="total-col row">
+                                <td colspan="12" class="col-12  col-sm-12 text-right h32">
                                     <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                                         <span class="primary_clr pd2"
                                             [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
-                                            {{ vm.baseCurrencyDetails?.symbol }}
+                                            {{ vm?.baseCurrencyDetails?.symbol }}
                                             {{ vm.compoundTotal | giddhCurrency}}</span>
                                     </span>
                                 </td>
                             </tr>
-                            <tr class="total-col">
+                            <tr class="total-col row">
                                 <!-- reckoning -->
-                                <td colspan="12" class="col-xs-12 col-sm-12 text-right h32"
+                                <td colspan="12" class="col-12 col-sm-12 text-right h32"
                                     style="padding-right:10px !important;">
                                     <span class="bdrT">
                                         {{ vm.baseCurrencyDetails?.symbol }} {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal)
@@ -724,7 +724,7 @@
                     </ng-container>
 
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12">
+                        <div class="col-12 col-sm-12">
                             <textarea id="update-ledger-description" rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
                                 placeholder="Description"></textarea>
                         </div>
@@ -845,7 +845,7 @@
                     <table class="width100">
                         <tbody>
                             <tr>
-                                <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
+                                <td class="primary_clr" (click)="getInvoiveLists(); toggleMoreDetail()">
                                     <i class="fa cp"
                                         [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
                                     <button class="no-btn pdL0">&nbsp; More Details</button>
@@ -1021,7 +1021,7 @@
 
                     <div class="row">
 
-                        <div class="col-xs-12 col-sm-12 clearfix mr-t1">
+                        <div class="col-12 col-sm-12 clearfix mr-t1">
 
                             <div class="mrR1 form-group pull-left cp">
                                 <label class="pull-left cp fs16">
@@ -1094,7 +1094,7 @@
 
                         </div>
 
-                        <div class="col-xs-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
+                        <div class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
                             <!--                            <div class="width-100 mb-05">-->
                             <!--                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;-->
                             <!--                                        update them first and try again.</p>-->
@@ -1113,11 +1113,8 @@
 
         </div>
     </div>
-
 </div>
 <!-- endregion -->
-
-
 <!-- region modals -->
 <!--deleteAttachedFile  -->
 <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
