@@ -241,13 +241,18 @@
                         </span>
                     </div>
                     <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
-                        <a [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName"
-                            (click)="switchToBranch(branch?.uniqueName, $event)" class="dropdown-item"
-                            tooltip="{{branch?.name}} ({{branch?.alias}})" href="javascript:void(0);">
-                            <span class="pr-3">{{branch?.name}} ({{branch?.alias}})</span>
-                            <i class="icon-branch-icon pull-right branch-icon-tooltip"  *ngIf="branch.parentBranch" tooltip="Branch"></i>
-                            <i class="icon-company-HO pull-right branch-icon-tooltip"  *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
+                        <a href="javascript:void(0);"  class="dropdown-item" [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName"(click)="switchToBranch(branch?.uniqueName, $event)">
+                            <span class="branch-alias-name">
+                                <a tooltip="{{branch?.name}} ({{branch?.alias}})" href="javascript:void(0);">
+                                    <span class="pr-3">{{branch?.name}} ({{branch?.alias}})</span>
+                                </a>
+                            </span>
+                            <span>
+                                <i class="icon-branch-icon pull-right branch-icon-tooltip" *ngIf="branch.parentBranch" tooltip="Branch"></i>
+                                <i class="icon-company-HO pull-right branch-icon-tooltip" *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
+                            </span>
                         </a>
+
                     </li>
                     <li class="divider dropdown-divider"></li>
                     <li *ngIf="currentBranch" (click)="goToCompany()" role="menuitem"><a class="dropdown-item go-to-company"
