@@ -218,11 +218,11 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
 
     public parseAllDateField() {
         if (this.request.invoiceDate) {
-            this.request.invoiceDate = moment(this.request.invoiceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+            this.request.invoiceDate = moment(this.request.invoiceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         }
 
         if (this.request.dueDate) {
-            this.request.dueDate = moment(this.request.dueDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+            this.request.dueDate = moment(this.request.dueDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         }
     }
 
@@ -233,7 +233,6 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
     }
 
     public onCancel() {
-        this.request = new InvoiceFilterClassForInvoicePreview();
         this.closeModelEvent.emit(true);
     }
 }
