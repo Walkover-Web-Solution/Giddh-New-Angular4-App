@@ -17,9 +17,10 @@ import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/defaultMenus'
 import { Configuration } from "./app.constant";
 import { LoginActions } from './actions/login.action';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
+import { OrganizationType } from './models/user-login-state';
 
 /**
  * App Component
@@ -138,7 +139,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         } else {
             localStorage.setItem('isMobileSiteGiddh', 'false');
         }
-        reassignNavigationalArray(isMobile);
+        let branches = [];
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            branches = response || [];
+        });
+        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
         this._generalService.setIsMobileView(isMobile);
     }
 
