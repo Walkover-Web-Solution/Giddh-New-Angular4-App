@@ -154,6 +154,12 @@ a[vr-item]:focus {
     padding: 0px !important;
 }
 
+.button-back-head{
+    position: absolute;
+    right: 0;
+    top: 110px;
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     .left-fixed-header li {
         display: grid;
@@ -824,11 +830,24 @@ ul.sub-list {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                    color: $nero !important;
+                    cursor: pointer;
                     &.dropdown-item.active-branch {
                         color: $chetwode-blue;
                         font-weight: bold;
 
                     }
+                    &:hover{
+                        color: $chetwode-blue !important;
+                    }
+                }
+                span{
+                    a{
+                        padding: 0;
+                    }
+                }
+                .branch-alias-name{
+                    width: 90%;
                 }
             }
             .go-to-company{
