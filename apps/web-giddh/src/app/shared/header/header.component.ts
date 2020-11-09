@@ -1136,7 +1136,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
             if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
                 this.store.dispatch(this._generalActions.addAndManageClosed());
-                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
+                if (this.selectedLedgerName) {
+                    this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
+                }
             }
         });
 
