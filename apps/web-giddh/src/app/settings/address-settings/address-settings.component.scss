@@ -71,9 +71,19 @@
 }
 
 .linked-with{
+    white-space: normal;
+    word-break: break-word;
     i{
         color: $gray;
         margin-right:5px;
+        margin-top: 4px;
+        float: left;
+    }
+    span.entity-alias{
+        margin-right: 0;
+        margin-top: 0;
+        float: right;
+        width: 95%;
     }
 }
 
