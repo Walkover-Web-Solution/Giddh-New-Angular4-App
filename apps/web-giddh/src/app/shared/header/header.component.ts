@@ -1204,7 +1204,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public goToCompany(): void {
         if (!localStorage.getItem('isNewArchitecture')) {
-            console.log('Clearing data');
+            /* New architecture displays more items in menu panel in company mode
+               as accounts are not visible hence to detect the environment for current customer
+               in PROD we are using local storage to reset the index DB once and replace it with new items
+            */
             this._dbService.clearAllData();
             localStorage.setItem('isNewArchitecture', String(true));
         }
@@ -1594,7 +1597,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen, this.currentOrganizationType === OrganizationType.Company).then((res) => {
+            let branches = [];
+            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+                branches = response || [];
+            });
+            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
+                this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
                 if (res) {
                     this.findListFromDb(res);
                 }
