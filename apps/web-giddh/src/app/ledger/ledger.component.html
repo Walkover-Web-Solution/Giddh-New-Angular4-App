@@ -10,7 +10,7 @@
                 (click)="showExportLedgerModal()">Export</a></li>
     </ul>
 </div>
-<hamburger-menu [pageHeading]="'Ledger Page Heading'"></hamburger-menu>
+<hamburger-menu [pageHeading]="(lc?.activeAccount?.name) ? lc?.activeAccount?.name + ' A/c' : ''"></hamburger-menu>
 <section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
     <!-- region ledger table-->
     <div class="ledg-head transactions-page mt-15 pos-rel">
