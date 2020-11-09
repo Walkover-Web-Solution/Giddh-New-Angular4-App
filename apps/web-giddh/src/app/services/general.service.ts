@@ -97,7 +97,6 @@ export class GeneralService {
 
     set currencyType(currencyType: string) {
         this._currencyType = currencyType;
-
     }
 
     get createNewCompany(): CompanyCreateRequest {
