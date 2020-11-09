@@ -243,7 +243,7 @@
                         </span>
                     </div>
                     <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
-                        <a href="javascript:void(0);"  class="dropdown-item" [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName"(click)="switchToBranch(branch?.uniqueName, $event)">
+                        <a href="javascript:void(0);"  class="dropdown-item" [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName" (click)="switchToBranch(branch?.uniqueName, $event)">
                             <span class="branch-alias-name">
                                 <a tooltip="{{branch?.name}} ({{branch?.alias}})" href="javascript:void(0);">
                                     <span class="pr-3">{{branch?.name}} ({{branch?.alias}})</span>
