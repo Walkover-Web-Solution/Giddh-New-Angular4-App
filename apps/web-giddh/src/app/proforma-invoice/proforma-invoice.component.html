@@ -97,14 +97,14 @@
 
                                 <div class="row">
                                     <!-- region customer name -->
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}} Name<span
                                                 class="red-text">*</span></label>
                                     </div>
                                     <!-- endregion -->
 
                                     <!-- region customer dropdown -->
-                                    <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
+                                    <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 select-customer-name">
 
                                         <div class="clearfix d-flex flex-column">
                                             <div class="d-flex">
@@ -417,11 +417,11 @@
                             <!-- region attention to -->
                             <div class="row">
 
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                     <label>Attention to</label>
                                 </div>
 
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="pl-0 col-sm-12 col-xl-6 col-lg-10 col-md-10">
 
                                         <input type="text" name="accountDetails.attention" placeholder="Attention to"
@@ -435,10 +435,10 @@
 
                             <!-- region email -->
                             <div class="row mt-b1">
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                     <label>Email Id</label>
                                 </div>
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input type="email" placeholder="someone@example.com"
                                             name="accountDetails.email" class="form-control attentionTo"
@@ -452,11 +452,11 @@
                             <!-- region mobile no -->
                             <div class="row mt-b1">
 
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                     <label>Mobile Number</label>
                                 </div>
 
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="tel"
                                             name="accountDetails.mobileNumber" class="form-control attentionTo"
@@ -467,10 +467,10 @@
                             <!-- endregion-->
                             <!-- warehouse selection -->
                             <div class="row mt-b1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                     <label>Warehouse</label>
                                 </div>
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <sh-select class="multi-select" name="warehouse"
                                             [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse"
@@ -483,10 +483,10 @@
                             <!-- end warehouse field -->
 
                             <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                     <label>Deliver To<span class="red-text">*</span></label>
                                 </div>
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 select-customer-name">
                                     <section class="form-inline">
                                         <div class="wrap-billing-address w-100 clearfix">
                                             <div class="row">
@@ -592,10 +592,10 @@
                                 </div>
                             </div>
                             <div class="row mt-b1" *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))">
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                     <label>Link Purchase Order</label>
                                 </div>
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <sh-select [options]="purchaseOrders" placeholder="Select Order" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPo" (selected)="getPurchaseOrder($event, true)" [isFilterEnabled]="true" [useInBuiltFilterForIOptionTypeItems]="true">
                                             <ng-template #optionTemplate let-option="option">
@@ -622,10 +622,10 @@
 
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mt-b1">
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                     <label> {{ invoiceNoLabel }} </label>
                                 </div>
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
                                         <div>
@@ -716,10 +716,10 @@
                             </div>
 
                             <div class="row mt-b1" *ngIf="isMobileScreen">
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                     <label>{{ invoiceDateLabel }}</label>
                                 </div>
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel"
                                             name="voucherDate" class="form-control date-invoice" bsDatepicker
@@ -739,10 +739,10 @@
 
                             <div class="row mt-b1"
                                 *ngIf="isMobileScreen && (isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice)">
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                     <label>{{ invoiceDueDateLabel }}</label>
                                 </div>
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel"
                                             name="dueDate" class="form-control date-invoice" bsDatepicker
@@ -759,10 +759,10 @@
                             <!-- reverse charge transction start -->
                             <!-- for purchase record start -->
                             <div class="row mt-b1" *ngIf="isPurchaseInvoice">
-                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12" *ngIf="!isMobileView">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                     <label></label>
                                 </div>
-                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-sm-6 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input id="reverse-charge" name="rcmEntry" class="checkbox-custom"
                                             type="checkbox" [ngModel]="isRcmEntry" (click)="toggleRcmCheckbox($event)">
@@ -784,10 +784,10 @@
                             <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                             <ng-container *ngIf="companyCountryCode === 'AE'">
                                 <div class="row mt-b1" *ngIf="isSalesInvoice || isCashInvoice">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12" *ngIf="!isMobileView">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                         <label></label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"
                                                 class="checkbox-custom"
@@ -803,10 +803,10 @@
                                 <!-- endregion -->
                                 <div class="row mt-b1 "
                                     *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable ">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>Passport Number</label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 ">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0 ">
                                             <input type="text" name="passportNumber" #passportNumber
                                                 placeholder="Passport Number" class="form-control attentionTo"
@@ -1333,7 +1333,7 @@
                                                         id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                         (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                                     <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                                        *ngIf="!entry.isOtherTaxApplicable" class="other-tax-label font-13 vertical-center">Other Tax?</label>
+                                                        *ngIf="!entry.isOtherTaxApplicable" class="other-tax-label font-13 align-middle">Other Tax?</label>
                                                 </div>
                                                 <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
 
@@ -1689,8 +1689,7 @@
                                                                             <ng-template #optionTemplate1
                                                                                 let-option="option">
                                                                                 <a href="javascript:void(0)"
-                                                                                    class="list-item"
-                                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                                    class="list-item">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
@@ -1716,7 +1715,7 @@
 
                                                                 <li class="clearfix mr-t1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
                                                                     <span
-                                                                        class="amount-field pull-right max100 amountFiledCash">
+                                                                        class="amount-field pull-right max100 amount-filed-cash">
                                                                         <span
                                                                             *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue
                                                 | giddhCurrency}}</span>
@@ -1777,7 +1776,7 @@
                             <!-- region static entry -->
                             <div class="card-invoice-table" [hidden]="activeIndx === entryIdx">
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-12">
+                                    <div class="col-sm-12">
                                         <div class="single-card-row">
                                             <div class="product-name">
                                                 <label class="card-label">Product/Service Description</label>
@@ -1798,14 +1797,14 @@
                                             <div class="date-hsn-code pr-0">
                                                 <div class="row">
 
-                                                    <div class="col-xs-6 col-sm-6" *ngIf="entry.entryDate">
+                                                    <div class="col-sm-6" *ngIf="entry.entryDate">
                                                         <div class="entry-date">
                                                             <label>Entry Date: {{entry.entryDate | date: 'dd-MM-yyyy'}}
                                                             </label>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-xs-6 col-sm-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
+                                                    <div class="col-sm-6 pl-0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                                         <div class="hsn-code text-right">
                                                             <label>HSN/SAC:
                                                                 {{(inventorySettings?.manageInventory || !transaction.sacNumberExists) ? transaction.hsnNumber : transaction.sacNumber}}</label>
@@ -1818,7 +1817,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-6 col-sm-6">
+                                    <div class="col-sm-6">
                                         <div class="single-card-row">
                                             <div class="qty-unit">
                                                 <label class="card-label">Qty/Unit</label>
@@ -1828,7 +1827,7 @@
 
                                     </div>
 
-                                    <div class="col-xs-6 col-sm-6">
+                                    <div class="col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-rate">
                                                 <label class="card-label">Rate</label>
@@ -1849,7 +1848,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-6 col-sm-6">
+                                    <div class="col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-amount">
                                                 <label class="card-label">Amount</label>
@@ -1865,7 +1864,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6 col-sm-6">
+                                    <div class="col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-discount">
                                                 <label class="card-label">Discount</label>
@@ -1882,7 +1881,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-6 col-sm-6">
+                                    <div class="col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-tax">
                                                 <label class="card-label">Tax</label>
@@ -1897,7 +1896,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6 col-sm-6">
+                                    <div class="col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-total">
                                                 <label class="card-label">Total</label>
@@ -1928,7 +1927,7 @@
                             <!-- region dynamic entry -->
                             <div class="card-invoice-table edit-card-invoice-table" [hidden]="activeIndx !== entryIdx">
                                 <div class="row">
-                                    <div class="col-xs-12 col-sm-12">
+                                    <div class="col-sm-12">
                                         <div class="single-card-row">
                                             <div class="product-name">
                                                 <label class="card-label">Product/Service Description</label>
@@ -2070,7 +2069,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row quantityUnitW100">
+                                <div class="row quantity-unit-w100">
                                     <div class="col-xs-6 col-sm-6">
 
                                         <div class="single-card-row">
@@ -2193,7 +2192,7 @@
                                             <div class="card-tax">
                                                 <label class="card-label text-right">Tax</label>
 
-                                                <div class="text-right" style="flex:1;">
+                                                <div class="text-right flex-fill">
                                                     <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
                                                         [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
                                                         [applicableTaxes]="transaction.applicableTaxes"
@@ -2219,7 +2218,7 @@
                                         <div class="single-card-row">
                                             <div class="card-total">
                                                 <label class="card-label text-right">Total</label>
-                                                <div style="flex:1;">
+                                                <div class="flex-fill">
                                                     <input type="tel" name="transaction.total_{{entryIdx}}"
                                                         class="form-control text-right"
                                                         (blur)="calculateTransactionValueInclusively(entry, transaction)"
@@ -2234,16 +2233,15 @@
                                                             id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                             (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                                         <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                                            *ngIf="!entry.isOtherTaxApplicable" class="other-tax-label"
-                                                            style="font-size:13px;vertical-align: middle">Other
+                                                            *ngIf="!entry.isOtherTaxApplicable" class="other-tax-label font-13 align-middle">Other
                                                             Tax?</label>
                                                     </div>
-                                                    <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1 othertaxes">
+                                                    <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1 other-taxes">
 
                                                         <span>
 
-                                                            <div style="display: flex;align-items: center">
-                                                                <span style="margin-right: 5px">
+                                                            <div class="d-flex align-items-center">
+                                                                <span class="mr-r">
                                                                     <a href="javascript: void 0"
                                                                         (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
                                                                         <img src="assets/images/edit-pencilicon.svg">
@@ -2257,15 +2255,14 @@
                                                                     name="entry.otherTaxesSum_{{entryIdx}}" />
                                                             </div>
 
-                                                            <p
-                                                                style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
+                                                            <p class="mr-t font-12 text-capitalize mr-b2">
                                                                 {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                                                         </span>
 
                                                     </div>
                                                 </div>
                                                 <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice"
-                                                    class="tax-incurrency" style="color:#999;">
+                                                    class="tax-incurrency">
                                                     {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                     <span>{{baseCurrencySymbol}}</span> :
                                                     <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
@@ -2282,7 +2279,7 @@
                                     </div>
                                 </div>
 
-                                <div class="saveCard-data pointer" (click)="handleOutsideClick()">
+                                <div class="save-card-data pointer" (click)="handleOutsideClick()">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 </div>
 
@@ -2312,7 +2309,7 @@
                                     <div class="ico-head">Other Details</div>
                                 </div>
 
-                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600  mr0">
+                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600  mr-0">
 
                                     <div class="row">
 
@@ -2361,16 +2358,16 @@
 
                             </div>
 
-                            <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
+                            <div class="pd-t1 pl-0 max-600" *ngIf="!isPurchaseInvoice">
                                 <label class="mr-b1">Note</label>
-                                <textarea style="height:120px" class="form-control" name="message2"
+                                <textarea rows="3" class="form-control" name="message2"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>
 
                         </div>
                     </div>
 
-                    <div class="total-amountDiscription">
+                    <div class="total-amount-description">
 
                         <section class="table-sec form-group">
 
@@ -2484,8 +2481,7 @@
                                                             [multiple]="false" [ItemHeight]="33"
                                                             [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
                                                             <ng-template #optionTemplate1 let-option="option">
-                                                                <a href="javascript:void(0)" class="list-item"
-                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                <a href="javascript:void(0)" class="list-item">
                                                                     <div class="item">{{ option.label }}</div>
                                                                     <div class="item-unique">{{ option.value }}</div>
                                                                 </a>
@@ -2504,7 +2500,7 @@
                                                 </li>
 
                                                 <li class="clearfix mr-t1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
-                                                    <span class="amount-field pull-right max100 amountFiledCash">
+                                                    <span class="amount-field pull-right max100 amount-filed-cash">
                                                         <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
@@ -2589,7 +2585,7 @@
                                 <div class="btn-group" [dropup]="isDropup" dropdown  [isDisabled]="!hasVoucherEntry">
                                     <button type="button" [disabled]="!hasVoucherEntry"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
-                                        class="btn btn-default generateInvoie">Generate
+                                        class="btn btn-default generate-invoice">Generate
                                         <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                             Cash
                                         </span>

@@ -907,12 +907,12 @@ span.edit-icon {
 }
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success,
-.bulkItemBtnGroup button.btn.btn-sm.btn-success {
+.bulk-item-btn-group button.btn.btn-sm.btn-success {
     background-color: #28ab00;
     color: #fff;
 }
 
-.temapletFooter {
+.template-footer {
     position: fixed;
     bottom: 15px;
     width: 100%;
@@ -1052,7 +1052,7 @@ section.newtable {
 
 .tax-incurrency {
     margin-bottom: 7px;
-    color: #999 !important;
+    color: $nobel !important;
     white-space: initial;
 }
 
@@ -1071,7 +1071,7 @@ section.newtable {
 .card-invoice-table-wrapper,
 .add-btn,
 .other-detail-card,
-.total-amountDiscription {
+.total-amount-description {
     display: none;
 }
 .custom-file-label::after, .dropdown-toggle::after{
@@ -1160,12 +1160,12 @@ section.newtable {
     padding-bottom: 20px;
 }
 
-.total-amountDiscription {
+.total-amount-description {
     max-width: 400px;
     width: 100%;
 }
 
-.total-amountDiscription {
+.total-amount-description {
     max-width: 400px;
     width: 100%;
 }
@@ -1196,94 +1196,94 @@ section.newtable {
 
 /* ADD BULK ITEM */
 
-.addBulkItemmodal.modal-dialog {
+.add-bulk-item-modal.modal-dialog {
     width: 870px !important;
     margin: 30px auto;
 }
 
-.addBulkItemmodal .singleProductWrapper {
+.add-bulk-item-modal .single-product-wrapper {
     margin-bottom: 20px;
 }
 
-.addBulkItemmodal .singleProductWrapper h5 {
+.add-bulk-item-modal .single-product-wrapper h5 {
     color: #333333;
     font-size: 14px;
 }
 
-.addBulkItemmodal .singleProductWrapper p {
+.add-bulk-item-modal .single-product-wrapper p {
     font-size: 12px;
     padding-top: 4px;
 }
 
-.addBulkItemmodal .productList {
+.add-bulk-item-modal .product-list {
     padding-top: 15px;
     height: 600px;
     overflow-y: auto;
 }
 
-.addBulkItemmodal .rightContent span.selectdStockNumber {
+.add-bulk-item-modal .right-content span.selected-stock-number {
     font-size: 20px;
 }
 
-.addBulkItemmodal .rightContent h4 {
+.add-bulk-item-modal .right-content h4 {
     font-size: 14px;
 }
 
-.addBulkItemmodal .rightContent hr {
+.add-bulk-item-modal .right-content hr {
     color: black;
     border-color: #ccc;
     margin: 10px -15px;
     margin-left: -15px;
 }
 
-.addBulkItemmodal .pl-0 {
+.add-bulk-item-modal .pl-0 {
     padding-left: 0;
 }
 
-.addBulkItemmodal .singleSelectdStock p {
+.add-bulk-item-modal .single-selected-stock p {
     font-size: 14px;
 }
 
-.addBulkItemmodal .wrapSelectedStocks {
+.add-bulk-item-modal .wrap-selected-stocks {
     margin-top: 15px;
 }
 
-.addBulkItemmodal .input-group {
+.add-bulk-item-modal .input-group {
     position: relative;
     display: table;
     border-collapse: separate;
     width: 138px;
 }
 
-.addBulkItemmodal input.form-control.input-number {
+.add-bulk-item-modal input.form-control.input-number {
     width: 60px !important;
     text-align: center;
     height: 28px !important;
 }
 
-.addBulkItemmodal .input-group .input-group-btn .btn {
+.add-bulk-item-modal .input-group .input-group-btn .btn {
     background: #fff;
     border-left: 1px solid #ccc;
 }
 
-.addBulkItemmodal .btn {
+.add-bulk-item-modal .btn {
     padding: 3px 13px;
 }
 
-.addBulkItemmodal .input-group-btn .fa {
+.add-bulk-item-modal .input-group-btn .fa {
     color: #c6c6c6;
 }
 
-.addBulkItemmodal .singleSelectdStock {
+.add-bulk-item-modal .single-selected-stock {
     margin-bottom: 20px;
 }
 
-.addBulkItemmodal .leftContent {
+.add-bulk-item-modal .left-content {
     border-right: 1px solid #ddd;
     padding-right: 15px;
 }
 
-.addBulkItemmodal .modal-title {
+.add-bulk-item-modal .modal-title {
     font-size: 22px !important;
     color: #fff;
 }
@@ -1737,7 +1737,7 @@ span.eligible-ITC {
     .card-invoice-table-wrapper,
     .add-btn,
     .other-detail-card,
-    .total-amountDiscription {
+    .total-amount-description {
         display: block;
     }
     .customer-invoice-table.bg-white {
@@ -1756,7 +1756,7 @@ span.eligible-ITC {
     }
     .card-invoice-table-wrapper,
     .other-detail-card,
-    .total-amountDiscription {
+    .total-amount-description {
         width: 100%;
         max-width: 100%;
     }
@@ -1767,11 +1767,11 @@ span.eligible-ITC {
         padding: 3px;
         font-size: 13px;
     }
-    .othertaxes div {
+    .other-taxes div {
         align-items: flex-end !important;
         justify-content: flex-end !important;
     }
-    .othertaxes {
+    .other-taxes {
         text-align: right;
     }
     .billing-address .col-sm-6.pd {
@@ -1856,7 +1856,7 @@ span.eligible-ITC {
         display: flex;
         flex-direction: column;
     }
-    #actionPane .generateInvoie {
+    #actionPane .generate-invoice {
         min-width: 189px;
     }
     .last-estimate-modal {
@@ -1866,7 +1866,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 414px) {
-    .quantityUnitW100 .col-xs-6 {
+    .quantity-unit-w100 .col-xs-6 {
         width: 100%;
     }
     .search-arrow-image {
@@ -1888,19 +1888,19 @@ span.eligible-ITC {
     .deposit-section {
         transform: translateX(30px);
     }
-    .total-amountDiscription .table-sec {
+    .total-amount-description .table-sec {
         display: block;
         width: 100%;
     }
-    .total-amountDiscription .table-sec .table-row {
+    .total-amount-description .table-sec .table-row {
         display: flex;
         justify-content: space-between;
     }
-    .total-amountDiscription .table-sec .table-row .table-cell {
+    .total-amount-description .table-sec .table-row .table-cell {
         min-width: 160px;
         text-align: left;
     }
-    .total-amountDiscription .table-sec .table-row .figure-cell {
+    .total-amount-description .table-sec .table-row .figure-cell {
         min-width: 150px;
         padding-right: 0 !important;
         text-align: right;
@@ -1925,7 +1925,7 @@ span.eligible-ITC {
     .deposit-section {
         transform: translateX(20px);
     }
-    .total-amountDiscription .table-sec .table-row .figure-cell {
+    .total-amount-description .table-sec .table-row .figure-cell {
         padding-right: 20px !important;
     }
 }

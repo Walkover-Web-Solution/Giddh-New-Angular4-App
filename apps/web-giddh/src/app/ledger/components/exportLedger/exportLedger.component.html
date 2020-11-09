@@ -1,4 +1,4 @@
-<div id="exportModal" class="" ng-if="ledgerCtrl.LedgerExport">
+<div id="exportModal" class="" *ngIf="ledgerCtrl.LedgerExport">
     <div class="modal-header">
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportLedgerModal.emit()" aria-label="Close">×</span>
         <h3>Export Ledger</h3>

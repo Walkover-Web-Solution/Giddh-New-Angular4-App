@@ -29,7 +29,7 @@
         <div *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
             <label class="pull-left mr-l2">Shared with:</label>
             <p class="pull-left ml-05">{{log.log.sharedWith.name}}
-                <span ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
+                <span *ngIf="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
                     | {{log.log.sharedWith.email}}</span>
             </p>
         </div>

@@ -53,6 +53,11 @@
     color: $white;
 }
 
+.label-tax{
+    margin-top: 3px !important;
+    margin-left: 2px !important;
+}
+
 @media (max-width: 768px) {
     :host {
         max-width: 600px;

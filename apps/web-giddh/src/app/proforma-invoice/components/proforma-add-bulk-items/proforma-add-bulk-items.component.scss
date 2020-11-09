@@ -1,12 +1,12 @@
 /* ADD BULK ITEM */
 
 @import "../../../../assets/css/color.scss";
-.addBulkItemmodal.modal-dialog {
+.add-bulk-item-modal.modal-dialog {
     width: 870px !important;
     margin: 30px auto;
 }
 
-.searchBox input[type="text"] {
+.search-box input[type="text"] {
     outline: none;
     width: 100%;
     height: 34px !important;
@@ -16,7 +16,7 @@
     margin-left: 10px;
 }
 
-.addBulkItemmodal .singleProductWrapper {
+.add-bulk-item-modal .single-product-wrapper {
     margin-bottom: 20px;
     padding: 4px;
 
@@ -36,86 +36,86 @@
     vertical-align: middle;
 }
 
-.addBulkItemmodal .singleProductWrapper h5 {
+.add-bulk-item-modal .single-product-wrapper h5 {
     color: #333333;
     font-size: 14px;
 }
 
-.addBulkItemmodal .singleProductWrapper p {
+.add-bulk-item-modal .single-product-wrapper p {
     font-size: 12px;
     padding-top: 4px;
 }
 
-.addBulkItemmodal .productList {
+.add-bulk-item-modal .product-list {
     padding-top: 15px;
     height: 600px;
     overflow-y: auto;
 }
 
-.addBulkItemmodal .rightContent span.selectdStockNumber {
+.add-bulk-item-modal .right-content span.selected-stock-number {
     font-size: 20px;
 }
 
-.addBulkItemmodal .rightContent h4 {
+.add-bulk-item-modal .right-content h4 {
     font-size: 14px;
 }
 
-.addBulkItemmodal .rightContent hr {
+.add-bulk-item-modal .right-content hr {
     color: black;
     border-color: #ccc;
     margin: 10px -15px;
     margin-left: -15px;
 }
 
-.addBulkItemmodal .pl-0 {
+.add-bulk-item-modal .pl-0 {
     padding-left: 0;
 }
 
-.addBulkItemmodal .singleSelectdStock p {
+.add-bulk-item-modal .single-selected-stock p {
     font-size: 14px;
 }
 
-.addBulkItemmodal .wrapSelectedStocks {
+.add-bulk-item-modal .wrap-selected-stocks {
     margin-top: 15px;
     padding-right: 20px;
 }
 
-.addBulkItemmodal .input-group {
+.add-bulk-item-modal .input-group {
     position: relative;
     display: table;
     border-collapse: separate;
     width: 138px;
 }
 
-.addBulkItemmodal input.form-control.input-number {
+.add-bulk-item-modal input.form-control.input-number {
     width: 60px !important;
     text-align: center;
     height: 28px !important;
 }
 
-.addBulkItemmodal .input-group .input-group-btn .btn {
+.add-bulk-item-modal .input-group .input-group-btn .btn {
     background: #fff;
     border-left: 1px solid #ccc;
 }
 
-.addBulkItemmodal .btn {
+.add-bulk-item-modal .btn {
     padding: 3px 13px;
 }
 
-.addBulkItemmodal .input-group-btn .fa {
+.add-bulk-item-modal .input-group-btn .fa {
     color: #c6c6c6;
 }
 
-.addBulkItemmodal .singleSelectdStock {
+.add-bulk-item-modal .single-selected-stock {
     margin-bottom: 20px;
 }
 
-.addBulkItemmodal .leftContent {
+.add-bulk-item-modal .left-content {
     border-right: 1px solid #ddd;
     padding-right: 15px;
 }
 
-.addBulkItemmodal .modal-title {
+.add-bulk-item-modal .modal-title {
     font-size: 22px !important;
     color: #fff;
 }
@@ -124,14 +124,14 @@
     padding-left: 10px;
 }
 
-.temapletFooter {
+.template-footer {
     position: absolute;
     bottom: 0;
     width: calc(100% - 30px);
     max-width: 100%;
 }
 
-.rightSideWrapper {
+.right-side-wrapper {
     height: 600px;
     overflow-y: auto;
     padding-bottom: 60px;
