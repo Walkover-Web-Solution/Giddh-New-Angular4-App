@@ -46,6 +46,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import { CompanyService } from '../services/companyService.service';
 import { ContactService } from '../services/contact.service';
 import { GeneralService } from '../services/general.service';
+import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
@@ -230,6 +231,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public isGetAccountsInProcess: boolean = false;
     /* This will hold the current page number */
     public currentPage: number = 1;
+    /** company custom fields list */
+    public companyCustomFields$: Observable<any[]>;
+    /** Column span length */
+    public colspanLength: number = 11;
 
     constructor(
         private store: Store<AppState>,
@@ -244,8 +249,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
-        private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions) {
+        private _router: Router, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions, private groupService: GroupService) {
         this.searchLoader$ = this.store.select(p => p.search.searchLoader);
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -266,6 +271,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.getCompanyCustomField();
     }
 
     /**
@@ -1189,7 +1195,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (event) {
             this.clearSelectedContacts(false);
         }
-        
+
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
@@ -1295,5 +1301,23 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+    }
+
+    /**
+    * API call to get custom field data
+    *
+    * @memberof ContactComponent
+    */
+    public getCompanyCustomField(): void {
+        this.groupService.getCompanyCustomField().subscribe(response => {
+            if (response && response.status === 'success') {
+                this.companyCustomFields$ = observableOf(response.body);
+                if (response.body) {
+                    this.colspanLength = 11 + response.body.length;
+                }
+            } else {
+                this._toaster.errorToast(response.message);
+            }
+        });
     }
 }

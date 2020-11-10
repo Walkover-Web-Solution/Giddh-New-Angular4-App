@@ -325,6 +325,9 @@
                     <td *ngIf="showFieldFilter.gstin && shouldShowTaxFilter"></td>
                     <td *ngIf="showFieldFilter.state"></td>
                     <td *ngIf="showFieldFilter.comment"></td>
+                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                        <td *ngIf="item.key"></td>
+                    </ng-container>
                 </tr>
 
                 <tr>
@@ -410,6 +413,9 @@
                     <th *ngIf="showFieldFilter.comment" class="comment-field">Comment</th>
 
                     <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
+                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                        <th width="10%">{{item.key}}</th>
+                    </ng-container>
 
                 </tr>
 
@@ -576,11 +582,15 @@
                             </ng-container>
 
                         </td>
+                        <ng-container *ngFor="let item of account?.customFields">
+                            <td class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value || '-' }}</td>
+                        </ng-container>
 
                     </tr>
                     <!---->
                     <tr *ngIf="!(sundryDebtorsAccounts).length ">
-                        <td colspan="11" class="text-center empty-table ">
+                        <td [attr.colspan]="colspanLength" class="text-center empty-table ">
                             <h1>No Record Found !!</h1>
                         </td>
                     </tr>
@@ -645,7 +655,7 @@
                                                             </li>
 
                                                             <li class="li-link" *ngIf="!isMobileScreen">
-                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Generate Invoice
+                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Record Bill
                                                                 </a>
                                                             </li>
 
@@ -755,9 +765,13 @@
                             <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
+                        <ng-container *ngFor="let item of account?.customFields">
+                            <td class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value || '-' }}</td>
+                        </ng-container>
                     </tr>
                     <tr *ngIf="!(sundryCreditorsAccounts).length ">
-                        <td colspan="12 " class="text-center empty-table ">
+                        <td [attr.colspan]="colspanLength" class="text-center empty-table ">
                             <h1>No Record Found !!</h1>
                         </td>
                     </tr>
