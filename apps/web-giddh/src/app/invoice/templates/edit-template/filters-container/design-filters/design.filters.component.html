@@ -18,14 +18,14 @@
   Start Upload
 </button> {{imagePreview}} -->
     <div class="clearfix scroll-auto">
-        <ul class="designTool">
+        <ul class="design-tool">
             <li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
                 <i class="ico-template"></i> <label>Change up to template</label>
             </li>
             <li [hidden]="!templateUISectionVisibility.templates">
                 <i class="ico-template"></i> <label>Change up to template</label>
                 <div class="clearfix">
-                    <ul class="templateView">
+                    <ul class="template-view">
                         <!-- {{ sampleTemplates | json}} -->
                         <ng-container *ngFor="let template of sampleTemplates">
                             <li (click)="onDesignChange('uniqueName', template.uniqueName)"
@@ -79,7 +79,7 @@
             <li [hidden]="!templateUISectionVisibility.logo">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
                 <div class="clearfix mr-t1">
-                    <div class="logoTool">
+                    <div class="logo-tool">
                         <span class="logo-preview" [class.cursor-disable]="isFileUploaded">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
                                 <input type="file" #fileInput accept="image/png, image/jpeg" id="logo-edit"
@@ -194,9 +194,9 @@
                 <i class="ico-print"></i> <label>Edit print setting</label>
 
                 <div class="clearfix mr-t1">
-                    <div class="printTool position-relative">
+                    <div class="print-tool position-relative">
                         <p>Page margins (in pixel)</p>
-                        <table class="table mr0">
+                        <table class="table m-0">
                             <thead>
                                 <tr>
                                     <th>Top</th>

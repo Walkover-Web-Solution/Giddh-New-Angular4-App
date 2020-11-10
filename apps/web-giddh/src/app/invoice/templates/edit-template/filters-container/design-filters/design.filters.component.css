@@ -3,7 +3,7 @@
 }
 
 .swatch ul li,
-.templateView li {
+.template-view li {
     cursor: pointer;
 }
 
@@ -101,11 +101,11 @@
     margin-left: 20px;
 }
 
-.logoTool {
+.logo-tool {
     float: left;
 }
 
-.logoTool ul li {
+.logo-tool ul li {
     margin-right: 5px;
     cursor: pointer;
     transition: all 0.5s ease;

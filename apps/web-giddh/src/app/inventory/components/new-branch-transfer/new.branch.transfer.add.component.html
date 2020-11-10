@@ -9,14 +9,14 @@
     <div class="reciptNoteContent">
         <div class="reciptNoteRadioBtn pr-15 pl-15 mb-15" *ngIf="!editBranchTransferUniqueName">
             <span class="pd0 mr-3">
-                <input id="multipleProducts" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
+                <input id="multipleProducts" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio-theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
                 name="transferType"
                 (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'">
                 <label for="multipleProducts" class="radio-custom-label">Multiple Products</label>
             </span>
 
             <span class="pd0 mr-3">
-                <input id="multipleSenders" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
+                <input id="multipleSenders" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio-theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
                 name="transferType" type="radio"
                 (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'">
                 <label for="multipleSenders" class="radio-custom-label" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label>

@@ -1,7 +1,7 @@
 <!-- upload And Map Content start-->
-<div class="uploadAndMapContent">
-    <h2 class="text-center" style="font-size: 32px"> Import {{ title | titlecase}}</h2>
-    <div class="upload_excel max-width-500 center-block box mr-t2 dashed_bdr">
+<div class="upload-and-map-content">
+    <h2 class="text-center"> Import {{ title | titlecase}}</h2>
+    <div class="upload-excel max-width-500 center-block box mr-t2 dashed-border">
         <input type="file" id="csvUploadInput" placeholder="Upload an EXCEL or CSV file"
             (change)="onFileChange($event.target.files)" droppable="true" class="form-control" />
         <div class="clearfix position-relative width100">

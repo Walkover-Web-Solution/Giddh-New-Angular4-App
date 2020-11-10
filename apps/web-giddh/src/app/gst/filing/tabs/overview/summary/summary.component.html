@@ -2,7 +2,7 @@
 
     <div class="gstr-transactions-summary" *ngIf="isTransactionSummary">
         <h4 class="clearfix gstr-summary-title">Transaction Summary</h4>
-        <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
+        <p class="text-muted half pd-t">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
     </div>
 
 
@@ -32,7 +32,7 @@
     <!--    </div>-->
     <!--  </div>-->
 
-    <hr style="margin: 0" *ngIf="!isTransactionSummary && selectedGst === 'gstr2'">
+    <hr class="m-0" *ngIf="!isTransactionSummary && selectedGst === 'gstr2'">
 
     <div class="gstr-transactions-summary">
         <div class="text-uppercase title" *ngIf="!isTransactionSummary">Overall Summary</div>
@@ -101,7 +101,7 @@
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'impg'">
                                     <img src="{{imgPath}}impg.svg" class="icon text-bottom" />
                                 </ng-container>
-                                <span style="margin-left: 5px;"> {{item?.name}}</span>
+                                <span class="ml-05"> {{item?.name}}</span>
                             </td>
                             <td class="text-center" data-title="Total Transactions" *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
                                 <a href="javascript:void(0)">

@@ -1,10 +1,12 @@
+@import "../../../assets/css/color.scss";
+
 .column.list-column.expanded-list-column {
     width: auto;
 }
 .tax-engine .column.list-column {
     display: block;
 
-    border-right: 1px solid #ededed;
+    border-right: 1px solid $whisper-light;
 }
 .tax-engine .column {
     height: 100%;
@@ -22,12 +24,21 @@
 }
 .tax-engine .list-filter {
     padding: 15px !important;
-    border-bottom: 1px solid #ddd !important;
+    border-bottom: 1px solid $gainsboro-light !important;
     height: 80px;
 }
-.tax-engine .transactions-list .list-filter .btn-toolbar {
-    margin-top: 2px;
-}
+.tax-engine{
+    .transactions-list{
+        .list-filter{
+            .btn-toolbar {
+                margin-top: 2px;
+                .btn-link{
+                    border: 1px solid $whisper-light;
+                }
+            }
+        } 
+    } 
+} 
 list-header .btn-toolbar .btn-group {
     float: none;
 }
@@ -67,7 +78,7 @@ fieldset[disabled] .btn-link {
     box-shadow: none;
 }
 .btn-link {
-    color: #428bca;
+    color: $curious-blue;
     font-weight: 400;
     cursor: pointer;
     border-radius: 0;
@@ -129,7 +140,7 @@ svg.icon.icon-sm {
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: #777;
+    color: $dark-gray;
 }
 .space {
     margin-top: 10px;
@@ -140,7 +151,7 @@ svg.icon.icon-sm {
     display: inline-block;
     width: 6px;
     height: 6px;
-    background-color: #2a85fb;
+    background-color: $primary;
     border-radius: 50%;
     margin-right: 5px;
     vertical-align: middle;
@@ -184,7 +195,7 @@ svg.icon.icon-sm {
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $whisper-light;
 }
 .tax-engine .transactions-overview .gstr-transactions-summary {
     padding: 15px 35px;
@@ -203,7 +214,7 @@ hr {
     .transactions-overview
     .gstr-transactions-summary
     .transactions-table {
-    border: 1px solid #ededed;
+    border: 1px solid $whisper-color;
 }
 .tax-engine .table.transactions-table,
 .tax-engine .transactions-list .zi-table.table-scroll {
@@ -223,10 +234,10 @@ address {
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
     font-size: 13px;
-    border-bottom: 1px solid #ededed;
+    border-bottom: 1px solid $whisper-color;
 }
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $gainsboro-light;
 }
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
     padding: 10px;
@@ -234,7 +245,7 @@ address {
     font-weight: 600;
 }
 .table thead:first-child tr:first-child th {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $gainsboro-light;
 }
 .table caption + thead tr:first-child td,
 .table caption + thead tr:first-child th,
@@ -245,8 +256,8 @@ address {
     border-top: 0;
 }
 .table thead > tr > th {
-    border-bottom: 1px solid #eee;
-    color: #777;
+    border-bottom: 1px solid $whisper-light;
+    color: $dark-gray;
 }
 .tax-engine .table.transactions-table tbody > tr > td {
     max-width: 160px;
@@ -264,7 +275,7 @@ address {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $whisper-light;
 }
 
 .tax-engine
@@ -273,7 +284,7 @@ address {
     > tr:not(.secondary-row)
     + tr.secondary-row
     > td {
-    border-top: 1px solid #ededed;
+    border-top: 1px solid $whisper-color;
 }
 .tax-engine
     .table.transactions-summary-table
@@ -285,7 +296,7 @@ address {
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
     background-color: #fff;
-    border-right: 1px solid #ededed;
+    border-right: 1px solid $whisper-color;
     font-size: 13px;
     padding: 13px;
 }
@@ -317,10 +328,17 @@ address {
 .tax-engine .nav-band .nav-tabs {
     white-space: nowrap;
 
-    background-color: #f7f7f7;
+    background-color: $lynx-white;
 }
-.tax-engine .sub-filter-nav-band ul > li {
-    display: inline-block;
+.tax-engine{
+    .sub-filter-nav-band{
+        border-bottom: 1px solid $gainsboro-light;
+        ul{
+            > li {
+            display: inline-block;
+        }
+    }
+    } 
 }
 .tax-engine .sub-filter-nav-band ul > li > a {
     cursor: pointer;
@@ -332,7 +350,7 @@ address {
 .tax-engine .sub-filter-nav-band ul > li.active:after {
     content: "";
     display: block;
-    border-bottom: 2px solid #2a85fb;
+    border-bottom: 2px solid $primary;
     width: 55%;
     margin: auto;
 }
@@ -424,8 +442,8 @@ svg.icon.icon-sm {
 .tax-engine .transactions-list .filter-band .btn,
 .tax-engine .transactions-list .filter-band .btn:focus,
 .tax-engine .transactions-list .filter-band .btn:hover {
-    color: #2a85fb;
-    border-color: #2a85fb;
+    color: $primary;
+    border-color: $primary;
     background-color: transparent;
     box-shadow: none;
 }
@@ -436,7 +454,7 @@ svg.icon.icon-sm {
 .tax-engine .transactions-list .filter-band .btn .caret,
 .tax-engine .transactions-list .filter-band .btn:focus .caret,
 .tax-engine .transactions-list .filter-band .btn:hover .caret {
-    border-top-color: #2a85fb;
+    border-top-color: $primary;
 }
 .caret {
     display: inline-block;
@@ -444,7 +462,7 @@ svg.icon.icon-sm {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid #000;
+    border-top: 4px solid $white;
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -462,17 +480,17 @@ svg.icon.icon-sm {
 }
 .table-striped > tbody > tr:hover {
     cursor: pointer;
-    background-color: #fafafa !important;
+    background-color: $snow !important;
 }
 .table-striped > tbody > tr:nth-child(odd) {
-    background-color: #f9f9f9;
+    background-color: $snow;
 }
 
 .table-striped > tbody > tr:nth-child(even) {
-    background-color: #fff;
+    background-color: $white;
 }
 .zi-table.table-hover tbody tr:hover td {
-    background-color: #fafafa;
+    background-color: $snow;
     cursor: pointer;
 }
 .table-hover > tbody > tr:hover > td,
@@ -489,7 +507,7 @@ svg.icon.icon-sm {
 .table > thead > tr.active > th,
 .table > thead > tr > td.active,
 .table > thead > tr > th.active {
-    background-color: #f5f5f5;
+    background-color: $gray-95;
 }
 .tax-engine
     .table.transactions-table
@@ -497,4 +515,20 @@ svg.icon.icon-sm {
     tr:first-child
     th.invisible {
     padding: 0 72px 0 12px !important;
+}
+
+
+.return-detail-col{
+    background-color: $very-dark-alice-blue; 
+    width: 50%;
+}
+
+.failed-trans{
+    padding: 10px 25px; 
+    margin: 5px auto; 
+    border-left: 1px solid $light-grey;
+}
+
+.zi-table-child{
+    border-left: 1px solid $whisper-color;
 }

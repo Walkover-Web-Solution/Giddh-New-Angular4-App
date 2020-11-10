@@ -5,19 +5,19 @@
 .basic > thead > tr > th {
     position: relative;
 }
-.sortTable {
+.sort-table {
     display: inline-block;
     position: relative;
     position: absolute;
     top: 6px;
     right: 10px;
 }
-.sortTable .top-sort {
+.sort-table .top-sort {
     border-bottom: 6px solid #bfbebe;
     border-top: 4px solid transparent;
 }
-.sortTable .bottom-sort,
-.sortTable .top-sort {
+.sort-table .bottom-sort,
+.sort-table .top-sort {
     display: block;
     margin-bottom: 3px;
     content: "";
@@ -27,7 +27,7 @@
     height: 0px;
     line-height: 0;
 }
-.sortTable .bottom-sort {
+.sort-table .bottom-sort {
     border-top: 7px solid #bfbebe;
     border-bottom: 4px solid transparent;
     margin-bottom: 0px;

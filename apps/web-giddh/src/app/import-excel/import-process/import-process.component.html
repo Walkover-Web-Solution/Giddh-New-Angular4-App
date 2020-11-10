@@ -1,13 +1,13 @@
 <!-- Review Field start-->
-<div class="reviewData">
+<div class="review-data">
     <div class="text-right">
-        <div class="action_btn">
+        <div class="action-btn">
             <button class="btn btn-default" (click)="onBack.emit()">Back</button>
             <button class="btn btn-success" [disabled]="!importDisable" [ladda]="isLoading"
                 (click)="save()">Import</button>
         </div>
     </div>
-    <div class="data_overview" [perfectScrollbar]="config">
+    <div class="data-overview" [perfectScrollbar]="config">
 
         <table class="table basic table-bordered mr-t1">
 

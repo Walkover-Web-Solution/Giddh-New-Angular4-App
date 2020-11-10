@@ -1,5 +1,5 @@
 @import '../../../assets/css/color.scss';
-.whiteBg {
+.white-bg {
     background-color: #fff;
 }
 .flex-row {
@@ -16,6 +16,13 @@
     background-color: $very-light-gray;
 }
 
+.input-width-name{
+    width:48.5% !important;
+}
+
+.stock-list-dropdown{
+    max-width: 150px !important;
+}
 // styles
 .form-inline {
     .form-group {

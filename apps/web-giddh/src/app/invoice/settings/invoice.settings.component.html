@@ -9,7 +9,7 @@
                 <span class="icon-chat2"></span> General
             </ng-template>
 
-            <div class="genral-tab single-tab-block">
+            <div class="general-tab single-tab-block">
 
                 <div class="box clearfix">
 
@@ -265,7 +265,7 @@
 
                     <div class="clearfix">
 
-                        <div class="row headingName">
+                        <div class="row heading-name">
                             <div class="col-sm-12 col-md-12 col-lg-3  lh-34"><label>Heading Name<span
                                         class="red-text">*</span></label></div>
 
@@ -273,7 +273,7 @@
                                 <div class="">
                                     <div class="">
                                         <div class=" form-group">
-                                            <div class="estimateProforma" [ngClass]="{'input-group': true}">
+                                            <div class="estimate-proforma" [ngClass]="{'input-group': true}">
                                                 <input type="text" class="form-control" [(ngModel)]="estimateSetting.headerName" placeholder="Eg. Estimate/Quotation/Proforma" name="estimateHeaderName" />
                                             </div>
                                             <!--                                            <input type="checkbox" name="estimate-checkbox" />-->
@@ -333,7 +333,7 @@
                         <!--                        </div>-->
                         <!--                      </div>-->
 
-                        <div class="row nextStepEstimate">
+                        <div class="row next-step-estimate">
 
                             <div class="col-sm-12 col-md-12 col-lg-3 lh-34"><label>Next step to Estimate<span
                                         class="red-text">*</span></label>
@@ -345,12 +345,12 @@
 
                                     <div class="col-md-12 p-0">
                                         <span class="p-0 mr-3">
-                                            <input id="radio-5" class="radio-custom cp ml0" name="signatureType" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'salesorder'" >
+                                            <input id="radio-5" class="radio-custom cp ml-0" name="signatureType" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'salesorder'" >
                                             <label for="radio-5" class="radio-custom-label">Proforma</label>
                                         </span>
 
                                         <span class="p-0 mr-3">
-                                            <input id="radio-6" class="radio-custom cp ml0" name="signatureType" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'invoice'">
+                                            <input id="radio-6" class="radio-custom cp ml-0" name="signatureType" type="radio" [(ngModel)]="estimateSetting.nextStepToEstimate" [value]="'invoice'">
                                             <label for="radio-6" class="radio-custom-label">Invoice</label>
                                         </span>
 
@@ -447,14 +447,14 @@
 
                     <div class="clearfix">
 
-                        <div class="row headingName">
+                        <div class="row heading-name">
                             <div class="col-sm-12 col-md-12 col-lg-3 lh-34"><label>Heading Name<span
                                         class="red-text">*</span></label></div>
                             <div class="col-sm-12 col-md-12 col-lg-9">
                                 <div class="">
                                     <div class="">
                                         <div class=" form-group">
-                                            <div class="estimateProforma" [ngClass]="{'input-group': true}">
+                                            <div class="estimate-proforma" [ngClass]="{'input-group': true}">
                                                 <input type="text" class="form-control" placeholder="Eg. Estimate/Quotation/Proforma" name="proformaHeaderName" [(ngModel)]="proformaSetting.headerName" />
 
                                             </div>
@@ -585,7 +585,7 @@
                     <h4 class="clearfix bd-rb">Invoice <span></span></h4>
                     <div class="clearfix">
 
-                        <!--                        <div class="row headingName">-->
+                        <!--                        <div class="row heading-name">-->
 
                         <!--                            <div class="col-xs-5 lh-34"><label>Heading Name</label></div>-->
 
@@ -593,7 +593,7 @@
                         <!--                                <div class="row">-->
                         <!--                                    <div class="">-->
                         <!--                                        <div class=" form-group">-->
-                        <!--                                            <div class="estimateProforma" [ngClass]="{'input-group': true}">-->
+                        <!--                                            <div class="estimate-proforma" [ngClass]="{'input-group': true}">-->
                         <!--                                                <input type="text" class="form-control" [(ngModel)]="invoiceSetting.headerName" placeholder="Eg. Estimate/Quotation/Proforma" name="estimateProforma" />-->
 
                         <!--                                            </div>-->
@@ -656,7 +656,7 @@
                                 </div>
 
                                 <div class="col-sm-12 col-md-9">
-                                    <div class="form-group date-pickerInvoice invoice-lock-date  mb-0">
+                                    <div class="form-group date-picker-invoice invoice-lock-date  mb-0">
                                         <giddh-datepicker name="invoiceLockDate" [(ngModel)]="invoiceSetting.lockDate"></giddh-datepicker>
                                     </div>
                                 </div>

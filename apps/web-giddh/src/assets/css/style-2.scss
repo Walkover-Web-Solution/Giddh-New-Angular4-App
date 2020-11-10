@@ -1208,6 +1208,9 @@ ul.sub-list {
     /* font-size: 14px; */
 }
 
+.normal{
+    font-weight: normal !important;
+}
 .unbold {
     font-weight: normal !important;
     font-family: 'opensans-regular' !important;
@@ -5400,14 +5403,14 @@ label {
 
 /*************************************************** input CSS  ****************************************************/
 
-.radio_theme {
+.radio-theme {
     position: relative;
     margin: 0px 5px !important;
     top: 1px;
     cursor: pointer;
 }
 
-.radio_theme:before {
+.radio-theme:before {
     content: " ";
     position: absolute;
     width: 18px;
@@ -5421,7 +5424,7 @@ label {
     border-radius: 50%;
 }
 
-.radio_theme:checked:after {
+.radio-theme:checked:after {
     content: " ";
     position: absolute;
     width: 8px;
@@ -5434,7 +5437,7 @@ label {
     text-align: center;
 }
 
-.radio_theme:checked:before {
+.radio-theme:checked:before {
     border: 1px solid $chetwode-blue;
 }
 
@@ -5502,7 +5505,7 @@ a {
 
 /*************************************************** Custom Invoice CSS  ****************************************************/
 
-#customInvoice .templateEditor input[type="checkbox"] {
+#customInvoice .template-editor input[type="checkbox"] {
     margin-right: 12px !important;
     left: 0;
 }
@@ -5522,18 +5525,18 @@ a {
     z-index: 2;
 }
 
-#customInvoice .templateEditor .btn-group-lg > .btn {
+#customInvoice .template-editor .btn-group-lg > .btn {
     border-radius: 0;
     border: 0;
     box-shadow: none;
     background: $whisper-color;
 }
 
-#customInvoice .templateEditor .btn-group-lg > .btn:focus {
+#customInvoice .template-editor .btn-group-lg > .btn:focus {
     outline: 0;
 }
 
-#customInvoice .templateEditor .btn-group-lg > .btn:hover {
+#customInvoice .template-editor .btn-group-lg > .btn:hover {
     background: $white;
 }
 
@@ -5551,56 +5554,56 @@ a {
     margin-bottom: 20px;
 }
 
-#customInvoice .templateEditor label {
+#customInvoice .template-editor label {
     margin-bottom: 15px;
     width: 100%;
 }
 
-#customInvoice .templateEditor .form-control,
-#customInvoice .templateEditor .table > tbody > tr > td .form-control {
+#customInvoice .template-editor .form-control,
+#customInvoice .template-editor .table > tbody > tr > td .form-control {
     margin: 7px 0;
     background: $white;
     border-color: $gainsboro;
     border-radius: 2px;
 }
 
-#customInvoice .templateEditor h3 {
+#customInvoice .template-editor h3 {
     margin: 15px 0;
     font-size: 18px;
 }
 
-.customField .form-control {
+.custom-field .form-control {
     float: right;
     width: 100%;
     margin: 0 !important;
 }
 
-#customInvoice .templateEditor label span {
+#customInvoice .template-editor label span {
     display: block;
 }
 
-#customInvoice .templateEditor .table > thead > tr > th,
-#customInvoice .templateEditor .table > tbody > tr > td {
+#customInvoice .template-editor .table > thead > tr > th,
+#customInvoice .template-editor .table > tbody > tr > td {
     border: 0;
     /* font-weight: normal; */
     /* padding: 0; */
     vertical-align: middle;
 }
 
-#customInvoice .templateEditor .table > tbody > tr > td:first-child,
-#customInvoice .templateEditor .table > thead > tr > th:first-child {
+#customInvoice .template-editor .table > tbody > tr > td:first-child,
+#customInvoice .template-editor .table > thead > tr > th:first-child {
     padding-left: 0;
 }
 
-#customInvoice .templateEditor .table > tbody {
+#customInvoice .template-editor .table > tbody {
     margin: 10px 0;
 }
 
-#customInvoice .templateEditor .table > tbody > tr > td label {
+#customInvoice .template-editor .table > tbody > tr > td label {
     margin-bottom: 0;
 }
 
-#customInvoice .templateEditor .customField span {
+#customInvoice .template-editor .custom-field span {
     display: inline-block;
     float: right;
     width: calc(100% - 30px);
@@ -5619,14 +5622,14 @@ a {
     display: inline-block;
 }
 
-.designTool > li {
+.design-tool > li {
     float: left;
     width: 100%;
     margin: 10px 0;
     list-style: none;
 }
 
-.designTool li > label {
+.design-tool li > label {
     display: inline-block;
     width: auto !important;
     line-height: 50px;
@@ -5634,8 +5637,8 @@ a {
     padding: 0 10px;
 }
 
-.designTool li [class^="ico-"],
-.designTool li [class*=" ico-"] {
+.design-tool li [class^="ico-"],
+.design-tool li [class*=" ico-"] {
     width: 50px;
     height: 50px;
     float: left;
@@ -5663,7 +5666,7 @@ a {
     background-position: center -267px !important;
 }
 
-.templateView li {
+.template-view li {
     float: left;
     width: 190px;
     margin: 0px;
@@ -5673,7 +5676,7 @@ a {
     position: relative;
 }
 
-.templateView li img {
+.template-view li img {
     background: $white;
     height: 100%;
     width: 100%;
@@ -5695,11 +5698,11 @@ a {
     object-fit: contain;
 }
 
-.logoTool ul {
+.logo-tool ul {
     margin: 5px 0;
 }
 
-.logoTool ul li {
+.logo-tool ul li {
     font-weight: bold;
     list-style: none;
     display: inline-block;
@@ -5712,7 +5715,7 @@ a {
     color: #b2b2b2;
 }
 
-.logoTool ul li:hover {
+.logo-tool ul li:hover {
     border-color: #666666;
     color: #666666;
 }
@@ -5724,15 +5727,15 @@ a {
     height: 100%;
 }
 
-.printTool .table > tbody > tr > td {
+.print-tool .table > tbody > tr > td {
     padding-top: 0;
 }
 
-.printTool .table > tbody > tr > td > input {
+.print-tool .table > tbody > tr > td > input {
     margin: 0 !important;
 }
 
-.printTool a {
+.print-tool a {
     bottom: 10px;
     top: inherit;
     right: -50px;
@@ -6478,11 +6481,11 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     top: -1px;
 }
 
-.dashboard-filter .radio_theme:before {
+.dashboard-filter .radio-theme:before {
     top: 0;
 }
 
-.dashboard-filter .radio_theme:after {
+.dashboard-filter .radio-theme:after {
     left: 4px;
 }
 
@@ -6690,7 +6693,7 @@ table td[class*=col-]:last-child {
     top: 33px;
 }
 
-.radio_theme {
+.radio-theme {
     height: 18px;
     width: 18px;
 }
@@ -6712,7 +6715,7 @@ table td[class*=col-]:last-child {
     font-family: "opensans-semibold";
 }
 
-.form_body {
+.form-body {
     background: $white;
     /* padding: 15px; */
 }
@@ -6764,7 +6767,7 @@ table td[class*=col-]:last-child {
 
 /* left bar menu */
 
-.form_body .toggle-btn label {
+.form-body .toggle-btn label {
     color: #7f7f7f;
 }
 
@@ -8214,17 +8217,17 @@ div#getGroupModal {
     height: 100vh;
 }
 
-.templateView li .beta-img {
+.template-view li .beta-img {
     position: absolute;
     top: 10px;
     right: 10px;
 }
 
-.templateView li:first-child .beta-img {
+.template-view li:first-child .beta-img {
     display: none;
 }
 
-.templateView li .beta-img img {
+.template-view li .beta-img img {
     background-color: transparent;
     border: none;
 }

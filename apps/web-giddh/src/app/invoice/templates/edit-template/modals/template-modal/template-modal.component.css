@@ -1,4 +1,4 @@
-.templateEditor {
+.template-editor {
     width: 30%;
     float: left;
     /* overflow: auto; */
@@ -44,7 +44,7 @@
         width: 75%;
         padding-left: 15px;
     }
-    .templateEditor {
+    .template-editor {
         width: 25%;
     }
 }
