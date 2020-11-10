@@ -726,12 +726,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // get user country from his profile
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             this.companyCountryName = profile.country;
+            await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
+        });
 
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile.addresses && profile.addresses.length > 0) {
                 this.fillDeliverToAddress(profile.addresses);
             }
-
-            await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
 
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
@@ -1613,9 +1614,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         } else {
             this.customerCountryName = '';
-
             this.showGstAndTrnUsingCountryName('');
-
             this.companyCurrency = 'INR';
         }
     }
