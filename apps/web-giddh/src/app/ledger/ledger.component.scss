@@ -668,6 +668,9 @@ sh-select:focus {
     background-color: $alice-blue-light;
     padding-left: 5px;
 }
+.show-if-ledger-open{
+    height: 275px;
+}
 @media only screen and (max-width: 1540px) {
     .modal-ledger {
         width: 85%;
@@ -679,6 +682,9 @@ sh-select:focus {
         width: 100%;
         margin: 0 auto;
         padding: 15px;
+    }
+    .show-if-update-ledger-open{
+        height: 230px;
     }
 }
 
