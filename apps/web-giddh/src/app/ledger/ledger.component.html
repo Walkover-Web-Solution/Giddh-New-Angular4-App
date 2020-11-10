@@ -262,7 +262,7 @@
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row row"
-                                                            [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
+                                                            [ngClass]="{'compoundEntry': txn.id === lc.selectedBankTxnUniqueName}">
                                                             <td class="col-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center">
                                                                     <span class="pl-05">
@@ -554,7 +554,7 @@
                             </tr>
                             <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate]; let i = index">
                                 <td class="pl-15 pr-15 relative"
-                                    [ngClass]="{compoundEntry: transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
+                                    [ngClass]="{'compoundEntry': transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
                                     tooltip="{{transactions.description}}"
                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
                                     (mouseout)="selectedTrxWhileHovering = ''">
@@ -621,7 +621,7 @@
             <div [ngClass]="Shown ? 'active' : ''" hr-item
                 (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
                 class="left-col-new"
-                [ngClass]="{bd-rr: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
+                [ngClass]="{'bd-rr': (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
                 <!-- region debit transaction header-->
                 <table class="width100 h-table table-head hidden-xs">
@@ -693,7 +693,7 @@
                         <tr vr-item tabindex="-1" class="ledger-row row"
                             *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index;"
                             (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
-                            [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
+                            [ngClass]="{'compoundEntry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                             tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
                             (mouseout)="selectedTrxWhileHovering = ''">
 
@@ -895,7 +895,7 @@
             <!-- region credit transaction-->
             <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
                 (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
-                [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
+                [ngClass]="{'bdrL': (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
                 <!-- region credit transaction header-->
                 <table class="width100 h-table hidden-xs">
                     <thead>
@@ -966,7 +966,7 @@
                         <tr class="ledger-row row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions; let i = index"
                             (dblclick)="showUpdateLedgerModal(txn)" vr-item tabindex="-1"
                             (keydown.enter)="showUpdateLedgerModal(txn)"
-                            [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
+                            [ngClass]="{'compoundEntry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                             tooltip="{{txn.description}}" data-toggle="tooltip"
                             (mouseover)="entryHovered(txn.entryUniqueName)" (mouseout)="selectedTrxWhileHovering = ''">
 
