@@ -173,7 +173,7 @@
         font-size: 14px;
         border: 1px solid $midnight-blue;
         border-radius: 20px;
-        padding: 0 15px;
+        padding: 0 12px;
         width: 150px !important;
         display: flex;
         align-items: center;
@@ -415,7 +415,6 @@
     }
 }
 
-
 @media(max-width:575px){
     .date-advance-search {
         .input-group-date-range-picker {
@@ -436,5 +435,5 @@
             font-size: 12px;
             height: 36px;
         }
-    } 
+    }
 }
