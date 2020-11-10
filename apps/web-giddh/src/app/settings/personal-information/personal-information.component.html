@@ -62,7 +62,7 @@
     </div>
     <div class="personal-other-deatils">
         <div class="row" *ngIf="organizationType === 'COMPANY'">
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
                 <div class="form-group">
                     <label>Business Type</label>
                     <sh-select disabled placeholder="Select Business Type" name="businessType" id="businessType"
@@ -73,13 +73,13 @@
                     </sh-select>
                 </div>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
                 <div class="form-group">
                     <label>Company Alias</label>
                     <input name="companyAlias" [(ngModel)]="profileData.nameAlias" (ngModelChange)="profileUpdated('nameAlias')"  type="text" class="form-control">
                 </div>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
                 <div class="form-group">
                     <label>Headquarter Alias</label>
                     <input name="headQuarterAlias" [(ngModel)]="profileData.headQuarterAlias" (ngModelChange)="profileUpdated('headQuarterAlias')"  type="text" class="form-control">
@@ -87,7 +87,7 @@
             </div>
         </div>
         <div class="row" *ngIf="organizationType === 'BRANCH'">
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
                 <div class="form-group">
                     <label>Alias</label>
                     <input name="alias" [(ngModel)]="profileData.alias" (ngModelChange)="profileUpdated('alias')"  type="text" class="form-control">
