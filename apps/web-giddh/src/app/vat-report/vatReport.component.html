@@ -6,21 +6,6 @@
                 <div class="vat-report w-100" id="setting-tab">
                     <tabset #staticTabs>
                         <tab heading="VAT Report">
-                            <div *ngIf="taxes?.length" class="row mb-3 mt-2">
-                                <div class="tax-heading col-md-3 col-sm-3 col-12">
-                                    <label>TRN:</label>
-                                </div>
-                                <div class="tax-dropdown col-md-9 col-sm-9 col-12">
-                                    <sh-select [options]="taxes"
-                                        [(ngModel)]="taxNumber"
-                                        (selected)="getVatReport()"
-                                        [defaultValue]="taxNumber"
-                                        placeholder="Select TRN"
-                                        [showClear]="false" [multiple]="false"
-                                        [ItemHeight]="67">
-                                    </sh-select>
-                                </div>
-                            </div>
                             <div class="navbar-header mb-3 mt-3">
                                 <div class="d-flex align-items-center tax-engine">
                                     <span class="d-inline-block mr-2">VAT Report for period</span>
