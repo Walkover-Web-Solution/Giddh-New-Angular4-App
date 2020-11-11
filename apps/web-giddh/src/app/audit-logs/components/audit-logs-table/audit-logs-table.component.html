@@ -926,7 +926,7 @@
 <section class="no-logs" *ngIf="(auditLogs$ | async).length < 1">
     <div class="no-data">
         <h1>Sorry, No Logs Found!</h1>
-        <p>You can use the filters on the left to fetch logs.</p>
+        <p>You can use the filters on the top to fetch logs.</p>
     </div>
 </section>
 <button class='btn btn-success pull-left mr-t2 mr-b2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More

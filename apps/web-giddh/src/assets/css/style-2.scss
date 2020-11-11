@@ -9805,11 +9805,14 @@ input.mat-input-element{
     }
 }
 /*material datepicker css end*/
-
     .master-custom-tabs.custom-tabs {
         .nav-tabs {
+            border-bottom: 1px solid $gainsboro;
+            padding: 0 0 0 15px !important;
+            background-color: $alice-blue-light;
+            z-index: 9;
+            position: relative !important;
             top: 0;
-
             li {
                 a {
                     padding-top: 5px;
@@ -9817,7 +9820,6 @@ input.mat-input-element{
             }
         }
     }
-
     .delete-modal-overlay {
         z-index: 9992; /*for delete custom zIndex modal*/
     }
