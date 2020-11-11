@@ -9817,11 +9817,11 @@ input.mat-input-element{
 /*material datepicker css end*/
     .master-custom-tabs.custom-tabs {
         .nav-tabs {
-            border-bottom: 1px solid #e0e0e0;
-            padding: 0 0 0 15px!important;
-            background-color: #f7f8fa;
+            border-bottom: 1px solid $gainsboro;
+            padding: 0 0 0 15px !important;
+            background-color: $alice-blue-light;
             z-index: 9;
-            position: relative;
+            position: relative !important;
             top: 0;
             li {
                 a {
