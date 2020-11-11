@@ -63,7 +63,7 @@ button.btn.btn-filter {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
-    margin-top: 9px;
+    margin-top: 5px;
 }
 .table-sec .table-row .figure-cell {
     width: 140px;
@@ -395,7 +395,7 @@ tfoot td .table-sec.form-group {
 
 .aside-overlay {
     transition: 0.5s all ease;
-    z-index: 999;
+    z-index: 9991;
 }
 .icon-pointer.active-text-color {
     color: #01a9f4;
@@ -443,6 +443,6 @@ tfoot td .table-sec.form-group {
 }
 @media(max-width:767px){
     .date-advance-search {
-        margin-top: 15px;
+        margin-top: 5px;
     }
 }

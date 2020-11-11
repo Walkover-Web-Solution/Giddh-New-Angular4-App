@@ -1,11 +1,14 @@
-<div class="container-fluid font-14">
-	<div class="clearfix mt-2 mb-2">
-		<ul class="list-inline d-inline-block middle nav-report">
-			<li class="active"><a href="javascript:void(0)" (click)="goToDashboard()">Report</a> <span
-					class="d-inline-block pl-1"> ></span></li>
-			<li><a href="javascript:void(0)">Purchase Register</a></li>
-		</ul>
+<div class="relative">
+    <hamburger-menu></hamburger-menu>
+    <div class="report-breadcrum">
+        <ul class="list-inline d-inline-block middle nav-report">
+            <li class="active"><a href="javascript:void(0)" (click)="goToDashboard()">Report</a> <span
+                    class="d-inline-block pl-1"> ></span></li>
+            <li><a href="javascript:void(0)">Purchase Register</a></li>
+        </ul>
     </div>
+</div>
+<div class="container-fluid font-14 mt-15">
     <div class="select-financial-year mb-15">
         <div class="xs-mb-1 inner-button">
             <sh-select [options]="financialOptions" [isFilterEnabled]="true" [placeholder]="activeFinacialYr.uniqueName"

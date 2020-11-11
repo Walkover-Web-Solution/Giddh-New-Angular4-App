@@ -2598,12 +2598,13 @@ background: #f9f9f9;
         float: left;
         margin: 0;
     }
-
+    hamburger-menu .navbar-nav {
+        float:none;
+    }
     .navbar-nav.navbar-right {
         float: right;
         margin: 0;
     }
-
     .navbar-nav .open .dropdown-menu {
         position: absolute;
         float: none;
