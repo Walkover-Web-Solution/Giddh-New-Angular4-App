@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
-
 @Component({
     selector: 'sales-register-component',
     templateUrl: './sales.register.component.html',

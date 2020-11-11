@@ -605,14 +605,6 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
 }
-.invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
-    .profile-tab-container {
-        .nav.nav-tabs {
-            padding-left: 0 !important;
-        }
-    }
-}
-
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -9960,6 +9952,14 @@ input.mat-input-element{
         width: 100%;
         display: block;
     }
+}
+@media (max-width: 767px) {
+    #setting-tab .tab-integraton .nav-tabs > li {
+        margin-top: 0 !important;
+    }
+    .hamburger-menu-icon{
+        display: none !important;
+    }
     .users-last-list > li:last-child {
         height: inherit !important;
     }
@@ -10021,7 +10021,46 @@ input.mat-input-element{
         width: 100%;
         li{
             white-space: normal;
+         }
+    }
+    .setting-page ul.nav.nav-tabs{
+        padding: 2px 0px 0 15px !important
+    }
+}
+@media (max-width: 1199px) {
+    .ledger-book .left-col-new .entry-modal {
+        width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .settings-profile-tabs {
+        .tab-content{
+            padding-top: 25px;
         }
+    }
+    .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+        .profile-tab-container {
+            .nav.nav-tabs {
+                padding-left: 15px !important;
+                left: 0;
+            }
+        }
+    }
+    .universal-date {
+        padding-top: 0;
+    }
+    #inventory-sidebar{
+        padding: 15px 0;
+    }
+    bs-datepicker-container {
+        position: fixed !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+    .modal-backdrop + .modal {
+        margin-top: 5px;
     }
     .tax-engine .nav-band .nav-tabs {
         white-space: nowrap;
@@ -10236,6 +10275,43 @@ input.mat-input-element{
 @media (max-width: 1199px) {
         .ledger-book .left-col-new .entry-modal {
             width: 100%;
+            top: 0;
+        }
+        .custom-tabs .top-bar {
+            margin-top: 45px;
+        }
+        .page-has-tabs .custom-tabs .top-bar {
+            margin-top: 15px;
+            padding-top: 0;
+        }
+        .page-has-tabs .custom-tabs .top-bar.customer-top-bar, .page-has-tabs .custom-tabs .top-bar.aging-top-bar {
+            margin-top: 0;
+        }
+        .custom-tabs.hide-header .top-bar {
+            margin-top: 10px;
+        }
+        .invoice-control .nav.nav-tabs {
+            padding: 0 0 0 15px !important;
+        }
+        #setting-tab setting-integration .tab-container .nav.nav-tabs,
+        #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
+            position: inherit !important;
+            white-space: nowrap;
+        }
+        #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
+            margin-top: 45px;
+            white-space: nowrap;
+            padding-left: 15px !important;
+        }
+        .setting-page .nav > li > a,
+        .custom-tabs .nav.nav-tabs > li a {
+            padding-top: 7px;
+        }
+        .ledg-head .custom-tabs .nav.nav-tabs {
+            left: 0;
+            top: 95px;
+            padding-top: 0 !important;
+            position: fixed;
         }
     }
 @media (max-width: 767px) {
@@ -10598,24 +10674,85 @@ input.mat-input-element{
             z-index: -1;
             left: 0;
             top: 0;
+            margin: 0;
         }
-    }
-    .hide-scroll-body:last-child .modal {
-        z-index: 9993;
-    }
-    .page-has-tabs .invoice-genrate-container,
-    .page-has-tabs .invoice-container,
-    .page-has-tabs .proforma-container,
-    .page-has-tabs .proforma-container{
-        padding-top: 15px !important;
-    }
-    .page-has-tabs
+        .edit-modal {
+            max-width: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            padding-top: 40px;
+
+            &:after {
+                position: absolute;
+                content: "";
+                background-color: rgba(0, 0, 0, 0.4);
+                width: 100% !important;
+                height: 125%;
+                z-index: -1;
+                left: 0;
+                top: 0;
+            }
+        }
+        .hide-scroll-body:last-child .modal {
+            z-index: 9993;
+        }
+        .page-has-tabs .proforma-container{
+            padding-top: 0 !important;
+        }
+        .page-has-tabs
         #setting-tab
         app-invoice-setting
         .tab-container
         .nav.nav-tabs,
-    .on-user-page .search-subscription {
-        margin-top: 15px !important;
+        .on-user-page .search-subscription {
+            margin-top: 0 !important;
+        }
+        .page-has-tabs .recurring-container {
+            margin-top: 0px !important;
+        }
+        .on-user-page .user-detail-page.company-page {
+            padding-top: 15px !important;
+        }
+        .HW_frame_cont.HW_visible.HW_bottom {
+            right: 0 !important;
+            left: auto !important;
+            max-width: 320px;
+            width: 100%;
+        }
+        .on-setting-page .setting-menu-icon,
+        .on-user-page .setting-menu-icon {
+            display: inline-flex !important;
+        }
+        .setting-data {
+            padding-left: 15px !important;
+        }
+        .mobile-setting-sidebar {
+            position: relative;
+            overflow-y: hidden;
+        }
+        .mobile-setting-sidebar:after {
+            position: absolute;
+            content: "";
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
+        .ledg-head .custom-tabs .nav.nav-tabs {
+            padding-top: 0 !important;
+        }
+        .digit-blue .tooltip.bs-tooltip-top {
+            display: block !important;
+        }
+        .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar {
+            left: 0;
+        }
     }
     .page-has-tabs .recurring-container {
         margin-top: 0px !important;
@@ -10661,20 +10798,30 @@ input.mat-input-element{
         left: 0;
     }
 }
+    @media (max-width: 575px) {
+        .purchase-setting-tab ul.nav.nav-tabs {
+            padding-bottom: 30px !important;
+            min-height: 100px;
+        }
+        .invoice-control .nav.nav-tabs{
+            white-space: nowrap;
+            overflow-y: hidden;
+            display: inline-block;
+        }
+        .linked-add .popover{
+            width: 180px;
+            transform: none !important;
+            right: 0;
+            left: auto !important;
+        }
+        .daterangepicker.ltr .ranges {
+            float: left;
 
-@media (max-width: 575px) {
-    .linked-add .popover{
-        width: 180px;
-        transform: none !important;
-        right: 0;
-        left: auto !important;
-    }
-    .daterangepicker.ltr .ranges {
-        float: left;
-        ul{
-            li{
-                font-size: 11px;
-                padding: 3px 4px;
+            ul {
+                li {
+                    font-size: 11px;
+                    padding: 3px 4px;
+                }
             }
         }
         .mat-form-field{
@@ -10695,7 +10842,7 @@ input.mat-input-element{
             top: 30px;
             padding-top: 0;
         }
-    }
+
     .custom-tabs .top-bar {
         padding-top: 10px;
         padding-bottom: 10px;
