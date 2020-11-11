@@ -141,7 +141,18 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
     },
     {
         type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 }, isRemoved: false, pIndex: 4
-    }
+    },
+    { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 }, isRemoved: false, pIndex: 11 },
+    { type: 'MENU', name: 'Settings', uniqueName: '/pages/settings', isRemoved: false, pIndex: 12 },
+    { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, isRemoved: false, pIndex: 13 },
+    { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook', isRemoved: false, pIndex: 14 },
+    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', isRemoved: false, pIndex: 15 },
+    { type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details/mobile-number', additional: { tab: 'profile', tabIndex: 1 }, isRemoved: false, pIndex: 16 },
+    { type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'pending', tabIndex: 2 } },
+    { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/templates', additional: { tab: 'templates', tabIndex: 3 } },
+    { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/settings', additional: { tab: 'settings', tabIndex: 4 } },
+    { type: 'MENU', name: 'Invoice > Estimate (Beta)', uniqueName: '/pages/invoice/preview/estimates', additional: { tab: 'estimates', tabIndex: 0 } },
+    { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 } },
 ];
 export let DEFAULT_AC_ORIGINAL = [
     { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash' },
@@ -228,7 +239,7 @@ export let DEFAULT_AC_RESPONSIVE = [
 export let DEFAULT_GROUPS = [];
 export let DEFAULT_GROUPS_RESPONSIVE = [];
 
-export function reassignNavigationalArray(toAssign) {
+export function reassignNavigationalArray(toAssign, isCompany) {
     if (toAssign) {
         NAVIGATION_ITEM_LIST = NAVIGATION_ITEM_LIST_RESPONSIVE;
         DEFAULT_MENUS = DEFAULT_MENUS_RESPONSIVE;
@@ -236,7 +247,7 @@ export function reassignNavigationalArray(toAssign) {
         DEFAULT_GROUPS = DEFAULT_GROUPS_RESPONSIVE;
     } else {
         NAVIGATION_ITEM_LIST = NAVIGATION_ITEM_LIST_ORIGINAL;
-        DEFAULT_MENUS = DEFAULT_MENUS_ORIGINAL;
+        DEFAULT_MENUS = isCompany ? DEFAULT_MENUS_ORIGINAL : DEFAULT_MENUS_ORIGINAL.slice(0, 17);
         DEFAULT_AC = DEFAULT_AC_ORIGINAL;
         DEFAULT_GROUPS = DEFAULT_GROUPS_ORIGINAL;
     }

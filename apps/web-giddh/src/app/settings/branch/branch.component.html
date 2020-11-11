@@ -1,7 +1,8 @@
 <div class="clearfix">
-    <div class="d-flex date-advance-search row">
-        <form class="form-inline input-group-date-range-picker pr col-xl-10 col-lg-9 col-md-6 mb-15">
-            <div class="mr-1 d-flex branch-header-content w-100 flex-row">
+    <div class="date-advance-search row">
+        <div class="col-sm-12 mb-15 branch-header d-flex justify-content-between">
+        <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
+            <div class="mr-1 branch-header-content w-100">
                 <!-- <div class="btn-group advance-icon" dropdown>
                         <button id="button-basic-icon" dropdownToggle type="button" class="btn dropdown-toggle mr-0 d-flex align-items-center" aria-controls="dropdown-basic-icon">
                                 <span class="icon-advance-search"></span>
@@ -62,9 +63,8 @@
                 </div> -->
             </div>
         </form>
-        <div class="col-xl-2 col-lg-3 col-md-6">
-            <button class="btn btn-sky-blue pull-right mr-0" (click)="openAddBranchModal()">Create Branch</button>
-        </div>
+        <button class="btn btn-sky-blue mr-0" (click)="openAddBranchModal()">Create Branch</button>
+    </div>
     </div>
     <!-- <div class="row select-branch">
         <div class="col-12 d-flex mb-15 align-items-center">

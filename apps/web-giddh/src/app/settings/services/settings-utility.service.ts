@@ -84,18 +84,20 @@ export class SettingsUtilityService {
      */
     public getFormattedBranchAddresses(response: Array<any>): Array<any> {
         const formattedCompanyAddresses = [];
-        response.forEach(address => {
-            formattedCompanyAddresses.push({
-                stateCode: address.stateCode,
-                stateName: address.stateName,
-                taxNumber: address.taxNumber,
-                taxType: address.taxType,
-                address: address.address,
-                isDefault: address.isDefault,
-                name: address.name,
-                uniqueName: address.uniqueName,
+        if (response) {
+            response.forEach(address => {
+                formattedCompanyAddresses.push({
+                    stateCode: address.stateCode,
+                    stateName: address.stateName,
+                    taxNumber: address.taxNumber,
+                    taxType: address.taxType,
+                    address: address.address,
+                    isDefault: address.isDefault,
+                    name: address.name,
+                    uniqueName: address.uniqueName,
+                });
             });
-        });
+        }
         return formattedCompanyAddresses;
     }
 
