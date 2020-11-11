@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.reciptNoteHeader {
+.receipt-note-header {
     display: flex;
     justify-content: space-between;
     background-color: #fff;
@@ -11,16 +11,16 @@
     align-items: center;
     color: #1a237e;
 }
-section.reciptNote {
+section.receipt-note {
     background-color: #fff;
 }
-.reciptNoteRadioBtn {
+.receipt-note-radio-btn {
     padding-top: 15px;
     padding-bottom: 15px;
     color: #1c1c1c;
     border-bottom: 1px solid #c4c4c4;
 }
-.reciptNoteContent {
+.receipt-note-content {
     font-size: 14px;
     height: 86vh;
     overflow-y: auto;
@@ -89,7 +89,7 @@ tfoot td .table-sec.form-group {
 }
 .senderDetails,
 .senderRecivers,
-.multipleRecivers {
+.multiple-receivers {
     font-size: 12px;
     color: #0c8fe6;
     margin-top: 7px;
@@ -400,7 +400,7 @@ tfoot td .table-sec.form-group {
 .icon-pointer.active-text-color {
     color: #01a9f4;
 }
-.closeRecipt {
+.close-receipt {
     color: #666666;
     font-size: 24px;
 }

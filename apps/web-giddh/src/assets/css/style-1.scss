@@ -402,7 +402,7 @@ aside-menu-account .container-fluid {
     padding-left: 5px;
 }
 
-.pdR-5 {
+.pd-r-5 {
     padding-right: 5px;
 }
 
@@ -446,7 +446,7 @@ aside-menu-account .container-fluid {
     padding-left: 0;
 }
 
-.pdR {
+.pd-r {
     padding-right: 5px;
 }
 
@@ -495,7 +495,7 @@ aside-menu-account .container-fluid {
     padding-left: 30px;
 }
 
-.pdR3 {
+.pd-r3 {
     padding-right: 30px !important;
 }
 
@@ -503,7 +503,7 @@ aside-menu-account .container-fluid {
     padding-top: 30px;
 }
 
-.pdT5 {
+.pd-t5 {
     padding-top: 30px;
 }
 
@@ -615,7 +615,7 @@ aside-menu-account .container-fluid {
     margin-bottom: 30px;
 }
 
-.mrL3 {
+.mr-l3 {
     margin-left: 30px;
 }
 
@@ -647,7 +647,7 @@ aside-menu-account .container-fluid {
     border: none;
 }
 
-.bdrT {
+.bd-rt {
     border-top: 1px solid $gainsboro;
 }
 
@@ -655,7 +655,7 @@ aside-menu-account .container-fluid {
     border-bottom: 1px solid $gainsboro !important;
 }
 
-.bdrL {
+.bd-rl {
     border-left: 1px solid $gainsboro;
 }
 
@@ -728,7 +728,7 @@ aside-menu-account .container-fluid {
     text-decoration: underline;
 }
 
-.alR {
+.text-right {
     text-align: right;
 }
 
@@ -945,7 +945,7 @@ position: relative; */
     font-size: 14px;
 }
 
-.fs16 {
+.font-16 {
     font-size: 16px;
 }
 
@@ -1389,25 +1389,25 @@ li:last-child .angular-ui-tree-handle {
     border-bottom: 1px solid #ddd;
 }
 
-.ldgTheadL span,
-.ldgTheadL .ledgerHead {
+.ledger-top-header-left span,
+.ledger-top-header-left .ledger-main-head {
     float: left;
     display: block;
 }
 
 .ldgTheadR span,
-.ldgTheadR .ledgerHead {
+.ldgTheadR .ledger-main-head {
     float: right;
     display: block;
 }
 
-.ledgerHead span {
+.ledger-main-head span {
     display: inline-block;
     line-height: 48px;
     font-size: 18px;
 }
 
-.ledgerHead .text-ellipsis {
+.ledger-main-head .text-ellipsis {
     text-transform: capitalize;
     max-width: 200px;
 }
@@ -2223,7 +2223,7 @@ table:focus {
     max-width: 110px;
 }
 
-.mart100 {
+.mt-100 {
     margin-top: 100px;
 }
 

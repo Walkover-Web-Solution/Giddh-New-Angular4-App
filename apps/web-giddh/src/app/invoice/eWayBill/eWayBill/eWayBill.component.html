@@ -1,6 +1,6 @@
 <div class="clearfix pt-15 pb-15">
     <div class="col-xs-12 col-sm-12">
-        <div class="d-inline-block pull-left mr-2 middle ewayBill-date">
+        <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
             <div class="input-group">
                 <span class="input-wrapper">
                     <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
@@ -20,7 +20,7 @@
                         <table class="table basic table-bordered giddh-table on-mobile-view">
                             <thead class="thead-background1" (clickOutside)="clickedOutside();">
                                 <tr>
-                                    <th style="width:50px">#</th>
+                                    <th width="50px">#</th>
                                     <th class="nowrap">
                                         <div class="d-flex">
                                             <div class="flex-fill">Date</div>
@@ -350,14 +350,14 @@
 
 
 
-                        <span class="pd0 mr-3">
-                            <input id="regular" class="radio-custom cp ml0" type="radio" name="vehicleType" required
+                        <span class="p-0 mr-3">
+                            <input id="regular" class="radio-custom cp ml-0" type="radio" name="vehicleType" required
                                 [(ngModel)]="updateEwayVehicleform.vehicleType" value="R">
                             <label for="regular" class="radio-custom-label">Regular</label>
                         </span>
 
-                        <span class="pd0 mr-3">
-                            <input id="dimensionalCargo" class="radio-custom cp ml0" type="radio" name="vehicleType"
+                        <span class="p-0 mr-3">
+                            <input id="dimensionalCargo" class="radio-custom cp ml-0" type="radio" name="vehicleType"
                                 required value="O" [(ngModel)]="updateEwayVehicleform.vehicleType">
                             <label for="dimensionalCargo" class="radio-custom-label">Over Dimensional Cargo</label>
                         </span>

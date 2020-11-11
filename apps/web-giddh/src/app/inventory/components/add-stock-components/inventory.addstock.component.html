@@ -225,8 +225,8 @@
                                         <div class="form-group row col-4 col-sm-4">
                                             <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                         </div>
-                                        <div class="pull-right unit_add">
-                                            <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add_row"></i></button>
+                                        <div class="pull-right unit-add">
+                                            <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
                                             <button class="btn-link btn" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i
                                                     class="icon-cross dlet"></i></button>
                                         </div>
@@ -268,8 +268,8 @@
                                         <div class="form-group row col-4 col-sm-4">
                                             <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                         </div>
-                                        <div class="pull-right unit_add">
-                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add_row"></i></button>
+                                        <div class="pull-right unit-add">
+                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
                                             <button class="btn-link btn" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i class="icon-cross dlet"></i></button>
                                         </div>
                                     </div>
@@ -278,7 +278,7 @@
 
                         </div>
                     </div>
-                    <div class="row pd-l pdR">
+                    <div class="row pd-l pd-r">
                         <div class="col-12 col-sm-12">
                             <div class="checkbox">
                                 <label class="" for="isFsStock">
@@ -291,7 +291,7 @@
 
 
                     <section class="mr-t2 row mr-b3 col-12 col-sm-12" *ngIf="addStockForm.value.isFsStock">
-                        <div class="pd-l pdR">
+                        <div class="pd-l pd-r">
                             <h1 class="section-head bd-rb"><strong>{{addStockForm.controls['name'].value}} (Made
                                     with)</strong></h1>
                             <table class="noHover  width100">
@@ -338,7 +338,7 @@
                                             </td>
                                             <td>
                                                 <button class="btn-link btn" (click)="addItemInLinkedStocks(list, i, i)" *ngIf="l" [disabled]="disableStockButton"><i
-                                                        class="icon-plus add_row"></i></button>
+                                                        class="icon-plus add-row"></i></button>
                                                 <button class="btn-link btn" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i class="icon-cross dlet"></i></button>
                                             </td>
                                         </tr>
@@ -350,7 +350,7 @@
 
                     <div class="row">
                         <div class="col-12 col-sm-12 text-left">
-                            <div class="mt-5 pd-l pdR">
+                            <div class="mt-5 pd-l pd-r">
 
                                 <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success" [disabled]="addStockForm.invalid || disableStockButton">Save
                                 </button>

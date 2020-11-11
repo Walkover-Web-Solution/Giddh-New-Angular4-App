@@ -175,7 +175,7 @@ body {
     padding-left: 5px;
 }
 
-.pdR-5 {
+.pd-r-5 {
     padding-right: 5px;
 }
 
@@ -215,11 +215,11 @@ body {
     padding-left: 5px;
 }
 
-.pdL0 {
+.pl-0 {
     padding-left: 0;
 }
 
-.pdR {
+.pd-r {
     padding-right: 5px;
 }
 
@@ -272,7 +272,7 @@ body {
     padding-left: 30px;
 }
 
-.pdR3 {
+.pd-r3 {
     padding-right: 30px !important;
 }
 
@@ -280,7 +280,7 @@ body {
     padding-top: 30px;
 }
 
-.pdT5 {
+.pd-t5 {
     padding-top: 30px;
 }
 
@@ -392,7 +392,7 @@ body {
     margin-bottom: 30px;
 }
 
-.mrL3 {
+.mr-l3 {
     margin-left: 30px;
 }
 
@@ -428,7 +428,7 @@ body {
     border: none;
 }
 
-.bdrT {
+.bd-rt {
     border-top: 1px solid #ccc;
 }
 
@@ -436,7 +436,7 @@ body {
     border-bottom: 1px solid #ccc;
 }
 
-.bdrL {
+.bd-rl {
     border-left: 1px solid #ccc !important;
 }
 
@@ -517,7 +517,7 @@ body {
     text-decoration: underline;
 }
 
-.alR {
+.text-right {
     text-align: right;
 }
 

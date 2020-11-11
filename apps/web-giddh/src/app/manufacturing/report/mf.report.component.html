@@ -58,10 +58,10 @@
         </div>
     </div>
     <!-- search form end -->
-    <section *ngIf="(isReportLoading$ | async)" class="clearfix mart100 col-xs-12">
+    <section *ngIf="(isReportLoading$ | async)" class="clearfix mt-100 col-md-12">
         <p class="lead text-center mr-t4">Loading...</p>
     </section>
-    <div class="no-data mart100 col-xs-12 col-sm-12"
+    <div class="no-data mt-100 col-xs-12 col-sm-12"
         *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>

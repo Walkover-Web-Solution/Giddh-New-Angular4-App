@@ -8,22 +8,22 @@
     <div class="modal-body noPad clearfix" id="export-body">
         <form #invoiceForm="ngForm" novalidate class="clearfix mr-b2" autocomplete="off" *ngIf="voucherFormDetails">
 
-            <div class="bd-rb clearfix">
-                <div class="col-xs-6">
+            <div class="bd-rb clearfix row">
+                <div class="col-sm-6">
                     <div class="form-group size_380">
                         <label>Customer Name</label>
                         <input type="text" name="customerName" class="form-control"
                             [(ngModel)]="voucherFormDetails.voucherDetails.customerName" />
                     </div>
                 </div>
-                <div class="col-xs-6 text-right">
+                <div class="col-sm-6 text-right">
                     <label>&nbsp;</label>
                     <p class="lead b">Balance Due: {{ voucherFormDetails.voucherDetails.grandTotal }}</p>
                 </div>
             </div>
 
-            <section class="clearfix mr-b4">
-                <section class="form-inline col-xs-12">
+            <section class="clearfix mr-b4 row">
+                <section class="form-inline col-md-12">
                     <div class="pd-t2 clearfix">
                         <div class="form-group size_340">
                             <label>Attention to</label>
@@ -205,8 +205,8 @@
             </section>
 
             <section class="row">
-                <section id="actionPane" class="text-center mr-b4">
-                    <div class="col-xs-12">
+                <section id="actionPane" class="text-center mr-b4 row">
+                    <div class="col-sm-12">
                         <div class="pull-right">
                             <button type="button" class="btn btn-default mr-r1" (click)="closeModelEvent.emit()">Close
                             </button>

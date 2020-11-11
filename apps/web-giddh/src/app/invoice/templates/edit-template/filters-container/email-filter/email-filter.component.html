@@ -1,7 +1,7 @@
 <div id="emails" class="design-tab-content">
 
 	<div class="clearfix mr-t2">
-		<h2 style="margin-bottom: 0;">Standard email</h2>
+		<h2 class="mb-0">Standard email</h2>
 		<small>Edit the email content your customer gets</small>
 	</div>
 	<div class="clearfix mr-t2">
@@ -13,12 +13,12 @@
 	</div>
 
 	<div class="clearfix mr-t2">
-		<div class="form-group">
-			<div class="">
+		<div class="form-group row">
+			<div class="col-12">
 				<input type="checkbox" name="useGreeting" [(ngModel)]="emailObject.useGreeting"
 					(change)="onUpdateEmailObject()" /> Use greeting
 			</div>
-			<div class="col-xs-4 pdL0">
+			<div class="col-4 pl-0">
 				<div class="custom-select position-relative">
 					<select class="form-control" name="greeting" [(ngModel)]="emailObject.greeting"
 						(change)="onUpdateEmailObject()">
@@ -29,8 +29,7 @@
 					<span class="select-drop"><i class="fa fa-caret-down"></i></span>
 				</div>
 			</div>
-			<div class="col-xs-8">
-				<div class="row">
+			<div class="col-8">
 					<div class="custom-select position-relative">
 						<select class="form-control" name="username" [(ngModel)]="emailObject.username"
 							(change)="onUpdateEmailObject()">
@@ -40,7 +39,6 @@
 						</select>
 						<span class="select-drop"><i class="fa fa-caret-down"></i></span>
 					</div>
-				</div>
 			</div>
 		</div>
 	</div>

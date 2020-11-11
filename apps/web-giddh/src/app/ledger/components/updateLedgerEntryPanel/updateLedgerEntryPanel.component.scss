@@ -89,7 +89,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     padding: 0px !important;
 }
 
-.amnt-total {
+.amount-total {
     font-size: 12px;
     color: #999999;
 }
@@ -102,7 +102,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     padding-left: 8px;
 }
 
-.total-col span.bdrT {
+.total-col span.bd-rt {
     width: 150px;
     display: inline-block;
     padding: 2px 0;
@@ -402,7 +402,7 @@ span.eligible-ITC {
         width: 185px;
         height: 36px !important;
     }
-    .debit-blank-row .amnt-total {
+    .debit-blank-row .amount-total {
         width: 185px;
         margin-top: 5px;
     }

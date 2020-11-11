@@ -60,7 +60,7 @@
                                 [mask]="inputMaskFormat" [customDecimalPlaces]="ratePrecision"
                                 (ngModelChange)="changePrice($event)" name="unitPrice"
                                 (keyup)="isInclusiveEntry = false" class="form-control text-right" />
-                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedRate | giddhCurrency: ratePrecision: true}}
                             </p>
@@ -84,7 +84,7 @@
                                 [suffix]="selectedSuffixForCurrency" disabled [mask]="inputMaskFormat"
                                 [(ngModel)]="currentTxn.advanceReceiptAmount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
-                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedAmount | giddhCurrency}}
                             </p>
@@ -104,7 +104,7 @@
                                 [suffixInput]="selectedSuffixForCurrency" [ledgerAmount]="currentTxn.amount"
                                 (hideOtherPopups)="hideTax()" (discountTotalUpdated)="calculateDiscount($event);">
                             </ledger-discount>
-                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedDiscount | giddhCurrency}}
                             </p>
@@ -143,7 +143,7 @@
                             <!-- TODO: After design finalization
                                 <span class="eligible-ITC">Eligible for ITC <span class="icon-edit"></span> </span> -->
 
-                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn.convertedTax |giddhCurrency}}
                             </p>
@@ -162,7 +162,7 @@
                                 [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right"
                                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
                                 [disabled]="isAdvanceReceipt ? 'disabled' : null" />
-                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn.convertedTotal | giddhCurrency}}
                             </p>
@@ -243,7 +243,7 @@
                     <td class="primary-color pl-0" (click)="toggleMoreDetail();">
                         <i class="fa cp"
                             [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
-                        <button id="ledger-more-details" class="no-btn pdL0">&nbsp;More Details</button>
+                        <button id="ledger-more-details" class="no-btn pl-0">&nbsp;More Details</button>
                     </td>
 
                     <td class="text-right">
@@ -458,7 +458,7 @@
 
                 <div class="mr-r1 form-group pull-left cp">
 
-                    <label class="pull-left cp fs16">
+                    <label class="pull-left cp font-16">
                         <input id="ledger-generate-voucher" class="pull-left" type="checkbox" name="generateInvoice" [disabled]="(isAdvanceReceipt || isAdjustReceiptSelected || isAdjustVoucherSelected || blankLedger.voucherType === 'credit note' || blankLedger.voucherType === 'debit note') && blankLedger.generateInvoice ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Voucher
@@ -509,7 +509,7 @@
                     <label class="upload_div pr-15"
                         [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
 
-                        <label for="invoiceFile" class="cp fs16">
+                        <label for="invoiceFile" class="cp font-16">
                             <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i> Attach file</label>
                     </label>
                     <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">

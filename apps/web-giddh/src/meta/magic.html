@@ -111,13 +111,13 @@
                                                     <span class="dr-cr-category pull-right text-gray">Dr</span>
                                                 </th>
                                             </tr>
-                                            <tr class="bg-yl row mr-0 ml-0 bdrL">
+                                            <tr class="bg-yl row mr-0 ml-0 bd-rl">
                                                 <th class="col-3">Date</th>
-                                                <th class="col-6 bdrL">Particular</th>
-                                                <th class="text-right col-3 bdrL">Amount</th>
+                                                <th class="col-6 bd-rl">Particular</th>
+                                                <th class="text-right col-3 bd-rl">Amount</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="bdrL">
+                                        <tbody class="bd-rl">
                                             <tr class="ledger-row bd-rb row mr-0 ml-0"
                                                 v-if="legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'DEBIT'">
                                                 <td class="col-3 bd-rr"></td>
@@ -148,9 +148,9 @@
                                                             <template v-for="txn in filterBy(ledger, searchText)">
                                                                 <tr class="text-left magicTable bd-rb row mr-0 ml-0">
                                                                     <td class="col-3">{{ledger.entryDate}}</td>
-                                                                    <td class="col-6 bdrL">To {{txn.particular.name}}
+                                                                    <td class="col-6 bd-rl">To {{txn.particular.name}}
                                                                     </td>
-                                                                    <td class="col-3 bdrL position-relative"
+                                                                    <td class="col-3 bd-rl position-relative"
                                                                         v-bind:class="{'pdR25imp': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                         align="right">
                                                                         {{txn.amount}}
@@ -232,8 +232,8 @@
                                             </tr>
                                             <tr class="bg-yl row mr-0 ml-0">
                                                 <th class="col-3">Date</th>
-                                                <th class="col-6 bdrL">Particular</th>
-                                                <th class="text-right col-3 bdrL">Amount</th>
+                                                <th class="col-6 bd-rl">Particular</th>
+                                                <th class="text-right col-3 bd-rl">Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -268,9 +268,9 @@
                                                             <template v-for="txn in filterBy(ledger, searchText)">
                                                                 <tr class="text-left magicTable bd-rb row mr-0 ml-0">
                                                                     <td class="col-3">{{ledger.entryDate}}</td>
-                                                                    <td class="col-6 bdrL">By {{txn.particular.name}}
+                                                                    <td class="col-6 bd-rl">By {{txn.particular.name}}
                                                                     </td>
-                                                                    <td class="col-3 bdrL position-relative bd-rr"
+                                                                    <td class="col-3 bd-rl position-relative bd-rr"
                                                                         v-bind:class="{'pdR25imp': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                         align="right">
                                                                         {{txn.amount}}
@@ -363,7 +363,7 @@
                                             <td colspan="12" class="col-12 text-right h32"
                                                 style="padding-right:10px !important;">
                                                 <!-- | number: '1.2-2'  -->
-                                                <span class="bdrT"
+                                                <span class="bd-rt"
                                                     style="width: 150px;display: block;float: right;padding: 10px 0;">{{ reckoningDebitTotal | currency }}</span>
                                             </td>
                                         </tr>
@@ -389,7 +389,7 @@
                                             <td colspan="12" class="col-12 text-right h32"
                                                 style="padding-right:10px !important;">
                                                 <!-- | number: '1.2-2'  -->
-                                                <span class="bdrT"
+                                                <span class="bd-rt"
                                                     style="width: 150px;display: block;float: right;padding: 10px 0;">{{reckoningCreditTotal | currency }}</span>
                                             </td>
                                         </tr>

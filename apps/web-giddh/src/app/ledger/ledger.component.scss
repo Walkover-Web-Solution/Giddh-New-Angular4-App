@@ -135,7 +135,7 @@ input {
     display: flex;
     flex-wrap: wrap;
 }
-.icomoon_ico {
+.icomoon-ico {
     margin-left: 0;
     margin-right: 8px;
 }
@@ -314,7 +314,7 @@ sh-select:focus {
     background: #efeff1 !important;
     padding: 2px 5px !important;
 }
-.amnt-total {
+.amount-total {
     font-size: 12px;
     color: #999999;
     padding-left: 5px;
@@ -335,7 +335,7 @@ sh-select:focus {
 .custom-tabs {
     display: none;
 }
-.ledg-head .icomoon_ico {
+.ledg-head .icomoon-ico {
     color: $gray;
     width: 36px;
     height: 36px;
@@ -347,12 +347,12 @@ sh-select:focus {
     background-color: #fff;
     border-radius: 50%;
 }
-.advanc-search-block input {
+.advance-search-block input {
     background: $solitude !important;
     height: 28px;
     border-color: $solitude !important;
 }
-.advanc-search-block input::placeholder {
+.advance-search-block input::placeholder {
     color: #666666;
 }
 
@@ -364,7 +364,7 @@ sh-select:focus {
 .ledger-section {
     display: flex;
 }
-.advanc-search-block .icon-search {
+.advance-search-block .icon-search {
     right: 0;
     top: 0;
     background-color: $chetwode-blue;
@@ -380,7 +380,7 @@ sh-select:focus {
 .ledger-book .ledger-footer-1 .total-col .border-top {
     border-top: 1px solid $gainsboro !important;
 }
-.ledger-book .ledger-footer-1 .total-col .bdrT {
+.ledger-book .ledger-footer-1 .total-col .bd-rt {
     border: none;
 }
 
@@ -458,7 +458,7 @@ sh-select:focus {
     }
 }
 
-.ledg-head .advanc-search-block {
+.ledg-head .advance-search-block {
     height: 34px;
     vertical-align: middle;
     display: flex;
@@ -550,7 +550,7 @@ sh-select:focus {
         width: 100%;
         tbody {
             background-color: $white;
-            .transction-date {
+            .transaction-date {
                 font-size: 16px;
                 font-family: "opensans-semibold";
             }
@@ -656,6 +656,11 @@ sh-select:focus {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+
+.list-item{
+    border-bottom: 1px solid #ccc;
+}
+
 /*responsive*/
 .modal-ledger {
     width: 70%;
@@ -732,7 +737,7 @@ sh-select:focus {
         }
     }
 
-    .advanc-search-block {
+    .advance-search-block {
         padding: 0;
     }
     .ledg-head input[type="search"] {
@@ -1028,7 +1033,7 @@ sh-select:focus {
     .search-ledger-field {
         min-width: 200px;
     }
-    .icomoon_ico {
+    .icomoon-ico {
         margin-top: 7px;
     }
     .ledg-head {

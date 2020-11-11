@@ -1,6 +1,6 @@
 @import "../../../../assets/css/color.scss";
 
-.bdrT {
+.bd-rt {
     border-color: #ccc;
 }
 
@@ -8,10 +8,9 @@
     flex: 1 1 auto;
 }
 
-.d-flex {
-    display: flex;
+.sh-select-dropdown{
+    width: 230px;
 }
-
 /*td-in-searchbox_style*/
 
 .td-search-box div {
@@ -288,7 +287,7 @@ button[aria-expanded="true"] i {
 .btn-link-2 {
     color: #0c8fe6;
 }
-.mB100 {
+.mb-100 {
     margin-bottom: 100px;
 }
 .advance-icon {

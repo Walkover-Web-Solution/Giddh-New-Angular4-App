@@ -1,18 +1,18 @@
 @import "../../../../assets/css/color.scss";
-.bdrT {
+.bd-rt {
     border-color: #ccc;
 }
 
-:host ::ng-deep .fb__1-container {
+:host ::ng-deep .fb-1-container {
     justify-content: flex-start;
 }
 
-:host ::ng-deep .fb__1-container .form-group {
+:host ::ng-deep .fb-1-container .form-group {
     margin-right: 10px;
     margin-bottom: 0;
 }
 
-:host ::ng-deep .fb__1-container .date-range-picker {
+:host ::ng-deep .fb-1-container .date-range-picker {
     min-width: 150px;
 }
 
@@ -74,8 +74,8 @@ tfoot {
     padding-right: 2px;
 }
 
-.d-flex {
-    display: flex;
+.sh-select-dropdown{
+    width: 230px;
 }
 
 
@@ -298,7 +298,7 @@ tfoot {
     color: #0c8fe6;
 }
 
-.mB100 {
+.mb-100 {
     margin-bottom: 100px;
 }
 

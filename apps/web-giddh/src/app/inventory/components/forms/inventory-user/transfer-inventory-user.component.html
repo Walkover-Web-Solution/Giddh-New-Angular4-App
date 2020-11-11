@@ -5,7 +5,7 @@
     <div class="form-bg clearfix">
         <form [formGroup]="form" autocomplete="off" class="form-group">
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-6">
                     <label>Name</label>
                     <input type="text" formControlName="name" class="form-control" />
                 </div>
@@ -13,7 +13,7 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-12 text-left mr-t1">
+                <div class="col-md-12 text-left mr-t1">
                     <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
                     <button class="btn btn-success" [ladda]="isLoading" (click)="save()">Save</button>
                 </div>

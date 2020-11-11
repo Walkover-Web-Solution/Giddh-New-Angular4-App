@@ -83,16 +83,16 @@
                         <td data-title="Name">{{item.name}}</td>
                         <td data-title="Unique Name">{{item.uniqueName}}</td>
                         <td data-title="Parent">{{item.parent}}</td>
-                        <td data-title="Opening Balance" class="alR">
+                        <td data-title="Opening Balance" class="text-right">
                             {{item.openingBalance | giddhCurrency }}
                             <span *ngIf="item.openingBalance > 0">
                                 <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">Dr</span>
                             <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">Cr</span>
                             </span>
                         </td>
-                        <td data-title="DR Total" class="alR">{{item.debitTotal | giddhCurrency }}</td>
-                        <td data-title="CR Total" class="alR">{{item.creditTotal | giddhCurrency}}</td>
-                        <td data-title="Closing Balance" class="alR">
+                        <td data-title="DR Total" class="text-right">{{item.debitTotal | giddhCurrency }}</td>
+                        <td data-title="CR Total" class="text-right">{{item.creditTotal | giddhCurrency}}</td>
+                        <td data-title="Closing Balance" class="text-right">
                             {{item.closingBalance | giddhCurrency }}
                             <span *ngIf="item.closingBalance > 0">
                                 <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">Dr</span>
@@ -122,7 +122,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
-                <div class="modal-header themeBg pd-l2 pd-r2 clearfix">
+                <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
                     <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->

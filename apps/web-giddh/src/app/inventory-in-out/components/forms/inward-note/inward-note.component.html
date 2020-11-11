@@ -102,10 +102,10 @@
                             </div>
 
 
-                            <div class="pull-right mr-t unit_add">
+                            <div class="pull-right mr-t unit-add">
                                 <button class="btn-link" (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last">
-                                    <i class="icon-plus add_row"></i>
+                                    <i class="icon-plus add-row"></i>
                                 </button>
                                 <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
                                     <i class="icon-cross dlet"></i>
@@ -121,7 +121,7 @@
             <ng-container *ngIf="mode === 'sender'">
                 <div class="row">
 
-                    <div class="mr-t1 pd-l pdR">
+                    <div class="mr-t1 pd-l pd-r">
                         <div class="col-xs-12">
                             <div class="checkbox">
                                 <label class="" for="isManufactured">
@@ -206,10 +206,10 @@
                                                 [multiple]="false" [placeholder]="'Select Unit'" [ItemHeight]="33">
                                             </sh-select>
                                         </div>
-                                        <div class="pull-right mr-t unit_add">
+                                        <div class="pull-right mr-t unit-add">
                                             <button class="btn-link" (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l" [disabled]="disableStockButton"><i
-                                                    class="icon-plus add_row"></i></button>
+                                                    class="icon-plus add-row"></i></button>
                                             <button class="btn-link" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i
                                                     class="icon-cross dlet"></i></button>
                                         </div>

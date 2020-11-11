@@ -1,5 +1,9 @@
 @import "../../assets/css/color.scss";
 
+.inventory-main{
+    min-height:100%;
+}
+
 .inventory-control ::ng-deep.nav > li > a {
     padding: 2px 0px !important;
     margin-right: 35px !important;

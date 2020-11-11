@@ -19,7 +19,7 @@
     </div> -->
 
     <!-- drop down for Esignature area -->
-    <div class="dropdown-menu mrL3" [ngClass]="{open: showEsign}">
+    <div class="dropdown-menu mr-l3" [ngClass]="{open: showEsign}">
         <div class="form-group">
             <e-sign-modal-component></e-sign-modal-component>
 
@@ -27,7 +27,7 @@
     </div>
 
     <!-- drop down for invoice copies -->
-    <div class="dropdown-menu mrL3 pd0" id="setting-tab" [ngClass]="{open: showMore}">
+    <div class="dropdown-menu mr-l3 p-0" id="setting-tab" [ngClass]="{open: showMore}">
 
         <ul class="nav nav-tabs">
             <li class="nav-item" [ngClass]="{'active': emailTabActive}">
@@ -52,7 +52,7 @@
                 <textarea class="form-control" #smsList placeholder="Enter mobile no. with countryCode"></textarea>
             </div>
             <div class="clearfix" [hidden]="smsTabActive">
-                <h3 class="fs16 mr-b">Invoice Copy</h3>
+                <h3 class="font-16 mr-b">Invoice Copy</h3>
                 <hr />
                 <div class="checkbox">
                     <label><input type="checkbox" value="Transport"

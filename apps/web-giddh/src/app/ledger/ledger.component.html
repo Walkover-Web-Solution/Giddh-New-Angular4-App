@@ -121,8 +121,8 @@
             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-right C-flex-end search-options" *ngIf="!isMobileScreen">
                 <div class="d-flex xs-width-100 ledger-head-top">
 
-                    <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advanc-search-block">
-                        <span class="mr-15 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
+                    <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advance-search-block">
+                        <span class="mr-15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
                         <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
@@ -141,13 +141,13 @@
 
                     <div class="d-flex">
 
-                        <a href="javascript:void(0)" id="share" class="icomoon_ico d-flex align-items-center"
+                        <a href="javascript:void(0)" id="share" class="icomoon-ico d-flex align-items-center"
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
-                            <i class="fa icon-ledger-path" style="line-height: 0px"></i>
+                            <i class="fa icon-ledger-path lh-0"></i>
                         </a>
-                        <a class="icomoon_ico d-flex align-items-center mr-0" id="export-ledger" href="javascript:void(0)" title=""
+                        <a class="icomoon-ico d-flex align-items-center mr-0" id="export-ledger" href="javascript:void(0)" title=""
                             [tooltip]="'Export'" [placement]="'top'" (click)="showExportLedgerModal()">
-                            <i class="icon-ledger-union-5" style="line-height: 0px"></i>
+                            <i class="icon-ledger-union-5 lh-0"></i>
                         </a>
 
                     </div>
@@ -155,9 +155,9 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen" class="advanc-search-block
+        <div *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen" class="advance-search-block
             mt-05">
-            <span class="mr-15 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
+            <span class="mr-15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
             <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
@@ -194,17 +194,17 @@
         <div class="clearfix"></div>
         <h1 class="mr-t2 primary-color" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
         <section id="eledgerwrap" class="mr-t2" *ngIf="lc.showEledger">
-            <div class="alert alert-danger ledger-book fade in pr" style="padding-right:15px">
+            <div class="alert alert-danger ledger-book fade in position-relative pr-15">
                 <button type="button" class="close">
-                    <span style="font-size:12px;font-weight:normal"
+                    <span class="font-12 font-weight-normal"
                         (click)="lc.showEledger = !lc.showEledger">Close</span>
                 </button>
 
-                <table class="table ledgerTable transaction-mapped-table" style="margin-bottom:0">
+                <table class="table ledgerTable transaction-mapped-table mb-0">
                     <thead>
                         <th class="nopad top-head-table" colspan="6">
-                            <div class="clearfix ldgTheadL">
-                                <h3 class="ledgerHead">
+                            <div class="clearfix ledger-top-header-left">
+                                <h3 class="ledger-main-head">
                                     <span>Transactions from mapped account</span>
                                 </h3>
                             </div>
@@ -222,27 +222,27 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="nopad bdrL bd-rr hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
+                            <td width="50%" class="nopad bd-rl bd-rr hidden-xs transaction-mapped-head" colspan="3">
                                 <table class="table">
                                     <thead>
-                                        <tr class="dgreyBg row">
+                                        <tr class="dark-grey-bg row">
                                             <th class="col-3 col-md-3 col-lg-3">Date
                                             </th>
                                             <th class="col-5 col-md-6 col-lg-6">Particular</th>
-                                            <th class="col-4 col-md-3 col-lg-3 alR">Amount</th>
+                                            <th class="col-4 col-md-3 col-lg-3 text-right">Amount</th>
                                         </tr>
                                     </thead>
                                 </table>
                             </td>
                             <!-- main left td end here -->
-                            <td class="nopad bdrL bd-rr hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
+                            <td width="50%" class="nopad bd-rl bd-rr hidden-xs transaction-mapped-head" colspan="3">
                                 <table class="table">
                                     <thead>
                                         <tr class="row">
                                             <th class="col-3 col-md-3 col-lg-3">Date
                                             </th>
                                             <th class="col-5 col-md-6 col-lg-6">Particular</th>
-                                            <th class="col-4 col-md-3 col-lg-3 alR">Amount</th>
+                                            <th class="col-4 col-md-3 col-lg-3 text-right">Amount</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -250,7 +250,7 @@
                             <!-- main right td end here -->
                         </tr>
                         <tr class="transaction-table-row">
-                            <td class="nopad bdrL bd-rr" colspan="3">
+                            <td class="nopad bd-rl bd-rr" colspan="3">
                                 <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                 <table class="width100"
                                     (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
@@ -298,8 +298,7 @@
                                                                             <ng-container
                                                                                 *ngIf="!option.additional?.stock">
                                                                                 <a href="javascript:void(0)"
-                                                                                    class="list-item"
-                                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                                    class="list-item">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
@@ -310,8 +309,7 @@
                                                                             <ng-container
                                                                                 *ngIf="option.additional?.stock">
                                                                                 <a href="javascript:void(0)"
-                                                                                    class="list-item"
-                                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                                    class="list-item">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
@@ -332,7 +330,7 @@
                                                             </td>
 
                                                             <td class="col-4 col-md-3 col-lg-3 position-relative">
-                                                                <input class="form-control alR" type="text" id="{{'enter-amount-dr-' + i}}"
+                                                                <input class="form-control text-right" type="text" id="{{'enter-amount-dr-' + i}}"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
@@ -370,7 +368,7 @@
                                 </table>
                                 </ng-container>
                             </td>
-                            <td colspan="3" class="nopad bdrL bd-rr">
+                            <td colspan="3" class="nopad bd-rl bd-rr">
                                 <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                 <table class="width100"
                                     (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
@@ -422,8 +420,7 @@
                                                                             <ng-container
                                                                                 *ngIf="!option.additional?.stock">
                                                                                 <a href="javascript:void(0)"
-                                                                                    class="list-item"
-                                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                                    class="list-item">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
@@ -435,8 +432,7 @@
                                                                             <ng-container
                                                                                 *ngIf="option.additional?.stock">
                                                                                 <a href="javascript:void(0)"
-                                                                                    class="list-item"
-                                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                                    class="list-item">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
@@ -457,7 +453,7 @@
                                                             </td>
 
                                                             <td class="col-4 col-md-3 col-lg-3 position-relative">
-                                                                <input class="form-control alR" type="text"  id="{{'enter-amount-cr-' + i}}"
+                                                                <input class="form-control text-right" type="text"  id="{{'enter-amount-cr-' + i}}"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
@@ -498,21 +494,21 @@
                     </tbody>
                     <!-- end main tbody -->
                     <tfoot>
-                        <tr class="fw600 dgreyBg">
-                            <td colspan="2" class="bdrL" style="width:36%">
+                        <tr class="fw600 dark-grey-bg">
+                            <td colspan="2" class="bd-rl" width="36%">
                                 <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
                                     C/F Balance
                                 </div>
                             </td>
-                            <td style="width:14%" class="bd-rr alR">
+                            <td width="14%" class="bd-rr text-right">
                                 <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | giddhCurrency}}</span>
                             </td>
-                            <td colspan="2" style="width:36%" class="bdrL">
+                            <td colspan="2" width="36%" class="bd-rl">
                                 <div class="pull-right" *ngIf="eLedgType == 'DEBIT'">
                                     C/F Balance
                                 </div>
                             </td>
-                            <td style="width:14%" class="bd-rr alR">
+                            <td width="14%" class="bd-rr text-right">
                                 <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
                             </td>
                         </tr>
@@ -550,7 +546,7 @@
                     <td class="border-none pt-0 pb-0">
                         <table width="100%">
                             <tr>
-                                <td class="transction-date pl-15 pr-15 pt-05" colspan="2">{{transactionDate}}</td>
+                                <td class="transaction-date pl-15 pr-15 pt-05" colspan="2">{{transactionDate}}</td>
                             </tr>
                             <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate]; let i = index">
                                 <td class="pl-15 pr-15 relative"
@@ -584,7 +580,7 @@
                                     <div class="d-flex justify-content-end">
                                         <div>
                                             {{ transactions.currencySymbol }}{{ transactions.amount | giddhCurrency }}
-                                            <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                            <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                                 {{ transactions.convertedCurrencySymbol }}{{ transactions.convertedAmount | giddhCurrency }}
                                             </p>
                                         </div>
@@ -597,7 +593,7 @@
                 </tbody>
             </table>
             <!-- region pagination -->
-            <div class="text-center mr-t2 page-count pa">
+            <div class="text-center mr-t2 page-count position-absolute">
                 <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions, </span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
@@ -661,12 +657,12 @@
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'" class="">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount  | giddhCurrency }}
                                 </span><br>
-                                <span class="amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <span class="amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}}
                                 </span>
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
 
-                                <!--              <p class="mb-0 amnt-total">$454</p>-->
+                                <!--              <p class="mb-0 amount-total">$454</p>-->
                                 </ng-container>
                             </td>
                         </tr>
@@ -704,7 +700,7 @@
                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
 
                                 <div class="d-flex align-items-center">
-                                    <span style="float: left">
+                                    <span class='float-left'>
                                         <input type="checkbox" id="{{ 'select-entry-dr-' + i}}"
                                             [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
                                             class="d-none" [(ngModel)]="txn.isChecked"
@@ -744,7 +740,7 @@
                             <td  [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"  class="col-xs-4 col-md-3 col-lg-3 position-relative text-right" data-title="Amount">
                                 {{ txn.currencySymbol }}{{ txn.amount | giddhCurrency }}
 
-                                <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount | giddhCurrency }}</p>
                             </td>
                         </tr>
@@ -805,16 +801,14 @@
                                                         [useInBuiltFilterForFlattenAc]="true">
                                                         <ng-template #optionTemplate let-option="option">
                                                             <ng-container *ngIf="!option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item"
-                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                <a href="javascript:void(0)" class="list-item">
                                                                     <div class="item">{{ option.label }}</div>
                                                                     <div class="item-unique">
                                                                         {{ option.additional?.uniqueName }}</div>
                                                                 </a>
                                                             </ng-container>
                                                             <ng-container *ngIf="option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item"
-                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                <a href="javascript:void(0)" class="list-item">
                                                                     <div class="item">{{ option.label }}</div>
                                                                     <div class="item-unique">
                                                                         {{ option.additional?.uniqueName }}</div>
@@ -843,7 +837,7 @@
                                             </td>
 
                                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 position-relative">
-                                                <input class="form-control alR" type="text"  id="{{'enter-bank-amount-dr-' + i}}"
+                                                <input class="form-control text-right" type="text"  id="{{'enter-bank-amount-dr-' + i}}"
                                                     [prefix]="selectedPrefixForCurrency"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                     [(ngModel)]="txn.amount" (input)="handleAmountInput(txn);"
@@ -895,7 +889,7 @@
             <!-- region credit transaction-->
             <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
                 (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
-                [ngClass]="{'bdrL': (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
+                [ngClass]="{'bd-rl': (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
                 <!-- region credit transaction header-->
                 <table class="width100 h-table hidden-xs">
                     <thead>
@@ -934,11 +928,11 @@
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
                                 </span><br>
-                                <span class="amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <span class="amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency }}
                                 </span>
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">0</span>
-                                <!--              <p class="mb-0 amnt-total">$454</p>-->
+                                <!--              <p class="mb-0 amount-total">$454</p>-->
                                 </ng-container>
                             </td>
                         </tr>
@@ -1018,7 +1012,7 @@
 
                             <td  [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"  data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 position-relative text-right">
                                 {{ txn.currencySymbol }} {{txn.amount | giddhCurrency}}
-                                <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount | giddhCurrency}}
                                 </p>
 
@@ -1085,16 +1079,14 @@
                                                         [useInBuiltFilterForFlattenAc]="true">
                                                         <ng-template #optionTemplate let-option="option">
                                                             <ng-container *ngIf="!option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item"
-                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                <a href="javascript:void(0)" class="list-item">
                                                                     <div class="item">{{ option.label }}</div>
                                                                     <div class="item-unique">
                                                                         {{ option.additional?.uniqueName }}</div>
                                                                 </a>
                                                             </ng-container>
                                                             <ng-container *ngIf="option.additional?.stock">
-                                                                <a href="javascript:void(0)" class="list-item"
-                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                <a href="javascript:void(0)" class="list-item">
                                                                     <div class="item">{{ option.label }}</div>
                                                                     <div class="item-unique">
                                                                         {{ option.additional?.uniqueName }}</div>
@@ -1124,7 +1116,7 @@
                                             </td>
 
                                             <td class="col-xs-4 col-md-3 col-lg-3 position-relative" data-title="Amount">
-                                                <input class="form-control alR" type="text"  id="enter-bank-amount-cr"
+                                                <input class="form-control text-right" type="text"  id="enter-bank-amount-cr"
                                                     [prefix]="selectedPrefixForCurrency"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                     [(ngModel)]="txn.amount" (input)="handleAmountInput(txn);"
@@ -1205,11 +1197,11 @@
 
                                 <div class="d-flex" style="flex-direction: column;">
 
-                                    <span class="bdrT ng-binding" style="padding: 1px 0;">
+                                    <span class="bd-rt ng-binding" style="padding: 1px 0;">
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningDebitTotal  | giddhCurrency }}
                                     </span>
 
-                                    <span class="bdrT ng-binding text-gray" style="padding: 1px 0;"
+                                    <span class="bd-rt ng-binding text-gray" style="padding: 1px 0;"
                                         *ngIf="isLedgerAccountAllowsMultiCurrency">
                                         {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningDebitTotal  | giddhCurrency }}
                                     </span>
@@ -1245,11 +1237,11 @@
                                 style="padding-right:10px !important;">
 
                                 <div class="d-flex" style="flex-direction: column;">
-                                    <span class="bdrT" style="padding: 1px 0;">
+                                    <span class="bd-rt" style="padding: 1px 0;">
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningCreditTotal | giddhCurrency }}
                                     </span>
 
-                                    <span class="bdrT text-gray" *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                    <span class="bd-rt text-gray" *ngIf="isLedgerAccountAllowsMultiCurrency"
                                         style="padding: 1px 0;">
                                         {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningCreditTotal | giddhCurrency }}
                                     </span>
@@ -1518,7 +1510,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div id="" class="">
-                <div class="modal-header themeBg pd-l2 pd-r2 clearfix">
+                <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">Confirmation </h3>
                     <i class="icon-cross text-right close-modal" aria-hidden="true"
                         (click)="onCancelBulkActionConfirmation()"></i>
@@ -1552,7 +1544,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div>
-                <div class="modal-header themeBg pd-l2 pd-r2 clearfix">
+                <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">Confirmation</h3>
                     <i class="icon-cross text-right close-modal" aria-hidden="true"
                         (click)="onCancelSelectInvoiceModal()"></i>

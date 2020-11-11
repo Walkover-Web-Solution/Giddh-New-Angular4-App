@@ -14,7 +14,7 @@
                                 <div class="ico-head">Sender’s Details</div>
                             </div>
                         </div>
-                        <div [collapse]="isOthrDtlCollapsed" class="clearfix pd-l3 pdR3 col-xs-12 mr0">
+                        <div [collapse]="isOthrDtlCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 mr0">
                             <div class="row mt13" formGroupName="companyDetails">
                                 <!-- <div class="form-group col-xs-2">
           <label>Ship Date</label>
@@ -98,7 +98,7 @@
                                 <div class="ico-head">Customer Details</div>
                             </div>
                         </div>
-                        <div [collapse]="isCustDtlCollapsed" class="clearfix pd-l3 pdR3 col-xs-12 mr0">
+                        <div [collapse]="isCustDtlCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 mr0">
                             <div class="row mt13" formGroupName="userDetails">
                                 <!-- commented by sagar sir -->
                                 <div class="form-group col-xs-4"
@@ -152,7 +152,7 @@
                                 <div class="ico-head">Mailing Details</div>
                             </div>
                         </div>
-                        <div [collapse]="isMlngAddrCollapsed" class="clearfix pd-l3 pdR3 col-xs-12 mr0">
+                        <div [collapse]="isMlngAddrCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 mr0">
                             <div class="row mt13">
                                 <div formGroupName="userDetails">
                                     <div class=""
@@ -238,7 +238,7 @@
                             </div>
 
                         </div>
-                        <div [collapse]="isGenDtlCollapsed" class="clearfix pd-l3 pdR3 col-xs-12 mr0">
+                        <div [collapse]="isGenDtlCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 mr0">
                             <div class="row mt13">
                                 <!-- <div class="form-group col-xs-4">
     <label>Attention to</label>
@@ -453,7 +453,7 @@ class="salesTax"
 <input type="number" name="transaction.total_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.total"
 />
 </td>-->
-                            <td class="action-panel-td alR">
+                            <td class="action-panel-td text-right">
                                 <span class="cp" *ngIf="last" (click)="addBlankRow()">
                                     <i class="icon-add" aria-hidden="true"></i>
                                 </span>

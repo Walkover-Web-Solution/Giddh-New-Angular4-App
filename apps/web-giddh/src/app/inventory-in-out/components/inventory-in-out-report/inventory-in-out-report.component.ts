@@ -11,20 +11,20 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
     selector: 'invetory-in-out-report',  // <home></home>
     templateUrl: './inventory-in-out-report.component.html',
     styles: [`
-    .bdrT {
+    .bd-rt {
       border-color: #ccc;
     }
 
-    :host ::ng-deep .fb__1-container {
+    :host ::ng-deep .fb-1-container {
       justify-content: flex-start;
     }
 
-    :host ::ng-deep .fb__1-container .form-group {
+    :host ::ng-deep .fb-1-container .form-group {
       margin-right: 10px;
       margin-bottom: 0;
     }
 
-    :host ::ng-deep .fb__1-container .date-range-picker {
+    :host ::ng-deep .fb-1-container .date-range-picker {
       min-width: 150px;
     }
   `]

@@ -123,7 +123,7 @@
             </div>
 
 
-            <div class="text-center top-aging-table-top seprta-top-aging pd-1" *ngIf="isMobileScreen">
+            <div class="text-center top-aging-table-top separate-top-aging pd-1" *ngIf="isMobileScreen">
                 <p (click)="showGiddhDatepicker($event)">
                     <strong>Due as on </strong>
                     <span *ngIf="selectedDateRangeUi">
@@ -132,9 +132,9 @@
                 </p>
             </div>
 
-            <div class="contact-main customerPage on-mobile-view">
+            <div class="contact-main customer-page on-mobile-view">
 
-                <div class=" pd-b2 mr-b1">
+                <div class="pd-b2 mr-b1">
 
                     <div class="">
 
@@ -214,7 +214,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
-                <div class="modal-header themeBg pd-l2 pd-r2 clearfix">
+                <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title-mail-vendor">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
                     <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
@@ -253,7 +253,7 @@
 
             <div class="border-radius-0">
 
-                <div class="modal-header themeBg pd-l2 pd-r2 clearfix">
+                <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title-mail-customer">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
                     <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
@@ -431,14 +431,14 @@
                                 <label></label>
                                 <input type="checkbox" (click)="selectAccount($event, account)"
                                     [(ngModel)]="account.isSelected"
-                                    [ngClass]="{'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}" />
+                                    [ngClass]="{'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}" />
                             </span>
-                                <span class="accountNameCustomer"> {{account.name}} </span>
+                                <span class="account-name-customer"> {{account.name}} </span>
                                 <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
                                     <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic" (click)="dropdown.show()"></a>
 
                                     <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
-                                        <div class="tb-pl-modal-header p-modal-tooltip" style="padding: 0 !important;">
+                                        <div class="tb-pl-modal-header p-modal-tooltip p-0">
 
                                             <div class="account-detail-modal-header-div selection-none">
 
@@ -446,9 +446,9 @@
 
                                                     <div class="account-detail-custom-header selection-none-header">
 
-                                                        <div class="d-flex" style="padding: 0px; border-right:0px;">
+                                                        <div class="d-flex p-0 border-right-0">
 
-                                                            <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
+                                                            <div class="account-detail-padding flex-fill border-right-0">
                                                                 <h3 class="account-detail-custom-title word-break">
                                                                     <span (click)="performActions(0, account)">{{account?.name}}</span>
                                                                 </h3>
@@ -512,7 +512,7 @@
 
                                                 <div class="border-radius-0" style="padding: 8px 8px 8px 8px;">
 
-                                                    <div class="modal-header themeBg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
+                                                    <div class="modal-header theme-bg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
                                                         <h3 class="modal-title bg" id="modal-title">
                                                             {{messageBody.header.set}}</h3>
                                                         <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
@@ -604,7 +604,7 @@
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account) "
                                         [(ngModel)]="account.isSelected "
-                                        [ngClass]="{ 'checkbox_visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length} " />
+                                        [ngClass]="{ 'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length} " />
                                 </span>
                                 <span>{{account.name}}</span>
                                 <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
@@ -613,7 +613,7 @@
                                     </a>
 
                                     <div id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic2">
-                                        <div class="tb-pl-modal-header p-modal-tooltip" style="padding: 0 !important;">
+                                        <div class="tb-pl-modal-header p-modal-tooltip p-0">
 
                                             <div class="account-detail-modal-header-div selection-none">
 
@@ -621,9 +621,9 @@
 
                                                     <div class="account-detail-custom-header selection-none-header">
 
-                                                        <div class="d-flex" style="padding: 0px; border-right:0px;">
+                                                        <div class="d-flex p-0 border-right-0">
 
-                                                            <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
+                                                            <div class="account-detail-padding flex-fill border-right-0">
                                                                 <h3 class="account-detail-custom-title word-break">
                                                                     <span (click)="performActions(0, account)">{{account?.name}}</span>
                                                                 </h3>
@@ -687,7 +687,7 @@
 
                                                 <div class="border-radius-0" style="padding: 8px 8px 8px 8px;">
 
-                                                    <div class="modal-header themeBg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
+                                                    <div class="modal-header theme-bg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
                                                         <h3 class="modal-title bg" id="modal-title">
                                                             {{messageBody.header.set}}</h3>
                                                         <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>

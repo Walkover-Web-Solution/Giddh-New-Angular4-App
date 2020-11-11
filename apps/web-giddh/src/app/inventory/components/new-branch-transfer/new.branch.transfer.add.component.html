@@ -1,13 +1,13 @@
-<section class="reciptNote" autocomplete="off">
-    <div class="reciptNoteHeader d-flex pl-15 pr-15">
+<section class="receipt-note" autocomplete="off">
+    <div class="receipt-note-header d-flex pl-15 pr-15">
         <h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
         <h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</h3>
-        <div class="closeRecipt pointer" (click)="closeBranchTransferPopup()">
+        <div class="close-receipt pointer" (click)="closeBranchTransferPopup()">
             <span class="icon-cross"></span>
         </div>
     </div>
-    <div class="reciptNoteContent">
-        <div class="reciptNoteRadioBtn pr-15 pl-15 mb-15" *ngIf="!editBranchTransferUniqueName">
+    <div class="receipt-note-content">
+        <div class="receipt-note-radio-btn pr-15 pl-15 mb-15" *ngIf="!editBranchTransferUniqueName">
             <span class="pd0 mr-3">
                 <input id="multipleProducts" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio-theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
                 name="transferType"
@@ -16,7 +16,7 @@
             </span>
 
             <span class="pd0 mr-3">
-                <input id="multipleSenders" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio-theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
+                <input id="multipleSenders" class="radio-custom cp ml-0" type="radio" [ngClass]="{'radio-theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
                 name="transferType" type="radio"
                 (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'">
                 <label for="multipleSenders" class="radio-custom-label" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label>
@@ -26,7 +26,7 @@
 
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
-        <div class="multiple-products-wrapper  ">
+        <div class="multiple-products-wrapper">
             <form #newBranchTransferForm="ngForm" novalidate="">
                 <div class="multiple-products row clearfix pl-15 pr-15">
                     <div class="col-lg-6 col-md-8" *ngIf="branchTransferMode === 'deliverynote'">
@@ -517,11 +517,11 @@
                             </tr>
                         </tbody>
                         <div class="addNewLine mr-t1">
-                            <a class="multipleRecivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add
+                            <a class="multiple-receivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add
                                 Multiple Receivers</a>
-                            <a class="multipleRecivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add
+                            <a class="multiple-receivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add
                                 Multiple Senders</a>
-                            <a class="multipleRecivers" (click)="addProduct()" *ngIf="transferType === 'products'"> <i class="icon-plus font-10"></i> Add Multiple Products</a>
+                            <a class="multiple-receivers" (click)="addProduct()" *ngIf="transferType === 'products'"> <i class="icon-plus font-10"></i> Add Multiple Products</a>
                         </div>
                         <tfoot id="tfoot">
                             <tr>

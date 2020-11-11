@@ -12,7 +12,7 @@
 
                                 <div class="col-sm-5">
                                     <div class="row mr-0 ml-0">
-                                        <div class="col-xs-5 p0 count-text">
+                                        <div class="col-5 p-0 count-text">
                                             <h4 class="text-light pl-0">
                                                 <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">Transaction Count
                                                 </div>
@@ -21,7 +21,7 @@
                                                 <div class="mt-1">Profit/Loss</div>
                                             </h4>
                                         </div>
-                                        <div class="col-xs-7 p0">
+                                        <div class="col-7 p-0">
                                             <h4 class="text-orange text-right">
                                                 <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
                                                     <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems | giddhCurrency}}</span>
@@ -37,18 +37,18 @@
                                         </div>
                                     </div>
                                     <div class="row" *ngIf="groupStockReport.openingBalance.transactionCount">
-                                        <div class="col-xs-10 p0">
+                                        <div class="col-10 p-0">
                                             <h4>Inward</h4>
                                         </div>
-                                        <div class="col-xs-2 p0">
+                                        <div class="col-2 p-0">
                                             <h4>&nbsp;<span>{{groupStockReport.InwardBalance.transactionCount | giddhCurrency}}</span></h4>
                                         </div>
                                     </div>
                                     <div class="row" *ngIf="groupStockReport.outwardBalance.transactionCount">
-                                        <div class="col-xs-10 p0">
+                                        <div class="col-10 p-0">
                                             <h4>Outward</h4>
                                         </div>
-                                        <div class="col-xs-2 p0">
+                                        <div class="col-2 p-0">
                                             <h4>&nbsp;<span>{{groupStockReport.outwardBalance.transactionCount | giddhCurrency}}</span></h4>
                                         </div>
                                     </div>
@@ -113,7 +113,7 @@
     <div class="mb-2 d-none">
         <!-- enable branch selection after implimentation from api-->
         <div class="d-flex">
-            <div style="width: 230px;margin-right: 15px;">
+            <div class="mr-15 sh-select-dropdown">
                 <div class="select-style middle">
                     <sh-select placeholder="Select Branch" name="entity" [(ngModel)]="selectedEntity" (selected)="selectEntity($event)" [options]="entities$ | async" [ItemHeight]="33"></sh-select>
                     <!-- html dropdown <select class="form-control" (change)="selectEntity($event.target.value)">
@@ -155,8 +155,8 @@
       </ul>
     </div>
   </div> -->
-    <div class="fb__1-container mr-b1">
-        <div class="d-flex" style="justify-content: space-between;width: 100%">
+    <div class="fb-1-container mr-b1">
+        <div class="d-flex justify-content-between w-100">
             <div class="d-flex wrap-head-report">
                 <h2 class="mr-2 head-report" *ngIf="groupStockReport">
                     <span>{{groupStockReport.stockGroupName}}</span> (Group)</h2>
@@ -198,11 +198,11 @@
 
     <section class="bottom-button-display">
         <div class="mobile-card-wrapper">
-            <table class="table basic table-border inventory-stock-table on-mobile-view table-responsive" [ngClass]="{'mB100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
+            <table class="table basic table-border inventory-stock-table on-mobile-view table-responsive" [ngClass]="{'mb-100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
                 <thead>
                     <tr>
                         <!-- in case of all entity with group -->
-                        <th colspan="4" class="bd-rr" width="30%" style="padding: 0 !important;" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
+                        <th colspan="4" class="bd-rr p-0" width="30%" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
                             <!-- in case of all entity with group -->
                             <th colspan="2" class="bd-rr" width="17%" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">
                                 <div class="d-flex">
@@ -214,7 +214,7 @@
                             <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Outwards</th>
                             <th class="text-center bd-rb" width="20%" colspan="2">Closing Stock</th>
                     </tr>
-                    <tr class="bdrT">
+                    <tr class="bd-rt">
                         <th colspan="2" class="bd-rr td-search-box max-width-140" (clickOutside)="clickedOutside($event,null, 'product')">
                             <div [hidden]="showProductSearch">
                                 <span>Product Name</span>
@@ -466,7 +466,7 @@
 
                         <div class="col-lg-5 col-md-12 pr-0">
                             <div class="row">
-                                <div class="col-xs-4 p0 count-text">
+                                <div class="col-4 p-0 count-text">
                                     <h4 class="text-light">
                                         <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">Transaction Count
                                         </div>
@@ -475,7 +475,7 @@
                                         <div class="mt-1">Profit/Loss</div>
                                     </h4>
                                 </div>
-                                <div class="col-xs-8 p0">
+                                <div class="col-8 p-0">
                                     <h4 class="text-orange text-left">
                                         <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
                                             <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems  | giddhCurrency}}</span>
@@ -491,18 +491,18 @@
                                 </div>
                             </div>
                             <div class="row" *ngIf="groupStockReport.openingBalance.transactionCount">
-                                <div class="col-xs-10 p0">
+                                <div class="col-10 p-0">
                                     <h4>Inward</h4>
                                 </div>
-                                <div class="col-xs-2 p0">
+                                <div class="col-2 p-0">
                                     <h4>&nbsp;<span>{{groupStockReport.InwardBalance.transactionCount | giddhCurrency}}</span></h4>
                                 </div>
                             </div>
                             <div class="row" *ngIf="groupStockReport.outwardBalance.transactionCount">
-                                <div class="col-xs-10 p0">
+                                <div class="col-10 p-0">
                                     <h4>Outward</h4>
                                 </div>
-                                <div class="col-xs-2 p0">
+                                <div class="col-2 p-0">
                                     <h4>&nbsp;<span>{{groupStockReport.outwardBalance.transactionCount | giddhCurrency}}</span></h4>
                                 </div>
                             </div>
@@ -579,7 +579,7 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="modal-header themeBg clearfix">
+            <div class="modal-header theme-bg clearfix">
                 <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
                 <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">×</span>
             </div>
