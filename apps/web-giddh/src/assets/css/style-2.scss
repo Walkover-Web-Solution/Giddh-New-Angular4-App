@@ -9774,7 +9774,17 @@ input.mat-input-element{
     background-color: $midnight-blue;
 }
 /*material datepicker css end*/
+ .master-custom-tabs.custom-tabs {
+        .nav-tabs {
+            top: 0;
 
+            li {
+                a {
+                    padding-top: 5px;
+                }
+            }
+        }
+    }
 /* responsive */
 
 @media (max-width: 1440px) {
