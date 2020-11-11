@@ -20,7 +20,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
 	@Input() public discountAccountsDetails: LedgerDiscountClass[];
 	@Input() public ledgerAmount: number = 0;
-	@Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
+	@Output() public discountTotalUpdated: EventEmitter<{discountTotal: number, isActive: any, discount: any }> = new EventEmitter();
 	@Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 	public discountTotal: number;
 	public discountAccountsList$: Observable<IDiscountList[]>;
@@ -139,9 +139,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	/**
 	 * on change of discount amount
 	 */
-	public change() {
+	public change(event?: any, discount?:any) {
 		this.discountTotal = giddhRoundOff(this.generateTotal(), 2);
-		this.discountTotalUpdated.emit(this.discountTotal);
+		this.discountTotalUpdated.emit({discountTotal: this.discountTotal, isActive: event, discount: discount});
 	}
 
 	/**
