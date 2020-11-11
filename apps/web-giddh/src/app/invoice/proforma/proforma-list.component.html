@@ -506,8 +506,8 @@
     <!-- region invoice-preview-details -->
     <div *ngIf="selectedVoucher">
         <invoice-preview-details-component [selectedItem]="selectedVoucher" [items]="itemsListForDetails"
-            [voucherType]="selectedVoucher.voucherType" [invoiceSetting]="invoiceSetting"
-            [voucherNoForDetail]="voucherNoForDetail" [voucherDetailAction]="voucherDetailAction"
+            [voucherType]="selectedVoucher.voucherType" [invoiceSetting]="invoiceSetting" [invoiceSearch]="invoiceSearch"
+            [voucherNoForDetail]="voucherNoForDetail" [voucherDetailAction]="voucherDetailAction" (invoiceSearchEvent)="invoiceSearch = $event;"
             (closeEvent)="invoicePreviewClosed()" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
             (deleteVoucher)="deleteVoucher()" (sendEmail)="sendEmail($event)" (refreshDataAfterVoucherUpdate)="getAll()"
             (updateVoucherAction)="updateVoucherAction($event)"></invoice-preview-details-component>
