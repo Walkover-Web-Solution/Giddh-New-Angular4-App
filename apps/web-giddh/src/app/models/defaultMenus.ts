@@ -112,39 +112,38 @@ export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['journal-voucher', 'inventory',
     'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
     'ledger'];
 export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
-    {
-        type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 }, isRemoved: false, pIndex: 3, hasTabs: true
+    { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 }, isRemoved: false, pIndex: 3, hasTabs: true
     },
-    {
-        type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', isRemoved: false, pIndex: 5, hasTabs: false
+    { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', isRemoved: false, pIndex: 5, hasTabs: false
     },
-    {
-        type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report', isRemoved: false, pIndex: 5, hasTabs: false
+    { type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report', isRemoved: false, pIndex: 5, hasTabs: false
     },
-    {
-        type: 'MENU', name: 'Import', uniqueName: '/pages/import', isRemoved: false, pIndex: 10, hasTabs: false
+    { type: 'MENU', name: 'Import', uniqueName: '/pages/import', isRemoved: false, pIndex: 10, hasTabs: false
     },
-    {
-        type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', isRemoved: false, pIndex: 8, hasTabs: true
+    { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', isRemoved: false, pIndex: 8, hasTabs: true
     },
-    {
-        type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: { tab: 'sales', tabIndex: 0 }, hasTabs: true
+    { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: { tab: 'sales', tabIndex: 0 }, hasTabs: true
     },
-    {
-        type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
+    { type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
     },
-    {
-        type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9, hasTabs: true
+    { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9, hasTabs: true
     },
-    {
-        type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase', isRemoved: false, pIndex: 7, hasTabs: false
+    { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase', isRemoved: false, pIndex: 7, hasTabs: false
     },
-    {
-        type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', isRemoved: false, pIndex: 6, hasTabs: false
+    { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', isRemoved: false, pIndex: 6, hasTabs: false
     },
-    {
-        type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 }, isRemoved: false, pIndex: 4, hasTabs: false
-    }
+    { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 }, isRemoved: false, pIndex: 4, hasTabs: false },
+    { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 }, isRemoved: false, pIndex: 11, hasTabs: true },
+    { type: 'MENU', name: 'Settings', uniqueName: '/pages/settings', isRemoved: false, pIndex: 12, hasTabs: true },
+    { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, isRemoved: false, pIndex: 13, hasTabs: true},
+    { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook', isRemoved: false, pIndex: 14, hasTabs: false },
+    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', isRemoved: false, pIndex: 15, hasTabs: true },
+    { type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details/mobile-number', additional: { tab: 'profile', tabIndex: 1 }, isRemoved: false, pIndex: 16, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'pending', tabIndex: 2 }, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/templates', additional: { tab: 'templates', tabIndex: 3 }, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/settings', additional: { tab: 'settings', tabIndex: 4 }, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Estimate (Beta)', uniqueName: '/pages/invoice/preview/estimates', additional: { tab: 'estimates', tabIndex: 0 }, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 }, hasTabs: true },
 ];
 export let DEFAULT_AC_ORIGINAL = [
     { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash', hasTabs: false },
@@ -231,14 +230,14 @@ export let DEFAULT_AC_RESPONSIVE = [
 export let DEFAULT_GROUPS = [];
 export let DEFAULT_GROUPS_RESPONSIVE = [];
 
-export function reassignNavigationalArray(toAssign) {
+export function reassignNavigationalArray(toAssign, isCompany) {
     if (toAssign) {
         NAVIGATION_ITEM_LIST = NAVIGATION_ITEM_LIST_RESPONSIVE;
         DEFAULT_MENUS = DEFAULT_MENUS_RESPONSIVE;
         DEFAULT_AC = DEFAULT_AC_RESPONSIVE;
         DEFAULT_GROUPS = DEFAULT_GROUPS_RESPONSIVE;
     } else {
-        NAVIGATION_ITEM_LIST = NAVIGATION_ITEM_LIST_ORIGINAL;
+        NAVIGATION_ITEM_LIST = isCompany ? NAVIGATION_ITEM_LIST_ORIGINAL : NAVIGATION_ITEM_LIST_ORIGINAL.slice(0, 12);
         DEFAULT_MENUS = DEFAULT_MENUS_ORIGINAL;
         DEFAULT_AC = DEFAULT_AC_ORIGINAL;
         DEFAULT_GROUPS = DEFAULT_GROUPS_ORIGINAL;
