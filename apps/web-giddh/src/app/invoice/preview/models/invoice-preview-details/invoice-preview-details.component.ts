@@ -139,6 +139,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public pdfPreviewHasError: boolean = false;
     /** This will hold the search value */
     @Input() public invoiceSearch: any = "";
+    /** This will hold the attached file in Purchase Bill */
+    private attachedAttachmentBlob: Blob;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -384,7 +386,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         const fileExtention = data.body.fileType.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
+                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
                             let objectURL = `data:image/${fileExtention};base64,` + data.body.uploadedFile;
                             this.imagePreviewSource = this.sanitizer.bypassSecurityTrustUrl(objectURL);
                             this.attachedDocumentType = { name: data.body.name, type: 'image', value: fileExtention };
@@ -392,10 +394,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         } else if (FILE_ATTACHMENT_TYPE.PDF.includes(fileExtention)) {
                             // Attached file type is PDF
                             this.attachedDocumentType = { name: data.body.name, type: 'pdf', value: fileExtention };
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
+                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
                             setTimeout(() => {
-                                this.selectedItem.blob = this.attachedDocumentBlob;
-                                this.pdfViewer.pdfSrc = this.attachedDocumentBlob;
+                                this.selectedItem.blob = this.attachedAttachmentBlob;
+                                this.pdfViewer.pdfSrc = this.attachedAttachmentBlob;
                                 this.pdfViewer.showSpinner = true;
                                 this.pdfViewer.refresh();
                                 this.detectChanges();
@@ -403,7 +405,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.isVoucherDownloadError = false;
                         } else {
                             // Unsupported type
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, '', 512);
+                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, '', 512);
                             this.attachedDocumentType = { name: data.body.name, type: 'unsupported', value: fileExtention };
                         }
                     }
@@ -493,7 +495,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.isVoucherDownloading || this.isVoucherDownloadError) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, `${this.attachedDocumentType.name}`);
+        saveAs(this.attachedAttachmentBlob, `${this.attachedDocumentType.name}`);
     }
 
     public printVoucher() {
