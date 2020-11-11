@@ -58,7 +58,7 @@
                                         <!-- <th width="10%">{{item.key | titlecase}}</th> -->
                                         <li role="menuitem">
                                             <a class="dropdown-item">
-                                                <input type="checkbox" name="item.key" (ngModelChange)="columnFilter($event, item.uniqueName)" [(ngModel)]="showFieldFilter[item.uniqueName]" /> {{item.key | titlecase}}
+                                                <input type="checkbox" name="item.uniqueName" (ngModelChange)="columnFilter($event, item.uniqueName)" [(ngModel)]="showFieldFilter[item.uniqueName]" /> {{item.key | titlecase}}
                                             </a>
                                         </li>
                                     </ng-container>
