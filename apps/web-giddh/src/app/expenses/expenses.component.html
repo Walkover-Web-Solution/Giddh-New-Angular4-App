@@ -1,33 +1,34 @@
-<div class="clearfix">
-    <tabset class="custom-tabs" #tabset>
+<div class="relative">
+    <hamburger-menu></hamburger-menu>
+    <div class="clearfix petty-cash">
+        <tabset class="custom-tabs" #tabset>
+            <div class="container-fluid pt-2 mb-15" *ngIf="!isSelectedRow">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="d-flex">
 
-        <div class="container-fluid mt-15 mb-15" *ngIf="!isSelectedRow">
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="d-flex">
-
-                        <div class="clearfix mr-1">
-                            <div class="input-group input-calender">
-                                <span class="input-group-addon" id="basic-addon1"><i class="icon-calender"></i></span>
-                                <input type="text" class="form-control" placeholder="Daterangepicker" daterangepicker
-                                    [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)">
+                            <div class="clearfix mr-1">
+                                <div class="input-group input-calender">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="icon-calender"></i></span>
+                                    <input type="text" class="form-control" placeholder="Daterangepicker" daterangepicker
+                                        [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)">
+                                </div>
                             </div>
+                            <!-- <div class="btn-group" dropdown="" ng-reflect-placement="right">
+                                <a (click)="openModal(filterModal)"> <i class="icon-options pd cp fs20" dropdowntoggle="" aria-haspopup="true"></i></a>
+                            </div> -->
                         </div>
-                        <!-- <div class="btn-group" dropdown="" ng-reflect-placement="right">
-                            <a (click)="openModal(filterModal)"> <i class="icon-options pd cp fs20" dropdowntoggle="" aria-haspopup="true"></i></a>
-                        </div> -->
                     </div>
-                </div>
-                <div class="col-sm-6" *ngIf="isFilterSelected">
-                    <div class="d-inline-block">
-                        <a href="javascript:void(0)" (click)="clearFilter()"
-                            class="btn btn-default d-flex align-items-center ml-1"><i class=" icon-cross mr-1"></i>
-                            Clear Filter</a>
-                    </div>
+                    <div class="col-sm-6" *ngIf="isFilterSelected">
+                        <div class="d-inline-block">
+                            <a href="javascript:void(0)" (click)="clearFilter()"
+                                class="btn btn-default d-flex align-items-center ml-1"><i class=" icon-cross mr-1"></i>
+                                Clear Filter</a>
+                        </div>
 
+                    </div>
                 </div>
             </div>
-        </div>
 
         <tab heading="Pending" id="tab1" (selectTab)="tabChanged('pending', $event);">
             <ng-container *ngIf="currentSelectedTab === 'pending'">
@@ -51,7 +52,8 @@
             </ng-container>
         </tab>
 
-    </tabset>
+        </tabset>
+    </div>
 </div>
 
 <ng-template #filterModal>

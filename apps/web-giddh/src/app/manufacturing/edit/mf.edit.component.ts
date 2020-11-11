@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
+import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { ToasterService } from './../../services/toaster.service';
 import { IOption } from './../../theme/ng-select/option.interface';
@@ -47,6 +47,7 @@ export class MfEditComponent implements OnInit {
     public selectedProduct: string;
     public selectedProductName: string;
     public showFromDatePicker: boolean = false;
+    public isInventoryPage: boolean = false;
     public moment = moment;
     public initialQuantityObj: any = [];
     public needForceClearLiability$: Observable<IForceClear> = observableOf({ status: false });
@@ -74,6 +75,7 @@ export class MfEditComponent implements OnInit {
     constructor(private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
         private inventoryAction: InventoryAction,
+        private router: Router,
         private _groupService: GroupService,
         private _location: Location,
         private _inventoryService: InventoryService,
@@ -156,6 +158,7 @@ export class MfEditComponent implements OnInit {
     }
 
     public ngOnInit() {
+        this.isInventoryPage = this.router.url.includes('/pages/inventory');
         if (this.isUpdateCase) {
             let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
             this.store.dispatch(this.inventoryAction.GetStockWithUniqueName(manufacturingDetailsObj.stockUniqueName));

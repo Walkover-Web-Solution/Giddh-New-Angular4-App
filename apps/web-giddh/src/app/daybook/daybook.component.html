@@ -1,20 +1,12 @@
+<hamburger-menu [pageHeading]="'Daybook'"></hamburger-menu>
 <div class="no-data mr-t2 loader-main" *ngIf="showLoader">
     <div class="spinner2">
         <div class="cube1"></div>
         <div class="cube2"></div>
     </div>
 </div>
-
-<section class="container nopad"></section>
-<!-- <div class="top-bar col-xs-12 bdrB">
-  <h1 class="section-title">DayBook</h1>
-</div> -->
-<div class="container-fluid">
-
-</div>
-
 <ng-container *ngIf="!showLoader">
-<div class="transactions-page mt-15 pos-rel clearfix">
+<div class="transactions-page pt-15 pos-rel clearfix">
 
     <!-- ledger header -->
     <div class="col-md-12">
