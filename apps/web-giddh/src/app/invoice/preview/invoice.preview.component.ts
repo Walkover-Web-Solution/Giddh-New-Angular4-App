@@ -1354,6 +1354,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.q = this.invoiceSearchRequest.q;
         }
 
+        if(this.invoiceSearchRequest && this.invoiceSearchRequest.sort) {
+            request.sort = this.invoiceSearchRequest.sort;
+        }
+        if(this.invoiceSearchRequest && this.invoiceSearchRequest.sortBy) {
+            request.sortBy = this.invoiceSearchRequest.sortBy;
+        }
+
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
         this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res => {
             this.parseBalRes(res);
