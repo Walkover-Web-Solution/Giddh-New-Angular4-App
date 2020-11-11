@@ -66,7 +66,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
 
 
     { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', hasTabs: false },
-    { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
+    { type: 'MENU', name: 'New Purchase Bill', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
     { type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash', hasTabs: false },
     { type: 'MENU', name: 'Proforma Invoice', uniqueName: '/pages/proforma-invoice/invoice/proformas', hasTabs: false },
     { type: 'MENU', name: 'Estimate (Beta)', uniqueName: '/pages/proforma-invoice/invoice/estimates', hasTabs: false },
@@ -128,7 +128,8 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
     },
     { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9, hasTabs: true
     },
-    { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase', isRemoved: false, pIndex: 7, hasTabs: false
+    {
+        type: 'MENU', name: 'New Purchase Bill', uniqueName: '/pages/proforma-invoice/invoice/purchase', isRemoved: false, pIndex: 7, hasTabs: false
     },
     { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', isRemoved: false, pIndex: 6, hasTabs: false
     },
@@ -209,7 +210,7 @@ export let DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
     },
 
     { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', hasTabs: false },
-    { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
+    { type: 'MENU', name: 'New Purchase Bill', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
     { type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash', hasTabs: false },
     { type: 'MENU', name: 'Proforma Invoice', uniqueName: '/pages/proforma-invoice/invoice/proformas', hasTabs: false },
     { type: 'MENU', name: 'Estimate (Beta)', uniqueName: '/pages/proforma-invoice/invoice/estimates', hasTabs: false },

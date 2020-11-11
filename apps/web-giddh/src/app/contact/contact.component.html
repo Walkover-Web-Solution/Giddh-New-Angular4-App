@@ -1,5 +1,5 @@
 <div class="relative">
-<hamburger-menu [pageHeading]="''" *ngIf="activeTab !== 'vendor'"></hamburger-menu>
+<hamburger-menu *ngIf="activeTab !== 'vendor'"></hamburger-menu>
 <hamburger-menu [pageHeading]="'Vendor'" *ngIf="activeTab === 'vendor'"></hamburger-menu>
 <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <!-- region Customer/Vendor -->
