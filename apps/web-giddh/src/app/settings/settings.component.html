@@ -30,8 +30,8 @@
                     </div>
                 </div>
 
-                <div *ngIf="activeTab === 'profile'">
-                    <hamburger-menu [pageHeading]="'Setting > Profile'"></hamburger-menu>
+                <div *ngIf="activeTab === 'profile'" class="relative">
+                    <hamburger-menu></hamburger-menu>
                     <div class="setting-container">
                         <setting-profile #profileComponent></setting-profile>
                         <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save"

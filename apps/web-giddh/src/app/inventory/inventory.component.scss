@@ -92,7 +92,7 @@
         position: fixed !important;
         width: 100%;
         top: 90px;
-        padding-top: 10px !important;
+        padding: 5px 0px 0 15px !important;
     }
 }
 @media(max-width:1024px){
@@ -100,8 +100,6 @@
         display: flex;
     }
 }
-
-
 @media (max-width:445px){
 .inventory-control .container-fluid {
     .branch-warehouse-filter {

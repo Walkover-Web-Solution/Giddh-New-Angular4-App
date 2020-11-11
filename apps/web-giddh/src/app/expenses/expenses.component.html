@@ -2,7 +2,7 @@
     <hamburger-menu [pageHeading]="''"></hamburger-menu>
     <div class="clearfix petty-cash">
         <tabset class="custom-tabs" #tabset>
-            <div class="container-fluid mt-15 mb-15" *ngIf="!isSelectedRow">
+            <div class="container-fluid pt-2 mb-15" *ngIf="!isSelectedRow">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="d-flex">
@@ -42,7 +42,7 @@
                     <div class="main-expense-details ">
                         <app-expense-details [selectedRowItem]="selectedRowItem" (toggleDetailsMode)="closeDetailedMode($event);" (refreshPendingItem)="refreshPendingItem($event);"></app-expense-details>
                     </div>
-                </div>    
+                </div>
             </ng-container>
         </tab>
 

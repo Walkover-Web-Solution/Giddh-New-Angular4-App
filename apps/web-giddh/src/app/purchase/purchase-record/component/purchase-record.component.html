@@ -8,7 +8,7 @@
                 </div>
             </tab>
             <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (selectTab)="onTabChanged('bill')">
-                <div *ngIf="activeTab == 'bill'">
+                <div *ngIf="activeTab == 'bill'" class="pt-15">
                     <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill" (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
                 </div>
             </tab>

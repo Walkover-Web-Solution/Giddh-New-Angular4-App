@@ -1772,12 +1772,20 @@ span.eligible-ITC {
         right: 0;
         float: none;
     }
-
+    .show-on-small-screen {
+        p{
+            top: -56px;
+        }
+    }
 }
 
 @media (max-width: 767px) {
     .mobile-view-padding{
-        padding: 15px;
+        padding:0 15px;
+        margin-bottom: 10px;
+    }
+    .more-btn-dropdown{
+        padding-top: 0 !important;
     }
     .invoice-date-due-date {
         position: static;

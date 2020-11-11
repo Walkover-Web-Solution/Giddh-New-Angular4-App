@@ -606,14 +606,6 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
 }
-.invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
-    .profile-tab-container {
-        .nav.nav-tabs {
-            padding-left: 0 !important;
-        }
-    }
-}
-
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -9912,7 +9904,7 @@ input.mat-input-element{
         }
         #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
             width: 90px;
-            height: 90px;
+            height: 90px !important;
             font-size: 14px;
         }
         .right-bar {
@@ -10221,6 +10213,9 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    #setting-tab .tab-integraton .nav-tabs > li {
+        margin-top: 0 !important;
+    }
     .hamburger-menu-icon{
         display: none !important;
     }
@@ -10250,6 +10245,9 @@ input.mat-input-element{
             max-width: 550px;
         }
     }
+    .setting-page ul.nav.nav-tabs{
+         padding: 2px 0px 0 15px !important
+    }
 }
     @media (max-width: 1199px) {
         .ledger-book .left-col-new .entry-modal {
@@ -10260,7 +10258,7 @@ input.mat-input-element{
     @media (max-width: 767px) {
         .settings-profile-tabs {
             .tab-content{
-                padding-top: 45px;
+                padding-top: 25px;
             }
         }
         .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
@@ -10422,11 +10420,10 @@ input.mat-input-element{
             transform: rotate(90deg);
         }
         #setting-tab .tab-container .nav.nav-tabs, #purchase-tab .purchase-tabset.tab-container
-        > .nav.nav-tabs ,
-        .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs, .inventory-control .nav.nav-tabs{
+    > .nav.nav-tabs , .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
             position: fixed !important;
             width: 100%;
-            top: 90px !important;
+            top: 98px !important;
         }
         #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
             top: 88px;
@@ -10460,7 +10457,7 @@ input.mat-input-element{
         }
         #setting-tab setting-integration .tab-container .nav.nav-tabs,
         #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
-            position: inherit;
+            position: inherit !important;
             white-space: nowrap;
         }
         #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
@@ -10623,11 +10620,11 @@ input.mat-input-element{
         .hide-scroll-body:last-child .modal {
             z-index: 9993;
         }
-        .page-has-tabs .invoice-genrate-container,
-        .page-has-tabs .invoice-container,
-        .page-has-tabs .proforma-container,
         .page-has-tabs .proforma-container {
             padding-top: 15px !important;
+        }
+        .page-has-tabs .proforma-container{
+            padding-top: 0 !important;
         }
         .page-has-tabs
         #setting-tab
@@ -10635,11 +10632,10 @@ input.mat-input-element{
         .tab-container
         .nav.nav-tabs,
         .on-user-page .search-subscription {
-            margin-top: 15px !important;
+            margin-top: 0 !important;
         }
         .page-has-tabs .recurring-container {
             margin-top: 0px !important;
-            padding-top: 10px !important;
         }
         .on-user-page .user-detail-page.company-page {
             padding-top: 15px !important;
@@ -10683,6 +10679,15 @@ input.mat-input-element{
     }
 
     @media (max-width: 575px) {
+        .purchase-setting-tab ul.nav.nav-tabs {
+            padding-bottom: 30px !important;
+            min-height: 100px;
+        }
+        .invoice-control .nav.nav-tabs{
+            white-space: nowrap;
+            overflow-y: hidden;
+            display: inline-block;
+        }
         .linked-add .popover{
             width: 180px;
             transform: none !important;
