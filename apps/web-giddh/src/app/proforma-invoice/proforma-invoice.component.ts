@@ -6347,19 +6347,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile.addresses && profile.addresses.length > 0) {
                 let companyAddresses = profile.addresses;
-
                 if (companyAddresses) {
-                    companyAddresses.forEach(address => {
-                        if (address.isDefault === true) {
-                            this.purchaseBillCompany.billingDetails.address = [];
-                            this.purchaseBillCompany.billingDetails.address.push(address.address);
-                            this.purchaseBillCompany.billingDetails.state.code = address.stateCode;
-                            this.purchaseBillCompany.billingDetails.state.name = address.stateName;
-                            this.purchaseBillCompany.billingDetails.stateCode = address.stateCode;
-                            this.purchaseBillCompany.billingDetails.stateName = address.stateName;
-                            this.purchaseBillCompany.billingDetails.gstNumber = address.taxNumber;
+                    let isDefaultAddress;
+                    let isDefaultAddressUsed = false;
 
-                            this.purchaseBillCompany.shippingDetails.gstNumber = address.taxNumber;
+                    companyAddresses.forEach(address => {
+                        if(!isDefaultAddressUsed && address.branches && address.branches.length > 0) {
+                            isDefaultAddress = address.branches.filter(branch => branch.isDefault && branch.isHeadQuarter);
+
+                            if (!isDefaultAddressUsed && isDefaultAddress && isDefaultAddress.length > 0 && isDefaultAddress[0]) {
+                                isDefaultAddressUsed = true;
+                                this.purchaseBillCompany.billingDetails.address = [];
+                                this.purchaseBillCompany.billingDetails.address.push(address.address);
+                                this.purchaseBillCompany.billingDetails.state.code = address.stateCode;
+                                this.purchaseBillCompany.billingDetails.state.name = address.stateName;
+                                this.purchaseBillCompany.billingDetails.stateCode = address.stateCode;
+                                this.purchaseBillCompany.billingDetails.stateName = address.stateName;
+                                this.purchaseBillCompany.billingDetails.gstNumber = address.taxNumber;
+
+                                this.purchaseBillCompany.shippingDetails.gstNumber = address.taxNumber;
+                            }
                         }
                     });
                 }
