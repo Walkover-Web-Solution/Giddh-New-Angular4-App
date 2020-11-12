@@ -446,6 +446,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             baseAccountName: this.searchQueryParams.baseAccountName,
             particularName: this.searchQueryParams.particularName,
             invoiceNumber: this.searchQueryParams.invoiceNumber,
+            totalAmount: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
+            totalAmountOperation: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.selectedValue : "",
+            unUsedAmount: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
+            unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
             sort: this.searchQueryParams.sort,
             sortBy: this.searchQueryParams.sortBy
         }

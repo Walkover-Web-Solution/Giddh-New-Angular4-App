@@ -4301,6 +4301,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 return newTrxObj;
             });
 
+            entry.transactions.map(trx => {
+                this.calculateTotalDiscountOfEntry(entry, trx, false);
+                this.calculateEntryTaxSum(entry, trx);
+            });    
+
             // tcs tax calculation
             if (entry.tcsTaxList && entry.tcsTaxList.length) {
                 entry.isOtherTaxApplicable = true;
@@ -4332,7 +4337,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
                 }
             }
-            entry.taxes = [];
+            //entry.taxes = [];
             entry.cessSum = 0;
             return entry;
         });
