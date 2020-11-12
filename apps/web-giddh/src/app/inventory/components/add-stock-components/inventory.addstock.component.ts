@@ -1,6 +1,6 @@
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 
-import { distinct, take, takeUntil } from 'rxjs/operators';
+import { distinct, map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output } from '@angular/core';
@@ -699,6 +699,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         }
 
         this.addStockForm.reset();
+        this.companyTaxesList$.pipe(map((item) => {
+           return item.map(tax=> tax.isChecked = false);
+        }), takeUntil(this.destroyed$)).subscribe(res=>{
+              return res;
+        });
+        this.taxTempArray = [];
 
         if (activeStock && !this.addStock) {
             this.isUpdatingStockForm = true;
