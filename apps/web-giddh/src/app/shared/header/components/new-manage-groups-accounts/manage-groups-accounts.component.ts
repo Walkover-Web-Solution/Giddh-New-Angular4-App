@@ -404,7 +404,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         const row = this.customFieldForm.get('customField') as FormArray;
         if (type === 'name') {
             if (row.controls[index].get('key').value.length > 50) {
-                this.toasterService.errorToast('Name can not be greater than 50 character');
+                this.toasterService.errorToast('Name can not be greater than 50 characters');
             }
         } else {
             if (row.controls[index].get('dataType').value === 'NUMERIC' && row.controls[index].get('valueLength').value > 30) {
