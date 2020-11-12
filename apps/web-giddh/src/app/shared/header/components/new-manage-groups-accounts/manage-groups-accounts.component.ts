@@ -389,4 +389,29 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         row.controls[index].get('valueLength').setValue(null);
     }
 
+    /**
+     * To show check custom field validation
+     *
+     * @param {string} type
+     * @param {number} index
+     * @memberof ManageGroupsAccountsComponent
+     */
+    public checkValidation(type: string, index: number): void {
+        const row = this.customFieldForm.get('customField') as FormArray;
+        if (type === 'name') {
+            if (row.controls[index].get('key').value.length > 50) {
+                this.toasterService.errorToast('Name can not be greater than 50 character');
+            }
+        } else {
+            if (row.controls[index].get('dataType').value === 'NUMERIC' && row.controls[index].get('valueLength').value > 30) {
+                this.toasterService.warningToast('Length can not be greater than 30 for type number');
+
+            } else if (row.controls[index].get('dataType').value === 'STRING' && row.controls[index].get('valueLength').value > 150) {
+                this.toasterService.warningToast('Length can not be greater than 150 for type string');
+
+            }
+        }
+
+    }
+
 }
