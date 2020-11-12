@@ -68,7 +68,7 @@
                                     <div class="row mb-15" [formGroupName]="index">
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
                                             <label *ngIf="first || isMobileScreen">Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter custom field name" [maxlength]="150" formControlName="key" name="key" autocomplete="off" [attr.disabled]="item.get('uniqueName').value && isEnabledIndex!==index ?'': null">
+                                            <input type="text" class="form-control" placeholder="Enter custom field name" [maxlength]="50" formControlName="key" name="key" autocomplete="off" [attr.disabled]="item.get('uniqueName').value && isEnabledIndex!==index ?'': null">
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
                                             <label *ngIf="first || isMobileScreen">Type</label>
