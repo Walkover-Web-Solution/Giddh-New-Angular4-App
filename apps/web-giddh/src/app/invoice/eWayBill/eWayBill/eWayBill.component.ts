@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
@@ -140,10 +139,8 @@ export class EWayBillComponent implements OnInit {
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService,
-        private _activatedRoute: ActivatedRoute,
         private _toaster: ToasterService,
         private modalService: BsModalService,
-        private router: Router,
         private _location: LocationService,
         private _cd: ChangeDetectorRef
     ) {
@@ -160,7 +157,6 @@ export class EWayBillComponent implements OnInit {
 
         this.updateEwayvehicleProcess$ = this.store.select(p => p.ewaybillstate.updateEwayvehicleInProcess).pipe(takeUntil(this.destroyed$));
         this.updateEwayvehicleSuccess$ = this.store.select(p => p.ewaybillstate.updateEwayvehicleSuccess).pipe(takeUntil(this.destroyed$));
-        this.store.dispatch(this.invoiceActions.getALLEwaybillList());
 
         // bind state sources
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
