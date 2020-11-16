@@ -200,13 +200,13 @@
                                                         (click)="toggleEditMode()"><i class="icon-edit-pencil"></i></a>
                                                 </span>
 
-                                                <span class="pos-rel" *ngIf="selectedItem?.voucherType !== 'purchase'">
+                                                <span *ngIf="selectedItem?.voucherType !== 'purchase'">
                                                     <a href="javascript:void 0" tooltip="Send Email" placement="top"
                                                         (click)="showEmailSendModal.toggle()"><i
                                                             class="fa fa-envelope-o"></i></a>
                                                 </span>
 
-                                                <span class="pos-rel" *ngIf="selectedItem?.voucherType === 'purchase'">
+                                                <span *ngIf="selectedItem?.voucherType === 'purchase'">
                                                     <a href="javascript:;" tooltip="Send Email" placement="top"
                                                         (click)="openSendMailModal(sendEmailModal)"><i
                                                             class="fa fa-envelope-o"></i></a>
@@ -219,21 +219,21 @@
                                                 </span>
 
                                                 <span *ngIf="selectedItem.voucherType === 'purchase' && pdfPreviewLoaded">
-                                                    <a href="javascript:void 0" tooltip="Download" placement="top"
+                                                    <a href="javascript:void 0" tooltip="Download PDF" placement="top"
                                                         (click)="downloadPurchaseBillPDF()"><i class="fa fa-file-pdf-o"></i></a>
                                                 </span>
 
                                                 <span
                                                     *ngIf="selectedItem?.voucherType !== 'purchase'"
                                                     [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
-                                                    <a href="javascript:void 0" tooltip="Download" placement="top"
+                                                    <a href="javascript:void 0" tooltip="Download PDF" placement="top"
                                                         (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
                                                 </span>
 
                                                 <span
                                                     *ngIf="selectedItem.voucherType === 'purchase' && attachedDocumentType?.type"
                                                     [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
-                                                    <a href="javascript:void 0" tooltip="Download" placement="top"
+                                                    <a href="javascript:void 0" tooltip="Download attachment" placement="top"
                                                         (click)="downloadFile()"><i class="icon-download"></i></a>
                                                 </span>
 
