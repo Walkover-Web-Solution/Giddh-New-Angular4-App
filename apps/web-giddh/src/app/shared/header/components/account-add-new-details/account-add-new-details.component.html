@@ -378,7 +378,7 @@
                                     <input *ngIf="item.dataType==='NUMERIC'" type="text" name="values{{index}}" formControlName="value" class="form-control" [maxLength]="item.valueLength" decimalDigitsDirective>
                                     <div *ngIf="item.dataType==='BOOLEAN'" class="clearfix">
                                         <span class="d-inline-block">
-                                            <input id="yes{{index}}" class="radio-custom cp ml0" type="radio"
+                                            <input id="yes{{index}}" class="radio-custom cp ml-0" type="radio"
                                                 [checked]="customFieldsItem.get('value').value==='true'"
                                                 (change)="selectedBooleanCustomField('true', index)"
                                                 name="booleanType{{index}}">
@@ -386,7 +386,7 @@
                                         </span>
 
                                         <span class="d-inline-block">
-                                            <input id="no{{index}}" class="radio-custom cp ml0" type="radio"
+                                            <input id="no{{index}}" class="radio-custom cp ml-0" type="radio"
                                                 [checked]="customFieldsItem.get('value').value==='false'"
                                                 (change)="selectedBooleanCustomField('false', index)"
                                                 name="booleanType{{index}}">

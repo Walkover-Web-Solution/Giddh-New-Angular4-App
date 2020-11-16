@@ -1,3 +1,4 @@
+
 :host {
     position: fixed;
     left: auto;
@@ -5,7 +6,7 @@
     right: 0;
     bottom: 0;
     width: 100%;
-    max-width: 760px;
+    max-width:580px;
     z-index: 99999;
 }
 
@@ -30,7 +31,8 @@
 
 :host .aside-pane {
     width: 100%;
-    max-width: 760px;
+    max-width:580px;
+    background: $white;
 }
 
 .aside-pane {
@@ -59,36 +61,4 @@
     transform: translateY(-50%);
     text-align: center;
     margin: 0 auto;
-}
-@media (max-width: 768px) {
-    :host {
-        max-width: 600px;
-    }
-    :host .aside-pane {
-        max-width: 600px;
-    }
-}
-@media (max-width: 575px) {
-    :host {
-        max-width: 370px;
-    }
-    :host .aside-pane {
-        max-width: 370px;
-    }
-}
-@media (max-width: 375px) {
-    :host {
-        max-width: 310px;
-    }
-    :host .aside-pane {
-        max-width: 310px;
-    }
-}
-@media (max-width: 320px) {
-    :host {
-        max-width: 280px;
-    }
-    :host .aside-pane {
-        max-width: 280px;
-    }
 }

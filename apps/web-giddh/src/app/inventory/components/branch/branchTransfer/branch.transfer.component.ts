@@ -16,71 +16,7 @@ import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
 @Component({
     selector: 'branch-destination',
     templateUrl: './branch.transfer.component.html',
-    styles: [`
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      max-width:580px;
-      z-index: 99999;
-    }
-
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-      position: fixed;
-      left: -41px;
-      top: 0;
-      z-index: 5;
-      border: 0;
-      border-radius: 0;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 100%;
-      max-width:580px;
-      background: #fff;
-    }
-
-    .aside-pane {
-      width: 100%;
-    }
-
-    .flexy-child {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .flexy-child-1 {
-      flex-grow: 1;
-    }
-
-    .vmiddle {
-      position: absolute;
-      top: 50%;
-      bottom: 0;
-      left: 0;
-      display: table;
-      width: 100%;
-      right: 0;
-      transform: translateY(-50%);
-      text-align: center;
-      margin: 0 auto;
-    }
-  `],
+    styles: [`./branch.transfer.component.scss`],
 })
 export class BranchTransferComponent implements OnInit, OnDestroy {
     // @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);

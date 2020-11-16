@@ -499,7 +499,7 @@ aside-menu-account .container-fluid {
     padding-top: 5px;
 }
 
-.pdB {
+.pd-t05 {
     padding-bottom: 5px;
 }
 
@@ -769,7 +769,7 @@ aside-menu-account .container-fluid {
     background: 0 0;
 }
 
-.oh {
+.overflow-hidden {
     overflow: hidden;
 }
 
@@ -929,7 +929,7 @@ position: relative; */
     padding: 15px;
 }
 
-.delIcon {
+.delete-icon {
     float: right;
     width: 34px;
     height: 34px;
@@ -937,7 +937,7 @@ position: relative; */
     cursor: pointer;
 }
 
-.delIcon .glyphicon {
+.delete-icon .glyphicon {
     left: 9px;
     top: 9px;
 }
@@ -5170,7 +5170,7 @@ perfect-scrollbar.ps-show-active
     margin: 0 !important;
 }
 
-.customItem:hover {
+.custom-item:hover {
     background-color: #e3e4ed !important;
     color: #5b64c9 !important;
 }

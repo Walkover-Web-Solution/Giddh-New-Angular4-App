@@ -29,7 +29,7 @@
 
                                         <td *ngIf="currentTxn?.unitRate">
                                             <label class="font-12">Unit</label>
-                                            <select id="ledger-unit" class="form-control" style="width: 78px;"
+                                            <select id="ledger-unit" class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                                 (change)="unitChanged($event.target.value)"
                                                 [value]="currentTxn?.inventory.unit.code">

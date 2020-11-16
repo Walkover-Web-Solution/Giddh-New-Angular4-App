@@ -38,7 +38,7 @@
               <aside [attachOutsideOnClick]="true" (clickOutside)="card.isDatePickerOpen = false" class="account-card" *ngFor="let card of acc.accounts; let i = index">
                   <aside class="title">{{card.name}}</aside>
                   <div class="reconnectDiv text-center" *ngIf="card.reconnect">
-                      <div class="vmiddle">
+                      <div class="vertical-align-middle">
                           <button class="btn btn-sm btn-default" (click)="onReconnectAccount(card)">Reconnect</button>
                           <button class="btn btn-sm btn-danger" (click)="onDeleteAddedBank(acc.siteName, card)">Delete</button>
                       </div>

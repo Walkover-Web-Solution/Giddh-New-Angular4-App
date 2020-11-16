@@ -101,6 +101,9 @@ span.eligible-ITC {
         color: $deep-sky-blue;
     }
 }
+#ledger-unit{
+    width: 78px;
+}
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;

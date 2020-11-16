@@ -15,8 +15,7 @@
                         name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="flattenAccountList" class=""
                         [useInBuiltFilterForFlattenAc]="true">
                         <ng-template #optionTemplate let-option="option">
-                            <a href="javascript:void(0)" class="" (click)="changeBaseAccount(option)"
-                                style="border-bottom: 1px solid #ccc;">
+                            <a href="javascript:void(0)" class="bd-rb" (click)="changeBaseAccount(option)">
                                 <div class="item font-14">{{option?.label}}</div>
                                 <div class="item-unique font-14">{{option.additional?.uniqueName}}</div>
                             </a>

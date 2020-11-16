@@ -96,7 +96,7 @@
                                     <!-- [(ngModel)]="selectedDateForGSTR1" -->
                                     <!-- <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker> -->
                                 </li>
-                                <li class="pd-1 clearfix pd-t pdB">
+                                <li class="pd-1 clearfix pd-t pd-t05">
                                     <span class="btn-group pull-left">
                                         <button type="button" class="btn btn-xs btn-primary mr-r"
                                             (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
@@ -123,7 +123,7 @@
                             <li>
                                 <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker>
                             </li>
-                            <li class="pd-1 clearfix pdT pdB">
+                            <li class="pd-1 clearfix pdT pd-t05">
                                 <span class="btn-group pull-left">
                                     <button type="button" class="btn btn-xs btn-primary mr-r" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
                                     <button type="button" class="btn btn-xs btn-success" click)="showGSTR1DatePicker = false">Done</button>

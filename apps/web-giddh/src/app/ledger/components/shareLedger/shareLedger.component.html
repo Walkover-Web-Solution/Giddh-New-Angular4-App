@@ -5,11 +5,9 @@
 				aria-label="Close">×</span>
 			<h3>Share Ledger</h3>
 		</div>
-
 		<div class="modal-body mr-b4" id="SharePop">
 			<div class="row">
 				<div class="col-md-10">
-
 					<div class="modal-wrap">
 						<!-- <h3 class="pd-b1">Share with</h3> -->
 						<div class="form-group add-mailer">
@@ -37,7 +35,7 @@
 												<small class="Useremail">{{ val.emailId }}</small>
 											</span>
 											<span>
-												<span class="delIcon pull-right">
+												<span class="delete-icon pull-right">
 													<i (click)="unShareAccount(val.uniqueName, val.emailId)"
 														class="icon-cross" aria-hidden="true"></i>
 												</span>
@@ -53,7 +51,7 @@
 						<div class="clearfix">
 							<span>Or</span>
 							<button class="btn-link btn" (click)="getMagicLink()">Get shareable link</button>
-							<!-- <span class="l8grey">Get shareable link</span> -->
+							<!-- <span class="light-gray">Get shareable link</span> -->
 							<span class="success" *ngIf="isCopied">Copied..</span>
 						</div>
 						<div class="input-group">
@@ -66,7 +64,7 @@
 							<!-- /btn-group -->
 						</div>
 						<!-- /input-group -->
-						<small class="mr-t1 l8grey">Anyone can see the ledger who gets this URL.</small>
+						<small class="mr-t1 light-gray">Anyone can see the ledger who gets this URL.</small>
 					</div>
 
 				</div>
