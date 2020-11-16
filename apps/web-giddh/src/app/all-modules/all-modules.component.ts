@@ -58,9 +58,9 @@ export class AllModulesComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
             companies = companies || [];
             this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
-        //     if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
-        //         this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
-        //     }
+            if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+                this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+            }
         });
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies) {
