@@ -145,7 +145,7 @@
     </div>
 </div>
 <!-- aside pane for create address -->
-<div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'" (click)="toggleAddressAsidePane($event)"></div>
+<div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
 <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
     [keyboardShortcut]="'esc'"
     (onShortcutPress)="toggleAddressAsidePane()"
