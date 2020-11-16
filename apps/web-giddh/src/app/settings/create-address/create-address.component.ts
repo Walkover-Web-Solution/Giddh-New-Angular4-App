@@ -90,8 +90,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     this.addressForm = this.formBuilder.group({
                         name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                        state: [{value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber }, Validators.required],
-                        address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber ? [Validators.required] : []],
+                        state: [{value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, Validators.required],
+                        address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
                         linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity.uniqueName)]
                     });
                     const linkedEntity = [...this.addressToUpdate.linkedEntities];
@@ -140,7 +140,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             }
         }
 
-        if (this.addressConfiguration.tax && this.addressConfiguration.tax.name) {
+        if (this.addressConfiguration.tax && this.addressConfiguration.tax.name && this.addressConfiguration.tax.name === 'GSTIN') {
             const taxField = this.addressForm.get('taxNumber');
             taxField.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
                 if (taxField.valid && taxField.value) {
@@ -182,8 +182,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public handleFormSubmit(): void {
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             const taxField = this.addressForm.get('taxNumber');
-            if (taxField.value && taxField.valid) {
-                // Tax is valid and has value then address is mandatory
+            if (taxField.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
+                // Tax is valid and has value then address is mandatory for GST taxes
                 const addresssValue = (this.addressForm.get('address').value || '').trim();
                 this.addressForm.get('address').setValue(addresssValue);
                 if (!addresssValue) {
@@ -214,25 +214,32 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public getStateCode(statesEle: ShSelectComponent, event: KeyboardEvent): void {
-        const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
-        if (keyAvoid.findIndex(key => key === event.key) > -1) {
-            return;
-        }
-        let gstVal: string = this.addressForm.get('taxNumber').value.trim();
-        this.addressForm.get('taxNumber').setValue(gstVal);
-        if (gstVal.length) {
+        if (this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
+            const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
+            if (keyAvoid.findIndex(key => key === event.key) > -1) {
+                return;
+            }
+            let gstVal: string = this.addressForm.get('taxNumber').value.trim();
+            this.addressForm.get('taxNumber').setValue(gstVal);
+            if (gstVal.length) {
 
-            if (gstVal.length >= 2) {
-                let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
-                if (currentState) {
-                    this.addressForm.get('state').patchValue(currentState.value);
-                    this.addressForm.get('state').disable();
+                if (gstVal.length >= 2) {
+                    let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
+                    if (currentState) {
+                        this.addressForm.get('state').patchValue(currentState.value);
+                        this.addressForm.get('state').disable();
+                    } else {
+                        this.addressForm.get('state').patchValue(null);
+                        this.addressForm.get('state').enable();
+                        if (this.addressConfiguration.tax.name) {
+                            this.toasterService.errorToast(`Invalid ${this.addressConfiguration.tax.name}`);
+                        }
+                    }
                 } else {
+                    statesEle.forceClearReactive.status = true;
+                    statesEle.clear();
                     this.addressForm.get('state').patchValue(null);
                     this.addressForm.get('state').enable();
-                    if (this.addressConfiguration.tax.name) {
-                        this.toasterService.errorToast(`Invalid ${this.addressConfiguration.tax.name}`);
-                    }
                 }
             } else {
                 statesEle.forceClearReactive.status = true;
@@ -240,11 +247,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.addressForm.get('state').patchValue(null);
                 this.addressForm.get('state').enable();
             }
-        } else {
-            statesEle.forceClearReactive.status = true;
-            statesEle.clear();
-            this.addressForm.get('state').patchValue(null);
-            this.addressForm.get('state').enable();
         }
     }
 
