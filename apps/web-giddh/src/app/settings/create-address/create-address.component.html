@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="col-sm-8 form-group">
                                         <label>State <sup>*</sup></label>
-                                        <sh-select #states [options]="addressConfiguration.stateList" required
+                                        <sh-select #states [disabled]="addressConfiguration?.type === 'editAddress' && addressToUpdate?.taxNumber" [options]="addressConfiguration.stateList" required
                                             [isFilterEnabled]="true" formControlName="state" class="w-100"
                                             [useInBuiltFilterForIOptionTypeItems]="true"
                                             [forceClearReactive]="forceClear$ | async">

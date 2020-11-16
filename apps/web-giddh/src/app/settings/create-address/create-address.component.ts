@@ -90,7 +90,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     this.addressForm = this.formBuilder.group({
                         name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                        state: [this.addressToUpdate.stateCode, Validators.required],
+                        state: [{value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber }, Validators.required],
                         address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber ? [Validators.required] : []],
                         linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity.uniqueName)]
                     });
