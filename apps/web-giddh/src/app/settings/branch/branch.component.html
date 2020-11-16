@@ -428,8 +428,10 @@
 
     <!-- Edit branch -->
     <div *ngIf="closeAddressSidePane === 'in'">
-        <div class="aside-overlay" (click)="toggleAsidePane()"></div>
+        <div class="aside-overlay"></div>
         <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane"
+            [keyboardShortcut]="'esc'"
+            (onShortcutPress)="toggleAsidePane()"
             [companyName]="currentBranch"
             [branchToUpdate]="branchToUpdate" [showLoader]="isBranchChangeInProgress"
             (updateAddress)="updateBranchInfo($event)" [addressConfiguration]="addressConfiguration"
