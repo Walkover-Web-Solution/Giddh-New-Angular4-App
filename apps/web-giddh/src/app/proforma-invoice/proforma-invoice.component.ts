@@ -1179,7 +1179,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.entries.forEach((entry, index) => {
                                         obj.entries[index].entryDate = this.universalDate || new Date();
                                     });
-        
+
                                     obj.entries = obj.entries;
                                 }
 
@@ -4296,6 +4296,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.calculateTotalDiscountOfEntry(entry, trx, false);
                 this.calculateEntryTaxSum(entry, trx);
                 return newTrxObj;
+            });
+
+            entry.transactions.map(trx => {
+                this.calculateTotalDiscountOfEntry(entry, trx, false);
+                this.calculateEntryTaxSum(entry, trx);
             });
 
             // tcs tax calculation
