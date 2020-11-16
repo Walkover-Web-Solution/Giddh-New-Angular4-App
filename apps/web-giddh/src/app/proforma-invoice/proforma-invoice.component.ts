@@ -4298,6 +4298,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 return newTrxObj;
             });
 
+            entry.transactions.map(trx => {
+                this.calculateTotalDiscountOfEntry(entry, trx, false);
+                this.calculateEntryTaxSum(entry, trx);
+            });
+
             // tcs tax calculation
             if (entry.tcsTaxList && entry.tcsTaxList.length) {
                 entry.isOtherTaxApplicable = true;
