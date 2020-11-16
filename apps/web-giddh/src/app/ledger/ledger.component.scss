@@ -111,8 +111,8 @@ input {
     }
 }
 .ledger-head-top i.icon-search.pos-abs {
-    background-color: #5b64c9;
-    color: #fff;
+    background-color: $chetwode-blue;
+    color: $white;
     width: 32px;
     height: 36px;
     top: 0px !important;
@@ -125,8 +125,8 @@ input {
 }
 .ledger-stat {
     padding: 10px 15px 0;
-    background: #fff;
-    color: #808080;
+    background: $white;
+    color: $gray;
     font-size: 18px;
     margin: 0px 0 0;
     box-shadow: 0px 2px 6px $black-russian-light;
@@ -147,6 +147,10 @@ input {
 .ledger-footer-1 {
     position: absolute;
     bottom: 0;
+    width:50%;
+    left:0;
+    bottom:0;
+    float: left;
 }
 .ledger-head th {
     color: $jacksons-purple;
@@ -177,7 +181,7 @@ input {
     width: 100% !important;
     left: 0% !important;
     bottom: 100px;
-    background: #fff;
+    background: $white;
     padding: 5px;
     font-size: 12px;
     z-index: 0;
@@ -188,37 +192,32 @@ input {
     width: 100%;
     text-align: center;
 }
-.pagination > .active > a {
-    background: #d35f29 !important;
-    color: #fff !important;
-    border-color: #bd501d !important;
-}
 .pagination > li > a:hover {
-    color: #d35f29;
+    color: $cinnabar-orange;
 }
 .ledger-panel label {
     font-weight: 400;
 }
-.upload_div {
+.upload-div {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
 }
-.upload_div label {
+.upload-div label {
     padding: 6px;
 }
 .pdR25imp {
     padding-right: 25px !important;
 }
 .thead-background1 th {
-    background: #fff;
-    color: #000000;
+    background: $white;
+    color: $black;
     border-right: 1px solid $gainsboro;
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid $gainsboro;
-    font-family: opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 14px;
     border-top: 1px solid $gainsboro;
 }
@@ -234,8 +233,8 @@ input {
     float: left;
     width: 100%;
     margin-bottom: 16px;
-    background: #fff;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    background: $white;
+    box-shadow: 0 0 6px $black-russian-light;
 }
 .Width600 {
     position: absolute;
@@ -286,11 +285,14 @@ input {
 .d-none {
     display: none;
 }
-.dateStep {
+.date-step {
     padding: 0 !important;
     font-size: 13px;
     height: 48px;
     line-height: 1;
+    &.focus-unset{
+        padding-left: 7px !important;
+    }
 }
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
@@ -299,29 +301,28 @@ input[type="date"]::-webkit-outer-spin-button {
 ::-webkit-calendar-picker-indicator {
     display: none;
 }
-
-.focusUnset.ledger-main .form-control:focus {
+.focus-unset.ledger-main .form-control:focus {
     border: unset !important;
 }
 tr[vr-item]:focus {
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     outline: 0;
 }
 sh-select:focus {
-    outline: 1px #d35f29 solid;
+    outline: 1px $cinnabar-orange solid;
 }
 .notfound-option.active {
-    background: #efeff1 !important;
+    background: $lavender !important;
     padding: 2px 5px !important;
 }
 .amount-total {
     font-size: 12px;
-    color: #999999;
+    color: $nobel;
     padding-left: 5px;
 }
 .ledger-book .left-col-new,
 .ledger-book .right-col-new {
-    background: #fff;
+    background: $white;
     padding: 0 15px 350px;
 }
 .left-col-new table.width100.h-table tbody tr td:last-child,
@@ -344,7 +345,7 @@ sh-select:focus {
     display: flex;
     justify-content: center;
     border-top-width: 1px;
-    background-color: #fff;
+    background-color: $white;
     border-radius: 50%;
 }
 .advance-search-block input {
@@ -353,7 +354,7 @@ sh-select:focus {
     border-color: $solitude !important;
 }
 .advance-search-block input::placeholder {
-    color: #666666;
+    color: $dark-gray;
 }
 
 .left-col-new,
@@ -369,7 +370,7 @@ sh-select:focus {
     top: 0;
     background-color: $chetwode-blue;
     padding: 6px 9px;
-    color: #fff;
+    color: $white;
 }
 .left-col-new table.width100.h-table#blank-ledger-container .no-left-border{
     border-left: none !important;
@@ -384,13 +385,13 @@ sh-select:focus {
     border: none;
 }
 
-.advanceSearchByDate {
+.advance-search-by-date {
     display: inline-flex;
     border: 1px solid $gainsboro;
     border-radius: 20px;
     position: relative;
 }
-.advanceSearchByDate:before {
+.advance-search-by-date:before {
     position: absolute;
     content: "";
     height: 1px;
@@ -399,7 +400,7 @@ sh-select:focus {
     left: -33%;
     top: 17px;
 }
-.advanceSearchByDate:after {
+.advance-search-by-date:after {
     position: absolute;
     content: "";
     height: 1px;
@@ -421,7 +422,7 @@ sh-select:focus {
     color: $midnight-blue;
 }
 .greyTextClr {
-    color: #666 !important;
+    color: $dark-gray !important;
     font-size: 14px;
 }
 
@@ -557,13 +558,13 @@ sh-select:focus {
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
-                border-bottom: 1px solid #d1d1d1;
+                border-bottom: 1px solid $gainsboro;
                 font-size: 14px;
             }
             .second-row {
                 td {
                     &:first-child {
-                        border-right: 1px solid #d9d9d9;
+                        border-right: 1px solid $gainsboro;
                         width: 60%;
                     }
                     span.account-holder-checkbox {
@@ -635,7 +636,7 @@ sh-select:focus {
         }
     }
     .transaction-table-row table td {
-        border-bottom: 1px solid #d9d9d9;
+        border-bottom: 1px solid $gainsboro;
     }
     .transaction-table-row table:last-child td {
         border-bottom: none;
@@ -658,7 +659,7 @@ sh-select:focus {
 }
 
 .list-item{
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $gainsboro;
 }
 
 /*responsive*/
@@ -717,14 +718,14 @@ sh-select:focus {
 
 }
 @media (max-width: 991px) {
-    .daterngoption {
+    .date-range-options {
         margin-bottom: 10px;
         text-align: left !important;
         z-index: 1;
         margin-left: 0;
     }
-    .advanceSearchByDate:before,
-    .advanceSearchByDate:after {
+    .advance-search-by-date:before,
+    .advance-search-by-date:after {
         display: none;
     }
     .ledger-head-top {
@@ -754,14 +755,14 @@ sh-select:focus {
     }
     .ledg-head table td[class*="col-"],
     .ledg-head table td .select2-container {
-        border-bottom: 0px solid #ccc;
-        border-right: 0px solid #ccc;
+        border-bottom: none;
+        border-right: none;
     }
     .ledger-state-box {
         margin-bottom: 0;
     }
     .amount-total {
-        background: #efefef;
+        background: $whisper-color;
     }
     .page-count {
         width: 100%;
@@ -798,7 +799,7 @@ sh-select:focus {
         display: block;
     }
     .right-col-new .ledger-head {
-        background: #f7f8fa;
+        background: $alice-blue-light;
     }
     .ledger-row td:empty {
         display: none !important;
@@ -836,6 +837,13 @@ sh-select:focus {
     }
     .download-invoice-ledger {
         padding-left: 6px;
+        position: unset;
+        align-items: center
+    }
+    .icon-download-circle{
+        font-size:15px;
+        top: 0 !important;
+        margin-top: 1px !important;
     }
     .custom-tabs {
         display: block;
@@ -884,8 +892,8 @@ sh-select:focus {
         .ledger-datepicker {
             width: 36px;
             height: 36px;
-            background-color: #fff;
-            border: 1px solid #d9d9d9;
+            background-color: $white;
+            border: 1px solid $gainsboro;
             text-align: center;
             align-items: center;
             justify-content: center;

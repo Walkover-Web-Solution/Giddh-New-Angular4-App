@@ -10,7 +10,7 @@
         <div class="basic_detail mr-b1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
             <table class="width100 total-detail-table">
 
-                <tbody class="">
+                <tbody>
 
                     <tr *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
 
@@ -95,7 +95,6 @@
                             <label class="d-block">&nbsp;</label>
                             <label class="font-20">-</label>
                         </td>
-
                         <!--discount-->
                         <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right price new-ledger-text-right" (click)="$event.stopPropagation()">
@@ -156,7 +155,7 @@
                         </td>
 
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
-                            class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
+                            class="pItem text-right total-amount-ledger" id="totalTd" (resized)="onResized($event)">
                             <label class="primary-color font-12">Total</label>
                             <input type="text" id="ledger-total-amount" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right"
@@ -258,37 +257,30 @@
             </tbody>
         </table>
 
-        <div class="pd-1 mr-b mr-t more-details" style="background: #fff;" *ngIf="showAdvanced">
-
-            <div class="">
-
+        <div class="pd-1 mr-b mr-t more-details"*ngIf="showAdvanced">
+            <div>
                 <div class="cheq pd-t clearfix">
-
                     <table>
                         <tr>
-
                             <td class="select2-parent pd-r1">
                                 <div class="form-group">
-                                    <label class="default_clr">Voucher Type</label>
+                                    <label class="default-color">Voucher Type</label>
                                     <sh-select id="ledger-voucher-type" #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"
                                         (selected)="getInvoiceListsData($event)" [placeholder]="'Select Vouchers'"
                                         [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'"
                                         [style.width.px]="161"></sh-select>
                                 </div>
                             </td>
-                            <!-- <td class="pd-l1">
-    <span>{{""}}</span>
-</td> -->
                             <td class="pd-r1"
                                 *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'pay')">
-                                <label class="default_clr">Invoice No.</label>
+                                <label class="default-color">Invoice No.</label>
                                 <input id="ledger-invoice-number" type="text" placeholder="Invoice no." class="form-control"
                                     [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
 
                             <!-- <td class="pd-r1" *ngIf="blankLedger.voucherType == 'rcpt'">
                                 <div class="form-group">
-                                    <label class="default_clr">Invoice No.</label>
+                                    <label class="default-color">Invoice No.</label>
 
                                     <div class="btn-group btn-block invoice-btn" dropdown>
 
@@ -316,7 +308,7 @@
 
                             <td class="pd-r1" *ngIf="blankLedger.voucherType == 'credit note' || blankLedger.voucherType === 'debit note'">
                                 <div class="form-group">
-                                    <label class="default_clr">Voucher No.</label>
+                                    <label class="default-color">Voucher No.</label>
 
                                     <sh-select id="ledger-voucher-type-debit-note" [options]="invoiceList" #invoice placeholder="Select Invoice"
                                         [(ngModel)]="selectedInvoiceForCreditNote" [notFoundLink]="false"
@@ -378,27 +370,22 @@
                     </table>
 
                     <table class="mr-t1">
-
                         <tbody>
-
                             <tr>
-
                                 <td class="pd-r1">
-                                    <label class="default_clr">Cheque Number</label>
+                                    <label class="default-color">Cheque Number</label>
                                     <input id="ledger-cheque-number" type="text" placeholder="XXXX2619" class="form-control"
                                         [(ngModel)]="blankLedger.chequeNumber" />
                                 </td>
 
                                 <td>
-                                    <label class="default_clr">Cheque Clearance Date</label>
+                                    <label class="default-color">Cheque Clearance Date</label>
                                     <input type="text" autocomplete="off" class="form-control" id="chequeClearanceDate"
                                         [(ngModel)]="blankLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
                                         [outsideClick]="true"
                                         [bsConfig]="{ dateInputFormat: giddhDateFormat, containerClass: 'chkclrbsdp theme-green' }" />
                                 </td>
-
                             </tr>
-
                         </tbody>
                     </table>
 
@@ -408,8 +395,8 @@
 
                             <tr>
 
-                                <td class="">
-                                    <label class="default_clr">Assign Tag</label>
+                                <td>
+                                    <label class="default-color">Assign Tag</label>
                                     <sh-select id="ledger-assign-tag" [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true"
                                         [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames"
                                         [ItemHeight]="'auto'"></sh-select>
@@ -427,7 +414,6 @@
 
         <!--map bank transactions-->
         <div class="row">
-
             <div class="col-7 form-group position-relative" *ngIf="isBankTransaction">
                 <a href="javascript:void(0)" (click)="getReconciledEntries()">Map Transaction
                     <span *ngIf="showMatchingEntries">with</span>
@@ -506,7 +492,7 @@
                     <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
                         ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput
                         (click)="onUploadOutput()">
-                    <label class="upload_div pr-15"
+                    <label class="upload-div pr-15"
                         [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
 
                         <label for="invoiceFile" class="cp font-16">

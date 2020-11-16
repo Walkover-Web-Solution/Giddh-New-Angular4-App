@@ -3,6 +3,7 @@
 .ledger-panel {
     overflow: visible;
     .more-details {
+        background-color: $white;
         .cheq {
             table {
                 td.remove-invoice {
@@ -132,7 +133,7 @@ span.eligible-ITC {
         width: 10%;
         text-align: center;
     }
-    .total-amn {
+    .total-amount-ledger {
         width: 100%;
     }
     .total-detail-table > tbody > tr {
