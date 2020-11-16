@@ -94,7 +94,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
-        this._activatedRoute.params.subscribe(a => {
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (!a) {
                 return;
             }

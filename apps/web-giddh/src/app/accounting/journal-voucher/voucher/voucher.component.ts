@@ -254,7 +254,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
         this.requestObj.transactions = [];
-        this._keyboardService.keyInformation.subscribe((key) => {
+        this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
             this.watchKeyboardEvent(key);
         });
         this.tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
@@ -354,7 +354,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.refreshEntry();
 
-        this.tallyModuleService.filteredAccounts.subscribe((accounts) => {
+        this.tallyModuleService.filteredAccounts.pipe(takeUntil(this.destroyed$)).subscribe((accounts) => {
             if (accounts) {
                 this.allAccounts = accounts;
                 this.createAccountsList();
@@ -1229,7 +1229,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let componentRef = viewContainerRef.createComponent(componentFactory);
         let componentInstance = componentRef.instance as QuickAccountComponent;
         componentInstance.needAutoFocus = true;
-        componentInstance.closeQuickAccountModal.subscribe((a) => {
+        componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideQuickAccountModal();
             componentInstance.newAccountForm.reset();
             componentInstance.destroyed$.next(true);

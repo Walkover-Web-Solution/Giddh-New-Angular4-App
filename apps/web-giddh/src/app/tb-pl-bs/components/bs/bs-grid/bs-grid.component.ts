@@ -1,19 +1,20 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { FormControl } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
-	selector: 'bs-grid',  // <home></home>
+	selector: 'bs-grid',
     templateUrl: './bs-grid.component.html',
     styleUrls: [`./bs-grid.component.scss`],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
+export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
 	public noData: boolean;
 	public showClearSearch: boolean = false;
 	@Input() public search: string = '';
@@ -29,9 +30,10 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
     public bsSearchControl: FormControl = new FormControl();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
-		//
+		
 	}
 
 	public ngOnChanges(changes: SimpleChanges) {
@@ -91,7 +93,7 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
 
 	public ngOnInit() {
 		this.bsSearchControl.valueChanges.pipe(
-			debounceTime(700))
+			debounceTime(700), takeUntil(this.destroyed$))
 			.subscribe((newValue) => {
 				this.searchInput = newValue;
 				this.searchChange.emit(this.searchInput);
@@ -148,5 +150,10 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
 				this.toggleVisibility(grp.childGroups, isVisible);
 			}
 		});
-	}
+    }
+    
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

@@ -30,7 +30,7 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions) {
-        this.store.pipe(select(p => p.session), distinctUntilKeyChanged('companyUniqueName')).subscribe(p => {
+        this.store.pipe(select(p => p.session), distinctUntilKeyChanged('companyUniqueName'), takeUntil(this.destroyed$)).subscribe(p => {
             let companies = p.companies;
             this.selectedCompany = companies.find(q => q.uniqueName === p.companyUniqueName);
         });

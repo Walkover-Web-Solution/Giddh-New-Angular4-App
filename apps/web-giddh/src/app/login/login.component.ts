@@ -208,7 +208,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         // get user object when google auth is complete
         if (!(Configuration.isElectron || Configuration.isCordova)) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
-                this.isSocialLogoutAttempted$.subscribe((res) => {
+                this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (!res && user) {
                         switch (user.provider) {
                             case "GOOGLE": {

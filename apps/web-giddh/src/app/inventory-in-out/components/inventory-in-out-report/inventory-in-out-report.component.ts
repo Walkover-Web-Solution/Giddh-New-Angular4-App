@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InventoryReportActions } from '../../../actions/inventory/inventory.report.actions';
 import { InventoryFilter, InventoryReport } from '../../../models/api-models/Inventory-in-out';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'invetory-in-out-report',  // <home></home>
@@ -30,7 +32,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
     }
   `]
 })
-export class InventoryInOutReportComponent {
+export class InventoryInOutReportComponent implements OnDestroy {
     public datePickerOptions: any = {
         locale: {
             applyClass: 'btn-green',
@@ -84,12 +86,13 @@ export class InventoryInOutReportComponent {
         { label: 'Sender', value: 'Sender' },
         { label: 'Receiver', value: 'Receiver' }
     ];
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _router: ActivatedRoute,
         private inventoryReportActions: InventoryReportActions,
         private _store: Store<AppState>) {
 
-        this._router.params.subscribe(p => {
+        this._router.params.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             this.uniqueName = p.uniqueName;
             this.type = p.type;
             this.filter = {};
@@ -103,10 +106,8 @@ export class InventoryInOutReportComponent {
                 this.applyFilters(1, false);
             }
         });
-        this._store.select(p => p.inventoryInOutState.inventoryReport)
-            .subscribe(p => this.inventoryReport = p);
-        this._store.select(p => ({ stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers }))
-            .subscribe(p => p.inventoryUsers && p.stocksList &&
+        this._store.pipe(select(p => p.inventoryInOutState.inventoryReport), takeUntil(this.destroyed$)).subscribe(p => this.inventoryReport = p);
+        this._store.pipe(select(p => ({ stocksList: p.inventory.stocksList, inventoryUsers: p.inventoryInOutState.inventoryUsers })), takeUntil(this.destroyed$)).subscribe(p => p.inventoryUsers && p.stocksList &&
                 (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
                     .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
     }
@@ -171,4 +172,9 @@ export class InventoryInOutReportComponent {
         this._store.dispatch(this.inventoryReportActions
             .genReport(this.uniqueName, this.startDate, this.endDate, page, 10, applyFilter ? this.filter : null));
     }
+
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();       
+	}
 }

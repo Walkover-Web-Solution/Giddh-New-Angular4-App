@@ -454,13 +454,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.createNewCompanyUser = res;
             }
         });
-        this.generalService.isMobileSite.subscribe(s => {
+        this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
             this.menuItemsFromIndexDB = DEFAULT_MENUS;
             this.accountItemsFromIndexDB = DEFAULT_AC;
         });
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
-        this.generalService.invokeEvent.subscribe(value => {
+        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value === 'openschedulemodal') {
                 this.openScheduleCalendlyModel();
             }
@@ -534,12 +534,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.openCrossedTxLimitModel(this.crossedTxLimitModel);
             }
         }
-        this.manageGroupsAccountsModal.onHidden.subscribe(e => {
+        this.manageGroupsAccountsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(e => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
 
         this.accountSearchControl.valueChanges.pipe(
-            debounceTime(300))
+            debounceTime(300), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.accountSearchValue = newValue;
                 if (newValue.length > 0) {
@@ -561,8 +561,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         combineLatest([
             this.store.pipe(select(p => p.general.flattenGroups), takeUntil(this.destroyed$)),
             this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$))
-        ])
-            .subscribe((resp: any[]) => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
                 let menuList = cloneDeep(NAVIGATION_ITEM_LIST);
                 let grpList = cloneDeep(resp[0]);
                 let acList = cloneDeep(resp[1]);
@@ -689,6 +688,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
             .observe(['(min-width: 1020px)'])
+            .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
@@ -713,7 +713,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         // if invalid menu item clicked then navigate to default route and remove invalid entry from db
-        this.generalService.invalidMenuClicked.subscribe(data => {
+        this.generalService.invalidMenuClicked.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
                 this.onItemSelected(data.next, data);
             }
@@ -1274,10 +1274,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let viewContainerRef = this.companynewadd.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
+        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideAddCompanyModal();
         });
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideCompanyModalAndShowAddAndManage();
         });
     }
@@ -1287,11 +1287,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let viewContainerRef = this.addmanage.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.subscribe((a) => {
+        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideManageGroupsModal();
             viewContainerRef.remove();
         });
-        this.manageGroupsAccountsModal.onShown.subscribe((a => {
+        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
             (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
             (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
         }));
@@ -1635,21 +1635,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         ).subscribe(() => this.changeDetection.markForCheck());
 
         this.subscriptions.push(
-            this.modalService.onShow.subscribe((reason: string) => {
+            this.modalService.onShow.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
             })
         );
         this.subscriptions.push(
-            this.modalService.onShown.subscribe((reason: string) => {
+            this.modalService.onShown.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
                 //
             })
         );
         this.subscriptions.push(
-            this.modalService.onHide.subscribe((reason: string) => {
+            this.modalService.onHide.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
                 //
             })
         );
         this.subscriptions.push(
-            this.modalService.onHidden.subscribe((reason: string) => {
+            this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
                 this.navigationModalVisible = false;
                 this.unsubscribe();
             })

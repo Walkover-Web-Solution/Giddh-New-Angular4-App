@@ -137,7 +137,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        this.scrollSubject$.pipe(debounceTime(25)).subscribe((response) => {
+        this.scrollSubject$.pipe(debounceTime(25), takeUntil(this.destroyed$)).subscribe((response) => {
             this.onScroll(response);
         });
     }

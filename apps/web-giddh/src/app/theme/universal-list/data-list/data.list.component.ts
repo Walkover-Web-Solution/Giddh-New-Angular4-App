@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -32,7 +32,7 @@ const LOCAL_MEMORY = {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+export class DataListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('mainEle', {static: true}) public mainEle: ElementRef;
     @ViewChild('searchEle', {static: true}) public searchEle: ElementRef;
@@ -115,7 +115,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     public ngOnInit() {
 
         // listen on input for searc
-        this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+        this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
             this.handleSearch(term);
             this._cdref.markForCheck();
         });
@@ -222,17 +222,6 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
     // getting data from vscroll and assigning data to local var.
     public checkItems(event: { items: any[]; idx: number; }) {
         this.viewPortItems = event.items;
-    }
-
-    /**
-     * watching over some keys to update UI on data basis
-     * @param changes
-     */
-    public ngOnChanges(changes: SimpleChanges) {
-        // listen for force auto focus
-        // if ('forceSetAutoFocus' in changes && changes.forceSetAutoFocus.currentValue) {
-        // this.setFocusOnList(this.forcekey);
-        // }
     }
 
     /**

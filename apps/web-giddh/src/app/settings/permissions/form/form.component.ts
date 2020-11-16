@@ -134,11 +134,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         // utitlity
-        this.permissionForm.get('periodOptions').valueChanges.pipe(debounceTime(100)).subscribe(val => {
+        this.permissionForm.get('periodOptions').valueChanges.pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(val => {
             this.togglePeriodOptionsVal(val);
         });
 
-        this.permissionForm.get('ipOptions').valueChanges.subscribe(val => {
+        this.permissionForm.get('ipOptions').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.toggleIpOptVal(val);
         });
     }

@@ -370,11 +370,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.dropdownShow = false;
         });
 
-        this.modalService.onShow.subscribe(response => {
+        this.modalService.onShow.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isInlineDateFieldsShowing = true;
         });
 
-        this.modalService.onHide.subscribe(response => {
+        this.modalService.onHide.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isInlineDateFieldsShowing = false;
             this.invalidInlineStartDate = "";
             this.invalidInlineEndDate = "";

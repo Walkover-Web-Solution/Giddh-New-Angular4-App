@@ -134,7 +134,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        this._generalService.invokeEvent.subscribe(value => {
+        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value === 'loadPaymentModes') {
                 this.loadPaymentModes();
             }

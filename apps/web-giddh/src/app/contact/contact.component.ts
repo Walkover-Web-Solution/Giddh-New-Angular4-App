@@ -823,7 +823,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
-            componentInstance.pageChanged.subscribe(e => {
+            componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
         }

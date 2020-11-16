@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
 import { AppState } from '../../../../store';
 import * as _ from '../../../../lodash-optimized';
@@ -39,10 +39,10 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private sidebarAction: SidebarAction) {
         this._store.dispatch(this._inventoryAction.GetAllLinkedStocks());
         this.initializeForm();
-        this.isBranchCreationInProcess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferInProcess).pipe(takeUntil(this.destroyed$));
-        this.isBranchCreationSuccess$ = this._store.select(state => state.inventoryBranchTransfer.isBranchTransferSuccess).pipe(takeUntil(this.destroyed$));
+        this.isBranchCreationInProcess$ = this._store.pipe(select(state => state.inventoryBranchTransfer.isBranchTransferInProcess), takeUntil(this.destroyed$));
+        this.isBranchCreationSuccess$ = this._store.pipe(select(state => state.inventoryBranchTransfer.isBranchTransferSuccess), takeUntil(this.destroyed$));
 
-        this._store.select(state => state.inventoryBranchTransfer.linkedStocks).pipe(takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
+        this._store.pipe(select(state => state.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
             if (branches) {
                 if (branches.results.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(b => ({ label: b.name, value: b.uniqueName, additional: b }));
@@ -77,8 +77,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this._store
-            .select(p => p.inventory.stocksList && p.inventory.stocksList.results).subscribe(s => {
+        this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$)).subscribe(s => {
                 if (s) {
                     this.stockListBackUp = s;
                     this.stockListOptions = s.map(p => ({ label: p.name, value: p.uniqueName }));

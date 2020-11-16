@@ -134,7 +134,8 @@ export class AgingReportComponent implements OnInit {
 
         this.searchStr$.pipe(
             debounceTime(1000),
-            distinctUntilChanged()
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
         ).subscribe(term => {
             this.dueAmountReportRequest.q = term;
             this.getDueReport();
@@ -177,7 +178,7 @@ export class AgingReportComponent implements OnInit {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
-            componentInstance.pageChanged.subscribe(e => {
+            componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
         }

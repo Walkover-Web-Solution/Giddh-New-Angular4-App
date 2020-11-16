@@ -51,7 +51,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 			}
 		});
 
-		this.groupDetailForm.get('name').valueChanges.pipe(debounceTime(100)).subscribe(name => {
+		this.groupDetailForm.get('name').valueChanges.pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(name => {
 			let val: string = name;
 			val = uniqueNameInvalidStringReplace(val);
 			if (val) {

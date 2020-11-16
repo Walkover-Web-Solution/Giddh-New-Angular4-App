@@ -164,7 +164,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		private inventoryAction: InventoryAction,
 		private invoiceActions: InvoiceActions,
 	) {
-		this._keyboardService.keyInformation.subscribe((key) => {
+		this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
 			this.watchKeyboardEvent(key);
 		});
 
@@ -247,7 +247,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		// this.refreshEntry();
 		// this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
-		this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+		this._tallyModuleService.filteredAccounts.pipe(takeUntil(this.destroyed$)).subscribe((accounts) => {
 			if (accounts) {
 				let accList: IOption[] = [];
 				accounts.forEach((acc: IFlattenAccountsResultItem) => {
@@ -901,7 +901,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		let componentInstance = componentRef.instance as QuickAccountComponent;
 		componentInstance.needAutoFocus = true;
-		componentInstance.closeQuickAccountModal.subscribe((a) => {
+		componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
 			this.hideQuickAccountModal();
 			componentInstance.needAutoFocus = false;
 			componentInstance.newAccountForm.reset();
@@ -912,7 +912,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 				this.selectedAccountInputField.value = '';
 			}
 		});
-		componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+		componentInstance.isQuickAccountCreatedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe((status: boolean) => {
 			if (status) {
 				this.refreshAccountListData(null, true);
 			}

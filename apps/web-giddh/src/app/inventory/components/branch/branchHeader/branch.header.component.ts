@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'branch-header',
@@ -25,9 +27,10 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class BranchHeaderComponent implements OnInit, OnDestroy {
     public branchAsideMenuState: string = 'out';
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _store: Store<AppState>) {
-        this._store.select(s => s.inventory.showBranchScreenSidebar).subscribe(bool => {
+        this._store.pipe(select(s => s.inventory.showBranchScreenSidebar), takeUntil(this.destroyed$)).subscribe(bool => {
             this.toggleBranchAsidePane();
         });
     }
@@ -53,6 +56,7 @@ export class BranchHeaderComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

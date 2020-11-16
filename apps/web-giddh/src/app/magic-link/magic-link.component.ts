@@ -1,4 +1,4 @@
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { BaseResponse } from './../models/api-models/BaseResponse';
 import { IMagicLinkLedgerRequest, IMagicLinkLedgerResponse } from './../models/api-models/MagicLink';
@@ -89,7 +89,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.route.queryParams.pipe(
-            filter(params => params.id))
+            filter(params => params.id), takeUntil(this.destroyed$))
             .subscribe(params => {
                 if (params && params.id) {
                     this.id = params.id;

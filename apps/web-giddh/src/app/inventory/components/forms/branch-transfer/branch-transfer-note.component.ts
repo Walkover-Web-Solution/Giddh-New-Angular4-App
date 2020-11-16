@@ -8,13 +8,11 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild,
-    TemplateRef
+    ViewChild
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment';
@@ -24,12 +22,10 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { InventoryService } from '../../../../services/inventory.service';
 import { CompanyResponse } from "../../../../models/api-models/Company";
 import { Observable, ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
-import { Store } from "@ngrx/store";
+import { takeUntil } from "rxjs/operators";
+import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../../store";
 import { ShSelectComponent } from "../../../../theme/ng-virtual-select/sh-select.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { InvViewService } from "../../../inv.view.service";
 import { GeneralService } from '../../../../services/general.service';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
@@ -70,19 +66,12 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     public stockUnitCode: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-
     constructor(
         private _generalService: GeneralService, private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
-        private _zone: NgZone, private _store: Store<AppState>, private invViewService: InvViewService, private _router: Router) {
+        private _zone: NgZone, private _store: Store<AppState>) {
         this.initializeForm(true);
-        this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
+        this.entrySuccess$ = this._store.pipe(select(s => s.inventoryInOutState.entrySuccess), takeUntil(this.destroyed$));
     }
-
-    /* setModalClass() {
-         this.valueWidth = !this.valueWidth;
-         const modalWidth = this.valueWidth ? 'modal-xl' : 'modal-sm';
-         this.modalRef.setClass(modalWidth);
-     }*/
 
     public get transferDate(): FormControl {
         return this.form.get('transferDate') as FormControl;
@@ -135,7 +124,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
             entity: null
         };
         this.manufacturingDetails.disable();
-        this.isManufactured.valueChanges.subscribe(val => {
+        this.isManufactured.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.manufacturingDetails.reset();
             val ? this.manufacturingDetails.enable() : this.manufacturingDetails.disable();
         });

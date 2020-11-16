@@ -1,8 +1,10 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import * as _ from '../../lodash-optimized';
 import { INameUniqueName } from '../../models/api-models/Inventory';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 const INV_PAGE = [
     { name: 'Invoice', uniqueName: 'invoice' },
@@ -37,7 +39,7 @@ const INV_PAGE = [
   `]
 })
 
-export class InvoicePageDDComponent implements OnInit {
+export class InvoicePageDDComponent implements OnInit, OnDestroy {
 
     public navItems: INameUniqueName[] = INV_PAGE;
     public selectedType: string = null;
@@ -51,8 +53,9 @@ export class InvoicePageDDComponent implements OnInit {
         { name: 'Credit Note', uniqueName: 'cr-note', path: 'credit note' },
         { name: 'Debit Note', uniqueName: 'dr-note', path: 'debit note' }
     ];
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private router: Router, private location: Location, private _cdRef: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
+    constructor(private _activatedRoute: ActivatedRoute) {
         // this.selectedType = 'Invoice';
         // this.router.events.subscribe((event: NavigationStart) => {
         //   if (event.url) {
@@ -69,7 +72,7 @@ export class InvoicePageDDComponent implements OnInit {
 
     public ngOnInit(): void {
 
-        this._activatedRoute.firstChild.params.subscribe(a => {
+        this._activatedRoute.firstChild.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.setUrl(a.voucherType);
             }
@@ -133,4 +136,8 @@ export class InvoicePageDDComponent implements OnInit {
         }
     }
 
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }
