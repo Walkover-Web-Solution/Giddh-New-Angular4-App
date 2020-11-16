@@ -1200,7 +1200,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
         this.setOrganizationDetails(OrganizationType.Branch, details);
-        if (!RESTRICTED_BRANCH_ROUTES.includes(this.router.url)) {
+        const isBranchRestrictedPath = RESTRICTED_BRANCH_ROUTES.find(route => this.router.url.includes(route));
+        if (!isBranchRestrictedPath) {
             window.location.reload();
         } else {
             window.location.href = '/pages/home';
@@ -1252,6 +1253,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
         this.setOrganizationDetails(OrganizationType.Company, details);
+        localStorage.removeItem('isNewArchitecture');
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else if (isCordova) {
