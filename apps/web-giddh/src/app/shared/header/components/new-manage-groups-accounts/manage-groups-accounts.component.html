@@ -68,7 +68,7 @@
                                     <div class="row mb-15" [formGroupName]="index">
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
                                             <label *ngIf="first || isMobileScreen">Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter custom field name" [maxlength]="150" formControlName="key" name="key" autocomplete="off" [attr.disabled]="item.get('uniqueName').value && isEnabledIndex!==index ?'': null">
+                                            <input type="text" class="form-control" placeholder="Enter custom field name" [maxlength]="50" (blur)="checkValidation('name', index)" formControlName="key" name="key" autocomplete="off" [attr.disabled]="item.get('uniqueName').value && isEnabledIndex!==index ?'': null">
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
                                             <label *ngIf="first || isMobileScreen">Type</label>
@@ -78,9 +78,9 @@
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
                                             <label *ngIf="first || isMobileScreen">Length</label>
                                             <input *ngIf="item.get('dataType').value ==='BOOLEAN' || item.get('dataType').value ==='NUMERIC' || !item.get('dataType').value" type="number" [max]="30" class="form-control" formControlName="valueLength" name="valueLength" [attr.disabled]="(item.get('uniqueName').value &&  isEnabledIndex!==index) || item.get('dataType').value ==='BOOLEAN' ?'': null"
-                                                autocomplete="off">
+                                                (blur)="checkValidation('length', index);" autocomplete="off" />
                                             <input *ngIf="item.get('dataType').value ==='STRING'" type="text" class="form-control" [max]="150" formControlName="valueLength" name="valueLength" [attr.disabled]="(item.get('uniqueName').value &&  isEnabledIndex!==index) || item.get('dataType').value ==='BOOLEAN' ?'': null"
-                                                autocomplete="off">
+                                                (blur)="checkValidation('length', index);" autocomplete="off" />
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12 edit-close-btn">
                                             <label *ngIf="first || isMobileScreen" class="d-block">&nbsp;</label>
