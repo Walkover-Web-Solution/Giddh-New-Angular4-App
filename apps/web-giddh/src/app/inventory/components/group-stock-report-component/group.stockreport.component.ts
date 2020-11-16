@@ -1,8 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -10,11 +9,8 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
-
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
-import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import {
@@ -23,7 +19,6 @@ import {
     InventoryDownloadRequest,
     StockGroupResponse,
 } from '../../../models/api-models/Inventory';
-import { GeneralService } from '../../../services/general.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
@@ -31,6 +26,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'invetory-group-stock-report',  // <home></home>
@@ -100,7 +96,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public filterValueCondition: string = null;
     public isFilterCorrect: boolean = false;
     public groupUniqueNameFromURL: string = null;
-    public _DDMMYYYY: string = 'DD-MM-YYYY';
     public pickerSelectedFromDate: string;
     public pickerSelectedToDate: string;
     public transactionTypes: any[] = [
@@ -219,18 +214,13 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public isMobileScreen: boolean = false;
 
     constructor(
-        private _generalService: GeneralService,
         private modalService: BsModalService,
         private store: Store<AppState>,
-        private route: ActivatedRoute,
-        private sideBarAction: SidebarAction,
         private stockReportActions: StockReportActions,
-        private router: Router,
         private inventoryService: InventoryService,
         private fb: FormBuilder,
         private _toasty: ToasterService,
         private inventoryAction: InventoryAction,
-        private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
         private breakPointObservar: BreakpointObserver
     ) {
@@ -317,8 +307,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(this._DDMMYYYY);
-                this.toDate = moment(a[1]).format(this._DDMMYYYY);
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
                 this.getGroupReport(true);
             }
         });
@@ -501,8 +491,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     public selectedDate(value: any, from?: string) { //from like advance search
-        this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
-        this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
+        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.pickerSelectedFromDate = value.picker.startDate;
         this.pickerSelectedToDate = value.picker.endDate;
         if (!from) {
@@ -668,8 +658,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(this._DDMMYYYY);
-                this.toDate = moment(a[1]).format(this._DDMMYYYY);
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
 

@@ -62,7 +62,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public advanceSearchForm: FormGroup;
     public showOtherDetails: boolean = false;
     public showChequeDatePicker: boolean = false;
-    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY', rangeInputFormat: 'DD-MM-YYYY' };
+    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
     public voucherTypeList: Observable<IOption[]>;
@@ -302,8 +302,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      */
     public onDateRangeSelected(data) {
         if (data && data.length) {
-            // this.advanceSearchRequest.from = moment(data[0]).format('DD-MM-YYYY');
-            // this.advanceSearchRequest.to = moment(data[1]).format('DD-MM-YYYY');
+            // this.advanceSearchRequest.from = moment(data[0]).format(GIDDH_DATE_FORMAT);
+            // this.advanceSearchRequest.to = moment(data[1]).format(GIDDH_DATE_FORMAT);
         }
         // this.closeModelEvent.emit(_.cloneDeep(this.advanceSearchRequest));
     }
@@ -326,7 +326,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public prepareRequest() {
         let dataToSend = _.cloneDeep(this.advanceSearchForm.value);
         if (dataToSend.dateOnCheque) {
-            dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
+            dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
         }
         return dataToSend;
     }

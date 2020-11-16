@@ -11,9 +11,9 @@ import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import * as moment from 'moment';
-import { ToasterService } from '../../../services/toaster.service';
 import { CurrentPage } from '../../../models/api-models/Common';
 import { GeneralActions } from '../../../actions/general/general.actions';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -115,10 +115,11 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     ];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
-        private _toaster: ToasterService,
         private _cdRef: ChangeDetectorRef, private _generalActions: GeneralActions) {
         this.isEwaybillGenerateInProcess$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybillInProcess).pipe(takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.select(p => p.ewaybillstate.isGenerateEwaybilSuccess).pipe(takeUntil(this.destroyed$));
@@ -153,9 +154,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
-        this.transporterList$.subscribe(s => {
-            //
-        });
+    
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
         })

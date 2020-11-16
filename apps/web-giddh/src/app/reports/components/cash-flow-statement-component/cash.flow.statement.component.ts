@@ -73,7 +73,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         /* Observer to detect device based on screen width */
         this.breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 

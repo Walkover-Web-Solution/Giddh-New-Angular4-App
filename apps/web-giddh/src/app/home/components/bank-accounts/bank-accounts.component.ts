@@ -7,6 +7,7 @@ import { take, takeUntil } from "rxjs/operators";
 import { createSelector } from "reselect";
 import * as moment from 'moment/moment';
 import { CompanyResponse } from "../../../models/api-models/Company";
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'bank-accounts',
@@ -37,12 +38,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(universalDate[0], 'DD-MM-YYYY').toDate(),
-                    endDate: moment(universalDate[1], 'DD-MM-YYYY').toDate(),
+                    ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
                     chosenLabel: universalDate[2]
                 };
-                this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
-                this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();

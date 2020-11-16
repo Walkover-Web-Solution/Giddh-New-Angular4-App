@@ -177,8 +177,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                     // this.assignStartAndEndDateForDateRangePicker(date[0], date[1]);
 
                     this.filterForm.patchValue({
-                        from: moment(a[0]).format('DD-MM-YYYY'),
-                        to: moment(a[1]).format('DD-MM-YYYY')
+                        from: moment(a[0]).format(GIDDH_DATE_FORMAT),
+                        to: moment(a[1]).format(GIDDH_DATE_FORMAT)
                     });
                 }
 
@@ -231,8 +231,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                     // assign dates
                     // this.assignStartAndEndDateForDateRangePicker(activeFinancialYear.financialYearStarts, null);
                     this.filterForm.patchValue({
-                        from: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day').format('DD-MM-YYYY'),
-                        to: moment().format('DD-MM-YYYY')
+                        from: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day').format(GIDDH_DATE_FORMAT),
+                        to: moment().format(GIDDH_DATE_FORMAT)
                     });
                 }
             }
@@ -248,8 +248,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
-        this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format('DD-MM-YYYY'));
-        this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format('DD-MM-YYYY'));
+        this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format(GIDDH_DATE_FORMAT));
+        this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format(GIDDH_DATE_FORMAT));
         this.filterData();
     }
 

@@ -60,8 +60,8 @@ export class ReceiptComponent implements OnInit, OnDestroy {
 
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
-        dateInputFormat: 'DD-MM-YYYY',
-        rangeInputFormat: 'DD-MM-YYYY',
+        dateInputFormat: GIDDH_DATE_FORMAT,
+        rangeInputFormat: GIDDH_DATE_FORMAT,
         containerClass: 'theme-green myDpClass'
     };
     public selectedInvoice: IInvoiceResult;
@@ -229,12 +229,12 @@ export class ReceiptComponent implements OnInit, OnDestroy {
                 let activeFinancialYear = selectedCmp.activeFinancialYear;
                 if (activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
+                        moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
                         moment()
                     ];
                     this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                        moment(activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
+                        moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
+                        moment(activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
                     ];
                 }
             }

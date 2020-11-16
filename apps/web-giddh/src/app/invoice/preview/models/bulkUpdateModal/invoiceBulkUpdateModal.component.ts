@@ -80,7 +80,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService, private _invoiceService: InvoiceService, private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
+    constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService, private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private _loaderService: LoaderService) {
         this.fileUploadOptions = { concurrency: 0 };
         this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));

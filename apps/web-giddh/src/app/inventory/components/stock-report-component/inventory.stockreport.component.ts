@@ -97,7 +97,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public filterValueCondition: string = null;
     public isFilterCorrect: boolean = false;
     public stockUniqueNameFromURL: string = null;
-    public _DDMMYYYY: string = 'DD-MM-YYYY';
     public pickerSelectedFromDate: string;
     public pickerSelectedToDate: string;
     public transactionTypes: any[] = [
@@ -347,8 +346,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(this._DDMMYYYY);
-                this.toDate = moment(a[1]).format(this._DDMMYYYY);
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
                 this.getStockReport(true);
             }
         });
@@ -549,8 +548,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     public selectedDate(value?: any, from?: string) { //from like advance search
-        this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
-        this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
+        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.pickerSelectedFromDate = value.picker.startDate;
         this.pickerSelectedToDate = value.picker.endDate;
         if (!from) {
@@ -718,8 +717,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(this._DDMMYYYY);
-                this.toDate = moment(a[1]).format(this._DDMMYYYY);
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
         //Reset Date

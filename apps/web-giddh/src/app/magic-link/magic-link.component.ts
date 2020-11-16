@@ -14,6 +14,7 @@ import { DOCUMENT } from '@angular/common';
 import { WindowRef } from 'apps/web-giddh/src/app/shared/helpers/window.object';
 import { underStandingTextData } from 'apps/web-giddh/src/app/ledger/underStandingTextData';
 import { CompanyService } from 'apps/web-giddh/src/app/services/companyService.service';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'magic',
@@ -132,8 +133,8 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
 	 * onDateRangeSelected
 	 */
     public onDateRangeSelected(value) {
-        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         let DataToSend = {
             data: {
                 id: this.id,

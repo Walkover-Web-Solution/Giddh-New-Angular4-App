@@ -10,6 +10,7 @@ import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { digitsOnly, stockManufacturingDetailsValidator } from '../../../../shared/helpers';
 import { ToasterService } from '../../../../services/toaster.service';
 import { InventoryService } from '../../../../services/inventory.service';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'transfer-inward-note',
@@ -34,12 +35,14 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
     public form: FormGroup;
-    public config: Partial<BsDatepickerConfig> = { dateInputFormat: 'DD-MM-YYYY' };
+    public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public mode: 'sender' | 'product' = 'sender';
     public today = new Date();
     public editLinkedStockIdx: any = null;
     public editModeForLinkedStokes: boolean = false;
     public disableStockButton: boolean = false;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
         private _zone: NgZone) {
@@ -84,7 +87,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
     public initializeForm(initialRequest: boolean = false) {
         this.form = this._fb.group({
-            inventoryEntryDate: [moment().format('DD-MM-YYYY'), Validators.required],
+            inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([], Validators.required),
             description: [''],
             inventoryUser: [''],
@@ -118,7 +121,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     public modeChanged(mode: 'sender' | 'product') {
         this.mode = mode;
         this.form.reset();
-        this.inventoryEntryDate.patchValue(moment().format('DD-MM-YYYY'));
+        this.inventoryEntryDate.patchValue(moment().format(GIDDH_DATE_FORMAT));
         this.transactions.controls = this.transactions.controls.filter(trx => false);
 
         if (this.mode === 'sender') {
@@ -317,7 +320,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
                 return rv;
             });
             let value: InventoryEntry = {
-                inventoryEntryDate: moment(this.inventoryEntryDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY'),
+                inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
                 description: this.description.value,
                 transactions: rawValues,
             };

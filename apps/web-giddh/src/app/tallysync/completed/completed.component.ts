@@ -1,11 +1,7 @@
 import { Observable, ReplaySubject } from 'rxjs';
-
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-
-
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { takeUntil } from "rxjs/operators";
 import { createSelector, select, Store } from "@ngrx/store";
@@ -18,9 +14,9 @@ import { TallySyncData, DownloadTallyErrorLogRequest } from "../../models/api-mo
 import { saveAs } from 'file-saver';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 import { GeneralService } from '../../services/general.service';
-import { HOUR } from 'ngx-bootstrap/chronos/units/constants';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PAGINATION_LIMIT } from '../../app.constant';
+
 @Component({
     selector: 'app-completed-preview',
     templateUrl: './completed.component.html',
@@ -30,8 +26,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
-        dateInputFormat: 'DD-MM-YYYY',
-        rangeInputFormat: 'DD-MM-YYYY',
+        dateInputFormat: GIDDH_DATE_FORMAT,
+        rangeInputFormat: GIDDH_DATE_FORMAT,
         containerClass: 'theme-green myDpClass'
     };
     public CompanyList: IOption[] = [];
@@ -108,8 +104,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private _toaster: ToasterService,
-        private _activatedRoute: ActivatedRoute,
-        private cdr: ChangeDetectorRef,
         private fb: FormBuilder,
         private tallysyncService: TallySyncService,
         private generalService: GeneralService
@@ -161,11 +155,9 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filterForm.get('filterDate').patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
         this.filterForm.get('filterTimeInterval').patchValue(this.timeInterval[5].value);
         this.filter.timeRange = this.timeInterval[5].value;
-        this.filter.startDate = moment(this.maxDate).format('DD-MM-YYYY');
+        this.filter.startDate = moment(this.maxDate).format(GIDDH_DATE_FORMAT);
         this.getReport();
     }
-
-
 
     public getReport() {
         if (this.filterForm.invalid) {

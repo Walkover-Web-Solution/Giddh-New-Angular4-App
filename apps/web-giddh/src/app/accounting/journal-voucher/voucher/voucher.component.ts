@@ -221,6 +221,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public baseCurrencySymbol: string;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(
         private _accountService: AccountService,

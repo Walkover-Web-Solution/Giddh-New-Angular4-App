@@ -5655,7 +5655,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * Call API to get all advance receipts of an invoice
      *
      * @param {*} customerUniquename Selected customer unique name
-     * @param {*} voucherDate  Voucher Date (DD-MM-YYYY) of selected invoice
+     * @param {*} voucherDate  Voucher Date (GIDDH_DATE_FORMAT) of selected invoice
      * @memberof ProformaInvoiceComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {

@@ -85,6 +85,8 @@ export class GstComponent implements OnInit, OnDestroy {
     public isTaxApiInProgress: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private store: Store<AppState>,
         private _companyActions: CompanyActions,
@@ -133,11 +135,11 @@ export class GstComponent implements OnInit, OnDestroy {
         this.getCurrentPeriod$.subscribe(a => {
             if (a && a.from) {
                 let date = {
-                    startDate: moment(a.from, 'DD-MM-YYYY').startOf('month').format('DD-MM-YYYY'),
-                    endDate: moment(a.to, 'DD-MM-YYYY').endOf('month').format('DD-MM-YYYY')
+                    startDate: moment(a.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: moment(a.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 if (date.startDate === a.from && date.endDate === a.to) {
-                    this.selectedMonth = moment(a.from, 'DD-MM-YYYY').toISOString();
+                    this.selectedMonth = moment(a.from, GIDDH_DATE_FORMAT).toISOString();
                     this.isMonthSelected = true;
                 } else {
                     this.isMonthSelected = false;
@@ -151,7 +153,7 @@ export class GstComponent implements OnInit, OnDestroy {
                     from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
                     to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
                 };
-                this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
+                this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
                 this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
