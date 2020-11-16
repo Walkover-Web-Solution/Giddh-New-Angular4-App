@@ -105,7 +105,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
         private _tallyModuleService: TallyModuleService,
         private _accountService: AccountService,
         private sidebarAction: SidebarAction) {
-        this._tallyModuleService.selectedPageInfo.subscribe((d) => {
+        this._tallyModuleService.selectedPageInfo.pipe(takeUntil(this.destroyed$)).subscribe((d) => {
             if (d) {
                 this.gridType = d.gridType;
                 this.selectedPage = d.page;

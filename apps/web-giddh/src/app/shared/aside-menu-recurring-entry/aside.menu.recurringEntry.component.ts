@@ -50,7 +50,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 			nextCronDate: ['', Validators.required],
 			cronEndDate: ['', Validators.required],
 		});
-		this.form.controls.nextCronDate.valueChanges.subscribe(p => {
+		this.form.controls.nextCronDate.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(p => {
 			this.maxEndDate = p;
 			const { cronEndDate } = this.form.value;
 			const end = moment(cronEndDate, cronEndDate instanceof Date ? null : GIDDH_DATE_FORMAT);

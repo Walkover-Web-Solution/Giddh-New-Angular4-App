@@ -291,7 +291,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         // Refresh report data according to universal date
-        this.store.pipe(select((state: AppState) => state.session.applicationDate)).subscribe((dateObj: Date[]) => {
+        this.store.pipe(select((state: AppState) => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.ledgerSearchRequest.dateRange = this.universalDate;

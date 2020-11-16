@@ -87,7 +87,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public ngOnInit(): void {
         // listen on input for search
-        this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+        this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
             this.commandKRequestParams.page = 1;
             this.commandKRequestParams.q = term;
             this.searchCommandK(true);

@@ -325,7 +325,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
-        this._activatedRoute.params.subscribe(a => {
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
                 this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName).subscribe((res: any) => {
                     if (res && res.body) {

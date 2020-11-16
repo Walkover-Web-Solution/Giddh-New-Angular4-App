@@ -131,7 +131,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getActiveTab();
 
-        this.route.params.subscribe(params => {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.activeTab = params['type'];
             }

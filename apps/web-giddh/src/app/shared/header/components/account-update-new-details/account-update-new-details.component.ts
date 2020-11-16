@@ -326,7 +326,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
 
         });
-        this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
+        this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
@@ -378,7 +378,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         //     }
         // });
         // get openingblance value changes
-        this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
+        this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {

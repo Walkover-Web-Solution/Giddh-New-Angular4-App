@@ -142,7 +142,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.requestObj.transactions = [];
-        this._keyboardService.keyInformation.subscribe((key) => {
+        this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
             this.watchKeyboardEvent(key);
         });
 
@@ -211,7 +211,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
         this.refreshEntry();
 
-        this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+        this._tallyModuleService.filteredAccounts.pipe(takeUntil(this.destroyed$)).subscribe((accounts) => {
             if (accounts) {
                 this.allAccounts = accounts;
                 this.createAccountsList();
@@ -937,7 +937,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         let componentRef = viewContainerRef.createComponent(componentFactory);
         let componentInstance = componentRef.instance as QuickAccountComponent;
         componentInstance.needAutoFocus = true;
-        componentInstance.closeQuickAccountModal.subscribe((a) => {
+        componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideQuickAccountModal();
             componentInstance.newAccountForm.reset();
             componentInstance.destroyed$.next(true);

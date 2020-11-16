@@ -116,7 +116,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         stateDetailsRequest.lastState = 'home';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-        this._generalService.invokeEvent.subscribe(value => {
+        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value === 'hideallcharts') {
                 this.hideallcharts = true;
             }

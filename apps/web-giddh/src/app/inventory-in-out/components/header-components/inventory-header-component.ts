@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'inventory-inout-header',
@@ -53,18 +55,17 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 // <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
 // <button type="button" *ngIf="activeGroupName$ | async" class="btn btn-default" (click)="goToAddStock()">Add Stock</button>
 // [routerLink]="['custom-stock']"
-export class InventoryHeaderComponent implements OnInit {
+export class InventoryHeaderComponent implements OnInit, OnDestroy {
     public asideMenuState: string = 'out';
     public selectedAsideView: string = '';
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _store: Store<AppState>) {
 
     }
 
     public ngOnInit() {
-        this._store
-            .select(p => p.inventoryInOutState.entrySuccess)
-            .subscribe(p => {
+        this._store.pipe(select(p => p.inventoryInOutState.entrySuccess), takeUntil(this.destroyed$)).subscribe(p => {
                 if (p) {
                     this.toggleGroupStockAsidePane('');
                 }
@@ -87,4 +88,9 @@ export class InventoryHeaderComponent implements OnInit {
             document.querySelector('body').classList.remove('fixed');
         }
     }
+
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();       
+	}
 }

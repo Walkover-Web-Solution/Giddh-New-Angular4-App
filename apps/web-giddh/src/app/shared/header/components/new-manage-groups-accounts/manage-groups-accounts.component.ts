@@ -132,7 +132,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.getCompanyCustomField();
 		// search groups
 		this.groupSearchTerms.pipe(
-			debounceTime(700))
+			debounceTime(700), takeUntil(this.destroyed$))
 			.subscribe(term => {
 				this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
 			});
@@ -145,7 +145,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 			this.breadcrumbUniquePath = [];
 		});
 
-		this._generalService.invokeEvent.subscribe(value => {
+		this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
 			if (value[0] === "accountdeleted") {
 				if (this.searchString) {
 					this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());

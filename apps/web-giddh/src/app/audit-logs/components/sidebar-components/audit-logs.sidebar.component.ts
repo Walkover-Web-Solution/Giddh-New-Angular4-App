@@ -1,20 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil, map } from 'rxjs/operators';
 import {map as lodashMap } from '../../../lodash-optimized';
-
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { flatten, omit, union } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { LogsRequest } from '../../../models/api-models/Logs';
-import { AccountService } from '../../../services/account.service';
 import { CompanyService } from '../../../services/companyService.service';
-import { GroupService } from '../../../services/group.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -31,8 +27,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
-                private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions, private bsConfig: BsDatepickerConfig) {
+    constructor(private store: Store<AppState>, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions, private bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.showWeekNumbers = false;

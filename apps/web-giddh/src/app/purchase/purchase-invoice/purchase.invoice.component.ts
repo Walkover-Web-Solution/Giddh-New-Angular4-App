@@ -798,7 +798,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         componentInstance.maxSize = 5;
         componentInstance.writeValue(s.data.page);
         componentInstance.boundaryLinks = true;
-        componentInstance.pageChanged.subscribe(e => {
+        componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
             this.reconcilePageChanged(e, this.reconcileActiveTab);
         });
     }

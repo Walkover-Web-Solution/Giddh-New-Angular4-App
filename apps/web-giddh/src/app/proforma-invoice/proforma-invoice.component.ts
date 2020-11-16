@@ -921,7 +921,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         // listen for universal date
-        this.store.pipe(select((p: AppState) => p.session.applicationDate)).subscribe((dateObj: Date[]) => {
+        this.store.pipe(select((p: AppState) => p.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
                     this.poFilterDates = {from: moment(dateObj[0]).format(GIDDH_DATE_FORMAT), to: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)}
@@ -1444,7 +1444,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isMobileScreen = st.matches;
             });
 
-        this.bulkItemsModal.onHidden.subscribe(() => {
+        this.bulkItemsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.showBulkItemModal = false;
         });
 

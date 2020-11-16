@@ -145,7 +145,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
         this.getCompanyCustomField();
 
-        this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
+        this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
@@ -160,7 +160,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         // get country code value change
-        this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
+        this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
 
             if (a) {
                 const addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -187,7 +187,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         // get openingblance value changes
-        this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
+        this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {

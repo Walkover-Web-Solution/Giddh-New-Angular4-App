@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, OnDestroy } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
@@ -11,6 +11,8 @@ import { digitsOnly, stockManufacturingDetailsValidator } from '../../../../shar
 import { ToasterService } from '../../../../services/toaster.service';
 import { InventoryService } from '../../../../services/inventory.service';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'inward-note',
@@ -22,7 +24,7 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
   `],
 })
 
-export class InwardNoteComponent implements OnInit, OnChanges {
+export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public onCancel = new EventEmitter();
     @Output() public onSave = new EventEmitter<InventoryEntry>();
 
@@ -43,6 +45,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
     public disableStockButton: boolean = false;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
         private _zone: NgZone) {
@@ -79,7 +82,7 @@ export class InwardNoteComponent implements OnInit, OnChanges {
 
     public ngOnInit() {
         this.manufacturingDetails.disable();
-        this.isManufactured.valueChanges.subscribe(val => {
+        this.isManufactured.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.manufacturingDetails.reset();
             val ? this.manufacturingDetails.enable() : this.manufacturingDetails.disable();
         });
@@ -374,4 +377,9 @@ export class InwardNoteComponent implements OnInit, OnChanges {
         linkedStocks = _.cloneDeep(rawArr);
         return linkedStocks;
     }
+
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();       
+	}
 }

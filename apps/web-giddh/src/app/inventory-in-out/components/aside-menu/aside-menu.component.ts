@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InventoryUsersActions } from '../../../actions/inventory/inventory.users.actions';
@@ -67,7 +67,7 @@ import { CustomStockUnitAction } from '../../../actions/inventory/customStockUni
   `],
 })
 
-export class AsideMenuComponent implements OnInit, OnChanges {
+export class AsideMenuComponent implements OnInit, OnDestroy {
 	public stockList$: Observable<IStocksItem[]>;
 	public stockUnits$: Observable<StockUnitRequest[]>;
 	public userList$: Observable<InventoryUser[]>;
@@ -92,27 +92,12 @@ export class AsideMenuComponent implements OnInit, OnChanges {
 		this.createStockSuccess$ = this._store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
 	}
 
-	public ngOnChanges(changes: SimpleChanges): void {
-		//
-	}
-
 	public ngOnInit() {
-		this.stockList$ = this._store
-			.select(p => p.inventory.stocksList && p.inventory.stocksList.results);
-
-		this.stockUnits$ = this._store
-			.select(p => p.inventory.stockUnits);
-
-		this.userList$ = this._store
-			.select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName));
-
-		this._store
-			.select(p => p.inventoryInOutState.entryInProcess)
-			.subscribe(p => this.isLoading = p);
-
-		this._store
-			.select(p => p.inventoryInOutState.userSuccess)
-			.subscribe(p => p && this.closeAsidePane(p));
+		this.stockList$ = this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$));
+		this.stockUnits$ = this._store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
+		this.userList$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName)), takeUntil(this.destroyed$));
+		this._store.pipe(select(p => p.inventoryInOutState.entryInProcess), takeUntil(this.destroyed$)).subscribe(p => this.isLoading = p);
+		this._store.pipe(select(p => p.inventoryInOutState.userSuccess), takeUntil(this.destroyed$)).subscribe(p => p && this.closeAsidePane(p));
 
 		this.createStockSuccess$.subscribe(s => {
 			if (s) {
@@ -139,5 +124,10 @@ export class AsideMenuComponent implements OnInit, OnChanges {
 
 	public createAccount(value) {
 		this._store.dispatch(this._inventoryUserAction.addNewUser(value.name));
+    }
+    
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();       
 	}
 }

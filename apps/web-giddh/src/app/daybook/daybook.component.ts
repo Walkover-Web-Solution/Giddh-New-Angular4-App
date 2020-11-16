@@ -231,7 +231,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 componentInstance.maxSize = 5;
                 componentInstance.writeValue(data.page);
                 componentInstance.boundaryLinks = true;
-                componentInstance.pageChanged.subscribe(e => {
+                componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                     this.pageChanged(e);
                 });
             }

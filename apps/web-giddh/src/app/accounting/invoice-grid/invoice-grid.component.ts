@@ -149,7 +149,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		private inventoryAction: InventoryAction,
 		private invoiceActions: InvoiceActions,
 	) {
-		this._keyboardService.keyInformation.subscribe((key) => {
+		this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
 			this.watchKeyboardEvent(key);
 		});
 
@@ -229,10 +229,8 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			}
 		});
 		this.entryDate = moment().format(GIDDH_DATE_FORMAT);
-		// this.refreshEntry();
-		// this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
-		this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+		this._tallyModuleService.filteredAccounts.pipe(takeUntil(this.destroyed$)).subscribe((accounts) => {
 			if (accounts) {
 				let accList: IOption[] = [];
 				accounts.forEach((acc: IFlattenAccountsResultItem) => {
@@ -964,7 +962,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		let componentInstance = componentRef.instance as QuickAccountComponent;
 		componentInstance.needAutoFocus = true;
-		componentInstance.closeQuickAccountModal.subscribe((a) => {
+		componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
 			this.hideQuickAccountModal();
 			componentInstance.needAutoFocus = false;
 			componentInstance.newAccountForm.reset();

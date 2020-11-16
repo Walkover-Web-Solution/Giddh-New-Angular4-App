@@ -1470,15 +1470,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.updateLedgerComponentInstance.defaultSuggestions = [...this.defaultSuggestions];
         this.updateLedgerComponentInstance.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
         this.updateLedgerComponentInstance.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
-        componentInstance.toggleOtherTaxesAsideMenu.subscribe(res => {
+        componentInstance.toggleOtherTaxesAsideMenu.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.toggleOtherTaxesAsidePane(res);
         });
 
-        componentInstance.closeUpdateLedgerModal.subscribe(() => {
+        componentInstance.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.hideUpdateLedgerModal();
         });
 
-        componentInstance.moreDetailOpen.subscribe((isOpened: boolean) => {
+        componentInstance.moreDetailOpen.pipe(takeUntil(this.destroyed$)).subscribe((isOpened: boolean) => {
             this.isMoreDetailsOpened = isOpened;
             this._cdRf.detectChanges();
         });
@@ -1498,7 +1498,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             componentRef.destroy();
         });
 
-        componentInstance.showQuickAccountModalFromUpdateLedger.subscribe(() => {
+        componentInstance.showQuickAccountModalFromUpdateLedger.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.showQuickAccountModal();
         });
     }
@@ -1509,7 +1509,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         viewContainerRef.remove();
         let componentRef = viewContainerRef.createComponent(componentFactory);
         let componentInstance = componentRef.instance as QuickAccountComponent;
-        componentInstance.closeQuickAccountModal.subscribe((a) => {
+        componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideQuickAccountModal();
             componentInstance.newAccountForm.reset();
             componentInstance.destroyed$.next(true);
@@ -1611,7 +1611,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         componentInstance.maxSize = 5;
         componentInstance.writeValue(s.page);
         componentInstance.boundaryLinks = true;
-        componentInstance.pageChanged.subscribe(e => {
+        componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
             // commenting this as we will use advance search api from now
             // if (this.isAdvanceSearchImplemented) {
             // this.advanceSearchPageChanged(e);

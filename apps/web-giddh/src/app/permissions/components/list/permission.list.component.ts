@@ -74,7 +74,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
             });
         });
 
-        this.route.data.subscribe((data: any) => this.localState = data.yourData);
+        this.route.data.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => this.localState = data.yourData);
         // Getting roles every time user refresh page
         this.store.dispatch(this.permissionActions.GetRoles());
         this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());

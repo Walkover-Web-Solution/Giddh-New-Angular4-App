@@ -1,4 +1,4 @@
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -48,7 +48,7 @@ export class SalesComponent implements OnInit, OnDestroy {
         this.isCreditNote = this.router.routerState.snapshot.url.includes('credit');
         this.isDebitNote = this.router.routerState.snapshot.url.includes('debit');
 
-        this.route.params.subscribe(parmas => {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
             if (parmas['accUniqueName']) {
                 this.accountUniqueName = parmas['accUniqueName'];
             }

@@ -216,7 +216,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.taxTempArray = [];
 
         // subscribe isFsStock for disabling manufacturingDetails
-        this.addStockForm.controls['isFsStock'].valueChanges.subscribe((v) => {
+        this.addStockForm.controls['isFsStock'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((v) => {
             const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
             if (v) {
                 manufacturingDetailsContorl.enable();
@@ -226,7 +226,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
 
         // subscribe enablePurchase checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enablePurchase'].valueChanges.subscribe((a) => {
+        this.addStockForm.controls['enablePurchase'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
             if (a) {
                 purchaseUnitRatesControls.enable();
@@ -236,7 +236,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
 
         // subscribe enableSales checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enableSales'].valueChanges.subscribe((a) => {
+        this.addStockForm.controls['enableSales'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
             if (a) {
                 saleUnitRatesControls.enable();

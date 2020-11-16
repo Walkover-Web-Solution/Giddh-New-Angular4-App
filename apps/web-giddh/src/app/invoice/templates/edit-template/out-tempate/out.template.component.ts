@@ -73,7 +73,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
 	public ngOnInit() {
 
-		this._activatedRoute.params.subscribe(a => {
+		this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
 			if (!a) {
 				return;
 			}

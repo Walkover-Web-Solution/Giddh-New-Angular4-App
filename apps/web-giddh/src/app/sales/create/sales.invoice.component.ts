@@ -391,7 +391,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             }
         });
 
-        this.route.params.subscribe(parmas => {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(parmas => {
             if (parmas['accUniqueName']) {
                 this.accountUniqueName = parmas['accUniqueName'];
                 this.isUpdateMode = false;
