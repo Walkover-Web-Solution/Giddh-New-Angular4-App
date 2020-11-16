@@ -1235,6 +1235,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public logout() {
+        /** Reset the current organization type on logout as we
+         * don't know receive switched branch from API in last state (state API)
+        */
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        this.setOrganizationDetails(OrganizationType.Company, details);
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else if (isCordova) {
