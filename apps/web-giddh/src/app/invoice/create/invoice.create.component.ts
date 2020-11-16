@@ -108,10 +108,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private invoiceActions: InvoiceActions,
         private _toasty: ToasterService,
-        private invoiceService: InvoiceService,
-        private salesService: SalesService,
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
         private _ledgerActions: LedgerActions,
@@ -125,11 +122,11 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 
-        this._activatedRoute.params.subscribe(a => {
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.selectedVoucher = a.voucherType;
             }
@@ -619,8 +616,9 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
                 return o.entryDate;
             }
         });
+
         if (maxDateEnrty && maxDateEnrty.entryDate) {
-            this.maxDueDate = moment(maxDateEnrty.entryDate, 'DD-MM-YYYY').toDate();
+            this.maxDueDate = moment(maxDateEnrty.entryDate, GIDDH_DATE_FORMAT).toDate();
         }
     }
 

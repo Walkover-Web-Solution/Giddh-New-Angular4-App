@@ -134,7 +134,9 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	private selectedAccountInputField: any;
 	private taxesToRemember: any[] = [];
 	private isAccountListFiltered: boolean = false;
-	private allFlattenAccounts: any[] = [];
+    private allFlattenAccounts: any[] = [];
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
 	constructor(
 		private _accountService: AccountService,
@@ -835,7 +837,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	}
 
 	public dateEntered() {
-		const date = moment(this.entryDate, 'DD-MM-YYYY');
+		const date = moment(this.entryDate, GIDDH_DATE_FORMAT);
 		if (moment(date).format('dddd') !== 'Invalid date') {
 			this.displayDay = moment(date).format('dddd');
 		} else {

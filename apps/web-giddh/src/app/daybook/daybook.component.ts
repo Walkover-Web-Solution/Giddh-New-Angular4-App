@@ -139,8 +139,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-        let from = moment(value.picker.startDate).format('DD-MM-YYYY');
-        let to = moment(value.picker.endDate).format('DD-MM-YYYY');
+        let from = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        let to = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
             this.showLoader = true;
             this.daybookQueryRequest.from = from;

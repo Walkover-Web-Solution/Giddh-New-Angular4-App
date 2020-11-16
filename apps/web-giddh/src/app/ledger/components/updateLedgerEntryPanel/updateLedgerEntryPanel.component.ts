@@ -1273,23 +1273,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public saveLedgerTransaction() {
         // due to date picker of Tx entry date format need to change
         if (this.vm.selectedLedger.entryDate) {
-            if (!moment(this.vm.selectedLedger.entryDate, 'DD-MM-YYYY').isValid()) {
+            if (!moment(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
                 this._toasty.errorToast('Invalid Date Selected.Please Select Valid Date');
                 this._loaderService.hide();
                 return;
             } else {
-                this.vm.selectedLedger.entryDate = moment(this.vm.selectedLedger.entryDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                this.vm.selectedLedger.entryDate = moment(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
         // due to date picker of Tx chequeClearance date format need to change
         if (this.vm.selectedLedger.chequeClearanceDate) {
-            if (!moment(this.vm.selectedLedger.chequeClearanceDate, 'DD-MM-YYYY').isValid()) {
+            if (!moment(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
                 this._toasty.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
                 this._loaderService.hide();
                 return;
             } else {
-                this.vm.selectedLedger.chequeClearanceDate = moment(this.vm.selectedLedger.chequeClearanceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                this.vm.selectedLedger.chequeClearanceDate = moment(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
         let requestObj: LedgerResponse = this.vm.prepare4Submit();
@@ -1748,7 +1748,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private getCurrencyRate() {
         let from = this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails.code : this.vm.foreignCurrencyDetails.code;
         let to = this.vm.selectedCurrency === 0 ? this.vm.foreignCurrencyDetails.code : this.vm.baseCurrencyDetails.code;
-        let date = moment().format('DD-MM-YYYY');
+        let date = moment().format(GIDDH_DATE_FORMAT);
         return this.ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
     }
 

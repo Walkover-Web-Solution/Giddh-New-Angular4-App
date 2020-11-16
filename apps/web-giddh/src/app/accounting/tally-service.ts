@@ -423,7 +423,7 @@ export class TallyModuleService {
     }
 
     /**
-     * Returns the date in DD-MM-YYYY format from YYYY-MM-DD format
+     * Returns the date in GIDDH_DATE_FORMAT format from YYYY-MM-DD format
      *
      * @param {string} date Date to be formatted
      * @returns {string} Formatted date

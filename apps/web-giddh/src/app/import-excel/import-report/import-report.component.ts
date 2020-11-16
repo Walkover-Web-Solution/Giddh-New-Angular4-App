@@ -9,11 +9,10 @@ import { ImportExcelRequestStates } from '../../store/import-excel/import-excel.
 import { takeUntil } from 'rxjs/operators';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-import { ImportExcelService } from '../../services/import-excel.service';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
-import { ToasterService } from '../../services/toaster.service';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'import-report',
@@ -25,15 +24,13 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     public importStatusResponse: ImportExcelStatusPaginatedResponse;
     public importRequestStatus: ImportExcelRequestStates;
     public importPaginatedRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _router: Router, private store: Store<AppState>, private _importActions: ImportExcelActions,
-        private _importExcelService: ImportExcelService, private _toaster: ToasterService) {
+    constructor(private _router: Router, private store: Store<AppState>, private _importActions: ImportExcelActions) {
         this.store.pipe(select(s => s.importExcel.importStatus), takeUntil(this.destroyed$)).subscribe(s => {
             if (s && s.results) {
                 s.results = s.results.map(res => {
-                    res.processDate = moment.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format('DD-MM-YYYY hh:mm:ss a');
+                    res.processDate = moment.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format(GIDDH_DATE_FORMAT + ' hh:mm:ss a');
                     return res;
                 })
             }

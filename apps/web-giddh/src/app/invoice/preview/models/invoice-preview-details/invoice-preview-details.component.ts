@@ -637,7 +637,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * Call API to get all advance receipts of an invoice
      *
      * @param {*} customerUniquename Selected customer unique name
-     * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
+     * @param {*} voucherDate Voucher Date (GIDDH_DATE_FORMAT)
      * @memberof InvoicePreviewDetailsComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {

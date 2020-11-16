@@ -242,6 +242,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public initialCalendarRender: boolean = true;
     /** This will hold how many days user can add in upto today field */
     public noOfDaysAllowed: number = 0;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.choosedDate = new EventEmitter();

@@ -28,6 +28,7 @@ import { ToasterService } from '../services/toaster.service';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -106,7 +107,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     ) {
         this.breakPointObservar.observe([
             '(max-width:1024px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.isMobileScreen && !result.matches) {
                 this.setDefaultGroup();
             }
@@ -227,8 +228,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.GroupStockReportRequest = new GroupStockReportRequest();
                 let firstElement = a[0];
                 if (firstElement) {
-                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-                    this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
                     this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
                     this.activeView = 'group';
                     this.firstDefaultActiveGroup = firstElement.uniqueName;

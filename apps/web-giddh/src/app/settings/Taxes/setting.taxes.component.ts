@@ -1,10 +1,8 @@
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-
 import {debounceTime, take, takeUntil} from 'rxjs/operators';
 import {GIDDH_DATE_FORMAT} from './../../shared/helpers/defaultDateFormat';
 import {select, Store} from '@ngrx/store';
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
 import {AppState} from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -69,9 +67,10 @@ export class SettingTaxesComponent implements OnInit {
     public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public taxAsideMenuState: string = 'out';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(
-        private router: Router,
         private store: Store<AppState>,
         private _companyActions: CompanyActions,
         private _accountService: AccountService,
@@ -135,7 +134,7 @@ export class SettingTaxesComponent implements OnInit {
             });
         }
 
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        dataToSave.date = moment(dataToSave.date).format(GIDDH_DATE_FORMAT);
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{date: dataToSave.date, taxValue: dataToSave.taxValue}];
         if (dataToSave.duration) {

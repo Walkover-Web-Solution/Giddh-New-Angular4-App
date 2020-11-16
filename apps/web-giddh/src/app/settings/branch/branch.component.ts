@@ -61,8 +61,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('confirmationModal', {static: false}) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
-        dateInputFormat: 'DD-MM-YYYY',
-        rangeInputFormat: 'DD-MM-YYYY',
+        dateInputFormat: GIDDH_DATE_FORMAT,
+        rangeInputFormat: GIDDH_DATE_FORMAT,
         containerClass: 'theme-green myDpClass'
     };
     public isMobileScreen: boolean = false;

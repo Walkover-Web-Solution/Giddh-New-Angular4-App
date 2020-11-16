@@ -71,12 +71,13 @@ export class MfEditComponent implements OnInit {
     public bsValue = new Date();
     private initialQuantity: number = 1;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
         private inventoryAction: InventoryAction,
         private router: Router,
-        private _groupService: GroupService,
         private _location: Location,
         private _inventoryService: InventoryService,
         private _accountService: AccountService,

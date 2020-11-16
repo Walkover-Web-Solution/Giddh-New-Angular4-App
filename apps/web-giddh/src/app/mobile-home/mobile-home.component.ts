@@ -93,7 +93,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit(): void {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (!result.matches) {
                 this.router.navigate(["/pages/home"]);
             }

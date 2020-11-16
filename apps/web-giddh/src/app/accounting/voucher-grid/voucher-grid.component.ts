@@ -124,6 +124,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public previousVoucherType: string = "";
     public universalDate$: Observable<any>;
     public universalDate: any = '';
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(
         private _accountService: AccountService,
@@ -836,7 +838,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public dateEntered() {
-        const date = moment(this.journalDate, 'DD-MM-YYYY');
+        const date = moment(this.journalDate, GIDDH_DATE_FORMAT);
         if (moment(date).format('dddd') !== 'Invalid date') {
             this.displayDay = moment(date).format('dddd');
         } else {

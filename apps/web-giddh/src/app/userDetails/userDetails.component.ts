@@ -80,7 +80,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private _loginAction: LoginActions,
         private _loginService: AuthenticationService,
         private loginAction: LoginActions,
-        private _subscriptionsActions: SubscriptionsActions,
         private _companyService: CompanyService,
         private companyActions: CompanyActions,
         private router: Router,

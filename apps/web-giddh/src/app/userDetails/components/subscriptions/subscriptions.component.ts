@@ -69,6 +69,8 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public allAssociatedCompanies: CompanyResponse[] = [];
     /* This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
@@ -113,7 +115,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             if(userSubscriptions && userSubscriptions.length > 0) {
                 userSubscriptions.forEach(userSubscription => {
                     if(userSubscription.createdAt) {
-                        userSubscription.createdAt = moment(userSubscription.createdAt, "DD-MM-YYYY HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                        userSubscription.createdAt = moment(userSubscription.createdAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
 
                     this.subscriptions.push(userSubscription);

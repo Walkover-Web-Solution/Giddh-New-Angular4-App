@@ -18,6 +18,7 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
 import { GeneralService } from '../../services/general.service';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'setting-linked-accounts',
@@ -255,7 +256,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     }
 
     public onUpdateDate(date, account) {
-        this.dateToUpdate = moment(date).format('DD-MM-YYYY');
+        this.dateToUpdate = moment(date).format(GIDDH_DATE_FORMAT);
 
         this.selectedAccount = _.cloneDeep(account);
         this.confirmationMessage = `Do you want to get ledger entries for this account from ${this.dateToUpdate} ?`;

@@ -12,75 +12,12 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { BranchTransferEntity, ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM, TransferDestinationRequest, TransferProductsRequest } from '../../../../models/api-models/BranchTransfer';
 import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'branch-destination',
     templateUrl: './branch.transfer.component.html',
-    styles: [`
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
-      max-width:580px;
-      z-index: 99999;
-    }
-
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-      position: fixed;
-      left: -41px;
-      top: 0;
-      z-index: 5;
-      border: 0;
-      border-radius: 0;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 100%;
-      max-width:580px;
-      background: #fff;
-    }
-
-    .aside-pane {
-      width: 100%;
-    }
-
-    .flexy-child {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .flexy-child-1 {
-      flex-grow: 1;
-    }
-
-    .vmiddle {
-      position: absolute;
-      top: 50%;
-      bottom: 0;
-      left: 0;
-      display: table;
-      width: 100%;
-      right: 0;
-      transform: translateY(-50%);
-      text-align: center;
-      margin: 0 auto;
-    }
-  `],
+    styleUrls: ['./branch.transfer.component.scss']
 })
 export class BranchTransferComponent implements OnInit, OnDestroy {
     // @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -96,6 +33,8 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
     public isBranchCreationInProcess$: Observable<boolean>;
     public isBranchCreationSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private _fb: FormBuilder, private _store: Store<AppState>, private _inventoryAction: InventoryAction, private sidebarAction: SidebarAction) {
         this._store.dispatch(this._inventoryAction.GetAllLinkedStocks());
@@ -185,7 +124,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
 
     public initializeForm() {
         this.form = this._fb.group({
-            transferDate: [moment().format('DD-MM-YYYY'), Validators.required],
+            transferDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
             source: ['', Validators.required],
             productName: ['', Validators.required],
             destination: [''],
@@ -284,7 +223,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
                 value.source = new BranchTransferEntity(this.source.value, this.getEntityType(this.source.value));
                 value.description = this.description.value;
                 value.product = new BranchTransferEntity(this.productName.value, 'stock');
-                value.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                value.transferDate = moment(this.transferDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
                 let rawValues = this.transfers.getRawValue();
                 rawValues.map(rv => {
@@ -300,7 +239,7 @@ export class BranchTransferComponent implements OnInit, OnDestroy {
                 value.source = new BranchTransferEntity(this.source.value, this.getEntityType(this.source.value));
                 value.description = this.description.value;
                 value.destination = new BranchTransferEntity(this.destination.value, this.getEntityType(this.destination.value));
-                value.transferDate = moment(this.transferDate.value, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                value.transferDate = moment(this.transferDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
                 let rawValues = this.transfers.getRawValue();
                 rawValues.map(rv => {

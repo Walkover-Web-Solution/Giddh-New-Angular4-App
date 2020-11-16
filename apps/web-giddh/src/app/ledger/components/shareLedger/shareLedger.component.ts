@@ -3,13 +3,10 @@ import { AccountsAction } from './../../../actions/accounts.actions';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
-import { AccountService } from '../../../services/account.service';
-import { Observable, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/index';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import * as moment from 'moment/moment';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'share-ledger',
@@ -30,10 +27,8 @@ export class ShareLedgerComponent implements OnInit {
     public magicLink: string = '';
     public isCopied: boolean = false;
     public activeAccountSharedWith: any[] = [];
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _ledgerService: LedgerService, private _accountService: AccountService,
-        private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
+    constructor(private _ledgerService: LedgerService, private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
     }
 
     public ngOnInit() {
@@ -50,7 +45,7 @@ export class ShareLedgerComponent implements OnInit {
     public getMagicLink() {
         let magicLinkRequest = new MagicLinkRequest();
         const data = _.cloneDeep(this.advanceSearchRequest);
-        data.dataToSend.bsRangeValue = [moment(this.from, 'DD-MM-YYYY').toDate(), moment(this.to, 'DD-MM-YYYY').toDate()];
+        data.dataToSend.bsRangeValue = [moment(this.from, GIDDH_DATE_FORMAT).toDate(), moment(this.to, GIDDH_DATE_FORMAT).toDate()];
         magicLinkRequest.from = moment(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
         magicLinkRequest.to = moment(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
         this._ledgerService.GenerateMagicLink(magicLinkRequest, this.accountUniqueName).subscribe(resp => {

@@ -51,6 +51,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public taxNumber: string;
     /** True, if API is in progress */
     public isTaxApiInProgress: boolean;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(
         private gstReconcileService: GstReconcileService,

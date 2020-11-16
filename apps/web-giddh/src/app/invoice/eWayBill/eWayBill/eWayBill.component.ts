@@ -146,8 +146,8 @@ export class EWayBillComponent implements OnInit {
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
-        this.EwayBillfilterRequest.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
-        this.EwayBillfilterRequest.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+        this.EwayBillfilterRequest.fromDate = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
+        this.EwayBillfilterRequest.toDate = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
 
         this.isGetAllEwaybillRequestInProcess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
         this.isGetAllEwaybillRequestSuccess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestSuccess).pipe(takeUntil(this.destroyed$));

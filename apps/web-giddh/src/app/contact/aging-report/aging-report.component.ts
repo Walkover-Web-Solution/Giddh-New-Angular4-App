@@ -17,6 +17,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { ContactAdvanceSearchComponent } from '../advanceSearch/contactAdvanceSearch.component';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'aging-report',
@@ -112,8 +113,8 @@ export class AgingReportComponent implements OnInit {
     public ngOnInit() {
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.fromDate = moment(a[0]).format('DD-MM-YYYY');
-                this.toDate = moment(a[1]).format('DD-MM-YYYY');
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
         let companyUniqueName = null;
@@ -141,6 +142,7 @@ export class AgingReportComponent implements OnInit {
 
         this._breakpointObserver
             .observe(['(max-width: 768px)'])
+            .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isMobileScreen = state.matches;
                 this.getDueAmountreportData();

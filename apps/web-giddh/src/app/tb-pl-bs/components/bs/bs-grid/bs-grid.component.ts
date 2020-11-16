@@ -5,6 +5,7 @@ import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'bs-grid',  // <home></home>
@@ -25,7 +26,9 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
 	@Input() public to: string = '';
 	@Output() public searchChange = new EventEmitter<string>();
 	@ViewChild('searchInputEl', {static: true}) public searchInputEl: ElementRef;
-	public bsSearchControl: FormControl = new FormControl();
+    public bsSearchControl: FormControl = new FormControl();
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
 	constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
 		//

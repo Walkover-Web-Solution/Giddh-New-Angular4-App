@@ -12,6 +12,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import { createSelector } from "reselect";
 import { IForceClear } from "../../models/api-models/Sales";
+import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -48,6 +49,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     public selectedTax: string = '';
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private store: Store<AppState>, private _settingsTaxesActions: SettingsTaxesActions, private _toaster: ToasterService) {
         for (let i = 1; i <= 31; i++) {
@@ -191,7 +194,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
             });
         }
 
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        dataToSave.date = moment(dataToSave.date).format(GIDDH_DATE_FORMAT);
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
 

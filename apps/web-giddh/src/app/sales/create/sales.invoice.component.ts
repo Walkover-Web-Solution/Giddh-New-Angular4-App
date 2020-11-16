@@ -726,10 +726,10 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                         }
 
                         if (obj.voucherDetails.voucherDate) {
-                            obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, 'DD-MM-YYYY').toDate();
+                            obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                         }
                         if (obj.voucherDetails.dueDate) {
-                            obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, 'DD-MM-YYYY').toDate();
+                            obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, GIDDH_DATE_FORMAT).toDate();
                         }
 
                         this.isCustomerSelected = true;
@@ -961,7 +961,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         }
 
         if (this.isSalesInvoice || this.isPurchaseInvoice) {
-            if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+            if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this._toasty.errorToast('Due date cannot be less than Invoice Date');
                 return;
             }
@@ -1971,7 +1971,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         let data: VoucherClass = _.cloneDeep(this.invFormData);
 
         if (this.isSalesInvoice || this.isPurchaseInvoice) {
-            if (moment(data.voucherDetails.dueDate, 'DD-MM-YYYY').isBefore(moment(data.voucherDetails.voucherDate, 'DD-MM-YYYY'), 'd')) {
+            if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this._toasty.errorToast('Due date cannot be less than Invoice Date');
                 return;
             }

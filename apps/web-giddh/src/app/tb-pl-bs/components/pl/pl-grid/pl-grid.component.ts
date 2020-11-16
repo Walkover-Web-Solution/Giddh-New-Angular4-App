@@ -5,6 +5,7 @@ import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'pl-grid',  // <home></home>
@@ -27,8 +28,8 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
 	@ViewChild('searchInputEl', {static: true}) public searchInputEl: ElementRef;
 	public moment = moment;
 	public plSearchControl: FormControl = new FormControl();
-
-	// }
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
 	constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
 		//

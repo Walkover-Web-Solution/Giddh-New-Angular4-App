@@ -16,6 +16,7 @@ import { AccountService } from 'apps/web-giddh/src/app/services/account.service'
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import {IForceClear} from "../../models/api-models/Sales";
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 const COMPARISON_FILTER = [
 	{ label: 'Greater Than', value: 'greaterThan' },
@@ -44,7 +45,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	public advanceSearchForm: FormGroup;
 	public showOtherDetails: boolean = false;
 	public showChequeDatePicker: boolean = false;
-	public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
+	public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT };
 	public accounts$: Observable<IOption[]>;
 	public groups$: Observable<IOption[]>;
 	public voucherTypeList: Observable<IOption[]>;
@@ -101,9 +102,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
        /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
 
-	constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _daybookActions: DaybookActions, private _accountService: AccountService) {
-
-
+	constructor(private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _accountService: AccountService) {
         this.initializeDaybookAdvanceSearchForm();
 		this.setVoucherTypes();
 		this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
@@ -143,13 +142,13 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 
 	public ngOnChanges(changes: SimpleChanges) {
 		if ('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) {
-			//this.datePickerOptions.startDate = moment(changes.startDate.currentValue, 'DD-MM-YYYY');
-			this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(changes.startDate.currentValue, 'DD-MM-YYYY') };
+			//this.datePickerOptions.startDate = moment(changes.startDate.currentValue, GIDDH_DATE_FORMAT);
+			this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(changes.startDate.currentValue, GIDDH_DATE_FORMAT) };
 			this.fromDate = changes.startDate.currentValue;
 		}
 		if ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue) {
-			//this.datePickerOptions.endDate = moment(changes.endDate.currentValue, 'DD-MM-YYYY');
-			this.datePickerOptions = { ...this.datePickerOptions, endDate: moment(changes.endDate.currentValue, 'DD-MM-YYYY') };
+			//this.datePickerOptions.endDate = moment(changes.endDate.currentValue, GIDDH_DATE_FORMAT);
+			this.datePickerOptions = { ...this.datePickerOptions, endDate: moment(changes.endDate.currentValue, GIDDH_DATE_FORMAT) };
 			this.toDate = changes.endDate.currentValue;
 		}
 	}
@@ -197,8 +196,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * onDateRangeSelected
      */
 	public onDateRangeSelected(value) {
-		this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-		this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+		this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+		this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
 	}
 
     /**
@@ -207,7 +206,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	public go(exportFileAs = null) {
 		let dataToSend = _.cloneDeep(this.advanceSearchForm.value) as DayBookRequestModel;
 		if (dataToSend.dateOnCheque) {
-			dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
+			dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
 		}
 		let fromDate = this.fromDate;
 		let toDate = this.toDate;

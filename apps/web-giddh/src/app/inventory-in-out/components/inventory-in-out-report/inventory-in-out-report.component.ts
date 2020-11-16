@@ -6,6 +6,7 @@ import { AppState } from '../../../store';
 import { InventoryReportActions } from '../../../actions/inventory/inventory.report.actions';
 import { InventoryFilter, InventoryReport } from '../../../models/api-models/Inventory-in-out';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'invetory-in-out-report',  // <home></home>
@@ -68,8 +69,8 @@ export class InventoryInOutReportComponent {
     public inventoryReport: InventoryReport;
     public filter: InventoryFilter = {};
     public stockOptions: IOption[] = [];
-    public startDate: string = moment().subtract(30, 'days').format('DD-MM-YYYY');
-    public endDate: string = moment().format('DD-MM-YYYY');
+    public startDate: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    public endDate: string = moment().format(GIDDH_DATE_FORMAT);
     public uniqueName: string;
     public type: string;
     public COMPARISON_FILTER = [
@@ -112,8 +113,8 @@ export class InventoryInOutReportComponent {
 
     public dateSelected(val) {
         const { startDate, endDate } = val.picker;
-        this.startDate = startDate.format('DD-MM-YYYY');
-        this.endDate = endDate.format('DD-MM-YYYY');
+        this.startDate = startDate.format(GIDDH_DATE_FORMAT);
+        this.endDate = endDate.format(GIDDH_DATE_FORMAT);
     }
 
     public searchChanged(val: IOption) {

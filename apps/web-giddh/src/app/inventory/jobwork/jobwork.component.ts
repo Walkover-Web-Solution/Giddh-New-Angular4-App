@@ -17,6 +17,7 @@ import { InvViewService } from '../inv.view.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { IStocksItem } from "../../models/interfaces/stocksItem.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'jobwork',
@@ -52,7 +53,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
 	public showReceiverSearch: boolean = false;
 	public showProductSearch: boolean = false;
 	public updateDescriptionIdx: number = null;
-	public _DDMMYYYY: string = 'DD-MM-YYYY';
 	// modal advance search
 	public isFilterCorrect: boolean = false;
 	public advanceSearchForm: FormGroup;
@@ -120,8 +120,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
 	public inventoryUsers$: Observable<InventoryUser[]>;
 	public filter: InventoryFilter = {};
 	public stockOptions: IOption[] = [];
-	public startDate: string = moment().subtract(30, 'days').format(this._DDMMYYYY);
-	public endDate: string = moment().format(this._DDMMYYYY);
+	public startDate: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+	public endDate: string = moment().format(GIDDH_DATE_FORMAT);
 	public uniqueName: string;
 	public type: string;
 	public reportType: string;
@@ -295,8 +295,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
 		this.universalDate$.subscribe(a => {
 			if (a) {
 				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-				this.startDate = moment(a[0]).format(this._DDMMYYYY);
-				this.endDate = moment(a[1]).format(this._DDMMYYYY);
+				this.startDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+				this.endDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
 				this.applyFilters(1, true);
 			}
 		});
@@ -325,8 +325,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
 	public dateSelected(val) {
 		const { startDate, endDate } = val.picker;
-		this.startDate = startDate.format(this._DDMMYYYY);
-		this.endDate = endDate.format(this._DDMMYYYY);
+		this.startDate = startDate.format(GIDDH_DATE_FORMAT);
+		this.endDate = endDate.format(GIDDH_DATE_FORMAT);
 		this.isFilterCorrect = true;
 		this.applyFilters(1, true);
 	}
@@ -491,8 +491,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
 		this.universalDate$.pipe(take(1)).subscribe(a => {
 			if (a) {
 				this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-				this.startDate = moment(a[0]).format(this._DDMMYYYY);
-				this.endDate = moment(a[1]).format(this._DDMMYYYY);
+				this.startDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+				this.endDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
 			}
 		});
 		//Reset Date
