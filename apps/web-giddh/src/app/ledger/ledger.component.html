@@ -1314,7 +1314,7 @@
 <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable">
     <div class="container">
         <section class="ledger-stat mrT3"
-            *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
+            *ngIf="!showLoader">
 
             <div class="row">
                 <div class="col-sm-3 col-xs-12 stat-block">
