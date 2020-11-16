@@ -22,12 +22,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ILedgerAdvanceSearchRequest } from '../../../models/api-models/Ledger';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
-import { AccountService } from '../../../services/account.service';
 import { GeneralService } from '../../../services/general.service';
 import { GroupService } from '../../../services/group.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -96,7 +93,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private modalService: BsModalService, private generalService: GeneralService) {
         this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-        this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -110,7 +107,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }
         });
 
-        this.stockListDropDown$ = this.store.select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
+        this.stockListDropDown$ = this.store.pipe(select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
             let data = _.cloneDeep(allStocks);
             if (data && data.results) {
                 let units = data.results;
@@ -119,7 +116,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     return { label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
                 });
             }
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
 
         if(!this.advanceSearchForm) {
             this.setAdvanceSearchForm();

@@ -123,8 +123,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         private _generalService: GeneralService,
         private router: Router) {
 
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
     }
 

@@ -265,7 +265,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 return false;
             }
             return true;
-        })).subscribe((data) => {
+        }), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
                 this.currentVoucher = data.page;
                 this.setCurrentPageTitle(this.currentVoucher);
@@ -297,7 +297,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
             }
         });
-        this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+        this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -336,13 +336,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 return false;
             }
             return true;
-        })).subscribe((data) => {
+        }), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
                 this.requestObj = cloneDeep(data);
             }
         });
 
-        this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$)).subscribe((s: boolean) => {
+        this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
             if (s) {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.refreshEntry();
@@ -1237,7 +1237,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.isNoAccFound = false;
             this.dateField.nativeElement.focus();
         });
-        componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+        componentInstance.isQuickAccountCreatedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe((status: boolean) => {
             if (status) {
                 this.refreshAccountListData(true);
             }
@@ -1347,7 +1347,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     private refreshAccountListData(needToFocusAccountInputField: boolean = false) {
-        this.store.select(p => p.session.companyUniqueName).subscribe(a => {
+        this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success') {

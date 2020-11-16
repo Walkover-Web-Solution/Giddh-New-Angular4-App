@@ -38,21 +38,21 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.bsConfig.showWeekNumbers = false;
 
         this.vm = new AuditLogsSidebarVM();
-        this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).pipe(takeUntil(this.destroyed$));
-        this.vm.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-        this.vm.selectedCompany = this.store.select(state => {
+        this.vm.getLogsInprocess$ = this.store.pipe(select(p => p.auditlog.getLogInProcess), takeUntil(this.destroyed$));
+        this.vm.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
+        this.vm.selectedCompany = this.store.pipe(select(state => {
             if (!state.session.companies) {
                 return;
             }
             return state.session.companies.find(cmp => {
                 return cmp.uniqueName === state.session.companyUniqueName;
             });
-        }).pipe(takeUntil(this.destroyed$));
-        this.vm.user$ = this.store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.vm.user$ = this.store.pipe(select(state => {
             if (state.session.user) {
                 return state.session.user.user;
             }
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
 
         /* previously we were getting data from api now we are getting data from general store */
 

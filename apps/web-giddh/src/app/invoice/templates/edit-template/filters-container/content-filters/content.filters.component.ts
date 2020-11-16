@@ -57,18 +57,18 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         let companies = null;
         let defaultTemplate = null;
 
-        this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
             this.companyUniqueName = ss.companyUniqueName;
             companies = ss.companies;
         });
 
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
         });
         this._invoiceUiDataService.initCustomTemplate(this.companyUniqueName, companies, defaultTemplate);
 
-        this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
 
         this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
             if (companies) {

@@ -114,8 +114,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
             filterTimeInterval: [''],
             filterDate: ['', Validators.required],
         });
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         // set financial years based on company financial year
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {

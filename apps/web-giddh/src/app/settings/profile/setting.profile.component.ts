@@ -202,7 +202,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
                     return data;
-                }));
+                }),
+                takeUntil(this.destroyed$));
         };
 
         this.keyDownSubject$
@@ -212,9 +213,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             });
 
         this.gstKeyDownSubject$
-            .pipe(debounceTime(3000)
-                , distinctUntilChanged()
-                , takeUntil(this.destroyed$))
+            .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 if (this.isGstValid) {
 
@@ -268,14 +267,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
 
-        this.store.select(p => p.settings.inventory).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
             }
         });
 
-        this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.currentCompanyDetails = response;
                 if (this.currentOrganizationType === OrganizationType.Company) {

@@ -74,7 +74,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(cmp => cmp.session.companies), takeUntil(this.destroyed$));
         this.activeCompanyUniqueName$ = this.store.pipe(select(cmp => cmp.session.companyUniqueName), takeUntil(this.destroyed$));
     }
 
@@ -449,15 +449,13 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
 
     // public getSubscriptionList() {
     //   this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
-    //   this.store.select(s =>  s.subscriptions.subscriptions)
-    //     .pipe(takeUntil(this.destroyed$))
+    //   this.store.pipe(select(s =>  s.subscriptions.subscriptions), takeUntil(this.destroyed$))
     //     .subscribe(s => {
     //       if (s && s.length) {
     //         this.subscriptions = s;
     //         this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
     //         this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
-    //         this.store.select(s =>  s.subscriptions.transactions)
-    //           .pipe(takeUntil(this.destroyed$))
+    //         this.store.pipe(select(s =>  s.subscriptions.transactions), takeUntil(this.destroyed$))
     //           .subscribe(s => this.transactions = s);
     //       }
     //     });

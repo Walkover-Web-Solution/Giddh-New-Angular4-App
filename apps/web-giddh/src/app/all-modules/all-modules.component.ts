@@ -137,7 +137,7 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @memberof AllModulesComponent
      */
     public hideManageGroupsModal(): void {
-        this.store.select(company => company.session.lastState).pipe(take(1)).subscribe((state: string) => {
+        this.store.pipe(select(company => company.session.lastState), take(1)).subscribe((state: string) => {
             if (state && (state.indexOf('ledger/') > -1 || state.indexOf('settings') > -1)) {
                 this.store.dispatch(this.generalActions.addAndManageClosed());
             }

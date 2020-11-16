@@ -249,18 +249,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
-        this.lc.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
-        this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).pipe(takeUntil(this.destroyed$));
-        this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess);
-        this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).pipe(takeUntil(this.destroyed$), shareReplay(1));
-        this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$));
-        this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-        // this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-        this.lc.companyProfile$ = this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$));
-        this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
-        this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
+        this.lc.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
+        this.accountInprogress$ = this.store.pipe(select(p => p.ledger.accountInprogress), takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
+        this.lc.transactionData$ = this.store.pipe(select(p => p.ledger.transactionsResponse), takeUntil(this.destroyed$), shareReplay(1));
+        this.isLedgerCreateSuccess$ = this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$));
+        this.lc.groupsArray$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
+        // this.lc.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
+        this.lc.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));
+        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.isTransactionRequestInProcess$ = this.store.pipe(select(p => p.ledger.transactionInprogress), takeUntil(this.destroyed$));
+        this.ledgerBulkActionSuccess$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionSuccess), takeUntil(this.destroyed$));
         // this.store.dispatch(this._generalActions.getFlattenAccount());
         // this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
@@ -270,11 +270,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._companyActions.getTax());
         // reset redirect state from login action
         this.store.dispatch(this._loginActions.ResetRedirectToledger());
-        this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-        this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
-        this.failedBulkEntries$ = this.store.select(p => p.ledger.ledgerBulkActionFailedEntries).pipe(takeUntil(this.destroyed$));
+        this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
+        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
+        this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
     }
 
     public toggleShow() {
@@ -654,7 +654,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                 // set state details
                 let companyUniqueName = null;
-                this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+                this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
                 let stateDetailsRequest = new StateDetailsRequest();
                 stateDetailsRequest.companyUniqueName = companyUniqueName;
                 stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
@@ -903,7 +903,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.searchTermStream.pipe(
             debounceTime(700),
-            distinctUntilChanged())
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$))
             .subscribe(term => {
                 this.trxRequest.q = term;
                 this.trxRequest.page = 0;
@@ -911,11 +912,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.getTransactionData();
             });
 
-        this.store.select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
+        this.store.pipe(select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
             if (yesOrNo) {
                 this.getTransactionData();
             }
-        })).pipe(debounceTime(300)).subscribe();
+        })), debounceTime(300), takeUntil(this.destroyed$)).subscribe();
 
         this.ledgerBulkActionSuccess$.subscribe((yes: boolean) => {
             if (yes) {
@@ -1247,7 +1248,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public showUpdateLedgerModal(txn: ITransactionItem) {
         let transactions: TransactionsResponse = null;
-        this.store.select(t => t.ledger.transactionsResponse).pipe(take(1)).subscribe(trx => transactions = trx);
+        this.store.pipe(select(t => t.ledger.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
         if (transactions) {
             // if (txn.isBaseAccount) {
             //   // store the trx values in store

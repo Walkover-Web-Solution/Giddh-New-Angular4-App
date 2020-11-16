@@ -103,10 +103,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.initialRequest();
         let companyUniqueName;
         let company;
-        store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$))
+
+        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$))
             .subscribe(p => companyUniqueName = p);
 
-        store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$))
+        this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$))
             .subscribe(p => {
                 company = p.find(q => q.uniqueName === companyUniqueName);
             });
@@ -118,7 +119,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         // set state details
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'daybook';

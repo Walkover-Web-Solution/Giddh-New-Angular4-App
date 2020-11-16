@@ -702,7 +702,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
-        this.store.select(s => {
+        this.store.pipe(select(s => {
             if (!s.session.companies) {
                 return;
             }
@@ -711,7 +711,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.selectedCompany = cmp;
                 }
             });
-        }).pipe(takeUntil(this.destroyed$)).subscribe();
+        }), takeUntil(this.destroyed$)).subscribe();
 
         this.activeAccount$.subscribe(data => {
             if (data) {
@@ -4400,7 +4400,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     private saveStateDetails() {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;

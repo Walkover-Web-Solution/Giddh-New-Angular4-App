@@ -21,7 +21,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
     styleUrls: [`./tb-pl-bs-filter.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
+export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
     public selectedDateOption: string = '0';
     public filterForm: FormGroup;
@@ -122,8 +122,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         this.store.dispatch(this._settingsTagActions.GetALLTags());
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
-
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     public get selectedCompany() {
@@ -157,28 +156,21 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        // if (changes['needToReCalculate']) {
-        //   this.calculateTotal();
-        // }
-    }
-
     public ngOnInit() {
 
         this.imgPath = (isElectron|| isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
-        //
         if (!this.showLabels) {
             this.filterForm.patchValue({selectedDateOption: '0'});
         }
         this.accountSearchControl.valueChanges.pipe(
-            debounceTime(700))
+            debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.search = newValue;
                 this.seachChange.emit(this.search);
                 this.cd.detectChanges();
             });
 
-        this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+        this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
             if (tags && tags.length) {
                 _.map(tags, (tag) => {
                     tag.value = tag.name;
@@ -186,7 +178,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 });
                 return _.orderBy(tags, 'name');
             }
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
 
         this.universalDate$.subscribe((a) => {
             if (a) {
@@ -258,7 +250,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public selectDateOption(v: IOption) {

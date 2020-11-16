@@ -56,7 +56,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private toasty: ToasterService, private cdRef: ChangeDetectorRef, private reverseChargeService: ReverseChargeService, private router: Router, private generalActions: GeneralActions) {
         this.setCurrentPageTitle();
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     /**
@@ -79,14 +79,14 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             });
         });
 
-        this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+        this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 if (this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
                     this.datePicker = [moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()];
                 }
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
     }
 
     /**

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
@@ -60,11 +60,11 @@ export class PendingListComponent implements OnInit, OnChanges {
         private expenseService: ExpenseService,
         private _toasty: ToasterService,
         private _cdRf: ChangeDetectorRef, private _modalService: BsModalService) {
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
-        this.pettyCashReportsResponse$ = this.store.select(p => p.expense.pettycashReport).pipe(takeUntil(this.destroyed$));
-        this.getPettycashReportInprocess$ = this.store.select(p => p.expense.getPettycashReportInprocess).pipe(takeUntil(this.destroyed$));
-        this.getPettycashReportSuccess$ = this.store.select(p => p.expense.getPettycashReportSuccess).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
+        this.pettyCashReportsResponse$ = this.store.pipe(select(p => p.expense.pettycashReport), takeUntil(this.destroyed$));
+        this.getPettycashReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashReportInprocess), takeUntil(this.destroyed$));
+        this.getPettycashReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashReportSuccess), takeUntil(this.destroyed$));
 
         observableCombineLatest(this.universalDate$, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
 			if (!Array.isArray(resp[0])) {

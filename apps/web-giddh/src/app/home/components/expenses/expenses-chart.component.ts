@@ -31,8 +31,8 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-        // this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        // this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+        // this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        // this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {

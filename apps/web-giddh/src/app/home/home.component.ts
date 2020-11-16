@@ -5,7 +5,7 @@ import { HistoryChartComponent } from './components/history/history-chart.compon
 import { RevenueChartComponent } from './components/revenue/revenue-chart.component';
 import { ExpensesChartComponent } from './components/expenses/expenses-chart.component';
 import { LiveAccountsComponent } from './components/live-accounts/live-accounts.component';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -70,16 +70,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         private _accountService: AccountService,
         private _generalService: GeneralService
     ) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-        this.comparisionChartData$ = this.store.select(p => p.home.comparisionChart).pipe(takeUntil(this.destroyed$));
-        this.expensesChartData$ = this.store.select(p => p.home.expensesChart).pipe(takeUntil(this.destroyed$));
-        this.historyComparisionChartData$ = this.store.select(p => p.home.history_comparisionChart).pipe(takeUntil(this.destroyed$));
-        this.networthComparisionChartData$ = this.store.select(p => p.home.networth_comparisionChart).pipe(takeUntil(this.destroyed$));
-        this.revenueChartData$ = this.store.select(p => p.home.revenueChart).pipe(takeUntil(this.destroyed$));
-        this.needsToRedirectToLedger$ = this.store.select(p => p.login.needsToRedirectToLedger).pipe(takeUntil(this.destroyed$));
+        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
+        this.comparisionChartData$ = this.store.pipe(select(p => p.home.comparisionChart), takeUntil(this.destroyed$));
+        this.expensesChartData$ = this.store.pipe(select(p => p.home.expensesChart), takeUntil(this.destroyed$));
+        this.historyComparisionChartData$ = this.store.pipe(select(p => p.home.history_comparisionChart), takeUntil(this.destroyed$));
+        this.networthComparisionChartData$ = this.store.pipe(select(p => p.home.networth_comparisionChart), takeUntil(this.destroyed$));
+        this.revenueChartData$ = this.store.pipe(select(p => p.home.revenueChart), takeUntil(this.destroyed$));
+        this.needsToRedirectToLedger$ = this.store.pipe(select(p => p.login.needsToRedirectToLedger), takeUntil(this.destroyed$));
 
-        this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.selectedCompany = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
                 return;
             }
@@ -96,7 +96,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             });
 
             return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
 
         this.selectedCompany.subscribe((res: any) => {
             if (res) {
@@ -110,7 +110,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public ngOnInit() {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'home';

@@ -1,19 +1,16 @@
 import { takeUntil } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsLinkedAccountsService } from '../../services/settings.linked.accounts.service';
 import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-accounts/settings.linked.accounts.action';
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
-import { DomSanitizer } from '@angular/platform-browser';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
@@ -56,19 +53,16 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     private dataToUpdate: object;
 
     constructor(
-        private router: Router,
         private store: Store<AppState>,
         private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
         private settingsLinkedAccountsActions: SettingsLinkedAccountsActions,
-        private _accountService: AccountService,
-        private _sanitizer: DomSanitizer,
         private _fb: FormBuilder,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private _generalService: GeneralService
     ) {
-        this.flattenAccountsStream$ = this.store.select(s => s.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+        this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.companyUniqueName = this._generalService.companyUniqueName;
-        this.needReloadingLinkedAccounts$ = this.store.select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$));
+        this.needReloadingLinkedAccounts$ = this.store.pipe(select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -81,21 +75,20 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             extraParams: ['', Validators.required]
         });
 
-        this.store.select(p => p.settings).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
                 this.ebankAccounts = _.cloneDeep(o.linkedAccounts.bankAccounts);
             }
         });
 
-        this.store.select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts), takeUntil(this.destroyed$)).subscribe((o) => {
             if (this.isRefreshWithCredentials) {
                 this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
             }
         });
 
-        this.store.select(p => p.settings.linkedAccounts.iframeSource).pipe(takeUntil(this.destroyed$)).subscribe((source) => {
+        this.store.pipe(select(p => p.settings.linkedAccounts.iframeSource), takeUntil(this.destroyed$)).subscribe((source) => {
             if (source) {
-                // this.iframeSource = _.clone(source);
                 this.connectBankModel.show();
                 this.connectBankModel.config.ignoreBackdropClick = true;
             }

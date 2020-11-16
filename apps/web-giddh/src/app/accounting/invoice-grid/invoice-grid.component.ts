@@ -13,11 +13,9 @@ import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
-import { FlyAccountsActions } from 'apps/web-giddh/src/app/actions/fly-accounts.actions';
 import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { SalesActions } from 'apps/web-giddh/src/app/actions/sales/sales.action';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
@@ -143,21 +141,17 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		private _ledgerActions: LedgerActions,
 		private store: Store<AppState>,
 		private _keyboardService: KeyboardService,
-		private flyAccountActions: FlyAccountsActions,
 		private _toaster: ToasterService,
 		private _router: Router,
-		private _salesActions: SalesActions,
 		private _tallyModuleService: TallyModuleService,
 		private componentFactoryResolver: ComponentFactoryResolver,
 		private inventoryService: InventoryService,
 		private inventoryAction: InventoryAction,
 		private invoiceActions: InvoiceActions,
 	) {
-		// this.data.transactions.inventory = [];
 		this._keyboardService.keyInformation.subscribe((key) => {
 			this.watchKeyboardEvent(key);
 		});
-		// this.store.dispatch(this._salesActions.getFlattenAcOfPurchase({groupUniqueNames: ['purchases']}));
 
 		this._tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
 			if (p && q) {
@@ -167,7 +161,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 				return false;
 			}
 			return true;
-		})).subscribe((d) => {
+		}), takeUntil(this.destroyed$)).subscribe((d) => {
 			if (d && d.gridType === 'invoice') {
 				this.data.voucherType = d.page;
 				this.gridType = d.gridType;
@@ -206,7 +200,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 				return false;
 			}
 			return true;
-		})).subscribe((data) => {
+		}), takeUntil(this.destroyed$)).subscribe((data) => {
 			if (data) {
 				this.data = cloneDeep(data);
 				if (this.gridType === 'invoice') {
@@ -215,8 +209,8 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			}
 		});
 
-		this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
-		this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+		this.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+		this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
 		this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 	}
 
@@ -225,7 +219,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		// dispatch stocklist request
 		this.store.dispatch(this.inventoryAction.GetStock());
 
-		this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$)).subscribe((s: boolean) => {
+		this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
 			if (s) {
 				this._toaster.successToast('Entry created successfully', 'Success');
 				this.refreshEntry();
@@ -981,7 +975,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 				this.selectedAccountInputField.value = '';
 			}
 		});
-		componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+		componentInstance.isQuickAccountCreatedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe((status: boolean) => {
 			if (status) {
 				this.refreshAccountListData(null, true);
 			}
@@ -1136,7 +1130,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	}
 
 	private refreshAccountListData(groupUniqueName: string = null, needToFocusSelectedInputField: boolean = false) {
-		this.store.select(p => p.session.companyUniqueName).subscribe(a => {
+		this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
 			if (a && a !== '') {
 				this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
 					if (data.status === 'success') {

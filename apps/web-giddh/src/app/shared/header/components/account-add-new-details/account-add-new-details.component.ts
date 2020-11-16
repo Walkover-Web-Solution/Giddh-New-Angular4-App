@@ -1,5 +1,4 @@
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {
     AfterViewInit,
@@ -16,14 +15,11 @@ import {
 } from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {digitsOnly} from '../../../helpers';
-import {AccountsAction} from '../../../../actions/accounts.actions';
 import {AppState} from '../../../../store';
 import {select, Store} from '@ngrx/store';
 import {AccountRequestV2, CustomFieldsData} from '../../../../models/api-models/Account';
-import {CompanyService} from '../../../../services/companyService.service';
 import {ToasterService} from '../../../../services/toaster.service';
 import {CompanyResponse, StateList, StatesRequest} from '../../../../models/api-models/Company';
-import {CompanyActions} from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
 import {ShSelectComponent} from '../../../../theme/ng-virtual-select/sh-select.component';
@@ -33,7 +29,6 @@ import {CommonActions} from '../../../../actions/common.actions';
 import {GeneralActions} from "../../../../actions/general/general.actions";
 import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
-import * as googleLibphonenumber from 'google-libphonenumber';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
@@ -101,16 +96,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     constructor(
         private _fb: FormBuilder,
         private store: Store<AppState>,
-        private accountsAction: AccountsAction,
-        private _companyService: CompanyService,
         private _toaster: ToasterService,
-        private companyActions: CompanyActions,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
         private changeDetectorRef: ChangeDetectorRef,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction) {
-        this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+        this.companiesList$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup),takeUntil(this.destroyed$));
         this.getCountry();
@@ -204,7 +196,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
         //     }
         // });
-        this.store.pipe(select(appState => appState.session.companyUniqueName), distinctUntilChanged()).subscribe(uniqueName => {
+        this.store.pipe(select(appState => appState.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(uniqueName => {
             if (uniqueName) {
                 this.companiesList$.pipe(take(1)).subscribe(companies => {
                     this.activeCompany = companies.find(cmp => cmp.uniqueName === uniqueName);

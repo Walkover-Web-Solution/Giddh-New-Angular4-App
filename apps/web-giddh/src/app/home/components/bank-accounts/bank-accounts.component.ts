@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject } from "rxjs";
-import { Store } from "@ngrx/store";
+import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
 import { take, takeUntil } from "rxjs/operators";
@@ -28,13 +28,13 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
 
     constructor(private store: Store<AppState>, private _contactService: ContactService) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+        this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.datePickerOptions = {
@@ -46,7 +46,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
         // get activeFinancialYear and lastFinancialYear
         this.companies$.subscribe(c => {

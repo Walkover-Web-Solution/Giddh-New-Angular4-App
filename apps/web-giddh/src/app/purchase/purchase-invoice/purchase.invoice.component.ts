@@ -1,20 +1,17 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import {BsDropdownConfig} from 'ngx-bootstrap/dropdown';
 import * as  moment from 'moment/moment';
 import * as  _ from '../../lodash-optimized';
-import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
-import { Store } from '@ngrx/store';
+import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse } from '../../services/purchase-invoice.service';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from '../../services/toaster.service';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
-
 import { AccountService } from '../../services/account.service';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
@@ -132,13 +129,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private router: Router,
-        private location: Location,
         private store: Store<AppState>,
         private invoicePurchaseActions: InvoicePurchaseActions,
         private toasty: ToasterService,
         private companyActions: CompanyActions,
-        private purchaseInvoiceService: PurchaseInvoiceService,
         private accountService: AccountService,
         private _reconcileActions: GstReconcileActions,
         private _generalServices: GeneralService,
@@ -150,34 +144,32 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.purchaseInvoiceRequestObject.entryUniqueName = [];
         this.purchaseInvoiceRequestObject.taxes = [];
 
-        this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((c) => {
+        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe((c) => {
             if (c) {
                 this.activeCompanyUniqueName = _.cloneDeep(c);
             }
         });
-        this.store.select(p => p.session.companies).pipe(take(1)).subscribe((c) => {
+        this.store.pipe(select(p => p.session.companies), take(1)).subscribe((c) => {
             if (c.length) {
                 let companies = this.companies = _.cloneDeep(c);
                 if (this.activeCompanyUniqueName) {
                     let activeCompany: any = companies.find((o: CompanyResponse) => o.uniqueName === this.activeCompanyUniqueName);
                     if (activeCompany && activeCompany.gstDetails[0]) {
                         this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
-                    } else {
-                        // this.toasty.errorToast('GST number not found.');
                     }
                 }
             } else {
                 this.store.dispatch(this.companyActions.RefreshCompanies());
             }
         });
-        this.gstReconcileInvoiceRequestInProcess$ = this.store.select(s => s.gstReconcile.isGstReconcileInvoiceInProcess).pipe(takeUntil(this.destroyed$));
-        this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
-        this.gstFoundOnGiddh$ = this.store.select(p => p.gstReconcile.gstFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-        this.gstNotFoundOnGiddhData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh).pipe(takeUntil(this.destroyed$));
-        this.gstNotFoundOnPortalData$ = this.store.select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal).pipe(takeUntil(this.destroyed$));
-        this.gstMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.matched).pipe(takeUntil(this.destroyed$));
-        this.gstPartiallyMatchedData$ = this.store.select(p => p.gstReconcile.gstReconcileData.partiallyMatched).pipe(takeUntil(this.destroyed$));
-        this.store.select(p => p.company.dateRangePickerConfig).pipe().subscribe(a => {
+        this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
+        this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+        this.gstFoundOnGiddh$ = this.store.pipe(select(p => p.gstReconcile.gstFoundOnGiddh), takeUntil(this.destroyed$));
+        this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
+        this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$));
+        this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
+        this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
+        this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
             let gstr1DatePicker = _.cloneDeep(a);
             gstr1DatePicker.opens = 'right';
             delete gstr1DatePicker.ranges['This Month to Date'];
@@ -207,7 +199,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         let paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
         paginationRequest.page = 1;
         this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
-        this.store.select(p => p.invoicePurchase).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.invoicePurchase), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.purchaseInvoices && o.purchaseInvoices.items) {
                 this.allPurchaseInvoices = _.cloneDeep(o.purchaseInvoices);
                 this.allPurchaseInvoicesBackup = _.cloneDeep(o.purchaseInvoices);
@@ -220,7 +212,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
             }
         });
         this.store.dispatch(this.invoicePurchaseActions.GetTaxesForThisCompany());
-        this.store.select(p => p.invoicePurchase).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.invoicePurchase), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.taxes && o.taxes.length) {
                 this.allTaxes = _.cloneDeep(o.taxes);
             }

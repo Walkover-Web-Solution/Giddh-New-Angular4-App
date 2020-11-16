@@ -83,8 +83,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService, private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
         private _loaderService: LoaderService) {
         this.fileUploadOptions = { concurrency: 0 };
-        this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.allTemplates$ = this.store.pipe(select(s => s.invoiceTemplate.customCreatedTemplates), takeUntil(this.destroyed$));
     }
     /**

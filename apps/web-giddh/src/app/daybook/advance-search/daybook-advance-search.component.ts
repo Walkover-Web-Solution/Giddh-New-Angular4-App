@@ -125,7 +125,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 			}
 		});
 
-		this.stockListDropDown$ = this.store.select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
+		this.stockListDropDown$ = this.store.pipe(select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
 			let data = _.cloneDeep(allStocks);
 			if (data && data.results) {
 				let units = data.results;
@@ -134,7 +134,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 					return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
 				});
 			}
-		})).pipe(takeUntil(this.destroyed$));
+		})), takeUntil(this.destroyed$));
          this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });
