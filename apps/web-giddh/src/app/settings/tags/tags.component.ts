@@ -1,9 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
@@ -30,15 +28,13 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(
-		private router: Router,
 		private store: Store<AppState>,
-		private settingsTagsActions: SettingsTagActions,
-		private _toasty: ToasterService
+		private settingsTagsActions: SettingsTagActions
 	) {
 	}
 
 	public ngOnInit() {
-		this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+		this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
 			if (tags && tags.length) {
 				_.map(tags, (tag) => {
 					tag.uniqueName = tag.name;
@@ -50,7 +46,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 				this.tagsBackup = null;
 				return null;
 			}
-		})).pipe(takeUntil(this.destroyed$));
+		})), takeUntil(this.destroyed$));
 	}
 
 	public getTags() {

@@ -1,12 +1,14 @@
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import { AccountsAction } from './../../../actions/accounts.actions';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/index';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import * as moment from 'moment/moment';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'share-ledger',
@@ -17,7 +19,7 @@ import * as moment from 'moment/moment';
     }
   `]
 })
-export class ShareLedgerComponent implements OnInit {
+export class ShareLedgerComponent implements OnInit, OnDestroy {
     @Input() public accountUniqueName: string = '';
     @Input() public from: string = '';
     @Input() public to: string = '';
@@ -27,6 +29,7 @@ export class ShareLedgerComponent implements OnInit {
     public magicLink: string = '';
     public isCopied: boolean = false;
     public activeAccountSharedWith: any[] = [];
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _ledgerService: LedgerService, private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
     }
@@ -37,7 +40,7 @@ export class ShareLedgerComponent implements OnInit {
 
     public checkAccountSharedWith() {
         this.store.dispatch(this._ledgerActions.sharedAccountWith(this.accountUniqueName));
-        this.store.select(state => state.ledger.activeAccountSharedWith).subscribe((data) => {
+        this.store.pipe(select(state => state.ledger.activeAccountSharedWith), takeUntil(this.destroyed$)).subscribe((data) => {
             this.activeAccountSharedWith = _.cloneDeep(data);
         });
     }
@@ -89,5 +92,10 @@ export class ShareLedgerComponent implements OnInit {
         this.email = '';
         this.magicLink = '';
         this.isCopied = false;
+    }
+
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

@@ -1,7 +1,7 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -24,15 +24,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
         ]),
     ],
     template: `
-    <!--<div class="stock-bar inline pull-right">
-      <div class="">
-        <div class="pull-right">
-          <button (click)="toggleCustomUnitAsidePane($event)" type="button" class="btn btn-link">Custom Stock Unit</button>
-          <button (click)="toggleGroupStockAsidePane($event);setInventoryAsideState(true, true, false)" type="button" class="btn btn-default">Create Group</button>
-          <button (click)="toggleGroupStockAsidePane($event);setInventoryAsideState(true, false, false)" type="button" class="btn btn-default">Create Stock</button>
-        </div>
-      </div>
-    </div>-->
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
     <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"
                         (onShortcutPress)="toggleCustomUnitAsidePane()"></aside-custom-stock>
@@ -40,9 +31,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
                                  (onShortcutPress)="toggleGroupStockAsidePane()"></aside-inventory-stock-group>
   `
 })
-// <button type="button" class="btn btn-default" (click)="goToAddGroup()">Add Group</button>
-// <button type="button" *ngIf="activeGroupName$ | async" class="btn btn-default" (click)="goToAddStock()">Add Stock</button>
-// [routerLink]="['custom-stock']"
+
 export class InventoryHearderComponent implements OnDestroy, OnInit {
     public activeGroupName$: Observable<string>;
     public accountAsideMenuState: string = 'out';
@@ -53,13 +42,13 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
 
     constructor(private router: Router, private store: Store<AppState>, private inventoryAction: InventoryAction) {
 
-        this.openGroupStockAsidePane$ = this.store.select(s => s.inventory.showNewGroupAsidePane).pipe(takeUntil(this.destroyed$));
-        this.openCustomUnitAsidePane$ = this.store.select(s => s.inventory.showNewCustomUnitAsidePane).pipe(takeUntil(this.destroyed$));
+        this.openGroupStockAsidePane$ = this.store.pipe(select(s => s.inventory.showNewGroupAsidePane), takeUntil(this.destroyed$));
+        this.openCustomUnitAsidePane$ = this.store.pipe(select(s => s.inventory.showNewCustomUnitAsidePane), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         // get activeGroup
-        this.activeGroupName$ = this.store.select(s => s.inventory.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
+        this.activeGroupName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
 
         this.openGroupStockAsidePane$.subscribe(s => {
             if (s) {
@@ -75,7 +64,6 @@ export class InventoryHearderComponent implements OnDestroy, OnInit {
     }
 
     public goToAddGroup() {
-        // this.store.dispatch(this.inventoryAction.resetActiveGroup());
         this.router.navigate(['/pages', 'inventory', 'add-group']);
     }
 

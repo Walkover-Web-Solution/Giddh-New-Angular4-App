@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Action, Store, select } from '@ngrx/store';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
@@ -115,11 +115,11 @@ export class CompanyActions {
                 // check if new uer has created first company then set newUserLoggedIn false
                 let isNewUser = false;
                 let prevTab = '';
-                this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+                this.store.pipe(select(s => s.session), take(1)).subscribe(s => {
                     isNewUser = s.userLoginState === 2;
                     prevTab = s.lastState;
                 });
-                //
+                
                 if (isNewUser) {
                     this.store.dispatch({
                         type: 'SetLoginStatus',
@@ -182,7 +182,7 @@ export class CompanyActions {
                 // check if new uer has created first company then set newUserLoggedIn false
                 let isNewUser = false;
                 let prevTab = '';
-                this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+                this.store.pipe(select(s => s.session), take(1)).subscribe(s => {
                     isNewUser = s.userLoginState === 2;
                     prevTab = s.lastState;
                 });
@@ -239,8 +239,8 @@ export class CompanyActions {
                 if (response.body.length) {
                     let activeCompanyName = null;
                     let totalCompany = 0;
-                    this.store.select(s => s.session.companyUniqueName).pipe(take(1)).subscribe(a => activeCompanyName = a);
-                    this.store.select(s => s.session.totalNumberOfcompanies).pipe(take(1)).subscribe(res => totalCompany = res);
+                    this.store.pipe(select(s => s.session.companyUniqueName), take(1)).subscribe(a => activeCompanyName = a);
+                    this.store.pipe(select(s => s.session.totalNumberOfcompanies), take(1)).subscribe(res => totalCompany = res);
 
                     if (activeCompanyName) {
                         let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);

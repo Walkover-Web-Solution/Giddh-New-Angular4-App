@@ -86,7 +86,7 @@ export class SettingTaxesComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.taxes) {
                 this.forceClear$ = observableOf({status: true});
                 _.map(o.taxes, (tax) => {
@@ -100,7 +100,7 @@ export class SettingTaxesComponent implements OnInit {
         });
         this.getFlattenAccounts('');
 
-        this.store.select((st: AppState) => st.general.addAndManageClosed).subscribe((bool) => {
+        this.store.pipe(select((st: AppState) => st.general.addAndManageClosed), takeUntil(this.destroyed$)).subscribe((bool) => {
             if (bool) {
                 this.getFlattenAccounts('');
             }
@@ -196,7 +196,7 @@ export class SettingTaxesComponent implements OnInit {
     }
 
     public reloadTaxList() {
-        this.store.select(p => p.company).pipe(take(1)).subscribe((o) => {
+        this.store.pipe(select(p => p.company), take(1)).subscribe((o) => {
             if (o.taxes) {
                 this.onCancel();
                 this.availableTaxes = _.cloneDeep(o.taxes);

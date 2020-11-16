@@ -83,8 +83,8 @@ export class NetworthChartComponent implements OnInit {
     // private AllSeries: IndividualSeriesOptionsExtension[];
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-        // this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        // this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+        // this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        // this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         // this.options = this.yearlyOption;
     }
 

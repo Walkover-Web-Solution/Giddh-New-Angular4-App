@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { CompanyResponse, StatesRequest, TaxResponse } from '../../models/api-models/Company';
+import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -8,7 +8,6 @@ import { takeUntil } from 'rxjs/operators';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
-import { ToasterService } from '../../services/toaster.service';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import { createSelector } from "reselect";
 import { IForceClear } from "../../models/api-models/Sales";
@@ -52,7 +51,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private store: Store<AppState>, private _settingsTaxesActions: SettingsTaxesActions, private _toaster: ToasterService) {
+    constructor(private store: Store<AppState>, private _settingsTaxesActions: SettingsTaxesActions) {
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i.toString(), value: i.toString() });
         }
@@ -61,7 +60,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         // tslint:disable-next-line:no-shadowed-variable
-        this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.selectedCompany = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
                 return;
             }
@@ -76,7 +75,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
                 return;
             }
             return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
 
         this.selectedCompany.subscribe((res: any) => {
             if (res) {

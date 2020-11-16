@@ -230,10 +230,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             this.isMobileScreen = result.matches;
         });
 
-        this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
+        this.groupStockReport$ = this.store.pipe(select(p => p.inventory.groupStockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();
         this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup), takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 const stockGroup = _.cloneDeep(a);
@@ -250,13 +250,13 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         });
 
         // tslint:disable-next-line:no-shadowed-variable
-        this.store.select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
             if (branches && branches.length > 0) {
                 this.branchAvailable = true;
             } else {
                 this.branchAvailable = false;
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
     }
 
@@ -280,9 +280,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 if (this.groupUniqueName) {
                     if (this.groupUniqueName) {
                         this.initReport();
-                    }
-                    if (this.dateRangePickerCmp) {
-                        //this.dateRangePickerCmp.nativeElement.value = `${this.GroupStockReportRequest.from} - ${this.GroupStockReportRequest.to}`;
                     }
                 }
             }
@@ -312,7 +309,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 this.getGroupReport(true);
             }
         });
-        this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.selectedCompany$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
                 return;
             }
@@ -331,7 +328,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             this.getAllBranch();
 
             return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
         this.selectedCompany$.subscribe();
 
         this.productUniqueNameInput.valueChanges.pipe(
@@ -434,7 +431,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * getAllBranch
      */
     public getAllBranch() {
-        this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
                 let newEntities = [];
                 if (entities.length) {
@@ -451,7 +448,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                     this.entities$ = observableOf(null);
                 }
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
     }
 
     public ngOnDestroy() {
@@ -459,12 +456,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.destroyed$.complete();
     }
 
-
     public goToManageGroup() {
         if (this.groupUniqueName) {
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
             this.setInventoryAsideState(true, true, true);
-            // this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName]);
         }
     }
 

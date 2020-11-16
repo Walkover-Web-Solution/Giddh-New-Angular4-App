@@ -75,7 +75,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 	 * TypeScript public modifiers
 	 */
 	constructor(private store: Store<AppState>, public searchActions: SearchActions) {
-		this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+		this.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {

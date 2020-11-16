@@ -6,7 +6,7 @@ import { AccountService } from '../services/account.service';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { Action, Store } from '@ngrx/store';
+import { Action, Store, select } from '@ngrx/store';
 import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 
@@ -143,7 +143,7 @@ export class AccountsAction {
                 }
                 this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 let groupSearchString: string;
-                this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).pipe(take(1)).subscribe(a => groupSearchString = a);
+                this.store.pipe(select(p => p.groupwithaccounts.groupAndAccountSearchString), take(1)).subscribe(a => groupSearchString = a);
                 if (groupSearchString) {
                     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
                 } else {
@@ -185,8 +185,8 @@ export class AccountsAction {
                     //   this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
                     // }
                 }
-                let groupSearchString: string;
-                this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).pipe(take(1)).subscribe(a => groupSearchString = a);
+                //let groupSearchString: string;
+                //this.store.pipe(select(p => p.groupwithaccounts.groupAndAccountSearchString), take(1)).subscribe(a => groupSearchString = a);
                 //if (groupSearchString) {
                 // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
                 //} else {

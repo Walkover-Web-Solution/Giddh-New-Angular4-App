@@ -127,9 +127,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-        private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
-        this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+    constructor(private _fb: FormBuilder, private store: Store<AppState>, private _toaster: ToasterService, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+        this.companiesList$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.getCountry();
         this.getCurrency();
@@ -200,7 +199,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             }
         });
-        this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
+
+        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.companiesList$.pipe(take(1)).subscribe(companies => {
                     this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
@@ -211,7 +211,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
 
-        this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
+        this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe((session) => {
             let companyUniqueName: string;
             if (session.companyUniqueName) {
                 companyUniqueName = _.cloneDeep(session.companyUniqueName);

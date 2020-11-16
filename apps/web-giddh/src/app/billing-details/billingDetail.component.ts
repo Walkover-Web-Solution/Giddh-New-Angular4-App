@@ -79,13 +79,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     private activeCompany;
 
-    constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router,
-        private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions,
-        private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef,
+    constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
         private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions) {
-        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.fromSubscription = this._route.routerState.snapshot.url.includes('buy-plan');
-        this.isUpdateCompanySuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+        this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -100,8 +98,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.getStates();
 
-        this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
-        this.isRefreshing$ = this.store.select(s => s.session.isRefreshing).pipe(takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
+        this.isRefreshing$ = this.store.pipe(select(s => s.session.isRefreshing), takeUntil(this.destroyed$));
         this.logedInuser = this._generalService.user;
 
         if (this._generalService.createNewCompany) {
