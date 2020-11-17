@@ -5,7 +5,7 @@
             <tabset #inventoryStaticTabs>
 
                 <tab heading="Inventory" (selectTab)="redirectUrlToActiveTab('inventory', $event)"
-                    [active]="activeTabIndex === 0">
+                    [active]="activeTabIndex === 0" [id]="(activeTabIndex === 0)?'giddh-page-heading': ''">
                     <!--sidebar-->
                     <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
                         <inventory-sidebar *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')"></inventory-sidebar>
@@ -57,7 +57,7 @@
 
 
                 <tab heading="Manufacturing" (selectTab)="redirectUrlToActiveTab('manufacturing', $event)"
-                    [active]="activeTabIndex === 2">
+                    [active]="activeTabIndex === 2" [id]="(activeTabIndex === 2)?'giddh-page-heading': ''">
 
                     <ng-container *ngIf="activeTabIndex === 2">
                         <manufacturing></manufacturing>
@@ -65,7 +65,8 @@
 
                 </tab>
 
-                <tab heading="Report" (selectTab)="redirectUrlToActiveTab('report', $event)" [active]="activeTabIndex === 3">
+                <tab heading="Report" (selectTab)="redirectUrlToActiveTab('report', $event)" [active]="activeTabIndex === 3"
+                [id]="(activeTabIndex === 3)?'giddh-page-heading': ''">
                     <ng-container *ngIf="activeTabIndex === 3">
                         <new-branch-transfer-list></new-branch-transfer-list>
                     </ng-container>

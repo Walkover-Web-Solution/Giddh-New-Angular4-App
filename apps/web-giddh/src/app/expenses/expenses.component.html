@@ -2,7 +2,6 @@
     <hamburger-menu></hamburger-menu>
     <div class="clearfix petty-cash">
         <tabset class="custom-tabs" #tabset>
-
             <div class="container-fluid pt-2 mb-15" *ngIf="!isSelectedRow">
                 <div class="row">
                     <div class="col-sm-6">
@@ -31,27 +30,28 @@
                 </div>
             </div>
 
-            <tab heading="Pending" id="tab1" (selectTab)="tabChanged('pending', $event);">
-                <ng-container *ngIf="currentSelectedTab === 'pending'">
-                    <app-pending-list #pendingListComponent *ngIf="!isSelectedRow" [isClearFilter]="isClearFilter"
-                        (isFilteredSelected)="isFilteredSelected($event);" (selectedRowToggle)="selectedRowToggle($event);"
-                        (selectedRowInput)="selectedRowInput($event);"></app-pending-list>
-                    <div class="main-edit-expense" *ngIf="isSelectedRow">
-                        <div class="left-expense">
-                            <app-filter-list [selectedRowItem]="selectedRowItem" (selectedDetailedRowInput)="selectedDetailedRowInput($event);"></app-filter-list>
-                        </div>
-                        <div class="main-expense-details ">
-                            <app-expense-details [selectedRowItem]="selectedRowItem" (toggleDetailsMode)="closeDetailedMode($event);" (refreshPendingItem)="refreshPendingItem($event);"></app-expense-details>
-                        </div>
+        <tab heading="Pending" (selectTab)="tabChanged('pending', $event);"
+        [id]="(currentSelectedTab === 'pending')?'giddh-page-heading': ''" >
+            <ng-container *ngIf="currentSelectedTab === 'pending'">
+                <app-pending-list #pendingListComponent *ngIf="!isSelectedRow" [isClearFilter]="isClearFilter"
+                    (isFilteredSelected)="isFilteredSelected($event);" (selectedRowToggle)="selectedRowToggle($event);"
+                    (selectedRowInput)="selectedRowInput($event);"></app-pending-list>
+                <div class="main-edit-expense" *ngIf="isSelectedRow">
+                    <div class="left-expense">
+                        <app-filter-list [selectedRowItem]="selectedRowItem" (selectedDetailedRowInput)="selectedDetailedRowInput($event);"></app-filter-list>
+                    </div>
+                    <div class="main-expense-details ">
+                        <app-expense-details [selectedRowItem]="selectedRowItem" (toggleDetailsMode)="closeDetailedMode($event);" (refreshPendingItem)="refreshPendingItem($event);"></app-expense-details>
                     </div>
                 </ng-container>
             </tab>
 
-            <tab heading="Rejected" (selectTab)="tabChanged('rejected', $event);">
-                <ng-container *ngIf="currentSelectedTab === 'rejected'">
-                    <app-rejected-list #rejectedListComponent (isFilteredSelected)="isFilteredSelected($event);" [isClearFilter]="isClearFilter"></app-rejected-list>
-                </ng-container>
-            </tab>
+        <tab heading="Rejected" (selectTab)="tabChanged('rejected', $event);"
+        [id]="(currentSelectedTab === 'rejected')?'giddh-page-heading': ''" >
+            <ng-container *ngIf="currentSelectedTab === 'rejected'">
+                <app-rejected-list #rejectedListComponent (isFilteredSelected)="isFilteredSelected($event);" [isClearFilter]="isClearFilter"></app-rejected-list>
+            </ng-container>
+        </tab>
 
         </tabset>
     </div>
