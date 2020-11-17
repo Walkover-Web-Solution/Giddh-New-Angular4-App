@@ -282,7 +282,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private router: Router,
         private flyAccountActions: FlyAccountsActions,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private cdRef: ChangeDetectorRef,
         private zone: NgZone,
         private route: ActivatedRoute,
         private _generalActions: GeneralActions,
@@ -333,6 +332,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
+            }
+
+            if(event instanceof RouteConfigLoadEnd) {
+                this.checkAndRenewUserSession();
             }
         });
 
@@ -853,11 +856,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngAfterViewChecked() {
-        this.cdRef.detectChanges();
-    }
-
-    public vendorOrCustomer(path: string) {
-        //this.selectedPage = path === 'customer' ? 'Customer' : 'Vendor';
+        this.changeDetection.detectChanges();
     }
 
     public handleNoResultFoundEmitter(e: any) {
@@ -2048,6 +2047,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (page.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
                 this.pageHasTabs = true;
                 return true;
+            }
+        });
+    }
+
+    /**
+     * This will check and renew user session if close to expiry
+     *
+     * @memberof HeaderComponent
+     */
+    public checkAndRenewUserSession(): void {
+        this.store.pipe(select(state => state.session.user), take(1)).subscribe((user) => {
+            if(user && user.session) {
+                let sessionExpiresAt: any = moment(user.session.expiresAt, GIDDH_DATE_FORMAT + " h:m:s");
+
+                if(sessionExpiresAt.diff(moment(), 'hours') < 2) {
+                    this.store.dispatch(this.loginAction.renewSession());
+                }
             }
         });
     }
