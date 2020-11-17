@@ -1,5 +1,5 @@
 import { take } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { SearchRequest } from '../models/api-models/Search';
@@ -33,7 +33,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'search';

@@ -61,7 +61,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
 
     constructor(private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private store: Store<AppState>, private cashFlowStatementService: CashFlowStatementService, private generalService: GeneralService, private toaster: ToasterService) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
-        this.universalDate$ = this.store.select(state => state.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     /**
@@ -73,7 +73,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         /* Observer to detect device based on screen width */
         this.breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 

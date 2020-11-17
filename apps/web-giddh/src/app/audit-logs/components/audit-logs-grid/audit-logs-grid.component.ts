@@ -1,7 +1,7 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { ILogsItem } from '../../../models/interfaces/logs.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { cloneDeep } from '../../../lodash-optimized';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -26,17 +26,16 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
      * TypeScript public modifiers
      */
     constructor(private store: Store<AppState>, private _auditLogsActions: AuditLogsActions) {
-        this.loadMoreInProcess$ = this.store.select(p => p.auditlog.LoadMoreInProcess).pipe(takeUntil(this.destroyed$));
-        this.logs$ = this.store.select(p => p.auditlog.logs);
-        this.size$ = this.store.select(p => p.auditlog.size);
-        this.totalElements$ = this.store.select(p => p.auditlog.totalElements);
-        this.totalPages$ = this.store.select(p => p.auditlog.totalPages);
-        this.page$ = this.store.select(p => p.auditlog.currentPage);
-        //
+        this.loadMoreInProcess$ = this.store.pipe(select(p => p.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
+        this.logs$ = this.store.pipe(select(p => p.auditlog.logs), takeUntil(this.destroyed$));
+        this.size$ = this.store.pipe(select(p => p.auditlog.size), takeUntil(this.destroyed$));
+        this.totalElements$ = this.store.pipe(select(p => p.auditlog.totalElements), takeUntil(this.destroyed$));
+        this.totalPages$ = this.store.pipe(select(p => p.auditlog.totalPages), takeUntil(this.destroyed$));
+        this.page$ = this.store.pipe(select(p => p.auditlog.currentPage), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        //
+        
     }
 
     public ngOnDestroy() {
@@ -45,7 +44,7 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
     }
 
     public loadMoreLogs() {
-        this.store.select(p => p.auditlog).pipe(take(1)).subscribe((r) => {
+        this.store.pipe(select(p => p.auditlog), take(1)).subscribe((r) => {
             let request = cloneDeep(r.currentLogsRequest);
             let page = r.currentPage + 1;
             this.store.dispatch(this._auditLogsActions.LoadMoreLogs(request, page));

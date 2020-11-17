@@ -87,7 +87,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             }
         }
-        this._generalService.IAmLoaded.subscribe(s => {
+        this._generalService.IAmLoaded.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.IAmLoaded = s;
         });
         if (isCordova()) {
@@ -103,7 +103,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.breakpointObserver.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
         if (Configuration.isElectron) {
@@ -160,8 +160,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public ngAfterViewInit() {
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
-        this.router.events.subscribe((evt) => {
-
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
             if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !(isElectron || isCordova())) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
@@ -194,7 +193,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!LOCAL_ENV && !(isElectron || isCordova())) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
 
-            this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
+            this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);
                 }

@@ -1,8 +1,7 @@
 import {take, takeUntil, distinctUntilChanged} from 'rxjs/operators';
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import {VerifyMobileActions} from '../../../../actions/verifyMobile.actions';
-import {LocationService} from '../../../../services/location.service';
 import {CompanyActions} from '../../../../actions/company.actions';
 import {GeneralActions} from '../../../../actions/general/general.actions';
 import {LoginActions} from '../../../../actions/login.action';
@@ -11,10 +10,8 @@ import {select, Store} from '@ngrx/store';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../../theme/ng-social-login-module/index';
 import {GeneralService} from '../../../../services/general.service';
-import {AuthenticationService} from '../../../../services/authentication.service';
 import {AppState} from '../../../../store';
 import {
-    CompanyRequest,
     CompanyResponse,
     SocketNewCompanyRequest,
     StateDetailsRequest,
@@ -109,17 +106,13 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     /** Stores active company details */
     public activeCompanyDetails: any;
 
-    constructor(private socialAuthService: AuthService,
-                private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-                private _location: LocationService, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService,
-                private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
-                private _toaster: ToasterService, private commonActions: CommonActions
+    constructor(private socialAuthService: AuthService, private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private _generalService: GeneralService, private _toaster: ToasterService, private commonActions: CommonActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
         this.getCallingCodes();
 
-        this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -137,16 +130,16 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             this.activeCompanyDetails = data;
         });
         this._generalService.createNewCompany = null;
-        this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-        this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
-        this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
+        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.isCompanyCreated$.subscribe(s => {
             if (s && !this.createBranch) {
-                this.store.select(state => state.session.userLoginState).pipe(take(1)).subscribe(st => {
+                this.store.pipe(select(state => state.session.userLoginState), take(1)).subscribe(st => {
                     this.isNewUser = st === userLoginStateEnum.newUserLoggedIn;
                 });
                 let prevTab = '';
-                this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
+                this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
                 let stateDetailsRequest = new StateDetailsRequest();
@@ -165,7 +158,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 }, 500);
             }
         });
-        this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
+        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a !== '' && this.company.uniqueName) {
                 if (a.includes(this.company.uniqueName.substring(0, 8))) {
                     this.company.name = '';
@@ -251,7 +244,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 let previousState;
                 this.store.dispatch(this._generalActions.getGroupWithAccounts());
                 this.store.dispatch(this._generalActions.getFlattenAccount());
-                this.store.select(ss => ss.session.lastState).pipe(take(1)).subscribe(se => {
+                this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     previousState = se;
                 });
                 if (previousState) {

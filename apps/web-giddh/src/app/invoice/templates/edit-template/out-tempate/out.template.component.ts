@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject, Observable } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
@@ -45,13 +45,13 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 		let companies = null;
 		let defaultTemplate = null;
 
-		this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
+		this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
 			companyUniqueName = ss.companyUniqueName;
 			companies = ss.companies;
 			this.companyUniqueName = ss.companyUniqueName;
         });
         
-        this.companyUniqueName$ = this.store.select(state => state.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
 
         this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
             if (companies) {
@@ -65,7 +65,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-		this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+		this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
 			defaultTemplate = ss.defaultTemplate;
 		});
 		this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
@@ -73,12 +73,11 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
 	public ngOnInit() {
 
-		this._activatedRoute.params.subscribe(a => {
+		this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
 			if (!a) {
 				return;
 			}
 			this.voucherType = a.voucherType;
-			// this.getVoucher(false);
 		});
 		this._invoiceUiDataService.templateVoucherType.subscribe((voucherType: string) => {
 			this.voucherType = _.cloneDeep(voucherType);

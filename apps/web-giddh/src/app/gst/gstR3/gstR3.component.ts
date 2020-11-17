@@ -74,7 +74,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 from: params['from'],
                 to: params['to']
             };
-            this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
+            this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
             this.selectedMonth = moment(this.selectedMonth).format('MMMM YYYY');
             this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];

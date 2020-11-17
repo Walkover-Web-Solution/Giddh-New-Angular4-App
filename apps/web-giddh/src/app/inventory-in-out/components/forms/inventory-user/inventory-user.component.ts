@@ -5,6 +5,7 @@ import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface'
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'inventory-user',
@@ -24,7 +25,7 @@ export class InventoryUserComponent implements OnChanges, OnInit {
 	public stockListOptions: IOption[];
 	public userListOptions: IOption[];
 	public form: FormGroup;
-	public config: Partial<BsDatepickerConfig> = { dateInputFormat: 'DD-MM-YYYY' };
+	public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
 	public today = new Date();
 
 	// public inventoryEntryDateValid;
@@ -98,7 +99,6 @@ export class InventoryUserComponent implements OnChanges, OnInit {
 
 	public save() {
 		if (this.form.valid) {
-			const inventoryEntryDate = moment(this.form.value.transferDate).format('DD-MM-YYYY');
 			this.onSave.emit(this.form.value);
 		}
 	}

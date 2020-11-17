@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -105,7 +105,7 @@ export class SettingTriggerComponent implements OnInit {
         // default value assinged bcz currently there is only single option
         this.newTriggerObj.action = 'webhook';
         this.newTriggerObj.scope = 'closing balance';
-        this.store.select(p => p.settings.triggers).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings.triggers), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o) {
                 this.forceClear$ = observableOf({ status: true });
                 this.availableTriggers = _.cloneDeep(o);
@@ -114,13 +114,13 @@ export class SettingTriggerComponent implements OnInit {
 
         this.getFlattenAccounts('');
 
-        this.store.select((state: AppState) => state.general.addAndManageClosed).subscribe((bool) => {
+        this.store.pipe(select((state: AppState) => state.general.addAndManageClosed), takeUntil(this.destroyed$)).subscribe((bool) => {
             if (bool) {
                 this.getFlattenAccounts('');
             }
         });
 
-        this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$)).subscribe((groups) => {
+        this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$)).subscribe((groups) => {
             if (groups) {
                 let groupsRes: IOption[] = [];
                 groups.map(d => {
@@ -130,7 +130,7 @@ export class SettingTriggerComponent implements OnInit {
             }
         });
 
-        this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$)).subscribe((companies) => {
+        this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$)).subscribe((companies) => {
             if (companies) {
                 let companiesRes: IOption[] = [];
                 companies.map(d => {

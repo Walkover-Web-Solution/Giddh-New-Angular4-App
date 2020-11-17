@@ -18,7 +18,6 @@ import {
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {
     BsModalRef,
-    BsModalService,
     ModalOptions
 } from 'ngx-bootstrap/modal';
 import {BsDatepickerDirective} from 'ngx-bootstrap/datepicker';
@@ -29,7 +28,6 @@ import {AppState} from '../store';
 import {SalesActions} from '../actions/sales/sales.action';
 import {CompanyActions} from '../actions/company.actions';
 import {ActivatedRoute, ActivationStart, Router} from '@angular/router';
-import {LedgerActions} from '../actions/ledger/ledger.actions';
 import {SalesService} from '../services/sales.service';
 import {ToasterService} from '../services/toaster.service';
 import {GeneralActions} from '../actions/general/general.actions';
@@ -555,11 +553,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public existingPoEntries: any[] = [];
     /* This will hold the transaction amount */
     public transactionAmount: number = 0;
-
     /** account's applied tax list */
     public tcsTdsTaxesAccount: any[] = [];
     /** account's applied discounts list */
     public accountAssignedApplicableDiscounts: any[] = [];
+    /** This will hold onboarding api form request */
+    public onboardingFormRequest: OnboardingFormRequest = {formName: '', country: ''};
+    /** This will hold states list with respect to country */
+    public countryStates: any[] = [];
+
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -580,12 +582,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private salesAction: SalesActions,
         private companyActions: CompanyActions,
         private router: Router,
-        private ledgerActions: LedgerActions,
         private salesService: SalesService,
         private _toasty: ToasterService,
         private _generalActions: GeneralActions,
         private generalService: GeneralService,
-        private _invoiceActions: InvoiceActions,
         private _settingsDiscountAction: SettingsDiscountActions,
         public route: ActivatedRoute,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -602,18 +602,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
         private purchaseRecordAction: PurchaseRecordActions,
-        private modalService: BsModalService,
         public purchaseOrderService: PurchaseOrderService,
         private searchService: SearchService
     ) {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
-        // this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
-        // this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
-        this.store.dispatch(this._invoiceActions.getInvoiceSetting());
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({page: 1, count: 0}));
@@ -632,7 +629,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
         this.updateProformaVoucherInProcess$ = this.store.pipe(select(state => state.proforma.isUpdateProformaInProcess), takeUntil(this.destroyed$));
         this.generateVoucherSuccess$ = combineLatest([this.store.pipe(select(appState => appState.proforma.isGenerateSuccess)),
-            this.store.pipe(select(appState => appState.proforma.isGenerateInProcess))]).pipe(debounceTime(0), takeUntil(this.destroyed$));
+        this.store.pipe(select(appState => appState.proforma.isGenerateInProcess))]).pipe(debounceTime(0), takeUntil(this.destroyed$));
         this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
         this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
         this.lastInvoices$ = this.store.pipe(select(p => p.receipt.lastVouchers), takeUntil(this.destroyed$));
@@ -705,7 +702,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
-        this.store.select(s => {
+        this.store.pipe(select(s => {
             if (!s.session.companies) {
                 return;
             }
@@ -714,7 +711,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.selectedCompany = cmp;
                 }
             });
-        }).pipe(takeUntil(this.destroyed$)).subscribe();
+        }), takeUntil(this.destroyed$)).subscribe();
 
         this.activeAccount$.subscribe(data => {
             if (data) {
@@ -725,13 +722,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // get user country from his profile
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             this.companyCountryName = profile.country;
-
-            if (profile.addresses && profile.addresses.length > 0) {
-                this.fillDeliverToAddress(profile.addresses);
-            }
-
             await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
+
+        this.fillDeliverToAddress();
 
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
@@ -858,6 +852,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.loadDefaultSearchSuggestions();
             this.focusInCustomerName();
             this.getAllLastInvoices();
+            this.fillDeliverToAddress();
         });
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
@@ -913,7 +908,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         // listen for universal date
-        this.store.pipe(select((p: AppState) => p.session.applicationDate)).subscribe((dateObj: Date[]) => {
+        this.store.pipe(select((p: AppState) => p.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
                     this.poFilterDates = {from: moment(dateObj[0]).format(GIDDH_DATE_FORMAT), to: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)}
@@ -1435,7 +1430,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isMobileScreen = st.matches;
             });
 
-        this.bulkItemsModal.onHidden.subscribe(() => {
+        this.bulkItemsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.showBulkItemModal = false;
         });
 
@@ -1612,26 +1607,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         } else {
             this.customerCountryName = '';
-
             this.showGstAndTrnUsingCountryName('');
-
             this.companyCurrency = 'INR';
         }
     }
 
     /**
-     *
      * To fetch regex call for onboarding countries (gulf)
-     * @param {*} countryCode
+     *
+     * @param {string} countryCode
      * @memberof ProformaInvoiceComponent
      */
-    public getOnboardingForm(countryCode) {
-        let onboardingFormRequest = new OnboardingFormRequest();
-        onboardingFormRequest.formName = 'onboarding';
-        onboardingFormRequest.country = countryCode;
-        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+    public getOnboardingForm(countryCode: string): void {
+        if(this.onboardingFormRequest.country !== countryCode) {
+            this.onboardingFormRequest.formName = 'onboarding';
+            this.onboardingFormRequest.country = countryCode;
+            this.store.dispatch(this.commonActions.GetOnboardingForm(this.onboardingFormRequest));
+        }
     }
-
 
     public assignDates() {
         let date = _.cloneDeep(this.universalDate);
@@ -2637,7 +2630,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
-
+        this.checkVoucherEntries();
         this.transactionAmount = 0;
         // /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
         // if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
@@ -2713,6 +2706,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
+        this.checkVoucherEntries();
     }
 
     public calculateTotalDiscount() {
@@ -4092,13 +4086,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                     let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                    taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                    taxableValue = (rawAmount + entry.taxSum);
                 }
                 entry.otherTaxType = 'tcs';
             } else {
                 taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 entry.otherTaxType = 'tds';
             }
+
 
             totalTaxes += tax.taxDetail[0].taxValue;
 
@@ -4208,7 +4203,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private parseEntriesFromResponse(entries: SalesEntryClass[]) {
         return entries.map((entry, index) => {
             this.activeIndx = index;
-            entry.otherTaxModal = new SalesOtherTaxesModal();
+            if(!entry.otherTaxModal) {
+                entry.otherTaxModal = new SalesOtherTaxesModal();
+            }
             entry.entryDate = (entry.entryDate) ? moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate() : this.universalDate || new Date();
 
             entry.discounts = this.parseDiscountFromResponse(entry);
@@ -4299,6 +4296,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 return newTrxObj;
             });
 
+            entry.transactions.map(trx => {
+                this.calculateTotalDiscountOfEntry(entry, trx, false);
+                this.calculateEntryTaxSum(entry, trx);
+            });
+
             // tcs tax calculation
             if (entry.tcsTaxList && entry.tcsTaxList.length) {
                 entry.isOtherTaxApplicable = true;
@@ -4312,7 +4314,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                        taxableValue = (rawAmount + entry.taxSum);
                     }
 
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
@@ -4330,7 +4332,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
                 }
             }
-            entry.taxes = [];
+            //entry.taxes = [];
             entry.cessSum = 0;
             return entry;
         });
@@ -4399,7 +4401,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     private saveStateDetails() {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;
@@ -4439,8 +4441,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             salesEntryClass.uniqueName = e.uniqueName;
             salesEntryClass.description = e.description;
             salesEntryClass.date = e.entryDate;
+            let calculationMethod = (e.otherTaxModal && e.otherTaxModal.tcsCalculationMethod) ? e.otherTaxModal.tcsCalculationMethod : "";
             e.taxList.forEach(t => {
-                salesEntryClass.taxes.push({uniqueName: t});
+                salesEntryClass.taxes.push({uniqueName: t, calculationMethod: calculationMethod});
             });
             if(this.isPurchaseInvoice) {
                 salesEntryClass.purchaseOrderItemMapping = e.purchaseOrderItemMapping;
@@ -4863,24 +4866,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
-                this.salesService.getStateCode(countryCode).subscribe(resp => {
-                    this.startLoader(false);
+                if(this.countryStates[countryCode]) {
                     if(!isCompanyStates) {
-                        this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                        this.statesSource = this.countryStates[countryCode];
                     } else {
-                        this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                        this.companyStatesSource = this.countryStates[countryCode];
                     }
+                    this.startLoader(false);
                     resolve();
-                }, () => {
-                    resolve();
-                });
+                } else {
+                    this.salesService.getStateCode(countryCode).subscribe(resp => {
+                        this.startLoader(false);
+                        if(!isCompanyStates) {
+                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                        } else {
+                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                        }
+                        resolve();
+                    }, () => {
+                        resolve();
+                    });
+                }
             } else {
                 resolve();
             }
         });
     }
 
-    private modifyStateResp(stateList: StateCode[]) {
+    private modifyStateResp(stateList: StateCode[], countryCode: string) {
         let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {
             stateListRet.push({
@@ -4889,6 +4902,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code
             });
         });
+
+        this.countryStates[countryCode] = stateListRet;
+
         return stateListRet;
     }
 
@@ -5590,7 +5606,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * Call API to get all advance receipts of an invoice
      *
      * @param {*} customerUniquename Selected customer unique name
-     * @param {*} voucherDate  Voucher Date (DD-MM-YYYY) of selected invoice
+     * @param {*} voucherDate  Voucher Date (GIDDH_DATE_FORMAT) of selected invoice
      * @memberof ProformaInvoiceComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
@@ -5970,13 +5986,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         }
+        // applicableDiscounts: accounts applicable discounts list and inheritedDiscounts: parent group's discount list
         if (data && data.applicableDiscounts && data.applicableDiscounts.length) {
             this.accountAssignedApplicableDiscounts = [...data.applicableDiscounts];
-            if (data.inheritedDiscounts && data.inheritedDiscounts.length) {
-                data.inheritedDiscounts.forEach(element => {
-                    this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
-                });
-            }
+        } else if (data.inheritedDiscounts && data.inheritedDiscounts.length) {
+            data.inheritedDiscounts.forEach(element => {
+                this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
+            });
         }
     }
 
@@ -6336,25 +6352,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**
      * This will autofill the
      *
-     * @param {*} companyAddresses
      * @memberof ProformaInvoiceComponent
      */
-    public fillDeliverToAddress(companyAddresses: any): void {
-        if (companyAddresses) {
-            companyAddresses.forEach(address => {
-                if (address.isDefault === true) {
-                    this.purchaseBillCompany.billingDetails.address = [];
-                    this.purchaseBillCompany.billingDetails.address.push(address.address);
-                    this.purchaseBillCompany.billingDetails.state.code = address.stateCode;
-                    this.purchaseBillCompany.billingDetails.state.name = address.stateName;
-                    this.purchaseBillCompany.billingDetails.stateCode = address.stateCode;
-                    this.purchaseBillCompany.billingDetails.stateName = address.stateName;
-                    this.purchaseBillCompany.billingDetails.gstNumber = address.taxNumber;
+    public fillDeliverToAddress(): void {
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile.addresses && profile.addresses.length > 0) {
+                let companyAddresses = profile.addresses;
+                if (companyAddresses) {
+                    let isDefaultAddress;
+                    let isDefaultAddressUsed = false;
 
-                    this.purchaseBillCompany.shippingDetails.gstNumber = address.taxNumber;
+                    companyAddresses.forEach(address => {
+                        if(!isDefaultAddressUsed && address.branches && address.branches.length > 0) {
+                            isDefaultAddress = address.branches.filter(branch => branch.isDefault && branch.isHeadQuarter);
+
+                            if (!isDefaultAddressUsed && isDefaultAddress && isDefaultAddress.length > 0 && isDefaultAddress[0]) {
+                                isDefaultAddressUsed = true;
+                                this.purchaseBillCompany.billingDetails.address = [];
+                                this.purchaseBillCompany.billingDetails.address.push(address.address);
+                                this.purchaseBillCompany.billingDetails.state.code = address.stateCode;
+                                this.purchaseBillCompany.billingDetails.state.name = address.stateName;
+                                this.purchaseBillCompany.billingDetails.stateCode = address.stateCode;
+                                this.purchaseBillCompany.billingDetails.stateName = address.stateName;
+                                this.purchaseBillCompany.billingDetails.gstNumber = address.taxNumber;
+
+                                this.purchaseBillCompany.shippingDetails.gstNumber = address.taxNumber;
+                            }
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
     }
 
     /**

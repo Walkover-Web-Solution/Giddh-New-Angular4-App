@@ -123,15 +123,15 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         private _generalService: GeneralService,
         private router: Router) {
 
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
     }
 
     public ngOnInit() {
         this.getActiveTab();
 
-        this.route.params.subscribe(params => {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.activeTab = params['type'];
             }
@@ -192,6 +192,13 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public selectedRowInput(item: ExpenseResults) {
+        if(this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+            this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
+            this.rejectedTabSortOptions.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
+        } else if(this.currentSelectedTab === "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+            this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
+            this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
+        }
         this.selectedRowItem = item;
     }
 
@@ -205,13 +212,41 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public closeDetailedMode(e) {
         this.isSelectedRow = !e;
+
+        setTimeout(() => {
+            if(this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
+                this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
+                this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
+            } else if(this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
+                this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
+                this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
+            }
+        }, 500);
     }
 
     public refreshPendingItem(e) {
         if (e) {
+            if(this.pendingTabSortOptions) {
+                this.pettycashRequest.sort = this.pendingTabSortOptions.sort;
+                this.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
+            }
             this.getPettyCashPendingReports(this.pettycashRequest);
+
+            if(this.rejectedTabSortOptions) {
+                this.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
+                this.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
+            }
             this.getPettyCashRejectedReports(this.pettycashRequest);
+            
             setTimeout(() => {
+                if(this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
+                    this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
+                    this.pendingListComponent.pettycashRequest.sortBy = this.pendingTabSortOptions.sortBy;
+                } else if(this.currentSelectedTab === "rejected" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest && this.rejectedTabSortOptions) {
+                    this.rejectedListComponent.pettycashRequest.sort = this.rejectedTabSortOptions.sort;
+                    this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
+                }
+
                 this.detectChanges();
             }, 600);
         }

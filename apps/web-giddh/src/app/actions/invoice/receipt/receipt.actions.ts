@@ -36,9 +36,7 @@ export class InvoiceReceiptActions {
             ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.body, action.payload.type)),
             map((response: BaseResponse<ReciptResponse, InvoiceReceiptFilter>) => {
-                if (response.status === 'success') {
-                    // this.showToaster('');
-                } else {
+                if (response.status !== 'success') {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetAllInvoiceReceiptResponse(response);

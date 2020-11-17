@@ -14,7 +14,7 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { GroupResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from '../../../../lodash-optimized';
@@ -144,24 +144,23 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
         private accountService: AccountService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions,
-        private _settingsDiscountAction: SettingsDiscountActions,
-        private _dbService: DbService, private router: Router) {
+        private _settingsDiscountAction: SettingsDiscountActions) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
-        this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
-        this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).pipe(takeUntil(this.destroyed$));
-        this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).pipe(takeUntil(this.destroyed$));
-        this.showEditAccount$ = this.store.select(state => state.groupwithaccounts.showEditAccount).pipe(takeUntil(this.destroyed$));
-        this.showEditGroup$ = this.store.select(state => state.groupwithaccounts.showEditGroup).pipe(takeUntil(this.destroyed$));
-        this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).pipe(takeUntil(this.destroyed$));
+        this.showNewForm$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNew), takeUntil(this.destroyed$));
+        this.showAddNewAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewAccount), takeUntil(this.destroyed$));
+        this.showAddNewGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewGroup), takeUntil(this.destroyed$));
+        this.showEditAccount$ = this.store.pipe(select(state => state.groupwithaccounts.showEditAccount), takeUntil(this.destroyed$));
+        this.showEditGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showEditGroup), takeUntil(this.destroyed$));
+        this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
 
-        this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
-        this.virtualAccountEnable$ = this.store.select(state => state.invoice.settings).pipe(takeUntil(this.destroyed$));
-        this.discountList$ = this.store.select(s => s.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.virtualAccountEnable$ = this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$));
+        this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
 
         // prepare drop down for taxes
-        this.companyTaxDropDown = this.store.select(createSelector([
+        this.companyTaxDropDown = this.store.pipe(select(createSelector([
             (state: AppState) => state.groupwithaccounts.activeAccount,
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
             (state: AppState) => state.company.taxes],
@@ -206,28 +205,28 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                     }
                 }
                 return arr;
-            })).pipe(takeUntil(this.destroyed$));
-        this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress).pipe(takeUntil(this.destroyed$));
-        this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith).pipe(takeUntil(this.destroyed$));
-        this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith).pipe(takeUntil(this.destroyed$));
-        this.groupList$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-        this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).pipe(takeUntil(this.destroyed$));
-        this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
-        this.companyTaxes$ = this.store.select(state => state.company.taxes).pipe(takeUntil(this.destroyed$));
-        this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen).pipe(takeUntil(this.destroyed$));
-        this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).pipe(takeUntil(this.destroyed$));
-        this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).pipe(takeUntil(this.destroyed$));
+            })), takeUntil(this.destroyed$));
+        this.activeGroupInProgress$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupInProgress), takeUntil(this.destroyed$));
+        this.activeGroupSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupSharedWith), takeUntil(this.destroyed$));
+        this.activeAccountSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountSharedWith), takeUntil(this.destroyed$));
+        this.groupList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
+        this.activeGroupTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
+        this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
+        this.companyTaxes$ = this.store.pipe(select(state => state.company.taxes), takeUntil(this.destroyed$));
+        this.showAddAccountForm$ = this.store.pipe(select(state => state.groupwithaccounts.addAccountOpen), takeUntil(this.destroyed$));
+        this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
+        this.isGroupNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isGroupNameAvailable), takeUntil(this.destroyed$));
 
         // account-add component's property
-        this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
-        this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
-        this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
-        this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
-        this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).pipe(takeUntil(this.destroyed$));
-        this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+        this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
+        this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
+        this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
+        this.updateAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountInProcess), takeUntil(this.destroyed$));
+        this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-        this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.selectedCompany = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
                 return;
             }
@@ -247,7 +246,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.activeCompany = selectedCmp.uniqueName;
             }
             return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
         this.selectedCompany.subscribe((res: any) => {
             if (res) {
                 this.activeCompany = res;
@@ -440,7 +439,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public ngAfterViewInit() {
 
-        this.isTaxableAccount$ = this.store.select(createSelector([
+        this.isTaxableAccount$ = this.store.pipe(select(createSelector([
             (state: AppState) => state.groupwithaccounts.groupswithaccounts,
             (state: AppState) => state.groupwithaccounts.activeAccount],
             (groupswithaccounts, activeAccount) => {
@@ -452,7 +451,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                     result = false;
                 }
                 return result;
-            }));
+            })), takeUntil(this.destroyed$));
     }
 
     public loadAccountData() {
