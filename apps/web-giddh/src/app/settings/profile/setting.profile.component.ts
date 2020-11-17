@@ -1122,7 +1122,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 parent: response.parentBranch,
                 uniqueName: response.uniqueName,
                 alias: response.alias,
-                taxType: response.taxType
+                taxType: response.taxType,
+                manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false
             };
             this.addresses = this.settingsUtilityService.getFormattedBranchAddresses(response.addresses);
             this.changeDetectorRef.detectChanges();
