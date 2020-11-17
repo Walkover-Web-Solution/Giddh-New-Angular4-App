@@ -6,7 +6,7 @@ import { SettingsLinkedAccountsService } from '../../../services/settings.linked
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
@@ -78,7 +78,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit {
         private _toaster: ToasterService,
         private store: Store<AppState>
     ) {
-        this.needReloadingLinkedAccounts$ = this.store.select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts).pipe(takeUntil(this.destroyed$));
+        this.needReloadingLinkedAccounts$ = this.store.pipe(select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts), takeUntil(this.destroyed$));
         this.dataSource = (text$: Observable<any>): Observable<any> => {
 
             const inputClick$ = this.click$;
@@ -105,7 +105,8 @@ export class ConnectBankModalComponent implements OnChanges, OnInit {
                         this.dataSourceBackup = res;
                         return data;
                     }
-                }));
+                }),
+                takeUntil(this.destroyed$));
         };
 
         this.loginForm = this.initLoginForm();

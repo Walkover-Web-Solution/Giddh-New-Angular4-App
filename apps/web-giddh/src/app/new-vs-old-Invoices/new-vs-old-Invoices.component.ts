@@ -1,16 +1,16 @@
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IOption } from '../theme/ng-select/option.interface';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { AppState } from '../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { NewVsOldInvoicesActions } from '../actions/new-vs-old-invoices.actions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../actions/company.actions';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
 import { NgForm } from '@angular/forms';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'new-vs-old-invoices',
@@ -45,19 +45,19 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public totalSalesInvCount: number = 0;
     public invoiceCountAll: number = 0;
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
-    private searchFilterData: any = null;
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions,
-        private componentFactoryResolver: ComponentFactoryResolver, private _companyActions: CompanyActions,
+    constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions, private _companyActions: CompanyActions,
         private _toasty: ToasterService) {
         this.NewVsOldInvoicesQueryRequest = new NewVsOldInvoicesRequest();
-        this.NewVsOldInvoicesData$ = this.store.select(s => s.newVsOldInvoices.data);
-        this.isRequestSuccess$ = this.store.select(s => s.newVsOldInvoices.requestInSuccess);
+        this.NewVsOldInvoicesData$ = this.store.pipe(select(s => s.newVsOldInvoices.data), takeUntil(this.destroyed$));
+        this.isRequestSuccess$ = this.store.pipe(select(s => s.newVsOldInvoices.requestInSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'new-vs-old-invoices';
@@ -148,7 +148,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public customMonthSorting(a: IOption, b: IOption) {

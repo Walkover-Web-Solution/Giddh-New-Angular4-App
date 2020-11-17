@@ -242,6 +242,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public initialCalendarRender: boolean = true;
     /** This will hold how many days user can add in upto today field */
     public noOfDaysAllowed: number = 0;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.choosedDate = new EventEmitter();
@@ -368,11 +370,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.dropdownShow = false;
         });
 
-        this.modalService.onShow.subscribe(response => {
+        this.modalService.onShow.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isInlineDateFieldsShowing = true;
         });
 
-        this.modalService.onHide.subscribe(response => {
+        this.modalService.onHide.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isInlineDateFieldsShowing = false;
             this.invalidInlineStartDate = "";
             this.invalidInlineEndDate = "";

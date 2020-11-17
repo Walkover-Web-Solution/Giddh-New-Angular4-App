@@ -18,7 +18,6 @@ import {
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {
     BsModalRef,
-    BsModalService,
     ModalOptions
 } from 'ngx-bootstrap/modal';
 import {BsDatepickerDirective} from 'ngx-bootstrap/datepicker';
@@ -29,7 +28,6 @@ import {AppState} from '../store';
 import {SalesActions} from '../actions/sales/sales.action';
 import {CompanyActions} from '../actions/company.actions';
 import {ActivatedRoute, ActivationStart, Router} from '@angular/router';
-import {LedgerActions} from '../actions/ledger/ledger.actions';
 import {SalesService} from '../services/sales.service';
 import {ToasterService} from '../services/toaster.service';
 import {GeneralActions} from '../actions/general/general.actions';
@@ -555,11 +553,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public existingPoEntries: any[] = [];
     /* This will hold the transaction amount */
     public transactionAmount: number = 0;
-
     /** account's applied tax list */
     public tcsTdsTaxesAccount: any[] = [];
     /** account's applied discounts list */
     public accountAssignedApplicableDiscounts: any[] = [];
+    /** This will hold onboarding api form request */
+    public onboardingFormRequest: OnboardingFormRequest = {formName: '', country: ''};
+    /** This will hold states list with respect to country */
+    public countryStates: any[] = [];
+
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -580,12 +582,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private salesAction: SalesActions,
         private companyActions: CompanyActions,
         private router: Router,
-        private ledgerActions: LedgerActions,
         private salesService: SalesService,
         private _toasty: ToasterService,
         private _generalActions: GeneralActions,
         private generalService: GeneralService,
-        private _invoiceActions: InvoiceActions,
         private _settingsDiscountAction: SettingsDiscountActions,
         public route: ActivatedRoute,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -602,18 +602,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
         private purchaseRecordAction: PurchaseRecordActions,
-        private modalService: BsModalService,
         public purchaseOrderService: PurchaseOrderService,
         private searchService: SearchService
     ) {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
-        // this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
-        // this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
-        this.store.dispatch(this._invoiceActions.getInvoiceSetting());
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({page: 1, count: 0}));
@@ -632,7 +629,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
         this.updateProformaVoucherInProcess$ = this.store.pipe(select(state => state.proforma.isUpdateProformaInProcess), takeUntil(this.destroyed$));
         this.generateVoucherSuccess$ = combineLatest([this.store.pipe(select(appState => appState.proforma.isGenerateSuccess)),
-            this.store.pipe(select(appState => appState.proforma.isGenerateInProcess))]).pipe(debounceTime(0), takeUntil(this.destroyed$));
+        this.store.pipe(select(appState => appState.proforma.isGenerateInProcess))]).pipe(debounceTime(0), takeUntil(this.destroyed$));
         this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
         this.lastGeneratedVoucherNo$ = this.store.pipe(select(p => p.proforma.lastGeneratedVoucherDetails), takeUntil(this.destroyed$));
         this.lastInvoices$ = this.store.pipe(select(p => p.receipt.lastVouchers), takeUntil(this.destroyed$));
@@ -705,7 +702,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
-        this.store.select(s => {
+        this.store.pipe(select(s => {
             if (!s.session.companies) {
                 return;
             }
@@ -714,7 +711,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.selectedCompany = cmp;
                 }
             });
-        }).pipe(takeUntil(this.destroyed$)).subscribe();
+        }), takeUntil(this.destroyed$)).subscribe();
 
         this.activeAccount$.subscribe(data => {
             if (data) {
@@ -911,7 +908,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         // listen for universal date
-        this.store.pipe(select((p: AppState) => p.session.applicationDate)).subscribe((dateObj: Date[]) => {
+        this.store.pipe(select((p: AppState) => p.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
                     this.poFilterDates = {from: moment(dateObj[0]).format(GIDDH_DATE_FORMAT), to: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)}
@@ -1433,7 +1430,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isMobileScreen = st.matches;
             });
 
-        this.bulkItemsModal.onHidden.subscribe(() => {
+        this.bulkItemsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.showBulkItemModal = false;
         });
 
@@ -1616,18 +1613,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-     *
      * To fetch regex call for onboarding countries (gulf)
-     * @param {*} countryCode
+     *
+     * @param {string} countryCode
      * @memberof ProformaInvoiceComponent
      */
-    public getOnboardingForm(countryCode) {
-        let onboardingFormRequest = new OnboardingFormRequest();
-        onboardingFormRequest.formName = 'onboarding';
-        onboardingFormRequest.country = countryCode;
-        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+    public getOnboardingForm(countryCode: string): void {
+        if(this.onboardingFormRequest.country !== countryCode) {
+            this.onboardingFormRequest.formName = 'onboarding';
+            this.onboardingFormRequest.country = countryCode;
+            this.store.dispatch(this.commonActions.GetOnboardingForm(this.onboardingFormRequest));
+        }
     }
-
 
     public assignDates() {
         let date = _.cloneDeep(this.universalDate);
@@ -4404,7 +4401,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     private saveStateDetails() {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;
@@ -4869,24 +4866,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
-                this.salesService.getStateCode(countryCode).subscribe(resp => {
-                    this.startLoader(false);
+                if(this.countryStates[countryCode]) {
                     if(!isCompanyStates) {
-                        this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                        this.statesSource = this.countryStates[countryCode];
                     } else {
-                        this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                        this.companyStatesSource = this.countryStates[countryCode];
                     }
+                    this.startLoader(false);
                     resolve();
-                }, () => {
-                    resolve();
-                });
+                } else {
+                    this.salesService.getStateCode(countryCode).subscribe(resp => {
+                        this.startLoader(false);
+                        if(!isCompanyStates) {
+                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                        } else {
+                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                        }
+                        resolve();
+                    }, () => {
+                        resolve();
+                    });
+                }
             } else {
                 resolve();
             }
         });
     }
 
-    private modifyStateResp(stateList: StateCode[]) {
+    private modifyStateResp(stateList: StateCode[], countryCode: string) {
         let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {
             stateListRet.push({
@@ -4895,6 +4902,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code
             });
         });
+
+        this.countryStates[countryCode] = stateListRet;
+
         return stateListRet;
     }
 
@@ -5596,7 +5606,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * Call API to get all advance receipts of an invoice
      *
      * @param {*} customerUniquename Selected customer unique name
-     * @param {*} voucherDate  Voucher Date (DD-MM-YYYY) of selected invoice
+     * @param {*} voucherDate  Voucher Date (GIDDH_DATE_FORMAT) of selected invoice
      * @memberof ProformaInvoiceComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
