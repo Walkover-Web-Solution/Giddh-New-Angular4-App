@@ -48,7 +48,9 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 	@Input() public selectedGst: string = null;
 	@Input() public activeCompanyGstNumber: string = null;
 	@Input() public isTransactionSummary: boolean = false;
-	@Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
+    @Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
+    /** Emits when HSN/SAC is selected */
+    @Output() public hsnSacSelected: EventEmitter<void> = new EventEmitter();
 
     public gstr1OverviewData$: Observable<GstOverViewResult>;
 
@@ -100,9 +102,13 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 	 * viewTransactions
 	 */
 	public viewTransactions(obj: GstOverViewSummary) {
-		if (obj.gstReturnType === 'hsnsac' || obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers') {
+		if (obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers') {
 			return;
-		}
+        }
+        if (obj.gstReturnType === 'hsnsac') {
+            this.hsnSacSelected.emit();
+            return;
+        }
 		let param = {
 			page: 1,
 			count: 20,

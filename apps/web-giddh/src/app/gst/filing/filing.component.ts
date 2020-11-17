@@ -30,7 +30,9 @@ export class FilingComponent implements OnInit, OnDestroy {
 	public fileReturn: {} = { isAuthenticate: false };
 	public selectedTabId: number = null;
 	public gstFileSuccess$: Observable<boolean> = of(false);
-	public fileReturnSucces: boolean = false;
+    public fileReturnSucces: boolean = false;
+    /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
+    public showHsn: boolean;
 
 	public gstr1OverviewDataInProgress$: Observable<boolean>;
 	public gstr2OverviewDataInProgress$: Observable<boolean>;
@@ -105,7 +107,7 @@ export class FilingComponent implements OnInit, OnDestroy {
 		this.selectedTab = tabHeading;
 		this.isTransactionSummary = this.selectedTab !== '1. Overview';
 		this.showTaxPro = val;
-		this.fileReturnSucces = false;
+        this.fileReturnSucces = false;
 		// this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
 	}
 
@@ -119,5 +121,15 @@ export class FilingComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
-	}
+    }
+
+    /**
+     * Opens the HSN/SAC section of GST report
+     *
+     * @memberof FilingComponent
+     */
+    public openHsnSacSection(): void {
+        this.showHsn = true;
+        this.selectTab('', true, 'pushToGstn');
+    }
 }
