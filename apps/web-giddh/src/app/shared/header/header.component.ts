@@ -244,6 +244,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public searchBranchQuery: string;
     /** Current organization type */
     public currentOrganizationType: OrganizationType;
+    /** Version of lated mac app  */
+    public macAppVersion: string;
+    /** This will hold the time when last session renewal was checked or updated */
+    public lastSessionRenewalTime: any;
 
     /**
      * Returns whether the account section needs to be displayed or not
@@ -256,9 +260,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         return this.currentOrganizationType === OrganizationType.Branch ||
             (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
     }
-
-    /** Version of lated mac app  */
-    public macAppVersion: string;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -332,10 +333,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
-            }
 
-            if(event instanceof RouteConfigLoadEnd) {
-                this.checkAndRenewUserSession();
+                if(!this.lastSessionRenewalTime || (this.lastSessionRenewalTime && this.lastSessionRenewalTime.diff(moment(), 'hours') >= 2)) {
+                    this.checkAndRenewUserSession();
+                }
             }
         });
 
@@ -2062,7 +2063,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let sessionExpiresAt: any = moment(user.session.expiresAt, GIDDH_DATE_FORMAT + " h:m:s");
 
                 if(sessionExpiresAt.diff(moment(), 'hours') < 2) {
+                    this.lastSessionRenewalTime = moment();
                     this.store.dispatch(this.loginAction.renewSession());
+                } else {
+                    this.lastSessionRenewalTime = moment();
                 }
             }
         });
