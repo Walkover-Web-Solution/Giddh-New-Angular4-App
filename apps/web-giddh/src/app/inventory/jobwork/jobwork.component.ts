@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InventoryReportActions } from '../../actions/inventory/inventory.report.actions';
 import { InventoryFilter, InventoryReport, InventoryUser } from '../../models/api-models/Inventory-in-out';
@@ -130,7 +130,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	private inventoryReport$: Observable<InventoryReport>;
 
-	constructor(private _router: ActivatedRoute, private router: Router,
+	constructor(
 		private inventoryReportActions: InventoryReportActions,
 		private inventoryService: InventoryService,
 		private _toasty: ToasterService,
@@ -139,9 +139,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
 		private _store: Store<AppState>,
 		private cdr: ChangeDetectorRef) {
 
-		this.stocksList$ = this._store.select(s => s.inventory.stocksList && s.inventory.stocksList.results).pipe(takeUntil(this.destroyed$));
-		this.inventoryUsers$ = this._store.select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers).pipe(takeUntil(this.destroyed$));
-		this.universalDate$ = this._store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+		this.stocksList$ = this._store.pipe(select(s => s.inventory.stocksList && s.inventory.stocksList.results), takeUntil(this.destroyed$));
+		this.inventoryUsers$ = this._store.pipe(select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers), takeUntil(this.destroyed$));
+		this.universalDate$ = this._store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
 		// on reload page
 		let len = document.location.pathname.split('/').length;
 		if (len === 6) {
@@ -155,7 +155,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
 			}
 		}
 		// get view from sidebar while clicking on person/stock
-
 
 		this.invViewService.getJobworkActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
 
@@ -216,16 +215,14 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
 		});
 
-		this.inventoryReport$ = this._store.select(p => p.inventoryInOutState.inventoryReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
+		this.inventoryReport$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
 
-		this._store.select(p => ({
+		this._store.pipe(select(p => ({
 			stocksList: p.inventory.stocksList,
 			inventoryUsers: p.inventoryInOutState.inventoryUsers
-		})).subscribe(p => p.inventoryUsers && p.stocksList &&
+		})), takeUntil(this.destroyed$)).subscribe(p => p.inventoryUsers && p.stocksList &&
 			(this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
 				.concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
-
-
 	}
 
 	public ngOnInit() {
