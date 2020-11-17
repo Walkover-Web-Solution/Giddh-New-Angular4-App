@@ -84,7 +84,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         nameAlias: '',
         headQuarterAlias: '',
         balanceDisplayFormat: '',
-        taxType: ''
+        taxType: '',
+        manageInventory: false
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -268,7 +269,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
 
-        this.store.select(p => p.settings.inventory).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
@@ -389,9 +390,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public updateInventorySetting(data) {
         let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
         dataToSaveNew.companyInventorySettings = { manageInventory: data };
-
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
-
     }
 
     public removeGstEntry(indx) {
@@ -750,7 +749,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public handleSaveProfile(value: any): void {
         if (this.currentOrganizationType === OrganizationType.Company) {
-            this.patchProfile({ ...value });
+            if ('manageInventory' in value) {
+                this.updateInventorySetting(value.manageInventory);
+            } else {
+                this.patchProfile({ ...value });
+            }
         } else if (this.currentOrganizationType === OrganizationType.Branch) {
             this.updateBranchProfile();
         }
@@ -1084,7 +1087,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 businessType: profileObj.businessType,
                 balanceDecimalPlaces: profileObj.balanceDecimalPlaces,
                 balanceDisplayFormat: profileObj.balanceDisplayFormat,
-                isMultipleCurrency: profileObj.isMultipleCurrency
+                isMultipleCurrency: profileObj.isMultipleCurrency,
+                manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false
             };
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
