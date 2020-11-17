@@ -3,7 +3,7 @@
 <hamburger-menu [pageHeading]="'Vendor'" *ngIf="activeTab === 'vendor'"></hamburger-menu>
 <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <!-- region Customer/Vendor -->
-    <tab heading="Customer" [id]="(activeTab !== 'aging-report')?'giddh-page-heading': ''" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
+    <tab heading="Customer" [id]="(activeTab !== 'aging-report') ? 'giddh-page-heading': ''" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
         <div class="container-fluid">
 
             <div class="top-bar customer-top-bar clearfix">
@@ -212,7 +212,7 @@
     <!-- endregion -->
 
     <!-- region Aging Report -->
-    <tab heading="Aging Report" [id]="(activeTab === 'aging-report')?'giddh-page-heading': ''" (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
+    <tab heading="Aging Report" [id]="(activeTab === 'aging-report') ? 'giddh-page-heading': ''" (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
         <!--    <div *ngIf="activeTab === 'aging'">-->
         <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
         <!--    </div>-->

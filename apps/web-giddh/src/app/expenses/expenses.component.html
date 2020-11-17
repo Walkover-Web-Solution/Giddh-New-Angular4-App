@@ -31,7 +31,7 @@
             </div>
 
         <tab heading="Pending" (selectTab)="tabChanged('pending', $event);"
-        [id]="(currentSelectedTab === 'pending')?'giddh-page-heading': ''" >
+        [id]="(currentSelectedTab === 'pending') ? 'giddh-page-heading': ''" >
             <ng-container *ngIf="currentSelectedTab === 'pending'">
                 <app-pending-list #pendingListComponent *ngIf="!isSelectedRow" [isClearFilter]="isClearFilter"
                     (isFilteredSelected)="isFilteredSelected($event);" (selectedRowToggle)="selectedRowToggle($event);"
@@ -48,7 +48,7 @@
         </tab>
 
         <tab heading="Rejected" (selectTab)="tabChanged('rejected', $event);"
-        [id]="(currentSelectedTab === 'rejected')?'giddh-page-heading': ''" >
+        [id]="(currentSelectedTab === 'rejected') ? 'giddh-page-heading': ''" >
             <ng-container *ngIf="currentSelectedTab === 'rejected'">
                 <app-rejected-list #rejectedListComponent (isFilteredSelected)="isFilteredSelected($event);" [isClearFilter]="isClearFilter"></app-rejected-list>
             </ng-container>
