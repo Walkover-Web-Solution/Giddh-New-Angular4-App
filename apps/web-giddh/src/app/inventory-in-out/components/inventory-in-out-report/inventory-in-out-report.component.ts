@@ -11,27 +11,11 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
 @Component({
-    selector: 'invetory-in-out-report',  // <home></home>
+    selector: 'invetory-in-out-report',
     templateUrl: './inventory-in-out-report.component.html',
-    styles: [`
-    .bdrT {
-      border-color: #ccc;
-    }
-
-    :host ::ng-deep .fb__1-container {
-      justify-content: flex-start;
-    }
-
-    :host ::ng-deep .fb__1-container .form-group {
-      margin-right: 10px;
-      margin-bottom: 0;
-    }
-
-    :host ::ng-deep .fb__1-container .date-range-picker {
-      min-width: 150px;
-    }
-  `]
+    styleUrls: ['./inventory-in-out-report.component.scss']
 })
+
 export class InventoryInOutReportComponent implements OnDestroy {
     public datePickerOptions: any = {
         locale: {
@@ -86,6 +70,7 @@ export class InventoryInOutReportComponent implements OnDestroy {
         { label: 'Sender', value: 'Sender' },
         { label: 'Receiver', value: 'Receiver' }
     ];
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _router: ActivatedRoute,
@@ -173,6 +158,11 @@ export class InventoryInOutReportComponent implements OnDestroy {
             .genReport(this.uniqueName, this.startDate, this.endDate, page, 10, applyFilter ? this.filter : null));
     }
 
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof InventoryInOutReportComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();       

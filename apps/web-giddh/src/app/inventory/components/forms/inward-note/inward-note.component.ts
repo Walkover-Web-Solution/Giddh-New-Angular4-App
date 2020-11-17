@@ -17,11 +17,7 @@ import { ReplaySubject } from 'rxjs';
 @Component({
     selector: 'transfer-inward-note',
     templateUrl: './inward-note.component.html',
-    styles: [`
-    .pad-10-5 {
-      padding: 10px 5px;
-    }
-  `],
+    styleUrls: ['./inward-note.component.scss'],
 })
 
 export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
@@ -45,6 +41,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     public disableStockButton: boolean = false;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
@@ -378,7 +375,12 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         return linkedStocks;
     }
 
-    public ngOnDestroy() {
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof InwardNoteComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

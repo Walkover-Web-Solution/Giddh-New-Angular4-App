@@ -17,11 +17,7 @@ import { ReplaySubject } from 'rxjs';
 @Component({
     selector: 'inward-note',
     templateUrl: './inward-note.component.html',
-    styles: [`
-    .pad-10-5 {
-      padding: 10px 5px;
-    }
-  `],
+    styleUrls: ['./inward-note.component.scss'],
 })
 
 export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
@@ -378,6 +374,11 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         return linkedStocks;
     }
 
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof InwardNoteComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();       

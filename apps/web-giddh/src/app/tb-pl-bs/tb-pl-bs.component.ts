@@ -73,7 +73,12 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
-    public ngOnDestroy() {
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof TbPlBsComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

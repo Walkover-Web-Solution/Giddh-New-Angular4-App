@@ -44,6 +44,11 @@ export class AsideTransferPaneComponent implements OnInit, OnDestroy {
         this.entrySuccess$ = this._store.pipe(select(s => s.inventoryInOutState.entrySuccess), takeUntil(this.destroyed$));
     }
 
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof AsideTransferPaneComponent
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -15,56 +15,7 @@ import { CustomStockUnitAction } from '../../../actions/inventory/customStockUni
 @Component({
 	selector: 'aside-menu',
 	templateUrl: './aside-menu.component.html',
-	styles: [`
-    .buttons-container {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .buttons-container > * {
-      margin: 20px;
-    }
-
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      max-width:480px;
-      width: 100%;
-      z-index: 99999;
-    }
-
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-      position: fixed;
-      left: -41px;
-      top: 0;
-      z-index: 5;
-      border: 0;
-      border-radius: 0;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      max-width:480px;
-      width: 100%;
-      padding: 0;
-      background: #fff;
-    }
-  `],
+	styleUrls: ['./aside-menu.component.scss'],
 })
 
 export class AsideMenuComponent implements OnInit, OnDestroy {
@@ -126,6 +77,11 @@ export class AsideMenuComponent implements OnInit, OnDestroy {
 		this._store.dispatch(this._inventoryUserAction.addNewUser(value.name));
     }
     
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof AsideMenuComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();       
