@@ -2,19 +2,22 @@
     <hamburger-menu></hamburger-menu>
     <tabset class="setting-page" id="setting-tab" #staticTabsTBPL>
         <tab heading="Trial Balance"
-            (selectTab)="setCurrentPageTitle('Trial Balance'); CanTBLoad = true;CanPLLoad = false;CanBSLoad = false;">
+            (selectTab)="setCurrentPageTitle('Trial Balance'); CanTBLoad = true;CanPLLoad = false;CanBSLoad = false;"
+            [id]="(CanTBLoad) ? 'giddh-page-heading': ''">
             <div class="container-fluid pt-15">
                 <tb [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
             </div>
         </tab>
         <tab heading="Profit &amp; Loss"
-            (selectTab)="setCurrentPageTitle('Profit &amp; Loss'); CanPLLoad = true;CanTBLoad = false;CanBSLoad = false;">
+            (selectTab)="setCurrentPageTitle('Profit &amp; Loss'); CanPLLoad = true;CanTBLoad = false;CanBSLoad = false;"
+             [id]="(CanPLLoad) ? 'giddh-page-heading': ''">
             <div class="container-fluid pt-15">
                 <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
             </div>
         </tab>
         <tab heading="Balance Sheet"
-            (selectTab)="setCurrentPageTitle('Balance Sheet'); CanBSLoad = true;CanTBLoad = false;CanPLLoad = false;">
+            (selectTab)="setCurrentPageTitle('Balance Sheet'); CanBSLoad = true;CanTBLoad = false;CanPLLoad = false;"
+            [id]="(CanBSLoad) ? 'giddh-page-heading': ''">
             <div class="container-fluid pt-15">
                 <bs [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></bs>
             </div>
