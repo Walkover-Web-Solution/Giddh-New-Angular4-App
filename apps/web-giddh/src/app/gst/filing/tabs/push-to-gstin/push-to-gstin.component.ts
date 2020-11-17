@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
 import { select, Store } from '@ngrx/store';
 import { GstDatePeriod, Gstr1SummaryRequest, Gstr1SummaryResponse } from '../../../../models/api-models/GstReconcile';
@@ -18,19 +18,28 @@ export class PushToGstInComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public currentPeriod: GstDatePeriod = null;
     @Input() public activeCompanyGstNumber: string = '';
     @Input() public selectedGst: string = '';
+    /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
+    @Input() public showHsn: boolean;
 
     public showTransaction: boolean = false;
     public gstr1SummaryDetails: Gstr1SummaryResponse;
     public gstr1SummaryDetailsInProcess: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _store: Store<AppState>, private gstrAction: GstReconcileActions, private activatedRoute: ActivatedRoute) {
+    constructor(
+        private _store: Store<AppState>,
+        private gstrAction: GstReconcileActions,
+        private activatedRoute: ActivatedRoute,
+        private changeDetectorRef: ChangeDetectorRef) {
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.showTransaction = !!params['transaction'];
         });
 
         this._store.pipe(select(s => s.gstR.gstr1SummaryResponse), takeUntil(this.destroyed$)).subscribe(result => {
             this.gstr1SummaryDetails = result;
+            if (this.showHsn) {
+                this.changeDetectorRef.detectChanges();
+            }
         });
 
         this._store.pipe(select(s => s.gstR.gstr1SummaryDetailsInProcess), takeUntil(this.destroyed$)).subscribe(result => {
