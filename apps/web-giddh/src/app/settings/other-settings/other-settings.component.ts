@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { OrganizationProfile } from '../constants/settings.constant';
@@ -45,7 +45,8 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         businessType: '',
         nameAlias: '',
         balanceDisplayFormat: '',
-        taxType: ''
+        taxType: '',
+        manageInventory: false
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -67,7 +68,7 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         digitAfterDecimal.map(d => {
             this.decimalDigitSource.push({ value: d.value, label: d.name });
         });
-        this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
+        this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
         const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem.value === this.profileData.balanceDisplayFormat)
@@ -95,5 +96,16 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
     public profileUpdated(keyName: string): void {
         this.updatedData[keyName] = this.profileData[keyName];
         this.saveProfileSubject.next();
+    }
+
+    /**
+     * Inventory type update handler
+     *
+     * @param {boolean} value True, if Product is selected
+     * @memberof OtherSettingsComponent
+     */
+    public inventoryTypeUpdated(value: boolean): void {
+        this.profileData.manageInventory = value;
+        this.profileUpdated('manageInventory');
     }
 }
