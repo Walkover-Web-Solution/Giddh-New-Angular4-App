@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
@@ -20,7 +20,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
 	@Input() public discountAccountsDetails: LedgerDiscountClass[];
 	@Input() public ledgerAmount: number = 0;
-	@Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
+	@Output() public discountTotalUpdated: EventEmitter<{discountTotal: number, isActive: any, discount: any }> = new EventEmitter();
 	@Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 	public discountTotal: number;
 	public discountAccountsList$: Observable<IDiscountList[]>;
@@ -39,7 +39,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(private store: Store<AppState>) {
-		this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
+		this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
 	}
 
 	public onFocusLastDiv(el) {
@@ -139,9 +139,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	/**
 	 * on change of discount amount
 	 */
-	public change() {
+	public change(event?: any, discount?:any) {
 		this.discountTotal = giddhRoundOff(this.generateTotal(), 2);
-		this.discountTotalUpdated.emit(this.discountTotal);
+		this.discountTotalUpdated.emit({discountTotal: this.discountTotal, isActive: event, discount: discount});
 	}
 
 	/**

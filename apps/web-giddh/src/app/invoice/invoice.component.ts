@@ -1,5 +1,5 @@
-import { auditTime, take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { CompanyActions } from '../actions/company.actions';
@@ -23,13 +23,14 @@ export class InvoiceComponent implements OnInit, OnDestroy {
     public activeTab: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isMobileView = false;
+
     constructor(private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private router: Router,
-        private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalActions: GeneralActions) {
+        private router: Router, private _activatedRoute: ActivatedRoute, private _breakPointObservar: BreakpointObserver, private _generalActions: GeneralActions) {
+
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
         });
     }

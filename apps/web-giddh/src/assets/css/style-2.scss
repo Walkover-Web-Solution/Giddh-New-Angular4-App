@@ -184,11 +184,10 @@ body{
 .middle {
     vertical-align: middle;
 }
-
-.clear-both {
-    clear: both;
+.clear-both{clear: both;}
+.border-bottom{
+    border-bottom: 1px solid $gainsboro;
 }
-
 /* start MDB tweaks */
 .caret{
     display: inline-block;
@@ -365,7 +364,9 @@ body{
 .border-none {
     border: none !important;
 }
-
+.border-bottom{
+    border-bottom-color: $gainsboro;
+}
 /* end MDB tweaks */
 
 .bg-none {
@@ -605,14 +606,6 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
 }
-.invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
-    .profile-tab-container {
-        .nav.nav-tabs {
-            padding-left: 0 !important;
-        }
-    }
-}
-
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -982,7 +975,7 @@ ul.sub-list {
 
 .tab-integraton .nav-tabs > li > a {
     width: 120px;
-    height: 120px;
+    height: 120px !important;
     background: $white;
     display: flex;
     flex-direction: column;
@@ -1068,7 +1061,20 @@ ul.sub-list {
     border-bottom: 4px solid transparent;
     display: inline-block;
 }
-
+.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0px 0 43px !important;
+    border-bottom:1px solid $gainsboro;
+    li{
+        a{
+            padding: 0 !important;
+            height: 36px;
+        }
+    }
+}
 .custom-tabs .nav.nav-tabs > li a:hover {
     color: $deep-sky-blue !important;
 }
@@ -1079,11 +1085,10 @@ ul.sub-list {
 
 .custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid #e0e0e0;
-    padding: 0px 0px 0 15px !important;
+    padding:10px 0px 0 43px !important;
     background-color: #f7f8fa;
     z-index: 9;
     position: relative;
-    top: -4px;
 }
 
 .btn-sky-blue {
@@ -8641,7 +8646,9 @@ ul.dropdown-menu p.lead.pd {
 #invoice-setting ul.nav.nav-tabs {
     margin-bottom: 15px;
     background: transparent;
-    position: inherit;
+    position: inherit !important;
+    padding: 0 0px 0 15px !important;
+    border-bottom: inherit !important;
 }
 
 #invoice-setting ul.nav.nav-tabs a {
@@ -8699,7 +8706,15 @@ ul.dropdown-menu p.lead.pd {
     position: relative;
     top: -2px;
 }
-
+.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs,
+.setting-page ul.nav.nav-tabs, .inventory-control .nav.nav-tabs{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0px 0 50px !important;
+    border-bottom:1px solid $gainsboro;
+}
 .setting-page .nav > li > a {
     padding: 2px 0px;
     margin-right: 25px;
@@ -8717,7 +8732,7 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 0px;
     padding-left: 0 !important;
     background-color: transparent;
-    position: static;
+    position: static !important;
     padding-top: 0 !important;
 }
 
@@ -9036,7 +9051,7 @@ p.remvBrnchName {
     padding: 0 0px 0 0 !important;
     background-color: transparent;
     z-index: 9;
-    position: relative;
+    position: relative !important;
     top: -4px;
     margin-bottom: 10px;
 }
@@ -9300,6 +9315,9 @@ input.form-control.focused {
             margin-bottom: 40px;
         }
     }
+}
+#setting-tab > .tab-container > .tab-content {
+    padding-top: 15px;
 }
 
 /*datepicker common css*/
@@ -9655,7 +9673,7 @@ span#HW_badge_cont:nth-child(3) {
     right: -22px;
 }
 #rcw-p91-widget-button{
-    z-index: 98;
+    z-index: 992;
 }
 
 .linked-add{
@@ -9713,6 +9731,12 @@ span#HW_badge_cont:nth-child(3) {
     .tooltip-inner{
         white-space: nowrap;
     }
+}
+.rcm-entry .popover{
+    max-width: 600px;
+}
+.update-ledger-overlay .modal-backdrop.show{
+    z-index: 991 !important;
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {
@@ -9791,11 +9815,14 @@ input.mat-input-element{
     }
 }
 /*material datepicker css end*/
-
     .master-custom-tabs.custom-tabs {
         .nav-tabs {
+            border-bottom: 1px solid $gainsboro;
+            padding: 0 0 0 15px !important;
+            background-color: $alice-blue-light;
+            z-index: 9;
+            position: relative !important;
             top: 0;
-
             li {
                 a {
                     padding-top: 5px;
@@ -9803,7 +9830,6 @@ input.mat-input-element{
             }
         }
     }
-
     .delete-modal-overlay {
         z-index: 9992; /*for delete custom zIndex modal*/
     }
@@ -9870,7 +9896,7 @@ input.mat-input-element{
         }
         #setting-tab .tab-integraton .nav-tabs > li > a {
             width: 90px;
-            height: 90px;
+            height: 90px !important;
             font-size: 14px;
         }
         .groups-buttons {
@@ -9883,7 +9909,7 @@ input.mat-input-element{
         }
         #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
             width: 90px;
-            height: 90px;
+            height: 90px !important;
             font-size: 14px;
         }
         .right-bar {
@@ -10027,7 +10053,7 @@ input.mat-input-element{
         }
     }
 
-    @media (max-width: 768px) {
+  @media (max-width: 768px) {
         ul.dropdown-menu.action-dropdown {
             left: auto;
             right: 0 !important;
@@ -10037,7 +10063,7 @@ input.mat-input-element{
         }
         #setting-tab .tab-integraton .nav-tabs > li > a {
             width: 70px;
-            height: 70px;
+            height: 70px !important;
         }
         .tab-integraton .nav-tabs > li > a > span {
             font-size: 22px;
@@ -10128,10 +10154,6 @@ input.mat-input-element{
         .universal-date label.btn.btn-link {
             display: none;
         }
-        .invoice-control .nav.nav-tabs {
-            margin-bottom: 15px;
-            padding: 0 0px 0 15px !important;
-        }
         overview-summary .transactions-overview {
             background: transparent;
         }
@@ -10180,29 +10202,62 @@ input.mat-input-element{
             margin-top: 0 !important;
         }
     }
-
-    @media (max-width: 1280px) {
-        .linked-add{
-            .popover{
-                width: 150px;
-                &.outside-popover {
-                    position: absolute !important;
-                    left: 160px !important;
-                    top: 10% !important;
-                }
+@media (max-width: 1280px) {
+    .multi-select input.form-control {
+        padding-right: 18px !important;
+    }
+    #dashboard .panel-default > .panel-heading {
+        font-size: 14px;
+    }
+    #dashboard .panel-heading i {
+        margin-left: 10px;
+    }
+}
+@media (max-width: 767px) {
+    .invoice-control .nav.nav-tabs {
+        margin-bottom: 15px;
+        padding: 0 0px 0 15px !important;
+    }
+    #setting-tab .tab-integraton .nav-tabs > li {
+        margin-top: 0 !important;
+    }
+    .hamburger-menu-icon{
+        display: none !important;
+    }
+    .hamburger-menu-icon{
+        display: none !important;
+    }
+    .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs{
+        padding-left: 15px !important;
+        top: 90px !important;
+        position: fixed !important;
+    }
+    bs-datepicker-container{
+        position: fixed !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+    .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
+        padding: 7px 0px 0 15px !important;
+        li{
+            a{
+                padding: 0 !important;
+                height: 30px;
             }
         }
-        .multi-select input.form-control {
-            padding-right: 18px !important;
-        }
-        #dashboard .panel-default > .panel-heading {
-            font-size: 14px;
-        }
-        #dashboard .panel-heading i {
-            margin-left: 10px;
+        .rcm-entry .popover{
+            max-width: 550px;
         }
     }
-
+    .setting-page ul.nav.nav-tabs{
+         padding: 2px 0px 0 15px !important
+    }
+    #setting-tab .settings-profile-tabs .tab-container .nav.nav-tabs{
+        top: 90px !important;
+        padding-top: 8px !important;
+    }
+}
     @media (max-width: 1199px) {
         .ledger-book .left-col-new .entry-modal {
             width: 100%;
@@ -10212,7 +10267,7 @@ input.mat-input-element{
     @media (max-width: 767px) {
         .settings-profile-tabs {
             .tab-content{
-                padding-top: 45px;
+                padding-top: 25px;
             }
         }
         .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
@@ -10295,7 +10350,10 @@ input.mat-input-element{
         }
         header .hamburger-menu h4 {
             color: $white;
-            font-size: 16px;
+            font-size: 14px;
+            white-space: normal;
+            word-break: break-word;
+            width: 100%;
         }
         header .hamburger-menu i.icon-bar {
             color: $white;
@@ -10374,10 +10432,10 @@ input.mat-input-element{
             transform: rotate(90deg);
         }
         #setting-tab .tab-container .nav.nav-tabs, #purchase-tab .purchase-tabset.tab-container
-        > .nav.nav-tabs {
-            position: fixed;
+    > .nav.nav-tabs , .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
+            position: fixed !important;
             width: 100%;
-            top: 90px;
+            top: 98px !important;
         }
         #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
             top: 88px;
@@ -10411,7 +10469,7 @@ input.mat-input-element{
         }
         #setting-tab setting-integration .tab-container .nav.nav-tabs,
         #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
-            position: inherit;
+            position: inherit !important;
             white-space: nowrap;
         }
         #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
@@ -10520,10 +10578,6 @@ input.mat-input-element{
         .panel-block .card-body {
             min-height: auto;
         }
-        // .tabs-page .padding-top-fixed-mobile {
-        //     padding-top: 126px;
-        // }
-
         .page-has-tabs .padding-top-fixed-mobile,
         .on-user-page .padding-top-fixed-mobile {
             padding-top: 130px !important;
@@ -10578,11 +10632,11 @@ input.mat-input-element{
         .hide-scroll-body:last-child .modal {
             z-index: 9993;
         }
-        .page-has-tabs .invoice-genrate-container,
-        .page-has-tabs .invoice-container,
-        .page-has-tabs .proforma-container,
         .page-has-tabs .proforma-container {
             padding-top: 15px !important;
+        }
+        .page-has-tabs .proforma-container{
+            padding-top: 0 !important;
         }
         .page-has-tabs
         #setting-tab
@@ -10590,11 +10644,10 @@ input.mat-input-element{
         .tab-container
         .nav.nav-tabs,
         .on-user-page .search-subscription {
-            margin-top: 15px !important;
+            margin-top: 0 !important;
         }
         .page-has-tabs .recurring-container {
             margin-top: 0px !important;
-            padding-top: 10px !important;
         }
         .on-user-page .user-detail-page.company-page {
             padding-top: 15px !important;
@@ -10638,6 +10691,15 @@ input.mat-input-element{
     }
 
     @media (max-width: 575px) {
+        .purchase-setting-tab ul.nav.nav-tabs {
+            padding-bottom: 30px !important;
+            min-height: 100px;
+        }
+        .invoice-control .nav.nav-tabs{
+            white-space: nowrap;
+            overflow-y: hidden;
+            display: inline-block;
+        }
         .linked-add .popover{
             width: 180px;
             transform: none !important;

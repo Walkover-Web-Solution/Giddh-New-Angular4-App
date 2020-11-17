@@ -12,7 +12,7 @@
 
                 <div class="pull-right text-right mr-b1">
                     <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}"
-                        [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
+                        [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" [placeholder]="giddhDateFormat"
                         class="form-control text-right invoice-date-field" /> {{ displayDay }}
                 </div>
             </div>

@@ -147,7 +147,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	private selectedAccountInputField: any;
 	private taxesToRemember: any[] = [];
 	private isAccountListFiltered: boolean = false;
-	private allFlattenAccounts: any[] = [];
+    private allFlattenAccounts: any[] = [];
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
 	constructor(
 		private _accountService: AccountService,
@@ -162,7 +164,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		private inventoryAction: InventoryAction,
 		private invoiceActions: InvoiceActions,
 	) {
-		this._keyboardService.keyInformation.subscribe((key) => {
+		this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
 			this.watchKeyboardEvent(key);
 		});
 
@@ -174,7 +176,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 				return false;
 			}
 			return true;
-		})).subscribe((d) => {
+		}), takeUntil(this.destroyed$)).subscribe((d) => {
 			if (d && d.gridType === 'invoice') {
 				this.data.voucherType = d.page;
 				this.gridType = d.gridType;
@@ -213,7 +215,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 				return false;
 			}
 			return true;
-		})).subscribe((data) => {
+		}), takeUntil(this.destroyed$)).subscribe((data) => {
 			if (data) {
 				this.data = cloneDeep(data);
 				if (this.gridType === 'invoice') {
@@ -222,8 +224,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 			}
 		});
 
-		this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
-		this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+		this.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+		this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
 		this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 	}
 
@@ -232,7 +234,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		// dispatch stocklist request
 		this.store.dispatch(this.inventoryAction.GetStock());
 
-		this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$)).subscribe((s: boolean) => {
+		this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
 			if (s) {
 				this._toaster.successToast('Entry created successfully', 'Success');
 				this.refreshEntry();
@@ -245,7 +247,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		// this.refreshEntry();
 		// this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
-		this._tallyModuleService.filteredAccounts.subscribe((accounts) => {
+		this._tallyModuleService.filteredAccounts.pipe(takeUntil(this.destroyed$)).subscribe((accounts) => {
 			if (accounts) {
 				let accList: IOption[] = [];
 				accounts.forEach((acc: IFlattenAccountsResultItem) => {
@@ -789,7 +791,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	}
 
 	public dateEntered() {
-		const date = moment(this.entryDate, 'DD-MM-YYYY');
+		const date = moment(this.entryDate, GIDDH_DATE_FORMAT);
 		if (moment(date).format('dddd') !== 'Invalid date') {
 			this.displayDay = moment(date).format('dddd');
 		} else {
@@ -899,7 +901,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		let componentRef = viewContainerRef.createComponent(componentFactory);
 		let componentInstance = componentRef.instance as QuickAccountComponent;
 		componentInstance.needAutoFocus = true;
-		componentInstance.closeQuickAccountModal.subscribe((a) => {
+		componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
 			this.hideQuickAccountModal();
 			componentInstance.needAutoFocus = false;
 			componentInstance.newAccountForm.reset();
@@ -910,7 +912,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 				this.selectedAccountInputField.value = '';
 			}
 		});
-		componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+		componentInstance.isQuickAccountCreatedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe((status: boolean) => {
 			if (status) {
 				this.refreshAccountListData(null, true);
 			}
@@ -1035,7 +1037,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	}
 
 	private refreshAccountListData(groupUniqueName: string = null, needToFocusSelectedInputField: boolean = false) {
-		this.store.select(p => p.session.companyUniqueName).subscribe(a => {
+		this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
 			if (a && a !== '') {
 				this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
 					if (data.status === 'success') {

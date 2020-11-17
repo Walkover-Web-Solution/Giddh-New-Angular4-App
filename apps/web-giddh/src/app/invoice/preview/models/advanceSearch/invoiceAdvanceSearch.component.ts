@@ -92,6 +92,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
         startDate: moment().subtract(30, 'days'),
         endDate: moment()
     };
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor() {
         //

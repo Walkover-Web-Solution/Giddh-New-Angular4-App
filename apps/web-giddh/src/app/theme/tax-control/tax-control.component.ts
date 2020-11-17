@@ -39,6 +39,7 @@ export class TaxControlData {
     public isChecked?: boolean;
     public isDisabled?: boolean;
     public type?: string;
+    public calculationMethod?: string;
 }
 
 @Component({
@@ -108,7 +109,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges) {
         // change
         if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
-            if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
+            if (moment(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid()) {
                 this.taxSum = 0;
                 this.prepareTaxObject();
                 this.change();
@@ -325,10 +326,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     private isTaxApplicable(tax): boolean {
-        const today = moment(moment().format('DD-MM-YYYY'), 'DD-MM-YYYY', true).valueOf();
+        const today = moment(moment().format(GIDDH_DATE_FORMAT), GIDDH_DATE_FORMAT, true).valueOf();
         let isApplicable = false;
         _.each(tax.taxDetail, (det: any) => {
-            if (today >= moment(det.date, 'DD-MM-YYYY', true).valueOf()) {
+            if (today >= moment(det.date, GIDDH_DATE_FORMAT, true).valueOf()) {
                 return isApplicable = true;
             }
         });

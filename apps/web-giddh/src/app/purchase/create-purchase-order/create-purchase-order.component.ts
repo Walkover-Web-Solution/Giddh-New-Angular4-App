@@ -555,7 +555,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         // listen for newly added stock and assign value
-        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             let stock = resp[0];
             let acData = resp[1];
             if (stock && acData) {
@@ -1850,7 +1850,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                        taxableValue = (rawAmount + entry.taxSum);
                     }
                     entry.otherTaxType = 'tcs';
                 } else {
