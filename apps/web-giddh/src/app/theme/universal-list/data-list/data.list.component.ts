@@ -4,7 +4,7 @@ import { UniversalSearchService, WindowRefService } from '../service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { cloneDeep, find, findIndex, remove, uniq } from '../../../lodash-optimized';
 import { IUlist } from '../../../models/interfaces/ulist.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
@@ -121,12 +121,12 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         // listen for companies and active company
-        this._store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe((name) => {
+        this._store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe((name) => {
             this.activeCompany = name;
         });
 
         // listen to smart list
-        this._store.select(p => p.general.smartCombinedList).pipe(takeUntil(this.destroyed$))
+        this._store.pipe(select(p => p.general.smartCombinedList), takeUntil(this.destroyed$))
             .subscribe((data: IUlist[]) => {
                 if (data) {
                     this.rawSmartComboList = data;
@@ -134,7 +134,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit {
             });
 
         // listen to smart list
-        this._store.select(p => p.general.smartList).pipe(takeUntil(this.destroyed$))
+        this._store.pipe(select(p => p.general.smartList), takeUntil(this.destroyed$))
             .subscribe((data: IUlist[]) => {
                 if (data) {
                     this.smartList = data;
