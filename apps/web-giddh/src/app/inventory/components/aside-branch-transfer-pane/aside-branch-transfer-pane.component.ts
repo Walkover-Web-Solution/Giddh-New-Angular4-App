@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -130,6 +130,11 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
 		this.transferType.emit(transferType);
     }
     
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof AsideBranchTransferPaneComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();       

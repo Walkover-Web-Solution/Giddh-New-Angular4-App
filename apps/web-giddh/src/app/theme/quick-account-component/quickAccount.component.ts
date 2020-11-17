@@ -184,7 +184,12 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm.value.groupUniqueName, createAccountRequest));
     }
 
-    public ngOnDestroy() {
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof QuickAccountComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

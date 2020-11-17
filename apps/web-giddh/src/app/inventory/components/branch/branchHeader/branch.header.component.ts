@@ -19,14 +19,12 @@ import { ReplaySubject } from 'rxjs';
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
-    template: `
-    <div class="aside-overlay" *ngIf="branchAsideMenuState === 'in'"></div>
-    <branch-destination *ngIf="branchAsideMenuState === 'in'" [class]="branchAsideMenuState"
-                        [@slideInOut]="branchAsideMenuState"></branch-destination>
-  `
+    templateUrl: './branch.header.component.html'
 })
+
 export class BranchHeaderComponent implements OnInit, OnDestroy {
     public branchAsideMenuState: string = 'out';
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _store: Store<AppState>) {
@@ -36,7 +34,7 @@ export class BranchHeaderComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        //
+        
     }
 
     public toggleBodyClass() {
@@ -55,7 +53,12 @@ export class BranchHeaderComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-    public ngOnDestroy() {
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof BranchHeaderComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

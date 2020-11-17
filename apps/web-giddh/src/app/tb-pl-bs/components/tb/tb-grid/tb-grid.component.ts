@@ -27,6 +27,7 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public data$: AccountDetails;
     @Input() public expandAll: boolean;
     @Output() public searchChange = new EventEmitter<string>();
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
@@ -68,13 +69,16 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
                         });
                     }
                 });
-
-                // this.data$ = _.cloneDeep(this.data$);
             }
         }
     }
 
-    public ngOnDestroy() {
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof TbGridComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -13,12 +13,9 @@ import { ReplaySubject } from 'rxjs';
 @Component({
     selector: 'share-ledger',
     templateUrl: './shareLedger.component.html',
-    styles: [`
-    .btn-success:disabled {
-      color: #fff !important;
-    }
-  `]
+    styleUrls: ['./shareLedger.component.scss']
 })
+
 export class ShareLedgerComponent implements OnInit, OnDestroy {
     @Input() public accountUniqueName: string = '';
     @Input() public from: string = '';
@@ -29,6 +26,7 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
     public magicLink: string = '';
     public isCopied: boolean = false;
     public activeAccountSharedWith: any[] = [];
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _ledgerService: LedgerService, private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
@@ -94,6 +92,11 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
         this.isCopied = false;
     }
 
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof ShareLedgerComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

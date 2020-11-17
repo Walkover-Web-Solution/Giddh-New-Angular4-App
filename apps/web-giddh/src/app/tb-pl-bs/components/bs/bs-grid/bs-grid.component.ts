@@ -30,6 +30,7 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
     public bsSearchControl: FormControl = new FormControl();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
@@ -38,11 +39,8 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
 
 	public ngOnChanges(changes: SimpleChanges) {
 		if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
-			//
 			if (this.bsData) {
-				// this.cd.detach();
 				this.zone.run(() => {
-					// if (!this.search) {
 					if (this.bsData) {
 						this.toggleVisibility(this.bsData.assets, changes.expandAll.currentValue);
 						this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
@@ -74,19 +72,7 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
 
 					}
 					this.cd.detectChanges();
-					// } else if (this.search && this.search.length < 3) {
-					//   if (this.plData.liabilities) {
-					//     this.plData.liabilities.forEach(p => p.isVisible = true);
-					//   }
-					//   if (this.plData.assets) {
-					//     this.plData.assets.forEach(p => p.isVisible = true);
-					//   }
-					// }
-
 				});
-
-				// this.plData = _.cloneDeep(this.plData);
-				// this.cd.detectChanges();
 			}
 		}
 	}
@@ -103,10 +89,6 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
 				}
 				this.cd.detectChanges();
 			});
-	}
-
-	public ngAfterViewInit() {
-		//
 	}
 
 	public toggleSearch() {
@@ -152,7 +134,12 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
 		});
     }
     
-    public ngOnDestroy() {
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof BsGridComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

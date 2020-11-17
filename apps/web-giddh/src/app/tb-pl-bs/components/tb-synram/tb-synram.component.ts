@@ -69,6 +69,11 @@ export class TbSynramComponent implements OnInit, OnDestroy {
 		});
     }
     
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof TbSynramComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

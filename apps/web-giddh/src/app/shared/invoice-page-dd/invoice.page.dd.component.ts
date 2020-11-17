@@ -14,29 +14,7 @@ const INV_PAGE = [
 @Component({
     selector: 'invoice-page-dd',
     templateUrl: './invoice.page.dd.component.html',
-    styles: [`
-    .navbar-brand {
-      height: auto;
-      padding: 5px 15px;
-    }
-
-    .more-btn-dropdown {
-      border: 0 !important;
-      background: transparent !important;
-      box-shadow: none !important;
-      border-radius: 0 !important;
-      font-size: 24px;
-    / / color: #393a3d;
-      padding: 0;
-    }
-    .dropdown-menu>li>a:hover {
-
-        background: #f4f5f8;
-    }
-    .dropdown-menu {
-          margin-top: 0;
-    }
-  `]
+    styleUrls: ['./invoice.page.dd.component.scss']
 })
 
 export class InvoicePageDDComponent implements OnInit, OnDestroy {
@@ -53,48 +31,24 @@ export class InvoicePageDDComponent implements OnInit, OnDestroy {
         { name: 'Credit Note', uniqueName: 'cr-note', path: 'credit note' },
         { name: 'Debit Note', uniqueName: 'dr-note', path: 'debit note' }
     ];
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _activatedRoute: ActivatedRoute) {
-        // this.selectedType = 'Invoice';
-        // this.router.events.subscribe((event: NavigationStart) => {
-        //   if (event.url) {
-        //     if (event.url.indexOf('invoice') !== -1) {
-        //       this.navItems = this.removeObjFromArr('invoice');
-        //       this.selectedType = INV_PAGE[0].name;
-        //     } else if (event.url.indexOf('proforma') !== -1) {
-        //       this.navItems = this.removeObjFromArr('proforma');
-        //       this.selectedType = INV_PAGE[1].name;
-        //     }
-        //   }
-        // });
+        
     }
 
     public ngOnInit(): void {
-
         this._activatedRoute.firstChild.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.setUrl(a.voucherType);
             }
         });
-
-        // if (this.router.routerState.snapshot.url) {
-        //   this.setUrl(this.router.routerState.snapshot.url);
-        // }
-
-        // this.router.events.subscribe(ev => {
-        //   if (ev instanceof NavigationEnd) {
-        //     this.setUrl(ev.url);
-        //   }
-        // });
     }
 
     public changePage(page): void {
-        // this._cdRef.detectChanges();
         this.selectedType = _.cloneDeep(page.name);
         this.setUrl(page.path);
-        // this.pageChanged.emit(page.path);
-        // this.router.navigate(['/pages', 'invoice', page.path]);
     }
 
     private removeObjFromArr(str) {
@@ -108,8 +62,6 @@ export class InvoicePageDDComponent implements OnInit, OnDestroy {
     }
 
     private setUrl(mainUrl: string) {
-        // let url = mainUrl.split('/');
-        // let lastUrl = url[url.length - 1];
         switch (mainUrl) {
             case 'sales':
                 this.selectedType = 'Invoice';
@@ -136,7 +88,12 @@ export class InvoicePageDDComponent implements OnInit, OnDestroy {
         }
     }
 
-    public ngOnDestroy() {
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof InvoicePageDDComponent
+     */
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
