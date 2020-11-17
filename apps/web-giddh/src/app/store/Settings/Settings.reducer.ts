@@ -300,6 +300,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 // newState.profile = _.cloneDeep(response.body);
                 newState.updateProfileSuccess = true;
                 newState.profileRequest = true;
+                newState.inventory = action.payload.request;
                 return Object.assign({}, state, newState);
             }
             return Object.assign({}, state, {
