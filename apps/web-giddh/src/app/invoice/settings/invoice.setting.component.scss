@@ -1,3 +1,4 @@
+@import '../../../assets/css/color.scss';
 .webookList li {
     list-style: none;
     margin-bottom: 7px;
@@ -115,7 +116,7 @@ input.form-control.send-alert {
         top: -24px;
         left: 0;
         font-size: 12px;
-        color: #666666;
+        color: $dark-gray;
         text-align: right;
     }
     div {
