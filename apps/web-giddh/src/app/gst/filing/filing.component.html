@@ -20,6 +20,7 @@
                         <div class="transactions-overview" *ngIf="selectedTab === '1. Overview' || !selectedTabId">
                             <filing-overview [activeCompanyGstNumber]="activeCompanyGstNumber"
                                 [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"
+                                (hsnSacSelected)="openHsnSacSection()"
                                 [isTransactionSummary]="isTransactionSummary"></filing-overview>
                         </div>
                     </tab>
@@ -34,12 +35,12 @@
                         </div>
                     </tab>
 
-                    <tab *ngIf="selectedGst === 'gstr1'" (selectTab)="selectTab($event, true, 'pushToGstn')">
+                    <tab *ngIf="selectedGst === 'gstr1'" [active]="selectedTab === 'pushToGstn' || selectedTabId === 1" (selectTab)="selectTab($event, true, 'pushToGstn')">
                         <ng-template tabHeading>
                             2. Push to GSTN
                         </ng-template>
                         <div *ngIf="selectedTab === 'pushToGstn' || selectedTabId === 1">
-                            <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber"
+                            <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [showHsn]="showHsn"
                                 [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
                         </div>
                     </tab>
