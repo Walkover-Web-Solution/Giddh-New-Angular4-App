@@ -204,12 +204,13 @@
 <!--Tabs of Company Profile-->
 <div *ngIf="!(getCompanyProfileInProgress$ | async)" class="settings-profile-tabs">
     <tabset #staticTabs class="profile-tab-container">
-        <tab (selectTab)="handleTabChanged('personal')" heading="Personal Information">
+        <tab (selectTab)="handleTabChanged('personal')" heading="Personal Information"
+        [id]="(currentTab === 'personal')?'giddh-page-heading': ''" >
             <personal-information *ngIf="currentTab === 'personal'" (saveProfile)="handleSaveProfile($event)"
                 [profileData]="companyProfileObj" [organizationType]="currentOrganizationType">
             </personal-information>
         </tab>
-        <tab (selectTab)="handleTabChanged('address')" heading="{{companyProfileObj?.taxType ? ('Address/' + companyProfileObj?.taxType) : 'Address/es' }}">
+        <tab (selectTab)="handleTabChanged('address')" heading="{{companyProfileObj?.taxType ? ('Address/' + companyProfileObj?.taxType) : 'Address/es' }}" [id]="(currentTab === 'address')?'giddh-page-heading': ''">
             <address-settings *ngIf="currentTab === 'address'" [addresses]="addresses"
                 [(isAddressChangeInProgress)]="isAddressChangeInProgress" [(closeSidePane)]="closeAddressSidePane"
                 [currentOrganizationUniqueName]="currentOrganizationUniqueName"
@@ -221,7 +222,8 @@
                 [paginationConfig]="addressTabPaginationData" [paginationLimit]="20"
                 [organizationType]="currentOrganizationType"></address-settings>
         </tab>
-        <tab (selectTab)="handleTabChanged('other')" heading="Other">
+        <tab (selectTab)="handleTabChanged('other')" heading="Other"
+        [id]="(currentTab === 'other')?'giddh-page-heading': ''">
             <other-settings [organizationType]="currentOrganizationType" (saveProfile)="handleSaveProfile($event)"
                 [profileData]="companyProfileObj" *ngIf="currentTab === 'other'"></other-settings>
         </tab>

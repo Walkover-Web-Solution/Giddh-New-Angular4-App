@@ -377,13 +377,13 @@
                             <i class="icon-bar"></i>
                         </button>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">
+                        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="navigationEnd && !navigateToUser">
                             {{selectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span>
                             <span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span>
                         </h4>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
+                        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
                                 class="txt-lwc">c</span></h4>
                     </li> -->
@@ -416,10 +416,10 @@
                                     class="icon-back-arrow"></i></span>
                         </li>
                         <li class="hamburger-menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
+                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
-                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">
+                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="!navigationEnd && !navigateToUser">
                                 {{oldSelectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
                         </li>
