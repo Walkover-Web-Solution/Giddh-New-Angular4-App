@@ -32,6 +32,7 @@ export interface OrganizationProfile {
     balanceDisplayFormat?: string;
     taxType: string;
     isMultipleCurrency?: boolean;
+    manageInventory?: boolean;
 }
 
 /** Form type in setting aside component */
