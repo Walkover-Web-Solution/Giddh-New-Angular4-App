@@ -73,6 +73,9 @@
 .linked-with{
     white-space: normal;
     word-break: break-word;
+    span.pb-1{
+        display: flex;
+    }
     i{
         color: $gray;
         margin-right:5px;
@@ -93,6 +96,24 @@
             td {
                 &::before {
                     left: 15px;
+                }
+            }
+        }
+    }
+}
+
+@media(max-width:767px){
+    .setting-profile-container{
+        padding-top: 15px;
+    }
+    .linked-with{
+        width: 100% !important;
+        .wrap-linked-company{
+            flex-direction: column;
+            .ml-auto{
+                margin-left: 0 !important;
+                .action-icon{
+                    width: 70px;
                 }
             }
         }

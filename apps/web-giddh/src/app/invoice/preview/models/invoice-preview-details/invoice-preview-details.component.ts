@@ -139,6 +139,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public pdfPreviewHasError: boolean = false;
     /** This will hold the search value */
     @Input() public invoiceSearch: any = "";
+    /** This will hold the attached file in Purchase Bill */
+    private attachedAttachmentBlob: Blob;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -158,7 +160,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private modalService: BsModalService) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
         });
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -182,7 +184,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     ngOnInit() {
         if (this.selectedItem) {
-            this.downloadVoucher('base64');
+            if(!this.isVoucherDownloading) {
+                this.downloadVoucher('base64');
+            }
             this.only4ProformaEstimates = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
 
             if (this.only4ProformaEstimates) {
@@ -253,7 +257,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
-                map((ev: any) => ev.target.value)
+                map((ev: any) => ev.target.value),
+                takeUntil(this.destroyed$)
             )
             .subscribe((term => {
                 this.filterVouchers(term);
@@ -355,7 +360,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 voucherNumber: [this.selectedItem.voucherNumber]
             };
             let accountUniqueName: string = this.selectedItem.account.uniqueName;
-            //
             this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
                 if (result) {
                     this.selectedItem.blob = result;
@@ -384,7 +388,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         const fileExtention = data.body.fileType.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
+                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
                             let objectURL = `data:image/${fileExtention};base64,` + data.body.uploadedFile;
                             this.imagePreviewSource = this.sanitizer.bypassSecurityTrustUrl(objectURL);
                             this.attachedDocumentType = { name: data.body.name, type: 'image', value: fileExtention };
@@ -392,10 +396,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         } else if (FILE_ATTACHMENT_TYPE.PDF.includes(fileExtention)) {
                             // Attached file type is PDF
                             this.attachedDocumentType = { name: data.body.name, type: 'pdf', value: fileExtention };
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
+                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
                             setTimeout(() => {
-                                this.selectedItem.blob = this.attachedDocumentBlob;
-                                this.pdfViewer.pdfSrc = this.attachedDocumentBlob;
+                                this.selectedItem.blob = this.attachedAttachmentBlob;
+                                this.pdfViewer.pdfSrc = this.attachedAttachmentBlob;
                                 this.pdfViewer.showSpinner = true;
                                 this.pdfViewer.refresh();
                                 this.detectChanges();
@@ -403,7 +407,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.isVoucherDownloadError = false;
                         } else {
                             // Unsupported type
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, '', 512);
+                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, '', 512);
                             this.attachedDocumentType = { name: data.body.name, type: 'unsupported', value: fileExtention };
                         }
                     }
@@ -493,7 +497,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.isVoucherDownloading || this.isVoucherDownloadError) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, `${this.attachedDocumentType.name}`);
+        saveAs(this.attachedAttachmentBlob, `${this.attachedDocumentType.name}`);
     }
 
     public printVoucher() {
@@ -634,7 +638,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * Call API to get all advance receipts of an invoice
      *
      * @param {*} customerUniquename Selected customer unique name
-     * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
+     * @param {*} voucherDate Voucher Date (GIDDH_DATE_FORMAT)
      * @memberof InvoicePreviewDetailsComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
@@ -733,7 +737,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+        saveAs(this.attachedDocumentBlob, 'purchasebill.pdf');
     }
 
     /**

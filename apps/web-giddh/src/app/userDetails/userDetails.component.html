@@ -2,12 +2,14 @@
     <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)"></aside-setting>
 </div>
 
-<div class="setting-page user-detail-page" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+<div class="setting-page user-detail-page relative" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+    <hamburger-menu></hamburger-menu>
     <!-- start of tab set -->
     <tabset #staticTabs>
 
         <!-- start auth tab tab -->
-        <tab heading="Auth Key" [active]="activeTab == 'auth-key'" (selectTab)="onTabChanged('auth-key')">
+        <tab heading="Auth Key" [active]="activeTab == 'auth-key'" (selectTab)="onTabChanged('auth-key')"
+        [id]="(activeTab == 'auth-key') ? 'giddh-page-heading': ''" >
             <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'auth-key'">
                 <div class="box clearfix mt-1">
                     <h1 class="section-head pdT0">Main Auth-key</h1>
@@ -26,7 +28,8 @@
             </div>
         </tab>
         <!-- end of auth tab tab -->
-        <tab heading="Mobile Number" [active]="activeTab == 'mobile-number'" (selectTab)="onTabChanged('mobile-number');">
+        <tab heading="Mobile Number" [active]="activeTab == 'mobile-number'" (selectTab)="onTabChanged('mobile-number');"
+        [id]="(activeTab == 'mobile-number') ? 'giddh-page-heading': ''">
             <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'mobile-number'">
                 <div class="box clearfix mt-1">
                     <form class="" name="mobileForm" novalidate>
@@ -130,7 +133,8 @@
         <!-- end of Mobile Number tab tab -->
 
         <!-- start session tab tab -->
-        <tab heading="Session" [active]="activeTab == 'session'" (selectTab)="onTabChanged('session')">
+        <tab heading="Session" [active]="activeTab == 'session'" (selectTab)="onTabChanged('session')"
+        [id]="(activeTab == 'session') ? 'giddh-page-heading': ''">
             <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'session'">
                 <div class="box clearfix mt-1">
                     <div class="max900 d-flex pd-b1  activity-title">
@@ -178,7 +182,8 @@
             </div>
         </tab>
 
-        <tab heading="Subscription" [active]="activeTab == 'subscription'" (selectTab)="onTabChanged('subscription')">
+        <tab heading="Subscription" [active]="activeTab == 'subscription'" (selectTab)="onTabChanged('subscription')"
+        [id]="(activeTab == 'subscription') ? 'giddh-page-heading': ''">
             <div class="wrap-tab-content-pd-15">
                 <subscriptions [activeTab]="activeTab"></subscriptions>
             </div>

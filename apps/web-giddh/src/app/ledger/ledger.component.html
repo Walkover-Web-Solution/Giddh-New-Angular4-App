@@ -10,6 +10,7 @@
                 (click)="showExportLedgerModal()">Export</a></li>
     </ul>
 </div>
+<hamburger-menu [pageHeading]="(lc?.activeAccount?.name) ? ('Ledger - ' + lc?.activeAccount?.name) + ' A/c' : ''"></hamburger-menu>
 <section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
     <!-- region ledger table-->
     <div class="ledg-head transactions-page mt-15 pos-rel">
@@ -351,6 +352,7 @@
                                                         [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                         [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
                                                         [needToReCalculate]="needToReCalculate"
+                                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                         (changeTransactionType)="toggleTransactionType($event)"
                                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                         (saveBlankLedger)="saveBankTransaction()"
@@ -475,6 +477,7 @@
                                                         [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                         [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
                                                         [needToReCalculate]="needToReCalculate"
+                                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                         (changeTransactionType)="toggleTransactionType($event)"
                                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
                                                         (saveBlankLedger)="saveBankTransaction()"
@@ -524,17 +527,17 @@
         <!-- endregion -->
         <!-- region account table-->
         <!-- Need to make this code correctly working -->
-        <table class="col-xs-12 ledger-head mr-t1 width-100"
+        <table class="col-sm-12 ledger-head mr-t1 width-100"
             *ngIf="!isMobileScreen || (isMobileScreen && visibleTransactionTypeMobile !== 'all')">
             <thead>
-                <tr>
+                <tr class="row">
                     <th [ngClass]="(Shown && !isMobileScreen) || (isMobileScreen && visibleTransactionTypeMobile === 'debit') ? 'active' : ''"
-                        class="col-xs-6 hidden-xs sticky-header">
+                        class="col-sm-6 hidden-xs sticky-header pr-0">
                         <b> {{lc.ledgerUnderStandingObj.text.dr}}</b>
                         <span class="dr-cr-category pull-right text-gray">Dr</span>
                     </th>
                     <th [ngClass]="(!Shown && !isMobileScreen) || (isMobileScreen && visibleTransactionTypeMobile === 'credit') ? 'active' : ''"
-                        class="col-xs-6 hidden-xs sticky-header">
+                        class="col-sm-6 hidden-xs sticky-header pl-0">
                         <b> {{lc.ledgerUnderStandingObj.text.cr}}</b>
                         <span class="dr-cr-category pull-right text-gray">Cr</span>
                     </th>
@@ -626,11 +629,11 @@
                 <table class="width100 h-table table-head hidden-xs">
                     <thead>
                         <tr class="t-h-bg1 row">
-                            <th class="col-xs-3 col-md-3 col-lg-3">
+                            <th class="col-xs-3 col-md-3 col-lg-3" width="25%">
                                 <span class="cp">Date</span>
                             </th>
-                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
-                            <th class="col-xs-4 col-md-3 col-lg-3 text-right">Amount</th>
+                            <th class="col-xs-5 col-md-6 col-lg-6" width="50%">Particular</th>
+                            <th class="col-xs-4 col-md-3 col-lg-3 text-right" width="25%">Amount</th>
                         </tr>
                     </thead>
                 </table>
@@ -860,6 +863,7 @@
                                     <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
+                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
                                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                         [selectedCurrency]="selectedCurrency"
@@ -898,11 +902,11 @@
                 <table class="width100 h-table hidden-xs">
                     <thead>
                         <tr class="t-h-bg1 row">
-                            <th class="col-xs-3 col-md-3 col-lg-3">
+                            <th class="col-xs-3 col-md-3 col-lg-3" width="25%">
                                 <span class="cp">Date</span>
                             </th>
-                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
-                            <th class="col-xs-4 col-md-3 col-lg-3 text-right">Amount</th>
+                            <th class="col-xs-5 col-md-6 col-lg-6" width="50%">Particular</th>
+                            <th class="col-xs-4 col-md-3 col-lg-3 text-right" width="25%">Amount</th>
                         </tr>
                     </thead>
                 </table>
@@ -1140,6 +1144,7 @@
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
                                         [selectedCurrency]="selectedCurrency"
                                         [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                         [selectedPrefixForCurrency]="selectedPrefixForCurrency"
@@ -1276,7 +1281,6 @@
         <!--endregion-->
     </div>
     <!-- endregion -->
-
 </section>
 
 <div class="container" *ngIf="!isShowLedgerColumnarReportTable">
@@ -1311,7 +1315,7 @@
 <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable">
     <div class="container">
         <section class="ledger-stat mrT3"
-            *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
+            *ngIf="!showLoader">
 
             <div class="row">
                 <div class="col-sm-3 col-xs-12 stat-block">
@@ -1430,6 +1434,9 @@
         </section>
     </div>
 </div>
+
+<div class="show-if-ledger-open" *ngIf="isMoreDetailsOpened">
+</div>
 <!-- modal sections -->
 
 <div *ngIf="isShowLedgerColumnarReportTable">
@@ -1450,12 +1457,15 @@
 <!-- aside menu section -->
 
 <!-- update ladger entry popup -->
-<div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard: true}" tabindex="-1">
+<div bsModal #updateLedgerModal="bs-modal" class="modal fade update-ledger-modal" role="dialog"
+[config]="{keyboard: true}"tabindex="-1">
     <div class="modal-dialog modal-xl modal-ledger">
         <div class="modal-content">
             <div element-view-container-ref #updateledgercomponent=elementviewcontainerref>
             </div>
         </div>
+    </div>
+    <div class="show-if-update-ledger-open">
     </div>
 </div>
 <!-- update ladger entry popup -->

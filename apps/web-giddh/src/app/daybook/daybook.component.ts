@@ -103,10 +103,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.initialRequest();
         let companyUniqueName;
         let company;
-        store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$))
+
+        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$))
             .subscribe(p => companyUniqueName = p);
 
-        store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$))
+        this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$))
             .subscribe(p => {
                 company = p.find(q => q.uniqueName === companyUniqueName);
             });
@@ -118,7 +119,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         // set state details
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'daybook';
@@ -139,8 +140,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-        let from = moment(value.picker.startDate).format('DD-MM-YYYY');
-        let to = moment(value.picker.endDate).format('DD-MM-YYYY');
+        let from = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        let to = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
             this.showLoader = true;
             this.daybookQueryRequest.from = from;
@@ -246,7 +247,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 componentInstance.maxSize = 5;
                 componentInstance.writeValue(data.page);
                 componentInstance.boundaryLinks = true;
-                componentInstance.pageChanged.subscribe(e => {
+                componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                     this.pageChanged(e);
                 });
             }

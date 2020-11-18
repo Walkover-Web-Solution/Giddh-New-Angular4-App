@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
@@ -43,7 +43,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(private store: Store<AppState>) {
-		this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
+		this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {

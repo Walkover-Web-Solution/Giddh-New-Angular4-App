@@ -1,9 +1,8 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
-import { Store } from '@ngrx/store';
-import { Component, ComponentFactoryResolver, OnDestroy, ViewChild } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
@@ -11,7 +10,6 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
-import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsBunchService } from '../../services/settings.bunch.service';
 
@@ -57,14 +55,12 @@ export class BunchComponent implements OnDestroy {
 	constructor(
 		private store: Store<AppState>,
 		private settingsBranchActions: SettingsBranchActions,
-		private componentFactoryResolver: ComponentFactoryResolver,
-		private companyActions: CompanyActions,
 		private settingsProfileActions: SettingsProfileActions,
 		private _settingsBunchService: SettingsBunchService,
 		private _toasterService: ToasterService
 	) {
 
-		this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+		this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
 			if (o && !_.isEmpty(o)) {
 				let companyInfo = _.cloneDeep(o);
 				this.currentBranch = companyInfo.name;
@@ -79,7 +75,7 @@ export class BunchComponent implements OnDestroy {
 		this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
 		this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
-		this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
+		this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
 			if (companies && companies.length && branches) {
 				let companiesWithSuperAdminRole = [];
 				_.each(companies, (cmp) => {
@@ -98,8 +94,7 @@ export class BunchComponent implements OnDestroy {
 				});
 				this.companies$ = observableOf(_.orderBy(companiesWithSuperAdminRole, 'name'));
 			}
-		})).pipe(takeUntil(this.destroyed$)).subscribe();
-
+		})), takeUntil(this.destroyed$)).subscribe();
 	}
 
 	public openAddCompanyModal(grp) {

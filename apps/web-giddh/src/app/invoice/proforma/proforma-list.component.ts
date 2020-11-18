@@ -170,7 +170,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
         this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
         this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
 
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -310,7 +310,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         //--------------------- Refresh report data according to universal date--------------------------------
-        this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (a) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.applicationDate], (a) => {
 
             if (a) {
                 if (localStorage.getItem('universalSelectedDate')) {
@@ -377,7 +377,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 }
                 this.getAll();
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
         this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
             .subscribe(result => this.appSideMenubarIsOpen = result);
@@ -402,7 +402,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
                 return;
             }
@@ -430,7 +430,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 }
             }
             return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
     }
 
     ngOnChanges(changes: SimpleChanges): void {

@@ -4,9 +4,10 @@ import { IOption } from '../../../theme/ng-select/option.interface';
 import * as moment from 'moment';
 import { CompanyImportExportFileTypes } from '../../../models/interfaces/companyImportExport.interface';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { CompanyImportExportActions } from '../../../actions/company-import-export/company-import-export.actions';
 import { Observable, ReplaySubject } from 'rxjs';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'company-import-export-form-component',
@@ -57,8 +58,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 		startDate: moment().subtract(30, 'days'),
 		endDate: moment()
 	};
-	public from: string = moment().subtract(30, 'days').format('DD-MM-YYYY');
-	public to: string = moment().format('DD-MM-YYYY');
+	public from: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+	public to: string = moment().format(GIDDH_DATE_FORMAT);
 	public selectedFile: File = null;
 
 	public isExportInProcess$: Observable<boolean>;
@@ -68,10 +69,10 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(private _store: Store<AppState>, private _companyImportExportActions: CompanyImportExportActions) {
-		this.isExportInProcess$ = this._store.select(s => s.companyImportExport.exportRequestInProcess).pipe(takeUntil(this.destroyed$));
-		this.isExportSuccess$ = this._store.select(s => s.companyImportExport.exportRequestSuccess).pipe(takeUntil(this.destroyed$));
-		this.isImportInProcess$ = this._store.select(s => s.companyImportExport.importRequestInProcess).pipe(takeUntil(this.destroyed$));
-		this.isImportSuccess$ = this._store.select(s => s.companyImportExport.importRequestSuccess).pipe(takeUntil(this.destroyed$));
+		this.isExportInProcess$ = this._store.pipe(select(s => s.companyImportExport.exportRequestInProcess), takeUntil(this.destroyed$));
+		this.isExportSuccess$ = this._store.pipe(select(s => s.companyImportExport.exportRequestSuccess), takeUntil(this.destroyed$));
+		this.isImportInProcess$ = this._store.pipe(select(s => s.companyImportExport.importRequestInProcess), takeUntil(this.destroyed$));
+		this.isImportSuccess$ = this._store.pipe(select(s => s.companyImportExport.importRequestSuccess), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {
@@ -89,8 +90,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 	}
 
 	public selectedDate(value: any) {
-		this.from = moment(value.picker.startDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
-		this.to = moment(value.picker.endDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+		this.from = moment(value.picker.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+		this.to = moment(value.picker.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 	}
 
 	public fileSelected(file: File) {

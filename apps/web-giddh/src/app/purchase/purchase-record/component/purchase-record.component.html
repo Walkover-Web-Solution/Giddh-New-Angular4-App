@@ -1,19 +1,27 @@
-<div _ngcontent-xlm-c43="" class="invoice-control" id="purchase-tab">
-    <tabset class="purchase-tabset">
-        <tab heading="Purchase Order" [active]="activeTab == 'order'" (selectTab)="onTabChanged('order')">
-            <div *ngIf="activeTab == 'order'">
-                <purchase-order (refreshPurchaseBill)="purchaseOrderOutput($event)"></purchase-order>
-            </div>
-        </tab>
-        <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (selectTab)="onTabChanged('bill')">
-            <div *ngIf="activeTab == 'bill'">
-                <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill" (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
-            </div>
-        </tab>
-        <tab heading="Settings" [active]="activeTab == 'settings'" (selectTab)="onTabChanged('settings')">
-            <div>
-                <purchase-setting></purchase-setting>
-            </div>
-        </tab>
-    </tabset>
+<div class="relative">
+    <hamburger-menu></hamburger-menu>
+    <div class="invoice-control" id="purchase-tab">
+        <tabset class="purchase-tabset">
+            <tab heading="Purchase Order" [active]="activeTab == 'order'" (selectTab)="onTabChanged('order')"
+            [id]="(activeTab == 'order') ? 'giddh-page-heading': ''">
+                <div *ngIf="activeTab == 'order'">
+                    <purchase-order (refreshPurchaseBill)="purchaseOrderOutput($event)"></purchase-order>
+                </div>
+            </tab>
+            <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (selectTab)="onTabChanged('bill')"
+            [id]="(activeTab == 'bill') ? 'giddh-page-heading': ''">
+                <div *ngIf="activeTab == 'bill'" class="pt-15">
+                    <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill" (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
+                </div>
+            </tab>
+            <tab heading="Settings" [active]="activeTab == 'settings'" (selectTab)="onTabChanged('settings')"
+            [id]="(activeTab == 'settings') ? 'giddh-page-heading': ''">
+                <div>
+                    <purchase-setting></purchase-setting>
+                </div>
+            </tab>
+        </tabset>
+    </div>
 </div>
+
+
