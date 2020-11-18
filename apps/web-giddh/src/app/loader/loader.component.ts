@@ -44,7 +44,7 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
             this.cdref.detectChanges();
         });
 
-        this.router.events.subscribe(a => {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a instanceof NavigationStart) {
                 this.navigationEnd$ = of(false);
                 this.cdref.detectChanges();

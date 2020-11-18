@@ -1,7 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
@@ -28,8 +27,8 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
-		this.store.select(p => p.permission).pipe(takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
+	constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
+		this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
 			if (p.roles && p.roles.length) {
 				this.allRoles = [];
 				_.forEach(p.roles, (role: IRoleCommonResponseAndRequest) => {

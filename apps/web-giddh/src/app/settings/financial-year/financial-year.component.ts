@@ -61,11 +61,11 @@ export class FinancialYearComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.store.select(createSelector([(state: AppState) => state.settings.refreshCompany], (o) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.settings.refreshCompany], (o) => {
             if (o) {
                 this.store.dispatch(this._companyActions.RefreshCompanies());
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
         this.store.pipe(select((state: AppState) => state.session),takeUntil(this.destroyed$)).subscribe(session => {
             if (session) {
@@ -97,7 +97,7 @@ export class FinancialYearComponent implements OnInit {
     public getInitialFinancialYearData() {
         this.setYearRange();
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
-        this.store.select(createSelector([(state: AppState) => state.settings.financialYears], (o) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.settings.financialYears], (o) => {
             this.setYearRange();
             if (o) {
                 this.financialYearObj = _.cloneDeep(o);
@@ -112,10 +112,9 @@ export class FinancialYearComponent implements OnInit {
                 this.yearOptions = _.cloneDeep(yearOptions);
                 this.forceClear$ = observableOf({ status: true });
             } else if (_.isNull(o)) {
-                // this.store.dispatch(this._companyActions.RefreshCompanies()); // for card G0-1477
                 this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
     }
 
     public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {

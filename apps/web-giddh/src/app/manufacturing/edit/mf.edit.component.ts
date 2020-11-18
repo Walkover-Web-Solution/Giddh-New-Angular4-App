@@ -71,12 +71,13 @@ export class MfEditComponent implements OnInit {
     public bsValue = new Date();
     private initialQuantity: number = 1;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
         private inventoryAction: InventoryAction,
         private router: Router,
-        private _groupService: GroupService,
         private _location: Location,
         private _inventoryService: InventoryService,
         private _accountService: AccountService,
@@ -164,7 +165,7 @@ export class MfEditComponent implements OnInit {
             this.store.dispatch(this.inventoryAction.GetStockWithUniqueName(manufacturingDetailsObj.stockUniqueName));
         }
         // dispatch stockList request
-        this.store.select(p => p.inventory).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
+        this.store.pipe(select(p => p.inventory), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (this.isUpdateCase && o.activeStock && o.activeStock.manufacturingDetails) {
                 let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
                 manufacturingDetailsObj.multipleOf = o.activeStock.manufacturingDetails.manufacturingMultipleOf;
@@ -173,7 +174,7 @@ export class MfEditComponent implements OnInit {
         });
 
         // get manufacturing stocks
-        this.stockListDropDown$ = this.store.select(
+        this.stockListDropDown$ = this.store.pipe(select(
             createSelector([(state: AppState) => state.inventory.manufacturingStockListForCreateMF], (manufacturingStockListForCreateMF) => {
                 let data = _.cloneDeep(manufacturingStockListForCreateMF);
                 let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
@@ -191,9 +192,9 @@ export class MfEditComponent implements OnInit {
                         });
                     }
                 }
-            })).pipe(takeUntil(this.destroyed$));
+            })), takeUntil(this.destroyed$));
         // get All stocks
-        this.allStocksDropDown$ = this.store.select(
+        this.allStocksDropDown$ = this.store.pipe(select(
             createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
                 let data = _.cloneDeep(allStocks);
 
@@ -211,7 +212,7 @@ export class MfEditComponent implements OnInit {
                         });
                     }
                 }
-            })).pipe(takeUntil(this.destroyed$));
+            })), takeUntil(this.destroyed$));
         // get stock with rate details
         this.store.pipe(select(manufacturingStore => manufacturingStore.manufacturing), takeUntil(this.destroyed$)).subscribe((res: any) => {
             let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);

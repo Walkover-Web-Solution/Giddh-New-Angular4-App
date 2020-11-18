@@ -43,12 +43,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
     public ngOnInit() {
         this.imgPath =  (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
-        // this.store.pipe(select(s => s.session.userSelectedSubscriptionPlan), takeUntil(this.destroyed$)).subscribe(res => {
-        //   this.selectedPlans = res;
-        // });
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'pages/onboarding';
@@ -65,11 +61,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
     public ngAfterViewInit() {
         this._generalService.IAmLoaded.next(true);
-        let scriptTag = document.createElement('script');
-        scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        scriptTag.type = 'text/javascript';
-        document.body.appendChild(scriptTag);
     }
+
     public selectConfigureBank() {
         if (this.companyCountry) {
             if (this.companyCountry.toLowerCase() === 'india') {
@@ -89,7 +82,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
     public scheduleNow() {
         if (isElectron) {
-            // https://app.intercom.io/a/meeting-scheduler/calendar/VEd2SmtLSyt2YisyTUpEYXBCRWg1YXkwQktZWmFwckF6TEtwM3J5Qm00R2dCcE5IWVZyS0JjSXF2L05BZVVWYS0tck81a21EMVZ5Z01SQWFIaG00RlozUT09--c6f3880a4ca63a84887d346889b11b56a82dd98f changed URI card G0-4255
             (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
         }else if (isCordova) {
             // todo: scheduleNow in cordova
@@ -112,15 +104,11 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         this.talkSalesModal.hide();
     }
 
-    // public downloadPlugin() {
-    //   window.location = 'https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp';
-    // }
-
     public initInventorySettingObj() {
 
         this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
 
-        this.store.select(p => p.settings.inventory).pipe().subscribe((o) => {
+        this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;

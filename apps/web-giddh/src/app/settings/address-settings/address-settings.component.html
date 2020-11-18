@@ -78,8 +78,8 @@
                             <td data-title="State">
                                 <div>{{address.stateCode}} - {{address.stateName}}</div>
                             </td>
-                            <td data-title="Linked with" width="25%">
-                                <div class="d-flex">
+                            <td data-title="Linked with" width="30%" class="linked-with">
+                                <div class="d-flex wrap-linked-company">
                                     <div class="d-flex flex-column linked-with w-100">
                                         <span *ngFor="let entity of address.linkedEntities" class="pb-1">
                                             <i tooltip="HO Branch" *ngIf="entity.isHeadQuarter"
@@ -171,7 +171,7 @@
 <!-- Create address part of Address Tab -->
 <div *ngIf="accountAsideMenuState === 'in' && !closeSidePane" [keyboardShortcut]="'esc'"
     (onShortcutPress)="toggleAccountAsidePane()">
-    <div class="aside-overlay" (click)="toggleAccountAsidePane()"></div>
+    <div class="aside-overlay"></div>
     <create-address class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState"
         [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
         [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"

@@ -1,3 +1,4 @@
+@import '../../../assets/css/color.scss';
 .webookList li {
     list-style: none;
     margin-bottom: 7px;
@@ -109,13 +110,18 @@ input.form-control.send-alert {
     display: inline-flex;
 }
 
-.custom-estimation label {
-    position: absolute;
-    top: -24px;
-    right: 15px;
-    font-size: 12px;
-    color: #666666;
-    text-align: right;
+.custom-estimation {
+    label {
+        position: absolute;
+        top: -24px;
+        left: 0;
+        font-size: 12px;
+        color: $dark-gray;
+        text-align: right;
+    }
+    div {
+        margin-left: 12px;
+    }
 }
 
 .initial-number {

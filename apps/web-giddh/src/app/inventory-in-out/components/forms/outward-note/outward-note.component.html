@@ -22,7 +22,7 @@
                     <label>Date <sup>*</sup></label>
                     <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
                         class="form-control" bsDatepicker [minDate]="today"
-                        [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}" />
+                        [bsConfig]=" {dateInputFormat: giddhDateFormat}" />
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
                         <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"

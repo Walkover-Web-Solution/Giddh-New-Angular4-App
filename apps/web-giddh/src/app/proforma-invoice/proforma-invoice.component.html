@@ -14,7 +14,7 @@
 
                 <div class="btn-group proforma-sales-time" dropdown>
 
-                    <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
+                    <button id="giddh-page-heading-link" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">
 
                             <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
@@ -640,6 +640,7 @@
 
                                             <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
+                                                    [fixedValue]="invoiceSelected?.label"
                                                     [forceClearReactive]="invoiceForceClearReactive$ | async" class="linking-dropdown"
                                                     [notFoundLink]="false" [(ngModel)]="selectedInvoice" name="invoiceLinking"
                                                     (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"

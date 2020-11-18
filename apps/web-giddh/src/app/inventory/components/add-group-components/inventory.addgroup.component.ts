@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxj
 
 import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
@@ -50,14 +50,14 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
         private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
         private router: Router) {
-        this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName).pipe(takeUntil(this.destroyed$));
-        this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable).pipe(takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.createGroupSuccess$ = this.store.select(state => state.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
-        this.isAddNewGroupInProcess$ = this.store.select(state => state.inventory.isAddNewGroupInProcess).pipe(takeUntil(this.destroyed$));
-        this.isUpdateGroupInProcess$ = this.store.select(state => state.inventory.isUpdateGroupInProcess).pipe(takeUntil(this.destroyed$));
-        this.isDeleteGroupInProcess$ = this.store.select(state => state.inventory.isDeleteGroupInProcess).pipe(takeUntil(this.destroyed$));
-        this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).pipe(takeUntil(this.destroyed$));
+        this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingGrpUniqueName), takeUntil(this.destroyed$));
+        this.isGroupNameAvailable$ = this.store.pipe(select(state => state.inventory.isGroupNameAvailable), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(state => state.inventory.activeGroup), takeUntil(this.destroyed$));
+        this.createGroupSuccess$ = this.store.pipe(select(state => state.inventory.createGroupSuccess), takeUntil(this.destroyed$));
+        this.isAddNewGroupInProcess$ = this.store.pipe(select(state => state.inventory.isAddNewGroupInProcess), takeUntil(this.destroyed$));
+        this.isUpdateGroupInProcess$ = this.store.pipe(select(state => state.inventory.isUpdateGroupInProcess), takeUntil(this.destroyed$));
+        this.isDeleteGroupInProcess$ = this.store.pipe(select(state => state.inventory.isDeleteGroupInProcess), takeUntil(this.destroyed$));
+        this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
         this.store.pipe(take(1)).subscribe(state => {
             if (state.inventory.groupsWithStocks === null) {
                 this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
@@ -283,11 +283,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
         this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
-        this.store.select(p => p.inventory.isUpdateGroupInProcess).pipe(takeUntil(this.destroyed$), distinctUntilChanged(), filter(p => !p)).subscribe((a) => {
+        this.store.pipe(select(p => p.inventory.isUpdateGroupInProcess), distinctUntilChanged(), filter(p => !p), takeUntil(this.destroyed$)).subscribe((a) => {
             this.activeGroup$.pipe(take(1)).subscribe(b => activeGroup = b);
-            // this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-            //   this.router.navigate(['/pages', 'inventory', 'group', activeGroup.uniqueName, 'stock-report']);
-            // });
         });
     }
 

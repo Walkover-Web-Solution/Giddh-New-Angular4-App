@@ -1,5 +1,5 @@
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GstDatePeriod } from '../../../../models/api-models/GstReconcile';
@@ -20,6 +20,9 @@ export class FilingOverviewComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public activeCompanyGstNumber: string = '';
     @Input() public selectedGst: string = '';
     @Input() public isTransactionSummary: boolean = false;
+
+    /** Emits when HSN/SAC is selected */
+    @Output() public hsnSacSelected: EventEmitter<void> = new EventEmitter();
 
     public showTransaction: boolean = false;
     public filters: any = {};

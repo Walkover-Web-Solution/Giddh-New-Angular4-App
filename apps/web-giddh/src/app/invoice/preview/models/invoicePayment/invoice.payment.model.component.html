@@ -71,7 +71,7 @@
                     <label>Cheque Clearance Date</label>
                     <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control"
                         [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="chequeClearance"
-                        placeholder="DD-MM-YYYY" />
+                        [placeholder]="giddhDateFormat" />
                 </div>
 
             </div>

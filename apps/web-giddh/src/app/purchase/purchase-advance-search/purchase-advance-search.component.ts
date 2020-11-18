@@ -3,7 +3,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { IOption } from '../../theme/ng-select/ng-select';
 import * as moment from 'moment/moment';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';

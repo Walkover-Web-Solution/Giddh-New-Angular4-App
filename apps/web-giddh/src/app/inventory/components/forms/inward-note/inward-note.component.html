@@ -20,7 +20,7 @@
                 <div class="col-6 form-group">
                     <label>Date <sup>*</sup></label>
                     <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
-                        class="form-control" bsDatepicker [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+                        class="form-control" bsDatepicker [bsConfig]=" {dateInputFormat: giddhDateFormat}">
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
                         <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
@@ -159,8 +159,7 @@
 
                                     <div class="col-5 form-group">
                                         <sh-select [options]="stockUnitsOptions" formControlName="manufacturingUnitCode"
-                                            [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33"
-                                            [forceClearReactive]="forceClear$ | async"></sh-select>
+                                            [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33"></sh-select>
                                     </div>
 
                                     <div class="col-3" style="display: flex;align-items: center;height: 30px"
