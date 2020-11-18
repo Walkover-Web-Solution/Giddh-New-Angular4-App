@@ -9907,6 +9907,9 @@ input.mat-input-element{
             width: 100%;
             white-space: nowrap;
         }
+        #setting-tab-wrapper .purchase-setting-tab.tab-integraton .nav-tabs{
+            display: inline-flex;
+        }
         #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
             width: 90px;
             height: 90px !important;
@@ -9916,7 +9919,28 @@ input.mat-input-element{
             width: 100% !important;
         }
     }
-
+@media(max-width:1191px) and (min-width:1024px){
+    .recurring-form-wrapper{
+        .recurring-form{
+            sh-select{
+                div{
+                    width: 100%;
+                    input{
+                        min-width: 100%;
+                        max-width: 100%;
+                    }
+                }
+            }
+            giddh-datepicker{
+                width: 100%;
+                .mat-form-field{
+                    max-width: 100%;
+                    min-width: 100%;
+                }
+            }
+        }
+    }
+}
 
     @media (max-width: 991px) {
         .setting-tab-data li.nav-item {
@@ -10747,6 +10771,14 @@ input.mat-input-element{
     }
 
     @media (max-width: 375px) {
+        .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs{
+            overflow-x: auto;
+            white-space: nowrap;
+            display: inline-block;
+            li{
+                float: none !important;
+            }
+        }
         .linked-add{
             .popover{
                 &.outside-popover {

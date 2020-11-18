@@ -1,6 +1,6 @@
 <div class="relative">
     <hamburger-menu></hamburger-menu>
-    <tabset class="setting-page" id="setting-tab" #staticTabsTBPL>
+    <tabset class="setting-page tb-pl-bs-tabs" id="setting-tab" #staticTabsTBPL>
         <tab heading="Trial Balance"
             (selectTab)="setCurrentPageTitle('Trial Balance'); CanTBLoad = true;CanPLLoad = false;CanBSLoad = false;"
             [id]="(CanTBLoad) ? 'giddh-page-heading': ''">
