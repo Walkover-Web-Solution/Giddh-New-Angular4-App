@@ -561,6 +561,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public onboardingFormRequest: OnboardingFormRequest = {formName: '', country: ''};
     /** This will hold states list with respect to country */
     public countryStates: any[] = [];
+    /** Stores the current invoice selected */
+    public invoiceSelected: any;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1721,6 +1723,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
                     } else {
                         this.invoiceForceClearReactive$ = observableOf({ status: true });
+                        this.invoiceSelected = '';
                     }
                     let invoiceSelected;
                     if (this.isUpdateMode) {
@@ -1740,6 +1743,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     _.uniqBy(this.invoiceList, 'value');
+                    this.invoiceSelected = invoiceSelected;
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
                     this._cdr.detectChanges();
                 }
@@ -1755,6 +1759,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public removeSelectedInvoice(): void {
         this.invoiceForceClearReactive$ = observableOf({ status: true });
         this.selectedInvoice = '';
+        this.invoiceSelected = '';
     }
 
     public prepareInvoiceTypeFlags() {
@@ -1990,6 +1995,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isOthrDtlCollapsed = false;
         this.forceClear$ = observableOf({ status: true });
         this.invoiceForceClearReactive$ = observableOf({ status: true });
+        this.invoiceSelected = '';
         this.isCustomerSelected = false;
         this.selectedFileName = '';
         this.selectedWarehouse = '';
