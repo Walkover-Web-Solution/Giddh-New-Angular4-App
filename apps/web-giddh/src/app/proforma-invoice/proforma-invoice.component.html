@@ -639,6 +639,7 @@
 
                                             <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
+                                                    [fixedValue]="invoiceSelected?.label"
                                                     [forceClearReactive]="invoiceForceClearReactive$ | async" class="linking-dropdown"
                                                     [notFoundLink]="false" [(ngModel)]="selectedInvoice" name="invoiceLinking"
                                                     (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
