@@ -1250,6 +1250,7 @@
                                             <div style="flex: 1;">
                                                 <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
                                                     (click)="transactionAmountClicked(transaction)" placeholder="Amount"
+                                                    (input)="checkVoucherEntries()"
                                                     name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective
@@ -2145,6 +2146,7 @@
                                                 <label class="card-label text-right">Amount</label>
                                                 <div style="flex: 1;">
                                                     <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
+                                                        (input)="checkVoucherEntries()"
                                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                                         [(ngModel)]="transaction.amount" decimalDigitsDirective
