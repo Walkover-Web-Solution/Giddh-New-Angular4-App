@@ -299,4 +299,10 @@ export class GeneralActions {
             type: GENERAL_ACTIONS.UPDATE_UI_FROM_DB
         }
     }
+    public openSideMenu(isOpen: boolean) {
+        return {
+            type: GENERAL_ACTIONS.OPEN_SIDE_MENU,
+            payload: isOpen
+        }
+    }
 }

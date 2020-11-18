@@ -6,9 +6,7 @@ import { InventoryDownloadRequest, StockReportRequest, StockReportResponse } fro
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
-
 import {
-    AfterViewInit,
     ChangeDetectorRef,
     Component,
     ElementRef,
@@ -22,8 +20,7 @@ import {
 } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of as observableOf, ReplaySubject, Subscription, combineLatest as observableCombineLatest } from 'rxjs';
-
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
@@ -36,9 +33,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvViewService } from '../../inv.view.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
-    selector: 'invetory-stock-report',  // <home></home>
+    selector: 'invetory-stock-report',
     templateUrl: './inventory.stockreport.component.html',
     styleUrls: ['./inventory.stockreport.component.scss'],
     animations: [
@@ -54,7 +52,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
         ]),
     ]
 })
-export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {
+export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy {
     @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
     @ViewChild('shCategory', { static: true }) public shCategory: ShSelectComponent;
@@ -95,7 +93,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public filterValueCondition: string = null;
     public isFilterCorrect: boolean = false;
     public stockUniqueNameFromURL: string = null;
-    public _DDMMYYYY: string = 'DD-MM-YYYY';
     public pickerSelectedFromDate: string;
     public pickerSelectedToDate: string;
     public transactionTypes: any[] = [
@@ -258,7 +255,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     ) {
         this.stockReport$ = this.store.pipe(select(stockReportStore => stockReportStore.inventory.stockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.stockReportRequest = new StockReportRequest();
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.entityAndInventoryTypeForm = this.fb.group({
             selectedEntity: ['allEntity'],
             selectedTransactionType: ['all']
@@ -339,13 +336,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(this._DDMMYYYY);
-                this.toDate = moment(a[1]).format(this._DDMMYYYY);
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
                 this.getStockReport(true);
             }
         });
 
-        this.selectedCompany$ = this.store.select(createSelector([(sessionStore: AppState) => sessionStore.session.companies, (companyStore: AppState) => companyStore.session.companyUniqueName], (companies, uniqueName) => {
+        this.selectedCompany$ = this.store.pipe(select(createSelector([(sessionStore: AppState) => sessionStore.session.companies, (companyStore: AppState) => companyStore.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
                 return;
             }
@@ -361,7 +358,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             }
             this.getAllBranch();
             return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
         this.selectedCompany$.subscribe();
 
         this.accountUniqueNameInput.valueChanges.pipe(
@@ -461,7 +458,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         let branchFilterRequest = new BranchFilterRequest();
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         // tslint:disable-next-line:no-shadowed-variable
-        this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
                 if (entities.length) {
                     if (this.selectedCmp && entities.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
@@ -476,7 +473,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                     this.entities$ = observableOf(null);
                 }
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
     }
 
     public initVoucherType() {
@@ -493,21 +490,12 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.destroyed$.complete();
     }
 
-    public ngAfterViewInit() {
-        this.store.select(p => p.inventory.activeGroup).pipe(take(1)).subscribe((a) => {
-            if (!a) {
-                // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-            }
-        });
-    }
-
     public goToManageStock() {
         if (this.groupUniqueName && this.stockUniqueName) {
             this.store.dispatch(this.inventoryAction.showLoaderForStock());
             this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
             this.setInventoryAsideState(true, false, true);
-            // this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName, 'add-stock', this.stockUniqueName]);
         }
     }
 
@@ -534,8 +522,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     public selectedDate(value?: any, from?: string) { //from like advance search
-        this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
-        this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
+        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.pickerSelectedFromDate = value.picker.startDate;
         this.pickerSelectedToDate = value.picker.endDate;
         if (!from) {
@@ -703,8 +691,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(this._DDMMYYYY);
-                this.toDate = moment(a[1]).format(this._DDMMYYYY);
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
         //Reset Date

@@ -1,14 +1,14 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { settingsPageTabs } from "../../../helpers/pageTabs";
-import { Location } from '@angular/common';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Router } from '@angular/router';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { select, Store } from '@ngrx/store';
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Organization } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'aside-setting',
@@ -16,7 +16,7 @@ import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state
     styleUrls: [`./aside-setting.component.scss`],
 })
 
-export class AsideSettingComponent implements OnInit {
+export class AsideSettingComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('searchField', {static: true}) public searchField: ElementRef;
@@ -26,8 +26,10 @@ export class AsideSettingComponent implements OnInit {
     public search: any = "";
     public filteredSettingsPageTabs: any[] = [];
     public isMobileScreen: boolean = true;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private location: Location, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>) {
+    constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>) {
 
     }
 
@@ -39,7 +41,7 @@ export class AsideSettingComponent implements OnInit {
     public ngOnInit(): void {
         this.breakPointObservar.observe([
             '(max-width:767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 
@@ -128,5 +130,15 @@ export class AsideSettingComponent implements OnInit {
         if(this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
         }
+    }
+
+    /**
+     * Releases the memory
+     *
+     * @memberof AsideSettingComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

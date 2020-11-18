@@ -114,8 +114,8 @@
                 New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
             <div class="row">
                 <div class="col-12 d-flex w-100 align-items-center pt-1 pb-1">
-                    <div class="more-export-btn d-flex mt-1">
-                        <div class="clear-filter visible-on-mobile" *ngIf="showAdvanceSearchIcon"
+                    <div class="more-export-btn d-flex mt-1" *ngIf="showAdvanceSearchIcon">
+                        <div class="clear-filter visible-on-mobile"
                             (click)="resetAdvanceSearch()">
                             <button class="btn btn-default">
                                 <span class="icon-cross"></span> Clear Filter

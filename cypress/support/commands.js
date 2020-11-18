@@ -31,12 +31,15 @@ import DashboardPage from "./pageObjects/DashboardPage";
 import GlobalSearchPage from "./pageObjects/GlobalSearchPage";
 import TrialBalancePage from "./pageObjects/TrialBalancePage";
 import LedgerPage from "./pageObjects/LedgerPage";
+import SignUpPage from "./pageObjects/SignUpPage";
+import CreateNewCompanyPage from "./pageObjects/CreateNewCompanyPage";
 const loginPage = new LoginPage()
-const mainPage = new MainPage()
+const signUpPage = new SignUpPage();
 const headerPage = new HeaderPage()
 const ledgerPage = new LedgerPage()
 const globalSearchPage = new GlobalSearchPage()
 const trialBalancePage = new TrialBalancePage()
+const createNewCompanyPage = new CreateNewCompanyPage();
 
 
 Cypress.Commands.add("loginWithGoogle", (email, password) => {
@@ -163,3 +166,28 @@ Cypress.Commands.add("getLedger", (accountUniqueName, entryUniqueID) => {
 
     return  cy.get('@getLedgerAPI')
 })
+
+Cypress.Commands.add("SignUp", (email, password) => {
+    cy.visit(Cypress.env('url'))
+    loginPage.signUpButton().click()
+    loginPage.getLoginWithEmail().click()
+    loginPage.enterEmailId().clear().type(email)
+    loginPage.enterPassword().clear().type(password)
+    loginPage.clickLoginButton().click()
+    signUpPage.enterVerificationCode("123456")
+    signUpPage.clickVerifyEmail()
+    cy.wait(2000);
+    //signUpPage.createNewCompany().should('have.value', 'Create New Company')
+    createNewCompanyPage.companyName("giddhautomation")
+    createNewCompanyPage.country().click()
+    createNewCompanyPage.countryList().click()
+    createNewCompanyPage.mobileNumber("1234567890")
+    createNewCompanyPage.nextButton().then(()=>{
+        cy.wait(1500)
+        createNewCompanyPage.submitButton()  .then(()=>{
+            cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+        })
+    })
+})
+
+

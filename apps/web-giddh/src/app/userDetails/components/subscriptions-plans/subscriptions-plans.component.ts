@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -76,7 +76,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService) {
 
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.select(profile => profile.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
                 this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).subscribe(res => {
@@ -120,8 +120,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 this.currentCompany = companyInfo.name;
             }
         });
-        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
-        this.isUpdateCompanySuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
+        this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -143,7 +143,10 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnDestroy() { }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
     /**
      * This will open the all features popup

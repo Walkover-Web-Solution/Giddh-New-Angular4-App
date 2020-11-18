@@ -1,6 +1,6 @@
 <section id="setting-tab-wrapper" class="setting-tab-data">
     <div id="invoice-setting" class="invoice-control mt-15">
-        <tabset class="tab-integraton">
+        <tabset class="tab-integraton purchase-setting-tab">
             <tab>
                 <ng-template tabHeading>
                     <span class="icon-mail"></span> Integration
@@ -150,7 +150,7 @@
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-9">
                                         <div class="form-group mb-0 bill-lock-date">
-                                            <input type="text" class="form-control invoice-lock-date" name="lockDate" bsDatepicker #dp="bsDatepicker" [(ngModel)]="invoiceSettings.purchaseBillSettings.lockDate" [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY'}">
+                                            <input type="text" class="form-control invoice-lock-date" name="lockDate" bsDatepicker #dp="bsDatepicker" [(ngModel)]="invoiceSettings.purchaseBillSettings.lockDate" [bsConfig]="{ adaptivePosition: true, dateInputFormat: giddhDateFormat}">
                                             <span class="icon-calender" (click)="dp.toggle()"></span>
                                         </div>
                                     </div>

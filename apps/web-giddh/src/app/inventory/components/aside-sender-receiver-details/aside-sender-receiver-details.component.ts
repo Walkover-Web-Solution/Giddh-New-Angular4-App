@@ -127,9 +127,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-        private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
-        this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+    constructor(private _fb: FormBuilder, private store: Store<AppState>, private _toaster: ToasterService, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+        this.companiesList$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.getCountry();
         this.getCurrency();
@@ -140,7 +139,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         }
     }
 
-
     selectTab(tabId: number) {
         this.staticTabs.tabs[tabId].active = true;
     }
@@ -148,13 +146,14 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     closeAsidePane(event) {
         this.closeAsideEvent.emit(event);
     }
+
     public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
         }
         this.initializeNewForm();
 
-        this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
+        this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
@@ -169,12 +168,11 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         });
 
         // get country code value change
-        this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
+        this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
 
             if (a) {
                 const addresses = this.addAccountForm.get('addresses') as FormArray;
                 let addressFormArray = (this.addAccountForm.controls['addresses'] as FormArray);
-                let lengthofFormArray = addressFormArray.controls.length;
                 if (a !== 'IN') {
                     this.isIndia = false;
                     Object.keys(addressFormArray.controls).forEach((key) => {
@@ -193,14 +191,15 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
         // get openingblance value changes
-        this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
+        this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
                 this.addAccountForm.get('openingBalanceType').patchValue('');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             }
         });
-        this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
+
+        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.companiesList$.pipe(take(1)).subscribe(companies => {
                     this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
@@ -211,7 +210,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
 
-        this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
+        this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe((session) => {
             let companyUniqueName: string;
             if (session.companyUniqueName) {
                 companyUniqueName = _.cloneDeep(session.companyUniqueName);

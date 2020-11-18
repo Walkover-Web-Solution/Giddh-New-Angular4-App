@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
@@ -17,6 +17,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { ContactAdvanceSearchComponent } from '../advanceSearch/contactAdvanceSearch.component';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'aging-report',
@@ -70,15 +71,15 @@ export class AgingReportComponent implements OnInit {
         private _cdr: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
         private componentFactoryResolver: ComponentFactoryResolver) {
-        this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
+        this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
-        this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
+        this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
         this.getDueAmountreportData();
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public getDueAmountreportData() {
-        this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+        this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
                 this.dueAmountReportRequest.page = data.page;
                 setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
@@ -112,12 +113,12 @@ export class AgingReportComponent implements OnInit {
     public ngOnInit() {
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.fromDate = moment(a[0]).format('DD-MM-YYYY');
-                this.toDate = moment(a[1]).format('DD-MM-YYYY');
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'aging-report';
@@ -133,7 +134,8 @@ export class AgingReportComponent implements OnInit {
 
         this.searchStr$.pipe(
             debounceTime(1000),
-            distinctUntilChanged()
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
         ).subscribe(term => {
             this.dueAmountReportRequest.q = term;
             this.getDueReport();
@@ -141,6 +143,7 @@ export class AgingReportComponent implements OnInit {
 
         this._breakpointObserver
             .observe(['(max-width: 768px)'])
+            .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isMobileScreen = state.matches;
                 this.getDueAmountreportData();
@@ -175,7 +178,7 @@ export class AgingReportComponent implements OnInit {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
-            componentInstance.pageChanged.subscribe(e => {
+            componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
         }

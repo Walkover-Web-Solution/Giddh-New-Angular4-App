@@ -1,20 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil, map } from 'rxjs/operators';
 import {map as lodashMap } from '../../../lodash-optimized';
-
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { flatten, omit, union } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { LogsRequest } from '../../../models/api-models/Logs';
-import { AccountService } from '../../../services/account.service';
 import { CompanyService } from '../../../services/companyService.service';
-import { GroupService } from '../../../services/group.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -31,28 +27,27 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
-                private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions, private bsConfig: BsDatepickerConfig) {
+    constructor(private store: Store<AppState>, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions, private bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.showWeekNumbers = false;
 
         this.vm = new AuditLogsSidebarVM();
-        this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).pipe(takeUntil(this.destroyed$));
-        this.vm.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-        this.vm.selectedCompany = this.store.select(state => {
+        this.vm.getLogsInprocess$ = this.store.pipe(select(p => p.auditlog.getLogInProcess), takeUntil(this.destroyed$));
+        this.vm.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
+        this.vm.selectedCompany = this.store.pipe(select(state => {
             if (!state.session.companies) {
                 return;
             }
             return state.session.companies.find(cmp => {
                 return cmp.uniqueName === state.session.companyUniqueName;
             });
-        }).pipe(takeUntil(this.destroyed$));
-        this.vm.user$ = this.store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.vm.user$ = this.store.pipe(select(state => {
             if (state.session.user) {
                 return state.session.user.user;
             }
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
 
         /* previously we were getting data from api now we are getting data from general store */
 
@@ -164,11 +159,11 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     public getLogfilters() {
         let reqBody: LogsRequest = new LogsRequest();
-        // reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
-        // reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
+        // reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format(GIDDH_DATE_FORMAT) : '';
+        // reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format(GIDDH_DATE_FORMAT) : '';
         reqBody.operation = this.vm.selectedOperation === 'All' ? '' : this.vm.selectedOperation;
         reqBody.entity = this.vm.selectedEntity === 'All' ? '' : this.vm.selectedEntity;
-        // reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
+        // reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
         reqBody.userUniqueName = this.vm.selectedUserUnq;
         reqBody.accountUniqueName = this.vm.selectedAccountUnq;
         reqBody.groupUniqueName = this.vm.selectedGroupUnq;
@@ -177,17 +172,17 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             reqBody.fromDate = null;
             reqBody.toDate = null;
             if (this.vm.logOrEntry === 'logDate') {
-                reqBody.logDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
+                reqBody.logDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
                 reqBody.entryDate = null;
             } else if (this.vm.logOrEntry === 'entryDate') {
-                reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
+                reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
                 reqBody.logDate = null;
             }
         } else {
             reqBody.logDate = null;
             reqBody.entryDate = null;
-            reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
-            reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
+            reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format(GIDDH_DATE_FORMAT) : '';
+            reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format(GIDDH_DATE_FORMAT) : '';
         }
         this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, 1));
     }

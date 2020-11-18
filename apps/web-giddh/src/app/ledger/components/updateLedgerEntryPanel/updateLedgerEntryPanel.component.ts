@@ -81,6 +81,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
     @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
 
     @Input() isPettyCash: boolean = false;
     @Input() pettyCashEntry: any;
@@ -256,17 +258,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.vm = new UpdateLedgerVm();
 
-        this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).pipe(takeUntil(this.destroyed$));
-        this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).pipe(takeUntil(this.destroyed$));
-        this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).pipe(takeUntil(this.destroyed$));
-        this.companyProfile$ = this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$));
-        this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-        this.vm.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
-        this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).pipe(takeUntil(this.destroyed$));
-        this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).pipe(takeUntil(this.destroyed$));
-        this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).pipe(takeUntil(this.destroyed$));
+        this.entryUniqueName$ = this.store.pipe(select(p => p.ledger.selectedTxnForEditUniqueName), takeUntil(this.destroyed$));
+        this.editAccUniqueName$ = this.store.pipe(select(p => p.ledger.selectedAccForEditUniqueName), takeUntil(this.destroyed$));
+        this.selectedLedgerStream$ = this.store.pipe(select(p => p.ledger.transactionDetails), takeUntil(this.destroyed$));
+        this.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));
+        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
+        this.vm.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+        this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.isDeleteTrxEntrySuccess$ = this.store.pipe(select(p => p.ledger.isDeleteTrxEntrySuccessfull), takeUntil(this.destroyed$));
+        this.isTxnUpdateInProcess$ = this.store.pipe(select(p => p.ledger.isTxnUpdateInProcess), takeUntil(this.destroyed$));
+        this.isTxnUpdateSuccess$ = this.store.pipe(select(p => p.ledger.isTxnUpdateSuccess), takeUntil(this.destroyed$));
         this.closeUpdateLedgerModal.pipe(takeUntil(this.destroyed$));
         this.vm.currencyList$ = this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$));
         this.store.dispatch(this._settingsTagActions.GetALLTags());
@@ -1271,23 +1273,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public saveLedgerTransaction() {
         // due to date picker of Tx entry date format need to change
         if (this.vm.selectedLedger.entryDate) {
-            if (!moment(this.vm.selectedLedger.entryDate, 'DD-MM-YYYY').isValid()) {
+            if (!moment(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
                 this._toasty.errorToast('Invalid Date Selected.Please Select Valid Date');
                 this._loaderService.hide();
                 return;
             } else {
-                this.vm.selectedLedger.entryDate = moment(this.vm.selectedLedger.entryDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                this.vm.selectedLedger.entryDate = moment(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
         // due to date picker of Tx chequeClearance date format need to change
         if (this.vm.selectedLedger.chequeClearanceDate) {
-            if (!moment(this.vm.selectedLedger.chequeClearanceDate, 'DD-MM-YYYY').isValid()) {
+            if (!moment(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
                 this._toasty.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
                 this._loaderService.hide();
                 return;
             } else {
-                this.vm.selectedLedger.chequeClearanceDate = moment(this.vm.selectedLedger.chequeClearanceDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+                this.vm.selectedLedger.chequeClearanceDate = moment(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
         let requestObj: LedgerResponse = this.vm.prepare4Submit();
@@ -1317,7 +1319,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
         requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
         requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
-        if (!this.taxOnlyTransactions) {
+        if (!this.isRcmEntry && !this.isAdvanceReceipt && !this.taxOnlyTransactions) {
             requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
         }
         requestObj.transactions.map((transaction: any) => {
@@ -1746,7 +1748,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private getCurrencyRate() {
         let from = this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails.code : this.vm.foreignCurrencyDetails.code;
         let to = this.vm.selectedCurrency === 0 ? this.vm.foreignCurrencyDetails.code : this.vm.baseCurrencyDetails.code;
-        let date = moment().format('DD-MM-YYYY');
+        let date = moment().format(GIDDH_DATE_FORMAT);
         return this.ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
     }
 
@@ -2121,6 +2123,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         }
         this.adjustPaymentModal.hide();
+    }
+
+    /**
+     * Toggles the more detail section
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public toggleMoreDetail(): void {
+        this.showAdvanced = !this.showAdvanced;
+        this.moreDetailOpen.emit(this.showAdvanced);
     }
 
     /**
