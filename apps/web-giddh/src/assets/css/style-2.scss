@@ -9679,11 +9679,6 @@ span#HW_badge_cont:nth-child(3) {
         border-radius: 4px;
         box-shadow: 0 3px 6px $black-russian;
         top: 20% !important;
-        &.outside-popover {
-            position: absolute !important;
-            left: 280px !important;
-            top: 10% !important;
-        }
         .popover-arrow{
             display:none;
         }
@@ -10186,11 +10181,6 @@ input.mat-input-element{
     .linked-add{
         .popover{
             width: 150px;
-            &.outside-popover {
-                position: absolute !important;
-                left: 160px !important;
-                top: 10% !important;
-            }
         }
     }
     .multi-select input.form-control {
@@ -10697,14 +10687,6 @@ input.mat-input-element{
 }
 
 @media (max-width: 375px) {
-    .linked-add{
-        .popover{
-            &.outside-popover {
-                left: 100px !important;
-                top: auto !important;
-            }
-        }
-    }
     #rcw-p91-widget-chats{
         min-width: 300px !important;
     }
