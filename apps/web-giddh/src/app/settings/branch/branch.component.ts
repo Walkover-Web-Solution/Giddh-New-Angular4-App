@@ -61,8 +61,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('confirmationModal', {static: false}) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
-        dateInputFormat: 'DD-MM-YYYY',
-        rangeInputFormat: 'DD-MM-YYYY',
+        dateInputFormat: GIDDH_DATE_FORMAT,
+        rangeInputFormat: GIDDH_DATE_FORMAT,
         containerClass: 'theme-green myDpClass'
     };
     public isMobileScreen: boolean = false;
@@ -281,13 +281,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         (componentRef.instance as CompanyAddNewUiComponent).createBranch = true;
         (componentRef.instance as CompanyAddNewUiComponent).isUpdateMode = isUpdateMode;
         (componentRef.instance as CompanyAddNewUiComponent).entityDetails = this.branchDetails;
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
+        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideAddCompanyModal();
             if (isUpdateMode) {
                 this.getAllBranches();
             }
         });
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideCompanyModalAndShowAddAndManage();
         });
     }

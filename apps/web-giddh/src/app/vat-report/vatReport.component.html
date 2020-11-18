@@ -37,9 +37,9 @@
                                                                 {{ moment(selectedMonth).format('MMMM YYYY') }}
                                                             </ng-container>
                                                             <ng-container *ngIf="!isMonthSelected">
-                                                                {{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                                                {{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
                                                                 -
-                                                                {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                                                {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}}
                                                             </ng-container>
                                                             <span class="caret"></span>
                                                         </button>
@@ -184,7 +184,7 @@
                                         </div>
                                     </div>
                                     <div *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length" class="no-data no-report">
-                                        <h1>To see the VAT report for this company, please provide a TRN to address in its profile section.</h1>
+                                        <h1>Please add TRN to your default address in order to view report.</h1>
                                     </div>
                                 </tab>
                             </tabset>

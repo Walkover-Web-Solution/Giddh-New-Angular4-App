@@ -394,7 +394,7 @@
 
 
     <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
-        class="modal fade openPoup" role="dialog" (onHidden)="onHide()">
+        class="modal fade openPoup" role="dialog">
         <div class="modal-dialog modal-xl modal-width">
             <div class="modal-content">
                 <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
@@ -428,8 +428,10 @@
 
     <!-- Edit branch -->
     <div *ngIf="closeAddressSidePane === 'in'">
-        <div class="aside-overlay" (click)="toggleAsidePane()"></div>
+        <div class="aside-overlay"></div>
         <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane"
+            [keyboardShortcut]="'esc'"
+            (onShortcutPress)="toggleAsidePane()"
             [companyName]="currentBranch"
             [branchToUpdate]="branchToUpdate" [showLoader]="isBranchChangeInProgress"
             (updateAddress)="updateBranchInfo($event)" [addressConfiguration]="addressConfiguration"

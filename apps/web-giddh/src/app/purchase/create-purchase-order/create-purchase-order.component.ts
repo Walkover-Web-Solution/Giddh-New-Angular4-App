@@ -555,7 +555,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         // listen for newly added stock and assign value
-        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             let stock = resp[0];
             let acData = resp[1];
             if (stock && acData) {

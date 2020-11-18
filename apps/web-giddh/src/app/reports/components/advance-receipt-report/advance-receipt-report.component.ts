@@ -236,11 +236,11 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         (componentRef.instance as ReceiptAdvanceSearchComponent).searchModel = cloneDeep(this.advanceSearchModel);
         merge(
             (componentRef.instance as ReceiptAdvanceSearchComponent).closeModal,
-            (componentRef.instance as ReceiptAdvanceSearchComponent).cancel).subscribe(() => {
+            (componentRef.instance as ReceiptAdvanceSearchComponent).cancel).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                 // Listener for close and cancel event of modal
                 this.receiptAdvanceSearchModalContainer.hide();
             });
-        (componentRef.instance as ReceiptAdvanceSearchComponent).confirm.subscribe((data: ReceiptAdvanceSearchModel) => {
+        (componentRef.instance as ReceiptAdvanceSearchComponent).confirm.pipe(takeUntil(this.destroyed$)).subscribe((data: ReceiptAdvanceSearchModel) => {
             // Listener for confirm event of modal
             this.showClearFilter = true;
             this.advanceSearchModel = cloneDeep(data);

@@ -294,15 +294,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invoiceSearchRequest.to = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
         this.invoiceSearchRequest.accountUniqueName = '';
         this.invoiceSearchRequest.invoiceNumber = '';
-        this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-        this.actionOnInvoiceSuccess$ = this.store.select(p => p.receipt.actionOnInvoiceSuccess).pipe(takeUntil(this.destroyed$));
-        this.isGetAllRequestInProcess$ = this.store.select(p => p.receipt.isGetAllRequestInProcess).pipe(takeUntil(this.destroyed$));
-        this.exportInvoiceRequestInProcess$ = this.store.select(p => p.invoice.exportInvoiceInprogress).pipe(takeUntil(this.destroyed$));
-        this.exportedInvoiceBase64res$ = this.store.select(p => p.invoice.exportInvoicebase64Data).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
+        this.actionOnInvoiceSuccess$ = this.store.pipe(select(p => p.receipt.actionOnInvoiceSuccess), takeUntil(this.destroyed$));
+        this.isGetAllRequestInProcess$ = this.store.pipe(select(p => p.receipt.isGetAllRequestInProcess), takeUntil(this.destroyed$));
+        this.exportInvoiceRequestInProcess$ = this.store.pipe(select(p => p.invoice.exportInvoiceInprogress), takeUntil(this.destroyed$));
+        this.exportedInvoiceBase64res$ = this.store.pipe(select(p => p.invoice.exportInvoicebase64Data), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
-        //this._invoiceService.getTotalAndBalDue();
     }
 
     /**
@@ -326,7 +325,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
-        this._activatedRoute.params.subscribe(a => {
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
                 this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName).subscribe((res: any) => {
                     if (res && res.body) {
@@ -387,7 +386,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         combineLatest([
-            this.store.select(p => p.receipt.vouchers).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount()),
+            this.store.pipe(select(p => p.receipt.vouchers), takeUntil(this.destroyed$), publishReplay(1), refCount()),
             this.store.pipe(select(s => s.receipt.voucherNoForDetails)),
             this.store.pipe(select(s => s.receipt.voucherNoForDetailsAction))
         ])
@@ -504,16 +503,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         //--------------------- Refresh report data according to universal date--------------------------------
-        this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (a) => {
-
-            if (a) {
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
                 if (localStorage.getItem('universalSelectedDate')) {
-
                     let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
-                    if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(a[1]).format(GIDDH_DATE_FORMAT))) {
+                    if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(dateObj[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(dateObj[1]).format(GIDDH_DATE_FORMAT))) {
                         if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
                             let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
-                            // this.showAdvanceSearchIcon = true;
                             this.datePickerOptions = {
                                 ...this.datePickerOptions,
                                 startDate: moment(storedSelectedDate.fromDates, GIDDH_DATE_FORMAT).toDate(),
@@ -521,7 +517,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                 chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                             };
                             // assign dates
-                            // this.assignStartAndEndDateForDateRangePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
                             if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
                                 this.invoiceSearchRequest.from = storedSelectedDate.fromDates;
                                 this.invoiceSearchRequest.to = storedSelectedDate.toDates;
@@ -530,53 +525,46 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                         } else {
                             this.datePickerOptions = {
-                                ...this.datePickerOptions, startDate: moment(a[0], GIDDH_DATE_FORMAT).toDate(),
-                                endDate: moment(a[1], GIDDH_DATE_FORMAT).toDate(),
-                                chosenLabel: a[2]
+                                ...this.datePickerOptions, startDate: moment(dateObj[0], GIDDH_DATE_FORMAT).toDate(),
+                                endDate: moment(dateObj[1], GIDDH_DATE_FORMAT).toDate(),
+                                chosenLabel: dateObj[2]
                             };
 
                             // assign dates
-                            // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
 
-                            this.invoiceSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                            this.invoiceSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                            this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.invoiceSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
                             this.isUniversalDateApplicable = true;
                         }
                     } else {
                         this.datePickerOptions = {
-                            ...this.datePickerOptions, startDate: moment(a[0], GIDDH_DATE_FORMAT).toDate(),
-                            endDate: moment(a[1], GIDDH_DATE_FORMAT).toDate(),
-                            chosenLabel: a[2]
+                            ...this.datePickerOptions, startDate: moment(dateObj[0], GIDDH_DATE_FORMAT).toDate(),
+                            endDate: moment(dateObj[1], GIDDH_DATE_FORMAT).toDate(),
+                            chosenLabel: dateObj[2]
                         };
 
                         // assign dates
-                        // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
 
-                        this.invoiceSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                        this.invoiceSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                        this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                        this.invoiceSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
                         this.isUniversalDateApplicable = true;
                     }
                 } else {
                     this.datePickerOptions = {
-                        ...this.datePickerOptions, startDate: moment(a[0], GIDDH_DATE_FORMAT).toDate(),
-                        endDate: moment(a[1], GIDDH_DATE_FORMAT).toDate(),
-                        chosenLabel: a[2]
+                        ...this.datePickerOptions, startDate: moment(dateObj[0], GIDDH_DATE_FORMAT).toDate(),
+                        endDate: moment(dateObj[1], GIDDH_DATE_FORMAT).toDate(),
+                        chosenLabel: dateObj[2]
                     };
 
                     // assign dates
-                    // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
 
-                    this.invoiceSearchRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                    this.invoiceSearchRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                    this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.invoiceSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
                     this.isUniversalDateApplicable = true;
                 }
+                this.getVoucher(true);
             }
-            //  this.getVoucherCount++;
-            //     if (this.getVoucherCount > 1) {
-            //       this.getVoucher(true);
-            //     }
-            this.getVoucher(true);
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        });
 
         this.actionOnInvoiceSuccess$.subscribe((a) => {
             if (a) {
@@ -586,7 +574,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
         // this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
 
-        this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.selectedCompany$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
                 return;
             }
@@ -616,7 +604,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
         this.selectedCompany$.subscribe(cmp => {
             if (cmp) {
                 this.activeFinancialYear = cmp.activeFinancialYear;
@@ -661,11 +649,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.selectedInvoiceForDetails = null;
                     this.getVoucher(this.isUniversalDateApplicable);
                 }
-
-                this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-                this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
-                    this.parseBalRes(res);
-                });
             });
 
         this.voucherDetails$.subscribe(response => {
@@ -712,7 +695,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes['selectedVoucher'] && changes['selectedVoucher'].currentValue !== changes['selectedVoucher'].previousValue) {
+        if (changes['selectedVoucher'] && changes['selectedVoucher'].currentValue !== changes['selectedVoucher'].previousValue && changes['selectedVoucher'].currentValue !== this.selectedVoucher) {
             this.selectedVoucher = changes['selectedVoucher'].currentValue;
 
             if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
@@ -1037,10 +1020,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public getVoucher(isUniversalDateSelected: boolean) {
         this.lastListingFilters = this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected);
-        this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher));
-        this._receiptServices.getAllReceiptBalanceDue(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher).subscribe(res => {
-            this.parseBalRes(res);
-        });
+        if(this.lastListingFilters) {
+            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
+            this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
+                this.parseBalRes(res);
+            });
+        }
     }
 
     /**
@@ -1682,7 +1667,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * Call API to get all advance receipts of an invoice
      *
      * @param {*} customerUniquename Selected customer unique name
-     * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
+     * @param {*} voucherDate Voucher Date (GIDDH_DATE_FORMAT)
      * @memberof InvoicePreviewComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {

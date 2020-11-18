@@ -220,7 +220,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.companyProfileObj = {};
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.dispatch(this.commonActions.resetOnboardingForm());
-        this.store.select(state => {
+        this.store.pipe(select(state => {
             if (!state.session.companies) {
                 return;
             }
@@ -229,7 +229,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.activeCompany = cmp;
                 }
             });
-        }).pipe(takeUntil(this.destroyed$)).subscribe();
+        }), takeUntil(this.destroyed$)).subscribe();
     }
 
     public ngOnInit() {
