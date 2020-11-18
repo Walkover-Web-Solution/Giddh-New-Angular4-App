@@ -9,13 +9,13 @@
                                 <span id="button-basic" dropdownToggle class="dropdown-toggle"
                                     aria-controls="dropdown-basic">
                                     <span *ngIf="activeGraphType !== undefined">
-                                        <strong>{{activeGraphType['uniqueName']}}</strong> </span> <span
+                                        <strong>{{activeGraphType['displayName']}}</strong> </span> <span
                                         class="icon-arrow-down mr-l1"></span>
                                 </span>
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                     aria-labelledby="button-basic">
                                     <li role="menuitem" *ngFor="let gtype of revenueGraphTypes;"><a class="dropdown-item"
-                                            (click)="changeGraphType(gtype);">{{gtype.uniqueName}}</a></li>
+                                            (click)="changeGraphType(gtype);">{{gtype.displayName}}</a></li>
                                 </ul>
                             </div>
 
