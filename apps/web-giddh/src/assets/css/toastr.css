@@ -118,6 +118,8 @@ button.toast-close-button {
     text-align: left;
     align-items: flex-start;
     animation: none !important;
+    white-space: normal;
+    word-break: break-word;
 }
 #toast-container .toast:hover {
     -moz-box-shadow: 0 0 12px #000000;
