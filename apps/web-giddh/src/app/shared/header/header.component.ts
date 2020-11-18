@@ -190,6 +190,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private activeCompanyForDb: ICompAidata;
     private smartCombinedList$: Observable<any>;
     public isMobileSite: boolean;
+    public isMobileView = false;
     public currentCompanyPlanAmount: any;
     public companyCountry: CompanyCountry = {
         baseCurrency: '',
@@ -294,10 +295,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsProfileService: SettingsProfileService,
         private settingsProfileAction: SettingsProfileActions,
         private companyService: CompanyService,
+        private _breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
         private accountsAction: AccountsAction,
         public location: Location
     ) {
+
+        this._breakPointObservar.observe([
+            '(max-width: 768px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileView = result.matches;
+        });
+
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
