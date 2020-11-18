@@ -13,7 +13,7 @@
 
                 <tabset #staticTabs id="c-tab" class="custom-tabs">
 
-                    <tab (selectTab)="selectTab($event, false, '1. Overview')">
+                    <tab [active]="selectedTab === '1. Overview'" (selectTab)="selectTab($event, false, '1. Overview')">
                         <ng-template tabHeading>
                             1. Overview
                         </ng-template>
@@ -41,6 +41,7 @@
                         </ng-template>
                         <div *ngIf="selectedTab === 'pushToGstn' || selectedTabId === 1">
                             <push-to-gstin [activeCompanyGstNumber]="activeCompanyGstNumber" [showHsn]="showHsn"
+                                (backClicked)="handleBackButton()"
                                 [currentPeriod]="currentPeriod" [selectedGst]="selectedGst"></push-to-gstin>
                         </div>
                     </tab>
