@@ -97,10 +97,7 @@
                             class="linked-add create" (noResultsClicked)="handleShortcutPress()">
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
-                                    <a popover="{{ option?.address }}" placement="right" popover
-                                        containerClass="outside-popover"
-                                        popoverTitle="{{option?.label}}" container="sh-select-menu"
-                                        triggers="mouseenter:mouseleave" (click)="selectAddress(option)"
+                                    <a (click)="selectAddress(option)"
                                         href="javascript:void(0)" class="list-item d-flex">
                                         <span><input type="checkbox"
                                                 [checked]="warehouseForm?.get('address')?.value?.includes(option.value)"
