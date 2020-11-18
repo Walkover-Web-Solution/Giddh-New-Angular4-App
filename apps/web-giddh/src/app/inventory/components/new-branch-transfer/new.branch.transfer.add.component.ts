@@ -442,7 +442,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         data.forEach(d => {
             if (d && !d.isCompany) {
-                branches.push(new LinkedStocksVM(d.name, d.uniqueName));
+                branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias));
                 if (d.warehouses.length) {
                     this.senderWarehouses[d.uniqueName] = [];
                     this.destinationWarehouses[d.uniqueName] = [];
@@ -489,7 +489,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (branches) {
                 if (branches.results.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(b => ({
-                        label: b.name,
+                        label: `${b.name} ${b.alias ? '(' + b.alias + ')' : ''}`,
                         value: b.uniqueName,
                         additional: b
                     }));

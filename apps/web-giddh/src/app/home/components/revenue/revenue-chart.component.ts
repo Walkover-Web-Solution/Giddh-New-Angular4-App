@@ -98,7 +98,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
                         this.graphParams.type = this.activeGraphType['type'];
                     }
-                    this.revenueGraphTypes.push({ uniqueName: res[key].uniqueName, type: res[key].type });
+                    this.revenueGraphTypes.push({ uniqueName: res[key].uniqueName, type: res[key].type, displayName: res[key].displayName });
                 });
 
                 this.getRevenueGraphData();

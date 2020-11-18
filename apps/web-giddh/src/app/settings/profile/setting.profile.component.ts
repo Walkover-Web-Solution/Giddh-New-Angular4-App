@@ -84,7 +84,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         nameAlias: '',
         headQuarterAlias: '',
         balanceDisplayFormat: '',
-        taxType: ''
+        taxType: '',
+        manageInventory: false
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -388,9 +389,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public updateInventorySetting(data) {
         let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
         dataToSaveNew.companyInventorySettings = { manageInventory: data };
-
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
-
     }
 
     public removeGstEntry(indx) {
@@ -749,7 +748,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public handleSaveProfile(value: any): void {
         if (this.currentOrganizationType === OrganizationType.Company) {
-            this.patchProfile({ ...value });
+            if ('manageInventory' in value) {
+                this.updateInventorySetting(value.manageInventory);
+            } else {
+                this.patchProfile({ ...value });
+            }
         } else if (this.currentOrganizationType === OrganizationType.Branch) {
             this.updateBranchProfile();
         }
@@ -1083,7 +1086,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 businessType: profileObj.businessType,
                 balanceDecimalPlaces: profileObj.balanceDecimalPlaces,
                 balanceDisplayFormat: profileObj.balanceDisplayFormat,
-                isMultipleCurrency: profileObj.isMultipleCurrency
+                isMultipleCurrency: profileObj.isMultipleCurrency,
+                manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false
             };
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
@@ -1117,7 +1121,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 parent: response.parentBranch,
                 uniqueName: response.uniqueName,
                 alias: response.alias,
-                taxType: response.taxType
+                taxType: response.taxType,
+                manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false
             };
             this.addresses = this.settingsUtilityService.getFormattedBranchAddresses(response.addresses);
             this.changeDetectorRef.detectChanges();
