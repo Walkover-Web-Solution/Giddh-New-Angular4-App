@@ -2590,10 +2590,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateBalanceDue();
     }
 
-    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false) {
+    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
         if(fromTransactionField && this.transactionAmount === trx.amount) {
             this.transactionAmount = 0;
             return;
+        }
+        if (event && event.discount && event.isActive) {
+            this.accountAssignedApplicableDiscounts.forEach(item => {
+                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                    item.isActive = event.isActive.target.checked;
+                }
+            });
+        }
+
+        if (event || !this.isUpdateMode) {
+            if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                entry.discounts.map(item => {
+                    let discountItem = this.accountAssignedApplicableDiscounts.find(element => element.uniqueName === item.discountUniqueName);
+                    if (discountItem && discountItem.uniqueName) {
+                        item.isActive = discountItem.isActive;
+                    }
+                });
+            }
         }
 
         if(trx.amount) {
@@ -2624,11 +2642,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
             this.applyRoundOff = true;
-        }
-        if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-            entry.discounts.map(item => {
-                item.isActive = this.accountAssignedApplicableDiscounts.some(element => element.uniqueName === item.discountUniqueName);
-            });
         }
 
         this.calculateTotalDiscountOfEntry(entry, trx, false);
@@ -4367,6 +4380,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     name: f.discount.name,
                     particular: f.account.uniqueName,
                     isActive: true,
+                    isUpdateModeDiscount: true,
                     discountValue: f.discount.discountValue,
                     discountUniqueName: f.discount.uniqueName
                 });
@@ -5984,6 +5998,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 });
             }
         }
+        // if (!this.isUpdateMode) {
+            this.accountAssignedApplicableDiscounts.map(item => item.isActive = true);
+        // }
     }
 
     /**
