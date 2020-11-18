@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
 import { select, Store } from '@ngrx/store';
 import { GstDatePeriod, Gstr1SummaryRequest, Gstr1SummaryResponse } from '../../../../models/api-models/GstReconcile';
@@ -11,7 +11,7 @@ import { takeUntil } from 'rxjs/operators';
     // tslint:disable-next-line:component-selector
     selector: 'push-to-gstin',
     templateUrl: './push-to-gstin.component.html',
-    styleUrls: ['push-to-gstin.component.css'],
+    styleUrls: ['./push-to-gstin.component.css'],
 })
 export class PushToGstInComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -20,6 +20,9 @@ export class PushToGstInComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public selectedGst: string = '';
     /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
     @Input() public showHsn: boolean;
+
+    /** Emitted when back button is clicked on HSN summary page */
+    @Output() public backClicked: EventEmitter<void> = new EventEmitter();
 
     public showTransaction: boolean = false;
     public gstr1SummaryDetails: Gstr1SummaryResponse;
@@ -77,6 +80,16 @@ export class PushToGstInComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Navigates back
+     *
+     * @memberof PushToGstInComponent
+     */
+    public goBack(): void {
+        this.showHsn = false;
+        this.backClicked.emit();
     }
 
 }
