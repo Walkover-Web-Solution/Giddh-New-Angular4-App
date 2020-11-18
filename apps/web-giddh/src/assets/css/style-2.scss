@@ -9683,11 +9683,6 @@ span#HW_badge_cont:nth-child(3) {
         border-radius: 4px;
         box-shadow: 0 3px 6px $black-russian;
         top: 20% !important;
-        &.outside-popover {
-            position: absolute !important;
-            left: 280px !important;
-            top: 10% !important;
-        }
         .popover-arrow{
             display:none;
         }
@@ -10777,14 +10772,6 @@ input.mat-input-element{
             display: inline-block;
             li{
                 float: none !important;
-            }
-        }
-        .linked-add{
-            .popover{
-                &.outside-popover {
-                    left: 100px !important;
-                    top: auto !important;
-                }
             }
         }
         #rcw-p91-widget-chats{
