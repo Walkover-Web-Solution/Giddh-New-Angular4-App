@@ -137,6 +137,11 @@
                             align-items: center;
                             width: 28px;
                         }
+                        &:last-child{
+                            float: left;
+                            width: 80%;
+
+                        }
                 }
             }
             &:hover{
