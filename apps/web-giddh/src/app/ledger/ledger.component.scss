@@ -655,6 +655,13 @@ sh-select:focus {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+.ledger-row{
+    .ellp{
+        min-width: 160px;
+        max-width: 400px;
+        width: 100%;
+    }
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;
