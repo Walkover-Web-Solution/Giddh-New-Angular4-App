@@ -84,7 +84,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         nameAlias: '',
         headQuarterAlias: '',
         balanceDisplayFormat: '',
-        taxType: ''
+        taxType: '',
+        manageInventory: false
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -202,7 +203,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
                     return data;
-                }));
+                }),
+                takeUntil(this.destroyed$));
         };
 
         this.keyDownSubject$
@@ -212,9 +214,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             });
 
         this.gstKeyDownSubject$
-            .pipe(debounceTime(3000)
-                , distinctUntilChanged()
-                , takeUntil(this.destroyed$))
+            .pipe(debounceTime(3000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 if (this.isGstValid) {
 
@@ -268,14 +268,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
 
-        this.store.select(p => p.settings.inventory).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
             }
         });
 
-        this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.currentCompanyDetails = response;
                 if (this.currentOrganizationType === OrganizationType.Company) {
@@ -389,9 +389,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public updateInventorySetting(data) {
         let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
         dataToSaveNew.companyInventorySettings = { manageInventory: data };
-
         this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
-
     }
 
     public removeGstEntry(indx) {
@@ -750,7 +748,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public handleSaveProfile(value: any): void {
         if (this.currentOrganizationType === OrganizationType.Company) {
-            this.patchProfile({ ...value });
+            if ('manageInventory' in value) {
+                this.updateInventorySetting(value.manageInventory);
+            } else {
+                this.patchProfile({ ...value });
+            }
         } else if (this.currentOrganizationType === OrganizationType.Branch) {
             this.updateBranchProfile();
         }
@@ -1084,7 +1086,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 businessType: profileObj.businessType,
                 balanceDecimalPlaces: profileObj.balanceDecimalPlaces,
                 balanceDisplayFormat: profileObj.balanceDisplayFormat,
-                isMultipleCurrency: profileObj.isMultipleCurrency
+                isMultipleCurrency: profileObj.isMultipleCurrency,
+                manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false
             };
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
@@ -1118,7 +1121,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 parent: response.parentBranch,
                 uniqueName: response.uniqueName,
                 alias: response.alias,
-                taxType: response.taxType
+                taxType: response.taxType,
+                manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false
             };
             this.addresses = this.settingsUtilityService.getFormattedBranchAddresses(response.addresses);
             this.changeDetectorRef.detectChanges();

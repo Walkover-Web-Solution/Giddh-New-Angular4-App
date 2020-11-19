@@ -150,7 +150,6 @@ input {
 }
 .ledger-head th {
     color: $jacksons-purple;
-    padding-left: 0;
     padding-top: 5px;
     padding-bottom: 10px;
     &.first-child{
@@ -655,6 +654,13 @@ sh-select:focus {
 .ledg-head table .ledger-main .ledger-row:last-child td[class*="col-"]{
     padding-left: 0 !important;
     padding-right: 0 !important;
+}
+.ledger-row{
+    .ellp{
+        min-width: 160px;
+        max-width: 400px;
+        width: 100%;
+    }
 }
 /*responsive*/
 .modal-ledger {

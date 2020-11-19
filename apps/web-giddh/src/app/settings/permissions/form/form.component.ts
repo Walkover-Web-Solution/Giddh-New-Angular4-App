@@ -1,4 +1,4 @@
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import * as isCidr from 'is-cidr';
@@ -58,6 +58,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public createPermissionSuccess$: Observable<boolean>;
     // observable to clear role permission dropdown
     public permissionRoleClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** To check active company role */
+    public isSuperAdminCompany: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -81,7 +83,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this._accountsAction.resetShareEntity();
-        
+
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
                 let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
@@ -105,7 +107,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         // get roles
-        this.store.select(s => s.permission).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+        this.store.pipe(select(s => s.permission), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.roles) {
                 let roles = _.cloneDeep(p.roles);
                 let allRoleArray = [];
@@ -121,12 +123,22 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
+            companies = companies || [];
+            let activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+            if (activeCompany && activeCompany.userEntityRoles && activeCompany.userEntityRoles.length && activeCompany.userEntityRoles[0] && activeCompany.userEntityRoles[0].role && activeCompany.userEntityRoles[0].role.uniqueName === 'super_admin') {
+                this.isSuperAdminCompany = true;
+            } else {
+                this.isSuperAdminCompany = false;
+            }
+        });
+
         // utitlity
-        this.permissionForm.get('periodOptions').valueChanges.pipe(debounceTime(100)).subscribe(val => {
+        this.permissionForm.get('periodOptions').valueChanges.pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(val => {
             this.togglePeriodOptionsVal(val);
         });
 
-        this.permissionForm.get('ipOptions').valueChanges.subscribe(val => {
+        this.permissionForm.get('ipOptions').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.toggleIpOptVal(val);
         });
     }

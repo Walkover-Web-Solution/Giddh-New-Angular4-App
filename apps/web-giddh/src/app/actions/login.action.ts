@@ -21,7 +21,7 @@ import { COMMON_ACTIONS } from './common.const';
 import { AppState } from '../store';
 import { Injectable, NgZone } from '@angular/core';
 import { map, switchMap, take } from 'rxjs/operators';
-import { userLoginStateEnum } from '../models/user-login-state';
+import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
 import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { DbService } from '../services/db.service';
 import { CompanyService } from '../services/companyService.service';
@@ -303,7 +303,7 @@ export class LoginActions {
                 let cmpUniqueName = '';
                 let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
                 let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-                
+
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
@@ -465,9 +465,18 @@ export class LoginActions {
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
                 if (response.body.companyUniqueName) {
+                    let isCompanyRestrictedPath;
                     if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
                         this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                            this.finalNavigate(response.body.lastState);
+                            if (this._generalService.currentOrganizationType === OrganizationType.Company) {
+                                // ledger is restricted in company mode
+                                isCompanyRestrictedPath = response.body.lastState.includes('ledger');
+                            }
+                            if (!isCompanyRestrictedPath) {
+                                this.finalNavigate(response.body.lastState);
+                            } else {
+                                this.finalNavigate('home');
+                            }
                         });
                     } else {
                         if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
@@ -482,7 +491,11 @@ export class LoginActions {
                                 });
                                 if (path.length > 0 && parament) {
                                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                                        if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
+                                        if (this._generalService.currentOrganizationType === OrganizationType.Company) {
+                                            // ledger is restricted in company mode
+                                            isCompanyRestrictedPath = path[0].includes('ledger');
+                                        }
+                                        if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1 && !isCompanyRestrictedPath) {
                                             this.finalNavigate(path[0], parament);
                                         } else {
                                             this.finalNavigate('home');

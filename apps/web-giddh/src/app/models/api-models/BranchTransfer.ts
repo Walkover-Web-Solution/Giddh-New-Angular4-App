@@ -67,7 +67,11 @@ export class LinkedStocksResponse {
 }
 
 export class LinkedStocksVM implements INameUniqueName {
-	constructor(public name: string, public uniqueName: string, public isWareHouse: boolean = false) {
+	constructor(
+        public name: string,
+        public uniqueName: string,
+        public isWareHouse: boolean = false,
+        public alias: string = '') {
 	}
 }
 

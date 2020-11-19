@@ -160,7 +160,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private modalService: BsModalService) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
         });
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -184,7 +184,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     ngOnInit() {
         if (this.selectedItem) {
-            this.downloadVoucher('base64');
+            if(!this.isVoucherDownloading) {
+                this.downloadVoucher('base64');
+            }
             this.only4ProformaEstimates = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
 
             if (this.only4ProformaEstimates) {
@@ -255,7 +257,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
-                map((ev: any) => ev.target.value)
+                map((ev: any) => ev.target.value),
+                takeUntil(this.destroyed$)
             )
             .subscribe((term => {
                 this.filterVouchers(term);
@@ -357,7 +360,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 voucherNumber: [this.selectedItem.voucherNumber]
             };
             let accountUniqueName: string = this.selectedItem.account.uniqueName;
-            //
             this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
                 if (result) {
                     this.selectedItem.blob = result;
@@ -636,7 +638,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * Call API to get all advance receipts of an invoice
      *
      * @param {*} customerUniquename Selected customer unique name
-     * @param {*} voucherDate Voucher Date (DD-MM-YYYY)
+     * @param {*} voucherDate Voucher Date (GIDDH_DATE_FORMAT)
      * @memberof InvoicePreviewDetailsComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
@@ -735,7 +737,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+        saveAs(this.attachedDocumentBlob, 'purchasebill.pdf');
     }
 
     /**

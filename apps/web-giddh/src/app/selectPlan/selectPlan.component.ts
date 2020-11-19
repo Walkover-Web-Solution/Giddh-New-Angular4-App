@@ -73,11 +73,11 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
         this.logedInUser = this._generalService.user;
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
 
-        this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-        this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
-        this.isRefreshing$ = this.store.select(s => s.session.isRefreshing).pipe(takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
+        this.isRefreshing$ = this.store.pipe(select(s => s.session.isRefreshing), takeUntil(this.destroyed$));
 
-        this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).pipe(takeUntil(this.destroyed$));
+        this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.isCompanyCreationInProcess$.pipe(takeUntil(this.destroyed$)).subscribe(isINprocess => {
             this.isCreateAndSwitchCompanyInProcess = isINprocess;
         });

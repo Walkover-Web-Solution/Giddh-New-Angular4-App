@@ -14,6 +14,9 @@
                     <div class="mb-15">
                         <label>Number System</label> <span>(GMT 5:30) India Standard Time (Asia/Calcutta)</span>
                     </div> -->
+                    <div class="mb-15">
+                        <label>Inventory Type</label> <span>{{profileData?.manageInventory ? 'Product' : 'Service'}}</span>
+                    </div>
                 </div>
                 <!-- branch profile element end -->
             </div>
@@ -41,6 +44,25 @@
                                         (selected)="profileUpdated('balanceDisplayFormat')" [isFilterEnabled]="true "
                                         name="balanceDisplayFormat" [(ngModel)]="profileData.balanceDisplayFormat">
                                     </sh-select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Inventory Type</label>
+                                    <div class="mr-t1">
+                                        <span class="pd0 mrR3">
+                                            <input id="radio-1" class="radio-custom cp ml0" name="radio-group" type="radio"
+                                                [checked]="profileData?.manageInventory"
+                                                (change)="inventoryTypeUpdated(true)" name="inventoryType" checked>
+                                            <label for="radio-1" class="radio-custom-label">Product</label>
+                                        </span>
+                                        <span class="pd0 ">
+                                            <input id="radio-2" class="radio-custom cp ml0" name="radio-group" type="radio"
+                                                [checked]="!profileData?.manageInventory"
+                                                (change)="inventoryTypeUpdated(false)" name="inventoryType">
+                                            <label for="radio-2" class="radio-custom-label">Service</label>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
