@@ -132,4 +132,14 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.showHsn = true;
         this.selectTab('', true, 'pushToGstn');
     }
+
+    /**
+     * Handle back button
+     *
+     * @memberof FilingComponent
+     */
+    public handleBackButton(): void {
+        this.showHsn = false;
+        this.selectTab('', false, '1. Overview');
+    }
 }

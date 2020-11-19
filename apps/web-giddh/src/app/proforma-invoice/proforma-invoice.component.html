@@ -1252,8 +1252,9 @@
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-amount" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div style="flex: 1;">
-                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
+                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true, $event)"
                                                     (click)="transactionAmountClicked(transaction)" placeholder="Amount"
+                                                    (input)="checkVoucherEntries()"
                                                     name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective
@@ -1275,7 +1276,7 @@
                                                     [discountAccountsDetails]="entry.discounts"
                                                     [discountSum]="entry.discountSum" [showHeaderText]="false"
                                                     (hideOtherPopups)="closeTaxControlPopup()"
-                                                    (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                                    (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                     [maskInput]="inputMaskFormat"
                                                     [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
@@ -2119,7 +2120,7 @@
                                                 <label class="card-label text-right">Rate</label>
                                                 <div style="flex: 1;">
                                                     <input type="text" [disabled]="!transaction.isStockTxn"
-                                                        (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
+                                                        (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                         placeholder="Rate" name="transaction.rate_{{entryIdx}}"
                                                         class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
                                                         [prefix]="invFormData.accountDetails.currencySymbol"
@@ -2148,7 +2149,8 @@
 
                                                 <label class="card-label text-right">Amount</label>
                                                 <div style="flex: 1;">
-                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
+                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true, $event)"
+                                                        (input)="checkVoucherEntries()"
                                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                                         [(ngModel)]="transaction.amount" decimalDigitsDirective
@@ -2175,7 +2177,7 @@
                                                     <discount-control-component #discountComponent [discountMenu]="false"
                                                         [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
                                                         [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
-                                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                         [maskInput]="inputMaskFormat"
                                                         [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                         [suffixInput]="selectedSuffixForCurrency">
