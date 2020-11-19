@@ -643,7 +643,7 @@ input {
 }
 
 .otherAccountEntry .header {
-    border: 1px solid #c40000 !important;
+    border: 1px solid $red !important;
     display: block;
     overflow: hidden;
 }
@@ -1069,7 +1069,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $whisper-color;
     padding:10px 0px 0 43px !important;
     background-color: $alice-blue-light;
     z-index: 9;
@@ -1340,7 +1340,7 @@ ul.sub-list {
     width: 0;
     height: 0;
     border: 5px solid transparent;
-    border-top-color: #acacac;
+    border-top-color: $gainsboro;
 }
 
 .select-style select {
@@ -1351,7 +1351,6 @@ ul.sub-list {
     appearance: none;
     padding: 7px 22px 7px 7px;
     border: 1px solid $gainsboro;
-    /* height: 32px; */
     border-radius: 2px;
     background: $white;
     font-size: 14px;
@@ -1382,31 +1381,17 @@ ul.sub-list {
     color: $white;
     background: $deep-sky-blue-hover;
 }
-
-/* .Advance-Search .header:after {
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    top: 14px;
-    right: 10px;
-    border-top: 7px solid #464646;
-    border-bottom: 9px solid transparent;
-    border-right: 6px solid transparent;
-    border-left: 6px solid transparent;
-  } */
-
 .choose-size label {
     font-weight: bold;
     display: inline-block;
-    border: 1px solid #b2b2b2;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
     width: 30px !important;
     text-align: center;
     height: 30px !important;
     line-height: 30px !important;
     margin-right: 5px;
-    color: #b2b2b2;
+    color: $gray;
 }
 
 .choose-size input:checked + label {
@@ -1591,9 +1576,8 @@ modal-container.modal {
 }
 
 .table-no-border tr th {
-    color: #9b9b9b;
+    color: $nobel;
 }
-
 .price-input {
     border: 1px solid $very-light-gray;
     font-size: 14px;
@@ -1645,15 +1629,15 @@ modal-container.modal {
 }
 
 .dot-warning {
-    background: #fed46a;
+    background: $grandis;
 }
 
 .dot-primary {
-    background: #4693f1;
+    background: $cornflower-blue;
 }
 
 .dot-success {
-    background: #2daa4a;
+    background: $success-green;
 }
 
 .pt-85 {
@@ -1972,10 +1956,6 @@ header .navbar {
     width: 100%;
 }
 
-/* .ledg-head input[type=search] {
-    min-width: 220px;
-} */
-
 /*btn*/
 
 .btn-pink {
@@ -2097,7 +2077,6 @@ fieldset[disabled] .btn-primary:hover {
 
 .compoundEntry td,
 .compoundEntry td .form-control {
-    /* background: $white0bc !important; */
     border: 0;
 }
 
@@ -2317,7 +2296,7 @@ fieldset[disabled] .btn-primary:hover {
     border-radius: 3px;
     outline: 0;
     box-shadow: none;
-    border: 1px solid #ca541e;
+    border: 1px solid $cinnabar-orange;
 }
 
 #company_wrap {
@@ -2329,13 +2308,6 @@ fieldset[disabled] .btn-primary:hover {
     padding: 0px 5px 0 0 !important;
     color: $white;
 }
-
-/* #company_wrap .company-text {
-    margin: 5px 0 5px 0px;
-    font-size: 9px;
-    padding-right: 5px;
-} */
-
 #companyList {
     background: $white;
     padding-bottom: 0;
@@ -2537,8 +2509,8 @@ input[type="checkbox"]:checked:after {
 .btn-success:disabled,
 .btn-success:disabled:hover {
     color: rgba(255, 255, 255, 0.51);
-    border: 1px solid #81d4d4;
-    background: #81d4d4;
+    border: 1px solid $success-green-disable;
+    background: $success-green-disable;
 }
 .btn-warning{
     color: $white !important;
@@ -2553,7 +2525,7 @@ input[type="checkbox"]:checked:after {
 
 .btn-danger {
     background: $whisper;
-    color: #e51f0c;
+    color:$red;
     border-color: $whisper;
 }
 
@@ -2561,9 +2533,9 @@ input[type="checkbox"]:checked:after {
 .btn-danger:active,
 .btn-danger:focus,
 .btn-danger:active:focus {
-    background: #d3d3d3;
-    color: #e51f0c;
-    border-color: #d3d3d3;
+    background: $gainsboro;
+    color:$red;
+    border-color: $gainsboro;
     outline: none;
     box-shadow: none;
 }
@@ -2574,7 +2546,7 @@ input[type="checkbox"]:checked:after {
 .btn-danger:active:hover,
 .btn-danger:focus {
     background: $whisper;
-    color: #e51f0c;
+    color:$red;
     border-color: $whisper;
     opacity: 0.5;
 }
@@ -2589,9 +2561,9 @@ input[type="checkbox"]:checked:after {
 .btn-cancel:active,
 .btn-cancel:focus,
 .btn-cancel:active:focus {
-    background: #d3d3d3;
+    background: $gainsboro;
     color: $dark-gray;
-    border-color: #d3d3d3;
+    border-color: $gainsboro;
     outline: none;
     box-shadow: none;
 }
@@ -2655,11 +2627,11 @@ input[type="checkbox"]:checked:after {
     border: 0;
     border-radius: 48px;
     top: 0;
-    background: #f0f0f0;
+    background: $white-smoke;
 }
 
 .switch.checked {
-    background: #48d076;
+    background: $success-green;
     border: 0;
 }
 
@@ -2781,11 +2753,6 @@ input[type="checkbox"]:checked:after {
 }
 
 /* my css start */
-
-// .modal.fade .modal-dialog {
-//     transform: translateY(70px) !important;
-//     margin: 10px auto;
-// }
 .pointer {
     cursor: pointer;
 }
@@ -2844,7 +2811,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .text-green {
-    color: #33bb0c;
+    color: $success-green;
 }
 
 .text-light {
@@ -2868,7 +2835,7 @@ input[type="checkbox"]:checked:after {
     background: $whisper-color;
     padding: 11px 20px;
     font-size: 14px;
-    font-family: "" opensans-semibold "";
+    font-family: 'opensans-semibold';
     border: 1px solid $gainsboro-light;
 }
 
@@ -2892,7 +2859,7 @@ input[type="checkbox"]:checked:after {
 
 .campanien-list ul > li > a {
     display: block;
-    color: #231f20;
+    color: $aubergine;
     padding: 10px 20px;
 }
 
@@ -2937,7 +2904,7 @@ li.no-click {
 
 .subscription_modal .modal-content {
     border-radius: 0px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
+    box-shadow: 0 5px 15px $black-russian-light;
 }
 
 .subscription_modal .modal-content .close {
@@ -2961,7 +2928,7 @@ li.no-click {
 }
 
 .company-box {
-    background: #ebecee;
+    background: $solitude;
     padding: 20px;
     margin-bottom: 30px;
     min-height: 220px;
@@ -3068,7 +3035,7 @@ li.no-click {
 .proforma-list > .filters .separator {
     height: 30px;
     width: 1px;
-    border: 1px solid #ded3c0;
+    border: 1px solid $gainsboro;
     margin-right: 10px;
     vertical-align: bottom;
     float: left;
@@ -3084,13 +3051,6 @@ li.no-click {
 .proforma-list > .filters > div {
     margin-right: 0;
 }
-
-.reset-btn {
-    padding: 8px;
-    background: $romance;
-    border: 1px solid #f5834e;
-}
-
 .filter-btn {
     right: 2em;
     cursor: pointer;
@@ -3313,7 +3273,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .datePickr .dropdown-menu {
-    box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
+    box-shadow: 0 3px 28px 0 $black-russian-light;
     color: $dark-gray;
     border: 1px solid $very-light-gray;
 }
@@ -3377,7 +3337,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .upload-btn {
     background: $romance;
-    border: 1px solid #f7de8a;
+    border: 1px solid $grandis;
     padding: 6px;
     border-radius: 2px;
     float: right;
@@ -3399,10 +3359,9 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 footer {
-    background-color: #26263a;
     padding: 10px 20px;
     text-align: center;
-    color: #c5c5b8;
+    color: $gray;
     font-size: 17px;
     margin-top: 20px;
     width: 100%;
@@ -3415,7 +3374,7 @@ footer > div {
 
 footer > div > a {
     margin: 0 22px;
-    color: #c5c5b8;
+    color: $gray;
     padding: 0;
     font-size: 16px;
 }
@@ -3494,7 +3453,7 @@ footer > div > a:last-child {
 .form-theme .form-control[disabled],
 .form-theme .form-control[readonly],
 .form-theme fieldset[disabled] .form-control {
-    background-color: #eee !important;
+    background-color: $whisper-light !important;
 }
 
 .btn-default-focus {
@@ -3543,7 +3502,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .add-row {
-    color: #36af47;
+    color: $success-green;
 }
 
 .dlet {
@@ -3572,11 +3531,11 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .stkRprtTbl > tfoot > tr > td,
 .stkRprtTbl > tbody > tr > td {
-    color: #6c6c6c;
+    color: $dark-gray;
 }
 
 .stkRprtTbl > thead > tr > th {
-    color: #20201f;
+    color: $nero;
 }
 
 .noPdTd.table_theme > tbody > tr > td {
@@ -3759,12 +3718,11 @@ a.btn.btn-xs.btn-link.pull-right {
     white-space: nowrap;
     overflow: hidden;
     position: relative;
-    /*    margin:22px 0;*/
     padding-right: 25px !important;
 }
 
 .fileName {
-    color: #337ab7;
+    color: $primary;
     text-align: right;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -3783,7 +3741,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .blue {
-    color: #337ab7;
+    color: $primary;
 }
 
 .flowY_scroll {
@@ -3804,17 +3762,17 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .pop-panel label {
-    color: rgba(0, 0, 0, 0.8);
+    color: $nero;
 }
 
 .inWords {
-    color: rgba(0, 0, 0, 0.8);
+    color:$nero;
     text-align: right;
     text-transform: capitalize;
 }
 
 .bd-rt {
-    border-color: #d7d7d7;
+    border-color: $gainsboro;
 }
 
 .popover.bottom > .arrow {
@@ -3824,7 +3782,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .default-color {
-    color: rgba(0, 0, 0, 0.8);
+    color: $nero;
 }
 
 .w50 {
@@ -4032,7 +3990,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .email-type label {
     font-weight: normal;
-    color: #808080;
+    color: $gray;
 }
 
 .email-type input {
@@ -4074,7 +4032,7 @@ input[type=radio]:checked:after {
     position: absolute;
     width: 6px;
     height: 6px;
-    background: #808080;
+    background: $gray;
     left: 3px;
     top: 4px;
     border-radius: 50%;
@@ -4103,7 +4061,7 @@ input[type=radio]:checked:after {
 }
 
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid #bababa;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .pop-panel .ui-select-toggle {
@@ -4117,26 +4075,6 @@ input[type=radio]:checked:after {
 .no-btn .rotate180 {
     top: 0;
 }
-
-/* .entrypanel .upload-div {
-    padding: 6px 8px;
-    float: left;
-    margin-right: 10px;
-    color: $dark-liver;
-    border: 1px solid #949494;
-    cursor: pointer;
-    background: #f9f7f2;
-    height: 32px;
-}
-
-.entrypanel .upload-div i {
-    cursor: pointer;
-}
-
-.entrypanel .upload-div label {
-    color: $dark-liver;
-} */
-
 #inventory-sidebar,
 #inventory-sidebar input {
     font-size: 14px;
@@ -4179,7 +4117,7 @@ select.form-control {
 }
 
 .isFsStock {
-    color: #929292;
+    color: $nobel;
 }
 
 .pdBth1015 {
@@ -4276,17 +4214,17 @@ select.form-control {
     border: 1px solid $very-light-gray;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    -webkit-box-shadow: 0 6px 12px $black-russian-light;
+    box-shadow: 0 6px 12px $black-russian-light;
     z-index: 1001;
 }
 
 .stkRprtTbl td.cr {
-    color: #34a83f;
+    color: $success-green;
 }
 
 .stkRprtTbl td.dr {
-    color: #4b7fbd;
+    color: $speech-blue;
 }
 
 .grp-list {
@@ -4308,7 +4246,7 @@ select.form-control {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: #808080;
+    color: $gray;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -4319,11 +4257,7 @@ select.form-control {
 }
 
 .grp-col {
-    /*max-width: 400px;*/
-    /*max-width: 690px;*/
     float: left;
-    /* min-height: 100%; */
-    /* height: 100%; */
     overflow-x: auto;
 }
 
@@ -4384,7 +4318,7 @@ label {
 
 #getGroupModal .detailed label {
     font-size: 14px;
-    color: #808080;
+    color: $gray;
 }
 
 .btn-add {
@@ -4397,7 +4331,7 @@ label {
 }
 
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid #bababa;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .pop-panel .ui-select-toggle {
@@ -4429,24 +4363,24 @@ label {
 
 #App_taxes .btn {
     padding: 4px;
-    background: #e0e0e0;
-    color: #6b6a6a;
+    background: $whisper-color;
+    color: $dark-gray;
     margin: 0 4px 5px 0;
 }
 
 #App_taxes .btn:hover {
-    background: #e0e0e0;
-    color: #6b6a6a;
+    background: $whisper-color;
+    color: $dark-gray;
     box-shadow: none;
 }
 
 #App_taxes .form-control {
-    background: #f4f5f5 !important;
+    background: $gray-95 !important;
     border: 1px solid $gainsboro;
 }
 
 .col-wrapper:nth-child(1) {
-    background: #f4f5f5;
+    background: $gray-95;
     position: fixed;
     height: calc(100% - 58px);
     min-height: 0;
@@ -4464,7 +4398,7 @@ label {
 }
 
 .col-wrapper:nth-child(1) .isParent {
-    background: #e1ebf0 !important;
+    background: $whisper-new !important;
 }
 
 .col-wrapper:last-child ul li a.isParent {
@@ -4481,15 +4415,15 @@ label {
 }
 
 .isAcc {
-    color: #1a1a1a !important;
+    color: $nero !important;
 }
 
 .isSelectedgrp {
-    background: #f0f0f0;
+    background: $white-smoke;
 }
 
 .isParent {
-    background: #f0f0f0;
+    background: $white-smoke;
 }
 
 .isActive {
@@ -4585,7 +4519,7 @@ label {
 
 #getGroupModal .detailed label {
     font-size: 14px;
-    color: #808080;
+    color: $gray;
 }
 
 .btn-add {
@@ -4598,7 +4532,7 @@ label {
 }
 
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid #bababa;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .pop-panel .ui-select-toggle {
@@ -4630,26 +4564,26 @@ label {
 
 #App_taxes .btn {
     padding: 4px;
-    background: #e0e0e0;
-    color: #6b6a6a;
+    background: $whisper-color;
+    color: $dark-gray;
     margin: 0 4px 5px 0;
 }
 
 #App_taxes .btn:hover {
-    background: #e0e0e0;
-    color: #6b6a6a;
+    background: $whisper-color;
+    color: $dark-gray;
     box-shadow: none;
 }
 
 #App_taxes .form-control {
-    background: #f4f5f5 !important;
+    background: $gray-95 !important;
     border: 1px solid $gainsboro;
 }
 
 .tax-bullet {
     display: inline-block;
     padding: 4px 8px;
-    color: #808080;
+    color: $gray;
     border-radius: 3px;
     background: $whisper-color;
     margin: 0px 0 4px 4px;
@@ -4712,14 +4646,14 @@ label {
 
 .accmerge li a {
     padding: 4px 8px;
-    color: #808080;
+    color: $gray;
     background: $whisper-color;
     float: left;
     border-radius: 2px;
 }
 
 .accmerge li a.isActive {
-    color: #808080;
+    color: $gray;
 }
 
 .accmerge li > a > span {
@@ -4756,7 +4690,7 @@ label {
     padding-left: 4px;
     content: ">";
     font-size: 13px;
-    color: #808080;
+    color: $gray;
 }
 
 .breadcrumb > .active > a {
@@ -4764,7 +4698,7 @@ label {
 }
 
 .breadcrumb a {
-    color: #808080;
+    color: $gray;
 }
 
 .load-bar-wrap {
@@ -4838,7 +4772,7 @@ label {
     position: absolute;
     top: 22px;
     right: 8px;
-    color: #b1b3b3;
+    color: $gray;
 }
 
 .gst {
@@ -4910,7 +4844,7 @@ label {
 
 #manufacture .source .linkstock {
     height: auto;
-    color: #777;
+    color: $dark-gray;
 }
 
 #manufacture .source .linkstock thead th,
@@ -5270,7 +5204,7 @@ label {
 }
 
 .add-new-role-modal .dropdown-menu li label {
-    color: #858585;
+    color: $gray;
     font-weight: normal;
 }
 
@@ -5311,7 +5245,7 @@ label {
 #single-role .panel-body label {
     font-size: 14px;
     text-transform: capitalize;
-    color: #858585;
+    color: $gray;
 }
 
 #single-role table {
@@ -5455,7 +5389,7 @@ a {
 }
 
 .sticky-footer {
-    background: #5d5d5d;
+    background: $dark-gray;
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -5646,13 +5580,13 @@ a {
     font-weight: bold;
     list-style: none;
     display: inline-block;
-    border: 1px solid #b2b2b2;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
     width: 30px;
     text-align: center;
     height: 30px;
     line-height: 30px;
-    color: #b2b2b2;
+    color: $gainsboro;
 }
 
 .logo-tool ul li:hover {
@@ -5761,13 +5695,13 @@ input[type="checkbox"][disabled] {
 }
 
 .input-group-btn .btn-default {
-    background: #eeeeee;
+    background: $whisper-light;
     border: 1px solid $gainsboro;
     color: $charcoal;
 }
 
 .input-group-btn .btn-default:hover {
-    background: #eeeeee;
+    background: $whisper-light;
     border: 1px solid $gainsboro;
     box-shadow: none;
     outline: 0;
@@ -6497,7 +6431,7 @@ table td[class*=col-]:last-child {
 .ledger-stat {
     padding: 50px 0;
     background: $white;
-    color: #808080;
+    color: $gray;
     font-size: 18px;
     margin: 100px 0;
 }
@@ -7268,7 +7202,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .dropdown-menu li .help-text,
 .tax-engine .modal-header .help-text,
 .tax-engine .text-muted {
-    color: #777;
+    color: $dark-gray;
 }
 
 .space {
@@ -7391,7 +7325,7 @@ th:first-child {
 
 .tax-engine .table thead > tr > th {
     border-bottom: 1px solid #eee;
-    color: #777;
+    color: $dark-gray;
 }
 
 .tax-engine .table.transactions-table tbody > tr > td {
@@ -10347,7 +10281,7 @@ input.mat-input-element{
             display: none;
         }
         .card-table tbody tr {
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid $whisper-color;
         }
         .card-table,
         .card-table tbody,
