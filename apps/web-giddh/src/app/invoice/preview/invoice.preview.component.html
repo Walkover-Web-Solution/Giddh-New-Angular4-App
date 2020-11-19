@@ -390,7 +390,7 @@
                         </td>
 
                         <!-- Invoice No. -->
-                        <td data-title="Cr note no.">
+                        <td data-title="Invoice No.">
                             <div (click)="onSelectInvoice(item)" [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
                                 style="position: relative" class="d-flex">
                                 <a href="javascript:void(0);" class="btn-link-2">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
@@ -551,7 +551,7 @@
                         </td>
 
                         <!-- CR Note No. / DR Note No. -->
-                        <td data-title="Dr note no.">
+                        <td [attr.data-title]="selectedVoucher === 'debit note' ? 'Dr note no.' : 'Cr note no.'">
                             <a style="cursor: pointer" (click)="onSelectInvoice(item)">
                                 {{item.voucherNumber }}</a>
                         </td>
