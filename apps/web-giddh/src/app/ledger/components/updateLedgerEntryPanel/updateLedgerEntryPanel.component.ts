@@ -1501,6 +1501,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     /**
+     * Checks if the voucher is generated which is a required
+     * condition for adjustment of voucher
+     *
+     * @param {*} event Click event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public checkForGeneratedVoucher(event: any): void {
+        if (event && !this.vm.selectedLedger.voucherGenerated) {
+            // Adjustment is not allowed until the voucher is generated
+            this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, 'Giddh');
+            event.preventDefault();
+        }
+    }
+
+    /**
      * Get Invoice list for credit note
      *
      * @memberof UpdateLedgerEntryPanelComponent
