@@ -999,6 +999,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 ]
             }
             this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
+            this.blankLedger.generateInvoice = true;
         }
     }
 
@@ -1011,6 +1012,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.forceClear$ = observableOf({ status: true });
         this.currentTxn.invoiceLinkingRequest = null;
         this.selectedInvoiceForCreditNote = null;
+        this.blankLedger.generateInvoice = false;
     }
 
     /**
@@ -1287,6 +1289,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 } else {
                     this.isAdjustReceiptSelected = false;
                 }
+                this.isAdjustVoucherSelected = false;
+                this.blankLedger.generateInvoice = false;
             }
         }
 
@@ -1307,9 +1311,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
-            if (this.blankLedger.voucherType === 'pur') {
-                this.blankLedger.generateInvoice = false;
-            }
+            this.blankLedger.generateInvoice = false;
         }
         this.adjustPaymentModal.hide();
     }
