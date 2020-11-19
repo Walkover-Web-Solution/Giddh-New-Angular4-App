@@ -12,7 +12,7 @@
             <div class="nav-band"
                 [hidden]="((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
 
-                <tabset #staticTabs id="c-tab" class="custom-tabs">
+                <tabset #staticTabs id="c-tab" class="custom-tabs gstr-tabs-head">
 
                     <tab [active]="selectedTab === '1. Overview'" (selectTab)="selectTab($event, false, '1. Overview')">
                         <ng-template tabHeading>
