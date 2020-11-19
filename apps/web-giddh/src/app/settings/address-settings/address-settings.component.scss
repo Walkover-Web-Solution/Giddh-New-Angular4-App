@@ -100,12 +100,6 @@
             }
         }
     }
-}
-
-@media(max-width:767px){
-    .setting-profile-container{
-        padding-top: 15px;
-    }
     .linked-with{
         width: 100% !important;
         .wrap-linked-company{
@@ -117,6 +111,12 @@
                 }
             }
         }
+    }
+}
+
+@media(max-width:767px){
+    .setting-profile-container{
+        padding-top: 15px;
     }
 }
 
