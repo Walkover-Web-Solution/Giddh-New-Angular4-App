@@ -318,6 +318,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public newlyCreatedStockAc$: Observable<INameUniqueName>;
     /* This will hold the transaction amount */
     public transactionAmount: number = 0;
+    /** Stores the current index of entry whose TCS/TDS are entered */
+    public tcsTdsIndex: number = 0;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.getInvoiceSettings();
@@ -2465,6 +2467,20 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         }
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    /**
+     * Closes the other taxes side menu panel on click of overlay
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public closeAsideMenuStateForOtherTaxes(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true, null);
+            if (this.purchaseOrder.entries[this.tcsTdsIndex]) {
+                this.purchaseOrder.entries[this.tcsTdsIndex].isOtherTaxApplicable = false;
+            }
+        }
     }
 
     /**

@@ -1,15 +1,19 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
 import { IOption } from '../../theme/ng-select/option.interface';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'app-aside-menu-other-taxes',
     templateUrl: './aside-menu-other-taxes.html',
-    styleUrls: ['./aside-menu-other-taxes.scss']
+    styleUrls: ['./aside-menu-other-taxes.scss'],
+    host: {'class': 'app-aside-menu-other-taxes'},
 })
 
-export class AsideMenuOtherTaxes implements OnInit, OnChanges {
+export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
     @Input() public otherTaxesModal: SalesOtherTaxesModal;
     @Input() public taxes: TaxResponse[] = [];
@@ -23,7 +27,20 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges {
         { label: 'On Total Value (Taxable + Gst + Cess)', value: 'OnTotalAmount' },
     ];
 
-    constructor() {
+    /** True if mobile screen */
+    public isMobileScreen: boolean;
+
+    /** To unsubscribe from subscription */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+    constructor(
+        private breakPointObservar: BreakpointObserver
+    ) {
+        this.breakPointObservar.observe([
+            '(max-width:1024px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     ngOnInit() {
@@ -65,5 +82,15 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges {
 
     public saveTaxes() {
         this.applyTaxes.emit(this.otherTaxesModal);
+    }
+
+    /**
+     * Unsubscribes to listeners
+     *
+     * @memberof AsideMenuOtherTaxes
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
