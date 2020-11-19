@@ -415,13 +415,11 @@ tfoot td .tableSec.form-group {
 .placeholder-for-table {
     color: $very-light-gray;
 }
-
-.table-delivery{
-    width:100%;
-    overflow-x:auto;
+.transportation-details{
+    max-width: 1160px;
+    width: 100%;
+    margin-bottom: 20px !important;
 }
-
-
 @media(max-width:991px){
     #table-recipt{
        width: calc(100% - 30px);
@@ -475,5 +473,9 @@ tfoot td .tableSec.form-group {
 @media(max-width:767px){
     .date-advance-search {
         margin-top: 15px;
+    }
+    .table-delivery{
+        width:100%;
+        overflow-x:auto;
     }
 }
