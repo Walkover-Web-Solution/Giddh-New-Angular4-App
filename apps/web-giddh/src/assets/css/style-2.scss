@@ -8719,6 +8719,7 @@ ul.dropdown-menu p.lead.pd {
 
 .gstr-tabs-head .nav.nav-tabs{
     position: relative !important;
+    padding: 10px 0px 0 15px !important;
 }
 
 .setting-page .nav > li > a {
@@ -11102,6 +11103,16 @@ input.mat-input-element{
             sh-select, input {
                 min-width: 130px;
                 max-width: 130px;
+            }
+        }
+    }
+
+    @media (min-width: 769px) and (max-width:991px){
+        .gstr-tabs-head{
+            .nav.nav-tabs{
+                li{
+                    display: inline-block;
+                }
             }
         }
     }
