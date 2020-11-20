@@ -152,6 +152,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public accountInheritedDiscounts: any[] = [];
     /** company custom fields list */
     public companyCustomFields: any[] = [];
+    /** This will handle if we need to disable country selection */
+    public disableCountrySelection: boolean = false;
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
         private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
@@ -322,6 +324,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
 
                 this.toggleStateRequired();
+                this.disableCountryIfSundryCreditor();
             }
 
         });
@@ -971,6 +974,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event.value);
+            this.disableCountryIfSundryCreditor();
         }
     }
     public isParentDebtorCreditor(activeParentgroup: string) {
@@ -1585,6 +1589,19 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selecteDiscountChanged(event: any) {
         if (event) {
             this.applyDiscounts();
+        }
+    }
+
+    /**
+     * This will disable country field if group selected is sundry creditor
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public disableCountryIfSundryCreditor(): void {
+        if(this.activeGroupUniqueName === "sundrycreditors") {
+            this.disableCountrySelection = true;
+        } else {
+            this.disableCountrySelection = false;
         }
     }
 }

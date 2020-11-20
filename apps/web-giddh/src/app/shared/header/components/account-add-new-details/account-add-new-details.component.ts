@@ -95,6 +95,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public companyCustomFields: any[] = [];
     /** Observable for selected active group  */
     private activeGroup$: Observable<any>;
+    /** This will handle if we need to disable country selection */
+    public disableCountrySelection: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -275,6 +277,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isDebtorCreditor = true;
         }
 
+        this.disableCountryIfSundryCreditor();
     }
 
     public isShowBankDetails(accountType: string) {
@@ -678,6 +681,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             // }
             this.isGroupSelected.emit(event.value);
             this.toggleStateRequired();
+            this.disableCountryIfSundryCreditor();
         }
     }
 
@@ -1046,5 +1050,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectedBooleanCustomField(isChecked: string, index: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         customField.controls[index].get('value').setValue(isChecked);
+    }
+
+    /**
+     * This will disable country field if group selected is sundry creditor
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public disableCountryIfSundryCreditor(): void {
+        if(this.activeGroupUniqueName === "sundrycreditors") {
+            this.disableCountrySelection = true;
+        } else {
+            this.disableCountrySelection = false;
+        }
     }
 }
