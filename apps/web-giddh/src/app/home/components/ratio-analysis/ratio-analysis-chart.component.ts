@@ -1,7 +1,7 @@
-import { skipWhile, take, takeUntil } from 'rxjs/operators';
+import { skipWhile, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
+import { ActiveFinancialYear } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
@@ -19,15 +19,11 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 })
 
 export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
+    @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
     @Input() public refresh: boolean = false;
 
-    // public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];
-    //public options: Options;
     public activeFinancialYear: ActiveFinancialYear;
     public lastFinancialYear: ActiveFinancialYear;
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
-    @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
     public requestInFlight = true;
     public currentRatioChart: typeof Highcharts = Highcharts;
     public currentRatioChartOptions: Highcharts.Options;
@@ -39,63 +35,42 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public fixedAssetOption: Highcharts.Options;
     public rationResponse$: Observable<any>;
     public ratioObj: any = {};
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         this.rationResponse$ = this.store.pipe(select(p => p.home.RatioAnalysis), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
-        // get activeFinancialYear and lastFinancialYear
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                let activeCmpUniqueName = '';
-                let financialYears = [];
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCmpUniqueName = a;
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.activeFinancialYear = activeCompany.activeFinancialYear;
-                    }
-                });
-                if (this.activeFinancialYear) {
-                    for (let cmp of c) {
-                        if (cmp.uniqueName === activeCmpUniqueName) {
-                            if (cmp.financialYears.length > 1) {
-                                financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                                financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
-                                    let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
-                                    let b = moment(it.financialYearEnds, GIDDH_DATE_FORMAT);
 
-                                    return b.diff(a, 'days') < 0;
-                                });
-                                financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
-                                    let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
-                                    let b = moment(p.financialYearEnds, GIDDH_DATE_FORMAT);
-                                    return b.diff(a, 'days');
-                                }, 'desc');
-                                this.lastFinancialYear = financialYears[0];
-                            }
-                        }
-                    }
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
+                let financialYears = [];
+
+                this.activeFinancialYear = selectedCmp.activeFinancialYear;
+                if (this.activeFinancialYear && selectedCmp.financialYears.length > 1) {
+                    financialYears = selectedCmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
+                    financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
+                        let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
+                        let b = moment(it.financialYearEnds, GIDDH_DATE_FORMAT);
+                        return b.diff(a, 'days') < 0;
+                    });
+                    financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
+                        let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
+                        let b = moment(p.financialYearEnds, GIDDH_DATE_FORMAT);
+                        return b.diff(a, 'days');
+                    }, 'desc');
+                    this.lastFinancialYear = financialYears[0];
                 }
-                // if (activeCmpUniqueName) { this.fetchChartData(); }
             }
         });
 
-        this.rationResponse$.pipe(
-            skipWhile(p => (isNullOrUndefined(p))))
-            .subscribe(p => {
-                this.ratioObj = p;
-                this.generateCharts();
-                this.requestInFlight = false;
-            });
-
+        this.rationResponse$.pipe(skipWhile(p => (isNullOrUndefined(p)))).subscribe(p => {
+            this.ratioObj = p;
+            this.generateCharts();
+            this.requestInFlight = false;
+        });
     }
 
     public hardRefresh() {
@@ -106,7 +81,6 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public fetchChartData() {
         this.requestInFlight = true;
         this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
-        // this.ApiToCALL = [];
         this.refresh = false;
     }
 

@@ -166,7 +166,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public universalDate$: Observable<any>;
     public universalDate: any = '';
 
-    public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
     /* Variable to store if modal is out/in */
     public accountAsideMenuState: string = 'out';
@@ -241,7 +240,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private companyActions: CompanyActions) {
 
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
-        this.activeCompanyUniqueName$ = this.store.pipe(select(companySession => companySession.session.companyUniqueName), (takeUntil(this.destroyed$)));
+
         this.createdAccountDetails$ = combineLatest([
             this.store.pipe(select(appState => appState.sales.createAccountSuccess)),
             this.store.pipe(select(appState => appState.sales.createdAccountDetails))
@@ -309,18 +308,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
-            this.store.pipe(select(companySession => companySession.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
-                if (!res) {
-                    return;
-                }
-                const currentCompany = res.find((company) => company.uniqueName === activeCompanyName);
-                if (currentCompany) {
-                    this.activeCompany = currentCompany;
-                    this.currentCompanyUniqueName = currentCompany.uniqueName;
-                    this.createAccountsList();
-                }
-            });
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
+                this.activeCompany = selectedCmp;
+                this.currentCompanyUniqueName = selectedCmp.uniqueName;
+                this.createAccountsList();
+            }
         });
 
         this.chequeDetailForm = this.fb.group({

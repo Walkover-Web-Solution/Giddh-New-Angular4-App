@@ -75,6 +75,8 @@ export class CompanyActions {
     public static GET_ALL_INTEGRATED_BANK_RESPONSE = 'GET_ALL_INTEGRATED_BANK_RESPONSE';
     public static SET_COMPANY_BRANCH = 'SET_COMPANY_BRANCH';
 
+    public static SET_ACTIVE_COMPANY_DATA = 'SET_ACTIVE_COMPANY_DATA';
+
     public createCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_COMPANY),
@@ -698,6 +700,20 @@ export class CompanyActions {
         return {
             type: CompanyActions.SET_COMPANY_BRANCH,
             payload: organizationDetails
+        };
+    }
+
+    /**
+     * This will set the active company data in store
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public setActiveCompanyData(data: any): CustomActions {
+        return {
+            type: CompanyActions.SET_ACTIVE_COMPANY_DATA,
+            payload: data
         };
     }
 }
