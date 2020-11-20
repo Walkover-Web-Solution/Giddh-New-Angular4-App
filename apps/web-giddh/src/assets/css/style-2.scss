@@ -8706,6 +8706,7 @@ ul.dropdown-menu p.lead.pd {
     position: relative;
     top: -2px;
 }
+
 .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs,
 .setting-page ul.nav.nav-tabs, .inventory-control .nav.nav-tabs{
     position: absolute !important;
@@ -8715,6 +8716,12 @@ ul.dropdown-menu p.lead.pd {
     padding: 10px 0px 0 50px !important;
     border-bottom:1px solid $gainsboro;
 }
+
+.gstr-tabs-head .nav.nav-tabs{
+    position: relative !important;
+    padding: 10px 0px 0 15px !important;
+}
+
 .setting-page .nav > li > a {
     padding: 2px 0px;
     margin-right: 25px;
@@ -11096,6 +11103,16 @@ input.mat-input-element{
             sh-select, input {
                 min-width: 130px;
                 max-width: 130px;
+            }
+        }
+    }
+
+    @media (min-width: 769px) and (max-width:991px){
+        .gstr-tabs-head{
+            .nav.nav-tabs{
+                li{
+                    display: inline-block;
+                }
             }
         }
     }
