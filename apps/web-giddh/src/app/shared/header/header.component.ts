@@ -504,7 +504,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        this.sideBarStateChange(true);
+        //this.sideBarStateChange(true);
+        this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
+            this.sideBarStateChange(response);
+        });
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
 

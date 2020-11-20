@@ -750,7 +750,11 @@ ul.sub-list {
         margin-left: 5px;
     }
 }
-
+.desktop-header{
+    .navbar{
+        display: none;
+    }
+}
 .name-year{
     font-size:12px !important;
     color:$deep-sky-blue !important;

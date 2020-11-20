@@ -980,7 +980,7 @@ ul.sub-list {
 
 .tab-integraton .nav-tabs > li > a {
     width: 120px;
-    height: 120px;
+    height: 120px !important;
     background: $white;
     display: flex;
     flex-direction: column;
@@ -1067,7 +1067,20 @@ ul.sub-list {
     border-bottom: 4px solid transparent;
     display: inline-block;
 }
-
+.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0px 0 43px !important;
+    border-bottom:1px solid $gainsboro;
+    li{
+        a{
+            padding: 0 !important;
+            height: 36px;
+        }
+    }
+}
 .custom-tabs .nav.nav-tabs > li a:hover {
     color: $deep-sky-blue !important;
 }
@@ -8651,7 +8664,9 @@ ul.dropdown-menu p.lead.pd {
 #invoice-setting ul.nav.nav-tabs {
     margin-bottom: 15px;
     background: transparent;
-    position: inherit;
+    position: inherit !important;
+    padding: 0 0px 0 15px !important;
+    border-bottom: inherit !important;
 }
 
 #invoice-setting ul.nav.nav-tabs a {
@@ -8709,7 +8724,15 @@ ul.dropdown-menu p.lead.pd {
     position: relative;
     top: -2px;
 }
-
+.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs,
+.setting-page ul.nav.nav-tabs, .inventory-control .nav.nav-tabs{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0px 0 50px !important;
+    border-bottom:1px solid $gainsboro;
+}
 .setting-page .nav > li > a {
     padding: 2px 0px;
     margin-right: 25px;
@@ -8727,7 +8750,7 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 0px;
     padding-left: 0 !important;
     background-color: transparent;
-    position: static;
+    position: static !important;
     padding-top: 0 !important;
 }
 
@@ -9311,7 +9334,9 @@ input.checkbox-custom[type="checkbox"] {
         }
     }
 }
-
+#setting-tab > .tab-container > .tab-content {
+    padding-top: 15px;
+}
 /*datepicker common css*/
 
 .giddh-datepicker-modal .modal-content {
@@ -9870,7 +9895,7 @@ input.mat-input-element{
     }
     #setting-tab .tab-integraton .nav-tabs > li > a {
         width: 90px;
-        height: 90px;
+        height: 90px !important;
         font-size: 14px;
     }
     .groups-buttons {
@@ -10034,7 +10059,7 @@ input.mat-input-element{
     }
     #setting-tab .tab-integraton .nav-tabs > li > a {
         width: 70px;
-        height: 70px;
+        height: 70px !important;
     }
     .tab-integraton .nav-tabs > li > a > span {
         font-size: 22px;
@@ -10202,9 +10227,23 @@ input.mat-input-element{
 }
 
 @media (max-width: 767px) {
+    #setting-tab .tab-integraton .nav-tabs > li {
+        margin-top: 0 !important;
+    }
+    .hamburger-menu-icon{
+        display: none !important;
+    }
+    .hamburger-menu-icon{
+        display: none !important;
+    }
+    .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs,  .setting-page ul.nav.nav-tabs{
+        padding-left: 15px !important;
+        top: 98px !important;;
+        position: fixed !important;
+    }
     .settings-profile-tabs {
         .tab-content{
-            padding-top: 45px;
+            padding-top: 25px;
         }
     }
     .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
@@ -10221,6 +10260,7 @@ input.mat-input-element{
     #inventory-sidebar{
             padding: 15px 0;
     }
+
     bs-datepicker-container{
         position: fixed !important;
         left: 50% !important;
@@ -10567,18 +10607,19 @@ input.mat-input-element{
         z-index: 9993;
     }
     .page-has-tabs .invoice-genrate-container,
-    .page-has-tabs .invoice-container,
-    .page-has-tabs .proforma-container,
-    .page-has-tabs .proforma-container{
+    .page-has-tabs .invoice-container{
         padding-top: 15px !important;
     }
+    .page-has-tabs .proforma-container{
+            padding-top: 0 !important;
+        }
     .page-has-tabs
         #setting-tab
         app-invoice-setting
         .tab-container
         .nav.nav-tabs,
     .on-user-page .search-subscription {
-        margin-top: 15px !important;
+        margin-top: 0 !important;
     }
     .page-has-tabs .recurring-container {
         margin-top: 0px !important;
@@ -10626,6 +10667,15 @@ input.mat-input-element{
 }
 
 @media (max-width: 575px) {
+    .purchase-setting-tab ul.nav.nav-tabs {
+        padding-bottom: 30px !important;
+        min-height: 100px;
+    }
+    .invoice-control .nav.nav-tabs{
+        white-space: nowrap;
+        overflow-y: hidden;
+        display: inline-block;
+    }
     .linked-add .popover{
         width: 180px;
         transform: none !important;

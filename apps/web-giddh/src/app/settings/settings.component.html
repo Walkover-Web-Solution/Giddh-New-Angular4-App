@@ -9,16 +9,20 @@
         <div class="invoice-control w-100">
             <div id="setting-tab">
                 <div class="setting-container" *ngIf="activeTab === 'taxes'">
+                    <hamburger-menu [pageHeading]="'Setting > Taxes'"></hamburger-menu>
                     <setting-taxes></setting-taxes>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'integration'">
+                    <hamburger-menu [pageHeading]="'Setting > Integration'"></hamburger-menu>
                     <setting-integration #integrationComponent [selectedTabParent]="selectedChildTab">
                     </setting-integration>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'linked-accounts'">
+                    <hamburger-menu [pageHeading]="'Setting > Linked accounts'"></hamburger-menu>
                     <setting-linked-accounts #eBankComp></setting-linked-accounts>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'profile'">
+                    <hamburger-menu></hamburger-menu>
                     <setting-profile #profileComponent></setting-profile>
                     <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;">
                         <i class="icon-refresh mrR fs14 rotate"></i>Saving...
@@ -28,24 +32,31 @@
                     </span>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'financial-year'">
+                    <hamburger-menu [pageHeading]="'Setting > Financial year'"></hamburger-menu>
                     <financial-year #financialYearComp></financial-year>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'permission'">
+                    <hamburger-menu [pageHeading]="'Setting > Permission'"></hamburger-menu>
                     <setting-permission #permissionComp></setting-permission>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'branch'">
+                    <hamburger-menu [pageHeading]="'Setting > Branch'"></hamburger-menu>
                     <setting-branch></setting-branch>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'tag'">
+                    <hamburger-menu [pageHeading]="'Setting > Tag'"></hamburger-menu>
                     <setting-tags #tagComp></setting-tags>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'trigger'">
+                    <hamburger-menu [pageHeading]="'Setting > Trigger'"></hamburger-menu>
                     <setting-trigger></setting-trigger>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'discount'">
+                    <hamburger-menu [pageHeading]="'Setting > Discount'"></hamburger-menu>
                     <setting-discount></setting-discount>
                 </div>
                 <div class="setting-container" *ngIf="activeTab === 'warehouse'">
+                    <hamburger-menu [pageHeading]="'Setting > warehouse'"></hamburger-menu>
                     <setting-warehouse></setting-warehouse>
                 </div>
             </div>
