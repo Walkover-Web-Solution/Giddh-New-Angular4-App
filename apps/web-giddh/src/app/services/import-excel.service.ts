@@ -26,7 +26,7 @@ export class ImportExcelService {
 			.replace(':entity', entity)
             ;
         if (model.data.branchUniqueName) {
-            url = url.concat(`&branchUniqueName=${model.data.branchUniqueName}`);
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(model.data.branchUniqueName)}`);
         }
 		const formData: FormData = new FormData();
 		formData.append('file', model.data.file, model.data.file.name);
