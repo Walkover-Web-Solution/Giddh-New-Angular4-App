@@ -7,14 +7,12 @@ import { ExpensesChartComponent } from './components/expenses/expenses-chart.com
 import { LiveAccountsComponent } from './components/live-accounts/live-accounts.component';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { ActiveFinancialYear, CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Observable, ReplaySubject } from 'rxjs';
+import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse } from '../models/interfaces/dashboard.interface';
-import * as moment from 'moment/moment';
 import * as _ from '../lodash-optimized';
-import { API_TO_CALL, CHART_CALLED_FROM } from '../actions/home/home.const';
 import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
@@ -24,18 +22,15 @@ import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.
 import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { TotalSalesComponent } from './components/total-sales/total-sales.component';
 import { SubscriptionsUser } from "../models/api-models/Subscriptions";
-import { createSelector } from "reselect";
 import { GeneralService } from "../services/general.service";
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'home',
     styleUrls: ['./home.component.scss'],
     templateUrl: './home.component.html'
 })
-export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
+
+export class HomeComponent implements OnInit, OnDestroy {
     public needsToRedirectToLedger$: Observable<boolean>;
     public revenueChartData$: Observable<IRevenueChartClosingBalanceResponse>;
     public networthComparisionChartData$: Observable<IComparisionChartResponse>;
@@ -54,24 +49,18 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('crdrlist', {static: true}) public crdrlist: CrDrComponent;
     @ViewChild('totalSales', {static: true}) public totalSales: TotalSalesComponent;
 
-    public selectedCompany: Observable<CompanyResponse>;
     public subscribedPlan: SubscriptionsUser;
-    public activeFinancialYear: ActiveFinancialYear;
-    public lastFinancialYear: ActiveFinancialYear;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public hideallcharts: boolean = false;
 
     constructor(
         private store: Store<AppState>,
         private companyActions: CompanyActions,
-        private cdRef: ChangeDetectorRef,
         private _homeActions: HomeActions,
         private _router: Router,
         private _accountService: AccountService,
         private _generalService: GeneralService
     ) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         this.comparisionChartData$ = this.store.pipe(select(p => p.home.comparisionChart), takeUntil(this.destroyed$));
         this.expensesChartData$ = this.store.pipe(select(p => p.home.expensesChart), takeUntil(this.destroyed$));
         this.historyComparisionChartData$ = this.store.pipe(select(p => p.home.history_comparisionChart), takeUntil(this.destroyed$));
@@ -79,31 +68,22 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.revenueChartData$ = this.store.pipe(select(p => p.home.revenueChart), takeUntil(this.destroyed$));
         this.needsToRedirectToLedger$ = this.store.pipe(select(p => p.login.needsToRedirectToLedger), takeUntil(this.destroyed$));
 
-        this.selectedCompany = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            let orderedCompanies = _.orderBy(companies, 'name');
-            this.companies$ = observableOf(orderedCompanies);
-            this.store.dispatch(this.companyActions.setTotalNumberofCompanies(orderedCompanies.length));
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                if (activeCompany.subscription) {
+                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(activeCompany.subscription));
+                    this.subscribedPlan = activeCompany.subscription;
                 }
-            });
 
-            return selectedCmp;
-        })), takeUntil(this.destroyed$));
-
-        this.selectedCompany.subscribe((res: any) => {
-            if (res) {
-                if (res.subscription) {
-                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
-                    this.subscribedPlan = res.subscription;
-                }
+                this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
+                    if (result) {
+                        this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                            if (data.status === 'success' && data.body.results.length > 0) {
+                                this._router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
+                            }
+                        });
+                    }
+                });
             }
         });
     }
@@ -125,128 +105,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
     }
-
-    public ngAfterViewInit(): void {
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCmpUniqueName = '';
-                let financialYears: ActiveFinancialYear[] = [];
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCmpUniqueName = a;
-                    let res = c.find(p => p.uniqueName === a);
-                    if (res) {
-                        this.activeFinancialYear = res.activeFinancialYear;
-
-                        this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
-                            if (result) {
-                                this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                                    if (data.status === 'success' && data.body.results.length > 0) {
-                                        this._router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-                if (this.activeFinancialYear) {
-                    for (let cmp of c) {
-                        if (cmp.uniqueName === activeCmpUniqueName) {
-                            if (cmp.financialYears.length > 1) {
-                                financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                                financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
-                                    let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
-                                    let b = moment(it.financialYearEnds, GIDDH_DATE_FORMAT);
-
-                                    return b.diff(a, 'days') < 0;
-                                });
-                                financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
-                                    let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
-                                    let b = moment(p.financialYearEnds, GIDDH_DATE_FORMAT);
-                                    return b.diff(a, 'days');
-                                }, 'desc');
-                                this.lastFinancialYear = financialYears[0];
-                            }
-                        }
-                    }
-
-                    if (activeCmpUniqueName) {
-                        // this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, false, CHART_CALLED_FROM.PAGEINIT, [API_TO_CALL.PL]));
-                        this.cdRef.detectChanges();
-                    }
-                }
-            }
-        });
-
-    }
-
-    // public hardRefresh() {
-    //     let API = [API_TO_CALL.PL];
-    //     if (this.activeFinancialYear) {
-    //         //this.expence.refresh = true;
-    //         this.compare.requestInFlight = true;
-    //         //this.history.requestInFlight = true;
-    //         //this.networth.requestInFlight = true;
-    //         //this.expence.fetchChartData();
-
-    //         this.revenue.refreshChart();
-    //         if (this.compare.showProfitLoss) {
-    //             API.push(API_TO_CALL.PL);
-    //         }
-    //         if (this.compare.showExpense) {
-    //             API.push(API_TO_CALL.EXPENCE);
-    //         }
-    //         if (this.compare.showRevenue) {
-    //             API.push(API_TO_CALL.REVENUE);
-    //         }
-
-    //         if (this.history.showProfitLoss) {
-    //             API.push(API_TO_CALL.PL);
-    //         }
-    //         if (this.history.showExpense) {
-    //             API.push(API_TO_CALL.EXPENCE);
-    //         }
-    //         if (this.history.showRevenue) {
-    //             API.push(API_TO_CALL.REVENUE);
-    //         }
-
-    //         let unique = API.filter((elem, index, self) => {
-    //             return index === self.indexOf(elem);
-    //         });
-
-    //         this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
-    //             this.activeFinancialYear.financialYearStarts,
-    //             this.activeFinancialYear.financialYearEnds, true, CHART_CALLED_FROM.PAGEINIT, unique));
-    //         API = [];
-    //         if (this.compare.showProfitLoss && this.compare.showLastYear) {
-    //             API.push(API_TO_CALL.PL);
-    //         }
-    //         if (this.compare.showExpense && this.compare.showLastYear) {
-    //             API.push(API_TO_CALL.EXPENCE);
-    //         }
-    //         if (this.compare.showRevenue && this.compare.showLastYear) {
-    //             API.push(API_TO_CALL.REVENUE);
-    //         }
-
-    //         if (this.history.showProfitLoss && this.history.showLastYear) {
-    //             API.push(API_TO_CALL.PL);
-    //         }
-    //         if (this.history.showExpense && this.history.showLastYear) {
-    //             API.push(API_TO_CALL.EXPENCE);
-    //         }
-    //         if (this.history.showRevenue && this.history.showLastYear) {
-    //             API.push(API_TO_CALL.REVENUE);
-    //         }
-
-    //         unique = API.filter((elem, index, self) => {
-    //             return index === self.indexOf(elem);
-    //         });
-    //         if (this.lastFinancialYear && this.history.showLastYear && this.compare.showLastYear) {
-    //             this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
-    //                 this.lastFinancialYear.financialYearStarts,
-    //                 this.lastFinancialYear.financialYearEnds, true, CHART_CALLED_FROM.HISTORY, unique));
-    //         }
-    //     }
-    // }
 
     public ngOnDestroy() {
         this.store.dispatch(this._homeActions.ResetHomeState());

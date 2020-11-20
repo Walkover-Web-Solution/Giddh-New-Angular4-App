@@ -3,12 +3,9 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormBuilder, FormGroup, AbstractControl, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { AccountsAction } from '../../../actions/accounts.actions';
-import { CompanyActions } from '../../../actions/company.actions';
 import { CommonActions } from '../../../actions/common.actions';
 import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil, take, distinctUntilChanged } from 'rxjs/operators';
-import { CompanyService } from '../../../services/companyService.service';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { IOption } from '../../../theme/ng-select/ng-select';
@@ -25,53 +22,6 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 @Component({
     selector: 'aside-sender-receiver-details-pane',
-    styles: [`
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 600px;
-      max-width: 100%;
-      z-index: 99999;
-    }
-
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-    position: absolute;
-    left: auto;
-    top: 14px;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-    right: 0;
-    background: transparent;
-    color: #fff;
-    font-size: 20px;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 600px;
-      max-width: 600px;
-    }
-
-    .aside-body {
-      margin-bottom: 80px;
-    }
-.aside-pane{
-  padding:0;
-}
-  `],
     templateUrl: './aside-sender-receiver-details.component.html',
     styleUrls: ['./aside-sender-reciver-details.component.scss'],
 })
@@ -97,8 +47,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
-
-
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public companiesList$: Observable<CompanyResponse[]>;
