@@ -19,10 +19,8 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { createSelector } from 'reselect';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-
 import { cloneDeep, find, forEach, map as lodashMap, uniq } from '../../app/lodash-optimized';
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -263,12 +261,13 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
             this.dueAmountReportData$ = observableOf(data);
         });
-        this.store.pipe(select(appState => {
-            if (!appState.session.companies) {
-                return;
+
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
+                this.selectedCompany = selectedCmp;
             }
-            this.selectedCompany = appState.session.companies.find((company) => company.uniqueName === appState.session.companyUniqueName);
-        }), takeUntil(this.destroyed$)).subscribe();
+        });
+
         this.store.dispatch(this._companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.getCompanyCustomField();

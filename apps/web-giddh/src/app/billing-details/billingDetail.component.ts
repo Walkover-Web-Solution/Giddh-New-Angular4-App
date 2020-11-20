@@ -88,12 +88,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     public ngOnInit() {
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
-        // set active company
-        this.store.pipe(
-            select(state => state.session.companies), take(1)
-        ).subscribe(companies => {
-            companies = companies || [];
-            this.activeCompany = companies.find(company => company.uniqueName === this._generalService.companyUniqueName);
+
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
+                this.activeCompany = selectedCmp;
+            }
         });
 
         this.getStates();

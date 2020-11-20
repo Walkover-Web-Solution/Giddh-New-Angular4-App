@@ -35,14 +35,13 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.vm = new AuditLogsSidebarVM();
         this.vm.getLogsInprocess$ = this.store.pipe(select(p => p.auditlog.getLogInProcess), takeUntil(this.destroyed$));
         this.vm.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
-        this.vm.selectedCompany = this.store.pipe(select(state => {
-            if (!state.session.companies) {
-                return;
+
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
+                this.vm.selectedCompany = observableOf(selectedCmp);
             }
-            return state.session.companies.find(cmp => {
-                return cmp.uniqueName === state.session.companyUniqueName;
-            });
-        }), takeUntil(this.destroyed$));
+        });
+
         this.vm.user$ = this.store.pipe(select(state => {
             if (state.session.user) {
                 return state.session.user.user;
@@ -63,10 +62,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 return [];
             }
         }));
-        let selectedCompany: CompanyResponse = null;
-        let loginUser: UserDetails = null;
-        this.vm.selectedCompany.pipe(take(1)).subscribe((c) => selectedCompany = c);
-        this.vm.user$.pipe(take(1)).subscribe((c) => loginUser = c);
+
         this._companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let users: IOption[] = [];
