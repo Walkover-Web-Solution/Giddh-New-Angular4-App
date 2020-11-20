@@ -134,6 +134,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }
+
+        this.disableCountryIfSundryCreditor();
+
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
@@ -276,8 +279,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             this.isDebtorCreditor = true;
         }
-
-        this.disableCountryIfSundryCreditor();
     }
 
     public isShowBankDetails(accountType: string) {
@@ -681,11 +682,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             // }
             this.isGroupSelected.emit(event.value);
             this.toggleStateRequired();
-            this.disableCountryIfSundryCreditor();
         }
     }
 
     public isParentDebtorCreditor(activeParentgroup: string) {
+        this.disableCountryIfSundryCreditor(activeParentgroup);
+
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -1053,12 +1055,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * This will disable country field if group selected is sundry creditor
+     * This will disable country field if selected group or parent group is sundry creditor
      *
+     * @param {string} [groupName]
      * @memberof AccountAddNewDetailsComponent
      */
-    public disableCountryIfSundryCreditor(): void {
-        if(this.activeGroupUniqueName === "sundrycreditors") {
+    public disableCountryIfSundryCreditor(groupName?: string): void {
+        if((groupName && groupName === "sundrycreditors") || this.activeGroupUniqueName === "sundrycreditors") {
             this.disableCountrySelection = true;
         } else {
             this.disableCountrySelection = false;

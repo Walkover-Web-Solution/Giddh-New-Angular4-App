@@ -974,10 +974,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event.value);
-            this.disableCountryIfSundryCreditor();
         }
     }
+
     public isParentDebtorCreditor(activeParentgroup: string) {
+        this.disableCountryIfSundryCreditor(activeParentgroup);
+
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -1593,12 +1595,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * This will disable country field if group selected is sundry creditor
+     * This will disable country field if selected group or parent group is sundry creditor
      *
+     * @param {string} [groupName]
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public disableCountryIfSundryCreditor(): void {
-        if(this.activeGroupUniqueName === "sundrycreditors") {
+    public disableCountryIfSundryCreditor(groupName?: string): void {
+        if((groupName && groupName === "sundrycreditors") || this.activeGroupUniqueName === "sundrycreditors") {
             this.disableCountrySelection = true;
         } else {
             this.disableCountrySelection = false;
