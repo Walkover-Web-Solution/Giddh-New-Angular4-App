@@ -225,33 +225,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isMobileScreen: boolean = false;
     /* This will hold current page url */
     public currentPageUrl: string = '';
-<<<<<<< HEAD
-=======
-
-    /** Stores the details of the current branch */
-    public currentBranch: any;
-    /** Observable to store the branches of current company */
-    public currentCompanyBranches$: Observable<any>;
-    /** Stores the branch list of a company */
-    public currentCompanyBranches: Array<any>;
-    /** Search query to search branch */
-    public searchBranchQuery: string;
-    /** Current organization type */
-    public currentOrganizationType: OrganizationType;
-
-    /**
-     * Returns whether the account section needs to be displayed or not
-     *
-     * @readonly
-     * @type {boolean} True, if either branch is switched or company is switched and only HO is there (single branch)
-     * @memberof HeaderComponent
-     */
-    public get shouldShowAccounts(): boolean {
-        return this.currentOrganizationType === OrganizationType.Branch ||
-            (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
-    }
-
->>>>>>> 928eba4aa... resolved
     /** Version of lated mac app  */
     public macAppVersion: string;
 
@@ -457,7 +430,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
-        this.sideBarStateChange(true);
+
+        //this.sideBarStateChange(true);
+        this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
+            this.sideBarStateChange(response);
+        });
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
 

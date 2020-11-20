@@ -49,6 +49,6 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
         if (this.sideMenu) {
             this.sideMenu.isopen = openSideMenu;
         }
-       // this.store.dispatch(this.generalActions.openSideMenu(openSideMenu));
+        this.store.dispatch(this.generalActions.openSideMenu(openSideMenu));
     }
 }

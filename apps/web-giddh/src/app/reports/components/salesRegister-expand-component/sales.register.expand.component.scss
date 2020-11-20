@@ -310,7 +310,35 @@ table th {
     padding-right: 5px;
     padding-left: 5px;
 }
-@media(max-width:1019px){
+.report-breadcrum{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 7px 0px 10px 36px !important;
+    border-bottom: 1px solid $gainsboro;
+    .nav-report{
+        li{
+            font-family: 'opensans-semibold';
+            font-size: 20px;
+            a{
+                color: $midnight-blue;
+            }
+        }
+    }
+    .customeMnthSelect{
+        font-family: 'opensans-semibold';
+        color: $midnight-blue;
+        .btn{
+            font-size: 19px;
+            padding: 0;
+        }
+        li{
+            font-family: 'opensans-regular';
+        }
+    }
+}
+@media (max-width: 1366px) {
     .sales-register {
         width: 100%;
     }
@@ -321,8 +349,22 @@ table th {
     }
 }
 @media (max-width: 767px) {
+     .report-breadcrum{
+        position: static !important;
+        padding-left: 15px !important;
+        .nav-report{
+            li{
+                font-size: 16px;
+            }
+        }
+        .customeMnthSelect{
+            .btn{
+                font-size: 16px;
+            }
+        }
+    }
     .sales-register {
-        display: block;
+        display: flex;
         position: relative;
     }
     .main-sale-register-box {

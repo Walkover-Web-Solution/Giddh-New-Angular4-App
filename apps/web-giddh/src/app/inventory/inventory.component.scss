@@ -9,16 +9,18 @@
     border-right: transparent !important;
     border-left: transparent !important;
     font-size: 14px;
+    height: 36px;
 }
 
 .inventory-control ::ng-deep.nav.nav-tabs {
     margin-bottom: 0;
     padding: 0 0px 0 15px !important;
-    background-color: #fff;
-    z-index: 9;
-    position: relative;
-    top: -4px;
-    background-color: #f7f8fa;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0px 0 50px !important;
+    border-bottom:1px solid $gainsboro;
 }
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
@@ -81,10 +83,10 @@
 }
 @media(max-width:767px){
     .inventory-control ::ng-deep.nav.nav-tabs {
-        position: fixed;
+        position: fixed !important;
         width: 100%;
         top: 90px;
-        padding-top: 10px !important;
+        padding: 5px 0px 0 15px !important;
     }
 }
 @media(max-width:1024px){
