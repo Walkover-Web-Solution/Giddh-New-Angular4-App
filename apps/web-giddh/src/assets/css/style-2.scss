@@ -1060,26 +1060,33 @@ ul.sub-list {
     padding-right: 0;
     border-bottom: 4px solid transparent;
     display: inline-block;
+    padding-top: 10px !important;
 }
-.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
+ .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
     position: absolute !important;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 10px 0px 0 43px !important;
+    padding: 10px 0px 0 50px !important;
     border-bottom:1px solid $gainsboro;
 }
 .custom-tabs .nav.nav-tabs > li a:hover {
     color: $deep-sky-blue !important;
 }
-
+.custom-tabs .nav.nav-tabs{
+    padding-top:30px !important;
+}
+.custom-tabs .nav.nav-tabs li a, .invoice-control .nav.nav-tabs li a, .setting-page ul.nav.nav-tabs li a {
+    padding: 0!important;
+    height: 36px;
+}
 .custom-tabs .nav.nav-tabs > li.active a {
     color: $nero !important;
 }
 
 .custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid #e0e0e0;
-    padding:10px 0px 0 43px !important;
+    padding:10px 0px 0 50px !important;
     background-color: #f7f8fa;
     z-index: 9;
     position: relative;
@@ -8712,13 +8719,13 @@ ul.dropdown-menu p.lead.pd {
     position: relative;
     top: -2px;
 }
-.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs,
+.invoice-control .nav.nav-tabs,
 .setting-page ul.nav.nav-tabs, .inventory-control .nav.nav-tabs{
     position: absolute !important;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 10px 0px 0 50px !important;
+    padding: 0 0px 0 50px !important;
     border-bottom:1px solid $gainsboro;
 }
 .setting-page .nav > li > a {
@@ -10086,6 +10093,9 @@ input.mat-input-element{
 }
 
   @media (max-width: 768px) {
+      #setting-tab > .tab-container > .tab-content {
+            padding-top: 60px;
+        }
         ul.dropdown-menu.action-dropdown {
             left: auto;
             right: 0 !important;
@@ -10106,7 +10116,7 @@ input.mat-input-element{
         #setting-tab .tab-integraton .nav-tabs > li {
             width: 70px;
             margin-bottom: 15px;
-            margin-top: 15px;
+            margin-top: 0;
         }
         .aging-table tr td:first-child,
         .aging-table tr th:first-child,
