@@ -4402,7 +4402,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     name: f.discount.name,
                     particular: f.account.uniqueName,
                     isActive: true,
-                    isUpdateModeDiscount: true,
                     discountValue: f.discount.discountValue,
                     discountUniqueName: f.discount.uniqueName
                 });
