@@ -641,12 +641,12 @@ export class CompanyActions {
     /**
      * Returns the action to set the financial year chosen in either sales or purchase register
      *
-     * @param {string} financialYearUniqueName Unique name of chosen financial year
+     * @param {string} filterValues Stores the filter values
      * @returns {CustomActions} Action to set the financial year
      * @memberof CompanyActions
      */
-    public setUserChosenFinancialYear(financialYearUniqueName: string): CustomActions {
-        return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: financialYearUniqueName };
+    public setUserChosenFinancialYear(filterValues: {financialYear: string, branchUniqueName: string, timeFilter: string}): CustomActions {
+        return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: filterValues };
     }
 
     /**

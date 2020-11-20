@@ -7,12 +7,15 @@ import { CompanyService } from "../../../services/companyService.service";
 import { PurchaseReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
-import { takeUntil, filter } from "rxjs/operators";
+import { takeUntil, filter, take } from "rxjs/operators";
 import * as moment from 'moment/moment';
-import { ReplaySubject } from "rxjs";
+import { Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { GeneralService } from '../../../services/general.service';
+import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
     selector: 'purchase-register-component',
@@ -87,7 +90,23 @@ export class PurchaseRegisterComponent implements OnInit {
     private interval: any;
     public currentActiveFinacialYear: IOption;
 
-    constructor(private router: Router, private store: Store<AppState>, private companyActions: CompanyActions, private companyService: CompanyService, private _toaster: ToasterService) {
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
+
+    constructor(
+        private router: Router,
+        private store: Store<AppState>,
+        private companyActions: CompanyActions,
+        private companyService: CompanyService,
+        private _toaster: ToasterService,
+        private settingsBranchAction: SettingsBranchActions,
+        private generalService: GeneralService) {
         this.setCurrentFY();
     }
 
@@ -98,6 +117,49 @@ export class PurchaseRegisterComponent implements OnInit {
                 // Reset the chosen financial year when user leaves the module
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
             });
+
+        this.store.pipe(
+            select(state => state.session.companies), take(1)
+        ).subscribe(companies => {
+            companies = companies || [];
+            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                const hoBranch = response.find(branch => !branch.parentBranch);
+                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                if (!this.currentBranch.uniqueName) {
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                } else {
+                    const currentBranchName = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch.uniqueName));
+                    if (currentBranchName) {
+                        this.currentBranch.name = currentBranchName.name + (currentBranchName.alias ? ` (${currentBranchName.alias})` : '');
+                    } else {
+                        // Company was selected from the branch dropdown
+                        this.currentBranch.name = this.activeCompany.name;
+                    }
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
     }
 
     public goToDashboard() {
@@ -174,10 +236,14 @@ export class PurchaseRegisterComponent implements OnInit {
 
     public setCurrentFY() {
         let financialYearChosenInReportUniqueName = '';
+        let currentBranchUniqueName = '';
+        let currentTimeFilter = '';
         // set financial years based on company financial year
         this.store.pipe(select(createSelector(
-            [(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName, (state: AppState) => state.session.financialYearChosenInReport], (companies, uniqueName, financialYearChosenInReport) => {
-                financialYearChosenInReportUniqueName = financialYearChosenInReport;
+            [(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName, (state: AppState) => state.session.registerReportFilters], (companies, uniqueName, registerReportFilters) => {
+                financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
+                currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
+                currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';
                 if (!companies) {
                     return;
                 }
@@ -205,9 +271,10 @@ export class PurchaseRegisterComponent implements OnInit {
                     selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
                     activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
                     this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
-                    this.store.dispatch(this.companyActions.setUserChosenFinancialYear(this.currentActiveFinacialYear.value));
+                    this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch.uniqueName;
+                    this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
                     this.activeFinacialYr = activeFinancialYear;
-                    this.populateRecords('monthly');
+                    this.populateRecords(this.selectedType);
                     this.purchaseRegisterTotal.particular = this.activeFinacialYr.uniqueName;
                 }
             });
@@ -216,7 +283,6 @@ export class PurchaseRegisterComponent implements OnInit {
     public selectFinancialYearOption(v: IOption) {
         if (v.value) {
             let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v.value);
-            this.store.dispatch(this.companyActions.setUserChosenFinancialYear(this.currentActiveFinacialYear.value));
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -240,6 +306,7 @@ export class PurchaseRegisterComponent implements OnInit {
                 to: endDate,
                 from: startDate,
                 interval: interval,
+                branchUniqueName: this.currentBranch.uniqueName
             }
             this.companyService.getPurchaseRegister(request).subscribe((res) => {
                 if (res.status === 'error') {
@@ -250,6 +317,7 @@ export class PurchaseRegisterComponent implements OnInit {
                     this.reportRespone = this.filterReportResp(res.body);
                 }
             });
+            this.savePreferences();
         }
     }
 
@@ -263,6 +331,7 @@ export class PurchaseRegisterComponent implements OnInit {
                 to: moment(event[1]).format(GIDDH_DATE_FORMAT),
                 from: moment(event[0]).format(GIDDH_DATE_FORMAT),
                 interval: 'monthly',
+                branchUniqueName: this.currentBranch.uniqueName
             }
             this.companyService.getPurchaseRegister(request).subscribe((res) => {
                 if (res.status === 'error') {
@@ -305,6 +374,28 @@ export class PurchaseRegisterComponent implements OnInit {
         }
 
         return { firstDay, lastDay };
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.populateRecords(this.interval, this.selectedMonth);
+    }
+
+    /**
+     * Saves the user preference for filters
+     *
+     * @private
+     * @memberof PurchaseRegisterComponent
+     */
+    private savePreferences(): void {
+        this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
+            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: this.currentBranch.uniqueName, timeFilter: this.selectedType
+        }));
     }
 
     /**
