@@ -227,7 +227,7 @@ export class ReceiptService implements OnInit {
         let url = this.createQueryString(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_SALES, {
             page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
         });
-        url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
@@ -246,7 +246,7 @@ export class ReceiptService implements OnInit {
         let url = this.createQueryString(this.config.apiUrl + COMPANY_API.GET_DETAILED_REGISTERED_PURCHASE, {
             page: request.page, count: request.count, from: request.from, to: request.to, q: request.q, sort: request.sort, sortBy: request.sortBy
         });
-        url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
