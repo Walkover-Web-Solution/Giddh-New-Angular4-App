@@ -70,7 +70,6 @@ export class PurchaseRegisterExpandComponent implements OnInit {
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = 50;
         this.getDetailedPurchaseRequestFilter.q = '';
-
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
@@ -82,6 +81,7 @@ export class PurchaseRegisterExpandComponent implements OnInit {
                 this.to = params.to;
                 this.getDetailedPurchaseRequestFilter.from = this.from;
                 this.getDetailedPurchaseRequestFilter.to = this.to;
+                this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
             }
         });
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);

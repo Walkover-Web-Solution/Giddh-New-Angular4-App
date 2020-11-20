@@ -386,14 +386,19 @@ export class CompanyService {
   * */
     public getSalesRegister(request: ReportsRequestModel) {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + COMPANY_API.GET_REGISTERED_SALES
+        let contextPath = this.config.apiUrl + COMPANY_API.GET_REGISTERED_SALES
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':fromDate', encodeURIComponent(request.from))
             .replace(':toDate', encodeURIComponent(request.to))
-            .replace(':interval', encodeURIComponent(request.interval))).pipe(map((res) => {
-                let data: BaseResponse<ReportsResponseModel, string> = res;
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
+            .replace(':interval', encodeURIComponent(request.interval));
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            contextPath = contextPath.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
+        return this._http.get(contextPath).pipe(map((res) => {
+            let data: BaseResponse<ReportsResponseModel, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
     }
 
 	/**
@@ -405,11 +410,16 @@ export class CompanyService {
      */
     public getPurchaseRegister(request: ReportsRequestModel) {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + COMPANY_API.GET_REGISTERED_PURCHASE
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':fromDate', encodeURIComponent(request.from))
-            .replace(':toDate', encodeURIComponent(request.to))
-            .replace(':interval', encodeURIComponent(request.interval))).pipe(map((res) => {
+        let contextPath = this.config.apiUrl + COMPANY_API.GET_REGISTERED_PURCHASE
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':fromDate', encodeURIComponent(request.from))
+        .replace(':toDate', encodeURIComponent(request.to))
+        .replace(':interval', encodeURIComponent(request.interval));
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            contextPath = contextPath.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
+        return this._http.get(contextPath).pipe(map((res) => {
                 let data: BaseResponse<ReportsResponseModel, string> = res;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
