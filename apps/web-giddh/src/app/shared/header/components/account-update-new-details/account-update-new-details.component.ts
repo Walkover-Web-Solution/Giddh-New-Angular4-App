@@ -152,6 +152,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public accountInheritedDiscounts: any[] = [];
     /** company custom fields list */
     public companyCustomFields: any[] = [];
+    /** This will handle if we need to disable country selection */
+    public disableCountrySelection: boolean = false;
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
         private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
@@ -322,6 +324,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
 
                 this.toggleStateRequired();
+                this.disableCountryIfSundryCreditor();
             }
 
         });
@@ -973,7 +976,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.isGroupSelected.emit(event.value);
         }
     }
+
     public isParentDebtorCreditor(activeParentgroup: string) {
+        this.disableCountryIfSundryCreditor(activeParentgroup);
+
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -1585,6 +1591,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selecteDiscountChanged(event: any) {
         if (event) {
             this.applyDiscounts();
+        }
+    }
+
+    /**
+     * This will disable country field if selected group or parent group is sundry creditor
+     *
+     * @param {string} [groupName]
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public disableCountryIfSundryCreditor(groupName?: string): void {
+        if((groupName && groupName === "sundrycreditors") || this.activeGroupUniqueName === "sundrycreditors") {
+            this.disableCountrySelection = true;
+        } else {
+            this.disableCountrySelection = false;
         }
     }
 }
