@@ -25,7 +25,7 @@
                                         <div class="d-flex align-items-center tax-engine">
                                             <span class="d-inline-block mr-2">VAT Report for period</span>
 
-                                            <div class="advanceSearchByDate date-advance-search">
+                                            <div class="advance-search-by-date date-advance-search">
                                                 <span class="input-wrapper">
                                                     <div class="btn-group dropdown" dropdown [autoClose]="false"
                                                         (isOpenChange)="onOpenChange($event)" #periodDropdown="bs-dropdown"
@@ -37,14 +37,12 @@
                                                                 {{ moment(selectedMonth).format('MMMM YYYY') }}
                                                             </ng-container>
                                                             <ng-container *ngIf="!isMonthSelected">
-                                                                {{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                                                {{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
                                                                 -
-                                                                {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                                                {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}}
                                                             </ng-container>
                                                             <span class="caret"></span>
                                                         </button>
-
-
                                                         <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu"
                                                             aria-labelledby="button-nested">
                                                             <li role="menuitem" dropdown placement="right" [autoClose]="false"
@@ -184,7 +182,7 @@
                                         </div>
                                     </div>
                                     <div *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length" class="no-data no-report">
-                                        <h1>To see the VAT report for this company, please provide a TRN to address in its profile section.</h1>
+                                        <h1>Please add TRN to your default address in order to view report.</h1>
                                     </div>
                                 </tab>
                             </tabset>

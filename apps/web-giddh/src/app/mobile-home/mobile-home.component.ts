@@ -93,7 +93,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit(): void {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (!result.matches) {
                 this.router.navigate(["/pages/home"]);
             }
@@ -137,7 +137,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        this.scrollSubject$.pipe(debounceTime(25)).subscribe((response) => {
+        this.scrollSubject$.pipe(debounceTime(25), takeUntil(this.destroyed$)).subscribe((response) => {
             this.onScroll(response);
         });
     }

@@ -3,7 +3,7 @@ import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/grou
 import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
@@ -82,9 +82,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	// tslint:disable-next-line:no-empty
     constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,private breakPointObservar: BreakpointObserver,
         private renderer: Renderer2, private _generalService: GeneralService, private modalService: BsModalService, private groupService: GroupService, private toasterService: ToasterService) {
-		this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).pipe(takeUntil(this.destroyed$));
-		this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-		this.groupAndAccountSearchString$ = this.store.select(s => s.groupwithaccounts.groupAndAccountSearchString).pipe(takeUntil(this.destroyed$));
+		this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
+		this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.groupswithaccounts), takeUntil(this.destroyed$));
+		this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
 		this.psConfig = { maxScrollbarLength: 80 };
 	}
 
@@ -132,7 +132,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.getCompanyCustomField();
 		// search groups
 		this.groupSearchTerms.pipe(
-			debounceTime(700))
+			debounceTime(700), takeUntil(this.destroyed$))
 			.subscribe(term => {
 				this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
 			});
@@ -145,7 +145,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 			this.breadcrumbUniquePath = [];
 		});
 
-		this._generalService.invokeEvent.subscribe(value => {
+		this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
 			if (value[0] === "accountdeleted") {
 				if (this.searchString) {
 					this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());

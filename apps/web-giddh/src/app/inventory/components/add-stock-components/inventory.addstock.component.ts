@@ -2,7 +2,7 @@ import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 
 import { distinct, map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
@@ -99,22 +99,22 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef) {
-        this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).pipe(takeUntil(this.destroyed$));
-        this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).pipe(takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeStock$ = this.store.select(s => s.inventory.activeStock).pipe(takeUntil(this.destroyed$));
-        this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-        this.isStockAddInProcess$ = this.store.select(s => s.inventory.isStockAddInProcess).pipe(takeUntil(this.destroyed$));
-        this.isStockUpdateInProcess$ = this.store.select(s => s.inventory.isStockUpdateInProcess).pipe(takeUntil(this.destroyed$));
-        this.isStockDeleteInProcess$ = this.store.select(s => s.inventory.isStockDeleteInProcess).pipe(takeUntil(this.destroyed$));
-        this.showLoadingForStockEditInProcess$ = this.store.select(s => s.inventory.showLoadingForStockEditInProcess).pipe(takeUntil(this.destroyed$));
-        this.createGroupSuccess$ = this.store.select(s => s.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
-        this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).pipe(takeUntil(this.destroyed$));
+        this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
+        this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(s => s.inventory.activeGroup), takeUntil(this.destroyed$));
+        this.activeStock$ = this.store.pipe(select(s => s.inventory.activeStock), takeUntil(this.destroyed$));
+        this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
+        this.isStockAddInProcess$ = this.store.pipe(select(s => s.inventory.isStockAddInProcess), takeUntil(this.destroyed$));
+        this.isStockUpdateInProcess$ = this.store.pipe(select(s => s.inventory.isStockUpdateInProcess), takeUntil(this.destroyed$));
+        this.isStockDeleteInProcess$ = this.store.pipe(select(s => s.inventory.isStockDeleteInProcess), takeUntil(this.destroyed$));
+        this.showLoadingForStockEditInProcess$ = this.store.pipe(select(s => s.inventory.showLoadingForStockEditInProcess), takeUntil(this.destroyed$));
+        this.createGroupSuccess$ = this.store.pipe(select(s => s.inventory.createGroupSuccess), takeUntil(this.destroyed$));
+        this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
-        this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
-        this.invoiceSetting$ = this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$));
+        this.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+        this.invoiceSetting$ = this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$));
 
-        this.store.select(state => state.inventory.stockUnits).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+        this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
                 let units = p;
                 let unitArr = units.map(unit => {
@@ -153,7 +153,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
         });
 
-        this.stockListDropDown$ = this.store.select(p => {
+        this.stockListDropDown$ = this.store.pipe(select(p => {
             if (p.inventory.stocksList) {
                 if (p.inventory.stocksList.results) {
                     let units = p.inventory.stocksList.results;
@@ -163,12 +163,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     });
                 }
             }
-        }).pipe(takeUntil(this.destroyed$));
-
-        // get all stock units
-        // this.stockUnitsDropDown$ = this.store.select(p => {
-
-        // }).takeUntil(this.destroyed$);
+        }), takeUntil(this.destroyed$));
 
         // add stock form
         this.addStockForm = this._fb.group({

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
@@ -39,11 +39,11 @@ export class RejectedListComponent implements OnInit, OnChanges {
 		private _toasty: ToasterService,
 		private _cdRf: ChangeDetectorRef,
 		private expenseService: ExpenseService) {
-		this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-		this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
-		this.pettycashRejectedReportResponse$ = this.store.select(p => p.expense.pettycashRejectedReport).pipe(takeUntil(this.destroyed$));
-		this.getPettycashRejectedReportInprocess$ = this.store.select(p => p.expense.getPettycashRejectedReportInprocess).pipe(takeUntil(this.destroyed$));
-		this.getPettycashRejectedReportSuccess$ = this.store.select(p => p.expense.getPettycashRejectedReportSuccess).pipe(takeUntil(this.destroyed$));
+		this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+		this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
+		this.pettycashRejectedReportResponse$ = this.store.pipe(select(p => p.expense.pettycashRejectedReport), takeUntil(this.destroyed$));
+		this.getPettycashRejectedReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashRejectedReportInprocess), takeUntil(this.destroyed$));
+		this.getPettycashRejectedReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashRejectedReportSuccess), takeUntil(this.destroyed$));
 
 		observableCombineLatest(this.universalDate$, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
 			if (!Array.isArray(resp[0])) {

@@ -434,7 +434,7 @@ aside-menu-account .container-fluid {
     padding-top: 5px;
 }
 
-.pdB {
+.pd-t05 {
     padding-bottom: 5px;
 }
 
@@ -643,10 +643,13 @@ aside-menu-account .container-fluid {
     border: 1px solid $gainsboro;
 }
 
-.bdrN {
+.border-none {
     border: none;
 }
-
+.bd-r-bottom-none{border-bottom:none;}
+.bd-r-top-none{border-top:none;}
+.bd-r-left-none{border-left:none;}
+.bd-r-right-none{border-right:none;}
 .bd-rt {
     border-top: 1px solid $gainsboro;
 }
@@ -700,7 +703,7 @@ aside-menu-account .container-fluid {
     background: 0 0;
 }
 
-.oh {
+.overflow-hidden {
     overflow: hidden;
 }
 
@@ -848,7 +851,7 @@ position: relative; */
     padding: 15px;
 }
 
-.delIcon {
+.delete-icon {
     float: right;
     width: 34px;
     height: 34px;
@@ -856,7 +859,7 @@ position: relative; */
     cursor: pointer;
 }
 
-.delIcon .glyphicon {
+.delete-icon .glyphicon {
     left: 9px;
     top: 9px;
 }
@@ -1336,7 +1339,7 @@ li:last-child .angular-ui-tree-handle {
     background-color:transparent;
 }
 
-.ledgerTable.table .nopad {
+.ledger-table.table .nopad {
     padding: 0 !important;
 }
 
@@ -1385,7 +1388,7 @@ li:last-child .angular-ui-tree-handle {
     border-right: 0;
 }
 
-.ledgerTable.table tfoot td {
+.ledger-table.table tfoot td {
     border-bottom: 1px solid #ddd;
 }
 
@@ -4848,7 +4851,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 #setting-tab .nav > li > a {
-    color: #231f20;
+    color: $aubergine;
     border: 0;
 }
 
@@ -5102,7 +5105,7 @@ perfect-scrollbar.ps-show-active
     margin: 0 !important;
 }
 
-.customItem:hover , .discount-item:hover {
+.custom-item:hover , .discount-item:hover {
     background-color: $lavender !important;
     color: #5b64c9 !important;
     &:hover {

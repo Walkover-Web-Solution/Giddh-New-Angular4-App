@@ -1,4 +1,4 @@
-<span class="position-relative c-dropdown" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true"
+<span class="position-relative custom-dropdown-ledger" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true"
     (clickOutside)="toggleTaxPopup(false)">
     <label *ngIf="showHeading">{{ customHeading ? customHeading : 'Tax' }} <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label>
 
@@ -10,13 +10,11 @@
             <span class="caret"></span>
         </div>
     </a>
-
-
     <div class="position-relative">
         <ul class="dropdown-menu pd update-ledger-tax-dropdown" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}"
             (click)="$event.stopPropagation()">
             <li *ngFor="let tax of taxRenderData;trackBy: trackByFn; let i = index">
-                <label class="checkbox oh width100 p0 m0 customItem bd-rb" style="padding: 5px;margin-bottom: 5px;"
+                <label class="checkbox overflow-hidden width100 p0 m0 custom-item bd-rb px-1 py-1 mb-05"
                     (click)="$event.stopPropagation()" [ngClass]="{'disabled-label': tax.isDisabled}">
                     <input class="pull-left" id="{{ 'update-ledger-tax-checkbox-' + i }}" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled"
                         (change)="change()" (click)="$event.stopPropagation()" />

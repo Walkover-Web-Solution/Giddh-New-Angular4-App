@@ -37,14 +37,14 @@
                         <div class="form-group mr-r1">
                             <label class="d-block">Date</label>
                             <div class="col-xs-8" style="padding: 0">
-                                <input type="text" name="invoiceDateRange" bsDatepicker required class="form-control" style="width: 100%" [(ngModel)]="manufacturingDetails.date" [bsValue]="bsValue" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
+                                <input type="text" name="invoiceDateRange" bsDatepicker required class="form-control" style="width: 100%" [(ngModel)]="manufacturingDetails.date" [bsValue]="bsValue" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                             </div>
                         </div>
 
                         <!-- <div class="form-group mr-r1" [attachOutsideOnClick]="true" (clickOutside)="showFromDatePicker=false;">
                             <label class="d-block">Date</label>
                             <div class="input-group">
-                                <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required />
+                                <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format(giddhDateFormat)" (focus)="showFromDatePicker = true;" class="form-control" required />
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default"
                                         (click)="showFromDatePicker = !showFromDatePicker">
@@ -57,7 +57,7 @@
                                     <li>
                                         <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
                                     </li>
-                                    <li class="pd-1 clearfix pdT pdB">
+                                    <li class="pd-1 clearfix pdT pd-t05">
                                         <span class="btn-group pull-left">
                                             <button type="button" class="btn btn-xs btn-primary mr-r"
                                                 (click)="setToday();showFromDatePicker = false;">Today</button>

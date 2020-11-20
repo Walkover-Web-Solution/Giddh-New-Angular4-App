@@ -38,9 +38,9 @@
                                 (click)="performBulkAction('upload', BulkUploadfileInput)" container="body"
                                 tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                             </button>
-                            <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
+                            <input type="file" #BulkUploadfileInput name="BulkUploadfileInput"
                                 id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
-                                [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+                                [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" class="d-none">
                         </div>
                     </div>
                     <!-- [ngClass]="{'class-1':condition1==condition2, 'class-2': condition3==condition4}" -->
@@ -93,17 +93,17 @@
                         <button class="btn btn-success mr-0" id="attach-file" (click)="performBulkAction('upload', BulkUploadfileInput)"
                             container="body" tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                         </button>
-                        <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
+                        <input type="file" #BulkUploadfileInput name="BulkUploadfileInput"
                             id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
-                            [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+                            [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" class="d-none">
                     </div>
 
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center daterngoption" *ngIf="!isMobileScreen">
+            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center date-range-options" *ngIf="!isMobileScreen">
                 <!-- (hideDaterangepicker)="selectedDate($event)"  -->
-                <div class="advanceSearchByDate date-advance-search">
+                <div class="advance-search-by-date date-advance-search">
                     <!-- <span class="icon-calender "></span> -->
                     <span class="input-wrapper">
                         <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker
@@ -125,7 +125,7 @@
                     <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advance-search-block">
                         <span class="mr-15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
-                        <div class="toggle d-inline-block currencyToggler" data-key="disabled">
+                        <div class="toggle d-inline-block currency-toggler" data-key="disabled">
 
                             <input type="checkbox" class="toggle-checkbox" id="disabled"
                                 [(ngModel)]="currencyTogglerModel" (click)="toggleCurrency($event)">
@@ -146,7 +146,7 @@
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
                             <i class="fa icon-ledger-path lh-0"></i>
                         </a>
-                        <a class="icomoon-ico d-flex align-items-center mr-0" id="export-ledger" href="javascript:void(0)" title=""
+                        <a class="icomoon-ico d-flex align-items-center mr-0" id="export-ledger" href="javascript:void(0)"
                             [tooltip]="'Export'" [placement]="'top'" (click)="showExportLedgerModal()">
                             <i class="icon-ledger-union-5 lh-0"></i>
                         </a>
@@ -160,7 +160,7 @@
             mt-05">
             <span class="mr-15 d-inline-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
-            <div class="toggle d-inline-block currencyToggler" data-key="disabled">
+            <div class="toggle d-inline-block currency-toggler" data-key="disabled">
 
                 <input type="checkbox" class="toggle-checkbox" id="disabled-mobile-view" [(ngModel)]="currencyTogglerModel"
                     (click)="toggleCurrency($event)">
@@ -201,7 +201,7 @@
                         (click)="lc.showEledger = !lc.showEledger">Close</span>
                 </button>
 
-                <table class="table ledgerTable transaction-mapped-table mb-0">
+                <table class="table ledger-table transaction-mapped-table mb-0">
                     <thead>
                         <th class="nopad top-head-table" colspan="6">
                             <div class="clearfix ledger-top-header-left">
@@ -495,7 +495,7 @@
                     </tbody>
                     <!-- end main tbody -->
                     <tfoot>
-                        <tr class="fw600 dark-grey-bg">
+                        <tr class="dark-grey-bg">
                             <td colspan="2" class="bd-rl" width="36%">
                                 <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
                                     C/F Balance
@@ -522,17 +522,17 @@
         <!-- endregion -->
         <!-- region account table-->
         <!-- Need to make this code correctly working -->
-        <table class="col-xs-12 ledger-head mr-t1 width-100"
+        <table class="col-sm-12 ledger-head mr-t1 width-100"
             *ngIf="!isMobileScreen || (isMobileScreen && visibleTransactionTypeMobile !== 'all')">
             <thead>
-                <tr>
+                <tr class="row">
                     <th [ngClass]="(Shown && !isMobileScreen) || (isMobileScreen && visibleTransactionTypeMobile === 'debit') ? 'active' : ''"
-                        class="col-xs-6 hidden-xs sticky-header">
+                        class="col-sm-6 hidden-xs sticky-header pr-0">
                         <b> {{lc.ledgerUnderStandingObj.text.dr}}</b>
                         <span class="dr-cr-category pull-right text-gray">Dr</span>
                     </th>
                     <th [ngClass]="(!Shown && !isMobileScreen) || (isMobileScreen && visibleTransactionTypeMobile === 'credit') ? 'active' : ''"
-                        class="col-xs-6 hidden-xs sticky-header">
+                        class="col-sm-6 hidden-xs sticky-header pl-0">
                         <b> {{lc.ledgerUnderStandingObj.text.cr}}</b>
                         <span class="dr-cr-category pull-right text-gray">Cr</span>
                     </th>
@@ -721,19 +721,15 @@
                                     </div>
 
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.attachedFileUniqueName"
-                                        style="position: unset;align-items: center"
                                         (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                                         tooltip="Download file : {{txn.attachedFileName}}" [placement]="'right'">
-                                        <i class="icon-download-circle pull-left"
-                                            style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
+                                        <i class="icon-download-circle pull-left"></i>
                                     </span>
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
-                                        style="position: unset;align-items: center"
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
                                         tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}"
                                         [placement]="'right'">
-                                        <i class="icon-download-circle pull-left"
-                                            style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
+                                        <i class="icon-download-circle pull-left"></i>
                                     </span>
                                 </div>
                             </td>
@@ -764,12 +760,12 @@
 
                                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
                                                 <div class="d-flex align-items-center">
-                                                    <span class="ledger-checkbox" style="float: left">
+                                                    <span class="ledger-checkbox pull-left">
                                                         <!--<input type="checkbox"/>-->
                                                     </span>
                                                     <input type="text" name="ledgDate" [maxlength]="10"
-                                                        #bs="bsDatepicker" class="form-control dateStep focusUnset"
-                                                        style="padding-left: 7px !important;" bsDatepicker
+                                                        #bs="bsDatepicker" class="form-control date-step focus-unset"
+                                                        bsDatepicker
                                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                         [(ngModel)]="lc.blankLedger.entryDate"
                                                         [placeholder]="lc.formatPlaceholder" [outsideClick]="true"
@@ -972,7 +968,7 @@
                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
 
                                 <div class="d-flex align-items-center">
-                                    <span class="ledger-checkbox" style="float: left">
+                                    <span class="ledger-checkbox pull-left">
 
                                         <input type="checkbox" id="{{'select-entry-cr-' + i }}"
                                             [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
@@ -994,19 +990,17 @@
                                     </div>
 
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.attachedFileUniqueName"
-                                        style="position: unset;align-items: center"
+
                                         (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                                         tooltip="Download file : {{txn.attachedFileName}}" [placement]="'right'">
-                                        <i class="icon-download-circle pull-left"
-                                            style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
+                                        <i class="icon-download-circle pull-left"></i>
                                     </span>
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
-                                        style="position: unset;align-items: center"
+
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
                                         tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}"
                                         [placement]="'right'">
-                                        <i class="icon-download-circle pull-left"
-                                            style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
+                                        <i class="icon-download-circle pull-left"></i>
                                     </span>
                                 </div>
                             </td>
@@ -1024,7 +1018,7 @@
                 </table>
 
                 <!-- region blank ledger-->
-                <table class="width100 " no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
+                <table class="width100" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
                     (click)="$event.stopPropagation()">
                     <tbody>
 
@@ -1043,19 +1037,19 @@
                                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
 
                                                 <div class="d-flex align-items-center">
-                                                    <span class="ledger-checkbox" style="float: left">
+                                                    <span class="ledger-checkbox pull-left">
                                                         <!--<input type="checkbox"/>-->
                                                     </span>
                                                     <input type="text" name="bsdateledger" [maxlength]="10"
-                                                        #bsd='bsDatepicker' class="form-control dateStep focusUnset"
-                                                        [outsideClick]="true" style="padding-left: 7px !important;"
-                                                        bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                        #bsd='bsDatepicker' class="form-control date-step focus-unset"
+                                                        [outsideClick]="true"
+                                                         bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                         [(ngModel)]="lc.blankLedger.entryDate"
                                                         [placeholder]="lc.formatPlaceholder" autocomplete="off" />
                                                 </div>
 
                                             </td>
-                                            <td class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger "
+                                            <td class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger"
                                                 data-title="Particular" (click)="bsd.hide()"
                                                 (mousedown)="showNewLedgerEntryPopup(txn);">
 
@@ -1167,14 +1161,13 @@
             <!--endregion-->
 
             <!-- region footer-->
-            <div style="width: 100%">
-                <table class="ledger-footer-1" style="width:50%;left:0;bottom:0;float: left;">
+            <div class="w-100">
+                <table class="ledger-footer-1">
                     <tbody>
 
                         <tr class="total-col">
 
-                            <td colspan="12" class="col-xs-12 text-right white h32"
-                                style="padding-right:10px !important">
+                            <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
 
                                 <span *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'"
                                     [tooltip]="lc.ledgerUnderStandingObj.balanceText.cr" [placement]="'left'">
@@ -1193,10 +1186,9 @@
 
                         <tr class="total-col">
 
-                            <td colspan="12" class="col-xs-12 text-right white h32 border-top"
-                                style="padding-right:10px !important;">
+                            <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
 
-                                <div class="d-flex" style="flex-direction: column;">
+                                <div class="d-flex flex-column">
 
                                     <span class="bd-rt ng-binding" style="padding: 1px 0;">
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningDebitTotal  | giddhCurrency }}
@@ -1214,13 +1206,12 @@
                     </tbody>
                 </table>
 
-                <table class=" ledger-footer-1 " style="width:50%;right:0;bottom:0;">
+                <table class="ledger-footer-1">
                     <tbody>
 
                         <tr class="total-col">
 
-                            <td colspan="12" class="col-xs-12 text-right white h32"
-                                style="padding-right:10px !important">
+                            <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
                                 <span *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'"
                                     [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
                                     <!-- By -->
@@ -1234,10 +1225,9 @@
                         </tr>
 
                         <tr class="total-col">
-                            <td colspan="12" class="col-xs-12 text-right white h32 border-top"
-                                style="padding-right:10px !important;">
+                            <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
 
-                                <div class="d-flex" style="flex-direction: column;">
+                                <div class="d-flex flex-column">
                                     <span class="bd-rt" style="padding: 1px 0;">
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningCreditTotal | giddhCurrency }}
                                     </span>
@@ -1330,7 +1320,7 @@
                             {{ ledgerTxnBalance?.forwardedBalance?.amount > 0 ? (ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}
                         </h3>
 
-                        <h3 class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                        <h3 class="digit-blue font-12 sub-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                             {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}}
                             {{ ledgerTxnBalance?.convertedForwardedBalance?.amount > 0 ? (ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}
                         </h3>
@@ -1343,7 +1333,7 @@
 
                         <h1 class="">Net Total</h1>
 
-                        <div class="d-flex" style="justify-content: space-between">
+                        <div class="d-flex justify-content-between">
 
                             <div *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal">
                                 <h3 class="digit-blue">
@@ -1351,7 +1341,7 @@
                                     Cr.
                                 </h3>
 
-                                <h3 class="digit-blue subTotal font-12" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <h3 class="digit-blue sub-total font-12" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal - ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
                                     Cr.
                                 </h3>
@@ -1359,7 +1349,7 @@
 
                         </div>
 
-                        <div class="d-flex" style="justify-content: space-between">
+                        <div class="d-flex justify-content-between">
 
                             <div *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal">
                                 <h3 class="digit-blue">
@@ -1367,7 +1357,7 @@
                                     Dr.
                                 </h3>
 
-                                <h3 class="digit-blue subTotal font-12" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <h3 class="digit-blue sub-total font-12" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal - ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
                                     Dr.
                                 </h3>
@@ -1378,20 +1368,20 @@
 
                         <div class="d-flex debit-credit-amount">
 
-                            <h1 class="mr-t font16 greyTextClr d-flex" style="flex-direction: column">Debit
+                            <h1 class="mr-t font16 greyTextClr d-flex flex-column">Debit
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}}
                                 </span>
-                                <span class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <span class="digit-blue font-12 sub-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}}
                                 </span>
                             </h1>
 
-                            <h1 class="mr-t font16 greyTextClr d-flex" style="flex-direction: column">Credit
+                            <h1 class="mr-t font16 greyTextClr d-flex flex-column">Credit
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}}
                                 </span>
-                                <span class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <span class="digit-blue font-12 sub-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
                                 </span>
                             </h1>
@@ -1402,10 +1392,9 @@
                 </div>
 
                 <div class="col-sm-3 col-xs-12 stat-block">
-
                     <div class="ledger-state-box">
                         <h1>Closing Balance</h1>
-                        <div class="d-flex" style="justify-content: space-between;flex-direction: column">
+                        <div class="d-flex flex-column justify-content-between">
                             <h3 class="digit-blue" container="body">
                                 <span
                                     [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)">{{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}}
@@ -1510,7 +1499,7 @@
 <div bsModal #bulkActionConfirmationModal="bs-modal" tabindex="-1" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div id="" class="">
+            <div>
                 <div class="modal-header theme-bg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">Confirmation </h3>
                     <i class="icon-cross text-right close-modal" aria-hidden="true"

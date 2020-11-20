@@ -207,7 +207,7 @@ body {
     padding-top: 5px;
 }
 
-.pdB {
+.pd-t05 {
     padding-bottom: 5px;
 }
 
@@ -424,7 +424,7 @@ body {
     border: 1px solid #ccc;
 }
 
-.bdrN {
+.border-none {
     border: none;
 }
 
@@ -481,7 +481,7 @@ body {
     background: 0 0;
 }
 
-.oh {
+.overflow-hidden {
     overflow: hidden;
 }
 

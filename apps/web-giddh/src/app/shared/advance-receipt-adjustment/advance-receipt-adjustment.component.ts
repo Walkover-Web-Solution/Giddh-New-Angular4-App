@@ -167,7 +167,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         if (this.isUpdateMode) {
             this.calculateBalanceDue();
         }
-        this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
+        this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
                 this.availableTdsTaxes = [];
                 obj.taxes.forEach(item => {

@@ -14,7 +14,7 @@
 
                 <div class="btn-group proforma-sales-time" dropdown>
 
-                    <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
+                    <button id="giddh-page-heading-link" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">
 
                             <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
@@ -640,6 +640,7 @@
 
                                             <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
+                                                    [fixedValue]="invoiceSelected?.label"
                                                     [forceClearReactive]="invoiceForceClearReactive$ | async" class="linking-dropdown"
                                                     [notFoundLink]="false" [(ngModel)]="selectedInvoice" name="invoiceLinking"
                                                     (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
@@ -2930,12 +2931,12 @@
                     </div>
                     <div class="col-md-8 col-sm-8 col-xs-7">
                         <span class="pd0 mr-2 d-inline-block">
-                            <input name="options" class="radio-custom cp ml0" id="deductedNo" [(ngModel)]="options"
+                            <input name="options" class="radio-custom cp ml-0" id="deductedNo" [(ngModel)]="options"
                                 type="radio" [value]="true" [checked]="options" />
                             <label for="deductedNo" class="radio-custom-label">No</label>
                         </span>
                         <span class="pd0 mr-2 d-inline-block">
-                            <input name="options" class="radio-custom cp ml0" [(ngModel)]="options" id="deductedYes"
+                            <input name="options" class="radio-custom cp ml-0" [(ngModel)]="options" id="deductedYes"
                                 type="radio" [value]="false" [checked]="!options" />
                             <label for="deductedYes" class="radio-custom-label">Yes</label>
                         </span>

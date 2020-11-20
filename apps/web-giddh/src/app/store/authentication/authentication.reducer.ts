@@ -418,7 +418,6 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     isSignupWithPasswordSuccess: false,
                 });
             }
-            return state;
         }
         case LoginActions.forgotPasswordRequest:
             return Object.assign({}, state, {
@@ -435,7 +434,6 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     isForgotPasswordInProcess: true,
                 });
             }
-            return state;
         }
         case LoginActions.resetPasswordRequest:
             return Object.assign({}, state, {
@@ -454,7 +452,6 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     isForgotPasswordInProcess: false
                 });
             }
-            return state;
         }
         default:
             return state;

@@ -12,7 +12,7 @@
                     <ul class="company-list font-14 mb-0">
                         <li>Plan: {{selectedCompany?.subscription?.planDetails?.name}}</li>
                         <li>ID: {{selectedCompany?.subscription?.subscriptionId}}</li>
-                        <li>Created on: {{moment(selectedCompany?.subscription.createdAt, 'DD-MM-YYYY').format('DD/MM/YYYY')}}</li>
+                        <li>Created on: {{moment(selectedCompany?.subscription.createdAt, giddhDateFormat).format('DD/MM/YYYY')}}</li>
                         <li>Total Transactions: {{selectedCompany?.subscription?.totalTransactions | number}}</li>
                     </ul>
                 </div>

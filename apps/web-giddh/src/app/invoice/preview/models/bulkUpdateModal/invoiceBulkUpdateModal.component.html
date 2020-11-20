@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
-                        <input name="lastInvoiceDate" required placeholder="Select Date" type="text" autocomplete="off" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
+                        <input name="lastInvoiceDate" required placeholder="Select Date" type="text" autocomplete="off" [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="updateDueDatesRequest.dueDate" class="form-control" bsDatepicker required>
                         <i class="fa fa-calendar text-light-2 inpute-date"></i>
                     </div>
                 </div>

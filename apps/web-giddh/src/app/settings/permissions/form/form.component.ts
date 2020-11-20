@@ -107,7 +107,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         // get roles
-        this.store.select(s => s.permission).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+        this.store.pipe(select(s => s.permission), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.roles) {
                 let roles = _.cloneDeep(p.roles);
                 let allRoleArray = [];
@@ -134,11 +134,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         // utitlity
-        this.permissionForm.get('periodOptions').valueChanges.pipe(debounceTime(100)).subscribe(val => {
+        this.permissionForm.get('periodOptions').valueChanges.pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(val => {
             this.togglePeriodOptionsVal(val);
         });
 
-        this.permissionForm.get('ipOptions').valueChanges.subscribe(val => {
+        this.permissionForm.get('ipOptions').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(val => {
             this.toggleIpOptVal(val);
         });
     }

@@ -21,7 +21,7 @@
                 <div class="col-6 form-group">
                     <label>Date <sup>*</sup></label>
                     <input name="dateRange" formControlName="inventoryEntryDate" type="text" autocomplete="off"
-                        class="form-control" bsDatepicker [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}" />
+                        class="form-control" bsDatepicker [bsConfig]=" {dateInputFormat: giddhDateFormat}" />
                     <span
                         *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
                         <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
