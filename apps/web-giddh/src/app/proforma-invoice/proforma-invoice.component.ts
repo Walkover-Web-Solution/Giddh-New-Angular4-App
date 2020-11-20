@@ -6014,9 +6014,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
             });
         }
-        // if (!this.isUpdateMode) {
             this.accountAssignedApplicableDiscounts.map(item => item.isActive = true);
-        // }
     }
 
     /**
