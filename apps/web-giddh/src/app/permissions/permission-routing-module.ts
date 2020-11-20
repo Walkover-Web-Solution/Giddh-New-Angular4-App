@@ -13,7 +13,7 @@ import { CapitalizePipe } from './capitalize.pipe';
 import { LaddaModule } from 'angular2-ladda';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-
+import { SharedModule } from '../shared/shared.module';
 const PERMISSION_ROUTES: Routes = [
     { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full', canActivate: [NeedsAuthentication] },
     {
@@ -57,7 +57,8 @@ const PERMISSION_ROUTES: Routes = [
         RouterModule.forChild(PERMISSION_ROUTES),
         LaddaModule,
         ModalModule,
-        BsDropdownModule
+        BsDropdownModule,
+        SharedModule
     ],
     exports: [
         RouterModule,

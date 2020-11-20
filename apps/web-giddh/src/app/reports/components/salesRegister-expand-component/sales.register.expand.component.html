@@ -1,3 +1,34 @@
+<div class="relative">
+    <hamburger-menu></hamburger-menu>
+    <div class="report-breadcrum">
+        <ul class="list-inline d-inline-block middle nav-report">
+            <li class="active">
+                <a href="javascript:void(0)" (click)="goToDashboard(true)">Report</a>
+                <span class="d-inline-block pl-1"> ></span>
+            </li>
+            <li>
+                <a href="javascript:void(0)" (click)="goToDashboard(false)">Sales Register</a><span
+                    class="d-inline-block pl-1">
+                    ></span>
+            </li>
+        </ul>
+        <div class="btn-group customeMnthSelect" dropdown>
+            <button id="button-custom-html" dropdownToggle type="button" class="btn  dropdown-toggle"
+                aria-controls="dropdown-custom-html">
+                {{ selectedMonth }} <span class="caret"></span>
+            </button>
+            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu"
+                aria-labelledby="button-custom-html">
+                <ng-container *ngFor="let item of monthYear; let i = index">
+                    <li role="menuitem">
+                        <a class="dropdown-item cursor-pointer"
+                            (click)="selectedFilterMonth(item, i + 1)">{{ item }}</a>
+                    </li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="top-bar clearfix">
     <div class="form-inline">
         <div class="dis  mrR1 d-inline-block middle">
@@ -44,37 +75,6 @@
                 </ul>
             </div>
         </div>
-        <div class="d-inline-block middle">
-            <ul class="list-inline d-inline-block middle nav-report">
-                <li class="active">
-                    <a href="javascript:void(0)" (click)="goToDashboard(true)">Report</a>
-                    <span class="d-inline-block pl-1"> ></span>
-                </li>
-                <li>
-                    <a href="javascript:void(0)" (click)="goToDashboard(false)">Sales Register</a><span
-                        class="d-inline-block pl-1"> ></span>
-                </li>
-            </ul>
-        </div>
-
-        <div class="btn-group customeMnthSelect" dropdown>
-            <button id="button-custom-html" dropdownToggle type="button" class="btn  dropdown-toggle"
-                aria-controls="dropdown-custom-html">
-                {{ selectedMonth }} <span class="caret"></span>
-            </button>
-            <ul id="dropdown-custom-html" *dropdownMenu class="dropdown-menu" role="menu"
-                aria-labelledby="button-custom-html">
-                <ng-container *ngFor="let item of monthYear; let i = index">
-                    <li role="menuitem">
-                        <a class="dropdown-item cursor-pointer"
-                            (click)="selectedFilterMonth(item, i + 1)">{{ item }}</a>
-                    </li>
-                </ng-container>
-            </ul>
-        </div>
-
-
-
         <div class="form-group expand-collapse-btn mr-1 d-inline-block">
             <a class="cp" (click)="emitExpand()" data-toggle="tooltip" data-placement="top" title="Expand All"
                 *ngIf="!expand">
