@@ -8561,6 +8561,7 @@ ul.dropdown-menu p.lead.pd {
     position: relative;
     top: -2px;
 }
+
 .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs,
 .setting-page ul.nav.nav-tabs, .inventory-control .nav.nav-tabs{
     position: absolute !important;
@@ -8570,6 +8571,12 @@ ul.dropdown-menu p.lead.pd {
     padding: 10px 0px 0 50px !important;
     border-bottom:1px solid $gainsboro;
 }
+
+.gstr-tabs-head .nav.nav-tabs{
+    position: relative !important;
+    padding: 10px 0px 0 15px !important;
+}
+
 .setting-page .nav > li > a {
     padding: 2px 0px;
     margin-right: 25px;
@@ -9538,11 +9545,6 @@ span#HW_badge_cont:nth-child(3) {
         border-radius: 4px;
         box-shadow: 0 3px 6px $black-russian;
         top: 20% !important;
-        &.outside-popover {
-            position: absolute !important;
-            left: 280px !important;
-            top: 10% !important;
-        }
         .popover-arrow{
             display:none;
         }
@@ -10637,14 +10639,6 @@ input.mat-input-element{
                 float: none !important;
             }
         }
-        .linked-add{
-            .popover{
-                &.outside-popover {
-                    left: 100px !important;
-                    top: auto !important;
-                }
-            }
-        }
         #rcw-p91-widget-chats{
             min-width: 300px !important;
         }
@@ -10967,6 +10961,16 @@ input.mat-input-element{
             sh-select, input {
                 min-width: 130px;
                 max-width: 130px;
+            }
+        }
+    }
+
+    @media (min-width: 769px) and (max-width:991px){
+        .gstr-tabs-head{
+            .nav.nav-tabs{
+                li{
+                    display: inline-block;
+                }
             }
         }
     }

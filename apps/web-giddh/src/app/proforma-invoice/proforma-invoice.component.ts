@@ -563,6 +563,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public countryStates: any[] = [];
     /** Stores the current invoice selected */
     public invoiceSelected: any;
+    /** Stores the current index of entry whose TCS/TDS are entered */
+    public tcsTdsIndex: number = 0;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -2512,6 +2514,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.toggleBodyClass();
     }
 
+    /**
+     * Closes the other taxes side menu panel on click of overlay
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public closeAsideMenuStateForOtherTaxes(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true, null);
+            if (this.invFormData.entries[this.tcsTdsIndex]) {
+                this.invFormData.entries[this.tcsTdsIndex].isOtherTaxApplicable = false;
+            }
+        }
+    }
+
     public checkForInfinity(value): number {
         return (value === Infinity) ? 0 : value;
     }
@@ -2589,10 +2605,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateBalanceDue();
     }
 
-    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false) {
+    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
         if(fromTransactionField && this.transactionAmount === trx.amount) {
             this.transactionAmount = 0;
             return;
+        }
+        if (event && event.discount && event.isActive) {
+            this.accountAssignedApplicableDiscounts.forEach(item => {
+                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                    item.isActive = event.isActive.target.checked;
+                }
+            });
+        }
+
+        if (event || !this.isUpdateMode) {
+            if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                entry.discounts.map(item => {
+                    let discountItem = this.accountAssignedApplicableDiscounts.find(element => element.uniqueName === item.discountUniqueName);
+                    if (discountItem && discountItem.uniqueName) {
+                        item.isActive = discountItem.isActive;
+                    }
+                });
+            }
         }
 
         if(trx.amount) {
@@ -2623,11 +2657,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
             this.applyRoundOff = true;
-        }
-        if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-            entry.discounts.map(item => {
-                item.isActive = this.accountAssignedApplicableDiscounts.some(element => element.uniqueName === item.discountUniqueName);
-            });
         }
 
         this.calculateTotalDiscountOfEntry(entry, trx, false);
@@ -6000,6 +6029,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
             });
         }
+        // if (!this.isUpdateMode) {
+            this.accountAssignedApplicableDiscounts.map(item => item.isActive = true);
+        // }
     }
 
     /**

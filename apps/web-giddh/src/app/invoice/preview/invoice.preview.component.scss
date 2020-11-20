@@ -511,6 +511,11 @@ span.icon-export-icon {
         }
     }
 }
+.invoice-preview{
+    .invoice-table.giddh-table{
+        border-right: none !important;
+    }
+}
 .visible-on-mobile {
     display: none;
 }
@@ -589,9 +594,9 @@ span.icon-export-icon {
     .mobile-table {
         display: block;
     }
-    .desktop-table {
-        display: none;
-    }
+    // .desktop-table {
+    //     display: none;
+    // }
     .mobileViewPagination {
         display: block;
         text-align: center;

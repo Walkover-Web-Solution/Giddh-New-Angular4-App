@@ -661,6 +661,13 @@ sh-select:focus {
     border-bottom: 1px solid $gainsboro;
 }
 
+.ledger-row{
+    .text-ellipsis{
+        min-width: 160px;
+        max-width: 400px;
+        width: 100%;
+    }
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;

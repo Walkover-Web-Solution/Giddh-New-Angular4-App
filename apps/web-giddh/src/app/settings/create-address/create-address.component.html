@@ -164,11 +164,7 @@
                                                 [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a popover="{{ option?.address }}" placement="top" popover
-                                                            popoverTitle="{{option?.label}}"
-                                                            triggers="mouseenter:mouseleave"
-                                                            containerClass="outside-popover"
-                                                            (click)="selectEntity(option)" href="javascript:void(0)"
+                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
                                                             class="list-item d-flex">
                                                             <span><input type="checkbox"
                                                                     [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
@@ -231,10 +227,7 @@
                                                 placeholder="Select Address/es">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a popover="{{ option?.address }}" placement="top" popover
-                                                            popoverTitle="{{option?.label}}"
-                                                            triggers="mouseenter:mouseleave"
-                                                            (click)="selectEntity(option)" href="javascript:void(0)"
+                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
                                                             class="list-item d-flex">
                                                             <span><input type="checkbox"
                                                                     [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"

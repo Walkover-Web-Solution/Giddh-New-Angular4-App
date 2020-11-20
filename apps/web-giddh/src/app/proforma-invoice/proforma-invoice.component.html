@@ -1250,8 +1250,9 @@
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-amount">
                                         <div class="td-wrapper">
                                             <div class="flex-grow-1">
-                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
+                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true, $event)"
                                                     (click)="transactionAmountClicked(transaction)" placeholder="Amount"
+                                                    (input)="checkVoucherEntries()"
                                                     name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective
@@ -1273,7 +1274,7 @@
                                                     [discountAccountsDetails]="entry.discounts"
                                                     [discountSum]="entry.discountSum" [showHeaderText]="false"
                                                     (hideOtherPopups)="closeTaxControlPopup()"
-                                                    (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                                    (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                     [maskInput]="inputMaskFormat"
                                                     [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
@@ -1331,6 +1332,7 @@
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                     <input type="checkbox" class="other-taxes-checkbox"
                                                         [(ngModel)]="entry.isOtherTaxApplicable"
+                                                        (click)="tcsTdsIndex = entryIdx"
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                         id="entry.isOtherTaxApplicable_{{entryIdx}}"
@@ -2114,7 +2116,7 @@
                                                 <label class="card-label text-right">Rate</label>
                                                 <div class="flex-grow-1">
                                                     <input type="text" [disabled]="!transaction.isStockTxn"
-                                                        (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
+                                                        (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                         placeholder="Rate" name="transaction.rate_{{entryIdx}}"
                                                         class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
                                                         [prefix]="invFormData.accountDetails.currencySymbol"
@@ -2143,7 +2145,8 @@
 
                                                 <label class="card-label text-right">Amount</label>
                                                 <div class="flex-grow-1">
-                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
+                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true, $event)"
+                                                        (input)="checkVoucherEntries()"
                                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                                         [(ngModel)]="transaction.amount" decimalDigitsDirective
@@ -2170,7 +2173,7 @@
                                                     <discount-control-component #discountComponent [discountMenu]="false"
                                                         [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
                                                         [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
-                                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                         [maskInput]="inputMaskFormat"
                                                         [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                         [suffixInput]="selectedSuffixForCurrency">
@@ -2232,6 +2235,7 @@
                                                     <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                         <input type="checkbox" class="other-taxes-checkbox"
                                                             [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
+                                                            (click)="tcsTdsIndex = entryIdx"
                                                             name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                             id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                             (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -2686,7 +2690,7 @@
     <!-- region models section -->
     <!-- open account aside -->
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' ||
-     asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
+     asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'" (click)="closeAsideMenuStateForOtherTaxes()"></div>
 
     <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"

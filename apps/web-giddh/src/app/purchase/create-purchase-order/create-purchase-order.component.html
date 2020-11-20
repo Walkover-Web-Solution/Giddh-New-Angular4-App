@@ -778,6 +778,7 @@
                                     <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                         <input type="checkbox" class="other-taxes-checkbox"
                                             [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
+                                            (click)="tcsTdsIndex = entryIdx"
                                             name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                             id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                             (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -1418,6 +1419,7 @@
                                             <input type="checkbox" class="other-taxes-checkbox"
                                                 [(ngModel)]="entry.isOtherTaxApplicable"
                                                 *ngIf="!entry.isOtherTaxApplicable"
+                                                (click)="tcsTdsIndex = entryIdx"
                                                 name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -1680,7 +1682,8 @@
 
 <!-- endregion -->
 <div class="aside-overlay"
-    *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForOtherTaxes === 'in'">
+    *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForOtherTaxes === 'in'"
+    (click)="closeAsideMenuStateForOtherTaxes()">
 </div>
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
     (closeAsideEvent)="toggleAccountAsidePane($event)"
