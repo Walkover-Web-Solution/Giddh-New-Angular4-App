@@ -33,7 +33,7 @@ export class TlPlService {
             params.tagName = request.tagName;
         }
         if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
-            params.branchUniqueName = request.branchUniqueName;
+            params.branchUniqueName = encodeURIComponent(request.branchUniqueName);
         } else {
             params.branchUniqueName = '';
         }
@@ -58,7 +58,7 @@ export class TlPlService {
             params.tagName = request.tagName;
         }
         if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
-            params.branchUniqueName = request.branchUniqueName;
+            params.branchUniqueName = encodeURIComponent(request.branchUniqueName);
         } else {
             params.branchUniqueName = '';
         }

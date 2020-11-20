@@ -544,7 +544,7 @@ export class CompanyService {
      * @memberof CompanyService
      */
     public updateBranch(requestObject: any): Observable<any> {
-        const contextPath = `${this.config.apiUrl}${COMPANY_API.CREATE_NEW_BRANCH}/${requestObject.branchUniqueName}`;
+        const contextPath = `${this.config.apiUrl}${COMPANY_API.CREATE_NEW_BRANCH}/${encodeURIComponent(requestObject.branchUniqueName)}`;
         const requestPayload = {
             name: requestObject.name,
             alias: requestObject.alias

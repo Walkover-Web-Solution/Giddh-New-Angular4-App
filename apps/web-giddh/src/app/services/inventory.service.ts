@@ -1064,7 +1064,10 @@ export class InventoryService {
         url = url.replace(":count", getParams.count);
         url = url.replace(":sort", getParams.sort);
         url = url.replace(":sortBy", getParams.sortBy);
-
+        if (getParams.branchUniqueName) {
+            const branchUniqueName = getParams.branchUniqueName !== this.companyUniqueName ? getParams.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(branchUniqueName)}`);
+        }
         return this._http.post(url, postParams)
             .pipe(map((res) => {
                 let data: BaseResponse<any, any> = res;
