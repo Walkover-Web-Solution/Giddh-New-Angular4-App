@@ -98,16 +98,16 @@
     <ng-container *ngIf="showTaxes">
         <div class="col-xs-12 col-sm-12">
 
-            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
+            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm">
                 <div class="tax-label">
                     <label>All Applicable Taxes</label>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown" [multiple]="true">
+                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" (selected)="applyTax()" [options]="companyTaxDropDown" [multiple]="true">
                         </sh-select>
-                        <span class="input-group-btn pdL2"> <button [disabled]="!taxGroupForm?.get('taxes')?.value?.length" type="submit"
-                                class="btn btn-success">Save</button></span>
+                        <!-- <span class="input-group-btn pdL2"> <button [disabled]="!taxGroupForm?.get('taxes')?.value?.length" type="submit"
+                                class="btn btn-success">Save</button></span> -->
                     </div>
                 </div>
             </form>
