@@ -17,6 +17,9 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { DaybookAdvanceSearchModelComponent } from './advance-search/daybook-advance-search.component';
+import { GeneralService } from '../services/general.service';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../models/user-login-state';
 
 @Component({
     selector: 'daybook',
@@ -87,6 +90,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
     };
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
+
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
 
@@ -96,7 +109,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private _companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private _daybookActions: DaybookActions,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private generalService: GeneralService,
+        private settingsBranchAction: SettingsBranchActions
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
@@ -135,6 +150,39 @@ export class DaybookComponent implements OnInit, OnDestroy {
             }
             this.showLoader = false;
             this.changeDetectorRef.detectChanges();
+        });
+        this.store.pipe(
+            select(appState => appState.session.companies), take(1)
+        ).subscribe(companies => {
+            companies = companies || [];
+            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                const hoBranch = response.find(branch => !branch.parentBranch);
+                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                this.daybookQueryRequest.branchUniqueName = this.currentBranch.uniqueName;
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
         });
     }
 
@@ -323,6 +371,17 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 };
             });
         });
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof DaybookComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.daybookQueryRequest.branchUniqueName = selectedEntity.value;
+        this.go();
     }
 }
 
