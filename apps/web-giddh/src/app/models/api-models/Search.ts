@@ -102,7 +102,8 @@ export class SearchDataSet {
 
 export interface BulkEmailRequest {
 	params: BulkEmailRequestParams;
-	data: BulkEmailRequestData;
+    data: BulkEmailRequestData;
+    branchUniqueName?: string;
 }
 
 export interface BulkEmailRequestData {

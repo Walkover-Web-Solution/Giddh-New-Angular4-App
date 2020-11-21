@@ -98,7 +98,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     /** Stores the branch list of a company */
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
-    public currentBranch: any;
+    public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
 
