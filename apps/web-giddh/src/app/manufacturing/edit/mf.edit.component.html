@@ -57,9 +57,9 @@
                                     <li>
                                         <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
                                     </li>
-                                    <li class="pd-1 clearfix pdT pd-t05">
+                                    <li class="pd-1 clearfix pdT pd-b05">
                                         <span class="btn-group pull-left">
-                                            <button type="button" class="btn btn-xs btn-primary mr-r"
+                                            <button type="button" class="btn btn-xs btn-primary mr-r05"
                                                 (click)="setToday();showFromDatePicker = false;">Today</button>
                                             <button type="button" class="btn btn-xs btn-success"
                                                 (click)="showFromDatePicker = false">Done</button>
@@ -131,7 +131,7 @@
                                     <td> {{ getCalculatedAmount(linkedStockQuantity, linkedStockRate) | number:'1.0-2' }}
                                     </td>
                                     <td class="action">
-                                        <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks, $event)" class="ico-btn pd0"><i
+                                        <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks, $event)" class="ico-btn p-0"><i
                                                 class="icon-plus text-danger" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
@@ -219,7 +219,7 @@
                                                 #transactionAmount></div>
                                     </td>
                                     <td>
-                                        <button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="icon-plus text-danger"
+                                        <button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn p-0"><i class="icon-plus text-danger"
                                                 aria-hidden="true"></i></button>
                                     </td>
                                 </tr>

@@ -487,23 +487,23 @@ aside-menu-account .container-fluid {
     padding: 20px;
 }
 
-.pd3 {
+.pd-3 {
     padding: 30px;
 }
 
-.pd4 {
+.pd-4 {
     padding: 40px;
 }
 
-.pd-t {
+.pd-t05 {
     padding-top: 5px;
 }
 
-.pd-t05 {
+.pd-b05 {
     padding-bottom: 5px;
 }
 
-.pd-l {
+.pd-l05 {
     padding-left: 5px;
 }
 
@@ -511,7 +511,7 @@ aside-menu-account .container-fluid {
     padding-left: 0;
 }
 
-.pd-r {
+.pd-r05 {
     padding-right: 5px;
 }
 
@@ -520,7 +520,7 @@ aside-menu-account .container-fluid {
 }
 
 .pd-t2,
-.pdT3 {
+.pd-t3 {
     padding-top: 20px;
 }
 
@@ -576,19 +576,19 @@ aside-menu-account .container-fluid {
     padding-bottom: 40px;
 }
 
-.pdL4 {
+.pd-l4 {
     padding-left: 40px;
 }
 
-.pdR4 {
+.pd-r4 {
     padding-right: 40px;
 }
 
-.pd0 {
+.p-0 {
     padding: 0;
 }
 
-.mr0 {
+.m-0 {
     margin: 0;
 }
 
@@ -596,7 +596,7 @@ aside-menu-account .container-fluid {
     margin: 5px;
 }
 
-.mr1 {
+.m-10 {
     margin: 10px;
 }
 
@@ -604,23 +604,23 @@ aside-menu-account .container-fluid {
     margin: 15px;
 }
 
-.mr2 {
+.m-20 {
     margin: 20px;
 }
 
-.mr3 {
+.m-30 {
     margin: 30px;
 }
 
-.mr4 {
+.m-40 {
     margin: 40px;
 }
 
-.mr-t {
+.mr-t05 {
     margin-top: 5px;
 }
 
-.mr-b {
+.mr-b05 {
     margin-bottom: 5px !important;
 }
 
@@ -628,7 +628,7 @@ aside-menu-account .container-fluid {
     margin-left: 5px;
 }
 
-.mr-r {
+.mr-r05 {
     margin-right: 5px;
 }
 
@@ -668,7 +668,7 @@ aside-menu-account .container-fluid {
     margin-left: 20px;
 }
 
-.mrR2 {
+.mr-r2 {
     margin-right: 20px;
 }
 
@@ -700,7 +700,7 @@ aside-menu-account .container-fluid {
     margin-bottom: 40px;
 }
 
-.mrL4 {
+.mr-l4 {
     margin-left: 40px;
 }
 
@@ -748,7 +748,7 @@ aside-menu-account .container-fluid {
     position: fixed;
 }
 
-.witClr {
+.white-color {
     color: #fff;
 }
 
@@ -756,7 +756,7 @@ aside-menu-account .container-fluid {
     color: #777;
 }
 
-.greyBg {
+.grey-bg {
     background: #f5f5f5;
     /*min-width:320px;*/
 }
@@ -773,19 +773,19 @@ aside-menu-account .container-fluid {
     overflow: hidden;
 }
 
-.oyAuto {
+.overflow-y-auto {
     overflow-y: auto;
 }
 
-.oxAuto {
+.overflow-x-auto {
     overflow-x: auto;
 }
 
-.rn {
+.resize-none {
     resize: none;
 }
 
-.ln {
+.list-style-none {
     list-style: none;
 }
 
@@ -797,11 +797,11 @@ aside-menu-account .container-fluid {
     text-transform: lowercase;
 }
 
-.txtCpc {
+.text-capitalize {
     text-transform: capitalize;
 }
 
-.td-undr {
+.text-underline {
     text-decoration: underline;
 }
 
@@ -840,7 +840,7 @@ aside-menu-account .container-fluid {
 position: relative; */
 }
 
-.scrItem {
+.scroll-item {
     overflow: auto;
     position: relative;
 }
@@ -921,7 +921,7 @@ position: relative; */
 
 /*manage company detail*/
 
-.greyBox {
+.grey-box {
     color: #444;
     background: #f3f3f3;
     border: solid 1px #ddd;
@@ -1268,26 +1268,26 @@ li:last-child .angular-ui-tree-handle {
 
 /*account list menus*/
 
-.acntAccordion {
+.account-accordion {
     font-size: 12px;
 }
 
-.acntAccordion a {
+.account-accordion a {
     color: #333;
 }
 
-.acntAccordion .title a {
+.account-accordion .title a {
     display: block;
     padding: 0 15px;
     cursor: pointer;
 }
 
-.acntAccordion > li > ul > li > ul > li {
+.account-accordion > li > ul > li > ul > li {
     line-height: 0;
     list-style: none;
 }
 
-.acntAccordion > li > ul > li > ul > li > a > div {
+.account-accordion > li > ul > li > ul > li > a > div {
     overflow: hidden;
 }
 
@@ -1419,8 +1419,8 @@ li:last-child .angular-ui-tree-handle {
     padding: 0 !important;
 }
 
-.greyBg td,
-.greyBg th {
+.grey-bg td,
+.grey-bg th {
     background-color: #f5f5f5;
 }
 
@@ -2322,11 +2322,11 @@ table:focus {
 
 /*tbpl list*/
 
-.tbplList .list-inline {
+.tbpl-list .list-inline {
     line-height: normal;
 }
 
-.tbplList .circle {
+.tbpl-list .circle {
     vertical-align: sub;
 }
 
@@ -2934,11 +2934,11 @@ table td.nopad {
     cursor: pointer;
 }
 
-.table-striped .selectedForInv {
+.table-striped .selected-for-inv {
     background-color: #cce7e7 !important;
 }
 
-.table-bordered > tbody > tr.selectedForInv > td {
+.table-bordered > tbody > tr.selected-for-inv > td {
     border-color: #b7cfcf;
 }
 

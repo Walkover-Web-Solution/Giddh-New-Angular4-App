@@ -51,7 +51,7 @@
                             <!-- other details -->
                             <div class="row">
                                 <div class="col-12 col-sm-12">
-                                    <div class="form-group toggle-btn mr-b"
+                                    <div class="form-group toggle-btn mr-b05"
                                         (click)="showOtherDetails = !showOtherDetails">
                                         <label class="cp">
                                             <i class="fa cp" aria-hidden="true"
@@ -231,7 +231,7 @@
 
                             </ng-container>
                         </div>
-                        <div class="pd-l pd-r pd-t row">
+                        <div class="pd-l05 pd-r05 pd-t05 row">
                             <div class="col-6 col-sm-6">
                                 <div class="checkbox">
                                     <label class="" for="enablePurchase">
@@ -351,7 +351,7 @@
                         </div>
 
 
-                        <div class="mr-t1 pd-l pd-r row">
+                        <div class="mr-t1 pd-l05 pd-r05 row">
                             <div class="col-12 col-sm-12">
                                 <div class="checkbox">
                                     <label class="" for="isFsStock">
@@ -365,7 +365,7 @@
 
 
                         <section class="mr-t2 mr-b3 col-12 col-sm-12 row" *ngIf="addStockForm.value.isFsStock">
-                            <div class="pd-l pd-r">
+                            <div class="pd-l05 pd-r05">
                                 <h1 class="section-head bd-rb"><strong>{{addStockForm.controls['name'].value}} (Made
                                         with)</strong></h1>
                                 <table class="noHover  width100">
@@ -443,7 +443,7 @@
                         </section>
 
                         <div class="col-12 col-sm-12 text-left">
-                            <div class="mr-t1 pd-l pd-r row">
+                            <div class="mr-t1 pd-l05 pd-r05 row">
 
                                 <button type="submit" *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success"

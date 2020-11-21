@@ -38,7 +38,7 @@
                         <!-- other details -->
                         <div class="row">
                             <div class="col-12 col-sm-12">
-                                <div class="form-group toggle-btn mr-b" (click)="showOtherDetails = !showOtherDetails">
+                                <div class="form-group toggle-btn mr-b05" (click)="showOtherDetails = !showOtherDetails">
                                     <label class="cp">
                                         <i class="fa cp" aria-hidden="true"
                                             [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other
@@ -278,7 +278,7 @@
 
                         </div>
                     </div>
-                    <div class="row pd-l pd-r">
+                    <div class="row pd-l05 pd-r05">
                         <div class="col-12 col-sm-12">
                             <div class="checkbox">
                                 <label class="" for="isFsStock">
@@ -291,7 +291,7 @@
 
 
                     <section class="mr-t2 row mr-b3 col-12 col-sm-12" *ngIf="addStockForm.value.isFsStock">
-                        <div class="pd-l pd-r">
+                        <div class="pd-l05 pd-r05">
                             <h1 class="section-head bd-rb"><strong>{{addStockForm.controls['name'].value}} (Made
                                     with)</strong></h1>
                             <table class="noHover  width100">
@@ -350,7 +350,7 @@
 
                     <div class="row">
                         <div class="col-12 col-sm-12 text-left">
-                            <div class="mt-5 pd-l pd-r">
+                            <div class="mt-5 pd-l05 pd-r05">
 
                                 <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success" [disabled]="addStockForm.invalid || disableStockButton">Save
                                 </button>

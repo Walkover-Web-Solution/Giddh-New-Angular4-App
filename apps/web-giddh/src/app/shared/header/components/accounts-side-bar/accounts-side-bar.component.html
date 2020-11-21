@@ -1,4 +1,4 @@
-<div class="accounts-side-bar greyBg wrapAcList" ng-click="$event.stopPropagation()">
+<div class="accounts-side-bar grey-bg wrapAcList" ng-click="$event.stopPropagation()">
     <div *ngIf="flyAccounts" style="height: 100%" class="wrapAcList" id="grp_acc_wrapper">
         <div class="pd-1 wrapAcList" *ngIf="(isFlyAccountInProcess$ | async)">
             Loading Accounts...
@@ -20,7 +20,7 @@
                 <span></span>
             </div>
             <ng-container *ngIf="showAccountList && Items">
-                <!-- <ul class="ul_0 acntAccordion wrapAcList"
+                <!-- <ul class="ul_0 account-accordion wrapAcList"
                     *vsFor="Items; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
 
                     <ng-container *ngFor="let item of _items;let i = index">

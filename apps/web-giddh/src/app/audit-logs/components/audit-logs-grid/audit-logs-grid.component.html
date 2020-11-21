@@ -5,7 +5,7 @@
         <span *ngIf="log && log.accountName && log.accountName != null"> - {{log.accountName}}
             ({{log.accountUniqueName}})</span>
     </h1>
-    <div class="mr-t border-top-btm clearfix">
+    <div class="mr-t05 border-top-btm clearfix">
         <div>
             <label class="pull-left">Entity:</label>
             <p class="pull-left ml-05">{{log.entityType}}</p>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="mr-t table-container" *ngIf="log.log != null && log.log.transactions != undefined && log.log.transactions.length > 0">
+    <div class="mr-t05 table-container" *ngIf="log.log != null && log.log.transactions != undefined && log.log.transactions.length > 0">
         <table class="table table-bordered ">
             <thead>
                 <tr>
@@ -61,7 +61,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mr-t text-center table-container" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+    <div class="mr-t05 text-center table-container" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -106,7 +106,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mr-t text-center table-container" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+    <div class="mr-t05 text-center table-container" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>

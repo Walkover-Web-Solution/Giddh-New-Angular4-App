@@ -8,7 +8,7 @@
     <!-- region page change menu -->
     <div class="d-flex border-bottom mobile-view-padding">
         <hamburger-menu></hamburger-menu>
-        <div class="form-group mr-b clearfix">
+        <div class="form-group mr-b05 clearfix">
 
             <div class="clearfix">
 
@@ -185,7 +185,7 @@
                                                     *ngTemplateOutlet="gstTreatmentModal;context:{ $implicit: showGstTreatmentModal}">
                                                 </ng-container>
 
-                                                <span class="cp aqua-color mr-r"
+                                                <span class="cp aqua-color mr-r05"
                                                     *ngIf="!isCashInvoice && !isUpdateMode">
                                                     <a href="javascript:void(0)"
                                                         (click)="getCustomerDetails()">{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}}
@@ -1345,7 +1345,7 @@
                                                     <span>
 
                                                         <div class="d-flex align-items-center">
-                                                            <span class="mr-r">
+                                                            <span class="mr-r05">
                                                                 <a href="javascript: void 0"
                                                                     (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
                                                                     <img src="assets/images/edit-pencilicon.svg">
@@ -1359,7 +1359,7 @@
                                                                 name="entry.otherTaxesSum_{{entryIdx}}" />
                                                         </div>
 
-                                                        <p class="mr-r font-12 text-capitalize mr-b2">
+                                                        <p class="mr-r05 font-12 text-capitalize mr-b2">
                                                             {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                                                     </span>
 
@@ -2248,7 +2248,7 @@
                                                         <span>
 
                                                             <div class="d-flex align-items-center">
-                                                                <span class="mr-r">
+                                                                <span class="mr-r05">
                                                                     <a href="javascript: void 0"
                                                                         (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
                                                                         <img src="assets/images/edit-pencilicon.svg">
@@ -2262,7 +2262,7 @@
                                                                     name="entry.otherTaxesSum_{{entryIdx}}" />
                                                             </div>
 
-                                                            <p class="mr-t font-12 text-capitalize mr-b2">
+                                                            <p class="mr-t05 font-12 text-capitalize mr-b2">
                                                                 {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                                                         </span>
 
@@ -2934,12 +2934,12 @@
                         <span class="d-inline-block font-14">Tax Deducted?</span>
                     </div>
                     <div class="col-md-8 col-sm-8 col-xs-7">
-                        <span class="pd0 mr-2 d-inline-block">
+                        <span class="p-0 mr-2 d-inline-block">
                             <input name="options" class="radio-custom cp ml-0" id="deductedNo" [(ngModel)]="options"
                                 type="radio" [value]="true" [checked]="options" />
                             <label for="deductedNo" class="radio-custom-label">No</label>
                         </span>
-                        <span class="pd0 mr-2 d-inline-block">
+                        <span class="p-0 mr-2 d-inline-block">
                             <input name="options" class="radio-custom cp ml-0" [(ngModel)]="options" id="deductedYes"
                                 type="radio" [value]="false" [checked]="!options" />
                             <label for="deductedYes" class="radio-custom-label">Yes</label>

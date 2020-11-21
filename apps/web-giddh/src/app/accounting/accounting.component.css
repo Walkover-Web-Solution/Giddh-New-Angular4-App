@@ -2,7 +2,7 @@
     padding-left: 0;
 }
 
-:host ::ng-deep .acntAccordion .mainLiAclist .title:before {
+:host ::ng-deep .account-accordion .mainLiAclist .title:before {
     content: none;
 }
 

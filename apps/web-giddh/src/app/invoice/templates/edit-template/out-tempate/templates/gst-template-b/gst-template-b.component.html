@@ -49,13 +49,13 @@
                                         <span class="bold">10-09-2018</span>
                                     </p>
 
-                                    <p class="mrR2" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                    <p class="mr-r2" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
                                         <strong>Attention to: </strong>
                                         <span>Mr. Alok Gangrade</span>
                                     </p>
 
                                     <p>
-                                        <span class="mrR2" [hidden]="!fieldsAndVisibility.header.gstin?.display">{{(fieldsAndVisibility.header.gstin?.label.length > 0) ? fieldsAndVisibility.header.gstin?.label
+                                        <span class="mr-r2" [hidden]="!fieldsAndVisibility.header.gstin?.display">{{(fieldsAndVisibility.header.gstin?.label.length > 0) ? fieldsAndVisibility.header.gstin?.label
                                             : 'GSTIN'}}: {{companyGSTIN ? companyGSTIN : '23AAUCS7548A1Z4'}}</span>
                                         <!-- <span [hidden]="!fieldsAndVisibility.header.pan?.display">{{fieldsAndVisibility.header.pan?.label}}: {{companyPAN ? companyPAN : 'AAACW9768L'}}</span> -->
                                     </p>
@@ -95,12 +95,12 @@
                             <p class="bold"
                                 *ngIf="fieldsAndVisibility.header.shippingDate?.display || fieldsAndVisibility.header.shippedVia?.display || fieldsAndVisibility.header.trackingNumber?.display">
                                 Shipping Detail:</p>
-                            <p *ngIf="fieldsAndVisibility?.header?.shippingDate?.display" class="mrR2">
+                            <p *ngIf="fieldsAndVisibility?.header?.shippingDate?.display" class="mr-r2">
                                 <span>{{(fieldsAndVisibility.header.shippingDate?.label.length > 0) ? fieldsAndVisibility.header.shippingDate?.label
                                     : 'Ship Date'}}:</span>
                                 <span>10-09-2018</span>
                             </p>
-                            <p *ngIf="fieldsAndVisibility?.header?.shippedVia?.display" class="mrR2">
+                            <p *ngIf="fieldsAndVisibility?.header?.shippedVia?.display" class="mr-r2">
                                 <span>{{(fieldsAndVisibility.header.shippedVia?.label.length > 0) ? fieldsAndVisibility.header.shippedVia?.label
                                     : 'Ship Via'}}:</span>
                                 <span>FedEx</span>

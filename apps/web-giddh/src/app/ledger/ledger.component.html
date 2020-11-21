@@ -1305,9 +1305,9 @@
                             <span class="digit-blue">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
                 async)?.creditTransactionsCount}}</span>
                         </h1>
-                        <span class=" mrR2 greyTextClr">Debit <span
+                        <span class=" mr-r2 greyTextClr">Debit <span
                                 class="digit-blue">{{(lc.transactionData$ | async)?.debitTransactionsCount}}</span></span><br>
-                        <span class=" mrR2 greyTextClr">Credit <span class="digit-blue">
+                        <span class=" mr-r2 greyTextClr">Credit <span class="digit-blue">
                                 {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span></span>
                     </div>
                 </div>
@@ -1368,7 +1368,7 @@
 
                         <div class="d-flex debit-credit-amount">
 
-                            <h1 class="mr-t font16 greyTextClr d-flex flex-column">Debit
+                            <h1 class="mr-t05 font16 greyTextClr d-flex flex-column">Debit
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}}
                                 </span>
@@ -1377,7 +1377,7 @@
                                 </span>
                             </h1>
 
-                            <h1 class="mr-t font16 greyTextClr d-flex flex-column">Credit
+                            <h1 class="mr-t05 font16 greyTextClr d-flex flex-column">Credit
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}}
                                 </span>

@@ -412,8 +412,8 @@
                         <h1>Total Transactions
                             <span class="primary-color">{{ledgerData.ledgersTransactions.totalItems}}</span>
                         </h1>
-                        <span class="mr-t1 mrR2">Dr {{ledgerData.ledgersTransactions.debitTransactionsCount}}</span>
-                        <span class="mr-t1 mrR2">Cr {{ledgerData.ledgersTransactions.creditTransactionsCount}}</span>
+                        <span class="mr-t1 mr-r2">Dr {{ledgerData.ledgersTransactions.debitTransactionsCount}}</span>
+                        <span class="mr-t1 mr-r2">Cr {{ledgerData.ledgersTransactions.creditTransactionsCount}}</span>
                     </div>
                     <div class="col-3">
                         <h1>Opening Balance</h1>
@@ -436,9 +436,9 @@
                             {{legderBalanceData.debitTotal - legderBalanceData.creditTotal | currency}}
                         </h3>
                         <!-- | number:'1.2-2' -->
-                        <h1 class="mr-t">Dr Total {{legderBalanceData.debitTotal | currency}}</h1>
+                        <h1 class="mr-t05">Dr Total {{legderBalanceData.debitTotal | currency}}</h1>
                         <!-- | number:'1.2-2' -->
-                        <h1 class="mr-t">Cr Total {{legderBalanceData.creditTotal | currency}}</h1>
+                        <h1 class="mr-t05">Cr Total {{legderBalanceData.creditTotal | currency}}</h1>
                     </div>
                     <div class="col-3">
                         <h1>Closing Balance</h1>

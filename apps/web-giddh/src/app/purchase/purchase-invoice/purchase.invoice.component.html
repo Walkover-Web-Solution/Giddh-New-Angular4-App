@@ -96,9 +96,9 @@
                                     <!-- [(ngModel)]="selectedDateForGSTR1" -->
                                     <!-- <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker> -->
                                 </li>
-                                <li class="pd-1 clearfix pd-t pd-t05">
+                                <li class="pd-1 clearfix pd-t05 pd-b05">
                                     <span class="btn-group pull-left">
-                                        <button type="button" class="btn btn-xs btn-primary mr-r"
+                                        <button type="button" class="btn btn-xs btn-primary mr-r05"
                                             (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
                                         <button type="button" class="btn btn-xs btn-success"
                                             (click)="showGSTR1DatePicker = false">Done</button>
@@ -123,9 +123,9 @@
                             <li>
                                 <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker>
                             </li>
-                            <li class="pd-1 clearfix pdT pd-t05">
+                            <li class="pd-1 clearfix pdT pd-b05">
                                 <span class="btn-group pull-left">
-                                    <button type="button" class="btn btn-xs btn-primary mr-r" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
+                                    <button type="button" class="btn btn-xs btn-primary mr-r05" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
                                     <button type="button" class="btn btn-xs btn-success" click)="showGSTR1DatePicker = false">Done</button>
                                 </span>
                                 <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showGSTR1DatePicker = false;">Clear</button>
@@ -168,7 +168,7 @@
                         [isDisabled]="!selectedGstrType.name">
                         <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left"> File
                             {{ selectedGstrType.name }}
-                            <span class="pull-right mrL4">
+                            <span class="pull-right mr-l4">
                                 <i class="fa fa-caret-down"></i>
                             </span>
                         </button>
@@ -344,7 +344,7 @@
                             *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)"
                             (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in
                             {{timeCounter}}s</button>
-                        <div class="btn-group btn-block mr-t" dropdown (onShown)="onDDShown()"
+                        <div class="btn-group btn-block mr-t05" dropdown (onShown)="onDDShown()"
                             (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)"
                             *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber && selectedRowIndex == i"
                             [autoClose]="false">

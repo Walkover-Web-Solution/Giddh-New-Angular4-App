@@ -1839,15 +1839,15 @@ input:-moz-placeholder {
     background: $whisper-new;
 }
 
-.acntAccordion a {
+.account-accordion a {
     color: $dark-gray;
 }
 
-.acntAccordion .title {
+.account-accordion .title {
     background-image: none;
 }
 
-.acntAccordion .title a {
+.account-accordion .title a {
     font-size: 14px;
 }
 
@@ -1885,7 +1885,7 @@ input:-moz-placeholder {
     font-size: 12px;
 }
 
-.acntAccordion .title.active {
+.account-accordion .title.active {
     background-image: none;
 }
 
@@ -2126,16 +2126,16 @@ fieldset[disabled] .btn-primary:hover {
     transform: translateY(-50%);
 }
 
-.acntAccordion .accBox {
+.account-accordion .accBox {
     background: none;
 }
 
-.acntAccordion .title,
-.acntAccordion .title.active {
+.account-accordion .title,
+.account-accordion .title.active {
     position: relative;
 }
 
-.acntAccordion .mainLiAclist .title:before {
+.account-accordion .mainLiAclist .title:before {
     font-family: "icomoon" !important;
     content: "\f2333";
     position: absolute;
@@ -3959,7 +3959,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 
-.mr-b-5 {
+.mr-b05-5 {
     margin-bottom: 5px;
 }
 
@@ -4099,7 +4099,7 @@ input[type=radio]:checked:after {
     border-radius: 3px;
 }
 
-.form-group.mr-b,
+.form-group.mr-b05,
 .margin-child-label .form-group label {
     margin-bottom: 5px;
 }
@@ -8083,7 +8083,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     font-family: "opensans-regular";
 }
 
-.border-radius-0 small.mr-t.mr-b.grey {
+.border-radius-0 small.mr-t05.mr-b05.grey {
     white-space: normal;
 }
 

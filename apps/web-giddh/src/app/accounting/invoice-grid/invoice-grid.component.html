@@ -20,7 +20,7 @@
             </div>
 
             <!-- invoice num -->
-            <div class="clearfix form-inline mr-b">
+            <div class="clearfix form-inline mr-b05">
                 <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
                     <!-- decimalDigitsDirective -->
                     <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
@@ -41,7 +41,7 @@
 
 
             <!-- party acc name -->
-            <div class="mx-350 clearfix form-inline mr-b">
+            <div class="mx-350 clearfix form-inline mr-b05">
                 <div class="form-group">
                     <label>Party A/c Name: <sup>*</sup></label>
                     <!-- #creditor -->
@@ -70,7 +70,7 @@
 
             <!-- operating cost acc only -->
             <!-- No need for purchase ledger, as discussed with alok
-    <div class="mx-300 clearfix form-inline mr-b">
+    <div class="mx-300 clearfix form-inline mr-b05">
     <div class="form-group">
         <label>Purchase Ledger:<sup>*</sup></label> <input type="text" #debtor placeholder="Purchase account" (focus)="accountType = 'debitor'" [(ngModel)]="debtorAcc.name" (focus)="getFlattenGrpAccounts('purchases', true)" (blur)="showAccountList=false;selectedInput=debtor"
             class="form-control max-height28 appearance_none" style="max-width:200px" />

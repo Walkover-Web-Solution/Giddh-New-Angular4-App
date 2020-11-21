@@ -236,7 +236,7 @@
                 [(ngModel)]="blankLedger.description"></textarea>
         </div>
 
-        <table class="width100 mr-t">
+        <table class="width100 mr-t05">
             <tbody>
                 <tr>
                     <td class="primary-color pl-0" (click)="toggleMoreDetail();">
@@ -257,9 +257,9 @@
             </tbody>
         </table>
 
-        <div class="pd-1 mr-b mr-t more-details"*ngIf="showAdvanced">
+        <div class="pd-1 mr-b05 mr-t05 more-details"*ngIf="showAdvanced">
             <div>
-                <div class="cheq pd-t clearfix">
+                <div class="cheq pd-t05 clearfix">
                     <table>
                         <tr>
                             <td class="select2-parent pd-r1">
@@ -423,7 +423,7 @@
 
                     <li class="cp" *ngFor="let entry of matchingEntriesData;"
                         (click)="confirmBankTransactionMap(entry)">
-                        <table class="table table-bordered mr0">
+                        <table class="table table-bordered m-0">
                             <tbody>
                                 <tr *ngFor="let txn of entry.transactions;">
                                     <td>{{entry.entryDate}}</td>
