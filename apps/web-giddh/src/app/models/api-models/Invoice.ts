@@ -51,7 +51,7 @@ export class CommonPaginatedRequest {
     public status?: string;
     public sort?: string;
     public sortBy?: string;
-
+    public branchUniqueName?: string;
 }
 
 export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest {
