@@ -272,14 +272,18 @@ export class CompanyService {
     public downloadCSV(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + COMPANY_API.DOWNLOAD_CSV
+        let url = this.config.apiUrl + COMPANY_API.DOWNLOAD_CSV
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
-            .replace(':to', encodeURIComponent(request.params.to))
-            , request.data).pipe(map((res) => {
-                return res;
-            }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
+            .replace(':to', encodeURIComponent(request.params.to));
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
+        }
+        return this._http.post(url, request.data).pipe(map((res) => {
+            return res;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
     }
 
     public sendSms(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {

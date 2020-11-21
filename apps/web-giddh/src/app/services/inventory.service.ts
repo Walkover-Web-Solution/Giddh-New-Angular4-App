@@ -978,6 +978,9 @@ export class InventoryService {
         if (request.reportType === 'group' || request.reportType === 'stock') {
             return this._http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error, '', {})));
         } else {
+            if (request.branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
+            }
             return this._http.get(url)
                 .pipe(map((res) => {
                     let data: BaseResponse<any, any> = res;
