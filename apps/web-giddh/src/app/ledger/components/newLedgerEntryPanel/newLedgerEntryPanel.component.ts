@@ -375,6 +375,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
             this.calculatePreAppliedTax();
+            this.preparePreAppliedDiscounts();
 
             if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
@@ -461,8 +462,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.generateInvoice = false;
     }
 
-    public calculateDiscount(total: number) {
-        this.currentTxn.discount = total;
+    public calculateDiscount(event: any) {
+        this.preparePreAppliedDiscounts();
+        this.currentTxn.discount = event.discountTotal;
+        this.accountOtherApplicableDiscount.forEach(item => {
+            if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                item.isActive = event.isActive.target.checked;
+            }
+        });
         this.currentTxn.convertedDiscount = this.calculateConversionRate(this.currentTxn.discount);
         this.calculateTax();
     }
@@ -1421,5 +1428,71 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private openAdjustPaymentModal(): void {
         this.adjustPaymentModal.show();
+    }
+
+    /**
+     * To assign updated account details
+     *
+     * @param {(AccountResponse | AccountResponseV2)} accountDetails
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public assignUpdateActiveAccount(accountDetails: AccountResponse | AccountResponseV2): void {
+        this.accountOtherApplicableDiscount = [];
+        this.activeAccount = accountDetails;
+        let parentAcc = accountDetails.parentGroups[0].uniqueName;
+        let incomeAccArray = ['revenuefromoperations', 'otherincome'];
+        let expensesAccArray = ['operatingcost', 'indirectexpenses'];
+        let assetsAccArray = ['assets'];
+        let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
+        if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+            let appTaxes = [];
+            accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+            this.currentAccountApplicableTaxes = appTaxes;
+        }
+        if (accountDetails.country && accountDetails.country.countryName) {
+            this.activeAccountCountryName = accountDetails.country.countryName;
+        }
+        if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
+            this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
+        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
+            accountDetails.inheritedDiscounts.forEach(element => {
+                this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
+            });
+        }
+        this.accountOtherApplicableDiscount.map(item => item.isActive = true);
+    }
+
+    /**
+     * To prepare pre applied discount for current transactions
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public preparePreAppliedDiscounts() {
+        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts && this.currentTxn.selectedAccount.accountApplicableDiscounts.length) {
+            this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
+            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                this.currentTxn.discounts.map(item => {
+                    if (element.uniqueName === item.discountUniqueName) {
+                        item.isActive = true;
+                    } else {
+                        item.isActive = false;
+                    }
+                    return item;
+                });
+            });
+        } else {
+            if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+                this.accountOtherApplicableDiscount.forEach(element => {
+                    this.currentTxn.discounts.map(item => {
+                        if (element.uniqueName === item.discountUniqueName) {
+                            item.isActive = true;
+                        } else {
+                            item.isActive = false;
+                        }
+                        return item;
+                    });
+                });
+            }
+        }
     }
 }
