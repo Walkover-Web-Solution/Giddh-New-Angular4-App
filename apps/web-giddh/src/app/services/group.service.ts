@@ -124,11 +124,16 @@ export class GroupService {
         }), catchError((e) => this.errorHandler.HandleCatch<GroupSharedWithResponse[], string>(e, groupUniqueName, { groupUniqueName })));
     }
 
-    public GetGroupsWithAccounts(q: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
+    public GetGroupsWithAccounts(q: string, branchUniqueName?: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        let url = this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''));
+        if (branchUniqueName) {
+            branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${branchUniqueName}`);
+        }
         if (this.companyUniqueName) {
-            return this._http.get(this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''))).pipe(map((res) => {
+            return this._http.get(url).pipe(map((res) => {
                 let data: BaseResponse<GroupsWithAccountsResponse[], string> = res;
                 data.request = q;
                 return data;

@@ -88,7 +88,8 @@ export interface SearchRequest {
 	fromDate: string;
 	toDate: string;
 	refresh: boolean;
-	page: number;
+    page: number;
+    branchUniqueName?: string;
 }
 
 export class SearchDataSet {

@@ -16,6 +16,7 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
         Daterangepicker,
         BsDropdownModule,
         ClickOutsideModule,
-        CurrencyModule
+        CurrencyModule,
+        ShSelectModule
     ]
 })
 export class SearchModule {
