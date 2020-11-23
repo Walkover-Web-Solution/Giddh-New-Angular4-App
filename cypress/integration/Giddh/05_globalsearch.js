@@ -1,9 +1,8 @@
 import TrialBalancePage from "../../support/pageObjects/TrialBalancePage";
 import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
 
-describe('This is Login Test', function() {
+describe('This is Global Search Test', function() {
 
-    const trialBalancePage = new TrialBalancePage()
     const globalSearchPage = new GlobalSearchPage()
 
     before(function() {
@@ -11,29 +10,29 @@ describe('This is Login Test', function() {
     })
 
     it('Verify Trial Balance using Global Search', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']', 'trial balance', 'Trial Balance')
+        cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
 
     });
 
     it('Verify Invoice using Global Search', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']','Invoice', 'Invoice ')
+        cy.globalSearch('#giddh-page-heading-link > span','Invoice', 'Invoice ')
 
     });
 
     it('Verify Customer module using Global Search', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']','Customer', 'Customer ')
+        cy.globalSearch('#giddh-page-heading-link > span','Customer', 'Customer ')
     });
 
     it('Verify Vendor module using Global Search', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']','Vendor', 'Vendor ')
+        cy.globalSearch('.hamburger_menu > #giddh-page-heading-link > span','Vendor', 'Vendor ')
     });
 
     it('Verify Settings module using Global Search', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']','Settings', 'Settings > Taxes ')
+        cy.globalSearch('#giddh-page-heading-link > span','Settings', 'Settings > Taxes ')
     });
 
     it('Verify Walkover Account module using Global Search', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']','Walkover', 'Walkover Technologies Private Limited A/c')
+        cy.globalSearch('.hamburger_menu > #giddh-page-heading-link > span','Walkover', 'Walkover Technologies Private Limited A/c')
     });
 
     it('Verify Cash Account module using Global Search', function () {
@@ -50,9 +49,9 @@ describe('This is Login Test', function() {
                 $e1.trigger("click")
                 cy.wait(2000)
                 cy.get('body').type('{enter}').then(()=>{
-                    cy.xpath('//h4[@id=\'giddh-page-heading\']', {timeout: 50000}).should('be.visible')
+                    cy.get('.hamburger_menu > #giddh-page-heading-link > span', {timeout: 50000}).should('be.visible')
                     cy.wait(2000)
-                    cy.xpath('//h4[@id=\'giddh-page-heading\']', {timeout: 50000}).then((elementText) => {
+                    cy.get('.hamburger_menu > #giddh-page-heading-link > span', {timeout: 50000}).then((elementText) => {
                         cy.wait(5000).then(() =>{
                             const text = elementText.text();
                             cy.log(text)
@@ -78,9 +77,9 @@ describe('This is Login Test', function() {
                 $e1.trigger("click")
                 cy.wait(2000)
                 cy.get('body').type('{enter}').then(()=>{
-                    cy.xpath('//h4[@id=\'giddh-page-heading\']', {timeout: 50000}).should('be.visible')
+                    cy.get('.hamburger_menu > #giddh-page-heading-link > span', {timeout: 50000}).should('be.visible')
                     cy.wait(2000)
-                    cy.xpath('//h4[@id=\'giddh-page-heading\']', {timeout: 50000}).then((elementText) => {
+                    cy.get('.hamburger_menu > #giddh-page-heading-link > span', {timeout: 50000}).then((elementText) => {
                         cy.wait(5000).then(() =>{
                             const text = elementText.text();
                             cy.log(text)

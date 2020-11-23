@@ -85,8 +85,8 @@ Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) =>
             globalSearchPage.selectFirstValueAfterSearch().then(($btn) => {
                 $btn.click();
                 cy.wait(5000)
-                cy.xpath(elementPath, {timeout: 50000}).should('be.visible')
-                cy.xpath(elementPath, {timeout: 50000}).then((elementText) => {
+                cy.get(elementPath, {timeout: 50000}).should('be.visible')
+                cy.get(elementPath, {timeout: 50000}).then((elementText) => {
                     cy.wait(5000).then(() =>{
                         const text = elementText.text();
                         //  expect(text).to.eq(expectedText)
