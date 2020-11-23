@@ -179,6 +179,7 @@ export interface GetAllAdvanceReceiptsRequest {
     totalAmountOperation?: string;
     unUsedAmount?: number
     unUsedAmountOperation?: string;
+    branchUniqueName?: string;
 }
 
 /** Request object model for advance receipts summary API */
@@ -186,6 +187,7 @@ export interface AdvanceReceiptSummaryRequest {
     companyUniqueName: string;
     from?: string;
     to?: string;
+    branchUniqueName?: string;
 }
 
 export class ColumnarResponseResult {
