@@ -380,22 +380,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => {
-            if (!state.session.companies) {
-                return;
-            }
-            state.session.companies.forEach(cmp => {
-                if (cmp.uniqueName === state.session.companyUniqueName) {
-                    this.selectedCompany = cmp;
-
-                    if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
-                        this.showLoaderUntilDataPrefilled = true;
-                        this.purchaseOrderUniqueName = this.urlParams['purchaseOrderUniqueName'];
-                        this.getPurchaseOrder();
-                    }
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
+                this.selectedCompany = selectedCmp;
+                if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
+                    this.showLoaderUntilDataPrefilled = true;
+                    this.purchaseOrderUniqueName = this.urlParams['purchaseOrderUniqueName'];
+                    this.getPurchaseOrder();
                 }
-            });
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+            }
+        });
 
         this.createVendorList();
         this.initializeWarehouse();
