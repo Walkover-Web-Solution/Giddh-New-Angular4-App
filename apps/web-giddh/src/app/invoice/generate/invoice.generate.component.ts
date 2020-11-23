@@ -308,20 +308,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
                 let activeFinancialYear = selectedCmp.activeFinancialYear;
                 if (activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [

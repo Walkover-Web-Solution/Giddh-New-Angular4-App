@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { CommonActions } from '../../../actions/common.actions';
 import { ToasterService } from '../../../services/toaster.service';
-import { takeUntil, take, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { IOption } from '../../../theme/ng-select/ng-select';
@@ -25,8 +25,8 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
     templateUrl: './aside-sender-receiver-details.component.html',
     styleUrls: ['./aside-sender-reciver-details.component.scss'],
 })
-export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChanges, OnDestroy {
 
+export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChanges, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -41,6 +41,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     @Input() public isDebtorCreditor: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
@@ -49,8 +51,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public stateList: StateList[] = [];
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
-    public companiesList$: Observable<CompanyResponse[]>;
-    public activeCompany: CompanyResponse;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
     public isMultipleCurrency: boolean = false;
@@ -72,11 +72,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public isGstValid: boolean;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
-    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private _toaster: ToasterService, private commonActions: CommonActions, private _generalActions: GeneralActions) {
-        this.companiesList$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.getCountry();
         this.getCurrency();
@@ -147,36 +143,15 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
 
-        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a) {
-                this.companiesList$.pipe(take(1)).subscribe(companies => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
-                    if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
-                        this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
-                    }
-                });
-            }
-        });
-
-        this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe((session) => {
-            let companyUniqueName: string;
-            if (session.companyUniqueName) {
-                companyUniqueName = _.cloneDeep(session.companyUniqueName);
-            }
-            if (session.companies && session.companies.length) {
-                let companies = _.cloneDeep(session.companies);
-                let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
-                if (currentCompany) {
-                    // set country
-                    this.setCountryByCompany(currentCompany);
-                    this.companyCurrency = _.clone(currentCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
-                    // if (this.isMultipleCurrency) {
-                    //     this.addAccountForm.get('currency').enable();
-                    // } else {
-                    //     this.addAccountForm.get('currency').disable();
-                    // }
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
+                if (selectedCmp.countryV2 !== undefined && selectedCmp.countryV2 !== null) {
+                    this.getStates(selectedCmp.countryV2.alpha2CountryCode);
                 }
+
+                this.setCountryByCompany(selectedCmp);
+                this.companyCurrency = _.clone(selectedCmp.baseCurrency);
+                this.isMultipleCurrency = _.clone(selectedCmp.isMultipleCurrency);
             }
         });
 

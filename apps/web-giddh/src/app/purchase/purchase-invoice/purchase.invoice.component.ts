@@ -11,7 +11,6 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from '../../services/toaster.service';
 import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
-import { CompanyActions } from '../../actions/company.actions';
 import { AccountService } from '../../services/account.service';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
@@ -68,11 +67,11 @@ const fileGstrOptions = [
             state('out', style({
                 transform: 'translate3d(100%, 0, 0)'
             })),
-            transition('in <=> out', animate('400ms ease-in-out')),
-            // transition('out => in', animate('400ms ease-in-out'))
+            transition('in <=> out', animate('400ms ease-in-out'))
         ]),
     ]
 })
+
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     @ViewChild('pgGstNotFoundOnPortal', {static: true}) public pgGstNotFoundOnPortal: ElementViewContainerRef;
     @ViewChild('pgGstNotFoundOnGiddh', {static: true}) public pgGstNotFoundOnGiddh: ElementViewContainerRef;
@@ -114,7 +113,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     public gstMatchedData$: Observable<ReconcileActionState>;
     public gstPartiallyMatchedData$: Observable<ReconcileActionState>;
     public reconcileActiveTab: string = 'NOT_ON_PORTAL';
-
     public datePickerOptions$: Observable<any> = of(null);
     public activeFinancialYear: ActiveFinancialYear;
     public singleDatePickerOptions$: Observable<any> = of(null);
@@ -123,7 +121,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     public selectedRangeType: string = '';
     public isMonthSelected: boolean = false;
     public selectedMonth: any = moment(new Date());
-
     private intervalId: any;
     private undoEntryTypeChange: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -132,7 +129,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private invoicePurchaseActions: InvoicePurchaseActions,
         private toasty: ToasterService,
-        private companyActions: CompanyActions,
         private accountService: AccountService,
         private _reconcileActions: GstReconcileActions,
         private _generalServices: GeneralService,
@@ -144,24 +140,12 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.purchaseInvoiceRequestObject.entryUniqueName = [];
         this.purchaseInvoiceRequestObject.taxes = [];
 
-        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe((c) => {
-            if (c) {
-                this.activeCompanyUniqueName = _.cloneDeep(c);
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany && activeCompany.gstDetails && activeCompany.gstDetails[0]) {
+                this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
             }
         });
-        this.store.pipe(select(p => p.session.companies), take(1)).subscribe((c) => {
-            if (c.length) {
-                let companies = this.companies = _.cloneDeep(c);
-                if (this.activeCompanyUniqueName) {
-                    let activeCompany: any = companies.find((o: CompanyResponse) => o.uniqueName === this.activeCompanyUniqueName);
-                    if (activeCompany && activeCompany.gstDetails[0]) {
-                        this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
-                    }
-                }
-            } else {
-                this.store.dispatch(this.companyActions.RefreshCompanies());
-            }
-        });
+
         this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstFoundOnGiddh$ = this.store.pipe(select(p => p.gstReconcile.gstFoundOnGiddh), takeUntil(this.destroyed$));

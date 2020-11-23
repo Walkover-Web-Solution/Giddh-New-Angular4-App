@@ -234,7 +234,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     };
     public stockReport: StockReportResponse;
     public universalDate$: Observable<any>;
-    public selectedCompany$: Observable<any>;
     public selectedCmp: CompanyResponse;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public advanceSearchModalShow: boolean = false;
@@ -342,24 +341,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             }
         });
 
-        this.selectedCompany$ = this.store.pipe(select(createSelector([(sessionStore: AppState) => sessionStore.session.companies, (companyStore: AppState) => companyStore.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
+                this.getAllBranch();
             }
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            this.getAllBranch();
-            return selectedCmp;
-        })), takeUntil(this.destroyed$));
-        this.selectedCompany$.subscribe();
+        });
 
         this.accountUniqueNameInput.valueChanges.pipe(
             debounceTime(700),

@@ -184,7 +184,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public isGetAllRequestInProcess$: Observable<boolean> = of(true);
     public templateType: any;
     public companies$: Observable<CompanyResponse[]>;
-    public selectedCompany$: Observable<CompanyResponse>;
     public invoiceSetting: InvoiceSetting;
     public isDeleteSuccess$: Observable<boolean>;
     public allItemsSelected: boolean = false;
@@ -575,22 +574,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
         // this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.prepareModelForInvoiceReceiptApi(''), this.selectedVoucher));
 
-        this.selectedCompany$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            if (selectedCmp) {
+        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
+            if(selectedCmp) {
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
                 if (this.activeFinancialYear) {
@@ -603,12 +588,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         moment(this.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
                     ];
                 }
-            }
-            return selectedCmp;
-        })), takeUntil(this.destroyed$));
-        this.selectedCompany$.subscribe(cmp => {
-            if (cmp) {
-                this.activeFinancialYear = cmp.activeFinancialYear;
             }
         });
 
