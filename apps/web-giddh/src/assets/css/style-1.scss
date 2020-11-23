@@ -748,7 +748,7 @@ aside-menu-account .container-fluid {
 
 .companyList li {
     min-height: 49px;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid $gray-90;
     position: relative;
     padding-top: 4px;
 }
@@ -770,7 +770,7 @@ aside-menu-account .container-fluid {
 
 .companyList li h3 {
     padding: 4px 0 2px;
-    color: #333;
+    color: $night-rider;
     font-size: 14px;
 }
 
@@ -889,7 +889,7 @@ aside-menu-account .container-fluid {
 
 .dGryHead {
     background-color: #e2e2e2;
-    color: #333;
+    color: $night-rider;
     font-size: 15px;
     padding: 9px 20px;
 }
@@ -1521,7 +1521,7 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .plBtTbl thead {
-    background: #e0e0e0;
+    background: $gray-88;
 }
 
 .plBtTbl tfoot {
@@ -1930,8 +1930,8 @@ v-pane-header.show-pseudo {
 
 .title-bar {
     height: 50px;
-    background: #f5f5f5;
-    border-bottom: 1px solid #e0e0e0;
+    background: $gray-95;
+    border-bottom: 1px solid $gray-88;
     width: 100%;
     line-height: 50px;
     overflow: hidden;
@@ -1943,7 +1943,7 @@ v-pane-header.show-pseudo {
 
 .filter-bar {
     padding: 10px 10px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $gray-88;
     width: 100%;
 }
 
@@ -2081,7 +2081,7 @@ z-index: 9;
 
 .table-container div.row {
     border-bottom: 1px solid $gray-88;
-    /* border-right: 1px solid #e0e0e0; */
+    /* border-right: 1px solid $gray-88; */
 }
 
 .table-container .isHidden {
@@ -3086,18 +3086,18 @@ ul.pills li {
     background: $gray-95;
     height: 32px;
     padding: 5px 10px;
-    color: #333;
+    color: $night-rider;
 }
 
 /*.ledger-container-w table tr.bg3 th {*/
 
-/*background: #f5f5f5;*/
+/*background: $gray-95;*/
 
 /*height: 32px;*/
 
 /*padding: 5px 10px;*/
 
-/*color: #333;*/
+/*color: $night-rider;*/
 
 /*}*/
 
@@ -3300,7 +3300,7 @@ ul.pills li {
 
 .sub_nav_menu ul li:not(.divider):hover {
     /* background: rgba(63, 63, 63, .9); */
-    background: #2d9ee0;
+    background: $primary;
 }
 
 .sub_nav_menu li i.glyphicon-trash {
@@ -3573,8 +3573,8 @@ ul.pills li {
 
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
-    background: #221f1f none repeat scroll 0 0;
-    border: 7px solid #c63b13;
+    background: $nero none repeat scroll 0 0;
+    border: 7px solid $bright-red;
     border-radius: 50%;
     box-shadow: 0 -10px 0 14px $white inset;
     box-sizing: border-box;
@@ -3603,7 +3603,7 @@ ul.pills li {
 }
 
 .font-white {
-    color: white;
+    color: $white;
     padding: 10px;
 }
 
@@ -3971,7 +3971,7 @@ tr.db-bnk-account > td.reconnectDiv {
 /* add generic styling for the editor */
 
 .ta-root.focussed > .ta-scroll-window.form-control {
-    border-color: #66afe9;
+    border-color: $malibu;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
         0 0 8px rgba(102, 175, 233, 0.6);
@@ -4016,7 +4016,7 @@ tr.db-bnk-account > td.reconnectDiv {
     position: absolute;
     bottom: 16px;
     right: 16px;
-    border: 1px solid black;
+    border: 1px solid $black;
     background-color: $white;
     padding: 0 4px;
     opacity: 0.7;
@@ -4028,7 +4028,7 @@ tr.db-bnk-account > td.reconnectDiv {
     right: 5px;
     left: 5px;
     top: 5px;
-    border: 1px solid black;
+    border: 1px solid $black;
     background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -4041,30 +4041,30 @@ tr.db-bnk-account > td.reconnectDiv {
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tl {
     top: 0;
     left: 0;
-    border-left: 1px solid black;
-    border-top: 1px solid black;
+    border-left: 1px solid $black;
+    border-top: 1px solid $black;
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tr {
     top: 0;
     right: 0;
-    border-right: 1px solid black;
-    border-top: 1px solid black;
+    border-right: 1px solid $black;
+    border-top: 1px solid $black;
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-bl {
     bottom: 0;
     left: 0;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+    border-left: 1px solid $black;
+    border-bottom: 1px solid $black;
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-br {
     bottom: 0;
     right: 0;
-    border: 1px solid black;
+    border: 1px solid $black;
     cursor: se-resize;
-    background-color: white;
+    background-color: $white;
 }
 
 /* copy the popover code from bootstrap so this will work even without it */
@@ -4171,7 +4171,7 @@ border-bottom-color: $white;
     border: 0 solid #cacaca;
     border: 0 solid rgba(0, 0, 0, 0.2) !important;
     height: 100%;
-    background-color: #f0f0f0;
+    background-color: $gray-94;
     overflow-y: auto;
 }
 
@@ -4190,7 +4190,7 @@ display:none;
 
 .proforma-list > .filters {
     padding: 5px 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $gray-88;
     margin-bottom: 5px;
     position: relative;
 }
@@ -4272,7 +4272,7 @@ width:30px;
 }
 
 .invoice-wrapper-m.a4 .hasVar input.isEditable {
-    border: 1px solid #444;
+    border: 1px solid $tundora;
 }
 
 .proforma-particulars tr td {
@@ -4348,7 +4348,7 @@ left: 16px !important;
 }
 
 .steps-indicator li.current:last-child a:before {
-    background-color: #393;
+    background-color: $cloud-burst;
 }
 
 /*** stock inventory**/
@@ -4356,7 +4356,7 @@ left: 16px !important;
 /*.stock-bar{
 padding:10px;
 margin:0;
-border-bottom: 1px solid #e0e0e0;
+border-bottom: 1px solid $gray-88;
 }*/
 
 .stock-bar ul {
@@ -4394,8 +4394,8 @@ border-bottom: 1px solid #e0e0e0;
 .sidebar {
     width: 320px;
     height: 100%;
-    border-right: 1px solid #e0e0e0;
-    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid $gray-88;
+    border-left: 1px solid $gray-88;
     padding: 10px;
 }
 
@@ -4405,23 +4405,23 @@ border-bottom: 1px solid #e0e0e0;
 
 .stock-grp-list > li > a {
     /* text-transform: uppercase; */
-    color: #616161;
+    color: $dim-gray-new;
 }
 
 .sub-grp > li > a {
     text-transform: uppercase;
-    color: #616161;
+    color: $dim-gray-new;
     font-weight: 400;
 }
 
 .stock-items > li > a {
     text-transform: capitalize;
-    color: #909090;
+    color: $suva-grey;
 }
 
 .stock-items > li > a:hover,
 .sub-grp > li > a:hover {
-    color: #616161;
+    color: $dim-gray-new;
 }
 
 .stock-grp.list {
@@ -4431,7 +4431,7 @@ border-bottom: 1px solid #e0e0e0;
 
 .stock-grp-list li > i {
     top: 3px;
-    color: #616161;
+    color: $dim-gray-new;
     float: right;
 }
 
@@ -4444,7 +4444,7 @@ border-bottom: 1px solid #e0e0e0;
 .stock-grp-list > li {
     /* padding: 7px 0; */
     padding: 6px 0 6px 15px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $gray-88;
     /* background-color: rgb(220, 220, 220); */
 }
 
@@ -4477,7 +4477,7 @@ border-bottom: 1px solid #e0e0e0;
 
 .stock-twin-list ul li {
     padding: 5px;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid $gray-88;
 }
 
 .stock-twin-list ul li:first-child {
@@ -4485,7 +4485,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .stock-twin-list ul li > a {
-    color: #444;
+    color: $tundora;
 }
 
 .uppercase {
@@ -4503,7 +4503,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .recurring-entry-grid .re-header {
-    background: #337ab7;
+    background: $curious-blue;
     overflow: hidden;
 }
 
@@ -4516,7 +4516,7 @@ border-bottom: 1px solid #e0e0e0;
 .recurring-entry-grid .re-body .row {
     padding: 0;
     margin: 0;
-    border: 1px solid #e0e0e0;
+    border: 1px solid $gray-88;
     border-top: none;
     max-height: 42px;
     transition: max-height 0.15s ease-out;
@@ -4569,7 +4569,7 @@ border-bottom: 1px solid #e0e0e0;
     padding: 10px;
     background: $white;
     overflow: hidden;
-    border-top: 1px solid #f5f5f5;
+    border-top: 1px solid $gray-95;
     position: relative;
 }
 
@@ -4579,16 +4579,16 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .recurring-entry-grid .re-body .row.animate input {
-    border: 1px solid #f0f0f0;
+    border: 1px solid $gray-94;
 }
 
 .recurring-entry-grid .re-body .row.animate input:disabled {
-    background: #e0e0e0;
+    background: $gray-88;
 }
 
 .recurring-entry-grid .filters {
     padding: 10px 0;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid $gray-88;
 }
 
 .recurring-entry-grid .filters ul li input,
@@ -4610,7 +4610,7 @@ border-bottom: 1px solid #e0e0e0;
     font-size: 10px;
     right: calc(50% + 10px);
     top: 22px;
-    color: #9e9c9c;
+    color: $dark-nobel;
 }
 
 .mtop-neg-54 {
@@ -4650,7 +4650,7 @@ border-bottom: 1px solid #e0e0e0;
     margin: 0;
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
     border-right: 1px solid $gainsboro;
-    background: #fdfdfd;
+    background: $ghost-white;
 }
 
 .tour-backdrop {
@@ -4776,7 +4776,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .modal-dialog.gray .modal-content {
-    background: #f4f5f8;
+    background: $solitude;
     border-radius: 0;
 }
 
@@ -4793,14 +4793,14 @@ border-bottom: 1px solid #e0e0e0;
 
 .modal-liquid.modal-dialog .modal-content .modal-header,
 .modal-liquid.modal-dialog .modal-content .modal-body {
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 /*box styles  on settings integration page*/
 
 .box {
     padding: 15px;
-    background-color: white;
+    background-color: $white;
     /* margin: 20px 0; */
 }
 
@@ -4829,7 +4829,7 @@ border-bottom: 1px solid #e0e0e0;
     .select2-selection--single
     .select2-selection__rendered {
     line-height: 32px;
-    color: #616161;
+    color: $dim-gray-new;
     font-size: 14px;
     padding-left: 0;
 }
@@ -4870,7 +4870,7 @@ border-bottom: 1px solid #e0e0e0;
 .dropdown-menu > .active > a > a,
 .dropdown-menu > .active > a > a:focus,
 .dropdown-menu > .active > a > a:hover {
-    color: white;
+    color: $white;
 }
 
 .dropdown-menu > li > a,
@@ -4879,8 +4879,8 @@ border-bottom: 1px solid #e0e0e0;
 .dropdown-menu > li > a > a,
 .dropdown-menu > li > a > a:focus,
 .dropdown-menu > li > a > a:hover {
-    color: black;
-    background-color: white;
+    color: $black;
+    background-color: $white;
 }
 
 #setting-tab .nav > li > a:focus,
@@ -4888,7 +4888,7 @@ border-bottom: 1px solid #e0e0e0;
     background: transparent;
 }
 .navbar-inverse .navbar-nav > .open > a {
-    background-color: #292929;
+    background-color: $nero;
     border-color: transparent;
 }
 
@@ -4905,17 +4905,17 @@ strong {
 }
 
 .hamburger-menu a:hover {
-    color: #fff !important;
+    color: $white !important;
 }
 
 .hamburger-menu.open a {
     background: transparent !important;
-    color: #fff !important;
+    color: $white !important;
 }
 
 .navbar-inverse .btn-link:focus,
 .navbar-inverse .btn-link:hover {
-    color: #333;
+    color: $night-rider;
 }
 
 b,
@@ -4981,7 +4981,7 @@ bs-datepicker-container {
 #sFSection-Jkvq .sFsubmit.btn-primary {
     font-size: 14px !important;
     background: #28ab00 !important;
-    color: #fff !important;
+    color: $white !important;
 }
 
 /* added by sarfaraz */
@@ -5016,11 +5016,11 @@ bs-datepicker-container {
 }
 
 .modal-dialog.universal_modal .shortcuts {
-    background: #f9f9f9;
+    background: $snow;
     border-top: none;
     margin: 0;
     padding: 12px 16px 12px 20px;
-    color: #717274;
+    color: $nevada;
     font-size: 12px;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -5040,12 +5040,12 @@ perfect-scrollbar.ps-show-active
 
 .sub-menu-nav li > a {
     padding: 5px 12px;
-    color: #333333;
+    color: $night-rider;
     display: block;
 }
 
 .sub-menu-nav li > a:hover {
-    background: #2d9ee0;
+    background: $primary;
 }
 
 .no-dbl-click-select {
@@ -5071,7 +5071,7 @@ perfect-scrollbar.ps-show-active
 
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid #a2a2a2;
+    border-bottom: 1px solid $nobel;
     display: inline-block;
     width: 57px;
     margin-right: 13px;
@@ -5079,7 +5079,7 @@ perfect-scrollbar.ps-show-active
 
 .or-line::after {
     content: "";
-    border-bottom: 1px solid #a2a2a2;
+    border-bottom: 1px solid $nobel;
     display: inline-block;
     width: 57px;
     margin-left: 13px;
@@ -5088,7 +5088,7 @@ perfect-scrollbar.ps-show-active
 .or-line {
     display: flex;
     align-items: center;
-    color: #a2a2a2;
+    color: $nobel;
     margin-bottom: 10px;
 }
 
@@ -5099,7 +5099,7 @@ perfect-scrollbar.ps-show-active
 }
 
 .basic thead tr th {
-    background: #e5e5e5;
+    background: $gray-90;
     color: $nero;
     border: 0;
     font-family: "" opensans-semibold "";
@@ -5107,7 +5107,7 @@ perfect-scrollbar.ps-show-active
 }
 
 .basic tbody tr:hover td {
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 body.fixed {

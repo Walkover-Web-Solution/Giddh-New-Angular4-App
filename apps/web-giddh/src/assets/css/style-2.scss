@@ -240,86 +240,6 @@ body{
     padding: 40px !important;
 }
 
-.pt-1 {
-    padding-top: 10px !important;
-}
-
-.pb-1 {
-    padding-bottom: 10px !important;
-}
-
-.pr-1 {
-    padding-right: 10px !important;
-}
-
-.pl-1 {
-    padding-left: 10px !important;
-}
-
-.pt-2 {
-    padding-top: 20px !important;
-}
-
-.pb-2 {
-    padding-bottom: 20px !important;
-}
-
-.pr-2 {
-    padding-right: 20px !important;
-}
-
-.pl-2 {
-    padding-left: 20px !important;
-}
-
-.pt-3 {
-    padding-top: 30px !important;
-}
-
-.pb-3 {
-    padding-bottom: 30px !important;
-}
-
-.pr-3 {
-    padding-right: 30px !important;
-}
-
-.pl-3 {
-    padding-left: 30px !important;
-}
-
-.pt-4 {
-    padding-top: 40px !important;
-}
-
-.pb-4 {
-    padding-bottom: 40px !important;
-}
-
-.pr-4 {
-    padding-right: 40px !important;
-}
-
-.pl-4 {
-    padding-left: 40px !important;
-}
-
-.pt-5 {
-    padding-top: 50px !important;
-}
-
-.pb-5 {
-    padding-bottom: 50px !important;
-}
-
-.pr-5 {
-    padding-right: 50px !important;
-}
-
-.pl-5 {
-    padding-left: 50px !important;
-}
-
 .pr-15 {
     padding-right: 15px;
 }
@@ -1139,7 +1059,7 @@ ul.sub-list {
 
 .aging-table-top .top-aging-table-top strong,
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    color: #1c1c1c;
+    color: $nero;
 }
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
@@ -4961,7 +4881,7 @@ label {
 }
 
 .grp-col::-webkit-scrollbar-track {
-    background: #eee;
+    background: $whisper-light;
     margin-left: 255px;
 }
 
@@ -5649,7 +5569,7 @@ a {
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
-    background-color: #eee !important;
+    background-color: $whisper-light !important;
 }
 
 input[type="checkbox"][disabled] {
@@ -5680,7 +5600,7 @@ input[type="checkbox"][disabled] {
     font-size: 12px;
     line-height: 1.5;
     border-radius: 3px;
-    background: #eee;
+    background: $whisper-light;
     border: 1px solid $gainsboro;
 }
 
@@ -5931,7 +5851,7 @@ input[type="checkbox"][disabled]:after {
 
 .table-container .account {
     background: $solitude;
-    /* background: #eee; */
+    /* background: $whisper-light; */
 }
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
@@ -6129,7 +6049,7 @@ typeahead-container .dropdown-menu li.active > a,
 typeahead-container .dropdown-menu li:hover > a,
 typeahead-container .dropdown-menu > .active > a:hover,
 typeahead-container .dropdown-menu li.active > a > a:hover {
-    background-color: rgb(244, 245, 248);
+    background-color: $solitude;
 }
 
 .has-item {
@@ -6337,7 +6257,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .user-list {
     padding: 15px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $whisper-light;
     overflow: hidden;
 }
 
@@ -6496,7 +6416,7 @@ table td[class*=col-]:last-child {
 }
 
 .thead-background1 th {
-    background: #eaebed;
+    background: $solitude;
     color: $dark-liver;
     border-right: 1px solid $gainsboro;
     padding: 11px !important;
@@ -6642,7 +6562,7 @@ table td[class*=col-]:last-child {
 /* left bar menu */
 
 .form-body .toggle-btn label {
-    color: #7f7f7f;
+    color: $gray;
 }
 
 .user-dropdown-header {
@@ -6702,7 +6622,7 @@ table td[class*=col-]:last-child {
 
 .app-list > ul li a {
     padding: 3px 0;
-    color: #555;
+    color: $davy-grey;
     display: block;
     position: relative;
     font-size: 12px;
@@ -6883,7 +6803,7 @@ table td[class*=col-]:last-child {
     position: absolute;
     top: 2px;
     right: -48px;
-    background: #eee;
+    background: $whisper-light;
     border-radius: 100%;
     padding: 7px 7px;
     text-transform: uppercase;
@@ -6946,7 +6866,7 @@ panel.sFthanks.fieldset {
 
 .tbpl-dropdown .caret {
     transform: rotate(180deg);
-    border-top: 7px dashed #bbb;
+    border-top: 7px dashed $autumn-fog;
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     position: absolute;
@@ -7222,7 +7142,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .nav-tabs > li a {
     font-size: 15px;
-    color: #555;
+    color: $davy-grey;
     margin-right: 0;
     height: 100%;
     padding: 14px 40px;
@@ -7252,7 +7172,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $whisper-light;
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary {
@@ -7324,7 +7244,7 @@ th:first-child {
 }
 
 .tax-engine .table thead > tr > th {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $whisper-light;
     color: $dark-gray;
 }
 
@@ -7337,7 +7257,7 @@ th:first-child {
 
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: #f9f9f9;
+    background-color: $snow;
 }
 
 .tax-engine .table tbody > tr > td,
@@ -7349,7 +7269,7 @@ th:first-child {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $whisper-light;
 }
 
 .tax-engine
@@ -7419,7 +7339,7 @@ th:first-child {
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a,
 .tax-engine .sub-filter-nav-bandnew ul > li.active > a {
-    color: #222;
+    color: $gray;
     font-weight: 600;
 }
 
@@ -7479,7 +7399,7 @@ th:first-child {
 }
 
 .tax-engine .transactions-list .filter-band {
-    background-color: #f5fafe;
+    background-color: $alice-blue-dark;
     padding: 20px;
     height: 66px;
 }
@@ -7527,8 +7447,8 @@ th:first-child {
 .tax-engine .transactions-list .filter-band .btn,
 .tax-engine .transactions-list .filter-band .btn:focus,
 .tax-engine .transactions-list .filter-band .btn:hover {
-    color: #2a85fb;
-    border-color: #2a85fb;
+    color: $primary;
+    border-color: $primary;
     background-color: transparent;
     box-shadow: none;
 }
@@ -7542,7 +7462,7 @@ th:first-child {
 .tax-engine .transactions-list .filter-band .btn .caret,
 .tax-engine .transactions-list .filter-band .btn:focus .caret,
 .tax-engine .transactions-list .filter-band .btn:hover .caret {
-    border-top-color: #2a85fb;
+    border-top-color: $primary;
 }
 
 .tax-engine .caret {
@@ -7582,8 +7502,8 @@ th:first-child {
 }
 
 .tax-engine .transactions-overview .transaction-info:hover {
-    border: 1px solid #eee;
-    box-shadow: 0 0 20px 3px #f9f9f9;
+    border: 1px solid $whisper-light;
+    box-shadow: 0 0 20px 3px $snow;
 }
 
 .tax-engine .transactions-overview .transaction-info {
@@ -7625,15 +7545,15 @@ th:first-child {
     font-style: italic;
     padding: 14px 25px;
     font-size: 13px;
-    color: #337ab7;
+    color: $curious-blue;
 }
 
 .tax-engine .sub-filter-nav-band > ul > li .count {
-    color: #cb1119;
+    color: $thunderbird;
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a {
-    color: #222;
+    color: $gray;
     font-weight: 600;
     border: 0;
 }
@@ -7651,7 +7571,7 @@ th:first-child {
 }
 
 .zi-table {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $whisper-light;
     table-layout: fixed;
 }
 
@@ -7685,7 +7605,7 @@ th:first-child {
 }
 
 .zi-table.table-hover tbody tr:hover td {
-    background-color: #fafafa;
+    background-color: $gray-98;
     cursor: pointer;
 }
 
@@ -7698,7 +7618,7 @@ th:first-child {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $whisper-light;
 }
 
 .tax-engine .details .details-info,
@@ -7730,7 +7650,7 @@ th:first-child {
 tbody
 > tr:hover
 .actions-dropdown-btn {
-    border: 1px solid #2a85fb;
+    border: 1px solid $primary;
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown-btn,
@@ -7739,11 +7659,11 @@ tbody
 tbody
 > tr:hover
 .reconcile-row-action {
-    color: #2a85fb;
+    color: $primary;
 }
 
 .tax-engine .table.reconciliations-table .unrecognized-value {
-    color: #cb1119;
+    color: $thunderbird;
 }
 
 /*.tax-engine .table.reconciliations-table .recognized-value,
@@ -7752,11 +7672,11 @@ tbody
 }*/
 
 .tax-engine .reconciliation-accepted {
-    color: #39c296;
+    color: $bright-green;
 }
 
 .zi-table.table thead > tr > th {
-    color: #263035;
+    color: $oxford-blue;
     background: $white;
     font-weight: 700;
     font-size: 12px;
@@ -7775,12 +7695,12 @@ tbody
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
-    color: #222;
+    color: $gray;
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: #f9f9f9;
+    background-color: $snow;
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
@@ -7798,7 +7718,7 @@ tbody
 
 .tax-engine .header-band {
     width: 100%;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $whisper-light;
     padding: 5px 0;
     margin-bottom: 15px;
 }
@@ -7837,7 +7757,7 @@ tbody
 
 .tax-engine .gstr-transactions-summary .table > tbody > tr.row-hover:hover {
     cursor: pointer;
-    background-color: #fafafa;
+    background-color: $gray-98;
 }
 
 .tax-engine
@@ -7870,11 +7790,11 @@ app-header {
 }
 
 .invalid-inp {
-    border: 2px solid red;
+    border: 2px solid $red;
 }
 
 .text-danger {
-    color: red;
+    color: $red;
 }
 
 #ngb-typeahead-1 {
@@ -7899,7 +7819,7 @@ app-header {
 }
 
 .text-warning {
-    color: #ffa000;
+    color: $orange-peel;
 }
 
 .heightVH-100 {
@@ -7937,7 +7857,7 @@ app-header {
 }
 
 #form-place .dropdown-menu .dropdown-item:hover {
-    background-color: rgb(244, 245, 248);
+    background-color: $solitude;
 }
 
 /* sticky footer css merged */
@@ -7964,7 +7884,7 @@ app-header {
 
 .sticky-footer-sale-amount .totalSale h3 {
     font-size: 20px;
-    color: #8f9091;
+    color: $aluminum;
     padding-right: 13px;
 }
 
@@ -8237,7 +8157,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     width: 0px;
     height: 0px;
     display: block;
-    border-top: 5px solid #bfbfbf;
+    border-top: 5px solid $gray-75;
     border-bottom: 5px solid transparent;
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
@@ -8247,7 +8167,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .welcome-header hr {
-    border-top-color: #b3b4b5;
+    border-top-color: $heather;
 }
 
 .btn-group-voucher-type label {
@@ -8282,7 +8202,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 span.red-text {
-    color: red;
+    color: $red;
 }
 
 #invoice-setting .nav > li > a:focus,
@@ -8296,7 +8216,7 @@ span.red-text {
 }
 
 .welcome-header hr {
-    border-top-color: #b3b4b5;
+    border-top-color: $heather;
 }
 
 .no-select {
@@ -8316,7 +8236,7 @@ span.red-text {
 
 .icon-btn .btn-xs {
     border: 1px solid $gainsboro;
-    background-color: #eee;
+    background-color: $whisper-light;
 }
 
 .modal.fade.open-popup.in.show {
@@ -8422,19 +8342,19 @@ span.red-text {
 }
 
 .ratio-chart-block:first-child span.pie-text_center {
-    color: #2681ef;
+    color: $primary;
 }
 
 .ratio-chart-block:nth-child(2) span.pie-text_center {
-    color: #edaf12;
+    color: $vivid-orange;
 }
 
 .ratio-chart-block:nth-child(3) span.pie-text_center {
-    color: #f74074;
+    color: $violet-red;
 }
 
 .ratio-chart-block:nth-child(4) span.pie-text_center {
-    color: #27a264;
+    color: $java;
 }
 
 .dashboard-container input[type="checkbox"]:checked:after {
@@ -8543,7 +8463,7 @@ ul.dropdown-menu p.lead.pd {
 .btn-lg.btn-primary:hover {
     background: $chetwode-blue;
     color: $white;
-    box-shadow: 0px 4px 4px -3px #afabab;
+    box-shadow: 0px 4px 4px -3px $dim-gray;
     border-radius: 0px;
     border-color: $chetwode-blue;
 }
@@ -8667,11 +8587,11 @@ ul.dropdown-menu p.lead.pd {
 }
 
 table.basic td {
-    color: #1c1c1c;
+    color: $nero;
 }
 
 .invoice-table td > a {
-    color: #1c1c1c;
+    color: $nero;
 }
 
 button.btn.btn-filter {
@@ -8739,7 +8659,7 @@ button.btn.btn-filter {
 .form-group sup {
     font-size: 14px;
     top: 0;
-    color: red;
+    color: $red;
 }
 
 .aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs {
@@ -8897,7 +8817,7 @@ p.remvBrnchName {
 .bs-datepicker-body table.days td.in-range:not(.select-start):before,
 .bs-datepicker-body table.days span.active:not(.select-start):before,
 .bs-datepicker-body table.days span.in-range:not(.select-start):before {
-    background: #ebedff;
+    background: $lavender-light;
 }
 
 .theme-green .bs-datepicker-body table td.week span {
@@ -9430,7 +9350,7 @@ span#HW_badge_cont:nth-child(3) {
 .select-border-bottom {
     .form-control {
         border: none;
-        border-bottom: 1px solid #d9d9d9;
+        border-bottom: 1px solid $gainsboro;
         width: 100%;
     }
 }
