@@ -1,5 +1,5 @@
 import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -45,6 +45,22 @@ export class SettingsBranchService {
             data.queryString = {};
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Retrieves the branches of a company
+     *
+     * @param {string} companyUniqueName Company unique name
+     * @returns {Observable<BaseResponse<any, any>>} Observable to perform further actions
+     * @memberof SettingsBranchService
+     */
+    public getBranchByCompany(companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        if (companyUniqueName) {
+            let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
+            url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+            return this._http.get(url).pipe(catchError((error => this.errorHandler.HandleCatch<any, any>(error))));
+        }
+        return of(null);
     }
 
 	/**
