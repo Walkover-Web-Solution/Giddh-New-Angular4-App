@@ -101,7 +101,7 @@
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
         <ng-container>
-            <tab heading="Address" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" [ngClass]="{'active': isDebtorCreditor}" class="gstin-address">
+            <tab heading="Address" [active]="isDebtorCreditor || isBankAccount" [disabled]="!isDebtorCreditor && !isBankAccount" [ngClass]="{'active': isDebtorCreditor}" class="gstin-address">
                 <ng-container>
                     <div class="gstin-form" formArrayName="addresses">
                         <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
