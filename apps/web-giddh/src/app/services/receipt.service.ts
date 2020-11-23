@@ -332,17 +332,18 @@ export class ReceiptService implements OnInit {
     public getAllAdvanceReceipts(requestObject: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
         const companyUniqueName = String(requestObject.companyUniqueName);
         delete requestObject.companyUniqueName;
-        return this._http.post(
-            `${this.config.apiUrl}${RECEIPT_API.GET_ALL_ADVANCE_RECEIPTS}`
-                .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-                .replace(':sortBy', requestObject && requestObject.sortBy ? requestObject.sortBy : '')
-                .replace(':sort', requestObject && requestObject.sort ? requestObject.sort : '')
-                .replace(':page', (requestObject && requestObject.page) ? String(requestObject.page) : '')
-                .replace(':count', requestObject && requestObject.count ? String(requestObject.count) : '')
-                .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
-                .replace(':to', requestObject && requestObject.to ? requestObject.to : ''),
-            requestObject
-        ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, GetAllAdvanceReceiptsRequest>(error)));
+        let url = `${this.config.apiUrl}${RECEIPT_API.GET_ALL_ADVANCE_RECEIPTS}`
+        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+        .replace(':sortBy', requestObject && requestObject.sortBy ? requestObject.sortBy : '')
+        .replace(':sort', requestObject && requestObject.sort ? requestObject.sort : '')
+        .replace(':page', (requestObject && requestObject.page) ? String(requestObject.page) : '')
+        .replace(':count', requestObject && requestObject.count ? String(requestObject.count) : '')
+        .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+        .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
+        if (requestObject.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
+        }
+        return this._http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, GetAllAdvanceReceiptsRequest>(error)));
     }
 
     /**
@@ -355,12 +356,13 @@ export class ReceiptService implements OnInit {
     public fetchSummary(requestObject: AdvanceReceiptSummaryRequest): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
         const companyUniqueName = String(requestObject.companyUniqueName);
         delete requestObject.companyUniqueName;
-        return this._http.get(
-            `${this.config.apiUrl}${RECEIPT_API.GET_ADVANCE_RECEIPTS_SUMMARY}`
-                .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-                .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
-                .replace(':to', requestObject && requestObject.to ? requestObject.to : ''),
-            {}
-        ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, AdvanceReceiptSummaryRequest>(error)));
+        let url = `${this.config.apiUrl}${RECEIPT_API.GET_ADVANCE_RECEIPTS_SUMMARY}`
+        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+        .replace(':from', requestObject && requestObject.from ? requestObject.from : '')
+        .replace(':to', requestObject && requestObject.to ? requestObject.to : '');
+        if (requestObject.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${requestObject.branchUniqueName !== companyUniqueName ? requestObject.branchUniqueName : ''}`);
+        }
+        return this._http.get(url, {}).pipe(catchError((error) => this.errorHandler.HandleCatch<any, AdvanceReceiptSummaryRequest>(error)));
     }
 }

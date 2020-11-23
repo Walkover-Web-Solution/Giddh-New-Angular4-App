@@ -96,7 +96,8 @@ export class ImportExcelStatusResponse {
 	public totalRows: number;
 	public successRows: number;
 	public processDate: string;
-	public submittedBy: string;
+    public submittedBy: string;
+    public branch?: any;
 }
 
 export class ImportExcelStatusPaginatedResponse extends CommonPaginatedRequest {

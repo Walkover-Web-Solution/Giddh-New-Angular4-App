@@ -413,6 +413,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
+        this.expand = false;
+        setTimeout(() => {
+            this.expandAll.emit(this.expand);
+        }, 10);
         this.onPropertyChanged.emit(this.filterForm.value);
     }
 

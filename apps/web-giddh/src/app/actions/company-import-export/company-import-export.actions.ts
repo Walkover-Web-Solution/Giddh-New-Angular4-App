@@ -4,10 +4,9 @@ import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AUDIT_LOGS_ACTIONS } from './audit-logs.const';
 import { CustomActions } from '../../store/customActions';
 import { CompanyImportExportService } from '../../services/companyImportExportService';
 import { COMPANY_IMPORT_EXPORT_ACTIONS } from './company-import-export.const';
@@ -23,7 +22,7 @@ export class CompanyImportExportActions {
             switchMap((action: CustomActions) => {
 
                 if (action.payload.fileType === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
-                    return this._companyImportExportService.ExportRequest().pipe(
+                    return this._companyImportExportService.ExportRequest(action.payload.branchUniqueName).pipe(
                         map((response: BaseResponse<any, string>) => {
                             if (response.status === 'success') {
                                 let res = { body: response.body };
@@ -36,7 +35,7 @@ export class CompanyImportExportActions {
                             return this.ExportResponse(response);
                         }));
                 } else {
-                    return this._companyImportExportService.ExportLedgersRequest(action.payload.from, action.payload.to).pipe(
+                    return this._companyImportExportService.ExportLedgersRequest(action.payload.from, action.payload.to, action.payload.branchUniqueName).pipe(
                         map((response: BaseResponse<any, string>) => {
                             if (response.status === 'success') {
                                 let res = { body: response.body };
@@ -56,7 +55,7 @@ export class CompanyImportExportActions {
             switchMap((action: CustomActions) => {
 
                 if (action.payload.fileType === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
-                    return this._companyImportExportService.ImportRequest(action.payload.file).pipe(
+                    return this._companyImportExportService.ImportRequest(action.payload.file, action.payload.branchUniqueName).pipe(
                         map((r: BaseResponse<string, string>) => {
                             if (r.status === 'success') {
                                 this._toasty.successToast(r.body);
@@ -85,10 +84,10 @@ export class CompanyImportExportActions {
         private _generalService: GeneralService) {
     }
 
-    public ExportRequest(fileType: CompanyImportExportFileTypes, from?: string, to?: string): CustomActions {
+    public ExportRequest(fileType: CompanyImportExportFileTypes, from?: string, to?: string, branchUniqueName?: string): CustomActions {
         return {
             type: COMPANY_IMPORT_EXPORT_ACTIONS.EXPORT_REQUEST,
-            payload: { fileType, from, to }
+            payload: { fileType, from, to, branchUniqueName }
         };
     }
 
@@ -99,10 +98,10 @@ export class CompanyImportExportActions {
         };
     }
 
-    public ImportRequest(fileType: CompanyImportExportFileTypes, file: File): CustomActions {
+    public ImportRequest(fileType: CompanyImportExportFileTypes, file: File, branchUniqueName: string): CustomActions {
         return {
             type: COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_REQUEST,
-            payload: { fileType, file }
+            payload: { fileType, file, branchUniqueName }
         };
     }
 
