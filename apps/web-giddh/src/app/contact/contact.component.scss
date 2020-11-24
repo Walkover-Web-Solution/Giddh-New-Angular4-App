@@ -34,7 +34,7 @@
 
 .icon-pointer.iconSearch {
     top: 30%;
-    color: #a9a9a9;
+    color: $dim-gray;
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -87,7 +87,7 @@
 }
 
 .custom-detail h4 {
-    color: #707070;
+    color: $gray-44;
     margin-top: 7px;
     font-size: 14px !important;
     font-family: opensans-regular !important;
@@ -100,12 +100,12 @@ ul.list-unstyled li a {
 .p-modal-tooltip {
     display: block;
     position: absolute;
-    background-color: white;
+    background-color: $white;
     z-index: 1000;
     width: 257px;
-    border: 1px solid #b4afaf;
+    border: 1px solid $pink-swan;
     border-radius: 4px;
-    box-shadow: 0 7px 24px #00000038;
+    box-shadow: 0 7px 24px $black-shadow;
     top: -2px;
 }
 
@@ -143,6 +143,9 @@ td.commentField {
     white-space: normal;
 }
 
+.date-range-picker{
+    width: 250px !important;
+}
 //  my css
 .aging-table tbody tr:first-child td {
     border-top: none;
@@ -170,7 +173,7 @@ td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer
 
 tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
 tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
-    border-bottom: 1px solid #ddd !important;
+    border-bottom: 1px solid $gainsboro-light !important;
 }
 
 .position-relative.word-wrap {
@@ -179,7 +182,7 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
         font-size: 20px;
         vertical-align: middle;
         display: none;
-        color: #333333;
+        color: $night-rider;
     }
     &:hover .icon-dots-three-vertical {
         display: block;
@@ -215,30 +218,30 @@ tr.aging-table-top td {
 
 #dropdown-basics {
     position: fixed !important;
-    background: red;
+    background: $red;
     bottom: initial;
 }
 
-.btn-group.moreBtn.open.show {
+.btn-group.more-button.open.show {
     display: inline-block !important;
 }
 
-.moreBtn li {
+.more-button li {
     padding: 5px;
     cursor: default;
 }
 
-.moreBtn li:hover {
-    background-color: #eeeff9;
+.more-button li:hover {
+    background-color: $lavender;
     color: $jacksons-purple;
 }
 
 .btn-primary.active,
 .btn-primary:active,
 .open>.dropdown-toggle.btn-primary {
-    color: #333;
-    background-color: #e7e7e8;
-    border-color: #e7e7e8;
+    color: $night-rider;
+    background-color: $lavender-dark;
+    border-color: $lavender-dark;
     box-shadow: none !important;
 }
 
@@ -251,7 +254,7 @@ i.icon-options {
     width: 36px;
     height: 36px;
     border: 1px solid $gainsboro;
-    background-color: #fff;
+    background-color: $white;
     color: $gray;
     font-size: 20px;
     padding: 0;
@@ -261,7 +264,7 @@ i.icon-options {
 }
 
 i.icon-options:hover {
-    background-color: #eaeaea;
+    background-color: $whisper-color;
 }
 
 .search-field {
@@ -271,12 +274,12 @@ i.icon-options:hover {
 
 .search-field input {
     width: 235px;
-    background-color: #e6e7e8 !important;
-    border-color: #e6e7e8 !important;
+    background-color: $solitude-dark !important;
+    border-color: $solitude-dark !important;
 }
 
 .search-field input:focus {
-    background-color: #fff !important;
+    background-color: $white !important;
     border-color: $midnight-express !important;
 }
 span.input-addon {
@@ -284,7 +287,7 @@ span.input-addon {
     right: 0px;
     padding: 4px 9px;
     background-color: $chetwode-blue;
-    color: #fff;
+    color: $white;
     font-size: 18px;
     border-radius: 2px;
     height: 36px;
@@ -361,6 +364,7 @@ button.btn.btn-filter span.icon-cross {
     align-items: center;
     justify-content: space-between;
 }
+
 /*responsive*/
 @media(max-width:800px){
     .customer-form-inline{
@@ -449,7 +453,7 @@ button.btn.btn-filter span.icon-cross {
         position: fixed;
         bottom: 0;
         width: 100%;
-        background: #fff;
+        background: $white;
         padding: 10px 5px;
         z-index: 1;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
@@ -538,7 +542,7 @@ button.btn.btn-filter span.icon-cross {
             padding-top: 6px;
             h5 {
                 font-size: 16px;
-                .numbertotal {
+                .number-total {
                     font-size: 20px;
                 }
             }
@@ -548,7 +552,7 @@ button.btn.btn-filter span.icon-cross {
         margin-bottom: 10px;
     }
     .customer-right {
-        background: #fff;
+        background: $white;
         padding: 0 15px;
         float: left;
         width: 100%;
@@ -649,5 +653,5 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .negative-balance {
-    color: #ff0000;
+    color: $red;
 }

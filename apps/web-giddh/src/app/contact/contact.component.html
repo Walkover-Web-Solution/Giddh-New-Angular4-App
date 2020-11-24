@@ -97,11 +97,11 @@
                                 <span class="pull-left mr-r1 totalContacts">
                                 <h5>
                                     <span *ngIf="!selectedCheckedContacts.length"
-                                        class="numbertotal">{{Totalcontacts}}</span>
-                                <span *ngIf="selectedCheckedContacts.length>0" class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
+                                        class="number-total">{{Totalcontacts}}</span>
+                                <span *ngIf="selectedCheckedContacts.length>0" class="number-total">{{selectedCheckedContacts.length}}</span> Contacts
                                 </h5>
                                 </span>
-                                <div class="btn-group moreBtn" dropdown>
+                                <div class="btn-group more-button" dropdown>
                                     <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle" aria-controls="dropdown-basic">
                                     More
                                     <span class="caret"></span>
@@ -121,7 +121,7 @@
                         </div>
 
                         <div class="btn-group  pull-right on-mobile-view">
-                            <button *ngIf="activeTab == 'customer'" class="btn btn-sky-blue" style="margin-right: 5px" (click)="openAddAndManage('customer')">
+                            <button *ngIf="activeTab == 'customer'" class="btn btn-sky-blue mr-r05" (click)="openAddAndManage('customer')">
                             + New Customer
                         </button>
                             <button *ngIf="activeTab == 'vendor'" class="btn btn-sky-blue " (click)="openAddAndManage('vendor')">
@@ -177,7 +177,7 @@
                         </div>
 
                         <div class="bg-white clearfix">
-                            <div class="customer-right  clearfix" style="width: 100%;">
+                            <div class="customer-right clearfix w-100">
                                 <table class="text-right">
                                     <tr>
                                         <td>
@@ -235,7 +235,7 @@
                     <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
                     <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
                     <h1 class="mr-b1">Type message body:</h1>
-                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
+                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control resize-none" rows="4" placeholder="start typing your message here"></textarea>
                     <small class="mr-t05 mr-b05 grey">Tip: Click on the tabs below to insert data in your message body.
                         Anything followed by '%s_' represents the position
                         where actual data will be placed.
@@ -277,7 +277,7 @@
                     <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
 
                     <h1 class="mr-b1">Type message body:</h1>
-                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
+                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control resize-none" rows="4" placeholder="start typing your message here"></textarea>
                     <small class="mr-t05 mr-b05 grey">Tip: Click on the tabs below to insert data in your message body.
                         Anything followed by '%s_' represents the position
                         where actual data will be placed.
@@ -327,7 +327,7 @@
                         <p class="due-as-on" container="body">
                             <strong>Due as on </strong>
                             <span class="italic underline">
-                                <input type="text" (click)="showGiddhDatepicker($event)" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
+                                <input type="text" (click)="showGiddhDatepicker($event)" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="form-control giddh-datepicker date-range-picker"/>
                             </span>
                         </p>
                     </td>

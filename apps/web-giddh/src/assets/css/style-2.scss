@@ -916,7 +916,7 @@ ul.sub-list {
 .tab-integraton .nav-tabs > li {
     margin-right: 25px;
 }
-.customer-footer-box .numbertotal {
+.customer-footer-box .number-total {
     font-size: 26px;
     color: $chetwode-blue;
 }
@@ -7549,7 +7549,7 @@ th:first-child {
 }
 
 .tax-engine .sub-filter-nav-band > ul > li .count {
-    color: $thunderbird;
+    color: $red;
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a {
@@ -7663,7 +7663,7 @@ tbody
 }
 
 .tax-engine .table.reconciliations-table .unrecognized-value {
-    color: $thunderbird;
+    color: $red;
 }
 
 /*.tax-engine .table.reconciliations-table .recognized-value,
