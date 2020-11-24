@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { SettingsProfileService } from '../../../services/settings.profile.service';
 
 @Component({
     selector: 'company-details-sidebar',
@@ -15,11 +16,26 @@ export class CompanyDetailsSidebarComponent implements OnInit {
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor() {
+    constructor(private settingsProfileService: SettingsProfileService) {
 
     }
 
     public ngOnInit() {
+        if(this.selectedCompany) {
+            this.getCompanyDetails();
+        }
+    }
 
+    /**
+     * This will get the company details
+     *
+     * @memberof CompanyDetailsSidebarComponent
+     */
+    public getCompanyDetails(): void {
+        this.settingsProfileService.getCompanyDetails(this.selectedCompany.uniqueName).subscribe((response: any) => {
+            if (response && response.status === "success" && response.body) {
+                this.selectedCompany = response.body;
+            }
+        });
     }
 }

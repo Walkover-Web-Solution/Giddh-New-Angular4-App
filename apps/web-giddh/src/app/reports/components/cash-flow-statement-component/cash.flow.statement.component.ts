@@ -88,7 +88,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         });
 
         /* This will get the company details */
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.downloadRequest.companyUniqueName = activeCompany.uniqueName;
                 this.activeCompany = activeCompany;

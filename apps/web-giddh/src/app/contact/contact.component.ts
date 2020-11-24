@@ -262,9 +262,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.dueAmountReportData$ = observableOf(data);
         });
 
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if(selectedCmp) {
-                this.selectedCompany = selectedCmp;
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
             }
         });
 
@@ -397,20 +397,18 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this.store
-            .pipe(
-                select(p => p.company.account), takeUntil(this.destroyed$)
-            )
-            .subscribe(res => {
-                if (res && Array.isArray(res)) {
-                    this.isICICIIntegrated = res.length > 0;
-                } else {
-                    this.isICICIIntegrated = false;
-                }
-            });
+        this.store.pipe(select(p => p.company && p.company.account), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res && Array.isArray(res)) {
+                this.isICICIIntegrated = res.length > 0;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+        });
+
         if (this.selectedCompany && this.selectedCompany.countryV2) {
             this.getOnboardingForm(this.selectedCompany.countryV2.alpha2CountryCode);
         }
+
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.balanceDecimalPlaces) {
                 this.giddhDecimalPlaces = response.balanceDecimalPlaces;

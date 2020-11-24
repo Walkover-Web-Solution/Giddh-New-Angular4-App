@@ -50,9 +50,9 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         });
 
         // This module should be accessible to superuser only
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if(selectedCmp) {
-                let superAdminIndx = selectedCmp.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin');
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                let superAdminIndx = activeCompany.userEntityRoles.findIndex((entity) => entity.role.uniqueName === 'super_admin');
                 if (superAdminIndx === -1) {
                     this.redirectToDashboard();
                 }

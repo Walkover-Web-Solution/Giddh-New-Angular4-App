@@ -437,8 +437,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 this.activeFinancialYear = selectedCmp.activeFinancialYear;
                 this.store.dispatch(this.companyActions.setActiveFinancialYear(this.activeFinancialYear));
-                if (selectedCmp.nameAlias) {
-                    this.seletedCompanywithBranch = selectedCmp.name + ' (' + selectedCmp.nameAlias + ')';
+                if (selectedCmp.alias) {
+                    this.seletedCompanywithBranch = selectedCmp.name + ' (' + selectedCmp.alias + ')';
                 } else {
                     this.seletedCompanywithBranch = selectedCmp.name;
                 }
@@ -1457,10 +1457,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.companies$.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies.filter((cmp) => {
-            if (!cmp.nameAlias) {
+            if (!cmp.alias) {
                 return cmp.name.toLowerCase().includes(ev.toLowerCase());
             } else {
-                return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase());
+                return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.alias.toLowerCase().includes(ev.toLowerCase());
             }
         });
     }

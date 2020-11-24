@@ -1,7 +1,6 @@
 import {
     AfterViewInit,
     Component,
-    ComponentFactoryResolver,
     EventEmitter,
     Input,
     OnDestroy,
@@ -14,14 +13,12 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { ModalOptions } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
-
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { OnBoardingType, DEFAULT_SIGNUP_TRIAL_PLAN } from '../app.constant';
 import * as _ from '../lodash-optimized';
 import { CountryRequest, OnboardingFormRequest } from '../models/api-models/Common';
@@ -222,16 +219,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.companyProfileObj = {};
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.dispatch(this.commonActions.resetOnboardingForm());
-        this.store.pipe(select(state => {
-            if (!state.session.companies) {
-                return;
+
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
             }
-            state.session.companies.forEach(cmp => {
-                if (cmp.uniqueName === state.session.companyUniqueName) {
-                    this.activeCompany = cmp;
-                }
-            });
-        }), takeUntil(this.destroyed$)).subscribe();
+        });
     }
 
     public ngOnInit() {

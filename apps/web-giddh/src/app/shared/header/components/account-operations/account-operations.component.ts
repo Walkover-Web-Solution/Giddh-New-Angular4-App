@@ -131,14 +131,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public accountDetails: any = '';
     @ViewChild('discountShSelect', {static: true}) public discountShSelect: ShSelectComponent;
     public selectedCompany: Observable<CompanyResponse>;
-    public activeCompany: any;
     private groupsListBackUp: IOption[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     dropdownList = [];
     selectedItems = [];
     dropdownSettings = {};
-    itemList = [];
     settings = {};
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
@@ -226,45 +224,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-        this.selectedCompany = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-
-            if (selectedCmp) {
-                this.activeCompany = selectedCmp.uniqueName;
-            }
-            return selectedCmp;
-        })), takeUntil(this.destroyed$));
-        this.selectedCompany.subscribe((res: any) => {
-            if (res) {
-                this.activeCompany = res;
-            }
-        });
     }
 
     public ngOnInit() {
-
-        this.itemList = [
-            { "id": 1, "itemName": "India", "category": "asia" },
-            { "id": 2, "itemName": "Singapore", "category": "asia pacific" },
-            { "id": 3, "itemName": "Germany", "category": "Europe" },
-            { "id": 4, "itemName": "France", "category": "Europe" },
-            { "id": 5, "itemName": "South Korea", "category": "asia" },
-            { "id": 6, "itemName": "Sweden", "category": "Europe" }
-        ];
-
         this.selectedItems = [];
         this.settings = {
             singleSelection: false,

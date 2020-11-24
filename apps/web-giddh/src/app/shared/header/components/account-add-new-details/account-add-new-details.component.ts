@@ -60,7 +60,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public stateList: StateList[] = [];
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
-    public companiesList$: Observable<CompanyResponse[]>;
     public activeCompany: CompanyResponse;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
@@ -102,7 +101,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private _generalActions: GeneralActions,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction) {
-        this.companiesList$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup),takeUntil(this.destroyed$));
         this.getCountry();
@@ -199,15 +197,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
         //     }
         // });
-        this.store.pipe(select(appState => appState.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(uniqueName => {
-            if (uniqueName) {
-                this.companiesList$.pipe(take(1)).subscribe(companies => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === uniqueName);
-                    if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
-                        this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
-                    }
-                    this.companyCurrency = _.clone(this.activeCompany.baseCurrency);
-                });
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
+                if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
+                    this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
+                }
+                this.companyCurrency = _.clone(this.activeCompany.baseCurrency);
             }
         });
 

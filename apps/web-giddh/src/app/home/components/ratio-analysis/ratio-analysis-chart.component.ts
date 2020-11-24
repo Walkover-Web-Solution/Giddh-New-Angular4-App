@@ -44,13 +44,13 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.dispatch(this._homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
 
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if(selectedCmp) {
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
                 let financialYears = [];
 
-                this.activeFinancialYear = selectedCmp.activeFinancialYear;
-                if (this.activeFinancialYear && selectedCmp.financialYears.length > 1) {
-                    financialYears = selectedCmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
+                this.activeFinancialYear = activeCompany.activeFinancialYear;
+                if (this.activeFinancialYear && activeCompany.financialYears.length > 1) {
+                    financialYears = activeCompany.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
                     financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
                         let a = moment(this.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT);
                         let b = moment(it.financialYearEnds, GIDDH_DATE_FORMAT);

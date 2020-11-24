@@ -54,14 +54,14 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @memberof AllModulesComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if(selectedCmp) {
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
                 this.activeCompanyForDb = new CompAidataModel();
-                this.activeCompanyForDb.name = selectedCmp.name;
-                this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                this.activeCompanyForDb.name = activeCompany.name;
+                this.activeCompanyForDb.uniqueName = activeCompany.uniqueName;
 
-                // if(selectedCmp && selectedCmp.createdBy && selectedCmp.createdBy.email) {
-                //     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(selectedCmp.createdBy.email);
+                // if(activeCompany && activeCompany.createdBy && activeCompany.createdBy.email) {
+                //     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(activeCompany.createdBy.email);
                 // }
             }
         });

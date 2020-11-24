@@ -143,15 +143,15 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
 
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if(selectedCmp) {
-                if (selectedCmp.countryV2 !== undefined && selectedCmp.countryV2 !== null) {
-                    this.getStates(selectedCmp.countryV2.alpha2CountryCode);
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                if (activeCompany.countryV2 !== undefined && activeCompany.countryV2 !== null) {
+                    this.getStates(activeCompany.countryV2.alpha2CountryCode);
                 }
 
-                this.setCountryByCompany(selectedCmp);
-                this.companyCurrency = _.clone(selectedCmp.baseCurrency);
-                this.isMultipleCurrency = _.clone(selectedCmp.isMultipleCurrency);
+                this.setCountryByCompany(activeCompany);
+                this.companyCurrency = _.clone(activeCompany.baseCurrency);
+                this.isMultipleCurrency = _.clone(activeCompany.isMultipleCurrency);
             }
         });
 

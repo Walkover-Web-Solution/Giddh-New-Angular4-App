@@ -89,9 +89,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.initialRequest();
 
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if(selectedCmp) {
-                this.companyName = selectedCmp.name;
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.companyName = activeCompany.name;
             }
         });
 

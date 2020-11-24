@@ -309,9 +309,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             }
         });
 
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if(selectedCmp) {
-                this.selectedCmp = selectedCmp;
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCmp = activeCompany;
                 this.getAllBranch();
             }
         });
