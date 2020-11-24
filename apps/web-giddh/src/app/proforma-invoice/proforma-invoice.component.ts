@@ -729,13 +729,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // get user country from his profile
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             this.companyCountryName = profile.country;
-
-            if (profile.addresses && profile.addresses.length > 0) {
-                this.fillDeliverToAddress(profile.addresses);
-            }
-
             await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
         });
+
+        this.fillDeliverToAddress();
 
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
@@ -862,6 +859,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.loadDefaultSearchSuggestions();
             this.focusInCustomerName();
             this.getAllLastInvoices();
+            this.fillDeliverToAddress();
         });
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
@@ -1616,9 +1614,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         } else {
             this.customerCountryName = '';
-
             this.showGstAndTrnUsingCountryName('');
-
             this.companyCurrency = 'INR';
         }
     }
@@ -6359,25 +6355,30 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**
      * This will autofill the
      *
-     * @param {*} companyAddresses
      * @memberof ProformaInvoiceComponent
      */
-    public fillDeliverToAddress(companyAddresses: any): void {
-        if (companyAddresses) {
-            companyAddresses.forEach(address => {
-                if (address.isDefault === true) {
-                    this.purchaseBillCompany.billingDetails.address = [];
-                    this.purchaseBillCompany.billingDetails.address.push(address.address);
-                    this.purchaseBillCompany.billingDetails.state.code = address.stateCode;
-                    this.purchaseBillCompany.billingDetails.state.name = address.stateName;
-                    this.purchaseBillCompany.billingDetails.stateCode = address.stateCode;
-                    this.purchaseBillCompany.billingDetails.stateName = address.stateName;
-                    this.purchaseBillCompany.billingDetails.gstNumber = address.taxNumber;
+    public fillDeliverToAddress(): void {
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile.addresses && profile.addresses.length > 0) {
+                let companyAddresses = profile.addresses;
 
-                    this.purchaseBillCompany.shippingDetails.gstNumber = address.taxNumber;
+                if (companyAddresses) {
+                    companyAddresses.forEach(address => {
+                        if (address.isDefault === true) {
+                            this.purchaseBillCompany.billingDetails.address = [];
+                            this.purchaseBillCompany.billingDetails.address.push(address.address);
+                            this.purchaseBillCompany.billingDetails.state.code = address.stateCode;
+                            this.purchaseBillCompany.billingDetails.state.name = address.stateName;
+                            this.purchaseBillCompany.billingDetails.stateCode = address.stateCode;
+                            this.purchaseBillCompany.billingDetails.stateName = address.stateName;
+                            this.purchaseBillCompany.billingDetails.gstNumber = address.taxNumber;
+
+                            this.purchaseBillCompany.shippingDetails.gstNumber = address.taxNumber;
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
