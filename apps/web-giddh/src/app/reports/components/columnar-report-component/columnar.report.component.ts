@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store';
@@ -50,6 +50,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public isShowColumnarReport: boolean = false;
     /** To check cr/dr or +/- checked */
     public isBalanceTypeAsSign: boolean = false;
+
     constructor(public settingsFinancialYearService: SettingsFinancialYearService, private store: Store<AppState>, private toaster: ToasterService, private ledgerService: LedgerService, private generalService: GeneralService) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
@@ -64,18 +65,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
-            if (state.session && !this.activeFinancialYear) {
-                this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
-
-                if (this.companyUniqueName && state.session.companies) {
-                    let companies = _.cloneDeep(state.session.companies);
-                    let comp = companies.find((c) => c.uniqueName === this.companyUniqueName);
-                    if (comp) {
-                        this.activeFinancialYear = comp.activeFinancialYear.uniqueName;
-                        this.selectActiveFinancialYear();
-                    }
-                }
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany && !this.activeFinancialYear) {
+                this.companyUniqueName = activeCompany.uniqueName;
+                this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
+                this.selectActiveFinancialYear();
             }
         });
     }
@@ -85,7 +79,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      *
      * @memberof ColumnarReportComponent
      */
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
         this.getColumnarRequestModel.count = this.paginationCount;

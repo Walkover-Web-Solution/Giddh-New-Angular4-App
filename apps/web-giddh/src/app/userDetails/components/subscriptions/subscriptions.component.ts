@@ -1,6 +1,6 @@
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -75,7 +75,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.pipe(select(cmp => cmp.session.companies), takeUntil(this.destroyed$));
-        this.activeCompanyUniqueName$ = this.store.pipe(select(cmp => cmp.session.companyUniqueName), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -88,10 +87,13 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 let orderedCompanies = _.orderBy(companies, 'name');
                 this.allAssociatedCompanies = orderedCompanies;
                 this.companyListForFilter = orderedCompanies;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(active => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === active);
-                    this.sortAssociatedCompanies();
-                    this.showCurrentCompanyPlan();
+
+                this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                    if(activeCompany) {
+                        this.activeCompany = activeCompany;
+                        this.sortAssociatedCompanies();
+                        this.showCurrentCompanyPlan();
+                    }
                 });
             }
         });

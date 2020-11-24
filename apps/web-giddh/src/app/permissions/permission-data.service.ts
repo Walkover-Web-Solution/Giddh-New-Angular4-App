@@ -22,7 +22,7 @@ export class PermissionDataService {
     private createdBy: CompanyData;
 
     constructor(private store: Store<AppState>) {
-        this.store.pipe(select(state => state.company.activeCompany)).subscribe(currentCompany => {
+        this.store.pipe(select(state => state.company && state.company.activeCompany)).subscribe(currentCompany => {
             if(currentCompany) {
                 this.getCompany = currentCompany;
                 if (currentCompany && currentCompany.userEntityRoles && currentCompany.userEntityRoles.length) {

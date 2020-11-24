@@ -1,5 +1,5 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { takeUntil, take, delay } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil, delay } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VatReportTransactionsRequest } from '../../models/api-models/Vat';
@@ -32,7 +32,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     @ViewChild('downloadOrSendMailComponent', {static: true}) public downloadOrSendMailComponent: ElementViewContainerRef;
     @ViewChild('invoiceGenerateModel', {static: true}) public invoiceGenerateModel: ModalDirective;
 
-    public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public vatReportTransactions: any = {};
@@ -55,7 +54,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public base64Data: string;
 
     constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.setCurrentPageTitle();
     }
 
@@ -82,17 +80,10 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
-            this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
-                if (!res) {
-                    return;
-                }
-                res.forEach(cmp => {
-                    if (cmp.uniqueName === activeCompanyName) {
-                        this.activeCompany = cmp;
-                    }
-                });
-            });
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+            }
         });
     }
 

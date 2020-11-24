@@ -71,9 +71,9 @@ export class CrDrComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if(selectedCmp) {
-                this.activeCompany = selectedCmp;
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
             }
         });
     }

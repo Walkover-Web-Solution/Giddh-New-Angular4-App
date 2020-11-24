@@ -308,9 +308,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         // set financial years based on company financial year
-        this.store.pipe(select(state => state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if(selectedCmp) {
-                let activeFinancialYear = selectedCmp.activeFinancialYear;
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [
                         moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
