@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div *ngIf="activeTab === 'profile'">
-                        <hamburger-menu></hamburger-menu>
+                        <hamburger-menu [pageHeading]="'Settings > Profile'"></hamburger-menu>
                         <div class="setting-container">
                             <setting-profile #profileComponent></setting-profile>
                             <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;">
