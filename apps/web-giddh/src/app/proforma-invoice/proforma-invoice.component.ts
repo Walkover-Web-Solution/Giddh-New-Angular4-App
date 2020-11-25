@@ -224,8 +224,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
     @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
     public showAdvanceReceiptAdjust: boolean = false;
-    @ViewChild('billingCompanyState', {static: false}) public billingCompanyState: ShSelectComponent;
-    @ViewChild('shippingCompanyState', {static: false}) public shippingCompanyState: ShSelectComponent;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -6330,10 +6328,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * This will assign state based on GST/TRN
      *
      * @param {string} type
-     * @param {SalesShSelectComponent} statesEle
      * @memberof ProformaInvoiceComponent
      */
-    public getStateCodeCompany(type: string, statesEle: SalesShSelectComponent): void {
+    public getStateCodeCompany(type: string): void {
         let gstVal = _.cloneDeep(this.purchaseBillCompany[type].gstNumber).toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.companyStatesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
@@ -6435,8 +6432,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.purchaseBillCompany.shippingDetails.state.name = defaultAddress.stateName;
                     this.purchaseBillCompany.shippingDetails.stateCode = defaultAddress.stateCode;
                     this.purchaseBillCompany.shippingDetails.stateName = defaultAddress.stateName;
-
-                    this.shippingCompanyState.disabled = true;
                 } else {
                     this.resetShippingAddress();
                 }

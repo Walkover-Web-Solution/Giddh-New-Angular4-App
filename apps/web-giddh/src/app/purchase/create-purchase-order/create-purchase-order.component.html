@@ -253,7 +253,6 @@
                                                             <sales-sh-select [placeholder]="'State'"
                                                                 class="select-border-bottom"
                                                                 (selected)="fillShippingBillingDetails($event, true, 'company'); autoFillShippingDetails('company')"
-                                                                #companyStatesBilling
                                                                 [showBottomBorderOnly]="true"
                                                                 [options]="companyStatesSource"
                                                                 name="companyBillingDetailsStateCode"
@@ -268,7 +267,7 @@
                                                                 [(ngModel)]="purchaseOrder.company.billingDetails.gstNumber"
                                                                 class="form-control input-custom"
                                                                 (blur)="autoFillShippingDetails('company')"
-                                                                (change)="getStateCode('billingDetails', companyStatesBilling, 'company')"
+                                                                (change)="getStateCode('billingDetails', 'company')"
                                                                 placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                         </div>
                                                     </div>
@@ -309,7 +308,6 @@
                                                                     [disabled]="autoFillCompanyShipping"
                                                                     class="select-border-bottom disabled"
                                                                     (selected)="fillShippingBillingDetails($event, false, 'company');"
-                                                                    #companyStatesShipping
                                                                     [showBottomBorderOnly]="true"
                                                                     [options]="companyStatesSource"
                                                                     name="companyShippingDetailsStateCode"
@@ -323,7 +321,7 @@
                                                                     name="companyShippingDetailsTax"
                                                                     [(ngModel)]="purchaseOrder.company.shippingDetails.gstNumber"
                                                                     class="form-control input-custom"
-                                                                    (change)="getStateCode('shippingDetails', companyStatesShipping, 'company')"
+                                                                    (change)="getStateCode('shippingDetails', 'company')"
                                                                     placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                             </div>
                                                         </div>
