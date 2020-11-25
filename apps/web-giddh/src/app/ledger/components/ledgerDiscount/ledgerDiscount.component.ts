@@ -150,10 +150,12 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	 * @returns {number}
 	 */
 	public generateTotal(): number {
-        if (this.discountAccountsDetails && this.discountAccountsDetails[0] && this.discountAccountsDetails[0].amount) {
-            this.discountAccountsDetails[0].isActive = true;
-        } else {
-            this.discountAccountsDetails[0].isActive = false;
+        if (this.discountAccountsDetails && this.discountAccountsDetails[0]) {
+            if (this.discountAccountsDetails[0].amount) {
+                this.discountAccountsDetails[0].isActive = true;
+            } else {
+                this.discountAccountsDetails[0].isActive = false;
+            }
         }
 
         let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
