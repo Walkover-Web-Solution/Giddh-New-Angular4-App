@@ -85,8 +85,16 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
         this.companies$.subscribe(companies => {
             if (companies) {
                 let orderedCompanies = _.orderBy(companies, 'name');
-                this.allAssociatedCompanies = orderedCompanies;
-                this.companyListForFilter = orderedCompanies;
+                let filteredCompanies = [];
+
+                orderedCompanies.forEach((company) => {
+                    if (company.showOnSubscription) {
+                        filteredCompanies.push(company);
+                    }
+                });
+
+                this.allAssociatedCompanies = filteredCompanies;
+                this.companyListForFilter = filteredCompanies;
 
                 this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if(activeCompany) {
@@ -380,7 +388,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public filterCompanyList(term): void {
         this.companyListForFilter = [];
         this.allAssociatedCompanies.forEach((company) => {
-            if (company.name.toLowerCase().includes(term.toLowerCase())) {
+            if (company.showOnSubscription && company.name.toLowerCase().includes(term.toLowerCase())) {
                 this.companyListForFilter.push(company);
             }
         });
