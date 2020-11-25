@@ -1174,6 +1174,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 if(obj && obj.entries) {
                                     obj.entries.forEach((entry, index) => {
                                         obj.entries[index].entryDate = this.universalDate || new Date();
+                                        obj.entries[index].uniqueName = "";
                                     });
 
                                     obj.entries = obj.entries;
@@ -1182,6 +1183,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 let date = _.cloneDeep(this.universalDate);
                                 obj.voucherDetails.voucherDate = date;
                                 obj.voucherDetails.dueDate = date;
+                                obj.voucherDetails.voucherNumber = "";
                             }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
@@ -4322,14 +4324,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
                 }
 
-                this.calculateTotalDiscountOfEntry(entry, trx, false);
-                this.calculateEntryTaxSum(entry, trx);
+                this.calculateTotalDiscountOfEntry(entry, newTrxObj, false);
+                this.calculateEntryTaxSum(entry, newTrxObj);
                 return newTrxObj;
-            });
-
-            entry.transactions.map(trx => {
-                this.calculateTotalDiscountOfEntry(entry, trx, false);
-                this.calculateEntryTaxSum(entry, trx);
             });
 
             // tcs tax calculation
@@ -4363,7 +4360,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
                 }
             }
-            //entry.taxes = [];
             entry.cessSum = 0;
             return entry;
         });
