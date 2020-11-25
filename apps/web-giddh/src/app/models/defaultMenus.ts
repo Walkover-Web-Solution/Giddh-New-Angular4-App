@@ -65,7 +65,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
 
 
     { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', hasTabs: false },
-    { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
+    { type: 'MENU', name: 'New Purchase Bill ', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
     { type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash', hasTabs: false },
     { type: 'MENU', name: 'Proforma Invoice', uniqueName: '/pages/proforma-invoice/invoice/proformas', hasTabs: false },
     { type: 'MENU', name: 'Estimate (Beta)', uniqueName: '/pages/proforma-invoice/invoice/estimates', hasTabs: false },
@@ -128,7 +128,7 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
         type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', isRemoved: false, pIndex: 2, additional: { tab: 'sales', tabIndex: 0 }, hasTabs: true
     },
     {
-        type: 'MENU', name: 'Journal Voucher', uniqueName: '/pages/accounting-voucher', isRemoved: false, pIndex: 1
+        type: 'MENU', name: 'Journal Voucher *', uniqueName: '/pages/journal-voucher', isRemoved: false, pIndex: 1
     },
     {
         type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', isRemoved: false, pIndex: 9, hasTabs: true
@@ -192,7 +192,7 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 }, hasTabs: true },
     { type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding', hasTabs: false },
     { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook', hasTabs: false },
-    { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
+    { type: 'MENU', name: 'New Purchase Bill ', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', hasTabs: false },
     { type: 'MENU', name: 'Reports > Receipt', uniqueName: '/pages/reports/receipt', hasTabs: false },
     { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' }
@@ -216,7 +216,7 @@ export let DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
     },
 
     { type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', hasTabs: false },
-    { type: 'MENU', name: 'Purchase Record ', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
+    { type: 'MENU', name: 'New Purchase Bill ', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
     { type: 'MENU', name: 'Cash Invoice ', uniqueName: '/pages/proforma-invoice/invoice/cash', hasTabs: false },
     { type: 'MENU', name: 'Proforma Invoice', uniqueName: '/pages/proforma-invoice/invoice/proformas', hasTabs: false },
     { type: 'MENU', name: 'Estimate (Beta)', uniqueName: '/pages/proforma-invoice/invoice/estimates', hasTabs: false },
