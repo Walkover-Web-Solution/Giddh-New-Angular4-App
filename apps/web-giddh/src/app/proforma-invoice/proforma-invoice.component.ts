@@ -225,7 +225,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
     public showAdvanceReceiptAdjust: boolean = false;
 
-
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     public editCurrencyInputField: boolean = false;
@@ -6329,25 +6328,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * This will assign state based on GST/TRN
      *
      * @param {string} type
-     * @param {SalesShSelectComponent} statesEle
      * @memberof ProformaInvoiceComponent
      */
-    public getStateCodeCompany(type: string, statesEle: SalesShSelectComponent): void {
+    public getStateCodeCompany(type: string): void {
         let gstVal = _.cloneDeep(this.purchaseBillCompany[type].gstNumber).toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.companyStatesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
                 this.purchaseBillCompany[type].stateCode = selectedState.value;
                 this.purchaseBillCompany[type].state.code = selectedState.value;
-
             } else {
                 this.purchaseBillCompany[type].stateCode = null;
                 this.purchaseBillCompany[type].state.code = null;
                 this._toasty.clearAllToaster();
             }
-            statesEle.disabled = true;
         } else {
-            statesEle.disabled = false;
             this.purchaseBillCompany[type].stateCode = null;
             this.purchaseBillCompany[type].state.code = null;
         }
@@ -6427,19 +6422,39 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public autoFillDeliverToWarehouseAddress(warehouse: any): void {
         if (warehouse) {
-            this.purchaseBillCompany.shippingDetails.address = [];
-            this.purchaseBillCompany.shippingDetails.address.push(warehouse.address);
-            this.purchaseBillCompany.shippingDetails.state.code = warehouse.stateCode;
-            this.purchaseBillCompany.shippingDetails.state.name = warehouse.stateName;
-            this.purchaseBillCompany.shippingDetails.stateCode = warehouse.stateCode;
-            this.purchaseBillCompany.shippingDetails.stateName = warehouse.stateName;
+            if (warehouse.addresses && warehouse.addresses.length) {
+                // Search the default linked address of warehouse
+                const defaultAddress = warehouse.addresses.find(address => address.isDefault);
+                if (defaultAddress) {
+                    this.purchaseBillCompany.shippingDetails.address = [];
+                    this.purchaseBillCompany.shippingDetails.address.push(defaultAddress.address);
+                    this.purchaseBillCompany.shippingDetails.state.code = defaultAddress.stateCode;
+                    this.purchaseBillCompany.shippingDetails.state.name = defaultAddress.stateName;
+                    this.purchaseBillCompany.shippingDetails.stateCode = defaultAddress.stateCode;
+                    this.purchaseBillCompany.shippingDetails.stateName = defaultAddress.stateName;
+                } else {
+                    this.resetShippingAddress();
+                }
+            } else {
+                this.resetShippingAddress();
+            }
         } else {
-            this.purchaseBillCompany.shippingDetails.address = [];
-            this.purchaseBillCompany.shippingDetails.state.code = "";
-            this.purchaseBillCompany.shippingDetails.stateCode = "";
-            this.purchaseBillCompany.shippingDetails.state.name = "";
-            this.purchaseBillCompany.shippingDetails.stateName = "";
+            this.resetShippingAddress();
         }
+    }
+
+    /**
+     Resets the shipping address if no default linked address is
+     * found in a warehouse
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public resetShippingAddress(): void {
+        this.purchaseBillCompany.shippingDetails.address = [];
+        this.purchaseBillCompany.shippingDetails.state.code = "";
+        this.purchaseBillCompany.shippingDetails.stateCode = "";
+        this.purchaseBillCompany.shippingDetails.state.name = "";
+        this.purchaseBillCompany.shippingDetails.stateName = "";
     }
 
     /**
