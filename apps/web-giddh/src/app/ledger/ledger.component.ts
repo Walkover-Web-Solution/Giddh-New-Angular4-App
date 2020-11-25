@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, HostListener, } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -51,6 +51,7 @@ import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryP
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
+import { ESCAPE } from '@angular/cdk/keycodes';
 
 @Component({
     selector: 'ledger',
@@ -2201,5 +2202,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.searchResults = [...this.defaultSuggestions];
             this.noResultsFoundLabel = SearchResultText.NotFound;
         });
+    }
+
+    /**
+     * This will close the account create aside pan on ESC Key Press
+     *
+     * @param {KeyboardEvent} event
+     * @memberof LedgerComponent
+     */
+    @HostListener('document:keyup', ['$event'])
+    public handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.which === ESCAPE && this.asideMenuState === 'in') {
+            document.querySelector('body').classList.remove('fixed');
+            this.asideMenuState = 'out';
+        }
     }
 }
