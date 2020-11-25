@@ -5,6 +5,7 @@ import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
 	selector: 'ledger-discount',
@@ -78,7 +79,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	}
 
 	public ngOnChanges(changes: SimpleChanges): void {
-		if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
+		if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue || changes.ledgerAmount) {
 			this.prepareDiscountList();
 
 			if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
@@ -116,8 +117,8 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	}
 
 	public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-		this.defaultDiscount.amount = parseFloat(val);
-		this.defaultDiscount.discountValue = parseFloat(val);
+		this.defaultDiscount.amount = parseFloat(String(val).replace(',',''));
+		this.defaultDiscount.discountValue = parseFloat(String(val).replace(',',''));
 		this.defaultDiscount.discountType = type;
 
 		this.change();
@@ -149,7 +150,13 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	 * @returns {number}
 	 */
 	public generateTotal(): number {
-		let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
+        if (this.discountAccountsDetails && this.discountAccountsDetails[0] && this.discountAccountsDetails[0].amount) {
+            this.discountAccountsDetails[0].isActive = true;
+        } else {
+            this.discountAccountsDetails[0].isActive = false;
+        }
+
+        let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
 			.filter(s => s.discountType === 'PERCENTAGE')
 			.reduce((pv, cv) => {
 				return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);

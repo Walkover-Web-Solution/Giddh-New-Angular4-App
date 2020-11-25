@@ -362,7 +362,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             e.additional.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
             if (data && data.body) {
-                this.lc.currentBlankTxn = null;
                 // Take taxes of parent group and stock's own taxes
                 const taxes = data.body.taxes || [];
                 if (data.body.stock) {
@@ -432,7 +431,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     txn.amount = rate;
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
+                this.needToReCalculate.next(true);
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+                this.newLedgerComponent.preparePreAppliedDiscounts();
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
                 this.newLedgerComponent.calculatePreAppliedTax();
