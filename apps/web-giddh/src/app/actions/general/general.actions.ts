@@ -299,6 +299,7 @@ export class GeneralActions {
             type: GENERAL_ACTIONS.UPDATE_UI_FROM_DB
         }
     }
+    /* This function is storinng side menu */
     public openSideMenu(isOpen: boolean) {
         return {
             type: GENERAL_ACTIONS.OPEN_SIDE_MENU,
