@@ -2,7 +2,7 @@
     <hamburger-menu [pageHeading]="'VAT Report'"></hamburger-menu>
     <div class="container-fluid">
         <div class="clearfix pt-15">
-            <a (click)="navigateToPreviousPage()" class="cursor-pointer fond-inline-block mr-2"><i class="fa fa-angle-left font-20 middle"></i> Back</a> <span *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">{{vatReportTransactions.results[0].description}}</span>
+            <a [routerLink]="['/pages/vat-report']" class="cursor-pointer fond-inline-block mr-2"><i class="fa fa-angle-left font-20 middle"></i> Back</a> <span *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">{{vatReportTransactions.results[0].description}}</span>
         </div>
         <div class="invoice-preview table-responsive">
             <table class="table basic table-bordered mt-2 invoice-table desktop-table">

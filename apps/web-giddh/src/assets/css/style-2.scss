@@ -10234,6 +10234,7 @@ input.mat-input-element{
     .invoice-control .nav.nav-tabs {
         margin-bottom: 15px;
         padding: 0 0px 0 15px !important;
+        background-color: $white;
     }
     #setting-tab .tab-integraton .nav-tabs > li {
         margin-top: 0 !important;
@@ -10453,7 +10454,7 @@ input.mat-input-element{
           margin-top: 0;
     }
     .custom-tabs.hide-header .top-bar {
-        margin-top: 10px;
+        margin-top: 0;
     }
     .invoice-control .nav.nav-tabs {
         padding: 0 0 0 15px !important;
@@ -10574,7 +10575,7 @@ input.mat-input-element{
     // }
     .page-has-tabs .padding-top-fixed-mobile,
     .on-user-page .padding-top-fixed-mobile {
-       padding-top: 130px !important;
+       padding-top: 135px !important;
    }
     .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile {
         padding-top: 85px !important;
