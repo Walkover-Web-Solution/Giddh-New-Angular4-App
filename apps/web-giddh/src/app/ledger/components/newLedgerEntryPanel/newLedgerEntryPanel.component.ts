@@ -1469,10 +1469,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.discount = 0;
         }
         /** if percent or value type discount applied */
-        if (this.currentTxn.discounts && this.currentTxn.discounts[0] && this.currentTxn.discounts[0].amount) {
-            this.currentTxn.discounts[0].isActive = true;
-        } else {
-            this.currentTxn.discounts[0].isActive = false;
+        if (this.currentTxn.discounts && this.currentTxn.discounts[0]) {
+            if (this.currentTxn.discounts[0].amount) {
+                this.currentTxn.discounts[0].isActive = true;
+            } else {
+                this.currentTxn.discounts[0].isActive = false;
+            }
         }
         if (this.discountControl) {
             if (this.discountControl.discountAccountsDetails) {
