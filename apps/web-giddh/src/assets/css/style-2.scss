@@ -9736,6 +9736,14 @@ span#HW_badge_cont:nth-child(3) {
 .update-ledger-overlay .modal-backdrop.show{
     z-index: 991 !important;
 }
+.invoice-edit-wrapper {
+     .hamburger-menu-icon{
+         display: none !important;
+     }
+    .mobile-view-padding{
+        padding-left: 10px;
+    }
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -10024,6 +10032,7 @@ input.mat-input-element{
         margin: 0;
         left: -16px;
         right: 0;
+        padding-left: 15px !important;
     }
     .sub-filter-nav-band .nav-tabs{
         overflow-x: auto;
