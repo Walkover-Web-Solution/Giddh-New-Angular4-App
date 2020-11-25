@@ -2203,18 +2203,4 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.noResultsFoundLabel = SearchResultText.NotFound;
         });
     }
-
-    /**
-     * This will close the account create aside pan on ESC Key Press
-     *
-     * @param {KeyboardEvent} event
-     * @memberof LedgerComponent
-     */
-    @HostListener('document:keyup', ['$event'])
-    public handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.which === ESCAPE && this.asideMenuState === 'in') {
-            document.querySelector('body').classList.remove('fixed');
-            this.asideMenuState = 'out';
-        }
-    }
 }
