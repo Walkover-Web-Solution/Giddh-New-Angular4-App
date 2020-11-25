@@ -11,8 +11,9 @@ import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.a
 })
 
 export class HamburgerMenuComponent implements OnInit, OnDestroy {
+    /* This inputs the heading which is needed to show */
     @Input() public pageHeading: string = '';
-
+    /* This will show sidebar is not open */
     public sideMenu: { isopen: boolean } = { isopen: false };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

@@ -214,7 +214,7 @@ ul#dropdown-nested li .caret {
     left: 100% !important;
 }
 
-.customeMnthSelect.show {
+.custom-month-select.show {
     display: inline-block !important;
 }
 
@@ -222,19 +222,19 @@ ul#dropdown-nested li .caret {
     padding: 15px;
 }
 
-.customeMnthSelect li:hover a.dropdown-item {
+.custom-month-select li:hover a.dropdown-item {
     background-color: #e5e5e5;
 }
 
-.customeMnthSelect button.btn {
+.custom-month-select button.btn {
     background: transparent !important;
     padding-left: 3px;
     padding-right: 3px;
 }
 
-.customeMnthSelect button.btn:active,
-.customeMnthSelect button.btn:focus,
-.customeMnthSelect button.btn:hover {
+.custom-month-select button.btn:active,
+.custom-month-select button.btn:focus,
+.custom-month-select button.btn:hover {
     background: transparent !important;
     box-shadow: none !important;
     outline: none !important;
@@ -331,7 +331,7 @@ table th {
             }
         }
     }
-    .customeMnthSelect{
+    .custom-month-select{
         font-family: 'opensans-semibold';
         color: $midnight-blue;
         .btn{
@@ -364,7 +364,7 @@ table th {
                 font-size: 16px;
             }
         }
-        .customeMnthSelect{
+        .custom-month-select{
             .btn{
                 font-size: 16px;
             }

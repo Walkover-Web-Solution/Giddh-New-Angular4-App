@@ -49,6 +49,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	public moment = moment;
 	public startDate: Date;
     public endDate: Date;
+    /* To check page is not inventory page */
     public isInventoryPage: boolean = false;
 	public activeStockGroup: string;
 	private universalDate: Date[];

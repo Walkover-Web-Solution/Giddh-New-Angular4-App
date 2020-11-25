@@ -49,6 +49,7 @@ export class MfEditComponent implements OnInit {
     public showFromDatePicker: boolean = false;
     public moment = moment;
     public initialQuantityObj: any = [];
+    /* To check page is not inventory page */
     public isInventoryPage: boolean = false;
     public needForceClearLiability$: Observable<IForceClear> = observableOf({ status: false });
     public needForceClearGroup$: Observable<IForceClear> = observableOf({ status: false });
