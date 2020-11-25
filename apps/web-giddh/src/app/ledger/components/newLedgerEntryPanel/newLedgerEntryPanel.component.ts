@@ -373,6 +373,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public calculatePreAppliedTax(): void {
         let activeAccountTaxes = [];
+          this.preparePreAppliedDiscounts();
         if (this.activeAccount && this.activeAccount.applicableTaxes) {
             activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
         }
@@ -1079,7 +1080,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-            this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
+            if(tax) {
+                this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
+            }
             if (tax) {
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
@@ -1445,5 +1448,55 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             });
         }
         this.accountOtherApplicableDiscount.map(item => item.isActive = true);
+    }
+
+    /**
+     * To prepare pre applied discount for current transactions
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public preparePreAppliedDiscounts() {
+        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts && this.currentTxn.selectedAccount.accountApplicableDiscounts.length) {
+            this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
+            this.currentTxn.discounts.map(item => { item.isActive = false });
+            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                this.currentTxn.discounts.map(item => {
+                    if (element.uniqueName === item.discountUniqueName) {
+                        item.isActive = true;
+                    }
+                    return item;
+                });
+            });
+        } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+            this.currentTxn.discounts.map(item => { item.isActive = false });
+            this.accountOtherApplicableDiscount.forEach(element => {
+                this.currentTxn.discounts.map(item => {
+                    if (element.uniqueName === item.discountUniqueName) {
+                        item.isActive = true;
+                    }
+                    return item;
+                });
+            });
+        } else {
+            this.currentTxn.discounts.map(item => {
+                item.isActive = false;
+                return item;
+            });
+            this.currentTxn.discount = 0;
+        }
+        /** if percent or value type discount applied */
+        if (this.currentTxn.discounts && this.currentTxn.discounts[0]) {
+            if (this.currentTxn.discounts[0].amount) {
+                this.currentTxn.discounts[0].isActive = true;
+            } else {
+                this.currentTxn.discounts[0].isActive = false;
+            }
+        }
+        if (this.discountControl) {
+            if (this.discountControl.discountAccountsDetails) {
+                this.discountControl.discountAccountsDetails = this.currentTxn.discounts;
+            }
+            this.discountControl.change();
+        }
     }
 }
