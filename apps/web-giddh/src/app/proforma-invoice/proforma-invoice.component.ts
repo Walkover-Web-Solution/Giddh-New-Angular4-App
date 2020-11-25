@@ -1178,6 +1178,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 if(obj && obj.entries) {
                                     obj.entries.forEach((entry, index) => {
                                         obj.entries[index].entryDate = this.universalDate || new Date();
+                                        obj.entries[index].uniqueName = "";
                                     });
 
                                     obj.entries = obj.entries;
@@ -1186,6 +1187,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 let date = _.cloneDeep(this.universalDate);
                                 obj.voucherDetails.voucherDate = date;
                                 obj.voucherDetails.dueDate = date;
+                                obj.voucherDetails.voucherNumber = "";
                             }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
