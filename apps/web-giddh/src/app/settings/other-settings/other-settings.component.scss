@@ -23,6 +23,11 @@
         min-width: 200px;
     }
 }
+@media(max-width:767px){
+    .other-setting-container{
+        padding-top: 15px;
+    }
+}
 @media(max-width:575px){
     .other-detail-section {
         label{

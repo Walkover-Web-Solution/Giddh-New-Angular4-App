@@ -488,8 +488,7 @@ textarea:focus {
     box-shadow: none !important;
     border-radius: 0 !important;
     font-size: 24px;
-    // color: #393a3d;
-    padding: 0;
+    padding: 3px 0 0 0 !important;
 }
 
 .disabled {
@@ -1782,6 +1781,13 @@ span.eligible-ITC {
 }
 
 @media (max-width: 767px) {
+    .mobile-view-padding{
+        padding:0 15px;
+        margin-bottom: 10px;
+    }
+    .more-btn-dropdown{
+        padding-top: 0 !important;
+    }
     .invoice-date-due-date {
         position: static;
         width: 100%;

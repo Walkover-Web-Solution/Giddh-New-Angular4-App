@@ -97,6 +97,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideHelpSupportMenuState: string = 'out';
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
+    /*This will check if page has not tabs*/
+    public pageHasTabs: boolean = false;
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -307,6 +309,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // SETTING CURRENT PAGE ON INIT
         this.setCurrentPage();
+        this.checkIfPageHasTabs();
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
@@ -326,6 +329,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
+                this.checkIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
@@ -501,7 +505,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        this.sideBarStateChange(true);
+        //this.sideBarStateChange(true);
+        this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
+            this.sideBarStateChange(response);
+        });
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
 
@@ -2037,6 +2044,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
                 this.macAppVersion = versNum;
+            }
+        })
+    }
+    /**
+     * This function will check if page has tabs to show/hide page heading
+     *
+     * @memberof HeaderComponent
+     */
+    public checkIfPageHasTabs(): void | boolean {
+        this.pageHasTabs = false;
+        let currentUrl = this.router.url;
+
+        NAVIGATION_ITEM_LIST.find((page) => {
+            if (page.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
+                this.pageHasTabs = true;
+                return true;
             }
         });
     }

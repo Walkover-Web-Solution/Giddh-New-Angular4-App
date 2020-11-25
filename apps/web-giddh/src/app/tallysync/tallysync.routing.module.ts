@@ -28,7 +28,7 @@ import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicke
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { TallySyncService } from "../services/tally-sync.service";
-
+import { SharedModule } from '../shared/shared.module';
 
 const _ROUTES: Routes = [
     {
@@ -68,7 +68,8 @@ const _ROUTES: Routes = [
         BsDropdownModule,
         SalesShSelectModule,
         TextMaskModule,
-        Daterangepicker
+        Daterangepicker,
+        SharedModule
     ],
     exports: [
         RouterModule,

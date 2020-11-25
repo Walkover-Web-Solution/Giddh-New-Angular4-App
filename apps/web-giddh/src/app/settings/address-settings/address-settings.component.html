@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid setting-profile-container">
     <div class="row">
         <div *ngIf="organizationType === 'COMPANY'"
             class="w-100 d-flex justify-content-between mt-1 mb-4 align-items-center address-list-top">
@@ -78,8 +78,8 @@
                             <td data-title="State">
                                 <div>{{address.stateCode}} - {{address.stateName}}</div>
                             </td>
-                            <td data-title="Linked with" width="25%">
-                                <div class="d-flex">
+                            <td data-title="Linked with" width="30%" class="linked-with">
+                                <div class="d-flex wrap-linked-company">
                                     <div class="d-flex flex-column linked-with w-100">
                                         <span *ngFor="let entity of address.linkedEntities" class="pb-1">
                                             <i tooltip="HO Branch" *ngIf="entity.isHeadQuarter"
