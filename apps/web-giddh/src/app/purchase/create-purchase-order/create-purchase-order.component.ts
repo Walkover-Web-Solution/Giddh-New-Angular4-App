@@ -1170,9 +1170,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
                 this.toaster.clearAllToaster();
             }
-            statesEle.disabled = true;
         } else {
-            statesEle.disabled = false;
             if (addressType === "vendor") {
                 this.purchaseOrder.account[type].stateCode = null;
                 this.purchaseOrder.account[type].state.code = null;
