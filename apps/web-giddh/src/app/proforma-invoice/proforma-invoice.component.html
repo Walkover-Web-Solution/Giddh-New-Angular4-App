@@ -513,6 +513,8 @@
                                                                         [showBottomBorderOnly]="true"
                                                                         [options]="companyStatesSource"
                                                                         name="companyBillingDetailsStateCode"
+                                                                        #billingCompanyState
+                                                                        [disabled]="(purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber.length >= 2) ? true : null"
                                                                         [(ngModel)]="purchaseBillCompany.billingDetails.state.code">
                                                                     </sales-sh-select>
                                                                 </div>
@@ -523,7 +525,7 @@
                                                                         [(ngModel)]="purchaseBillCompany.billingDetails.gstNumber"
                                                                         class="form-control input-custom"
                                                                         (blur)="autoFillCompanyShippingDetails()"
-                                                                        (change)="getStateCodeCompany('billingDetails', billingStateCompany)"
+                                                                        (change)="getStateCodeCompany('billingDetails', billingCompanyState)"
                                                                         placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                 </div>
                                                             </div>
@@ -568,6 +570,8 @@
                                                                             [showBottomBorderOnly]="true"
                                                                             [options]="companyStatesSource"
                                                                             name="companyShippingDetailsStateCode"
+                                                                            #shippingCompanyState
+                                                                            [disabled]="(purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber.length >= 2) ? true : null"
                                                                             [(ngModel)]="purchaseBillCompany.shippingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
@@ -577,7 +581,7 @@
                                                                             name="companyShippingDetailsTax"
                                                                             [(ngModel)]="purchaseBillCompany.shippingDetails.gstNumber"
                                                                             class="form-control input-custom"
-                                                                            (change)="getStateCodeCompany('shippingDetails', shippingStateCompany)"
+                                                                            (change)="getStateCodeCompany('shippingDetails', shippingCompanyState)"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
                                                                 </div>

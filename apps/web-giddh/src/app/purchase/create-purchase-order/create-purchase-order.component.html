@@ -255,6 +255,7 @@
                                                                 [showBottomBorderOnly]="true"
                                                                 [options]="companyStatesSource"
                                                                 name="companyBillingDetailsStateCode"
+                                                                [disabled]="(purchaseOrder.company.billingDetails.gstNumber && purchaseOrder.company.billingDetails.gstNumber.length >= 2) ? true : null"
                                                                 [(ngModel)]="purchaseOrder.company.billingDetails.state.code">
                                                             </sales-sh-select>
                                                         </div>
@@ -310,6 +311,7 @@
                                                                     [showBottomBorderOnly]="true"
                                                                     [options]="companyStatesSource"
                                                                     name="companyShippingDetailsStateCode"
+                                                                    [disabled]="(purchaseOrder.company.shippingDetails.gstNumber && purchaseOrder.company.shippingDetails.gstNumber.length >= 2) ? true : null"
                                                                     [(ngModel)]="purchaseOrder.company.shippingDetails.state.code">
                                                                 </sales-sh-select>
                                                             </div>
