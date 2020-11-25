@@ -82,6 +82,12 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             this.loggedInUser = this.generalService.user;
         }
 
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
+            }
+        });
+
         this.companies$.subscribe(companies => {
             if (companies) {
                 let orderedCompanies = _.orderBy(companies, 'name');
@@ -98,7 +104,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
 
                 this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if(activeCompany) {
-                        this.activeCompany = activeCompany;
                         this.sortAssociatedCompanies();
                         this.showCurrentCompanyPlan();
                     }
