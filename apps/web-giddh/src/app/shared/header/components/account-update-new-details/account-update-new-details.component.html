@@ -24,7 +24,7 @@
                 <div class="col-sm-4">
                     <div class="form-group" formGroupName="country">
                         <label>Country <sup class="text-danger">*</sup> </label>
-                        <sh-select [options]="countrySource" [isFilterEnabled]="true" (viewInitEvent)="onViewReady($event)" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true"></sh-select>
+                        <sh-select [options]="countrySource" [isFilterEnabled]="true" (viewInitEvent)="onViewReady($event)" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true" [disabled]="disableCountrySelection"></sh-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
