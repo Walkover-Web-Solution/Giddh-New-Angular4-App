@@ -606,7 +606,7 @@ input {
 .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
     .profile-tab-container {
         .nav.nav-tabs {
-            padding-left: 0 !important;
+            padding-left: 0;
         }
     }
 }
@@ -9906,6 +9906,9 @@ input.mat-input-element{
         width: 100%;
         white-space: nowrap;
     }
+    #setting-tab-wrapper .purchase-setting-tab.tab-integraton .nav-tabs{
+            display: inline-flex;
+        }
     #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
         width: 90px;
         height: 90px;
@@ -9915,8 +9918,28 @@ input.mat-input-element{
         width: 100% !important;
     }
 }
-
-
+@media(max-width:1191px) and (min-width:1024px){
+    .recurring-form-wrapper{
+        .recurring-form{
+            sh-select{
+                div{
+                    width: 100%;
+                    input{
+                        min-width: 100%;
+                        max-width: 100%;
+                    }
+                }
+            }
+            giddh-datepicker{
+                width: 100%;
+                .mat-form-field{
+                    max-width: 100%;
+                    min-width: 100%;
+                }
+            }
+        }
+    }
+}
 @media (max-width: 991px) {
     .setting-tab-data li.nav-item {
         display: inline-block;
@@ -10149,10 +10172,10 @@ input.mat-input-element{
     .universal-date label.btn.btn-link {
         display: none;
     }
-    .invoice-control .nav.nav-tabs {
-        margin-bottom: 15px;
-        padding: 0 0px 0 15px;
-    }
+    // .invoice-control .nav.nav-tabs {
+    //     margin-bottom: 15px;
+    //     padding: 0 0px 0 15px;
+    // }
     overview-summary .transactions-overview {
         background: transparent;
     }
@@ -10227,6 +10250,10 @@ input.mat-input-element{
 }
 
 @media (max-width: 767px) {
+    .invoice-control .nav.nav-tabs {
+        margin-bottom: 15px;
+        padding: 0 0px 0 15px !important;
+    }
     #setting-tab .tab-integraton .nav-tabs > li {
         margin-top: 0 !important;
     }
@@ -10240,6 +10267,7 @@ input.mat-input-element{
         padding-left: 15px !important;
         top: 98px !important;;
         position: fixed !important;
+        padding-top: 0 !important;
     }
     .settings-profile-tabs {
         .tab-content{
@@ -10253,6 +10281,10 @@ input.mat-input-element{
                 left: 0;
             }
         }
+    }
+    #setting-tab .settings-profile-tabs .tab-container .nav.nav-tabs{
+        top: 90px !important;
+        padding-top: 8px !important;
     }
     .universal-date {
         padding-top: 0;
@@ -10325,7 +10357,10 @@ input.mat-input-element{
     }
     header .hamburger-menu h4 {
         color: $white;
-        font-size: 16px;
+        font-size: 14px;
+        white-space: normal;
+        word-break: break-word;
+        width: 100%;
     }
     header .hamburger-menu i.icon-bar {
         color: $white;
@@ -10417,6 +10452,9 @@ input.mat-input-element{
         position: fixed;
         width: 100%;
         top: 90px;
+    }
+    .petty-cash .custom-tabs .nav.nav-tabs {
+        padding-top: 0 !important;
     }
     .ledg-head.entry-popup .custom-tabs .nav.nav-tabs {
         position: relative;
@@ -10608,10 +10646,10 @@ input.mat-input-element{
     }
     .page-has-tabs .invoice-genrate-container,
     .page-has-tabs .invoice-container{
-        padding-top: 15px !important;
+        padding-top: 5px !important;
     }
     .page-has-tabs .proforma-container{
-            padding-top: 0 !important;
+            padding-top: 5px !important;
         }
     .page-has-tabs
         #setting-tab
@@ -10735,6 +10773,14 @@ input.mat-input-element{
 }
 
 @media (max-width: 375px) {
+    .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs{
+        overflow-x: auto;
+        white-space: nowrap;
+        display: inline-block;
+        li{
+            float: none !important;
+        }
+    }
     #rcw-p91-widget-chats{
         min-width: 300px !important;
     }
