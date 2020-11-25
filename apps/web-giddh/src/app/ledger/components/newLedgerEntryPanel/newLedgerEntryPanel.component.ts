@@ -445,7 +445,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public calculateDiscount(event: any) {
-        this.preparePreAppliedDiscounts();
         this.currentTxn.discount = event.discountTotal;
         this.accountOtherApplicableDiscount.forEach(item => {
             if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
