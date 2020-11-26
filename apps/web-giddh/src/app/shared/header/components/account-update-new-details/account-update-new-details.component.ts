@@ -23,7 +23,7 @@ import {
 import { IGroupsWithAccounts } from 'apps/web-giddh/src/app/models/interfaces/groupsWithAccounts.interface';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
@@ -154,6 +154,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public companyCustomFields: any[] = [];
     /** This will handle if we need to disable country selection */
     public disableCountrySelection: boolean = false;
+    /** To check applied taxes modified  */
+    public isTaxesSaveDisable$: Observable<boolean> = of(true);
+    /** To check applied discounts modified  */
+    public isDiscountSaveDisable$: Observable<boolean> = of(true);
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
         private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
@@ -1581,19 +1585,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * To capture selected/de-select discounts list update
-     *
-     * @param {*} event
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public selecteDiscountChanged(event: any) {
-
-        if (event) {
-            this.applyDiscounts();
-        }
-    }
-
-    /**
      * This will disable country field if selected group or parent group is sundry creditor
      *
      * @param {string} [groupName]
@@ -1605,5 +1596,26 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         } else {
             this.disableCountrySelection = false;
         }
+    }
+
+    /**
+     * To check taxes list updated
+     *
+     * @param {*} event
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public taxesSelected(event: any): void {
+        if (event) {
+            this.isTaxesSaveDisable$ = of(false);
+        }
+    }
+
+    /**
+     * To check discount list updated
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public discountSelected(): void {
+        this.isDiscountSaveDisable$ = of(false);
     }
 }
