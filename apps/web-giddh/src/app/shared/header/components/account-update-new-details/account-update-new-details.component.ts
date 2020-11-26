@@ -79,6 +79,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public showBankDetail: boolean = false;
     @Input() public showVirtualAccount: boolean = false;
     @Input() public isDebtorCreditor: boolean = false;
+    /** True if bank category account is selected */
+    @Input() public isBankAccount: boolean = false;
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
     @ViewChild('autoFocusUpdate', {static: true}) public autoFocusUpdate: ElementRef;
@@ -986,7 +988,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.addBlankGstForm();
             }
 
+        } else if (activeParentgroup === 'bankaccounts') {
+            this.isBankAccount = true;
+            this.isDebtorCreditor = false;
+            this.showBankDetail = false;
         } else {
+            this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
         }
