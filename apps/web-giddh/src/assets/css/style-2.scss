@@ -8733,6 +8733,10 @@ ul.dropdown-menu p.lead.pd {
     padding: 10px 0px 0 50px !important;
     border-bottom:1px solid $gainsboro;
 }
+.gstr-tabs-head .nav.nav-tabs{
+    position: relative !important;
+    padding: 10px 0px 0 15px !important;
+}
 .setting-page .nav > li > a {
     padding: 2px 0px;
     margin-right: 25px;
@@ -11124,7 +11128,15 @@ input.mat-input-element{
 /*** iPhone and iOS Form Input Zoom Fixes ***/
 
 /* Fix Input Zoom on devices older than iPhone 5: */
-
+@media (min-width: 769px) and (max-width:991px){
+    .gstr-tabs-head{
+        .nav.nav-tabs{
+            li{
+                display: inline-block;
+            }
+        }
+    }
+}
 @media screen and (device-aspect-ratio: 2/3) {
     select,
     textarea,
