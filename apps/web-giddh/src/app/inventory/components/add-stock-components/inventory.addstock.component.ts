@@ -700,7 +700,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     tax.isChecked = false;
                     tax.isDisabled = false;
                 }
-                return tax
+                return tax;
             });
         }), takeUntil(this.destroyed$)).subscribe(res=>{
               return res;
