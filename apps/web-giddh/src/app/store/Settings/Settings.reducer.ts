@@ -265,6 +265,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_PROFILE_ACTIONS.RESET_PATCH_PROFILE: {
              return Object.assign({}, state, {
                 updateProfileSuccess: false,
+                updateProfileInProgress: false
             });
         }
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
