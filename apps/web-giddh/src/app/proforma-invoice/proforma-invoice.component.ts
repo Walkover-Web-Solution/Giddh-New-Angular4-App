@@ -2940,7 +2940,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             mobileNo: data.body.mobileNo,
                             nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                             stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
-                            hsnNumber: (selectedAcc.stock) ? data.body.hsnNumber : "",
+                            hsnNumber: (selectedAcc.stock) ? selectedAcc.stock.hsnNumber : "",
                             sacNumber: (!selectedAcc.stock) ? data.body.sacNumber : "",
                             uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
