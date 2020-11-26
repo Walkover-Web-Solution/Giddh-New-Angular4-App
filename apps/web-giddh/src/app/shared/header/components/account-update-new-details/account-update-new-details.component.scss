@@ -1,12 +1,12 @@
 @import "../../../../../assets/css/color.scss";
 .form-header {
     padding: 20px 15px;
-    background: #1a237e;
-    color: #fff;
+    background: $midnight-blue;
+    color: $white;
 }
 
 .aside-pane-form {
-    background-color: #fff;
+    background-color: $white;
     box-shadow: 0px 3px 6px $black-russian-light;
     padding: 15px 15px;
     //  height: 100vh;
@@ -18,7 +18,7 @@
 .aside-pane-container {
     padding: 15px;
     font-size: 14px;
-    color: #1c1c1c;
+    color: $nero;
 }
 
 .aside-pane-form label {
@@ -48,8 +48,8 @@ span.dr-label {
 }
 
 .cr-dr-account span.active {
-    background-color: #5b64c9;
-    color: #fff;
+    background-color: $chetwode-blue;
+    color: $white;
 }
 
 .aside-pane-form .col-sm-4,
@@ -92,7 +92,7 @@ form.gstin-form {
 
 .add-address-default h3 {
     font-size: 16px;
-    color: #1c1c1c;
+    color: $nero;
 }
 
 .contact-form,
@@ -135,4 +135,9 @@ form.gstin-form {
         max-width: 180px;
         white-space: normal;
     }
+}
+
+.contact-number-select{
+    width: 60px; 
+    margin-right: 10px;
 }

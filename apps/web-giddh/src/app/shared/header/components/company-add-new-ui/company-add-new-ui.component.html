@@ -1,4 +1,4 @@
-<div id="share-modal" class=" share-grp ">
+<div id="share-modal" class="share-grp">
 	<div class="modal-header">
 		<h3 *ngIf="!createBranch">Create New Company</h3>
 		<h3 *ngIf="createBranch">{{isUpdateMode ? 'Update' : 'Create New'}} Branch</h3>
@@ -41,9 +41,9 @@
 							<span>
 								<label for="country" class="d-block">Country<sup>*</sup></label>
 								<sh-select [disabled]="createBranch ? 'disabled' : null"  id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
-									name="country" [(ngModel)]="company.country" class="pull-left select-caret"
+									name="country" [(ngModel)]="company.country" class="pull-left select-caret w-100"
 									[required]='true' (selected)="selectCountry($event)"
-									[defaultValue]="selectedCountry" style="width: 100%">
+									[defaultValue]="selectedCountry">
 								</sh-select>
 							</span>
 						</div>
@@ -59,8 +59,7 @@
 							<span>
 								<label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
 								<div class="d-flex welcome-select ">
-									<sh-select class="pull-left select-caret" required
-										style="width: 85px;margin-right: 28px;" name="phoneCode" [placeholder]="+91"
+									<sh-select class="pull-left select-caret phone-code-caret" required name="phoneCode" [placeholder]="+91"
 										[options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
 										[defaultValue]="company.phoneCode">
 									</sh-select>
@@ -75,7 +74,7 @@
 							<span>
 								<label for="aliasName" class="d-block">Alias<sup>*</sup></label>
 								<div class="d-flex welcome-select ">
-									<input type="text" class="form-control mrR1" required
+									<input type="text" class="form-control mr-r1" required
 										id="alias-name" autocomplete="off"
 										[(ngModel)]="company.nameAlias"
 										name="aliasName" />
@@ -83,7 +82,7 @@
 							</span>
                         </div>
 						<div class="col-xs-12 col-sm-12 mr-t1">
-							<button class="btn btn-sky-blue mr-l1" style="margin-left: 0 !important;" type="submit"
+							<button class="btn btn-sky-blue ml-0" type="submit"
 								(click)="createCompany(null)" [disabled]="companyForm.invalid"
 								[ladda]="isCompanyCreationInProcess$ | async">{{isUpdateMode ? 'Update' : 'Next'}}
 							</button>

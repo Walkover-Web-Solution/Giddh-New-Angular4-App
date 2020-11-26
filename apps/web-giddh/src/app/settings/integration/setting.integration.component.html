@@ -53,7 +53,7 @@
                             Gmail</a>
                     </ng-container>
 
-                    <h4 style="align-self: center" *ngIf="(isGmailIntegrated$ | async)" class="text-success">Gmail integrated successfully.</h4>
+                    <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success align-self-center">Gmail integrated successfully.</h4>
                     <button *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger mr-l2" (click)="removegmailintegration.toggle()">Remove Account
                     </button>
                 </div>
@@ -890,7 +890,7 @@
                         </div>
                     </form>
                     <div *ngIf="(isPaymentAdditionSuccess$ | async)">
-                        <div style="display: inline-block" class="clearfix">
+                        <div class="clearfix d-inline-block">
                             <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
                             </div>
                         </div>

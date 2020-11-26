@@ -5,7 +5,7 @@
                 <div class="col-sm-4">
                     <div class="ng-select-wrap liq select-group">
                         <label>Select Group<span class="red-text">*</span> </label>
-                        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" style="width:100%">
+                        <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" class="w-100">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
                                 <div class="account-list-item font-12">{{option?.value}}</div>
@@ -131,7 +131,7 @@
                                     <div class="form-group">
                                         <label>State <sup class="text-danger" *ngIf="isStateRequired">*</sup> </label>
                                         <div>
-                                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async" formControlName="stateCode" style="width:100%" [useInBuiltFilterForIOptionTypeItems]="true"
+                                            <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async" formControlName="stateCode" class="w-100" [useInBuiltFilterForIOptionTypeItems]="true"
                                                 [attr.required]="isStateRequired">
                                             </sh-select>
                                         </div>

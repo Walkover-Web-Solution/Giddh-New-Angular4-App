@@ -128,7 +128,7 @@ input {
     background: $white;
     color: $gray;
     font-size: 18px;
-    margin: 0px 0 0;
+    margin: 0px !important;
     box-shadow: 0px 2px 6px $black-russian-light;
 }
 .ledger-stat .row {
@@ -148,10 +148,16 @@ input {
     position: absolute;
     bottom: 0;
     width:50%;
-    left:0;
-    bottom:0;
-    float: left;
 }
+
+.left-align{
+    left: 0;
+}
+
+.right-align{
+    right: 0;
+}
+
 .ledger-head th {
     color: $jacksons-purple;
     padding-top: 5px;
@@ -543,6 +549,19 @@ sh-select:focus {
         width: 203px !important;
     }
 }
+
+.download-invoice-ledger {
+    padding-left: 6px;
+    position: unset !important;
+    align-items: center;
+}
+.icon-download-circle{
+    font-size:15px;
+    top: 0 !important;
+    margin-top: 1px !important;
+}
+
+
 /*mobile ledger view css*/
 .mobile-ledger-view {
     margin: 0 -15px;
@@ -840,16 +859,6 @@ sh-select:focus {
     }
     .justify-content-between {
         justify-content: inherit;
-    }
-    .download-invoice-ledger {
-        padding-left: 6px;
-        position: unset;
-        align-items: center
-    }
-    .icon-download-circle{
-        font-size:15px;
-        top: 0 !important;
-        margin-top: 1px !important;
     }
     .custom-tabs {
         display: block;

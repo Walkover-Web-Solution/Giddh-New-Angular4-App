@@ -200,7 +200,7 @@
                         <div class="form-group">
                             <label>Mobile Number</label>
                             <div class="d-flex mobileNumberWidth">
-                                <sh-select [placeholder]="'+91'" [options]="countryPhoneCode" formControlName="mobileCode" style="width: 60px; margin-right: 10px;"></sh-select>
+                                <sh-select [placeholder]="'+91'" [options]="countryPhoneCode" formControlName="mobileCode" class="contact-number-select"></sh-select>
                                 <input type="text" pattern="[0-9]*" class="form-control pull-right" placeholder="98XXXXXXXX" formControlName="mobileNo" id="contactNo" autocomplete="off" (blur)="isValidMobileNumber(mobileNoEl)" #mobileNoEl />
                                 <small class="clearfix error-msg" *ngIf="addAccountForm.get('mobileNo').value && !addAccountForm.get('mobileCode').value">Phone
                                     code

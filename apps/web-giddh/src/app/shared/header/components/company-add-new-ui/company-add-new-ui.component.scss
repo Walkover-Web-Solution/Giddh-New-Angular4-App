@@ -2,23 +2,23 @@
 
 @import "../../../../../assets/css/color.scss";
 .modal-body label {
-    color: #707070;
+    color: $gray-44;
     margin-bottom: 5px;
 }
 
 label .required {
     position: relative;
     top: 0px;
-    color: #cf0606;
+    color: $strong-red;
 }
 
 .form-control {
-    color: #707070;
+    color: $gray-44;
 }
 
 .modal-body p {
     font-size: 14px;
-    color: #b3b3b3;
+    color: $extra-pink-swan;
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -39,7 +39,7 @@ label .required {
 }
 
 .add-company-detail {
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     margin-bottom: 0 !important;
 }
 
@@ -62,11 +62,17 @@ label .required {
 }
 
 .add-company-detail {
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
 }
 #share-modal .btn-sky-blue{
     width: 100%;
 }
+
+.phone-code-caret{
+    width: 85px;
+    margin-right: 28px;
+}
+
 @media (max-width:767px) {
     .giddh-logo-welcome img {
         max-width: 150px;
