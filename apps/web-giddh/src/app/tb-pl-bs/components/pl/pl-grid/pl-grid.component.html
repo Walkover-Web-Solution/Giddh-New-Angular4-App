@@ -74,7 +74,7 @@
 
                             <section class="row-1">
                                 <div class="pl-grid-row row">
-                                    <div class="col-8  group pl-1">Total Cost of Goods Sold
+                                    <div class="col-8  group pd-l1">Total Cost of Goods Sold
                                     </div>
                                     <div class="col-4  bd-rl group text-right pull-right">
                                         <span> {{ cogsData?.closingBalance.amount | giddhCurrency }} </span>
@@ -121,8 +121,8 @@
 
                                     <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'revenue'">
                                         <div class="pl-grid-row row">
-                                            <div class="col-8  group pl-1">Total Revenue</div>
-                                            <div class="col-4  bd-rl group text-right pull-right">
+                                            <div class="col-8  group pd-l1">Total Revenue</div>
+                                            <div class="col-4  bd-rl group text-right pull-right pd-l1">
                                                 <span> {{ plData?.incomeStatment.revenue.amount | giddhCurrency }}
                                                 </span>
                                             </div>
@@ -131,10 +131,10 @@
 
                                     <div class="group clearfix row"
                                         *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'">
-                                        <div class="col-8  group pd-1">
+                                        <div class="col-8  group pd-l1">
                                             Total Operating Expenses
                                         </div>
-                                        <div class="col-4  group text-right pull-right bd-rl pd-1">
+                                        <div class="col-4  group text-right pull-right bd-rl pd-l1">
                                             {{ plData?.incomeStatment.operatingExpenses.amount | giddhCurrency }}
                                         </div>
                                     </div>
@@ -152,9 +152,9 @@
 
                                     <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
                                         <div class="pl-grid-row row">
-                                            <div class="col-8  group pl-1">Total Other
+                                            <div class="col-8  group pd-l1">Total Other
                                                 Expenses</div>
-                                            <div class="col-4  bd-rl group text-right pull-right">
+                                            <div class="col-4  bd-rl group text-right pull-right pd-l1">
                                                 <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }}
                                                 </span>
                                             </div>
@@ -162,8 +162,8 @@
                                     </section>
 
                                     <!-- <div class="group clearfix" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
-                      <div class="col-4  group pd-1" style="padding-left: 10px;">Total </div>
-                      <div class="col-3  bd-rl group text-right pull-right bd-rl pd-1">
+                      <div class="col-4  group pd-l1" style="padding-left: 10px;">Total </div>
+                      <div class="col-3  bd-rl group text-right pull-right bd-rl pd-l1">
                           <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} </span>
                       </div>
                   </div> -->
@@ -195,10 +195,10 @@
                 <ng-template
                     *ngIf="plData && plData?.incomeStatment && plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'">
                     <div class="group clearfix font-14 row">
-                        <div class="col-8  group pd-1">
+                        <div class="col-8  group pd-l1">
                             Taxes (30%)
                         </div>
-                        <div class="col-4  group text-right pull-right bd-rl pd-1">
+                        <div class="col-4  group text-right pull-right bd-rl pd-l1">
                             {{ plData?.incomeStatment.appliedTax | giddhCurrency }}
                         </div>
                     </div>

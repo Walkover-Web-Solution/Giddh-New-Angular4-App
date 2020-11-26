@@ -71,7 +71,7 @@ $greyClr: #6d6d6d;
 
 // common class for extend
 .white-bg {
-    background-color: white;
+    background-color: $white;
 }
 
 .cp {
@@ -134,12 +134,12 @@ $greyClr: #6d6d6d;
         right: 0;
         bottom: 0;
         padding: 0 1em;
-        color: #cccccc;
+        color: $very-light-gray;
         pointer-events: none;
     }
     /* Transition */
     &:hover::after {
-        color: #bbbbbb;
+        color: $gray;
     }
     &::after {
         -webkit-transition: 0.25s all ease;
@@ -370,12 +370,12 @@ ng-select.splSales {
 }
 
 .billing-address {
-    background: #fff;
+    background: $white;
     border: 1px solid #d6d6d6;
     padding: 5px;
     padding-bottom: 10px;
     &.disabled {
-        background: #eee;
+        background: $whisper-light;
     }
     textarea {
         border: none;
@@ -396,7 +396,7 @@ textarea:focus {
 
 .input-custom {
     border: none;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro-light;
 }
 
 .pl0 {
@@ -405,7 +405,7 @@ textarea:focus {
 
 .balance-due {
     display: block;
-    color: #6b6c72;
+    color: $comet;
     line-height: 1.2rem;
     font-size: 14px;
     font-weight: 500;
@@ -425,7 +425,7 @@ textarea:focus {
     > thead {
         > tr {
             > th {
-                border: 1px solid #c7c7c7 !important;
+                border: 1px solid $very-light-gray !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
@@ -454,7 +454,7 @@ textarea:focus {
     > tbody {
         > tr {
             > td {
-                border: 1px solid #c7c7c7 !important;
+                border: 1px solid $very-light-gray !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 position: relative;
@@ -467,7 +467,7 @@ textarea:focus {
                     width: 90px;
                 }
                 &.error-box.item-tax {
-                    border: 2px solid red !important;
+                    border: 2px solid $red !important;
                 }
             }
         }
@@ -492,7 +492,7 @@ textarea:focus {
 }
 
 .disabled {
-    background: #eee;
+    background: $whisper-light;
     pointer-events: none;
     opacity: 0.7;
 }
@@ -515,19 +515,19 @@ textarea:focus {
     top: 50%;
     left: inherit;
     width: 282px;
-    background: #f4f5f8;
+    background: $solitude;
     display: block;
 }
 
 #deposit-dropdown .caret,
 #deposit-dropdown-normal .caret {
-    border-top: 7px dashed #d0d0d3;
+    border-top: 7px dashed $ghost;
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     right: -15px;
     position: absolute;
     top: 47%;
-    background: #f4f5f8;
+    background: $solitude;
     transform: rotate(-90deg) translateY(-50%);
 }
 
@@ -572,25 +572,25 @@ textarea:focus {
     background: rgba(112, 112, 112, 0.92);
     bottom: 0;
     width: 100%;
-    color: #fff;
+    color: $white;
     padding: 10px;
     text-align: center;
 }
 
 .modal-invoice-footer .btn {
-    background: #a7a7a7;
+    background: $dark-gray;
     font-size: 12px;
     border-radius: 90px;
     padding: 1px 6px;
     vertical-align: middle;
     margin-right: 0px;
     transition: 0.5s all ease;
-    color: #fff;
+    color: $white;
 }
 
 .modal-invoice-footer .btn:hover {
-    background: #229e2b;
-    color: #fff;
+    background: $dark-green;
+    color: $white;
 }
 
 .sales-invoice-modal .modal-body perfect-scrollbar {
@@ -602,8 +602,8 @@ textarea:focus {
 }
 
 .modal-invoice-footer ul > li > input:checked + label {
-    background: #229e2b;
-    color: #fff;
+    background: $dark-green;
+    color: $white;
 }
 
 // my css
@@ -612,12 +612,12 @@ textarea:focus {
 }
 
 .other-options {
-    color: #a9a9a9;
+    color: $dark-gray;
     padding-top: 5px;
 }
 
 .other-options a {
-    color: #0c8fe6;
+    color: $electric-blue;
     font-size: 12px;
 }
 
@@ -636,7 +636,7 @@ form label {
     border: none !important;
     padding-right: 2px !important;
     background-color: transparent !important;
-    border-bottom: 1px solid #c7c7c7 !important;
+    border-bottom: 1px solid $very-light-gray !important;
     height: 28px;
 }
 
@@ -664,7 +664,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 
 .billingaddresFull p {
     font-size: 14px;
-    color: #666666;
+    color: $dark-gray;
     margin-bottom: 5px;
 }
 
@@ -677,7 +677,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .change-label {
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .wrap-invoiceNumberDetails .form-group {
@@ -689,7 +689,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .bg-white {
-    background-color: #fff;
+    background-color: $white;
     // padding: 10px 0;
     margin: 0 0;
 }
@@ -705,7 +705,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .description textarea {
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -713,8 +713,8 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 
 .sales-invoice-table table input[disabled] {
     cursor: default;
-    background-color: #eeeeee;
-    border: 1px solid #ccc;
+    background-color: $whisper-light;
+    border: 1px solid $very-light-gray;
     padding: 5px;
     width: 100%;
     // max-width: 150px;
@@ -735,7 +735,7 @@ input[type="text"] {
 }
 
 a.copyInvoice {
-    color: #3597ec;
+    color: $primary;
     margin-left: 10px;
 }
 
@@ -756,7 +756,7 @@ a.copyInvoice img {
     padding: 0;
 }
 .shipping-address textarea {
-    border-bottom: 1px solid #ccc !important;
+    border-bottom: 1px solid $very-light-gray !important;
 }
 
 .mb-0 {
@@ -807,7 +807,7 @@ a.copyInvoice img {
 .add-bulk-items {
     font-size: 12px;
     padding-bottom: 0;
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .otherDetailTable th,
@@ -861,8 +861,8 @@ span.edit-icon {
 
 .hsn-code-dropdown {
     position: absolute;
-    background-color: #fff;
-    border: 1px solid #c7c7c7;
+    background-color: $white;
+    border: 1px solid $very-light-gray;
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
@@ -885,18 +885,18 @@ span.edit-icon {
     height: 28px !important;
     padding: 5px;
     max-width: 100%;
-    border: 1px solid #c7c7c7;
+    border: 1px solid $very-light-gray;
 }
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: #c6c6c6;
+    color: $light-silver;
 }
 
 .hsn-code-dropdown a {
     display: inline-block;
     text-align: center;
-    color: #cccccc;
+    color: $very-light-gray;
     padding: 5px 8px;
     font-size: 16px;
 }
@@ -907,8 +907,8 @@ span.edit-icon {
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success,
 .bulk-item-btn-group button.btn.btn-sm.btn-success {
-    background-color: #28ab00;
-    color: #fff;
+    background-color: $dark-green;
+    color: $white;
 }
 
 .template-footer {
@@ -919,13 +919,13 @@ span.edit-icon {
 }
 
 .update-text {
-    color: #0c8fe6;
+    color: $electric-blue;
     padding: 0 5px;
 }
 
 .select-account-label {
     font-size: 14px;
-    color: #c7c7c7;
+    color: $very-light-gray;
     padding-bottom: 3px;
 }
 
@@ -997,7 +997,7 @@ section.static-invoice-table {
 
 .customer-invoice-table.bg-white {
     margin-top: 10px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
     margin-bottom: 20px;
 }
 
@@ -1015,13 +1015,13 @@ section.static-invoice-table {
 
 // new table css
 section.newtable {
-    background-color: #e5e5e5;
+    background-color: $gray-90;
     margin-bottom: 30px;
     margin: 0 15px 30px;
 }
 
 .newtable .thead {
-    border-right: 1px solid #c7c7c7;
+    border-right: 1px solid $very-light-gray;
     padding: 8px 10px;
 }
 
@@ -1080,7 +1080,7 @@ section.newtable {
 .card-invoice-table-wrapper {
     max-width: 400px;
     width: 100%;
-    background-color: #fff;
+    background-color: $white;
     margin: 20px 0;
     border-radius: 3px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
@@ -1098,7 +1098,7 @@ section.newtable {
 }
 
 .single-card-row p {
-    color: #666;
+    color: $dark-gray;
     font-size: 14px;
 }
 
@@ -1111,7 +1111,7 @@ section.newtable {
     position: absolute;
     right: 15px;
     top: 11px;
-    color: #f00;
+    color: $red;
     font-size: 18px;
 }
 
@@ -1145,7 +1145,7 @@ section.newtable {
     max-width: 400px;
     margin: 20px 0;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background-color: $white;
     padding: 15px 20px;
     border-radius: 3px;
 }
@@ -1173,16 +1173,16 @@ section.newtable {
     position: absolute;
     top: 11px;
     right: 40px;
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .sales-country-label {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro-light;
     padding-left: 6px;
-    border-bottom-color: rgb(214, 214, 214);
+    border-bottom-color: $very-light-gray;
 }
 
 .loader-class {
@@ -1205,7 +1205,7 @@ section.newtable {
 }
 
 .add-bulk-item-modal .single-product-wrapper h5 {
-    color: #333333;
+    color: $night-rider;
     font-size: 14px;
 }
 
@@ -1229,8 +1229,8 @@ section.newtable {
 }
 
 .add-bulk-item-modal .right-content hr {
-    color: black;
-    border-color: #ccc;
+    color: $black;
+    border-color: $very-light-gray;
     margin: 10px -15px;
     margin-left: -15px;
 }
@@ -1261,8 +1261,8 @@ section.newtable {
 }
 
 .add-bulk-item-modal .input-group .input-group-btn .btn {
-    background: #fff;
-    border-left: 1px solid #ccc;
+    background: $white;
+    border-left: 1px solid $very-light-gray;
 }
 
 .add-bulk-item-modal .btn {
@@ -1270,7 +1270,7 @@ section.newtable {
 }
 
 .add-bulk-item-modal .input-group-btn .fa {
-    color: #c6c6c6;
+    color: $light-silver;
 }
 
 .add-bulk-item-modal .single-selected-stock {
@@ -1278,13 +1278,13 @@ section.newtable {
 }
 
 .add-bulk-item-modal .left-content {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid $gainsboro-light;
     padding-right: 15px;
 }
 
 .add-bulk-item-modal .modal-title {
     font-size: 22px !important;
-    color: #fff;
+    color: $white;
 }
 
 .table-custom-invoice .salesTax .dropdown-menu-right li label {
@@ -1303,7 +1303,7 @@ section.newtable {
     position: absolute;
     top: 60px;
     z-index: 10;
-    border: 1px solid #c7c7c7;
+    border: 1px solid $very-light-gray;
 }
 
 .gst-treatment-header > span {
@@ -1366,7 +1366,7 @@ table.table.table-custom-invoice.basic {
     top: 132px;
     opacity: 0.6;
     z-index: 98;
-    background: #f7f8fa;
+    background: $alice-blue-light;
 }
 
 .cash-invoice-input {
@@ -1398,7 +1398,7 @@ table.table.table-custom-invoice.basic {
 }
 
 .differ-currency {
-    color: #999999;
+    color: $nobel;
     font-size: 14px;
     text-align: right;
     bottom: 3px;
@@ -1420,7 +1420,7 @@ table.table.table-custom-invoice.basic {
 
 .switch-currency {
     font-size: 14px;
-    color: #333;
+    color: $night-rider;
     max-width: 1000px;
     text-align: right;
     margin-bottom: 10px;
@@ -1473,7 +1473,7 @@ label.sales-country-label {
 
 .tax-incurrency span.icon-rupees {
     font-size: 11px;
-    color: #999;
+    color: $nobel;
 }
 
 .thead-sales-invoice {
@@ -1533,7 +1533,7 @@ label.sales-country-label {
     transform: translateY(-40px);
     width: 20px;
     height: 20px;
-    border: 1px solid #999;
+    border: 1px solid $nobel;
     border-radius: 50%;
     text-align: center;
 }
@@ -1745,8 +1745,8 @@ span.eligible-ITC {
         margin-bottom: 0;
     }
     .showInMobile {
-        background: #fff;
-        border-top: 1px solid #ddd;
+        background: $white;
+        border-top: 1px solid $gainsboro-light;
         padding-right: 15px;
         padding-left: 15px;
     }
@@ -1761,8 +1761,8 @@ span.eligible-ITC {
     }
     .other-taxes-input {
         width: 99px;
-        background-color: #eee;
-        border: 1px solid #eee;
+        background-color: $whisper-light;
+        border: 1px solid $whisper-light;
         padding: 3px;
         font-size: 13px;
     }

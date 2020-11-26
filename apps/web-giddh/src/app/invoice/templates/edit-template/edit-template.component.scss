@@ -1,6 +1,6 @@
 @import "../../../../assets/css/color.scss";
 .template-grid {
-    background: #fff;
+    background: $white;
     max-width: 255px;
     width: 100%;
     padding: 20px;
@@ -30,9 +30,9 @@
 
 @import "../../../../../../web-giddh/src/assets/css/color.scss";
 .btn-warning {
-    color: #fff;
-    background-color: #ec971f;
-    border-color: #d58512;
+    color: $white;
+    background-color: $warning;
+    border-color: $warning;
 }
 
 .more-btn-dropdown {
@@ -41,7 +41,7 @@
     border-radius: 0 !important;
     font-size: 14px;
     padding: 5px 10px;
-    background: rgb(255, 255, 255) !important;
+    background: $white !important;
     width: 160px;
     text-align: left;
     display: flex;
@@ -53,10 +53,10 @@
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $gray-90;
 }
 .badge {
-    background: #eaeaea;
+    background: $whisper-color;
     color: $charcoal;
     font-family: opensans-regular;
     border: none;
@@ -65,14 +65,14 @@
     border-radius: 50px;
 }
 .badge.btn-success:hover {
-    background: #ddd;
+    background: $gainsboro-light;
     color: $charcoal;
 }
 .badge.btn-sky-blue,
 .badge.btn-sky-blue:hover {
-    background: #313a97 !important;
+    background: $jacksons-purple !important;
     border: none !important;
-    color: #fff !important;
+    color: $white !important;
 }
 .template-grid-container {
     padding: 0 15px;
@@ -92,7 +92,7 @@
 }
 @media (max-width: 414px) {
     .template-grid {
-        background: #fafafa;
+        background: $gray-98;
         max-width: 100%;
     }
 }

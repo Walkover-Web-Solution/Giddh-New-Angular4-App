@@ -12,7 +12,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid #c6c4c4;
+    border-right: 1px solid $light-silver;
 }
 
 .flex-fill {
@@ -63,9 +63,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: #1c1c1c;
+    color: $nero;
     border: none;
-    background-color: #f2f2f2;
+    background-color: $white-smoke;
 }
 
 .td-search-box .input-container i {
@@ -85,7 +85,7 @@
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue !important;
-    background: #eeeff9 !important;
+    background: $lavender !important;
 }
 
 .dropdown-menu {
@@ -104,9 +104,9 @@
     list-style: none;
     position: absolute;
     left: -114px;
-    background-color: white;
+    background-color: $white;
     width: 131px;
-    box-shadow: 0px 4px 7px #bfbfbf;
+    box-shadow: 0px 4px 7px $gray-75;
     border-radius: 3px;
     z-index: 100;
     border: 1px solid $gainsboro;
@@ -119,7 +119,7 @@
 .click-dropdwon ul li {
     padding: 3px 6px;
     margin-bottom: 4px;
-    color: orange;
+    color: $orange;
     cursor: pointer;
 }
 
@@ -128,11 +128,11 @@
 }
 
 .click-dropdwon ul li:hover a {
-    color: orangered;
+    color: $orange-red;
 }
 
 .click-dropdwon ul li a {
-    color: black;
+    color: $black;
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -146,7 +146,7 @@
 
 .btn.btn-sky-blue:focus,
 .btn.btn-sky-blue:hover {
-    color: #fff;
+    color: $white;
     text-decoration: none;
     outline: none !important;
 }
@@ -184,7 +184,7 @@
 }
 
 td.card-header.clearfix {
-    background-color: #eee;
+    background-color: $whisper-light;
     padding: 10px !important;
 }
 
@@ -194,10 +194,10 @@ td.card-header.clearfix {
 }
 
 .card #invoice_td {
-    border-bottom: 1px solid #ddd !important;
+    border-bottom: 1px solid $gainsboro-light !important;
     padding-bottom: 20px !important;
-    background-color: #f9f9f9;
-    border-top: 1px solid #ddd !important;
+    background-color: $snow;
+    border-top: 1px solid $gainsboro-light !important;
     padding-top: 10px !important;
 }
 
@@ -231,7 +231,7 @@ td.card-header.clearfix {
 
 .card .more-button .moreBtnWrapper {
     margin-right: 0;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $gainsboro-light;
     padding-top: 8px;
 }
 
@@ -290,7 +290,7 @@ ul.select-action-dropdown {
 }
 
 .select-action-dropdown a {
-    color: #333;
+    color: $night-rider;
     font-size: 14px;
     padding: 5px 10px;
     display: block;
@@ -298,11 +298,11 @@ ul.select-action-dropdown {
 
 .select-action-dropdown a:hover {
     color: $chetwode-blue !important;
-    background: #eeeff9 !important;
+    background: $lavender !important;
 }
 
 .add-invoice .dropdown-toggle {
-    color: #fff;
+    color: $white;
 }
 
 .invoice-container {
@@ -340,7 +340,7 @@ ul.select-action-dropdown {
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: #999999;
+    color: $nobel;
 }
 
 .advance-icon,
@@ -355,7 +355,7 @@ ul.select-action-dropdown {
     border: 1px solid $gainsboro;
     border-radius: 2px;
     color: $gray;
-    background: #fff;
+    background: $white;
     color: $gray;
 }
 
@@ -364,7 +364,7 @@ ul.select-action-dropdown {
 }
 
 .advance-icon:hover {
-    background: #eaeaea;
+    background: $whisper-color;
 }
 
 .dropdown-toggle.more-btn-dropdown {
@@ -378,21 +378,21 @@ ul.select-action-dropdown {
     align-items: center;
     margin-right: 15px;
     color: $midnight-express;
-    background-color: #fff;
+    background-color: $white;
 }
 
 .dropdown-toggle.more-btn-dropdown:hover {
     background: $chetwode-blue;
-    color: #fff !important;
+    color: $white !important;
     border-color: $chetwode-blue;
 }
 
 .dropdown-toggle.more-btn-dropdown:hover .caret {
-    color: #fff !important;
+    color: $white !important;
 }
 
 .dropdown-toggle.more-btn-dropdown .caret {
-    color: #999999;
+    color: $nobel;
 }
 
 button.btn.btn-default.ladda-button {
@@ -425,7 +425,7 @@ button.btn.btn-default.ladda-button {
 }
 
 .btn-link-2 {
-    color: #1c1c1c;
+    color: $nero;
 }
 
 .input-wrapper {
@@ -449,14 +449,14 @@ button.btn.btn-default.ladda-button {
 
 .invoice-footer h3 {
     font-size: 16px;
-    color: #999999;
+    color: $nobel;
     display: inline-block;
     margin-right: 10px;
 }
 
 .invoice-footer h1 {
     font-size: 18px;
-    color: #333;
+    color: $night-rider;
     display: inline-block;
 }
 
@@ -627,7 +627,7 @@ span.icon-export-icon {
         right: 14px;
         box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
         transform: rotate(45deg);
-        background-color: #fff;
+        background-color: $white;
         z-index: -1;
     }
     .displayBlock {
@@ -655,8 +655,8 @@ span.icon-export-icon {
         bottom: 120px;
         z-index: 99;
         line-height: 0;
-        background-color: #36a1ce;
-        color: #fff;
+        background-color: $shamrock;
+        color: $white;
         box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
         display: block;
     }
@@ -769,7 +769,7 @@ span.icon-export-icon {
 @media (max-width: 420px) {
     .smallLoading {
         padding-left: 0;
-        color: #333333;
+        color: $night-rider;
         font-size: 12px;
         position: relative;
         top: 2px;

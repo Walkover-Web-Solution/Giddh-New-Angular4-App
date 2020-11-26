@@ -13,7 +13,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid #c6c4c4;
+    border-right: 1px solid $light-silver;
 }
 
 .flex-fill {
@@ -56,9 +56,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: #1c1c1c;
+    color: $nero;
     border: none;
-    background-color: #f2f2f2;
+    background-color: $white-smoke;
 }
 
 .td-search-box .input-container i {
@@ -69,7 +69,7 @@
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $gray-90;
 }
 
 .dropdown-menu {
@@ -84,9 +84,9 @@
     list-style: none;
     position: absolute;
     left: -114px;
-    background-color: white;
+    background-color: $white;
     width: 131px;
-    box-shadow: 0px 4px 7px #bfbfbf;
+    box-shadow: 0px 4px 7px $gray-75;
     border-radius: 3px;
     z-index: 100;
     border: 1px solid $gainsboro;
@@ -100,7 +100,7 @@
     padding: 3px 6px;
     margin-bottom: 4px;
 
-    color: orange;
+    color:$orange;
     cursor: pointer;
 }
 
@@ -109,11 +109,11 @@
 }
 
 .click-dropdwon ul li:hover a {
-    color: orangered;
+    color: $orange-red;
 }
 
 .click-dropdwon ul li a {
-    color: black;
+    color: $black;
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -148,14 +148,14 @@ ul.select-action-dropdown {
     list-style: none;
 }
 .select-action-dropdown a {
-    color: #333;
+    color: $night-rider;
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
 .select-action-dropdown a:hover {
     color: $chetwode-blue !important;
-    background: #eeeff9 !important;
+    background: $lavender !important;
 }
 .dropdown-toggle.more-btn-dropdown {
     color: $navy;
@@ -167,18 +167,18 @@ ul.select-action-dropdown {
     justify-content: space-between;
     align-items: center;
     margin-right: 15px;
-    background-color: #fff;
+    background-color: $white;
 }
 .dropdown-toggle.more-btn-dropdown:hover {
     background: $chetwode-blue;
-    color: #fff !important;
+    color: $white !important;
     border-color: $chetwode-blue;
 }
 .dropdown-toggle.more-btn-dropdown .caret {
-    color: #999999;
+    color: $nobel;
 }
 .dropdown-toggle.more-btn-dropdown:hover .caret {
-    color: #fff !important;
+    color: $white !important;
 }
 
 .proforma-container {
@@ -225,7 +225,7 @@ ul.select-action-dropdown {
     border: 1px solid $gainsboro;
     border-radius: 2px;
     color: $gray;
-    background: #fff;
+    background: $white;
     align-items: center;
     justify-content: center;
 }
@@ -233,13 +233,13 @@ ul.select-action-dropdown {
     display: none;
 }
 .advance-icon:hover {
-    background: #eaeaea;
+    background: $whisper-color;
 }
 button.btn.btn-filter {
-    background: #e4e4e4;
-    border: 1px solid #e4e4e4;
+    background: $whisper;
+    border: 1px solid $whisper;
     font-size: 14px;
-    color: #1a237e;
+    color: $midnight-blue;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -249,13 +249,13 @@ button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
 .icon-ellipse.select-action a {
-    color: #333;
+    color: $night-rider;
 }
 .invoice-table th .d-flex {
     align-items: center;
 }
 a.btn-link-2 {
-    color: #1c1c1c;
+    color: $nero;
 }
 .input-wrapper {
     display: block !important;
@@ -354,7 +354,7 @@ span.icon-advance-filter {
 @media (max-width: 420px) {
     .smallLoading {
         padding-left: 0;
-        color: #333333;
+        color: $night-rider;
         font-size: 12px;
         position: relative;
         top: 2px;

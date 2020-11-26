@@ -1,3 +1,5 @@
+@import "../../../../../../assets/css/color.scss";
+
 .swatch ul {
     max-width: 260px;
 }
@@ -8,85 +10,85 @@
 }
 
 .swatch ul li:nth-child(1) {
-    background: #bdbdbd;
+    background: $gray-74;
 }
 
 .swatch ul li:nth-child(2) {
-    background: #636363;
+    background: $granite-gray;
 }
 
 .swatch ul li:nth-child(3) {
-    background: #000000;
+    background: $black;
 }
 
 .swatch ul li:nth-child(4) {
-    background: #e34818;
+    background: $crimson;
 }
 
 .swatch ul li:nth-child(5) {
-    background: #7889a1;
+    background: $light-grayish;
 }
 
 .swatch ul li:nth-child(6) {
-    background: #48565f;
+    background: $san-juan;
 }
 
 .swatch ul li:nth-child(7) {
-    background: #79bd58;
+    background: $bud-green;
 }
 
 .swatch ul li:nth-child(8) {
-    background: #0e909a;
+    background: $eastern-blue;
 }
 
 .swatch ul li:nth-child(9) {
-    background: #202e5a;
+    background: $cloud-burst;
 }
 
 .swatch ul li:nth-child(10) {
-    background: #96bc2d;
+    background: $atlantis;
 }
 
 .swatch ul li:nth-child(11) {
-    background: #2a651d;
+    background: $dell;
 }
 
 .swatch ul li:nth-child(12) {
-    background: #004254;
+    background: $sherpa-blue;
 }
 
 .swatch ul li:nth-child(13) {
-    background: #ff8c00;
+    background: $dark-orange;
 }
 
 .swatch ul li:nth-child(14) {
-    background: #82001d;
+    background: $burgundy;
 }
 
 .swatch ul li:nth-child(15) {
-    background: #6b1438;
+    background: $dull-pink;
 }
 
 .swatch ul li:nth-child(16) {
-    background: #f4749b;
+    background: $tickle-pink;
 }
 
 .swatch ul li:nth-child(17) {
-    background: #950069;
+    background: $deep-pink;
 }
 
 .swatch ul li:nth-child(18) {
-    background: #542852;
+    background: $dark-magenta;
 }
 
 .upload-button {
     width: 100px !important;
-    background: #fff;
+    background: $white;
     display: table-cell;
     text-align: center;
     height: 100px;
     vertical-align: middle;
-    border: 4px dashed #969696;
+    border: 4px dashed $nobel;
     cursor: pointer;
 }
 

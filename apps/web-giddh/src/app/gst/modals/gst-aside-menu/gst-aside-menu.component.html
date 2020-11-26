@@ -16,7 +16,7 @@
         <div class="aside-pane-form">
             <div class="form-body white-bg clearfix margin-child-label">
 
-                <div class="form-bg clearfix">
+                <div class="clearfix">
 
                     <!-- region not gst authenticated and before otp verified -->
                     <div *ngIf="!gstAuthenticated && !gspSessionOtpAuthorized">
@@ -80,7 +80,7 @@
                                                 id="tax_pro_otp" [(ngModel)]="taxProForm.otp">
                                         </div>
 
-                                        <div style="align-self: flex-end;">
+                                        <div class="align-self-end">
                                             <a class="btn btn-link" (click)="resendOtp()"
                                                 href="javascript:void 0">Resend
                                                 Otp</a>

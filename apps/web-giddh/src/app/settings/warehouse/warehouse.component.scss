@@ -44,7 +44,7 @@
     margin-bottom: 10px;
 }
 .create-warehouse p span {
-    color: #5b64c9;
+    color: $chetwode-blue;
 }
 .create-warehouse img {
     margin-bottom: 20px;
@@ -68,7 +68,7 @@
     .btn-group .btn {
         background-color: transparent;
         padding: 0;
-        color: #707070;
+        color: $gray-44;
         margin-right: 0;
         font-size: 20px;
         position: relative;
@@ -130,11 +130,11 @@ span.set-as-default {
     }
 }
 .gray-text {
-    color: #8f9091;
+    color: $aluminum;
     font-size: 12px;
 }
 .set-as-default i.icon-favorite-selected {
-    color: #5b64c9;
+    color: $chetwode-blue;
 }
 .createNewWarehouseBtn {
     justify-content: center;

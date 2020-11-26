@@ -40,10 +40,10 @@
     flex-wrap: wrap;
 
     span {
-        border: 1px solid #ddd;
+        border: 1px solid $gainsboro-light;
         padding: 5px 8px;
         margin: 10px 10px 12px 0px;
-        background-color: #ddd;
+        background-color: $gainsboro-light;
     }
 }
 .input-group {

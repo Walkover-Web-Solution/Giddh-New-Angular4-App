@@ -49,7 +49,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid #cdcdcd;
+    border-right: 1px solid $very-light-gray;
 }
 
 .icon-pointer .glyphicon {
@@ -58,7 +58,7 @@
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $gray-90;
 }
 
 .dropdown-menu {

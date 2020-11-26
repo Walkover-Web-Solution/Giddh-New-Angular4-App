@@ -355,7 +355,7 @@ address {
     margin: auto;
 }
 .tax-engine .sub-filter-nav-band ul > li.active > a {
-    color: #222;
+    color: $gray-black;
     font-weight: 600;
 }
 #subtabs {
@@ -363,7 +363,7 @@ address {
 }
 .tax-engine .gstr-transactions-summary .gstr-summary-title {
     margin: 0 0 6px;
-    color: #777;
+    color: $grimmys-gray;
 }
 .gstr-transactions-summary p {
     margin-bottom: 10px;
@@ -402,7 +402,7 @@ svg.icon.icon-xs {
     display: block;
 }
 .tax-engine .transactions-list .filter-band {
-    background-color: #f5fafe;
+    background-color: $alice-blue-dark;
     padding: 20px;
     height: 66px;
 }

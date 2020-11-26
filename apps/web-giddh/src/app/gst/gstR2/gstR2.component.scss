@@ -157,7 +157,7 @@ svg.icon.icon-sm {
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: #777;
+    color: $grimmys-gray;
 }
 
 .space {
@@ -634,7 +634,7 @@ svg.icon.icon-sm {
 }
 
 .tax-engine .sub-filter-nav-band ul > li.active > a {
-    color: #222;
+    color: $gray-black;
     font-weight: 600;
 }
 

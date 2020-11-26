@@ -25,7 +25,7 @@
         background: none;
         border: none;
         max-width: 108px;
-        border-bottom: 1px solid #dddddd;
+        border-bottom: 1px solid $gainsboro-light;
     }
     .item-label {
         display: inline-block;
@@ -39,16 +39,16 @@
     i {
         margin-left: 10px;
         padding-bottom: 3px;
-        border-bottom: 1px solid #dddddd;
+        border-bottom: 1px solid $gainsboro-light;
     }
     .new-custom-btn {
         font-size: 12px;
-        color: #2262d1;
+        color: $cobalt-blue;
         padding-top: 30px;
         cursor: pointer;
     }
     .text-danger {
-        color: #f80606;
+        color: $extra-bright-red;
     }
 }
 
@@ -77,14 +77,14 @@ tr.fsstock td {
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: #fff;
+    color: $white;
     font-size: 17px;
     top: 18px;
     margin-right: 0;
     border: 0;
 }
 .aside-pane-form {
-    background-color: #fff;
+    background-color: $white;
     box-shadow: 0 3px 6px $black-russian-light;
     padding: 15px;
     height: calc(100vh - 90px);

@@ -1,6 +1,6 @@
 @import "../../../../assets/css/color.scss";
 .bd-rt {
-    border-color: #ccc;
+    border-color: $very-light-gray;
 }
 
 :host ::ng-deep .fb-1-container {
@@ -95,7 +95,7 @@ tfoot {
 
 .td-search-box div i {
     margin-top: 1px;
-    color: #757bb9;
+    color: $wild-blue-yonder;
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -116,7 +116,7 @@ tfoot {
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: #1c1c1c;
+    color: $nero;
     border: none;
     background-color: $white-smoke;
 }
@@ -133,7 +133,7 @@ tfoot {
 }
 
 .basic>thead>tr>th {
-    border-right: 1px solid #cdcdcd;
+    border-right: 1px solid $very-light-gray;
 }
 
 .icon-pointer .glyphicon {
@@ -171,7 +171,7 @@ tfoot {
     .footitem {
         padding: 41px;
         h2 {
-            color: #8f9091;
+            color: $aluminum;
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -222,7 +222,7 @@ tfoot {
 .icon-pointer .icon-sort-dsc {
     line-height: 20px;
     width: 15px;
-    color: #757bb9;
+    color: $wild-blue-yonder;
 }
 
 .icon-pointer .active-text-color {
@@ -248,7 +248,7 @@ tfoot {
         }
         .operators {
             font-size: 39px;
-            color: #8f9091;
+            color: $aluminum;
         }
         h2 {
             font-size: 18px;
@@ -292,11 +292,11 @@ tfoot {
 }*/
 
 .text-orange {
-    color: #5b64c9;
+    color: $chetwode-blue;
 }
 
 .btn-link-2 {
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .mb-100 {
@@ -319,10 +319,10 @@ td.brNone {
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    border: 1px solid #5b64c9;
+    border: 1px solid $chetwode-blue;
     border-radius: 2px;
-    color: #1a237e;
-    background: #fff;
+    color: $midnight-blue;
+    background: $white;
 }
 
 .inventory-stock-table{
@@ -338,10 +338,10 @@ td.brNone {
 }
 
 button.btn.btn-filter {
-    background: #e4e4e4;
-    border: 1px solid #e4e4e4;
+    background: $whisper;
+    border: 1px solid $whisper;
     font-size: 14px;
-    color: #1a237e;
+    color: $midnight-blue;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -353,12 +353,12 @@ button.btn.btn-filter {
 }
 
 .inventory-stock-table input.form-control.stock-input {
-    color: #1c1c1c;
+    color: $nero;
     text-align: left;
 }
 
 .recept-modal .modal-title {
-    color: #fff;
+    color: $white;
 }
 
 .mt-0 {

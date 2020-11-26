@@ -24,7 +24,7 @@
 
 .icon-estimate .path1:before {
     content: "\e900";
-    color: #ffceb1;
+    color: $skin-tone;
 }
 
 .general-tab h4,
@@ -45,7 +45,7 @@
 }
 
 h4 > span {
-    color: #939292 !important;
+    color: $suva-grey !important;
     font-size: 12px !important;
 }
 
@@ -95,7 +95,7 @@ input.form-control.send-alert {
 
 .sendAlert a {
     padding-left: 5px;
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .p-0 {
@@ -146,7 +146,7 @@ span.viasocket {
 }
 
 span.viasocket a {
-    color: #c6c6c6;
+    color: $light-silver;
 }
 
 .invoice-lock-date {
@@ -162,7 +162,7 @@ span.viasocket a {
     position: absolute;
     right: 10px;
     top: 25%;
-    color: #666666;
+    color: $dark-gray;
     font-size: 16px;
 }
 

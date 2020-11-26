@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 .upload-fil ul {
     display: flex;
     list-style-type: none;
@@ -13,18 +15,18 @@
 .upload-fil ul li .upload-img {
     width: 120px;
     height: 120px;
-    background: #cbcbcb;
+    background: $very-light-gray;
     display: flex;
     align-items: center;
     overflow: hidden;
     justify-content: center;
     font-size: 48px;
     cursor: pointer;
-    color: #999999;
+    color: $nobel;
 }
 
 .upload-fil ul li .upload-img > a {
-    color: #999999;
+    color: $nobel;
     display: block;
     width: 100%;
     height: 100%;
@@ -55,12 +57,12 @@
     top: 0;
     right: -29px;
     z-index: 99;
-    background: #cbcbcb;
+    background: $very-light-gray;
     width: 30px;
     height: 30px;
     text-align: center;
     line-height: 30px;
-    color: #666666;
+    color: $dark-gray;
     border-radius: 3px;
     cursor: pointer;
 }
@@ -104,7 +106,7 @@ span.close-modal.cp.pull-right {
 .pettycash {
     /** height: 57vh;
     overflow-y: auto;**/
-    background: #fff;
+    background: $white;
 }
 @media only screen and (max-width: 1440px) {
     .pettycash {

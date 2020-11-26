@@ -50,9 +50,10 @@
     }
     .table-th{
         padding: 14px 8px 14px 0;
-        &.table-th-closing{
-            padding: 14px 20px 14px 0;
-        }
+    }
+
+    .table-th-closing{
+        padding: 14px 20px 14px 0;
     }
 }
 @media (max-width: 1024px) {

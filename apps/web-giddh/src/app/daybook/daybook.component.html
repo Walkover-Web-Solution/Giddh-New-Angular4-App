@@ -22,7 +22,7 @@
 
                 </div>
                 <div class="form-group cursor-pointer">
-                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
+                    <div class="advance-icon align-items-center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
                         <span class="icon-advance-filter"></span>
                     </div>
                 </div>
@@ -100,10 +100,10 @@
                     </tr>
                     <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                         <tr *ngFor="let details of entry.otherTransactions">
-                            <td class="hideTD"></td>
+                            <td class="hide-td"></td>
                             <td data-title="Particular">{{ details.particular.name }}</td>
-                            <td class="hideTD"></td>
-                            <td class="hideTD"></td>
+                            <td class="hide-td"></td>
+                            <td class="hide-td"></td>
                             <td class="text-right" data-title="Debit Amt">
                                 <span *ngIf="details.type === 'DEBIT'">{{ details.amount || 0 |giddhCurrency}}</span>
                                 <span *ngIf="details.type !== 'DEBIT'">-</span>

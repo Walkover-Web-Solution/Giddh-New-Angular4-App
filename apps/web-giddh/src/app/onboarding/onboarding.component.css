@@ -16,7 +16,7 @@
         margin-top: 35px;
     }
 
-    .borderbtm {
+    .border-btm {
         font-size: 16px;
         font-family: "" opensans-semibold "";
         border-bottom: 1px solid #cccccc;
@@ -24,7 +24,7 @@
         margin-bottom: 10px;
     }
 
-    .manage_invoice {
+    .manage-invoice {
         list-style: none;
     }
 
@@ -45,7 +45,7 @@
         padding-top: 0;
     }
 
-    .manage_invoice li a {
+    .manage-invoice li a {
         background: #fff;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         padding: 9px 15px;
@@ -56,13 +56,13 @@
         max-width: 356px;
     }
 
-    .manage_invoice li a i {
+    .manage-invoice li a i {
         margin-right: 20px;
         font-size: 23px;
         color: #535353;
     }
 
-    .manage_invoice li a:hover {
+    .manage-invoice li a:hover {
         text-decoration: none;
     }
 
@@ -83,7 +83,7 @@
         color: #b1b1b3;
     }
 
-    .right_section span {
+    .right-section span {
         font-size: 14px;
         color: #b2b2b4;
         display: block;
@@ -147,7 +147,7 @@
         color: #0c8fe6;
     }
 
-    .right_section {
+    .right-section {
         background: none !important;
     }
 

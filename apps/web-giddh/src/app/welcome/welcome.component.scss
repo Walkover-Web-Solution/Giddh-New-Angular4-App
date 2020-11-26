@@ -9,13 +9,13 @@
 
 .welcome-container {
     hr {
-        background: #707070;
+        background: $gray-44;
     }
     form {
         flex: 0;
     }
     .name-error {
-        color: #e51f0c;
+        color: $scarlet;
         font-size: 11px;
         float: right;
     }
@@ -55,16 +55,16 @@
 }
 
 .welcome-outer hr {
-    border: 0.5px solid #707070;
+    border: 0.5px solid $gray-44;
 }
 
 .skip {
-    color: #10aae0;
+    color: $cerulean;
     margin-left: 16px;
 }
 
 .btn-default:hover {
-    background: #e6e6e6;
+    background: $whisper-new;
 }
 
 ::ng-deep sh-select .header.open > input[type="text"],
@@ -80,13 +80,13 @@
 }
 
 .addCmpnyAddrs p {
-    color: #10aae0;
+    color: $cerulean;
     font-size: 12px;
 }
 
 .change-preference, .taxation-not-supported {
     font-size: 14px;
-    color: #707070;
+    color: $gray-44;
 }
 
 .welcome-container .btn-sky-blue {
@@ -94,8 +94,8 @@
 }
 
 .btn-default {
-    background: #ccc;
-    color: #333;
+    background: $very-light-gray;
+    color: $extra-dark-gray;
 }
 .welcome-container p.welcome-title {
     font-size: 14px;
@@ -105,7 +105,7 @@
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] {
-    color: #707070 !important;
+    color: $gray-44 !important;
 }
 .welcome-container sup {
     top: 0;
@@ -120,8 +120,8 @@ fieldset[disabled] {
     color: $deep-sky-blue;
 }
 .custom-multi-select li {
-    background: #f1f1f1;
-    color: white;
+    background: $light-white-smoke;
+    color: $white;
     margin: 4px;
     padding: 2px 10px;
     font-size: 14px;

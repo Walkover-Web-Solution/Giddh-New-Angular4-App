@@ -111,7 +111,7 @@ form{
                         line-height: 2;
                         border-bottom: 1px solid $gainsboro;
                         padding-left: 6px;
-                        border-bottom-color: rgb(214, 214, 214);
+                        border-bottom-color: $very-light-gray;
                         width: 100%;
                     }
                     .input-custom {
@@ -726,7 +726,7 @@ section.newtable {
                     width: 90px;
                 }
                 &.error-box.item-tax {
-                    border: 2px solid red !important;
+                    border: 2px solid $red !important;
                 }
             }
         }
@@ -918,7 +918,7 @@ span.eligible-ITC {
 
 // card css
 .show-in-mobile {
-    background: #fff;
+    background: $white;
     padding-right: 15px;
     padding-left: 15px;
     padding-top: 20px;
@@ -1032,7 +1032,7 @@ span.eligible-ITC {
     line-height: 2.4;
     border-bottom: 1px solid $gainsboro;
     padding-left: 6px;
-    border-bottom-color: rgb(214, 214, 214);
+    border-bottom-color: $very-light-gray;
 }
 
 .loader-class {

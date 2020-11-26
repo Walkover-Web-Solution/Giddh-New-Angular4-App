@@ -25,7 +25,7 @@ form label {
 .form-inline .form-control.selectedVal {
     border: 1px solid $gainsboro !important;
     padding-right: 22px !important;
-    background: #fff !important;
+    background: $white !important;
 }
 .clear {
     position: absolute;
@@ -52,7 +52,7 @@ input.checkbox-btn {
 span.expand {
     display: inline-block;
     padding: 2px 5.8px;
-    background: #eee;
+    background: $whisper-light;
     font-size: 18px;
 
     border: 1px solid $gainsboro;
