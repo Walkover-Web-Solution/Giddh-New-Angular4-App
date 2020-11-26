@@ -524,19 +524,20 @@
     <ng-container *ngIf="(isTaxableAccount$ | async)">
         <div class="row" *ngIf="selectedTab === 'others'">
             <div class="col-sm-12">
-                <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
+                <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm">
                     <div class="tax-label">
                         <label>Default Taxes</label>
                     </div>
                     <div class="form-group">
                         <div class="clearfix">
                             <span class="calc-width pull-left">
-                                <sh-select  [options]="companyTaxDropDown$ | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes">
+                                <sh-select  [options]="companyTaxDropDown$ | async" [placeholder]="'Select Tax'" (selected)="applyTax()" [multiple]="true" formControlName="taxes">
                                 </sh-select>
                             </span>
-                            <span class="pull-right">
+                            <!-- Commented for later use -->
+                            <!-- <span class="pull-right">
                                 <button [disabled]="!taxGroupForm?.get('taxes')?.value?.length" type="submit" class="btn btn-success">Save</button>
-                            </span>
+                            </span> -->
                         </div>
                     </div>
                 </form>
