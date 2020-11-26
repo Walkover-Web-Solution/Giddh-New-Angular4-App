@@ -67,6 +67,7 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.sort = this.order;
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
+        exportRequest.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
         const body = _.cloneDeep(this.advanceSearchRequest);
         if (body && body.dataToSend) {
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
@@ -176,6 +177,7 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.sort = this.order;
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
+        exportRequest.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
         this.showColumnarTable.emit({
             isShowColumnarTable: true,
             exportRequest: exportRequest

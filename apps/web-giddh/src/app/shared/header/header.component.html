@@ -229,7 +229,7 @@
                 (onShown)="loadCompanyBranches()" (clickOutside)="subdropdown.isOpen = false">
                 <a id="button-basic" dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic">
                     <ng-container *ngIf="currentBranch">{{currentBranch?.name}} ({{currentBranch?.alias}})</ng-container>
-                    <ng-container *ngIf="!currentBranch">Go to Entity</ng-container>
+                    <ng-container *ngIf="!currentBranch">Switch Branch</ng-container>
                     <span class="icon-arrow-down"></span>
                 </a>
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
@@ -307,7 +307,7 @@
             <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="false">
 
                 <!-- Accounts menu -->
-                <ul class="left-fixed-header mr-t1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async) && shouldShowAccounts">
+                <ul class="left-fixed-header mr-t1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                     <h6 class="mr-b1">ACCOUNTS
 
                         <img src="{{imgPath}}plus-around-icon.svg" *ngIf="!isMobileSite" (click)="showManageGroupsModal()" tooltip="Create account" class="pull-right" placement="bottom" container="body">
@@ -330,7 +330,7 @@
                 </ul>
 
                 <!-- Main menu -->
-                <ul class="left-fixed-header" [ngClass]="{'open':sideMenu.isopen, 'mr-t4': shouldShowAccounts, 'mr-t1': !shouldShowAccounts}" *ngIf="(selectedCompany | async)">
+                <ul class="left-fixed-header mr-t4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                     <h6 class="mr-b1">MENU
                         <a (click)="navigateToAllModules()">
                             <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body">

@@ -243,18 +243,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public currentOrganizationType: OrganizationType;
 
     /**
-     * Returns whether the account section needs to be displayed or not
-     *
-     * @readonly
-     * @type {boolean} True, if either branch is switched or company is switched and only HO is there (single branch)
-     * @memberof HeaderComponent
-     */
-    public get shouldShowAccounts(): boolean {
-        return this.currentOrganizationType === OrganizationType.Branch ||
-            (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
-    }
-
-    /**
      * Returns whether the back button in header should be displayed or not
      *
      * @readonly

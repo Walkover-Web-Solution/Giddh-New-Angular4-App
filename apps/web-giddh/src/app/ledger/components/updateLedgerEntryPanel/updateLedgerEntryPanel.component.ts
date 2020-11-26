@@ -55,6 +55,7 @@ import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLed
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { SearchService } from '../../../services/search.service';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
+import { OrganizationType } from '../../../models/user-login-state';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -239,6 +240,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. & Are you sure you want to proceed?';// & symbol is not part of message it to split sentance by '&'
     /* This will hold the account unique name which is going to be in edit mode to get compared once updated */
     public entryAccountUniqueName: any = '';
+    /** Stores the current organization type */
+    public currentOrganizationType: string;
 
     constructor(
         private _accountService: AccountService,
@@ -286,6 +289,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
             if (response === true) {
                 this.store.dispatch(this._ledgerAction.refreshLedger(false));
@@ -716,9 +720,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
 
                     this.vm.reInitilizeDiscount(resp[0]);
-
-                    this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
-                    this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
+                        this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+                    }
 
                     if (this.vm.stockTrxEntry) {
                         this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
@@ -976,14 +981,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
-
-        if (Number(txn.amount) === 0) {
-            txn.amount = undefined;
-        }
-        let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
-        if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
-            let blankTrxnRow = this.vm.blankTransactionItem(type);
-            this.vm.selectedLedger.transactions.push(blankTrxnRow);
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+            if (Number(txn.amount) === 0) {
+                txn.amount = undefined;
+            }
+            let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
+            if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
+                let blankTrxnRow = this.vm.blankTransactionItem(type);
+                this.vm.selectedLedger.transactions.push(blankTrxnRow);
+            }
+        } else {
+            event.preventDefault();
+            event.stopPropagation();
         }
     }
 
@@ -1602,15 +1611,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openHeaderDropDown() {
-        this.entryAccountUniqueName = "";
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+            this.entryAccountUniqueName = "";
 
-        if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
-            this.entryAccountUniqueName = this.vm.selectedLedger.particular.uniqueName;
-            this.openDropDown = true;
-        } else {
-            this.openDropDown = false;
-            this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
-            return;
+            if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
+                this.entryAccountUniqueName = this.vm.selectedLedger.particular.uniqueName;
+                this.openDropDown = true;
+            } else {
+                this.openDropDown = false;
+                this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
+                return;
+            }
         }
     }
 
@@ -1960,8 +1971,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public openAdjustInvoiceEditMode(): void {
-        // this.selectedAdvanceReceiptAdjustInvoiceEditMode = this.selectedAdvanceReceiptAdjustInvoiceEditMode ? false : true;
-        this.handleVoucherAdjustment(true);
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+            this.handleVoucherAdjustment(true);
+        }
     }
 
     /**

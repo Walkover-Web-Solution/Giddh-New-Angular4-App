@@ -5,3 +5,8 @@ export interface IOption {
     isHilighted?: boolean;
     additional?: any;
 }
+
+export interface BorderConfiguration {
+    style?: string;
+    radius?: string;
+}
