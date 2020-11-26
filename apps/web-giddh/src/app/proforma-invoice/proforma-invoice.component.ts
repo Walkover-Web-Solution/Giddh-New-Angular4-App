@@ -565,6 +565,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Stores the current index of entry whose TCS/TDS are entered */
     public tcsTdsIndex: number = 0;
 
+    /** this is showing pending sales page **/
+    public isPendingSales: boolean = false;
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -706,7 +708,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
-
+        this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales' && '/pages/purchase-management/purchase/bill');
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
