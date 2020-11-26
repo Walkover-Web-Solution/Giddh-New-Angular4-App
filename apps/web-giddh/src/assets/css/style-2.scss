@@ -2055,7 +2055,7 @@ fieldset[disabled] .btn-primary:hover {
     position: relative;
 }
 
-.account-accordion .mainLiAclist .title:before {
+.account-accordion .main-account-list .title:before {
     font-family: "icomoon" !important;
     content: "\f2333";
     position: absolute;
@@ -9733,7 +9733,7 @@ input.mat-input-element{
             left: 4px;
             min-height: auto !important;
 
-            .menu_list {
+            .menu-list {
                 li {
                     display: inline-flex;
 

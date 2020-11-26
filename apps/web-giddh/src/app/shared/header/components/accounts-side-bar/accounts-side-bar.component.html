@@ -25,7 +25,7 @@
 
                     <ng-container *ngFor="let item of _items;let i = index">
 
-                        <li *ngIf="item.isGroup" class="mainLiAclist parent-Group">
+                        <li *ngIf="item.isGroup" class="main-account-list parent-Group">
                             <div class="title  LIB{{item.UniqueName}}"
                                 (click)="toggleGroup(item,i + _startIndex,$event)"
                                 [ngClass]="{'active' : item.isOpen || item.UniqueName === selectedGroupUname}">
