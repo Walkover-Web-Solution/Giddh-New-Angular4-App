@@ -1,3 +1,5 @@
+<div class="relative">
+    <hamburger-menu></hamburger-menu>
 <div _ngcontent-xlm-c43="" class="invoice-control" id="purchase-tab">
     <tabset class="purchase-tabset">
         <tab heading="Purchase Order" [active]="activeTab == 'order'" (selectTab)="onTabChanged('order')">
@@ -6,7 +8,7 @@
             </div>
         </tab>
         <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (selectTab)="onTabChanged('bill')">
-            <div *ngIf="activeTab == 'bill'">
+            <div *ngIf="activeTab == 'bill'" class="mt-15">
                 <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill" (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
             </div>
         </tab>
@@ -16,4 +18,5 @@
             </div>
         </tab>
     </tabset>
+</div>
 </div>

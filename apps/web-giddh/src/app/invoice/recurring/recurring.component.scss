@@ -118,6 +118,35 @@
         }
     }
 }
+@media(max-width:1191px) and (min-width:1024px){
+    .recurring-form-wrapper{
+        display: flex;
+        width: 100%;
+        .recurring-form{
+            flex: auto;
+            display: flex;
+            width: 100%;
+            .form-group{
+                flex-flow: column wrap;
+                align-items: flex-start;
+                margin-bottom: 0;
+                width: 25%;
+                .input-group{
+                    width: 100%;
+                    display: flex;
+                        sh-select, input, div{
+                        min-width: 100%;
+                        max-width: 100%;
+                    }
+                }
+            }
+            input{
+                min-width: 100%;
+                max-width: 100%;
+            }
+        }
+    }
+}
 @media (max-width: 1023px) {
     .input-group {
         display: block;
@@ -157,11 +186,6 @@
     }
     .search-invoice-filed {
         display: block;
-    }
-}
-@media (max-width: 767px) {
-    .recurring-container {
-        margin-top: 55px;
     }
 }
 @media (max-width: 530px) {
