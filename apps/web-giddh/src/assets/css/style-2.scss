@@ -9073,7 +9073,7 @@ p.remvBrnchName {
     padding: 0 0px 0 0 !important;
     background-color: transparent;
     z-index: 9;
-    position: relative;
+    position: relative !important;
     top: -4px;
     margin-bottom: 10px;
 }
@@ -9837,6 +9837,11 @@ input.mat-input-element{
 }
 .master-custom-tabs.custom-tabs {
     .nav-tabs {
+        border-bottom: 1px solid $gainsboro;
+        padding: 0 0 0 15px !important;
+        background-color: $alice-blue-light;
+        z-index: 9;
+        position: relative!important;
         top: 0;
         li {
             a {
