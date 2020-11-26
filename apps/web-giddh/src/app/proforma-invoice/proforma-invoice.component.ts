@@ -334,6 +334,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public modalRef: BsModalRef;
     public message: string;
     public isDropup: boolean = true;
+    /** this is showing pending sales page **/
+    public isPendingSales: boolean = false;
 
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
@@ -705,7 +707,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
-
+        this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales');
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
