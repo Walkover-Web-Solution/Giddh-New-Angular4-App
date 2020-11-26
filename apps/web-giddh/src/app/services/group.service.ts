@@ -176,15 +176,19 @@ export class GroupService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, groupUniqueName, { groupUniqueName })));
     }
 
-    public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
+    public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false', branchUniqueName?: string): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         if (this.companyUniqueName) {
-            return this._http.get(this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            let url = this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 .replace(':q', encodeURIComponent(q || ''))
                 .replace(':page', encodeURIComponent(page.toString()))
                 .replace(':count', encodeURIComponent(count.toString()))
-                .replace(':showEmptyGroups', encodeURIComponent(showEmptyGroups))).pipe(map((res) => {
+                .replace(':showEmptyGroups', encodeURIComponent(showEmptyGroups));
+            if (branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? branchUniqueName : ''}`);
+            }
+            return this._http.get(url).pipe(map((res) => {
                     let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res;
                     data.request = '';
                     data.queryString = { q, page, count, showEmptyGroups };

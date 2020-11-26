@@ -69,8 +69,7 @@ export class LedgerService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
 
-        // tslint:disable-next-line:max-line-length
-        return this._http.get(this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        let url = this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':q', encodeURIComponent(request.q || ''))
             .replace(':page', request.page.toString())
             .replace(':count', encodeURIComponent(request.count.toString()))
@@ -79,8 +78,13 @@ export class LedgerService {
             .replace(':sort', encodeURIComponent(request.sort))
             .replace(':to', encodeURIComponent(request.to))
             .replace(':reversePage', request.reversePage.toString())
-            .replace(':accountCurrency', request.accountCurrency.toString())
-        ).pipe(map((res) => {
+            .replace(':accountCurrency', request.accountCurrency.toString());
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
+        }
+        // tslint:disable-next-line:max-line-length
+        return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res;
             data.request = request;
             return data;
@@ -210,9 +214,13 @@ export class LedgerService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         let API = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
-        return this._http.post(API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-            .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)).replace(':format', encodeURIComponent(model.format)).replace(':sort', encodeURIComponent(model.sort)), body).pipe(
+            .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)).replace(':format', encodeURIComponent(model.format)).replace(':sort', encodeURIComponent(model.sort));
+        if (model.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
+        }
+        return this._http.post(url, body).pipe(
                 map((res) => {
                     let data: BaseResponse<any, ExportLedgerRequest> = res;
                     data.request = model;
@@ -255,7 +263,7 @@ export class LedgerService {
                 catchError((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, { accountUniqueName })));
     }
 
-    public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, sortingOrder?: string, page?: number, count?, q?: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
+    public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from?: string, to?: string, sortingOrder?: string, page?: number, count?, q?: string, branchUniqueName?: string): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         let request = '';
@@ -276,6 +284,9 @@ export class LedgerService {
         }
         if (q) {
             request += '&q=' + q;
+        }
+        if (branchUniqueName) {
+            request = request.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? encodeURIComponent(branchUniqueName) : ''}`);
         }
         return this._http.post(this.config.apiUrl + LEDGER_API.ADVANCE_SEARCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)) + request, model).pipe(
@@ -380,11 +391,15 @@ export class LedgerService {
     public GetLedgerBalance(model: TransactionsRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        let url = this.config.apiUrl + LEDGER_API.GET_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
             .replace(':from', model.from).replace(':to', model.to)
-            .replace(':accountCurrency', model.accountCurrency.toString())
-        ).pipe(
+            .replace(':accountCurrency', model.accountCurrency.toString());
+        if (model.branchUniqueName) {
+            model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
+        }
+        return this._http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -490,6 +505,9 @@ export class LedgerService {
         }
         if (model.sort) {
             url = `${url}&sort=${model.sort}`;
+        }
+        if (model.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${model.branchUniqueName !== companyUniqueName ? encodeURIComponent(model.branchUniqueName): ''}`);
         }
         return this._http.post(url, body).pipe(map((res) => {
             let data: BaseResponse<any, ReportsDetailedRequestFilter> = res;

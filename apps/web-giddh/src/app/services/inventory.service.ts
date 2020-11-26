@@ -151,17 +151,20 @@ export class InventoryService {
     /**
      * get Stocks
      */
-    public GetStocks(companyUniqueName: string = ''): Observable<BaseResponse<StocksResponse, string>> {
+    public GetStocks(payload: any = { companyUniqueName: '' }): Observable<BaseResponse<StocksResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-
         let cmpUniqueName: string = this.companyUniqueName;
+        if (payload.companyUniqueName) {
+            cmpUniqueName = payload.companyUniqueName;
+        }
+        let url = this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName))
 
-        if (companyUniqueName) {
-            cmpUniqueName = companyUniqueName;
+        if (payload.branchUniqueName) {
+            url = url.concat(`?${payload.branchUniqueName !== cmpUniqueName ? encodeURIComponent(payload.branchUniqueName) : ''}`);
         }
 
-        return this._http.get(this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName))).pipe(map((res) => {
+        return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<StocksResponse, string> = res;
             data.request = '';
             data.queryString = {};
