@@ -1,3 +1,5 @@
+@import '../../../assets/css/color.scss';
+
 .mx-300 {
     max-width: 300px;
 }
@@ -7,11 +9,11 @@
 }
 
 .appearance_none:focus {
-    background: #ccc !important;
+    background: $very-light-gray !important;
 }
 
 .appearance_none {
-    background: #e5e5e5 !important;
+    background: $gray-90 !important;
 }
 
 .max-height28 {
