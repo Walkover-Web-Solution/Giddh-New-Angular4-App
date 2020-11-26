@@ -98,16 +98,16 @@
     <ng-container *ngIf="showTaxes">
         <div class="col-xs-12 col-sm-12">
 
-            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm">
+            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                 <div class="tax-label">
                     <label>All Applicable Taxes</label>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" (selected)="applyTax()" [options]="companyTaxDropDown" [multiple]="true">
+                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" (selected)="taxesSelected($event);" [options]="companyTaxDropDown" [multiple]="true">
                         </sh-select>
-                        <!-- <span class="input-group-btn pdL2"> <button [disabled]="!taxGroupForm?.get('taxes')?.value?.length" type="submit"
-                                class="btn btn-success">Save</button></span> -->
+                        <span class="input-group-btn pdL2"> <button type="submit" [disabled]="(isTaxesSaveDisable$ | async)"
+                                class="btn btn-success">Save</button></span>
                     </div>
                 </div>
             </form>
@@ -140,12 +140,11 @@
                         class="primary-color"></span></label>
             <div class="clearfix">
                 <span>
-                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" (ngModelChange)="applyDiscounts()" placeholder="Select discounts"></sh-select>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" (selected)="discountSelected()" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
                     </span>
-                <!-- <span class="pull-right">
-                        <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
-                    </span> -->
-
+                <span class="pull-right">
+                        <button  class="btn btn-primary mrgeBtn"  [disabled]="(isDiscountSaveDisable$ | async)" (click)="applyDiscounts()">Apply</button>
+                    </span>
             </div>
         </div>
     </div>
