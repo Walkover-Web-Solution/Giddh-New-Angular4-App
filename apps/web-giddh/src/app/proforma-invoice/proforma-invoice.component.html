@@ -6,40 +6,36 @@
 </div>
 <div *ngIf="!showLoader">
     <!-- region page change menu -->
-        <div class="d-flex border-bottom mobile-view-padding">
-            <hamburger-menu></hamburger-menu>
-        <div class="form-group mrB clearfix">
+        <div class="d-flex border-bottom mobile-view-padding" [ngClass]="{'pending-sales-page': isPendingSales}">
+            <hamburger-menu *ngIf="!isPendingSales"></hamburger-menu>
+            <div class="form-group mrB clearfix">
+                <div class="clearfix">
+                    <div class="btn-group proformaSalesTime" dropdown>
+                        <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
+                            aria-controls="dropdown-basic">
 
-            <div class="clearfix">
+                                <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                                    Cash
+                                </span>
 
-                <div class="btn-group proformaSalesTime" dropdown>
+                            <small *ngIf="invoiceType==='estimates'"> (Beta) </small>
+                            <span class="caret" *ngIf="!isUpdateMode"></span>
+                        </button>
 
-                    <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                        aria-controls="dropdown-basic">
+                        <ng-container *ngIf="!isUpdateMode">
+                            <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                aria-labelledby="button-basic">
+                                <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)"
+                                    *ngFor="let item of pageList">
+                                    <a class="dropdown-item cp">{{ item.additional?.label }}</a>
+                                </li>
+                            </ul>
+                        </ng-container>
+                    </div>
 
-                            <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
-                                Cash
-                            </span>
-
-                        <small *ngIf="invoiceType==='estimates'"> (Beta) </small>
-                        <span class="caret" *ngIf="!isUpdateMode"></span>
-                    </button>
-
-                    <ng-container *ngIf="!isUpdateMode">
-                        <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                            aria-labelledby="button-basic">
-                            <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)"
-                                *ngFor="let item of pageList">
-                                <a class="dropdown-item cp">{{ item.additional?.label }}</a>
-                            </li>
-                        </ul>
-                    </ng-container>
                 </div>
-
             </div>
         </div>
-
-    </div>
 
     <!-- endregion -->
 
@@ -73,7 +69,7 @@
 
                         <div class="inner-container">
 
-                            <div class="show-on-small-screen"
+                            <div class="show-on-small-screen" [ngClass]="{'pending-sales-balance-due': isPendingSales}"
                                 *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice">
 
                                 <div class="text-right">
