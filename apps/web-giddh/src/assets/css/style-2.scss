@@ -3830,11 +3830,11 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .shared-list li {
-    list-style: none;
+    list-style: none !important;
     color: $dark-gray;
-    font-size: 16px;
-    padding: 5px 0 2px 0;
-    border-bottom: 1px solid $gainsboro;
+    font-size: 16px !important;
+    padding: 5px 0 2px 0 !important;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .shared-list select {
