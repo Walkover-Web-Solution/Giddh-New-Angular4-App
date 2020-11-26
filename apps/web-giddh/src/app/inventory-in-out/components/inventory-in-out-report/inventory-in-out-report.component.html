@@ -1,5 +1,5 @@
 <section class="h100">
-    <form class="fb-1-container mr-b1 sadik" name="groupReportForm" novalidate (ngSubmit)="applyFilters(1)" #f="ngForm">
+    <form class="fb-1-container mr-b1" name="groupReportForm" novalidate (ngSubmit)="applyFilters(1)" #f="ngForm">
         <div class="form-group">
             <!-- <label class="d-block">From - To</label> -->
             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
@@ -30,7 +30,7 @@
         </div>
     </form>
 
-    <section style="margin-top: 20px">
+    <section class="mr-t2">
         <table class="table basic">
             <thead>
                 <tr>
