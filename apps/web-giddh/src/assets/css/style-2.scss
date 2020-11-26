@@ -10295,49 +10295,6 @@ input.mat-input-element{
     .sticky-footer {
         position: relative;
     }
-    .stock-lists {
-        position: absolute;
-        box-shadow: 0 3px 6px #ccc;
-        background: $white;
-        min-width: 200px;
-        display: inline-block;
-        z-index: 9;
-        max-height: 400px;
-        overflow-y: auto;
-    }
-    .stock-grp-list > li {
-        display: inline-block;
-        border: 0px;
-        position: relative;
-    }
-    .ledg-head .custom-tabs .nav.nav-tabs {
-        position: absolute;
-        width: 104%;
-        top: -50px;
-        padding-top: 5px !important;
-        margin: 0;
-        left: -16px;
-        right: 0;
-        padding-left: 15px !important;
-    }
-    .sub-filter-nav-band .nav-tabs{
-        overflow-x: auto;
-        overflow-y: hidden;
-        display: inline-flex;
-        white-space: nowrap;
-        width: 100%;
-        li{
-            white-space: normal;
-        }
-    }
-    .tax-engine .nav-band .nav-tabs {
-        white-space: nowrap;
-        padding-top: 15px !important;
-        overflow: hidden;
-        display: inline-block;
-        width: 100%;
-        overflow-x: auto;
-    }
 }
     @media (max-width: 1199px) {
         .ledger-book .left-col-new .entry-modal {
