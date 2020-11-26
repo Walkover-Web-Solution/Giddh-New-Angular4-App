@@ -1184,6 +1184,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 if(obj && obj.entries) {
                                     obj.entries.forEach((entry, index) => {
                                         obj.entries[index].entryDate = this.universalDate || new Date();
+                                        obj.entries[index].uniqueName = "";
                                     });
                                     obj.entries = obj.entries;
                                 }
@@ -1191,6 +1192,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 let date = _.cloneDeep(this.universalDate);
                                 obj.voucherDetails.voucherDate = date;
                                 obj.voucherDetails.dueDate = date;
+                                obj.voucherDetails.voucherNumber = "";
                             }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
@@ -2940,6 +2942,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             mobileNo: data.body.mobileNo,
                             nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                             stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
+                            hsnNumber: (selectedAcc.stock) ? selectedAcc.stock.hsnNumber : "",
+                            sacNumber: (!selectedAcc.stock) ? data.body.sacNumber : "",
                             uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
                         txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
