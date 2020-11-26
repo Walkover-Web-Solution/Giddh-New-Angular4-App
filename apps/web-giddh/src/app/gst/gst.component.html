@@ -1,8 +1,8 @@
 <!-- filter area-->
 <ng-container>
     <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
-    <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
-        <i class="text-middle" style="padding: 0 2%;">Please add GSTIN to your default address in order to view report.</i>
+    <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!activeCompanyGstNumber">
+        <i class="text-middle" style="padding: 0 2%;">Please add GSTIN in company setting to view report.</i>
     </div>
 
     <div class="tax-engine"

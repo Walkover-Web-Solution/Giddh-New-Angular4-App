@@ -1629,6 +1629,10 @@ span.eligible-ITC {
         min-height: 100px;
     }
 }
+.pending-sales-page {
+    padding-left: 15px;
+    border-bottom: none !important;
+}
 /* resposnvie */
 @media(max-width:1199px){
     .invoice-date-due-date {
@@ -1684,6 +1688,10 @@ span.eligible-ITC {
 }
 
 @media (max-width: 1024px) {
+    .pending-sales-balance-due{
+        position: relative;
+        right: 35px;
+    }
     .customer-invoice-form::before {
         top: 130px;
     }
