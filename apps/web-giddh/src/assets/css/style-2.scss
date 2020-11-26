@@ -9818,9 +9818,9 @@ input.mat-input-element{
 /*material datepicker css end*/
 .master-custom-tabs.custom-tabs {
     .nav-tabs {
-        border-bottom: 1px solid #d9d9d9;
+        border-bottom: 1px solid $gainsboro;
         padding: 0 0 0 15px!important;
-        background-color: #f7f8fa;
+        background-color: $alice-blue-light;
         z-index: 9;
         position: relative!important;
         top: 0;
