@@ -47,6 +47,7 @@ export class MfEditComponent implements OnInit {
     public selectedProduct: string;
     public selectedProductName: string;
     public showFromDatePicker: boolean = false;
+    /* To check page is not inventory page */
     public isInventoryPage: boolean = false;
     public moment = moment;
     public initialQuantityObj: any = [];

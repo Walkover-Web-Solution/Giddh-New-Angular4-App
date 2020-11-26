@@ -9515,6 +9515,15 @@ span#HW_badge_cont:nth-child(3) {
 .update-ledger-overlay .modal-backdrop.show{
     z-index: 991 !important;
 }
+.invoice-edit-wrapper {
+     .hamburger-menu-icon{
+         display: none !important;
+     }
+    .mobile-view-padding{
+        padding-left: 10px;
+        border-bottom: none !important;
+    }
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -10057,6 +10066,9 @@ input.mat-input-element{
     #setting-tab .settings-profile-tabs .tab-container .nav.nav-tabs{
         top: 90px !important;
         padding-top: 8px !important;
+    }
+    .sticky-footer {
+        position: relative;
     }
 }
     @media (max-width: 1199px) {
