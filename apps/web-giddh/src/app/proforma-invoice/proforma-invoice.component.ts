@@ -707,7 +707,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
-        this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales');
+        this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales' && '/pages/purchase-management/purchase/bill');
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
