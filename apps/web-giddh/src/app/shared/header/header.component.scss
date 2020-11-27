@@ -746,8 +746,11 @@ ul.sub-list {
 .unique-name-financial-year{
     display: flex;
     align-items: center;
-    .fyear{
-        margin-left: 5px;
+    flex-wrap: wrap;
+    .branch-unique-name{
+        margin-right: 5px;
+        white-space: normal;
+        word-break: break-word;
     }
 }
 .desktop-header{
