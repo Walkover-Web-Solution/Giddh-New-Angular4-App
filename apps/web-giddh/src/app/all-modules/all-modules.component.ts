@@ -52,35 +52,16 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @memberof AllModulesComponent
      */
     public ngOnInit(): void {
-        // commenting for later use if required
-        // this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
-        //     companies = companies || [];
-        //     this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompanyForDb = new CompAidataModel();
+                this.activeCompanyForDb.name = activeCompany.name;
+                this.activeCompanyForDb.uniqueName = activeCompany.uniqueName;
 
-        //     if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
-        //         this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
-        //     }
-        // });
-        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (!companies) {
-                return;
+                // if(activeCompany && activeCompany.createdBy && activeCompany.createdBy.email) {
+                //     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(activeCompany.createdBy.email);
+                // }
             }
-            if (companies.length === 0) {
-                return;
-            }
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === this.generalService.companyUniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            this.activeCompanyForDb = new CompAidataModel();
-            this.activeCompanyForDb.name = selectedCmp.name;
-            this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
         });
 
         this.getSharedAllModules();

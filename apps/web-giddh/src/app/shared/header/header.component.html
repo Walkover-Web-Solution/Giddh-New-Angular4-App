@@ -64,17 +64,17 @@
                                                         <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
 
                                                             <ng-template #CompanyBranchname> {{ cmp.name }}
-                                                                <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
+                                                                <span *ngIf="cmp.alias">({{(cmp.alias)}})</span>
                                                             </ng-template>
 
                                                             <span container="body" [tooltip]="CompanyBranchname" placement="top">
                                                                 {{ cmp.name }} <span
-                                                                    *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
+                                                                    *ngIf="cmp.alias">({{(cmp.alias)}})</span>
                                                             </span>
 
-                                                            <img class="pull-right permission-icon" *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users.svg">
+                                                            <img class="pull-right permission-icon" *ngIf="hoveredIndx !== i && cmp?.createdBy?.email !== (user$ | async)?.email" src="assets/images/users.svg">
 
-                                                            <img class="pull-right permission-icon" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
+                                                            <img class="pull-right permission-icon" *ngIf="hoveredIndx === i && cmp?.createdBy?.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
 
                                                         </a>
                                                     </li>
@@ -666,15 +666,15 @@
                                 <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
 
                                     <ng-template #CompanyBranchname> {{ cmp.name }}
-                                        <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
+                                        <span *ngIf="cmp.alias">({{(cmp.alias)}})</span>
                                     </ng-template>
 
                                     <span container="body" [tooltip]="CompanyBranchname" placement="top">
-                                    {{ cmp.name }} <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span> </span>
+                                    {{ cmp.name }} <span *ngIf="cmp.alias">({{(cmp.alias)}})</span> </span>
 
-                                    <img class="pull-right permission-icon" *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users.svg">
+                                    <img class="pull-right permission-icon" *ngIf="hoveredIndx !== i && cmp?.createdBy?.email !== (user$ | async)?.email" src="assets/images/users.svg">
 
-                                    <img class="pull-right permission-icon" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
+                                    <img class="pull-right permission-icon" *ngIf="hoveredIndx === i && cmp?.createdBy?.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
 
                                 </a>
                             </li>

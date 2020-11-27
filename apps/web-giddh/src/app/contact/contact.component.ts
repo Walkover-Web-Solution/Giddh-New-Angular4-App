@@ -19,10 +19,8 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { createSelector } from 'reselect';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-
 import { cloneDeep, find, forEach, map as lodashMap, uniq } from '../../app/lodash-optimized';
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -263,12 +261,13 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
             this.dueAmountReportData$ = observableOf(data);
         });
-        this.store.pipe(select(appState => {
-            if (!appState.session.companies) {
-                return;
+
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
             }
-            this.selectedCompany = appState.session.companies.find((company) => company.uniqueName === appState.session.companyUniqueName);
-        }), takeUntil(this.destroyed$)).subscribe();
+        });
+
         this.store.dispatch(this._companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.getCompanyCustomField();
@@ -398,20 +397,18 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this.store
-            .pipe(
-                select(p => p.company.account), takeUntil(this.destroyed$)
-            )
-            .subscribe(res => {
-                if (res && Array.isArray(res)) {
-                    this.isICICIIntegrated = res.length > 0;
-                } else {
-                    this.isICICIIntegrated = false;
-                }
-            });
+        this.store.pipe(select(p => p.company && p.company.account), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res && Array.isArray(res)) {
+                this.isICICIIntegrated = res.length > 0;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+        });
+
         if (this.selectedCompany && this.selectedCompany.countryV2) {
             this.getOnboardingForm(this.selectedCompany.countryV2.alpha2CountryCode);
         }
+
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.balanceDecimalPlaces) {
                 this.giddhDecimalPlaces = response.balanceDecimalPlaces;

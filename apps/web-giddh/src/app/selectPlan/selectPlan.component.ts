@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { GeneralService } from '../services/general.service';
-import { Route } from '@angular/compiler/src/core';
 import { CompanyActions } from '../actions/company.actions';
 import { ToasterService } from '../services/toaster.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -20,8 +18,8 @@ import { FormControl } from '@angular/forms';
     templateUrl: './selectPlan.component.html',
     styleUrls: [`./selectPlan.component.scss`],
 })
-export class SelectPlanComponent implements OnInit, OnDestroy {
 
+export class SelectPlanComponent implements OnInit, OnDestroy {
     public createNewCompanyPreObj: CompanyCreateRequest;
     public logedInUser: UserDetails;
     public SubscriptionRequestObj: SubscriptionRequest = {
@@ -34,8 +32,6 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     public SubscriptionPlans: CreateCompanyUsersPlan[] = [];
     public subscriptionPrice: any = '';
     public UserCurrency: string = '';
-
-    public companies$: Observable<CompanyResponse[]>;
     public isCompanyCreationInProcess$: Observable<boolean>;
     public isRefreshing$: Observable<boolean>;
     public isCompanyCreated$: Observable<boolean>;
@@ -73,7 +69,6 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
         this.logedInUser = this._generalService.user;
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
 
-        this.companies$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
         this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
         this.isRefreshing$ = this.store.pipe(select(s => s.session.isRefreshing), takeUntil(this.destroyed$));
 

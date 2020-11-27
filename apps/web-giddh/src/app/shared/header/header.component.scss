@@ -518,6 +518,7 @@ a[vr-item]:focus {
     border: 1px solid $white;
     border-radius: 20px;
     margin-right: 15px;
+    display: inline-block !important;
     i {
         font-size: 12px;
         padding-right: 5px;

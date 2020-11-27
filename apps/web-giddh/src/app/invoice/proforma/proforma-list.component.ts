@@ -402,35 +402,20 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            if (selectedCmp) {
-                if (selectedCmp.activeFinancialYear) {
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                if (activeCompany.activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(selectedCmp.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
+                        moment(activeCompany.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
                         moment()
                     ];
                     this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(selectedCmp.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
-                        moment(selectedCmp.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
+                        moment(activeCompany.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
+                        moment(activeCompany.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
                     ];
                 }
             }
-            return selectedCmp;
-        })), takeUntil(this.destroyed$)).subscribe();
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {

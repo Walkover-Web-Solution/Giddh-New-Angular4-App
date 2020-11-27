@@ -1,5 +1,5 @@
-import { Observable, ReplaySubject } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
@@ -26,7 +26,6 @@ import { GstReconcileService } from '../services/GstReconcile.service';
 
 export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];
-    public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
     public datePickerOptions: any = {
         alwaysShowCalendars: true,
@@ -64,7 +63,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private _route: Router
     ) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
+        
     }
 
     public ngOnInit() {
@@ -84,19 +83,13 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.fromDate = this.currentPeriod.from;
         this.toDate = this.currentPeriod.to;
 
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
-            this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
-                if (!res) {
-                    return;
-                }
-                res.forEach(cmp => {
-                    if (cmp.uniqueName === activeCompanyName) {
-                        this.activeCompany = cmp;
-                        this.saveLastState(activeCompanyName);
-                    }
-                });
-            });
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+                this.saveLastState(activeCompany.uniqueName);
+            }
         });
+        
         if (this.taxNumber) {
             this.getVatReport();
         }
