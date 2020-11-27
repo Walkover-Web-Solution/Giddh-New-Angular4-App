@@ -58,11 +58,11 @@ i.close.icon.clear::after {
     content: "✕";
     padding-right: 8px;
     font-weight: 800;
-    color: gray;
+    color: $gray;
 }
 
 i.close.icon.clear:hover::after {
-    color: red;
+    color: $red;
 }
 
 .clear {
@@ -76,12 +76,12 @@ i.close.icon.clear:hover::after {
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
-    color: black;
+    color: $black;
     transform: translateY(-50%);
 }
 
 .sh-select-disabled {
-    background-color: #e3e3e3;
+    background-color: $gainsboro-dark;
     color: $bay-of-many;
     cursor: not-allowed;
 }
@@ -93,7 +93,7 @@ i.close.icon.clear:hover::after {
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: #f4f5f8;
+    background-color: $solitude;
     margin: 8px 0 5px 8px;
     /* color: white; */
 }
@@ -110,18 +110,18 @@ i.close.icon.clear:hover::after {
 .chipclose-btn:hover {
     font-weight: 700;
     opacity: 0.5;
-    color: black;
+    color: $black;
 }
 
 .header .form-control[readonly] {
-    background-color: #fff !important;
-    border: 1px solid #ccc;
+    background-color: $white !important;
+    border: 1px solid $very-light-gray;
 }
 
 .sh-select-disabled .selectedVal,
 .sh-select-disabled .form-control,
 .sh-select-disabled .form-control[readonly] {
-    background: #eee !important;
+    background: $whisper-light !important;
     pointer-events: none;
     cursor: not-allowed;
 }
@@ -129,11 +129,11 @@ i.close.icon.clear:hover::after {
 .selectedVal {
     border: 1px solid $gainsboro !important;
     padding-right: 22px !important;
-    background: #fff !important;
+    background: $white !important;
 }
 
 .header.open > input[type="text"] {
-    border-color: #d6d6d6;
+    border-color: $light-gray;
 }
 
 .header .bdr > input[type="text"] {

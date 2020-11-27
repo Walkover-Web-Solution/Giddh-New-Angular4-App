@@ -83,7 +83,7 @@
 <!-- input box template -->
 <ng-template #searchEleTemplate>
 	<div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
-		<span class="searh-ico"><i class="icon-search"></i></span>
+		<span class="icon-search-icon"><i class="icon-search"></i></span>
 		<span *ngFor="let item of listOfSelectedGroups; let idx = index">
 			<div class="vR">
 				<div class="vN">
@@ -94,7 +94,7 @@
 				</div>
 			</div>
 		</span>
-		<input class="searchEle" #searchEle type="text" placeholder="Search" (focus)="handleFocus()"
+		<input class="search-element" #searchEle type="text" placeholder="Search" (focus)="handleFocus()"
 			(keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)" />
 	</div>
 	<i class="icon-cross close-navigation" (click)="close()"></i>

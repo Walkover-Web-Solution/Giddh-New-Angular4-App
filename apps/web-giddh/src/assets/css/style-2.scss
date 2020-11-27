@@ -755,7 +755,7 @@ input {
 }
 
 .hover-orange:hover {
-    color: #bdc3ff !important;
+    color: $lavender-blue !important;
     /* font-family: ''opensans-semibold''; */
 }
 
@@ -938,7 +938,7 @@ ul.sub-list {
 
 .customer-right table tr td {
     padding: 15px;
-    color: #707070;
+    color: $gray-44;
 }
 
 .customer-right table tr td h3 {
@@ -1128,7 +1128,7 @@ ul.sub-list {
     border: 1px solid $gainsboro;
     padding: 5px;
     text-align: center;
-    color: #707070;
+    color: $gray-44;
     /* font-size: 14px; */
 }
 
@@ -1227,7 +1227,7 @@ ul.sub-list {
 }
 
 .Advance-Search p small {
-    color: #bdbaba;
+    color: $extra-silver;
 }
 
 .Advance-Search p {

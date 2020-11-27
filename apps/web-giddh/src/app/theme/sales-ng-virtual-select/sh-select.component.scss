@@ -60,11 +60,11 @@ i.close.icon.clear::after {
     content: "✕";
     padding-right: 8px;
     font-weight: 800;
-    color: gray;
+    color: $gray;
 }
 
 i.close.icon.clear:hover::after {
-    color: red;
+    color: $red;
 }
 
 .clear {
@@ -78,12 +78,12 @@ i.close.icon.clear:hover::after {
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
-    color: black;
+    color: $black;
     transform: translateY(-50%);
 }
 
 .sh-select-disabled {
-    background-color: #e3e3e3;
+    background-color: $gainsboro-dark;
     color: $bay-of-many;
     cursor: not-allowed;
 }
@@ -95,7 +95,7 @@ i.close.icon.clear:hover::after {
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: #f4f5f8;
+    background-color: $solitude;
     margin: 8px 0 5px 8px;
     /* color: white; */
 }
@@ -112,46 +112,46 @@ i.close.icon.clear:hover::after {
 .chipclose-btn:hover {
     font-weight: 700;
     opacity: 0.5;
-    color: black;
+    color: $black;
 }
 
 .sh-select-disabled .selectedVal,
 .sh-select-disabled .form-control {
-    background: #eee !important;
+    background: $whisper-light !important;
     pointer-events: none;
     cursor: not-allowed;
 }
 
 .selectedVal {
-    border: 1px solid #d6d6d6 !important;
+    border: 1px solid $light-gray !important;
     padding-right: 5px !important;
-    background: #fff !important;
+    background: $white !important;
 }
 
 .header.open > input[type="text"] {
-    border-color: #d6d6d6;
+    border-color: $light-gray;
 }
 
 .header .bdr > input[type="text"] {
     border: 0;
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
-    color: #c1c1c1 !important;
+    color: $silver-shade !important;
 }
 .header .bdr > input[type="text"]::-moz-placeholder {
-    color: #c1c1c1 !important;
+    color: $silver-shade !important;
 }
 .header .bdr > input[type="text"]:-ms-input-placeholder {
-    color: #c1c1c1 !important;
+    color: $silver-shade !important;
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
-    color: #c1c1c1 !important;
+    color: $silver-shade !important;
 }
 
 .toggle {
     position: absolute;
     right: 0;
-    border: 1px solid #ddd;
+    border: 1px solid $gainsboro-light;
     height: 100%;
     width: 28px;
     text-align: center;
@@ -160,13 +160,13 @@ i.close.icon.clear:hover::after {
     top: 0;
     bottom: 0;
     cursor: pointer;
-    background: #f4f5f8;
-    color: #686868;
+    background: $solitude;
+    color: $dim-gray;
     font-size: 16px;
 }
 
 button.form-control:focus {
-    border-color: #ddd !important;
+    border-color: $gainsboro-light !important;
 }
 
 .label-btn {
@@ -175,11 +175,11 @@ button.form-control:focus {
     box-shadow: none !important;
     border-radius: 0 !important;
     font-size: 20px;
-    color: #393a3d;
+    color: $vulcan;
 }
 
 .toggle:hover {
-    background: #eee;
+    background: $whisper-light;
 }
 
 .label-toggle {
@@ -190,7 +190,7 @@ button.form-control:focus {
 
 .bottom-border-only {
     border: none !important;
-    border-bottom: 1px solid #d6d6d6 !important;
+    border-bottom: 1px solid $light-gray !important;
     border-radius: 0 !important;
 }
 .Advance-Search .header {

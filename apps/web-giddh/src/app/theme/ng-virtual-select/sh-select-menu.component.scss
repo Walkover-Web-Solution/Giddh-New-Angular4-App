@@ -52,7 +52,7 @@
 }
 
 .no-result-link > a {
-    color: #10aae0 !important;
+    color: $cerulean !important;
 }
 
 #noresult:hover {
@@ -68,7 +68,7 @@
 .disabled a,
 .disabled a .item {
     cursor: not-allowed !important;
-    color: gray !important;
+    color: $gray !important;
 }
 @media (max-width: 767px) {
     .menu {
