@@ -21,6 +21,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
+import { CompanyService } from './services/companyService.service';
 
 /**
  * App Component
@@ -56,6 +57,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private dbServices: DbService,
         private loadingService: LoaderService,
         private companyActions: CompanyActions,
+        private companyService: CompanyService,
         private loginAction: LoginActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
@@ -101,11 +103,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
         this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
 
-        this.breakpointObserver.observe([
-            '(max-width: 1023px)'
-        ]).subscribe(result => {
-            this.changeOnMobileView(result.matches);
-        });
         if (Configuration.isElectron) {
             // electronOauth2
             const { ipcRenderer } = (window as any).require("electron");
@@ -143,11 +140,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
-        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
+        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 
     public ngOnInit() {
+        this.breakpointObserver.observe([
+            '(max-width: 1023px)'
+        ]).subscribe(result => {
+            this.changeOnMobileView(result.matches);
+        });
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
 

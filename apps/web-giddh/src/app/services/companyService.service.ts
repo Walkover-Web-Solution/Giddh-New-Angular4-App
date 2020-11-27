@@ -557,4 +557,19 @@ export class CompanyService {
             .replace(':companyUniqueName', encodeURIComponent(requestObject.companyUniqueName)), requestPayload).pipe(
                 catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
     }
+
+    /**
+     * Returns the menu items to be shown in menu panel
+     *
+     * @param {boolean} [isMobile=false] True if screen is of mobile size
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof CompanyService
+     */
+    public getMenuItems(isMobile: boolean = false): Observable<any> {
+        let url = `${this.config.apiUrl}${COMPANY_API.GET_SIDE_BAR_ITEM}`;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this._generalService.companyUniqueName))
+            .replace(':isMobile', String(isMobile));
+        return this._http.get(url).pipe(
+                catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
+    }
 }
