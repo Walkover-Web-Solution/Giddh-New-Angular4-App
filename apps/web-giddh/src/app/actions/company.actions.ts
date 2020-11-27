@@ -248,17 +248,11 @@ export class CompanyActions {
                         let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
                         if (companyIndex > -1) {
                             // if active company find no action needed
-                            if (response.body.length === totalCompany) {     // if company created success then only change to new created company otherwise refres Api call will return null action
+                            if (response.body.length === totalCompany) { // if company created success then only change to new created company otherwise refresh Api call will return null action
                                 return { type: 'EmptyAction' };
-
                             } else {
-                                return {
-                                    type: 'CHANGE_COMPANY',
-                                    payload: response.body[companyIndex].uniqueName
-                                };
+                                return { type: 'EmptyAction' };
                             }
-
-                            // return { type: 'EmptyAction' };
                         } else {
                             // if no active company active next company from companies list
                             return {
