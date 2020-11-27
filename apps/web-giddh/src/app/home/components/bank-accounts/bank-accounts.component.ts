@@ -3,10 +3,9 @@ import { Observable, ReplaySubject } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
-import { take, takeUntil } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 import { createSelector } from "reselect";
 import * as moment from 'moment/moment';
-import { CompanyResponse } from "../../../models/api-models/Company";
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -23,13 +22,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public toDate: string;
     public fromDate: string;
     public bankAccounts: any[] = [];
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any = {};
 
     constructor(private store: Store<AppState>, private _contactService: ContactService) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -48,16 +43,9 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             }
         })), takeUntil(this.destroyed$)).subscribe();
 
-        // get activeFinancialYear and lastFinancialYear
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.activeCompany = activeCompany;
-                    }
-                });
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
             }
         });
     }

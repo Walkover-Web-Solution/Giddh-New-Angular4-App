@@ -8,7 +8,6 @@ import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
@@ -90,7 +89,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
 
-
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private _companyActions: CompanyActions,
@@ -101,19 +99,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.initialRequest();
-        let companyUniqueName;
-        let company;
 
-        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$))
-            .subscribe(p => companyUniqueName = p);
+        // this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        //     if(activeCompany) {
+        //         this.companyName = activeCompany.name;
+        //     }
+        // });
 
-        this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$))
-            .subscribe(p => {
-                company = p.find(q => q.uniqueName === companyUniqueName);
-            });
-        this.companyName = company.name;
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {

@@ -1,14 +1,11 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store, select } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CompanyActions } from '../../actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -55,6 +52,7 @@ const taxDuration = [
     templateUrl: './setting.trigger.component.html',
     styleUrls: [`./setting.trigger.component.scss`]
 })
+
 export class SettingTriggerComponent implements OnInit {
 
     @ViewChild('triggerConfirmationModel', {static: true}) public triggerConfirmationModel: ModalDirective;
@@ -74,7 +72,6 @@ export class SettingTriggerComponent implements OnInit {
     public accounts: IOption[];
     public groups: IOption[];
     public triggerToEdit = []; // It is for edit toogle
-    public companies: IOption[];
     public entityList: IOption[] = entityType;
     public filterList: IOption[] = filterType;
     public actionList: IOption[] = actionType;
@@ -86,9 +83,7 @@ export class SettingTriggerComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private router: Router,
         private store: Store<AppState>,
-        private _companyActions: CompanyActions,
         private _accountService: AccountService,
         private _settingsTriggersActions: SettingsTriggersActions,
         private _toaster: ToasterService
@@ -127,16 +122,6 @@ export class SettingTriggerComponent implements OnInit {
                     groupsRes.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
                 });
                 this.groups = _.cloneDeep(groupsRes);
-            }
-        });
-
-        this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$)).subscribe((companies) => {
-            if (companies) {
-                let companiesRes: IOption[] = [];
-                companies.map(d => {
-                    companiesRes.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
-                });
-                this.companies = _.cloneDeep(companiesRes);
             }
         });
     }

@@ -79,7 +79,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public valueFilterDropDown$: Observable<IOption[]>;
     public asidePaneState: string = 'out';
     public asideTransferPaneState: string = 'out';
-    public selectedCompany$: Observable<any>;
     public selectedCmp: CompanyResponse;
     public isWarehouse: boolean = false;
     public showAdvanceSearchIcon: boolean = false;
@@ -309,27 +308,13 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 this.getGroupReport(true);
             }
         });
-        this.selectedCompany$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            this.selectedCmp = selectedCmp;
 
-            this.getAllBranch();
-
-            return selectedCmp;
-        })), takeUntil(this.destroyed$));
-        this.selectedCompany$.subscribe();
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCmp = activeCompany;
+                this.getAllBranch();
+            }
+        });
 
         this.productUniqueNameInput.valueChanges.pipe(
             debounceTime(700),

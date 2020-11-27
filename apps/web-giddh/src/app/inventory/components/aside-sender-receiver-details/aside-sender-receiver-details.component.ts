@@ -3,12 +3,9 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormBuilder, FormGroup, AbstractControl, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { AccountsAction } from '../../../actions/accounts.actions';
-import { CompanyActions } from '../../../actions/company.actions';
 import { CommonActions } from '../../../actions/common.actions';
 import { ToasterService } from '../../../services/toaster.service';
-import { takeUntil, take, distinctUntilChanged } from 'rxjs/operators';
-import { CompanyService } from '../../../services/companyService.service';
+import { takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { IOption } from '../../../theme/ng-select/ng-select';
@@ -25,58 +22,11 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 @Component({
     selector: 'aside-sender-receiver-details-pane',
-    styles: [`
-    :host {
-      position: fixed;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 600px;
-      max-width: 100%;
-      z-index: 99999;
-    }
-
-    #close {
-      display: none;
-    }
-
-    :host.in #close {
-      display: block;
-    position: absolute;
-    left: auto;
-    top: 14px;
-    z-index: 5;
-    border: 0;
-    border-radius: 0;
-    right: 0;
-    background: transparent;
-    color: #fff;
-    font-size: 20px;
-    }
-
-    :host .container-fluid {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    :host .aside-pane {
-      width: 600px;
-      max-width: 600px;
-    }
-
-    .aside-body {
-      margin-bottom: 80px;
-    }
-.aside-pane{
-  padding:0;
-}
-  `],
     templateUrl: './aside-sender-receiver-details.component.html',
     styleUrls: ['./aside-sender-reciver-details.component.scss'],
 })
-export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChanges, OnDestroy {
 
+export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChanges, OnDestroy {
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -91,18 +41,16 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     @Input() public isDebtorCreditor: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
-
-
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
-    public companiesList$: Observable<CompanyResponse[]>;
-    public activeCompany: CompanyResponse;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
     public isMultipleCurrency: boolean = false;
@@ -124,11 +72,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public isGstValid: boolean;
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
-    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private _toaster: ToasterService, private commonActions: CommonActions, private _generalActions: GeneralActions) {
-        this.companiesList$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.getCountry();
         this.getCurrency();
@@ -199,36 +143,15 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
 
-        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a) {
-                this.companiesList$.pipe(take(1)).subscribe(companies => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
-                    if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
-                        this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
-                    }
-                });
-            }
-        });
-
-        this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe((session) => {
-            let companyUniqueName: string;
-            if (session.companyUniqueName) {
-                companyUniqueName = _.cloneDeep(session.companyUniqueName);
-            }
-            if (session.companies && session.companies.length) {
-                let companies = _.cloneDeep(session.companies);
-                let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
-                if (currentCompany) {
-                    // set country
-                    this.setCountryByCompany(currentCompany);
-                    this.companyCurrency = _.clone(currentCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
-                    // if (this.isMultipleCurrency) {
-                    //     this.addAccountForm.get('currency').enable();
-                    // } else {
-                    //     this.addAccountForm.get('currency').disable();
-                    // }
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                if (activeCompany.countryV2 !== undefined && activeCompany.countryV2 !== null) {
+                    this.getStates(activeCompany.countryV2.alpha2CountryCode);
                 }
+
+                this.setCountryByCompany(activeCompany);
+                this.companyCurrency = _.clone(activeCompany.baseCurrency);
+                this.isMultipleCurrency = _.clone(activeCompany.isMultipleCurrency);
             }
         });
 

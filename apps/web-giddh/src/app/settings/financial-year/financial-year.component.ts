@@ -30,7 +30,6 @@ export interface IGstObj {
 
 export class FinancialYearComponent implements OnInit {
     public financialYearObj: IFinancialYearResponse;
-    public currentCompanyUniqueName: string;
     public currentCompanyFinancialYearUN: string;
     public currentCompanyName: string;
     public financialOptions = [];
@@ -61,26 +60,13 @@ export class FinancialYearComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.store.pipe(select(createSelector([(state: AppState) => state.settings.refreshCompany], (o) => {
-            if (o) {
-                this.store.dispatch(this._companyActions.RefreshCompanies());
-            }
-        })), takeUntil(this.destroyed$)).subscribe();
-
-        this.store.pipe(select((state: AppState) => state.session),takeUntil(this.destroyed$)).subscribe(session => {
-            if (session) {
-                this.currentCompanyUniqueName = _.cloneDeep(session.companyUniqueName);
-            }
-            if (this.currentCompanyUniqueName && session.companies) {
-                let companies = _.cloneDeep(session.companies);
-                let company = companies.find((items) => items.uniqueName === this.currentCompanyUniqueName);
-                if (company) {
-                    this.currentCompanyName = company.name;
-                    this.currentCompanyFinancialYearUN = company.activeFinancialYear.uniqueName;
-                    this.financialOptions = company.financialYears.map(element => {
-                        return { label: element.uniqueName, value: element.uniqueName };
-                    });
-                }
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.currentCompanyName = activeCompany.name;
+                this.currentCompanyFinancialYearUN = activeCompany.activeFinancialYear.uniqueName;
+                this.financialOptions = activeCompany.financialYears.map(element => {
+                    return { label: element.uniqueName, value: element.uniqueName };
+                });
             }
         });
     }

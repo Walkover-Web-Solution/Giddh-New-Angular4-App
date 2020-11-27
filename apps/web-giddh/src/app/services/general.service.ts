@@ -336,12 +336,10 @@ export class GeneralService {
      * @memberof CompletedComponent
      */
     public ConvertUTCTimeToLocalTime(UTCDateString) {
+        UTCDateString = UTCDateString.replace("@", "");
         let convertdLocalTime = new Date(UTCDateString);
-
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
-
         convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
-
         return convertdLocalTime;
     }
 
