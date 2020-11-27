@@ -114,7 +114,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 		this.getCountry();
 		this.data = new VoucherClass();
 
-		this.CreateInvoiceForm.get('uiCalculation').get('depositAmount').valueChanges.subscribe((val) => {
+		this.CreateInvoiceForm.get('uiCalculation').get('depositAmount').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
 			let data = _.cloneDeep(this.CreateInvoiceForm.value);
 			let totalAmountWithTax = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.amount)) ? 0 : parseFloat(entry.amount));
 			let balanceDue = totalAmountWithTax - val;

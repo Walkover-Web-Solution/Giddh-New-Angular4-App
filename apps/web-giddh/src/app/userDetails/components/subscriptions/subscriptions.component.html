@@ -159,7 +159,7 @@
                                         </thead>
                                         <tbody *ngIf="seletedUserPlans">
                                             <tr>
-                                                <!-- <td data-title="Date">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td> -->
+                                                <!-- <td data-title="Date">{{ moment(transaction.from, giddhDateFormat).format('MMM - YY')}}</td> -->
                                                 <td data-title="Consumptions">{{ seletedUserPlans?.totalTransactions ? (seletedUserPlans?.totalTransactions | number) : 0 }}</td>
                                                 <td data-title="Balance">{{ seletedUserPlans?.remainingTransactions || 0 }}</td>
                                                 <td data-title="Additional Charges" class="text-right">{{ seletedUserPlans?.additionalCharges? (seletedUserPlans?.additionalCharges | number) : 0 }}</td>
@@ -229,7 +229,7 @@
                                                     <div class="d-flex associated-company-name">
                                                         <p>
                                                             <img src="assets/images/blue-check.svg" class="mr-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
-                                                            {{company.name}} ({{company.alias}})
+                                                            {{company.name}} {{(company.alias) ? "(" + company.alias + ")" : ""}}
                                                         </p>
                                                         <p class="font-12 mt-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
                                                     </div>
@@ -294,7 +294,7 @@
                                 </thead>
                                 <tbody *ngIf="seletedUserPlans">
                                     <tr>
-                                        <td class="professional-name">{{ moment(transaction.from, 'DD-MM-YYYY').format('MMM - YY')}}</td>
+                                        <td class="professional-name">{{ moment(transaction.from, giddhDateFormat).format('MMM - YY')}}</td>
                                         <td>{{ seletedUserPlans?.totalTransactions ? seletedUserPlans?.totalTransactions : 0 }}
                                         </td>
                                         <span class="text-light ml-05">({{transaction.previousTransactionCount}}+{{transaction.currentTransactionCount}})</span>
@@ -401,7 +401,7 @@
                     </tr>
 
                     <tr *ngFor="let companyTransaction of companyTransactions">
-                        <td>{{ moment(companyTransaction.from, 'DD-MM-YYYY').format('MMM') }}</td>
+                        <td>{{ moment(companyTransaction.from, giddhDateFormat).format('MMM') }}</td>
                         <td>{{ companyTransaction.totalTransactionCount }} ({{companyTransaction.previousTransactionCount}}+{{companyTransaction.currentTransactionCount}})</td>
                         <td>{{ companyTransaction.totalPlanTransactionCount }} ({{companyTransaction.previousPlanTransactionCount}}+{{companyTransaction.currentPlanTransactionCount}})</td>
                     </tr>

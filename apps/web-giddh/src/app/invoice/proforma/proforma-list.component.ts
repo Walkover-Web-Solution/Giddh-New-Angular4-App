@@ -170,7 +170,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
         this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
         this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
 
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -310,7 +310,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         //--------------------- Refresh report data according to universal date--------------------------------
-        this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (a) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.applicationDate], (a) => {
 
             if (a) {
                 if (localStorage.getItem('universalSelectedDate')) {
@@ -377,7 +377,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 }
                 this.getAll();
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
         this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
             .subscribe(result => this.appSideMenubarIsOpen = result);
@@ -402,35 +402,20 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            if (selectedCmp) {
-                if (selectedCmp.activeFinancialYear) {
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                if (activeCompany.activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                        moment(selectedCmp.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
+                        moment(activeCompany.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
                         moment()
                     ];
                     this.datePickerOptions.ranges['Last Financial Year'] = [
-                        moment(selectedCmp.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
-                        moment(selectedCmp.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
+                        moment(activeCompany.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).subtract(1, 'year'),
+                        moment(activeCompany.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
                     ];
                 }
             }
-            return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {

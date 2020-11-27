@@ -197,11 +197,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         // set initial values
         this.ledgerSearchRequest.page = 1;
         this.ledgerSearchRequest.count = 20;
-        this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
-        this.isBulkInvoiceGenerated$ = this.store.select(p => p.invoice.isBulkInvoiceGenerated).pipe(takeUntil(this.destroyed$));
-        this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.voucherDetailsInProcess$ = this.store.select(p => p.receipt.voucherDetailsInProcess).pipe(takeUntil(this.destroyed$));
+        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
+        this.isBulkInvoiceGenerated$ = this.store.pipe(select(p => p.invoice.isBulkInvoiceGenerated), takeUntil(this.destroyed$));
+        this.isBulkInvoiceGeneratedWithoutErr$ = this.store.pipe(select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.voucherDetailsInProcess$ = this.store.pipe(select(p => p.receipt.voucherDetailsInProcess), takeUntil(this.destroyed$));
         this.getLedgerDataInProcess$ = this.store.pipe(select(state => state.invoice.isGetAllLedgerDataInProgress),takeUntil(this.destroyed$));
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -260,8 +260,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             });
 
         this.store.pipe(select(stores => stores.receipt.voucher),
-            takeUntil(this.destroyed$),
-            distinctUntilChanged()).subscribe((voucher: any) => {
+            distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
                 if (voucher) {
                     this.voucherDetails = voucher;
                     if (voucher && voucher.templateDetails && voucher.templateDetails.templateUniqueName) {
@@ -292,7 +291,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         // Refresh report data according to universal date
-        this.store.pipe(select((state: AppState) => state.session.applicationDate)).subscribe((dateObj: Date[]) => {
+        this.store.pipe(select((state: AppState) => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.ledgerSearchRequest.dateRange = this.universalDate;
@@ -309,21 +308,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
-                let activeFinancialYear = selectedCmp.activeFinancialYear;
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [
                         moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),

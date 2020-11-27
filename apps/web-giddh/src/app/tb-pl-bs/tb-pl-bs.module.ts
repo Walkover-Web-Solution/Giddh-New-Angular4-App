@@ -35,7 +35,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ClickOutsideModule } from 'ng-click-outside';
-
+import { SharedModule } from '../shared/shared.module';
 @NgModule({
     declarations: [
         TbPlBsComponent,
@@ -56,7 +56,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
         BsGridComponent,
         BsGridRowComponent,
         TrialAccordionDirective,
-        TbsearchPipe,
+        TbsearchPipe
     ],
     exports: [
         TbPlBsComponent, CurrencyModule
@@ -80,6 +80,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
         CurrencyModule,
         TooltipModule,
         AccountDetailModalModule,
+        SharedModule
     ],
 })
 export class TBPlBsModule {

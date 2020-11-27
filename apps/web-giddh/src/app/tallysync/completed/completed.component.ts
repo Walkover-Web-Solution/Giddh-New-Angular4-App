@@ -1,13 +1,10 @@
 import { Observable, ReplaySubject } from 'rxjs';
-
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-
-
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ToasterService } from '../../services/toaster.service';
 import { takeUntil } from "rxjs/operators";
-import { createSelector, select, Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -31,8 +28,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
-        dateInputFormat: 'DD-MM-YYYY',
-        rangeInputFormat: 'DD-MM-YYYY',
+        dateInputFormat: GIDDH_DATE_FORMAT,
+        rangeInputFormat: GIDDH_DATE_FORMAT,
         containerClass: 'theme-green myDpClass'
     };
     public CompanyList: IOption[] = [];
@@ -132,28 +129,15 @@ export class CompletedComponent implements OnInit, OnDestroy {
             filterDate: ['', Validators.required],
             branchUniqueName: ['']
         });
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
-                this.activeCompany = selectedCmp;
-                this.filterForm.get('filterCompany').patchValue(selectedCmp.uniqueName);
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
+                this.filterForm.get('filterCompany').patchValue(activeCompany.uniqueName);
             }
         });
-
     }
 
     public ngOnInit() {
@@ -161,7 +145,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.paginationRequest.sortBy = '';
         this.paginationRequest.page = 1;
         this.paginationRequest.count = PAGINATION_LIMIT;
-
 
         this.companies$.subscribe(a => {
             if (a) {
@@ -174,7 +157,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filterForm.get('filterDate').patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
         this.filterForm.get('filterTimeInterval').patchValue(this.timeInterval[5].value);
         this.filter.timeRange = this.timeInterval[5].value;
-        this.filter.startDate = moment(this.maxDate).format('DD-MM-YYYY');
+        this.filter.startDate = moment(this.maxDate).format(GIDDH_DATE_FORMAT);
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -198,8 +181,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-
 
     public getReport() {
         if (this.filterForm.invalid) {

@@ -73,6 +73,13 @@
 .entity-dropdown {
     width: 200px;
 }
+@media(max-width:1280px){
+    .invoice-footer {
+        h1 {
+            display: block;
+        }
+    }
+}
 @media(max-width:991px){
     .invoice-footer{
         padding: 15px 0;

@@ -1,6 +1,9 @@
+<div class="relative">
+<hamburger-menu *ngIf="activeTab !== 'vendor'"></hamburger-menu>
+<hamburger-menu [pageHeading]="'Vendor'" *ngIf="activeTab === 'vendor'"></hamburger-menu>
 <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <!-- region Customer/Vendor -->
-    <tab heading="Customer" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
+    <tab heading="Customer" [id]="(activeTab !== 'aging-report') ? 'giddh-page-heading': ''" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
         <div class="container-fluid">
 
             <div class="top-bar customer-top-bar clearfix">
@@ -54,6 +57,14 @@
                                             <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')" [(ngModel)]="showFieldFilter.comment" /> Comment
                                         </a>
                                     </li>
+                                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                                        <!-- <th width="10%">{{item.key | titlecase}}</th> -->
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" name="{{item.uniqueName}}" (ngModelChange)="columnFilter($event, item.uniqueName)" [(ngModel)]="showFieldFilter[item.uniqueName]" /> {{item.key | titlecase}}
+                                            </a>
+                                        </li>
+                                    </ng-container>
                                 </ul>
                             </div>
                         </div>
@@ -227,13 +238,14 @@
     <!-- endregion -->
 
     <!-- region Aging Report -->
-    <tab heading="Aging Report" (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
+    <tab heading="Aging Report" [id]="(activeTab === 'aging-report') ? 'giddh-page-heading': ''" (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
         <!--    <div *ngIf="activeTab === 'aging'">-->
         <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
         <!--    </div>-->
     </tab>
     <!-- endregion -->
 </tabset>
+</div>
 
 <!-- region Modal for Mail/SMS for vendore-->
 <div *ngIf="activeTab === 'vendor'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
@@ -352,7 +364,7 @@
                     <td *ngIf="showFieldFilter.state"></td>
                     <td *ngIf="showFieldFilter.comment"></td>
                     <ng-container *ngFor="let item of (companyCustomFields$ | async)">
-                        <td *ngIf="item.key"></td>
+                        <td *ngIf="item.key && showFieldFilter[item.uniqueName]"></td>
                     </ng-container>
                 </tr>
 
@@ -437,12 +449,10 @@
                     </th>
 
                     <th *ngIf="showFieldFilter.comment" class="comment-field">Comment</th>
-
-                    <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
-
                     <ng-container *ngFor="let item of (companyCustomFields$ | async)">
-                        <th width="10%">{{item.key}}</th>
+                        <th width="10%" *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]">{{item.key | titlecase}}</th>
                     </ng-container>
+                    <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
                 </tr>
 
             </thead>
@@ -609,7 +619,7 @@
 
                         </td>
                         <ng-container *ngFor="let item of account?.customFields">
-                            <td class="word-wrap" [attr.data-title]="item.key">
+                            <td *ngIf="item.key && showFieldFilter[item.uniqueName]" class="word-wrap" [attr.data-title]="item.key">
                                 {{item.value || '-' }}</td>
                         </ng-container>
                     </tr>
@@ -782,6 +792,10 @@
                                 <textarea class='form-control' maxlength='100' [(ngModel)]='account.comment' (blur)='updateComment(account)'></textarea>
                             </ng-container>
                         </td>
+                        <ng-container *ngFor="let item of account?.customFields">
+                            <td *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]" class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value || '-' }}</td>
+                        </ng-container>
                         <td data-title="Action" *ngIf="isICICIIntegrated">
                             <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
@@ -789,10 +803,6 @@
                             <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
-                        <ng-container *ngFor="let item of account?.customFields">
-                            <td class="word-wrap" [attr.data-title]="item.key">
-                                {{item.value || '-' }}</td>
-                        </ng-container>
                     </tr>
                     <tr *ngIf="!(sundryCreditorsAccounts).length ">
                         <td [attr.colspan]="colspanLength" class="text-center empty-table">
@@ -845,9 +855,9 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
-                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="selectedDate($event)" (datesUpdated)="selectedDate($event)" [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="selectedDate($event)" (datesUpdated)="selectedDate($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

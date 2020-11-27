@@ -1,3 +1,4 @@
+<hamburger-menu [pageHeading]="'Permissions'"></hamburger-menu>
 <div class="container-fluid clearfix" *ngIf="allRoles.length > 0">
     <a href="javascript:void(0)" *ngIf="showBackButton" class="btn btn-sky-blue pull-right mt-1" [routerLink]="['/pages/settings/permission']">Back</a>
     <div class="col-sm-12 mt-15 pd0 role clearfix" *ngFor="let role of allRoles">

@@ -24,7 +24,7 @@
                 <div class="col-sm-4">
                     <div class="form-group" formGroupName="country">
                         <label>Country <sup class="text-danger">*</sup> </label>
-                        <sh-select [options]="countrySource" defaultValue="{{selectedCountry}}" required [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true">
+                        <sh-select [options]="countrySource" defaultValue="{{selectedCountry}}" required [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true" [disabled]="disableCountrySelection">
                         </sh-select>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
         <ng-container>
-            <tab heading="Address" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" class="gstinAddress">
+            <tab heading="Address" [active]="isDebtorCreditor || isBankAccount" [disabled]="!isDebtorCreditor && !isBankAccount" [ngClass]="{'active': isDebtorCreditor}" class="gstinAddress">
                 <ng-container>
                     <div class="gstinForm" formArrayName="addresses">
                         <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -141,7 +141,7 @@
                                     <div class="form-group mb-05">
                                         <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}
                                         </label>
-                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states, $event);" (blur)="checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
+                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);getStateCode(gst, states, $event);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
                                         />
                                     </div>
                                 </div>

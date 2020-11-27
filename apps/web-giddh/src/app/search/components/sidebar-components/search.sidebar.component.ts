@@ -16,7 +16,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { GroupService } from '../../../services/group.service';
 
 @Component({
-	selector: 'search-sidebar',  // <home></home>
+	selector: 'search-sidebar',
     templateUrl: './search.sidebar.component.html',
     styleUrls: [`./search.sidebar.component.scss`],
 })
@@ -82,7 +82,9 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Stores the current company */
     public activeCompany: any;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-	private paginationPageNumber: number;
+    private paginationPageNumber: number;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
 	/**
 	 * TypeScript public modifiers
@@ -94,12 +96,12 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions
     ) {
-		this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+		this.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {
-		this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
-		this.toDate = moment().format('DD-MM-YYYY');
+		this.fromDate = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+		this.toDate = moment().format(GIDDH_DATE_FORMAT);
 
 		// Get source for Group Name Input selection
 		this.groupsList$.subscribe(data => {

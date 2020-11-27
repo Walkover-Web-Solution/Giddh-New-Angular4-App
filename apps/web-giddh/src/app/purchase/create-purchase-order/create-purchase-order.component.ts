@@ -319,6 +319,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public newlyCreatedStockAc$: Observable<INameUniqueName>;
     /* This will hold the transaction amount */
     public transactionAmount: number = 0;
+    /** Stores the current index of entry whose TCS/TDS are entered */
+    public tcsTdsIndex: number = 0;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.getInvoiceSettings();
@@ -376,22 +378,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => {
-            if (!state.session.companies) {
-                return;
-            }
-            state.session.companies.forEach(cmp => {
-                if (cmp.uniqueName === state.session.companyUniqueName) {
-                    this.selectedCompany = cmp;
-
-                    if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
-                        this.showLoaderUntilDataPrefilled = true;
-                        this.purchaseOrderUniqueName = this.urlParams['purchaseOrderUniqueName'];
-                        this.getPurchaseOrder();
-                    }
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
+                if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
+                    this.showLoaderUntilDataPrefilled = true;
+                    this.purchaseOrderUniqueName = this.urlParams['purchaseOrderUniqueName'];
+                    this.getPurchaseOrder();
                 }
-            });
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+            }
+        });
 
         this.createVendorList();
         this.initializeWarehouse();
@@ -555,7 +551,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         // listen for newly added stock and assign value
-        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             let stock = resp[0];
             let acData = resp[1];
             if (stock && acData) {
@@ -1137,10 +1133,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * get state code using Tax number to prefill state
      *
      * @param {string} type billingDetails || shipping
-     * @param {SalesShSelectComponent} statesEle state input box
      * @memberof CreatePurchaseOrderComponent
      */
-    public getStateCode(type: string, statesEle: SalesShSelectComponent, addressType: string): void {
+    public getStateCode(type: string, addressType: string): void {
         let gstVal;
         if (addressType === "vendor") {
             gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
@@ -1168,9 +1163,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
                 this.toaster.clearAllToaster();
             }
-            statesEle.disabled = true;
         } else {
-            statesEle.disabled = false;
             if (addressType === "vendor") {
                 this.purchaseOrder.account[type].stateCode = null;
                 this.purchaseOrder.account[type].state.code = null;
@@ -1850,7 +1843,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                        taxableValue = (rawAmount + entry.taxSum);
                     }
                     entry.otherTaxType = 'tcs';
                 } else {
@@ -2497,6 +2490,20 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         }
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    /**
+     * Closes the other taxes side menu panel on click of overlay
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public closeAsideMenuStateForOtherTaxes(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true, null);
+            if (this.purchaseOrder.entries[this.tcsTdsIndex]) {
+                this.purchaseOrder.entries[this.tcsTdsIndex].isOtherTaxApplicable = false;
+            }
+        }
     }
 
     /**

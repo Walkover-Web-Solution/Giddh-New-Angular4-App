@@ -18,6 +18,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
+import { SharedModule } from '../shared/shared.module';
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -45,7 +46,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         BsDropdownModule,
         ClickOutsideModule,
         CurrencyModule,
-        ShSelectModule
+        ShSelectModule,
+        SharedModule
     ]
 })
 export class SearchModule {

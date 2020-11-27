@@ -71,7 +71,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 		observableFromEvent(this.search.nativeElement, 'input').pipe(
 			debounceTime(500),
 			distinctUntilChanged(),
-			map((e: any) => e.target.value))
+			map((e: any) => e.target.value), takeUntil(this.destroyed$))
 			.subscribe((val: string) => {
 				if (val) {
 					this.isSearching = true;

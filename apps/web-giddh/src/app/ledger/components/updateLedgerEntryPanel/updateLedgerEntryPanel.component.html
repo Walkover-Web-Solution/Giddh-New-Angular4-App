@@ -850,7 +850,7 @@
                     <table class="width100">
                         <tbody>
                             <tr>
-                                <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
+                                <td class="primary_clr" (click)="getInvoiveLists(); toggleMoreDetail()">
                                     <i class="fa cp"
                                         [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
                                     <button class="no-btn pdL0">&nbsp; More Details</button>
@@ -962,7 +962,7 @@
                             <tr>
                                 <td *ngIf="(vm.selectedLedger.voucher.shortCode !== 'jr' && vm.selectedLedger.voucher.shortCode !== 'cntr' && vm.selectedLedger.voucher.shortCode !== 'rcpt'
                                 && vm.selectedLedger.voucher.shortCode !== 'advance-receipt')" class="pd-r1 pb-1">
-                                    <input [disabled]="currentOrganizationType === 'COMPANY'" type="checkbox" id="update-ledger-sale" name="advanceReceipt" [(ngModel)]="isAdjustVoucherSelected" (change)="handleVoucherAdjustment()">
+                                    <input [disabled]="currentOrganizationType === 'COMPANY'" type="checkbox" id="update-ledger-sale" name="advanceReceipt" [(ngModel)]="isAdjustVoucherSelected" (click)="checkForGeneratedVoucher($event)" (change)="handleVoucherAdjustment()">
                                     Adjust {{
                                         vm.selectedLedger.voucher.shortCode === 'sal' ? 'Sales' :
                                         vm.selectedLedger.voucher.shortCode === 'pur' ? 'Purchase' :
@@ -972,10 +972,10 @@
                                     }}
                                 </td>
                                 <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt" class="pd-r1 pb-1">
-                                    <input [disabled]="currentOrganizationType === 'COMPANY'" type="checkbox" id="update-ledger-advance-receipt" name="advanceReceipt" [(ngModel)]="isAdjustAdvanceReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Advance Receipt
+                                    <input [disabled]="currentOrganizationType === 'COMPANY'" type="checkbox" id="update-ledger-advance-receipt" name="advanceReceipt" [(ngModel)]="isAdjustAdvanceReceiptSelected" (click)="checkForGeneratedVoucher($event)" (change)="handleVoucherAdjustment()">Adjust Advance Receipt
                                 </td>
                                 <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt" class="pd-r1 pb-1">
-                                    <input [disabled]="currentOrganizationType === 'COMPANY'" type="checkbox" id="update-ledger-adjust-receipt" name="advanceReceipt" [(ngModel)]="isAdjustReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Receipt
+                                    <input [disabled]="currentOrganizationType === 'COMPANY'" type="checkbox" id="update-ledger-adjust-receipt" name="advanceReceipt" [(ngModel)]="isAdjustReceiptSelected" (click)="checkForGeneratedVoucher($event)" (change)="handleVoucherAdjustment()">Adjust Receipt
                                 </td>
                             </tr>
                         </table>
@@ -1119,11 +1119,8 @@
 
         </div>
     </div>
-
 </div>
 <!-- endregion -->
-
-
 <!-- region modals -->
 <!--deleteAttachedFile  -->
 <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">

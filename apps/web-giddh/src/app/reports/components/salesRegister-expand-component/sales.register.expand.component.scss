@@ -162,7 +162,8 @@ ul.list-unstyled li a {
     position: fixed;
     bottom: 0;
     z-index: 2;
-    width: calc(100% - 200px);
+    padding-right: 90px !important;
+    width: calc(100% - 215px);
 }
 
 .responsive {
@@ -211,7 +212,7 @@ ul#dropdown-nested li .caret {
     left: 100% !important;
 }
 
-.customeMnthSelect.show {
+.custom-month-select.show {
     display: inline-block !important;
 }
 
@@ -219,19 +220,19 @@ ul#dropdown-nested li .caret {
     padding: 15px;
 }
 
-.customeMnthSelect li:hover a.dropdown-item {
+.custom-month-select li:hover a.dropdown-item {
     background-color: #e5e5e5;
 }
 
-.customeMnthSelect button.btn {
+.custom-month-select button.btn {
     background: transparent !important;
     padding-left: 3px;
     padding-right: 3px;
 }
 
-.customeMnthSelect button.btn:active,
-.customeMnthSelect button.btn:focus,
-.customeMnthSelect button.btn:hover {
+.custom-month-select button.btn:active,
+.custom-month-select button.btn:focus,
+.custom-month-select button.btn:hover {
     background: transparent !important;
     box-shadow: none !important;
     outline: none !important;
@@ -309,21 +310,61 @@ table th {
     padding-right: 5px;
     padding-left: 5px;
 }
-
-@media (max-width: 1366px) {
+.report-breadcrum{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 7px 0px 10px 36px !important;
+    border-bottom: 1px solid $gainsboro;
+    .nav-report{
+        li{
+            font-family: 'opensans-semibold';
+            font-size: 20px;
+            a{
+                color: $midnight-blue;
+            }
+        }
+    }
+    .custom-month-select{
+        font-family: 'opensans-semibold';
+        color: $midnight-blue;
+        .btn{
+            font-size: 19px;
+            padding: 0;
+        }
+        li{
+            font-family: 'opensans-regular';
+        }
+    }
+}
+@media(max-width:1019px){
     .sales-register {
         width: 100%;
     }
 }
-
 @media (max-width: 991px) {
     .sales-register-table {
         padding-bottom: 50px;
     }
 }
 @media (max-width: 767px) {
+    .report-breadcrum{
+        position: static !important;
+        padding-left: 15px !important;
+        .nav-report{
+            li{
+                font-size: 16px;
+            }
+        }
+        .custom-month-select{
+            .btn{
+                font-size: 16px;
+            }
+        }
+    }
     .sales-register {
-        display: block;
+        display: flex;
         position: relative;
     }
     .main-sale-register-box {

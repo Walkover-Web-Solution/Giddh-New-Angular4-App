@@ -1,5 +1,5 @@
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -24,7 +24,8 @@ import { OrganizationType } from '../../../models/user-login-state';
     styleUrls: [`./tb-pl-bs-filter.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
+
+export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
     public selectedDateOption: string = '0';
     public filterForm: FormGroup;
@@ -136,8 +137,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         this.store.dispatch(this._settingsTagActions.GetALLTags());
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
-
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     public get selectedCompany() {
@@ -157,8 +157,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
         if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
             this.datePickerOptions = {
-                ...this.datePickerOptions, startDate: moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY'),
-                endDate: moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY')
+                ...this.datePickerOptions, startDate: moment(value.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT),
+                endDate: moment(value.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT)
             };
 
             // this.assignStartAndEndDateForDateRangePicker(value.activeFinancialYear.financialYearStarts, value.activeFinancialYear.financialYearEnds);
@@ -171,28 +171,21 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        // if (changes['needToReCalculate']) {
-        //   this.calculateTotal();
-        // }
-    }
-
     public ngOnInit() {
 
         this.imgPath = (isElectron|| isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
-        //
         if (!this.showLabels) {
             this.filterForm.patchValue({selectedDateOption: '0'});
         }
         this.accountSearchControl.valueChanges.pipe(
-            debounceTime(700))
+            debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.search = newValue;
                 this.seachChange.emit(this.search);
                 this.cd.detectChanges();
             });
 
-        this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+        this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
             if (tags && tags.length) {
                 _.map(tags, (tag) => {
                     tag.value = tag.name;
@@ -200,7 +193,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 });
                 return _.orderBy(tags, 'name');
             }
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
 
         this.universalDate$.subscribe((a) => {
             if (a) {
@@ -216,8 +209,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                     // this.assignStartAndEndDateForDateRangePicker(date[0], date[1]);
 
                     this.filterForm.patchValue({
-                        from: moment(a[0]).format('DD-MM-YYYY'),
-                        to: moment(a[1]).format('DD-MM-YYYY')
+                        from: moment(a[0]).format(GIDDH_DATE_FORMAT),
+                        to: moment(a[1]).format(GIDDH_DATE_FORMAT)
                     });
                 }
 
@@ -273,32 +266,19 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
     public setCurrentFY() {
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp && this.universalDateICurrent) {
-                let activeFinancialYear = selectedCmp.activeFinancialYear;
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany && this.universalDateICurrent) {
+                let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
                     this.datePickerOptions = {
                         ...this.datePickerOptions,
-                        startDate: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'), endDate: moment(), chosenLabel: undefined
+                        startDate: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'), endDate: moment(), chosenLabel: undefined
                     };
 
                     // assign dates
-                    // this.assignStartAndEndDateForDateRangePicker(activeFinancialYear.financialYearStarts, null);
                     this.filterForm.patchValue({
-                        from: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day').format('DD-MM-YYYY'),
-                        to: moment().format('DD-MM-YYYY')
+                        from: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day').format(GIDDH_DATE_FORMAT),
+                        to: moment().format(GIDDH_DATE_FORMAT)
                     });
                 }
             }
@@ -306,7 +286,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public selectDateOption(v: IOption) {
@@ -314,8 +295,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
-        this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format('DD-MM-YYYY'));
-        this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format('DD-MM-YYYY'));
+        this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format(GIDDH_DATE_FORMAT));
+        this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format(GIDDH_DATE_FORMAT));
         this.filterData();
     }
 
@@ -399,8 +380,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 this.selectFinancialYearOption(this.financialOptions[0]);
             } else {
                 this.filterForm.patchValue({
-                    from: moment(this.datePickerOptions.startDate).format('DD-MM-YYYY'),
-                    to: moment(this.datePickerOptions.endDate).format('DD-MM-YYYY')
+                    from: moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT),
+                    to: moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT)
                 });
             }
         }

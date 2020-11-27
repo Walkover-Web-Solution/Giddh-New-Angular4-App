@@ -304,7 +304,7 @@
 .branch-vector{
     text-align: right;
     position: absolute;
-    bottom: 8px;
+    bottom: -70px;
     right: 90px;
 }
 @media (max-width: 375px) {
@@ -335,9 +335,14 @@
                 margin-right: 0;
             }
         }
+        .search-field{
+            margin-right: 0;
+            .clear-filter-btn{
+                padding: 0 8px;
+            }
+        }
     }
     .input-group-date-range-picker {
-        width: 66%;
         .form-group {
             margin-bottom: 0;
         }
@@ -358,6 +363,20 @@
         .btn {
             float: left !important;
         }
+    }
+    .branch-header-content {
+        margin-right: 0;
+        .search-field{
+            margin-right: 0;
+            .search-branch-box{
+                max-width: 160px;
+            }
+            .clear-filter-btn{
+                width: 122px !important;
+                padding: 0 6px;
+            }
+        }
+
     }
 }
 
@@ -411,5 +430,5 @@
             font-size: 12px;
             height: 36px;
         }
-    } 
+    }
 }

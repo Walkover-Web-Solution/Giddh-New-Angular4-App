@@ -505,6 +505,11 @@ span.icon-export-icon {
         }
     }
 }
+.invoice-preview{
+    .invoice-table.giddh-table{
+        border-right: none !important;
+    }
+}
 .visible-on-mobile {
     display: none;
 }
@@ -583,9 +588,9 @@ span.icon-export-icon {
     .mobileTable {
         display: block;
     }
-    .desktop-table {
-        display: none;
-    }
+    // .desktop-table {
+    //     display: none;
+    // }
     .mobileViewPagination {
         display: block;
         text-align: center;
@@ -675,9 +680,6 @@ span.icon-export-icon {
 }
 
 @media (max-width: 767px) {
-    .date-advance-search{
-        margin-top: 5px !important;
-    }
     .desktop-view-btn {
         display: none !important;
     }
@@ -698,9 +700,6 @@ span.icon-export-icon {
     }
     .invoice-footer h1 {
         font-size: 18px !important;
-    }
-    .invoice-container {
-        padding-top: 10px;
     }
     .total-due-sale-wrap {
         display: block !important;

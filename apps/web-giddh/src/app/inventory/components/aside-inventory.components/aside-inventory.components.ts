@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, OnChanges, OnDestroy, OnInit, Output, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
@@ -39,15 +39,15 @@ export class AsideInventoryComponent implements OnInit, OnChanges, OnDestroy {
 		private store: Store<AppState>,
 		private inventoryAction: InventoryAction
 	) {
-		this.openGroupAsidePane$ = this.store.select(s => s.inventory.showNewGroupAsidePane).pipe(takeUntil(this.destroyed$));
-		this.createGroupSuccess$ = this.store.select(s => s.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
-		this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).pipe(takeUntil(this.destroyed$));
-		this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-		this.removeStockSuccess$ = this.store.select(s => s.inventory.deleteStockSuccess).pipe(takeUntil(this.destroyed$));
-		this.removeGroupSuccess$ = this.store.select(s => s.inventory.deleteGroupSuccess).pipe(takeUntil(this.destroyed$));
-		this.UpdateStockSuccess$ = this.store.select(s => s.inventory.UpdateStockSuccess).pipe(takeUntil(this.destroyed$));
-		this.UpdateGroupSuccess$ = this.store.select(s => s.inventory.UpdateGroupSuccess).pipe(takeUntil(this.destroyed$));
-		this.MoveStockSuccess$ = this.store.select(s => s.inventory.moveStockSuccess).pipe(takeUntil(this.destroyed$));
+		this.openGroupAsidePane$ = this.store.pipe(select(s => s.inventory.showNewGroupAsidePane), takeUntil(this.destroyed$));
+		this.createGroupSuccess$ = this.store.pipe(select(s => s.inventory.createGroupSuccess), takeUntil(this.destroyed$));
+		this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
+		this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
+		this.removeStockSuccess$ = this.store.pipe(select(s => s.inventory.deleteStockSuccess), takeUntil(this.destroyed$));
+		this.removeGroupSuccess$ = this.store.pipe(select(s => s.inventory.deleteGroupSuccess), takeUntil(this.destroyed$));
+		this.UpdateStockSuccess$ = this.store.pipe(select(s => s.inventory.UpdateStockSuccess), takeUntil(this.destroyed$));
+		this.UpdateGroupSuccess$ = this.store.pipe(select(s => s.inventory.UpdateGroupSuccess), takeUntil(this.destroyed$));
+		this.MoveStockSuccess$ = this.store.pipe(select(s => s.inventory.moveStockSuccess), takeUntil(this.destroyed$));
 
 	}
 

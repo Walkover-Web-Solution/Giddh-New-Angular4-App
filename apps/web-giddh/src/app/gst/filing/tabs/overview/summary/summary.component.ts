@@ -1,8 +1,7 @@
 import { GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
-import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { ReconcileActionState } from '../../../../../store/GstReconcile/GstReconcile.reducer';
 import { AppState } from '../../../../../store';
@@ -49,7 +48,9 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 	@Input() public selectedGst: string = null;
 	@Input() public activeCompanyGstNumber: string = null;
 	@Input() public isTransactionSummary: boolean = false;
-	@Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
+    @Output() public SelectTxn: EventEmitter<any> = new EventEmitter(null);
+    /** Emits when HSN/SAC is selected */
+    @Output() public hsnSacSelected: EventEmitter<void> = new EventEmitter();
 
     public gstr1OverviewData$: Observable<GstOverViewResult>;
 
@@ -67,7 +68,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
+    constructor(private _store: Store<AppState>, private _route: Router) {
         this.gstr1OverviewData$ = this._store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
 
         this.gstr2OverviewData$ = this._store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
@@ -101,9 +102,13 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 	 * viewTransactions
 	 */
 	public viewTransactions(obj: GstOverViewSummary) {
-		if (obj.gstReturnType === 'hsnsac' || obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers') {
+		if (obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers') {
 			return;
-		}
+        }
+        if (obj.gstReturnType === 'hsnsac') {
+            this.hsnSacSelected.emit();
+            return;
+        }
 		let param = {
 			page: 1,
 			count: 20,

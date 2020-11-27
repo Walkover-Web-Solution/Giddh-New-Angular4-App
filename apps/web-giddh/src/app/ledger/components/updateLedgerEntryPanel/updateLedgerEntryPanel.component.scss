@@ -288,11 +288,14 @@ span.eligible-ITC {
 .dropdown-container[disabled], .table-amount[disabled] {
     pointer-events: none;
 }
+.show-if-ledger-open{
+    height: 300px;
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
     .ledger-bottom {
-        display: block;
+        display: flex;
     }
 }
 
