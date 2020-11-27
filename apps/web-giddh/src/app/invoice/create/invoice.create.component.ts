@@ -5,22 +5,19 @@ import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContentCommon, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection } from '../../models/api-models/Invoice';
-import { InvoiceService } from '../../services/invoice.service';
 import { ToasterService } from '../../services/toaster.service';
 import { OtherSalesItemClass, SalesEntryClass, SalesTransactionItemClass } from '../../models/api-models/Sales';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SelectComponent } from '../../theme/ng-select/ng-select';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerActions } from 'apps/web-giddh/src/app/actions/ledger/ledger.actions';
 import { ReciptRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
-import { StatesRequest, TaxResponse } from '../../models/api-models/Company';
+import { TaxResponse } from '../../models/api-models/Company';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 let THEAD_ARR_READONLY = [
     {
@@ -108,34 +105,31 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private invoiceActions: InvoiceActions,
         private _toasty: ToasterService,
-        private invoiceService: InvoiceService,
-        private salesService: SalesService,
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
         private _ledgerActions: LedgerActions,
         private receiptActions: InvoiceReceiptActions,
         private _breakPointObservar: BreakpointObserver
     ) {
-        this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
+        this.isInvoiceGenerated$ = this.store.pipe(select(state => state.invoice.isInvoiceGenerated), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
 
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 
-        this._activatedRoute.params.subscribe(a => {
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.selectedVoucher = a.voucherType;
             }
         });
 
-        this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+        this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
             if (o) {
                 this.companyTaxesList$ = observableOf(o);
                 _.map(this.theadArrReadOnly, (item: IContentCommon) => {
@@ -153,9 +147,9 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
             this.tthead.push(ele);
         });
-        this.store.select(p => p.receipt.voucher).pipe(
+        this.store.pipe(select(p => p.receipt.voucher), 
             takeUntil(this.destroyed$),
-            distinctUntilChanged())
+            distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((o: any) => {
                 if (o && o.voucherDetails) {
                     this.invFormData = _.cloneDeep(o);
@@ -206,9 +200,8 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
             }
             );
 
-        this.store.select(p => p.invoice.invoiceTemplateConditions).pipe(
-            takeUntil(this.destroyed$),
-            distinctUntilChanged())
+        this.store.pipe(select(p => p.invoice.invoiceTemplateConditions), 
+            distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((o: InvoiceTemplateDetailsResponse) => {
                 if (o) {
                     this.invTempCond = _.cloneDeep(o);
@@ -230,13 +223,11 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.select(state => state.invoice.visitedFromPreview).pipe(
-            takeUntil(this.destroyed$),
-            distinctUntilChanged())
+        this.store.pipe(select(state => state.invoice.visitedFromPreview), 
+            distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((val: boolean) => {
                 this.updateMode = val;
-            }
-            );
+            });
 
         // bind state sources
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
@@ -619,8 +610,9 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
                 return o.entryDate;
             }
         });
+
         if (maxDateEnrty && maxDateEnrty.entryDate) {
-            this.maxDueDate = moment(maxDateEnrty.entryDate, 'DD-MM-YYYY').toDate();
+            this.maxDueDate = moment(maxDateEnrty.entryDate, GIDDH_DATE_FORMAT).toDate();
         }
     }
 

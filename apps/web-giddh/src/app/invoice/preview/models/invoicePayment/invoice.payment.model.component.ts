@@ -43,6 +43,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public isActionSuccess$: Observable<boolean> = observableOf(false);
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     //Multicurrency changes
     private originalPaymentMode: IOption[] = [];
@@ -132,7 +134,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        this._generalService.invokeEvent.subscribe(value => {
+        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value === 'loadPaymentModes') {
                 this.loadPaymentModes();
             }
@@ -258,7 +260,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public getCurrencyRate(from, to) {
         if (from && to) {
-            let date = moment().format('DD-MM-YYYY');
+            let date = moment().format(GIDDH_DATE_FORMAT);
             this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
                 let rate = response.body;
                 if (rate) {

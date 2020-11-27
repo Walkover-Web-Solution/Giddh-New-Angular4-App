@@ -1,5 +1,4 @@
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {
     AfterViewInit,
@@ -16,14 +15,11 @@ import {
 } from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {digitsOnly} from '../../../helpers';
-import {AccountsAction} from '../../../../actions/accounts.actions';
 import {AppState} from '../../../../store';
 import {select, Store} from '@ngrx/store';
 import {AccountRequestV2, CustomFieldsData} from '../../../../models/api-models/Account';
-import {CompanyService} from '../../../../services/companyService.service';
 import {ToasterService} from '../../../../services/toaster.service';
 import {CompanyResponse, StateList, StatesRequest} from '../../../../models/api-models/Company';
-import {CompanyActions} from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
 import {ShSelectComponent} from '../../../../theme/ng-virtual-select/sh-select.component';
@@ -33,7 +29,6 @@ import {CommonActions} from '../../../../actions/common.actions';
 import {GeneralActions} from "../../../../actions/general/general.actions";
 import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
-import * as googleLibphonenumber from 'google-libphonenumber';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
@@ -56,6 +51,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public showBankDetail: boolean = false;
     @Input() public showVirtualAccount: boolean = false;
     @Input() public isDebtorCreditor: boolean = true;
+    /** True if bank category account is selected */
+    @Input() public isBankAccount: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
     @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
@@ -97,20 +94,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public companyCustomFields: any[] = [];
     /** Observable for selected active group  */
     private activeGroup$: Observable<any>;
+    /** This will handle if we need to disable country selection */
+    public disableCountrySelection: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
         private store: Store<AppState>,
-        private accountsAction: AccountsAction,
-        private _companyService: CompanyService,
         private _toaster: ToasterService,
-        private companyActions: CompanyActions,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
         private changeDetectorRef: ChangeDetectorRef,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction) {
-        this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
+        this.companiesList$ = this.store.pipe(select(s => s.session.companies), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup),takeUntil(this.destroyed$));
         this.getCountry();
@@ -135,6 +131,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }
+
+        this.disableCountryIfSundryCreditor();
+
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
@@ -150,7 +149,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
         this.getCompanyCustomField();
 
-        this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
+        this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
@@ -165,7 +164,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         // get country code value change
-        this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
+        this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
 
             if (a) {
                 const addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -192,7 +191,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         // get openingblance value changes
-        this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
+        this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
@@ -204,7 +203,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
         //     }
         // });
-        this.store.pipe(select(appState => appState.session.companyUniqueName), distinctUntilChanged()).subscribe(uniqueName => {
+        this.store.pipe(select(appState => appState.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(uniqueName => {
             if (uniqueName) {
                 this.companiesList$.pipe(take(1)).subscribe(companies => {
                     this.activeCompany = companies.find(cmp => cmp.uniqueName === uniqueName);
@@ -277,7 +276,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             this.isDebtorCreditor = true;
         }
-
     }
 
     public isShowBankDetails(accountType: string) {
@@ -686,6 +684,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public isParentDebtorCreditor(activeParentgroup: string) {
+        this.disableCountryIfSundryCreditor(activeParentgroup);
+
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -698,7 +698,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addBlankGstForm();
             }
 
+        } else if (activeParentgroup === 'bankaccounts') {
+            this.isBankAccount = true;
+            this.isDebtorCreditor = false;
+            this.showBankDetail = false;
+            this.addAccountForm.get('addresses').reset();
         } else {
+            this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
@@ -1054,5 +1060,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectedBooleanCustomField(isChecked: string, index: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         customField.controls[index].get('value').setValue(isChecked);
+    }
+
+    /**
+     * This will disable country field if selected group or parent group is sundry creditor
+     *
+     * @param {string} [groupName]
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public disableCountryIfSundryCreditor(groupName?: string): void {
+        if((groupName && groupName === "sundrycreditors") || this.activeGroupUniqueName === "sundrycreditors") {
+            this.disableCountrySelection = true;
+        } else {
+            this.disableCountrySelection = false;
+        }
     }
 }

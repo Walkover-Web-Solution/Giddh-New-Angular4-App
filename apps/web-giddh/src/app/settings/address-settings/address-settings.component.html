@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid setting-profile-container">
     <div class="row">
         <div *ngIf="organizationType === 'COMPANY'"
             class="w-100 d-flex justify-content-between mt-1 mb-4 align-items-center address-list-top">
@@ -78,9 +78,9 @@
                             <td data-title="State">
                                 <div>{{address.stateCode}} - {{address.stateName}}</div>
                             </td>
-                            <td data-title="Linked with">
-                                <div class="d-flex">
-                                    <div class="d-flex flex-column linked-with">
+                            <td data-title="Linked with" width="30%" class="linked-with">
+                                <div class="d-flex wrap-linked-company">
+                                    <div class="d-flex flex-column linked-with w-100">
                                         <span *ngFor="let entity of address.linkedEntities" class="pb-1">
                                             <i tooltip="HO Branch" *ngIf="entity.isHeadQuarter"
                                                 class="icon-company-HO"></i>
@@ -88,7 +88,7 @@
                                                 class="icon-branch-icon"></i>
                                             <i tooltip="Warehouse" *ngIf="entity.isWarehouse"
                                                 class="icon-warehouse-icon"></i>
-                                            {{entity.alias || entity.name}}
+                                           <span class="entity-alias"> {{entity.alias || entity.name}} </span>
                                         </span>
                                     </div>
 
@@ -154,6 +154,9 @@
                     </div>
                 </div>
             </div>
+            <div class="no-data" *ngIf="addresses.length === 0">
+                <h1>No addresses found within given criteria.</h1>
+            </div>
         </div>
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center">
@@ -166,8 +169,9 @@
 </div>
 
 <!-- Create address part of Address Tab -->
-<div *ngIf="accountAsideMenuState === 'in' && !closeSidePane">
-    <div class="aside-overlay" (click)="toggleAccountAsidePane()"></div>
+<div *ngIf="accountAsideMenuState === 'in' && !closeSidePane" [keyboardShortcut]="'esc'"
+    (onShortcutPress)="toggleAccountAsidePane()">
+    <div class="aside-overlay"></div>
     <create-address class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState"
         [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
         [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"

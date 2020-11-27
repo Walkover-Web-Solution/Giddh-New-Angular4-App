@@ -22,6 +22,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { CurrentPage } from '../models/api-models/Common';
 import { API_POSTMAN_DOC_URL } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 @Component({
     selector: 'user-details',
@@ -80,36 +81,37 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private _loginAction: LoginActions,
         private _loginService: AuthenticationService,
         private loginAction: LoginActions,
-        private _subscriptionsActions: SubscriptionsActions,
         private _companyService: CompanyService,
         private companyActions: CompanyActions,
         private router: Router,
         private _sessionAction: SessionActions,
         public _route: ActivatedRoute,
         private breakPointObservar: BreakpointObserver,
-        private generalActions: GeneralActions) {
-        this.contactNo$ = this.store.select(s => {
+        private generalActions: GeneralActions, private settingsProfileActions: SettingsProfileActions) {
+        this.contactNo$ = this.store.pipe(select(s => {
             if (s.session.user) {
                 return s.session.user.user.contactNo;
             }
-        }).pipe(takeUntil(this.destroyed$));
-        this.countryCode$ = this.store.select(s => {
+        }), takeUntil(this.destroyed$));
+        this.countryCode$ = this.store.pipe(select(s => {
             if (s.session.user) {
                 return s.session.user.countryCode;
             }
-        }).pipe(takeUntil(this.destroyed$));
-        this.isAddNewMobileNoInProcess$ = this.store.select(s => s.login.isAddNewMobileNoInProcess).pipe(takeUntil(this.destroyed$));
-        this.isAddNewMobileNoSuccess$ = this.store.select(s => s.login.isAddNewMobileNoSuccess).pipe(takeUntil(this.destroyed$));
-        this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoInProcess).pipe(takeUntil(this.destroyed$));
-        this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoSuccess).pipe(takeUntil(this.destroyed$));
-        this.userSessionResponse$ = this.store.select(s => s.userLoggedInSessions.Usersession).pipe(takeUntil(this.destroyed$));
-        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
+        /** To reset isUpdateCompanyInProgress in case of subscription module */
+        this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
+        this.isAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.userSessionResponse$ = this.store.pipe(select(s => s.userLoggedInSessions.Usersession), takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
 
-        this.authenticateTwoWay$ = this.store.select(s => {
+        this.authenticateTwoWay$ = this.store.pipe(select(s => {
             if (s.session.user) {
                 return s.session.user.user.authenticateTwoWay;
             }
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -160,7 +162,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        //  this.getSubscriptionList();     // commented due todesign and API get changed
         this.contactNo$.subscribe(s => this.phoneNumber = s);
         this.countryCode$.subscribe(s => this.countryCode = s);
         this.isAddNewMobileNoSuccess$.subscribe(s => this.showVerificationBox = s);
@@ -179,13 +180,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 this._toasty.errorToast(a.message, a.status);
             }
         });
-        this.store.select(s => s.subscriptions.companies)
-            .pipe(takeUntil(this.destroyed$))
+        this.store.pipe(select(s => s.subscriptions.companies), takeUntil(this.destroyed$))
             .subscribe(s => this.companies = s);
-        this.store.select(s => s.subscriptions.companyTransactions)
-            .pipe(takeUntil(this.destroyed$))
+        this.store.pipe(select(s => s.subscriptions.companyTransactions), takeUntil(this.destroyed$))
             .subscribe(s => this.companyTransactions = s);
-        this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
+        this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe((session) => {
             let companyUniqueName: string;
             if (session.companyUniqueName) {
                 companyUniqueName = cloneDeep(session.companyUniqueName);
@@ -245,22 +244,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         request.oneTimePassword = this.oneTimePassword;
         this.store.dispatch(this._loginAction.VerifyAddNewMobileNo(request));
     }
-
-    // public getSubscriptionList() {
-    //   this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
-    //   this.store.select(s => s.subscriptions.subscriptions)
-    //     .pipe(takeUntil(this.destroyed$))
-    //     .subscribe(s => {
-    //       if (s && s.length) {
-    //         this.subscriptions = s;
-    //         this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
-    //         this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
-    //         this.store.select(s => s.subscriptions.transactions)
-    //           .pipe(takeUntil(this.destroyed$))
-    //           .subscribe(s => this.transactions = s);
-    //       }
-    //     });
-    // }
 
     public changeTwoWayAuth() {
         this._loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).subscribe(res => {

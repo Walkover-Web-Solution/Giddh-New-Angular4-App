@@ -240,12 +240,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private settingsUtilityService: SettingsUtilityService,
         private _toasty: ToasterService
     ) {
-        this.discountAccountsList$ = this.store.select(p => p.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
-        this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
-        this.sessionKey$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.select(p => p.ledger.account).pipe(takeUntil(this.destroyed$));
-        this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).pipe(takeUntil(this.destroyed$));
+        this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
+        this.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+        this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
+        this.isLedgerCreateInProcess$ = this.store.pipe(select(p => p.ledger.ledgerCreateInProcess), takeUntil(this.destroyed$));
         this.voucherTypeList = observableOf([{
             label: 'Sales',
             value: 'sal'
@@ -308,7 +308,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        this.tags$ = this.store.select(createSelector([(st: AppState) => st.settings.tags], (tags) => {
+        this.tags$ = this.store.pipe(select(createSelector([(st: AppState) => st.settings.tags], (tags) => {
             if (tags && tags.length) {
                 _.map(tags, (tag) => {
                     tag.label = tag.name;
@@ -316,7 +316,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
                 return _.orderBy(tags, 'name');
             }
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
 
         // for tcs and tds identification
         if (this.tcsOrTds === 'tcs') {
@@ -373,6 +373,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public calculatePreAppliedTax(): void {
         let activeAccountTaxes = [];
+          this.preparePreAppliedDiscounts();
         if (this.activeAccount && this.activeAccount.applicableTaxes) {
             activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
         }
@@ -445,8 +446,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.generateInvoice = false;
     }
 
-    public calculateDiscount(total: number) {
-        this.currentTxn.discount = total;
+    public calculateDiscount(event: any) {
+        this.currentTxn.discount = event.discountTotal;
+        this.accountOtherApplicableDiscount.forEach(item => {
+            if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                item.isActive = event.isActive.target.checked;
+            }
+        });
+        this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
+            if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                item.isActive = event.isActive.target.checked;
+            }
+        });
         this.currentTxn.convertedDiscount = this.calculateConversionRate(this.currentTxn.discount);
         this.calculateTax();
     }
@@ -474,7 +485,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 /** apply account's discount (default) */
                 if (this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
                     this.currentTxn.discounts.map(item => {
-                        item.isActive = this.accountOtherApplicableDiscount.some(element => element.uniqueName === item.discountUniqueName);
+                        let discountItem = this.accountOtherApplicableDiscount.find(element => element.uniqueName === item.discountUniqueName);
+                        if (discountItem && discountItem.uniqueName) {
+                            item.isActive = discountItem.isActive;
+                        }
                     });
                 }
 
@@ -983,6 +997,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 ]
             }
             this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
+            this.blankLedger.generateInvoice = true;
         }
     }
 
@@ -995,6 +1010,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.forceClear$ = observableOf({ status: true });
         this.currentTxn.invoiceLinkingRequest = null;
         this.selectedInvoiceForCreditNote = null;
+        this.blankLedger.generateInvoice = false;
     }
 
     /**
@@ -1069,7 +1085,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-            this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
+            if(tax) {
+                this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
+            }
             if (tax) {
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
@@ -1271,6 +1289,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 } else {
                     this.isAdjustReceiptSelected = false;
                 }
+                this.isAdjustVoucherSelected = false;
+                this.blankLedger.generateInvoice = false;
             }
         }
 
@@ -1291,9 +1311,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
-            if (this.blankLedger.voucherType === 'pur') {
-                this.blankLedger.generateInvoice = false;
-            }
+            this.blankLedger.generateInvoice = false;
         }
         this.adjustPaymentModal.hide();
     }
@@ -1433,6 +1451,58 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             accountDetails.inheritedDiscounts.forEach(element => {
                 this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
             });
+        }
+        this.accountOtherApplicableDiscount.map(item => item.isActive = true);
+    }
+
+    /**
+     * To prepare pre applied discount for current transactions
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public preparePreAppliedDiscounts() {
+        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts && this.currentTxn.selectedAccount.accountApplicableDiscounts.length) {
+            this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
+            this.currentTxn.discounts.map(item => { item.isActive = false });
+            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                this.currentTxn.discounts.map(item => {
+                    if (element.uniqueName === item.discountUniqueName) {
+                        item.isActive = true;
+                    }
+                    return item;
+                });
+            });
+        } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+            this.currentTxn.discounts.map(item => { item.isActive = false });
+            this.accountOtherApplicableDiscount.forEach(element => {
+                this.currentTxn.discounts.map(item => {
+                    if (element.uniqueName === item.discountUniqueName) {
+                        item.isActive = true;
+                    }
+                    return item;
+                });
+            });
+        } else {
+            this.currentTxn.discounts.map(item => {
+                item.isActive = false;
+                return item;
+            });
+            this.currentTxn.discount = 0;
+        }
+        /** if percent or value type discount applied */
+        if (this.currentTxn.discounts && this.currentTxn.discounts[0]) {
+            if (this.currentTxn.discounts[0].amount) {
+                this.currentTxn.discounts[0].isActive = true;
+            } else {
+                this.currentTxn.discounts[0].isActive = false;
+            }
+        }
+        if (this.discountControl) {
+            if (this.discountControl.discountAccountsDetails) {
+                this.discountControl.discountAccountsDetails = this.currentTxn.discounts;
+                this.currentTxn.discount = giddhRoundOff(this.discountControl.generateTotal());
+                this.discountControl.discountTotal = this.currentTxn.discount;
+            }
         }
     }
 }

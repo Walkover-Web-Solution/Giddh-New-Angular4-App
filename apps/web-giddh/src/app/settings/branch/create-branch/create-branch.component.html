@@ -65,9 +65,7 @@
                             class="linked-add create" (noResultsClicked)="handleShortcutPress()">
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
-                                    <a popover="{{ option?.address }}" placement="right" popover
-                                        popoverTitle="{{option?.label}}" container="sh-select-menu"
-                                        triggers="mouseenter:mouseleave" (click)="selectAddress(option)"
+                                    <a (click)="selectAddress(option)"
                                         href="javascript:void(0)" class="list-item d-flex">
                                         <span><input type="checkbox"
                                                 [checked]="branchForm?.get('address')?.value?.includes(option.value)"
@@ -152,8 +150,9 @@
         </form>
     </div>
 </div>
-<div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'" (click)="toggleAddressAsidePane($event)"></div>
-<create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
+<div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
+<create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState" [keyboardShortcut]="'esc'"
+    (onShortcutPress)="toggleAddressAsidePane()"
     [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"
     (saveAddress)="createNewAddress($event)" [addressConfiguration]="addressConfiguration"
     (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>

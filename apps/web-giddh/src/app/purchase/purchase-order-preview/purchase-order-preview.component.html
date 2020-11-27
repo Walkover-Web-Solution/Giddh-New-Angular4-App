@@ -82,7 +82,7 @@
                                                 <li>
                                                     <a class="cp" href="javascript:void(0)"
                                                         (click)="statusUpdate('cancelled')"
-                                                        *ngIf="purchaseOrder.status === 'OPEN'">Cancel</a>
+                                                        *ngIf="purchaseOrder.status !== 'CANCELLED'">Cancel</a>
                                                     <a class="cp" href="javascript:void(0)"
                                                         (click)="statusUpdate('open')"
                                                         *ngIf="purchaseOrder.status === 'CANCELLED' || purchaseOrder.status === 'EXPIRED'">Open</a>
@@ -103,7 +103,7 @@
                                                             class="fa fa-pencil"></i></a>
                                                 </span>
 
-                                                <span class="pos-rel">
+                                                <span>
                                                     <a href="javascript:;" tooltip="Send Email" placement="top"
                                                         (click)="openSendMailModal(sendEmailModal)"><i
                                                             class="fa fa-envelope-o"></i></a>

@@ -49,7 +49,7 @@ import {
 } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
@@ -76,6 +76,8 @@ import { CompanyService } from '../../services/companyService.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { AccountsAction } from '../../actions/accounts.actions';
+import { LedgerActions } from '../../actions/ledger/ledger.actions';
+import { PermissionService } from '../../services/permission.service';
 
 @Component({
     selector: 'app-header',
@@ -96,6 +98,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideHelpSupportMenuState: string = 'out';
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
+    /*This will check if page has not tabs*/
+    public pageHasTabs: boolean = false;
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -243,7 +247,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public currentOrganizationType: OrganizationType;
     /** Version of lated mac app  */
     public macAppVersion: string;
-
+    /** This will hold the time when last session renewal was checked or updated */
+    public lastSessionRenewalTime: any;
+    /** All modules data with routing shared with user */
+    public allModulesList = [];
 
     /**
      * Returns whether the account section needs to be displayed or not
@@ -279,7 +286,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private router: Router,
         private flyAccountActions: FlyAccountsActions,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private cdRef: ChangeDetectorRef,
         private zone: NgZone,
         private route: ActivatedRoute,
         private _generalActions: GeneralActions,
@@ -295,17 +301,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private companyService: CompanyService,
         private settingsBranchAction: SettingsBranchActions,
         private accountsAction: AccountsAction,
+        private ledgerAction: LedgerActions,
+        private permissionService: PermissionService,
         public location: Location
     ) {
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
-
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
-
-        this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
 
         // SETTING CURRENT PAGE ON INIT
         this.setCurrentPage();
+        this.checkIfPageHasTabs();
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
@@ -325,10 +332,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
+                this.checkIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
+                }
+
+                if(!this.lastSessionRenewalTime || (this.lastSessionRenewalTime && this.lastSessionRenewalTime.diff(moment(), 'hours') >= 2)) {
+                    this.checkAndRenewUserSession();
                 }
             }
         });
@@ -349,7 +361,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(s => s.general.isCalendlyModelOpen), takeUntil(this.destroyed$)).subscribe(response => {
             this.isCalendlyModelActivate = response;
         });
-        this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
+        this.user$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user && user.user && user.user.name && user.user.name.length > 1) {
                 let name = user.user.name;
                 this.loggedInUserEmail = user.user.email;
@@ -363,7 +375,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
                 return user.user;
             }
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
@@ -383,9 +395,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
-        this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
-        this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+        this.isCompanyRefreshInProcess$ = this.store.pipe(select(state => state.session.isRefreshing), takeUntil(this.destroyed$));
+        this.isCompanyCreationSuccess$ = this.store.pipe(select(p => p.session.isCompanyCreationSuccess), takeUntil(this.destroyed$));
+        this.isCompanyProifleUpdate$ = this.store.pipe(select(p => p.settings.updateProfileSuccess), takeUntil(this.destroyed$));
         this.updateIndexDbInProcess$ = this.store.pipe(select(p => p.general.updateIndexDbInProcess), takeUntil(this.destroyed$))
         this.updateIndexDbSuccess$ = this.store.pipe(select(p => p.general.updateIndexDbComplete), takeUntil(this.destroyed$))
 
@@ -444,25 +456,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.selectedCompanyCountry = selectedCmp.country;
         });
 
-        this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
+        this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
 
-        this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
+        this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         this.smartCombinedList$ = this.store.pipe(select(s => s.general.smartCombinedList), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.createNewCompanyUser = res;
             }
         });
-        this.generalService.isMobileSite.subscribe(s => {
+        this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
             this.menuItemsFromIndexDB = DEFAULT_MENUS;
             this.accountItemsFromIndexDB = DEFAULT_AC;
+            this.getAllMenusModules();
         });
-        this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
-        this.generalService.invokeEvent.subscribe(value => {
+        this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
+        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value === 'openschedulemodal') {
                 this.openScheduleCalendlyModel();
-                // this.openScheduleModal();
             }
             if (value === 'resetcompanysession') {
                 this.removeCompanySessionData();
@@ -484,7 +496,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.getCurrentCompanyData();
-
+        this.getAllMenusModules();
         this._breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -498,6 +510,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.changeDetection.detectChanges();
                 });
             }
+        });
+
+        this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
+            this.sideBarStateChange(response);
         });
 
         this.sideBarStateChange(true);
@@ -530,12 +546,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.openCrossedTxLimitModel(this.crossedTxLimitModel);
             }
         }
-        this.manageGroupsAccountsModal.onHidden.subscribe(e => {
+        this.manageGroupsAccountsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(e => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
 
         this.accountSearchControl.valueChanges.pipe(
-            debounceTime(300))
+            debounceTime(300), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.accountSearchValue = newValue;
                 if (newValue.length > 0) {
@@ -544,7 +560,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.filterAccounts(newValue);
             });
 
-        this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
+        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a !== '') {
                 this.zone.run(() => {
                     this.filterAccounts('');
@@ -554,11 +570,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.loadCompanyBranches();
 
         // region creating list for cmd+g modal
-        combineLatest(
-            this.store.select(p => p.general.flattenGroups).pipe(takeUntil(this.destroyed$)),
-            this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$))
-        )
-            .subscribe((resp: any[]) => {
+        combineLatest([
+            this.store.pipe(select(p => p.general.flattenGroups), takeUntil(this.destroyed$)),
+            this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$))
+        ]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
                 let menuList = cloneDeep(NAVIGATION_ITEM_LIST);
                 let grpList = cloneDeep(resp[0]);
                 let acList = cloneDeep(resp[1]);
@@ -649,7 +664,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (a instanceof NavigationStart) {
                     this.navigationEnd = false;
                 }
-                if (a instanceof NavigationCancel) {
+                if (a instanceof NavigationError) {
                     this.navigationEnd = true;
                     let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                         return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
@@ -685,6 +700,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
             .observe(['(min-width: 1020px)'])
+            .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
@@ -709,7 +725,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         // if invalid menu item clicked then navigate to default route and remove invalid entry from db
-        this.generalService.invalidMenuClicked.subscribe(data => {
+        this.generalService.invalidMenuClicked.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
                 this.onItemSelected(data.next, data);
             }
@@ -827,38 +843,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.FetchUserDetails());
 
         // Get universal date
-        this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj && dateObj.length) {
                 this.isTodaysDateSelected = !dateObj[3];  //entry-setting API date response in case of today fromDate/toDate will be null
                 if (this.isTodaysDateSelected) {
                     let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-                    // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.selectedDateRangeUi = 'Today';
-
                 } else {
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.isDateRangeSelected = true;
                 }
-
-
-                // }
-                // let fromForDisplay = moment(dateObj[0]).format('D-MMM-YY');
-                // let toForDisplay = moment(dateObj[1]).format('D-MMM-YY');
-                // if (this.dateRangePickerCmp) {
-                //     this.dateRangePickerCmp.nativeElement.value = `${fromForDisplay} - ${toForDisplay}`;
-                // }
             }
-        })).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
     }
 
     public ngAfterViewChecked() {
-        this.cdRef.detectChanges();
-    }
-
-    public vendorOrCustomer(path: string) {
-        //this.selectedPage = path === 'customer' ? 'Customer' : 'Vendor';
+        this.changeDetection.detectChanges();
     }
 
     public handleNoResultFoundEmitter(e: any) {
@@ -1087,17 +1089,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.activeCompanyForDb.uniqueName) {
             return;
         }
-
         if (dbResult) {
 
             this.menuItemsFromIndexDB = dbResult.aidata.menus;
 
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 15) : slice(this.menuItemsFromIndexDB, 0, 10);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 17) : slice(this.menuItemsFromIndexDB, 0, 10);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 7);
             } else {
-                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 12) : slice(this.menuItemsFromIndexDB, 0, 8);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 17) : slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 5);
             }
 
@@ -1120,6 +1121,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
             }
         }
+        this.prepareMenuListByAccessPermission();
     }
 
     public showManageGroupsModal() {
@@ -1129,10 +1131,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public hideManageGroupsModal() {
-        this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
+        this.store.pipe(select(c => c.session.lastState), take(1)).subscribe((s: string) => {
             if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
                 this.store.dispatch(this._generalActions.addAndManageClosed());
-                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
+                if (this.selectedLedgerName) {
+                    this.store.dispatch(this.ledgerAction.GetLedgerAccount(this.selectedLedgerName));
+                    this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
+                }
             }
         });
 
@@ -1194,7 +1199,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
         this.setOrganizationDetails(OrganizationType.Branch, details);
-        if (!RESTRICTED_BRANCH_ROUTES.includes(this.router.url)) {
+        const isBranchRestrictedPath = RESTRICTED_BRANCH_ROUTES.find(route => this.router.url.includes(route));
+        if (!isBranchRestrictedPath) {
             window.location.reload();
         } else {
             window.location.href = '/pages/home';
@@ -1207,6 +1213,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public goToCompany(): void {
+        if (!localStorage.getItem('isNewArchitecture')) {
+            /* New architecture displays more items in menu panel in company mode
+               as accounts are not visible hence to detect the environment for current customer
+               in PROD we are using local storage to reset the index DB once and replace it with new items
+            */
+            this._dbService.clearAllData();
+            localStorage.setItem('isNewArchitecture', String(true));
+        }
         this.changeCompany(this.selectedCompanyDetails.uniqueName);
     }
 
@@ -1229,6 +1243,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public logout() {
+        /** Reset the current organization type on logout as we
+         * don't know receive switched branch from API in last state (state API)
+        */
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        this.setOrganizationDetails(OrganizationType.Company, details);
+        localStorage.removeItem('isNewArchitecture');
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else if (isCordova) {
@@ -1270,10 +1294,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let viewContainerRef = this.companynewadd.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
+        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideAddCompanyModal();
         });
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideCompanyModalAndShowAddAndManage();
         });
     }
@@ -1283,11 +1307,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let viewContainerRef = this.addmanage.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.subscribe((a) => {
+        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideManageGroupsModal();
             viewContainerRef.remove();
         });
-        this.manageGroupsAccountsModal.onShown.subscribe((a => {
+        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
             (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
             (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
         }));
@@ -1593,7 +1617,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen, this.currentOrganizationType === OrganizationType.Company).then((res) => {
+            let branches = [];
+            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+                branches = response || [];
+            });
+            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
+                this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
                 if (res) {
                     this.findListFromDb(res);
                 }
@@ -1626,21 +1655,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         ).subscribe(() => this.changeDetection.markForCheck());
 
         this.subscriptions.push(
-            this.modalService.onShow.subscribe((reason: string) => {
+            this.modalService.onShow.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
             })
         );
         this.subscriptions.push(
-            this.modalService.onShown.subscribe((reason: string) => {
+            this.modalService.onShown.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
                 //
             })
         );
         this.subscriptions.push(
-            this.modalService.onHide.subscribe((reason: string) => {
+            this.modalService.onHide.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
                 //
             })
         );
         this.subscriptions.push(
-            this.modalService.onHidden.subscribe((reason: string) => {
+            this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
                 this.navigationModalVisible = false;
                 this.unsubscribe();
             })
@@ -1969,6 +1998,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             window['Headway'].init();
         }
     }
+    /**
+     * This function will check if page has tabs to show/hide page heading
+     *
+     * @memberof HeaderComponent
+     */
+    public checkIfPageHasTabs(): void | boolean {
+        this.pageHasTabs = false;
+        let currentUrl = this.router.url;
+
+        NAVIGATION_ITEM_LIST.find((page) => {
+            if (page.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
+                this.pageHasTabs = true;
+                return true;
+            }
+        });
+    }
 
     /**
      * Navigates to previous page
@@ -1996,7 +2041,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
 
-
     /**
      * To get latest version of mac app
      *
@@ -2009,6 +2053,58 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
                 this.macAppVersion = versNum;
+            }
+        });
+    }
+
+    /**
+     * This will check and renew user session if close to expiry
+     *
+     * @memberof HeaderComponent
+     */
+    public checkAndRenewUserSession(): void {
+        this.store.pipe(select(state => state.session.user), take(1)).subscribe((user) => {
+            if(user && user.session) {
+                let sessionExpiresAt: any = moment(user.session.expiresAt, GIDDH_DATE_FORMAT + " h:m:s");
+
+                if(sessionExpiresAt.diff(moment(), 'hours') < 2) {
+                    this.lastSessionRenewalTime = moment();
+                    this.store.dispatch(this.loginAction.renewSession());
+                } else {
+                    this.lastSessionRenewalTime = moment();
+                }
+            }
+        });
+    }
+
+    /**
+     * To prepare menu list
+     *
+     * @memberof HeaderComponent
+     */
+    public prepareMenuListByAccessPermission(): void {
+        if (this.allModulesList.length) {
+            let sharedMenus = [];
+            let routerLinks = [];
+            this.allModulesList.forEach(item => {
+                sharedMenus.push(...item.items);
+            });
+            sharedMenus.forEach(element => {
+                routerLinks.push(element.routerLink);
+            });
+            this.menuItemsFromIndexDB = this.menuItemsFromIndexDB.filter(item => routerLinks.includes(item.uniqueName));
+        }
+    }
+
+    /**
+     * To get all shared modules list
+     *
+     * @memberof HeaderComponent
+     */
+    public getAllMenusModules() {
+        this.permissionService.getSharedAllModules().subscribe(response => {
+            if (response && response.status === 'success') {
+                this.allModulesList = response.body;
             }
         });
     }

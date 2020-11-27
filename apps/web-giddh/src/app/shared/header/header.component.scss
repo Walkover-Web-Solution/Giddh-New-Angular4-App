@@ -743,11 +743,19 @@ ul.sub-list {
 .desktop-header .hamburger-menu{
     display: flex;
 }
+.desktop-header{
+    .navbar{
+        display: none;
+    }
+}
 .unique-name-financial-year{
     display: flex;
     align-items: center;
-    .fyear{
-        margin-left: 5px;
+    flex-wrap: wrap;
+    .branch-unique-name{
+        margin-right: 5px;
+        white-space: normal;
+        word-break: break-word;
     }
 }
 
@@ -833,11 +841,24 @@ ul.sub-list {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                    color: $nero !important;
+                    cursor: pointer;
                     &.dropdown-item.active-branch {
                         color: $chetwode-blue;
                         font-weight: bold;
 
                     }
+                    &:hover{
+                        color: $chetwode-blue !important;
+                    }
+                }
+                span{
+                    a{
+                        padding: 0;
+                    }
+                }
+                .branch-alias-name{
+                    width: 90%;
                 }
             }
             .go-to-company{
@@ -967,6 +988,7 @@ ul.sub-list {
             margin-bottom: 5px;
             display: flex;
             flex-direction: row;
+            flex-wrap: inherit;
             .hamburger-menu {
                 display: flex;
                 align-items: center;

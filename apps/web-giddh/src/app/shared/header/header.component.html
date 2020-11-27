@@ -240,11 +240,18 @@
                         </span>
                     </div>
                     <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
-                        <a [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName" (click)="switchToBranch(branch?.uniqueName, $event)" class="dropdown-item" tooltip="{{branch?.name}} ({{branch?.alias}})" href="javascript:void(0);">
-                            <span class="pr-3">{{branch?.name}} ({{branch?.alias}})</span>
-                            <i class="icon-branch-icon pull-right branch-icon-tooltip"  *ngIf="branch.parentBranch" tooltip="Branch"></i>
-                            <i class="icon-company-HO pull-right branch-icon-tooltip"  *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
+                        <a href="javascript:void(0);"  class="dropdown-item" [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName" (click)="switchToBranch(branch?.uniqueName, $event)">
+                            <span class="branch-alias-name">
+                                <a tooltip="{{branch?.name}} ({{branch?.alias}})" href="javascript:void(0);">
+                                    <span class="pr-3">{{branch?.name}} ({{branch?.alias}})</span>
+                                </a>
+                            </span>
+                            <span>
+                                <i class="icon-branch-icon pull-right branch-icon-tooltip" *ngIf="branch.parentBranch" tooltip="Branch"></i>
+                                <i class="icon-company-HO pull-right branch-icon-tooltip" *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
+                            </span>
                         </a>
+
                     </li>
                     <li class="divider dropdown-divider"></li>
                     <li *ngIf="currentBranch" (click)="goToCompany()" role="menuitem"><a class="dropdown-item go-to-company" href="javascript:void(0);">Go to company</a>
@@ -365,21 +372,21 @@
         <div class="container-fluid pd-t1 pd-b1">
             <div class="navbar-header">
                 <ul class="nav navbar-nav">
-                    <li class="hamburger-menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+                    <!-- <li class="hamburger-menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                         <button class="btn mr-0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
                             <i class="icon-bar"></i>
                         </button>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
-                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
+                        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="navigationEnd && !navigateToUser">
+                            {{selectedPage}}
+                            <span *ngIf="isLedgerAccSelected">A/</span>
+                            <span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span>
+                        </h4>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
-                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
-
-                    </li>
-                    <li>
-
-                    </li>
+                        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
+                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
+                                class="txt-lwc">c</span></h4>
+                    </li> -->
                 </ul>
 
                 <div class="giddh_logo">
@@ -409,10 +416,10 @@
                                     class="icon-back-arrow"></i></span>
                         </li>
                         <li class="hamburger-menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
+                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
-                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">
+                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="!navigationEnd && !navigateToUser">
                                 {{oldSelectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
                         </li>

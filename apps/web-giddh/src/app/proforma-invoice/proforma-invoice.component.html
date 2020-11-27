@@ -4,40 +4,42 @@
         <div class="cube2"></div>
     </div>
 </div>
-
 <div *ngIf="!showLoader">
     <!-- region page change menu -->
-    <div class="form-group mrB mr-t2 clearfix">
+    <div class="d-flex border-bottom mobile-view-padding">
+        <hamburger-menu></hamburger-menu>
+        <div class="form-group mrB clearfix">
 
-        <div class="col-12 col-sm-12 clearfix">
+            <div class="clearfix">
 
-            <div class="btn-group proformaSalesTime" dropdown>
+                <div class="btn-group proformaSalesTime" dropdown>
 
-                <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                    aria-controls="dropdown-basic">
+                    <button id="giddh-page-heading-link" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
+                        aria-controls="dropdown-basic">
 
-                    <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
-                        Cash
-                    </span>
+                            <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                                Cash
+                            </span>
 
-                    <small *ngIf="invoiceType==='estimates'"> (Beta) </small>
-                    <span class="caret" *ngIf="!isUpdateMode"></span>
-                </button>
+                        <small *ngIf="invoiceType==='estimates'"> (Beta) </small>
+                        <span class="caret" *ngIf="!isUpdateMode"></span>
+                    </button>
 
-                <ng-container *ngIf="!isUpdateMode">
-                    <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu"
-                        aria-labelledby="button-basic">
-                        <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)"
-                            *ngFor="let item of pageList">
-                            <a class="dropdown-item cp">{{ item.additional?.label }}</a>
-                        </li>
-                    </ul>
-                </ng-container>
+                    <ng-container *ngIf="!isUpdateMode">
+                        <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                            aria-labelledby="button-basic">
+                            <li role="menuitem" (click)="pageChanged(item.value, item.additional.label)"
+                                *ngFor="let item of pageList">
+                                <a class="dropdown-item cp">{{ item.additional?.label }}</a>
+                            </li>
+                        </ul>
+                    </ng-container>
+                </div>
+
             </div>
-
         </div>
-
     </div>
+
     <!-- endregion -->
 
     <!-- region update mode loader-->
@@ -64,7 +66,7 @@
 
             <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
 
-                <div class="clearfix wrapperCustomerTable  pdT2">
+                <div class="clearfix wrapper-customer-table  pt-15">
                     <!-- region customer and address section -->
                     <div class="customerInvoiceTable">
 
@@ -514,6 +516,7 @@
                                                                         [showBottomBorderOnly]="true"
                                                                         [options]="companyStatesSource"
                                                                         name="companyBillingDetailsStateCode"
+                                                                        [disabled]="(purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber.length >= 2) ? true : null"
                                                                         [(ngModel)]="purchaseBillCompany.billingDetails.state.code">
                                                                     </sales-sh-select>
                                                                 </div>
@@ -524,7 +527,7 @@
                                                                         [(ngModel)]="purchaseBillCompany.billingDetails.gstNumber"
                                                                         class="form-control input-custom"
                                                                         (blur)="autoFillCompanyShippingDetails()"
-                                                                        (change)="getStateCodeCompany('billingDetails', billingStateCompany)"
+                                                                        (change)="getStateCodeCompany('billingDetails')"
                                                                         placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                 </div>
                                                             </div>
@@ -569,6 +572,7 @@
                                                                             [showBottomBorderOnly]="true"
                                                                             [options]="companyStatesSource"
                                                                             name="companyShippingDetailsStateCode"
+                                                                            [disabled]="(purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber.length >= 2) ? true : null"
                                                                             [(ngModel)]="purchaseBillCompany.shippingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
@@ -578,7 +582,7 @@
                                                                             name="companyShippingDetailsTax"
                                                                             [(ngModel)]="purchaseBillCompany.shippingDetails.gstNumber"
                                                                             class="form-control input-custom"
-                                                                            (change)="getStateCodeCompany('shippingDetails', shippingStateCompany)"
+                                                                            (change)="getStateCodeCompany('shippingDetails')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
                                                                 </div>
@@ -639,6 +643,7 @@
 
                                             <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
+                                                    [fixedValue]="invoiceSelected?.label"
                                                     [forceClearReactive]="invoiceForceClearReactive$ | async" class="linking-dropdown"
                                                     [notFoundLink]="false" [(ngModel)]="selectedInvoice" name="invoiceLinking"
                                                     (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
@@ -1249,8 +1254,9 @@
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-amount" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div style="flex: 1;">
-                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
+                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true, $event)"
                                                     (click)="transactionAmountClicked(transaction)" placeholder="Amount"
+                                                    (input)="checkVoucherEntries()"
                                                     name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
                                                     decimalDigitsDirective
@@ -1272,7 +1278,7 @@
                                                     [discountAccountsDetails]="entry.discounts"
                                                     [discountSum]="entry.discountSum" [showHeaderText]="false"
                                                     (hideOtherPopups)="closeTaxControlPopup()"
-                                                    (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                                    (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                     [maskInput]="inputMaskFormat"
                                                     [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                     [suffixInput]="selectedSuffixForCurrency">
@@ -1330,6 +1336,7 @@
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                                     <input type="checkbox" class="other-taxes-checkobx"
                                                         [(ngModel)]="entry.isOtherTaxApplicable"
+                                                        (click)="tcsTdsIndex = entryIdx"
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                         id="entry.isOtherTaxApplicable_{{entryIdx}}"
@@ -2116,7 +2123,7 @@
                                                 <label class="card-label text-right">Rate</label>
                                                 <div style="flex: 1;">
                                                     <input type="text" [disabled]="!transaction.isStockTxn"
-                                                        (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
+                                                        (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                         placeholder="Rate" name="transaction.rate_{{entryIdx}}"
                                                         class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
                                                         [prefix]="invFormData.accountDetails.currencySymbol"
@@ -2145,7 +2152,8 @@
 
                                                 <label class="card-label text-right">Amount</label>
                                                 <div style="flex: 1;">
-                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
+                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true, $event)"
+                                                        (input)="checkVoucherEntries()"
                                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                                         [(ngModel)]="transaction.amount" decimalDigitsDirective
@@ -2172,7 +2180,7 @@
                                                     <discount-control-component #discountComponent [discountMenu]="false"
                                                         [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
                                                         [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
-                                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction, false, $event)"
                                                         [maskInput]="inputMaskFormat"
                                                         [prefixInput]="invFormData.accountDetails.currencySymbol"
                                                         [suffixInput]="selectedSuffixForCurrency">
@@ -2234,6 +2242,7 @@
                                                     <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                                         <input type="checkbox" class="other-taxes-checkobx"
                                                             [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
+                                                            (click)="tcsTdsIndex = entryIdx"
                                                             name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                             id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                             (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -2691,7 +2700,7 @@
     <!-- region models section -->
     <!-- open account aside -->
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' ||
-     asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'"></div>
+     asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'" (click)="closeAsideMenuStateForOtherTaxes()"></div>
 
     <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"

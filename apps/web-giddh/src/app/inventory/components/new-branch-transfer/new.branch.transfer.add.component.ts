@@ -316,8 +316,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public getTransportersList(): void {
-        this.transporterListDetails$ = this.store.select(p => p.ewaybillstate.TransporterListDetails).pipe(takeUntil(this.destroyed$));
-        this.transporterList$ = this.store.select(p => p.ewaybillstate.TransporterList).pipe(takeUntil(this.destroyed$));
+        this.transporterListDetails$ = this.store.pipe(select(p => p.ewaybillstate.TransporterListDetails), takeUntil(this.destroyed$));
+        this.transporterList$ = this.store.pipe(select(p => p.ewaybillstate.TransporterList), takeUntil(this.destroyed$));
 
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
@@ -337,10 +337,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             }
         });
 
-        this.isGenarateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInProcess).pipe(takeUntil(this.destroyed$));
-        this.updateTransporterInProcess$ = this.store.select(p => p.ewaybillstate.updateTransporterInProcess).pipe(takeUntil(this.destroyed$));
-        this.updateTransporterSuccess$ = this.store.select(p => p.ewaybillstate.updateTransporterSuccess).pipe(takeUntil(this.destroyed$));
-        this.isGenarateTransporterSuccessfully$ = this.store.select(p => p.ewaybillstate.isAddnewTransporterInSuccess).pipe(takeUntil(this.destroyed$));
+        this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
+        this.updateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.updateTransporterInProcess), takeUntil(this.destroyed$));
+        this.updateTransporterSuccess$ = this.store.pipe(select(p => p.ewaybillstate.updateTransporterSuccess), takeUntil(this.destroyed$));
+        this.isGenarateTransporterSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$));
 
         this.updateTransporterSuccess$.subscribe(s => {
             if (s) {
@@ -348,7 +348,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             }
         });
 
-        this.store.select(state => state.ewaybillstate.isAddnewTransporterInSuccess).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+        this.store.pipe(select(state => state.ewaybillstate.isAddnewTransporterInSuccess), takeUntil(this.destroyed$)).subscribe(p => {
             if (p) {
                 this.clearTransportForm();
             }
@@ -442,7 +442,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
         data.forEach(d => {
             if (d && !d.isCompany) {
-                branches.push(new LinkedStocksVM(d.name, d.uniqueName));
+                branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias));
                 if (d.warehouses.length) {
                     this.senderWarehouses[d.uniqueName] = [];
                     this.destinationWarehouses[d.uniqueName] = [];
@@ -489,7 +489,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (branches) {
                 if (branches.results.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(b => ({
-                        label: b.name,
+                        label: `${b.name} ${b.alias ? '(' + b.alias + ')' : ''}`,
                         value: b.uniqueName,
                         additional: b
                     }));

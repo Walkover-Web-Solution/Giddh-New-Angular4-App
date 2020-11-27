@@ -10,6 +10,7 @@
                 (click)="showExportLedgerModal()">Export</a></li>
     </ul>
 </div>
+<hamburger-menu [pageHeading]="(lc?.activeAccount?.name) ? ('Ledger - ' + lc?.activeAccount?.name) + ' A/c' : ''"></hamburger-menu>
 <section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
     <!-- region ledger table-->
     <div class="ledg-head transactions-page mt-15 pos-rel">
@@ -526,17 +527,17 @@
         <!-- endregion -->
         <!-- region account table-->
         <!-- Need to make this code correctly working -->
-        <table class="col-xs-12 ledger-head mr-t1 width-100"
+        <table class="col-sm-12 ledger-head mr-t1 width-100"
             *ngIf="!isMobileScreen || (isMobileScreen && visibleTransactionTypeMobile !== 'all')">
             <thead>
-                <tr>
+                <tr class="row">
                     <th [ngClass]="(Shown && !isMobileScreen) || (isMobileScreen && visibleTransactionTypeMobile === 'debit') ? 'active' : ''"
-                        class="col-xs-6 hidden-xs sticky-header">
+                        class="col-sm-6 hidden-xs sticky-header pr-0">
                         <b> {{lc.ledgerUnderStandingObj.text.dr}}</b>
                         <span class="dr-cr-category pull-right text-gray">Dr</span>
                     </th>
                     <th [ngClass]="(!Shown && !isMobileScreen) || (isMobileScreen && visibleTransactionTypeMobile === 'credit') ? 'active' : ''"
-                        class="col-xs-6 hidden-xs sticky-header">
+                        class="col-sm-6 hidden-xs sticky-header pl-0">
                         <b> {{lc.ledgerUnderStandingObj.text.cr}}</b>
                         <span class="dr-cr-category pull-right text-gray">Cr</span>
                     </th>
@@ -628,11 +629,11 @@
                 <table class="width100 h-table table-head hidden-xs">
                     <thead>
                         <tr class="t-h-bg1 row">
-                            <th class="col-xs-3 col-md-3 col-lg-3">
+                            <th class="col-xs-3 col-md-3 col-lg-3" width="25%">
                                 <span class="cp">Date</span>
                             </th>
-                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
-                            <th class="col-xs-4 col-md-3 col-lg-3 text-right">Amount</th>
+                            <th class="col-xs-5 col-md-6 col-lg-6" width="50%">Particular</th>
+                            <th class="col-xs-4 col-md-3 col-lg-3 text-right" width="25%">Amount</th>
                         </tr>
                     </thead>
                 </table>
@@ -901,11 +902,11 @@
                 <table class="width100 h-table hidden-xs">
                     <thead>
                         <tr class="t-h-bg1 row">
-                            <th class="col-xs-3 col-md-3 col-lg-3">
+                            <th class="col-xs-3 col-md-3 col-lg-3" width="25%">
                                 <span class="cp">Date</span>
                             </th>
-                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
-                            <th class="col-xs-4 col-md-3 col-lg-3 text-right">Amount</th>
+                            <th class="col-xs-5 col-md-6 col-lg-6" width="50%">Particular</th>
+                            <th class="col-xs-4 col-md-3 col-lg-3 text-right" width="25%">Amount</th>
                         </tr>
                     </thead>
                 </table>
@@ -1314,7 +1315,7 @@
 <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable">
     <div class="container">
         <section class="ledger-stat mrT3"
-            *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
+            *ngIf="!showLoader">
 
             <div class="row">
                 <div class="col-sm-3 col-xs-12 stat-block">
@@ -1450,8 +1451,7 @@
 
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<ledger-aside-pane [class]="asideMenuState" *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState"
-    (closeAsideEvent)="toggleAsidePane()">
+<ledger-aside-pane [class]="asideMenuState" *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" [keyboardShortcut]="'esc'" (onShortcutPress)="toggleAsidePane()" (closeAsideEvent)="toggleAsidePane()">
 </ledger-aside-pane>
 <!-- aside menu section -->
 

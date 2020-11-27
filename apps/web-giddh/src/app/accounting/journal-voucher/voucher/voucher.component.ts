@@ -221,6 +221,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public baseCurrencySymbol: string;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(
         private _accountService: AccountService,
@@ -252,7 +254,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
         this.requestObj.transactions = [];
-        this._keyboardService.keyInformation.subscribe((key) => {
+        this._keyboardService.keyInformation.pipe(takeUntil(this.destroyed$)).subscribe((key) => {
             this.watchKeyboardEvent(key);
         });
         this.tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
@@ -263,7 +265,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 return false;
             }
             return true;
-        })).subscribe((data) => {
+        }), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
                 this.currentVoucher = data.page;
                 this.setCurrentPageTitle(this.currentVoucher);
@@ -295,7 +297,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
             }
         });
-        this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
+        this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -334,13 +336,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 return false;
             }
             return true;
-        })).subscribe((data) => {
+        }), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
                 this.requestObj = cloneDeep(data);
             }
         });
 
-        this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$)).subscribe((s: boolean) => {
+        this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
             if (s) {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.refreshEntry();
@@ -352,7 +354,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.refreshEntry();
 
-        this.tallyModuleService.filteredAccounts.subscribe((accounts) => {
+        this.tallyModuleService.filteredAccounts.pipe(takeUntil(this.destroyed$)).subscribe((accounts) => {
             if (accounts) {
                 this.allAccounts = accounts;
                 this.createAccountsList();
@@ -1227,7 +1229,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let componentRef = viewContainerRef.createComponent(componentFactory);
         let componentInstance = componentRef.instance as QuickAccountComponent;
         componentInstance.needAutoFocus = true;
-        componentInstance.closeQuickAccountModal.subscribe((a) => {
+        componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideQuickAccountModal();
             componentInstance.newAccountForm.reset();
             componentInstance.destroyed$.next(true);
@@ -1235,7 +1237,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.isNoAccFound = false;
             this.dateField.nativeElement.focus();
         });
-        componentInstance.isQuickAccountCreatedSuccessfully$.subscribe((status: boolean) => {
+        componentInstance.isQuickAccountCreatedSuccessfully$.pipe(takeUntil(this.destroyed$)).subscribe((status: boolean) => {
             if (status) {
                 this.refreshAccountListData(true);
             }
@@ -1345,7 +1347,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     private refreshAccountListData(needToFocusAccountInputField: boolean = false) {
-        this.store.select(p => p.session.companyUniqueName).subscribe(a => {
+        this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success') {

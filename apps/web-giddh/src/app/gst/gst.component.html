@@ -1,7 +1,8 @@
 <!-- filter area-->
 <ng-container>
+    <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
     <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
-        <i class="text-middle" style="padding: 0 2%;">Please add GSTIN in company setting to view report.</i>
+        <i class="text-middle" style="padding: 0 2%;">Please add GSTIN to your default address in order to view report.</i>
     </div>
 
     <div *ngIf="taxes?.length" class="row mb-3 mt-3 ml-3">
@@ -39,8 +40,8 @@
                                     {{ moment(selectedMonth).format('MMMM YYYY') }}
                                 </ng-container>
                                 <ng-container *ngIf="!isMonthSelected">
-                                    {{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
-                                    - {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                    {{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
+                                    - {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}}
                                 </ng-container>
                                 <span class="caret"></span>
                             </button>
@@ -175,8 +176,8 @@
                                         ({{ moment(selectedMonth).format('MMMM YYYY') }})
                                     </ng-container>
                                     <ng-container *ngIf="!isMonthSelected">
-                                        ({{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
-                                        - {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                                        ({{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
+                                        - {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}})
                                     </ng-container>
 
                                 </b> &nbsp;&nbsp;
@@ -283,11 +284,10 @@
                                         ({{ moment(selectedMonth).format('MMMM YYYY') }})
                                     </ng-container>
                                     <ng-container *ngIf="!isMonthSelected">
-                                        ({{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
-                                        - {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                                        ({{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
+                                        - {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}})
                                     </ng-container>
                                 </b>
-                                <!---->
                             </div>
                             <p class="text-muted"> Details of inward supplies of goods and services </p>
                         </div>

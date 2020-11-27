@@ -91,7 +91,39 @@ ul#dropdown-nested li .caret {
         margin-right: 15px;
     }
 }
+.report-breadcrum{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 7px 0px 10px 36px !important;
+    border-bottom: 1px solid $gainsboro;
+    .nav-report{
+        li{
+            font-family: 'opensans-semibold';
+            font-size: 20px;
+            a{
+                color: $midnight-blue;
+            }
+        }
+    }
+}
 @media (max-width: 767px) {
+    .report-breadcrum{
+        position: static !important;
+        padding-left: 15px !important;
+        padding-top: 0 !important;
+        .nav-report{
+            li{
+                font-size: 16px;
+            }
+        }
+        .custom-month-select{
+            .btn{
+                font-size: 16px;
+            }
+        }
+    }
     .xs-pr-0 {
         padding-right: 0px !important;
     }

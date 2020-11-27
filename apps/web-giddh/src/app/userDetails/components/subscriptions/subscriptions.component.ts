@@ -69,10 +69,12 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public allAssociatedCompanies: CompanyResponse[] = [];
     /* This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
+        this.companies$ = this.store.pipe(select(cmp => cmp.session.companies), takeUntil(this.destroyed$));
         this.activeCompanyUniqueName$ = this.store.pipe(select(cmp => cmp.session.companyUniqueName), takeUntil(this.destroyed$));
     }
 
@@ -113,7 +115,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             if(userSubscriptions && userSubscriptions.length > 0) {
                 userSubscriptions.forEach(userSubscription => {
                     if(userSubscription.createdAt) {
-                        userSubscription.createdAt = moment(userSubscription.createdAt, "DD-MM-YYYY HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                        userSubscription.createdAt = moment(userSubscription.createdAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
 
                     this.subscriptions.push(userSubscription);
@@ -447,15 +449,13 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
 
     // public getSubscriptionList() {
     //   this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
-    //   this.store.select(s =>  s.subscriptions.subscriptions)
-    //     .pipe(takeUntil(this.destroyed$))
+    //   this.store.pipe(select(s =>  s.subscriptions.subscriptions), takeUntil(this.destroyed$))
     //     .subscribe(s => {
     //       if (s && s.length) {
     //         this.subscriptions = s;
     //         this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesList(s && s[0]));
     //         this.store.dispatch(this._subscriptionsActions.SubscribedUserTransactions(s && s[0]));
-    //         this.store.select(s =>  s.subscriptions.transactions)
-    //           .pipe(takeUntil(this.destroyed$))
+    //         this.store.pipe(select(s =>  s.subscriptions.transactions), takeUntil(this.destroyed$))
     //           .subscribe(s => this.transactions = s);
     //       }
     //     });

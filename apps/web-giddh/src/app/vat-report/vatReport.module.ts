@@ -16,6 +16,7 @@ import { VatReportTransactionsComponent } from './transactions/vatReportTransact
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { InvoiceModule } from '../invoice/invoice.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         ModalModule,
         ElementViewChildModule,
         InvoiceModule,
-        ShSelectModule
+        ShSelectModule,
+        SharedModule
     ],
     exports: [
         VatReportRoutingModule

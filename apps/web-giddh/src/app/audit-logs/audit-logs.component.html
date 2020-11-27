@@ -1,5 +1,6 @@
+<hamburger-menu [pageHeading]="'Audit Log'" *ngIf="!isNewVersion"></hamburger-menu>
+<hamburger-menu [pageHeading]="'Audit-Log > New'" *ngIf="isNewVersion"></hamburger-menu>
 <div class="container-fluid">
-
     <div class="row">
         <div class="col-12 col-md-12 audit-log-sidebar" [ngClass]="!isNewVersion ? 'col-lg-3' : 'col-lg-12'">
             <!--sidebar-->

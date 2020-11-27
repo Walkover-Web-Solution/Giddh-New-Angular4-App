@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AppState } from '../../../../store';
-import { Observable, ReplaySubject, BehaviorSubject, combineLatest } from 'rxjs';
+import { Observable, ReplaySubject, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from '../../../../lodash-optimized';
@@ -15,7 +15,6 @@ import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { createSelector } from 'reselect';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { digitsOnly } from '../../../helpers';
@@ -23,12 +22,10 @@ import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
 import { cloneDeep } from '../../../../lodash-optimized';
 import { LedgerDiscountComponent } from '../../../../ledger/components/ledgerDiscount/ledgerDiscount.component';
 import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
-import { LedgerService } from '../../../../services/ledger.service';
-import { StylesCompileDependency } from '@angular/compiler';
-import { style } from '@angular/animations';
 import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
+
 @Component({
     selector: 'group-update',
     templateUrl: 'group-update.component.html',
@@ -87,20 +84,22 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public discountList: any[] = [];
     public discountList$: Observable<IDiscountList[]>;
     public selectedDiscounts: any[] = [];
-
-
+    /** To check applied taxes modified  */
+    public isTaxesSaveDisable$: Observable<boolean> = of(true);
+    /** To check applied discounts modified  */
+    public isDiscountSaveDisable$: Observable<boolean> = of(true);
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions, private _ledgerService: LedgerService, private settingsDiscountAction: SettingsDiscountActions ) {
-        this.groupList$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
-        this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).pipe(takeUntil(this.destroyed$));
-        this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).pipe(takeUntil(this.destroyed$));
-        this.showEditGroup$ = this.store.select(state => state.groupwithaccounts.showEditGroup).pipe(takeUntil(this.destroyed$));
-        this.activeGroupSelected$ = this.store.select(state => {
+        private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions, private settingsDiscountAction: SettingsDiscountActions ) {
+        this.groupList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
+        this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
+        this.isGroupNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isGroupNameAvailable), takeUntil(this.destroyed$));
+        this.showEditGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showEditGroup), takeUntil(this.destroyed$));
+        this.activeGroupSelected$ = this.store.pipe(select(state => {
             if (state.groupwithaccounts.activeAccount) {
                 if (state.groupwithaccounts.activeAccountTaxHierarchy) {
                     return _.difference(state.groupwithaccounts.activeAccountTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
@@ -112,12 +111,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             }
 
             return [];
-        }).pipe(takeUntil(this.destroyed$));
-        this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).pipe(takeUntil(this.destroyed$));
-        this.isUpdateGroupInProcess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupInProcess).pipe(takeUntil(this.destroyed$));
-        this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
+        this.activeGroupTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
+        this.isUpdateGroupInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupInProcess), takeUntil(this.destroyed$));
+        this.isUpdateGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$));
         this.discountList$ = this.store.pipe(select(state => state.settings.discount.discountList),takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {
@@ -232,7 +230,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        this.isTaxableGroup$ = this.store.select(state => {
+        this.isTaxableGroup$ = this.store.pipe(select(state => {
             let result: boolean = false;
             if (state.groupwithaccounts.groupswithaccounts && state.groupwithaccounts.activeGroup) {
                 if (state.groupwithaccounts.activeAccount) {
@@ -248,16 +246,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (a) {
                     this.amountChanged();
                     this.calculateTotal();
-                    //this.calculateCompoundTotal();
                 }
             });
-
-
-
-
-
-
-        });
+        }), takeUntil(this.destroyed$));
 
         this.activeGroupSelected$.subscribe((p) => {
             this.taxGroupForm.patchValue({ taxes: p });
@@ -278,21 +269,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
     }
-    public calculateTotal() {
 
-        if (this.currentTxn && this.currentTxn.selectedAccount) {
-            if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
-                if (this.currentTxn.inventory.unit.rate) {
-                    // this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
-                }
-            }
-        }
+    public calculateTotal() {
         if (this.currentTxn && this.currentTxn.amount) {
             let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
             this.totalForTax = total;
             this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
         }
-        //this.calculateCompoundTotal();
     }
 
     public amountChanged() {
@@ -311,7 +294,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             return;
         } else {
             this.isAmountFirst = true;
-            // this.currentTxn.isInclusiveTax = false;
         }
     }
 
@@ -600,6 +582,27 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.store.dispatch(this.settingsDiscountAction.GetDiscount());
             }
         });
+    }
+
+    /**
+     * To check taxes list updated
+     *
+     * @param {*} event
+     * @memberof GroupUpdateComponent
+     */
+    public taxesSelected(event: any): void {
+        if (event) {
+            this.isTaxesSaveDisable$ = of(false);
+        }
+    }
+
+    /**
+     * To check discount list updated
+     *
+     * @memberof GroupUpdateComponent
+     */
+    public discountSelected(): void {
+        this.isDiscountSaveDisable$ = of(false);
     }
 
 }

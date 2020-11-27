@@ -121,11 +121,11 @@ export class AllModulesComponent implements OnInit, OnDestroy {
         let viewContainerRef = this.addmanage.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.subscribe((a) => {
+        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideManageGroupsModal();
             viewContainerRef.remove();
         });
-        this.manageGroupsAccountsModal.onShown.subscribe((a => {
+        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
             (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
             (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
         }));
@@ -137,7 +137,7 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @memberof AllModulesComponent
      */
     public hideManageGroupsModal(): void {
-        this.store.select(company => company.session.lastState).pipe(take(1)).subscribe((state: string) => {
+        this.store.pipe(select(company => company.session.lastState), take(1)).subscribe((state: string) => {
             if (state && (state.indexOf('ledger/') > -1 || state.indexOf('settings') > -1)) {
                 this.store.dispatch(this.generalActions.addAndManageClosed());
             }
@@ -271,7 +271,12 @@ export class AllModulesComponent implements OnInit, OnDestroy {
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen, this.generalService.currentOrganizationType === OrganizationType.Company);;
+            let branches = [];
+            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+                branches = response || [];
+            });
+            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
+                this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
         }
     }
 }
