@@ -8,6 +8,7 @@
         flex-wrap: wrap !important;
         border-bottom: 1px solid #ccc;
         width:100% !important;
+        max-width: 580px;
         .searchEle {
             outline: none;
             border: none;
@@ -201,6 +202,7 @@
         .search-wrapper {
             padding: 1rem 2rem 1rem 3.9rem;
             margin-bottom: 10px;
+            max-width: 100%;
             .searh-ico {
                 left: -3px;
             }
