@@ -1,5 +1,5 @@
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -12,8 +12,10 @@ import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.a
 import { createSelector } from 'reselect';
 import { Observable, ReplaySubject } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'tb-pl-bs-filter',  // <home></home>
@@ -31,46 +33,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public accountSearchControl: FormControl = new FormControl();
     public tags$: Observable<TagRequest[]>;
     public selectedTag: string;
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
-            ],
-            'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
-            ],
-            'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     @Input() public tbExportPdf: boolean = false;
     @Input() public tbExportXLS: boolean = false;
     @Input() public tbExportCsv: boolean = false;
@@ -100,13 +62,35 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
 
     public universalDate$: Observable<any>;
     public newTagForm: FormGroup;
+     /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Moment object */
+    public moment = moment;
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
 
     constructor(private fb: FormBuilder,
                 private cd: ChangeDetectorRef,
                 private store: Store<AppState>,
-                private _settingsTagActions: SettingsTagActions) {
+                private _settingsTagActions: SettingsTagActions, private generalService: GeneralService, private modalService: BsModalService) {
         this.filterForm = this.fb.group({
             from: [''],
             to: [''],
@@ -142,13 +126,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
         });
 
         if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
-            this.datePickerOptions = {
-                ...this.datePickerOptions, startDate: moment(value.activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT),
-                endDate: moment(value.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT)
-            };
-
-            // this.assignStartAndEndDateForDateRangePicker(value.activeFinancialYear.financialYearStarts, value.activeFinancialYear.financialYearEnds);
-
             this.filterForm.patchValue({
                 to: value.activeFinancialYear.financialYearEnds,
                 from: value.activeFinancialYear.financialYearStarts,
@@ -189,8 +166,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
                     this.setCurrentFY();
                 } else {
                     this.universalDateICurrent = false;
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: date[0], endDate: date[1], chosenLabel: date[2] };
-
                     // assign dates
                     // this.assignStartAndEndDateForDateRangePicker(date[0], date[1]);
 
@@ -210,6 +185,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
                 if (!this.cd['destroyed']) {
                     this.cd.detectChanges();
                 }
+                /** To set local datepicker */
+                let universalDate = _.cloneDeep(a);
+                this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
+                this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.filterData();
             }
         });
@@ -222,10 +203,11 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             if(activeCompany && this.universalDateICurrent) {
                 let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions,
-                        startDate: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'), endDate: moment(), chosenLabel: undefined
-                    };
+                    // commented for later use
+                    // this.datePickerOptions = {
+                    //     ...this.datePickerOptions,
+                    //     startDate: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'), endDate: moment(), chosenLabel: undefined
+                    // };
 
                     // assign dates
                     this.filterForm.patchValue({
@@ -332,8 +314,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
                 this.selectFinancialYearOption(this.financialOptions[0]);
             } else {
                 this.filterForm.patchValue({
-                    from: moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT),
-                    to: moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT)
+                    from: moment(this.datePickerOption.startDate).format(GIDDH_DATE_FORMAT),
+                    to: moment(this.datePickerOption.endDate).format(GIDDH_DATE_FORMAT)
                 });
             }
         }
@@ -351,5 +333,58 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             startDate: moment(from, GIDDH_DATE_FORMAT),
             endDate: moment(to, GIDDH_DATE_FORMAT)
         });
+    }
+
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof TbPlBsFilterComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof TbPlBsFilterComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof TbPlBsFilterComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.filterForm.controls['from'].setValue(this.fromDate);
+            this.filterForm.controls['to'].setValue(this.toDate);
+            this.filterData();
+        }
     }
 }
