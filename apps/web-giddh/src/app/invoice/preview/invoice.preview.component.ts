@@ -1349,7 +1349,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.to = this.invoiceSearchRequest.to;
         }
         this.lastListingFilters = request;
-        
+
         if(this.invoiceSearchRequest && this.invoiceSearchRequest.q) {
             request.q = this.invoiceSearchRequest.q;
         }

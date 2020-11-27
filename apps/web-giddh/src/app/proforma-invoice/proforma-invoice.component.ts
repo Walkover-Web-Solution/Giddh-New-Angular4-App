@@ -562,15 +562,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public accountAssignedApplicableDiscounts: any[] = [];
     /** Stores the current invoice selected */
     public invoiceSelected: any;
-    /** Stores the current index of entry whose TCS/TDS are entered */
     public tcsTdsIndex: number = 0;
 
     /** this is showing pending sales page **/
     public isPendingSales: boolean = false;
     /**
-     * Returns true, if Purchase Record creation record is broken
-     *
-     * @readonly
      * @private
      * @type {boolean}
      * @memberof ProformaInvoiceComponent
