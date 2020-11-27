@@ -8,6 +8,7 @@
         flex-wrap: wrap !important;
         border-bottom: 1px solid #ccc;
         width:100% !important;
+        max-width: 580px;
         .searchEle {
             outline: none;
             border: none;
@@ -120,11 +121,11 @@
             outline: none;
         }
         .item {
-            height: 50px;
-            overflow: hidden;
+            min-height: 50px;
+            overflow: initial;
             padding: 0 24px;
             a {
-                height: 50px;
+                min-height: 50px;
             }
             .item-icon {
                 color: #979797;
@@ -142,6 +143,9 @@
                 font-size: 14px;
                 color: #333333;
                 text-transform: capitalize;
+                .width-60{
+                    width: 60%;
+                }
                 .smlP {
                     margin: 0;
                     width: 320px;
@@ -159,6 +163,8 @@
                     right: 0;
                     top: 10px;
                     text-transform: initial;
+                    width: 30%;
+                    word-break: break-word;
                 }
                 .brdcrmb {
                     max-width: 150px;
@@ -201,6 +207,7 @@
         .search-wrapper {
             padding: 1rem 2rem 1rem 3.9rem;
             margin-bottom: 10px;
+            max-width: 100%;
             .searh-ico {
                 left: -3px;
             }
