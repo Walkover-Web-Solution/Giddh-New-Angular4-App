@@ -4,7 +4,7 @@ import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ToasterService } from '../../services/toaster.service';
 import { takeUntil } from "rxjs/operators";
-import { createSelector, select, Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -117,24 +117,11 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
-                this.filterForm.get('filterCompany').patchValue(selectedCmp.uniqueName);
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.filterForm.get('filterCompany').patchValue(activeCompany.uniqueName);
             }
         });
-
     }
 
     public ngOnInit() {
@@ -142,7 +129,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.paginationRequest.sortBy = '';
         this.paginationRequest.page = 1;
         this.paginationRequest.count = PAGINATION_LIMIT;
-
 
         this.companies$.subscribe(a => {
             if (a) {

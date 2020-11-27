@@ -43,7 +43,6 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
 	@Output() public transferType: EventEmitter<boolean> = new EventEmitter(true);
 	@Input() public selectedAsideView: string = 'mainview';
 	public isLoading: boolean;
-	public currentCompany: CompanyResponse;
 	public entrySuccess$: Observable<boolean>;
 	public transferEntrySuccess$: Observable<boolean>;
 	public isSaveClicked: boolean = false;
@@ -89,24 +88,6 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
 				this.branches$ = observableOf(null);
 			}
 		})), takeUntil(this.destroyed$)).subscribe();
-
-		// tslint:disable-next-line:no-shadowed-variable
-		this._store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-			if (!companies) {
-				return;
-			}
-			return companies.find(cmp => {
-				if (cmp && cmp.uniqueName) {
-					return cmp.uniqueName === uniqueName;
-				} else {
-					return false;
-				}
-			});
-		})), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-			if (selectedCmp) {
-				this.currentCompany = selectedCmp;
-			}
-		});
 	}
 
 	public onCancel() {

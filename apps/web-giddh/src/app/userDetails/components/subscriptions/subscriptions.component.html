@@ -229,7 +229,7 @@
                                                     <div class="d-flex associated-company-name">
                                                         <p>
                                                             <img src="assets/images/blue-check.svg" class="mr-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
-                                                            {{company.name}} ({{company.alias}})
+                                                            {{company.name}} {{(company.alias) ? "(" + company.alias + ")" : ""}}
                                                         </p>
                                                         <p class="font-12 mt-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
                                                     </div>

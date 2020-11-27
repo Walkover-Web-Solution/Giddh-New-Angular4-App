@@ -1719,11 +1719,6 @@ span.eligible-ITC {
     .show-on-small-screen {
         padding: 0 15px;
         display: block;
-        p{
-            position: absolute;
-            right: 15px;
-            top: -63px;
-        }
     }
         .balance-due-absolute {
         display: none;
@@ -1779,6 +1774,9 @@ span.eligible-ITC {
 }
 
 @media (max-width: 768px) {
+    .wrapper-customer-table {
+        padding-top: 0 !important;
+    }
     .search-arrow-image {
         left: 143px;
     }
@@ -1788,13 +1786,7 @@ span.eligible-ITC {
         right: 0;
         float: none;
     }
-    .show-on-small-screen {
-        p{
-            top: -56px;
-        }
-    }
 }
-
 @media (max-width: 767px) {
     .mobile-view-padding{
         padding:0 15px;
@@ -1813,10 +1805,6 @@ span.eligible-ITC {
 
     .sales-proforma-estimate.customer-invoice-form::before {
         top: 135px;
-    }
-
-    .wrapper-customer-table {
-        padding-top: 0;
     }
     .search-arrow-image {
         left: 15px;
