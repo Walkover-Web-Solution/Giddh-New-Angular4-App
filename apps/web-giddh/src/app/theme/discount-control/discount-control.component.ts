@@ -136,8 +136,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
-        this.defaultDiscount.amount = parseFloat(String(event.target.value).replace(',',''));
-        this.defaultDiscount.discountValue = parseFloat(String(event.target.value).replace(',',''));
+        this.defaultDiscount.amount = parseFloat(String(event.target.value).replace(/,/g,''));
+        this.defaultDiscount.discountValue = parseFloat(String(event.target.value).replace(/,/g,''));
         this.defaultDiscount.discountType = type;
 
         this.change();
