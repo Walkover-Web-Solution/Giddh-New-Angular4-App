@@ -77,6 +77,7 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
+import { PermissionService } from '../../services/permission.service';
 
 @Component({
     selector: 'app-header',
@@ -97,6 +98,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideHelpSupportMenuState: string = 'out';
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
+    /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
@@ -247,6 +249,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public macAppVersion: string;
     /** This will hold the time when last session renewal was checked or updated */
     public lastSessionRenewalTime: any;
+    /** All modules data with routing shared with user */
+    public allModulesList = [];
 
     /**
      * Returns whether the account section needs to be displayed or not
@@ -298,6 +302,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsBranchAction: SettingsBranchActions,
         private accountsAction: AccountsAction,
         private ledgerAction: LedgerActions,
+        private permissionService: PermissionService,
         public location: Location
     ) {
         // Reset old stored application date
@@ -464,6 +469,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isMobileSite = s;
             this.menuItemsFromIndexDB = DEFAULT_MENUS;
             this.accountItemsFromIndexDB = DEFAULT_AC;
+            this.getAllMenusModules();
         });
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
@@ -490,7 +496,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.getCurrentCompanyData();
-
+        this.getAllMenusModules();
         this._breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -1086,7 +1092,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.activeCompanyForDb.uniqueName) {
             return;
         }
-
         if (dbResult) {
 
             this.menuItemsFromIndexDB = dbResult.aidata.menus;
@@ -1119,6 +1124,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
             }
         }
+        this.prepareMenuListByAccessPermission();
     }
 
     public showManageGroupsModal() {
@@ -2070,6 +2076,38 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 } else {
                     this.lastSessionRenewalTime = moment();
                 }
+            }
+        });
+    }
+
+    /**
+     * To prepare menu list
+     *
+     * @memberof HeaderComponent
+     */
+    public prepareMenuListByAccessPermission(): void {
+        if (this.allModulesList.length) {
+            let sharedMenus = [];
+            let routerLinks = [];
+            this.allModulesList.forEach(item => {
+                sharedMenus.push(...item.items);
+            });
+            sharedMenus.forEach(element => {
+                routerLinks.push(element.routerLink);
+            });
+            this.menuItemsFromIndexDB = this.menuItemsFromIndexDB.filter(item => routerLinks.includes(item.uniqueName));
+        }
+    }
+
+    /**
+     * To get all shared modules list
+     *
+     * @memberof HeaderComponent
+     */
+    public getAllMenusModules() {
+        this.permissionService.getSharedAllModules().subscribe(response => {
+            if (response && response.status === 'success') {
+                this.allModulesList = response.body;
             }
         });
     }

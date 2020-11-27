@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AppState } from '../../../../store';
-import { Observable, ReplaySubject, BehaviorSubject, combineLatest } from 'rxjs';
+import { Observable, ReplaySubject, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from '../../../../lodash-optimized';
@@ -84,6 +84,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public discountList: any[] = [];
     public discountList$: Observable<IDiscountList[]>;
     public selectedDiscounts: any[] = [];
+    /** To check applied taxes modified  */
+    public isTaxesSaveDisable$: Observable<boolean> = of(true);
+    /** To check applied discounts modified  */
+    public isDiscountSaveDisable$: Observable<boolean> = of(true);
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -578,6 +582,27 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.store.dispatch(this.settingsDiscountAction.GetDiscount());
             }
         });
+    }
+
+    /**
+     * To check taxes list updated
+     *
+     * @param {*} event
+     * @memberof GroupUpdateComponent
+     */
+    public taxesSelected(event: any): void {
+        if (event) {
+            this.isTaxesSaveDisable$ = of(false);
+        }
+    }
+
+    /**
+     * To check discount list updated
+     *
+     * @memberof GroupUpdateComponent
+     */
+    public discountSelected(): void {
+        this.isDiscountSaveDisable$ = of(false);
     }
 
 }

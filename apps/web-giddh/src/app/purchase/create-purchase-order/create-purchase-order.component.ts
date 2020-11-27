@@ -1133,10 +1133,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * get state code using Tax number to prefill state
      *
      * @param {string} type billingDetails || shipping
-     * @param {SalesShSelectComponent} statesEle state input box
      * @memberof CreatePurchaseOrderComponent
      */
-    public getStateCode(type: string, statesEle: SalesShSelectComponent, addressType: string): void {
+    public getStateCode(type: string, addressType: string): void {
         let gstVal;
         if (addressType === "vendor") {
             gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
@@ -1164,9 +1163,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
                 this.toaster.clearAllToaster();
             }
-            statesEle.disabled = true;
         } else {
-            statesEle.disabled = false;
             if (addressType === "vendor") {
                 this.purchaseOrder.account[type].stateCode = null;
                 this.purchaseOrder.account[type].state.code = null;

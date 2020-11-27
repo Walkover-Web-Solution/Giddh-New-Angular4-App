@@ -689,7 +689,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
         this.addStockForm.reset();
         this.companyTaxesList$.pipe(map((item) => {
-           return item.map(tax=> tax.isChecked = false);
+            return item.map(tax => {
+                if (tax) {
+                    tax.isChecked = false;
+                    tax.isDisabled = false;
+                }
+                return tax;
+            });
         }), takeUntil(this.destroyed$)).subscribe(res=>{
               return res;
         });
