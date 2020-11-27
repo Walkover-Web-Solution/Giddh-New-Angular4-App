@@ -1674,7 +1674,7 @@ span.eligible-ITC {
     .invoice-date-due-date {
         display: none;
     }
-    .wrapperCustomerTable .col-sm-2 {
+    .wrapper-customer-table .col-sm-2 {
         padding-right: 0;
     }
     .cashInvoiceInput {
@@ -1706,11 +1706,6 @@ span.eligible-ITC {
     .show-on-small-screen {
         padding: 0 15px;
         display: block;
-        p{
-            position: absolute;
-            right: 15px;
-            top: -63px;
-        }
     }
         .balance-due-absolute {
         display: none;
@@ -1766,6 +1761,9 @@ span.eligible-ITC {
 }
 
 @media (max-width: 768px) {
+    .wrapper-customer-table {
+        padding-top: 0 !important;
+    }
     .search-arrow-image {
         left: 143px;
     }
@@ -1775,9 +1773,7 @@ span.eligible-ITC {
         right: 0;
         float: none;
     }
-
 }
-
 @media (max-width: 767px) {
     .mobile-view-padding{
         padding:0 15px;
@@ -1796,10 +1792,6 @@ span.eligible-ITC {
 
     .slaesPrEsti.customer-invoice-form::before {
         top: 135px;
-    }
-
-    .wrapperCustomerTable {
-        padding-top: 0;
     }
     .search-arrow-image {
         left: 15px;
