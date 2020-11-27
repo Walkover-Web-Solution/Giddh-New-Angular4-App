@@ -175,8 +175,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             }
             return;
         } else {
-            let companies = null;
-            this.companies$.pipe(take(1)).subscribe(c => companies = c);
             this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
             this.company.isBranch = this.createBranch;
             this._generalService.createNewCompany = this.company;
@@ -327,16 +325,12 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
         });
-        this.store.pipe(select(state => state.session), takeUntil(this.destroyed$)).subscribe((session: any) => {
-            // Fetch current company country
-            if (session.companies) {
-                session.companies.forEach(company => {
-                    if (company.uniqueName === session.companyUniqueName) {
-                        const countryDetails = company.countryV2;
-                        this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
-                        this.company.phoneCode = countryDetails.callingCode;
-                    }
-                });
+        
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                const countryDetails = activeCompany.countryV2;
+                this.company.country = countryDetails.alpha2CountryCode || countryDetails.alpha3CountryCode;
+                this.company.phoneCode = countryDetails.callingCode;
             }
         });
     }

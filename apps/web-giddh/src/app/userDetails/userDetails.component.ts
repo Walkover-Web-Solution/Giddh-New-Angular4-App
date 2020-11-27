@@ -6,13 +6,12 @@ import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { LoginActions } from '../actions/login.action';
-import { SubscriptionsActions } from '../actions/userSubscriptions/subscriptions.action';
 import { AuthenticationService } from '../services/authentication.service';
 import { CompanyService } from '../services/companyService.service';
 import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
 import { CompanyActions } from '../actions/company.actions';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
@@ -78,7 +77,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(private store: Store<AppState>,
         private _toasty: ToasterService,
-        private _loginAction: LoginActions,
         private _loginService: AuthenticationService,
         private loginAction: LoginActions,
         private _companyService: CompanyService,
@@ -184,18 +182,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(s => this.companies = s);
         this.store.pipe(select(s => s.subscriptions.companyTransactions), takeUntil(this.destroyed$))
             .subscribe(s => this.companyTransactions = s);
-        this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe((session) => {
-            let companyUniqueName: string;
-            if (session.companyUniqueName) {
-                companyUniqueName = cloneDeep(session.companyUniqueName);
+
+        this.store.pipe(select(s => s.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
+            if (user) {
+                this.user = cloneDeep(user.user);
+                this.userSessionId = _.cloneDeep(user.session.id);
             }
-            if (session.companies && session.companies.length) {
-                let companies = cloneDeep(session.companies);
-                this.selectedCompany = companies.find((company) => company.uniqueName === companyUniqueName);
-            }
-            if (session.user) {
-                this.user = cloneDeep(session.user.user);
-                this.userSessionId = _.cloneDeep(session.user.session.id);
+        });
+
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.selectedCompany = activeCompany;
             }
         });
 
@@ -231,7 +228,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             const request: SignupWithMobile = new SignupWithMobile();
             request.countryCode = Number(this.countryCode) || 91;
             request.mobileNumber = this.phoneNumber;
-            this.store.dispatch(this._loginAction.AddNewMobileNo(request));
+            this.store.dispatch(this.loginAction.AddNewMobileNo(request));
         } else {
             this._toasty.errorToast('Please enter number in format: 9998899988');
         }
@@ -242,7 +239,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         request.countryCode = Number(this.countryCode) || 91;
         request.mobileNumber = this.phoneNumber;
         request.oneTimePassword = this.oneTimePassword;
-        this.store.dispatch(this._loginAction.VerifyAddNewMobileNo(request));
+        this.store.dispatch(this.loginAction.VerifyAddNewMobileNo(request));
     }
 
     public changeTwoWayAuth() {

@@ -244,4 +244,21 @@ export class SettingsProfileService {
             .replace(':warehouseUniqueName', encodeURIComponent(warehouseUniqueName));
         return this._http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
+
+    /**
+     * This will get the company details
+     *
+     * @param {string} companyUniqueName
+     * @returns {Observable<BaseResponse<SmsKeyClass, string>>}
+     * @memberof SettingsProfileService
+     */
+    public getCompanyDetails(companyUniqueName: string): Observable<BaseResponse<SmsKeyClass, string>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = companyUniqueName;
+        return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<SmsKeyClass, string> = res;
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)));
+    }
 }

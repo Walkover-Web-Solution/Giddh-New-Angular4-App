@@ -1,10 +1,8 @@
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-
-import { distinct, map, take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, EventEmitter, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../shared/helpers';
@@ -22,15 +20,15 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { IForceClear } from '../../../models/api-models/Sales';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../../actions/company.actions';
-import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from '../../../app.constant';
 
 @Component({
-    selector: 'inventory-add-stock',  // <home></home>
+    selector: 'inventory-add-stock',
     templateUrl: './inventory.addstock.component.html',
     styleUrls: ['./inventory.addstock.component.scss']
 })
+
 export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     @Input() public addStock: boolean = false;
     @Input() public autoFocusInChild: boolean = false;
@@ -94,11 +92,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public forceClearSalesStock$: Observable<IForceClear> = of({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-        private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
-        private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions,
-        private invViewService: InvViewService,
-        private cdr: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private sideBarAction: SidebarAction, private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService, private customStockActions: CustomStockUnitAction, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invViewService: InvViewService, private cdr: ChangeDetectorRef) {
         this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
         this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(s => s.inventory.activeGroup), takeUntil(this.destroyed$));
@@ -111,7 +105,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.createGroupSuccess$ = this.store.pipe(select(s => s.inventory.createGroupSuccess), takeUntil(this.destroyed$));
         this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
-        this.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+        this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.invoiceSetting$ = this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {

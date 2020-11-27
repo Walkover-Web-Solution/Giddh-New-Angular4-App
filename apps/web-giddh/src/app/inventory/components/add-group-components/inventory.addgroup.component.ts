@@ -1,5 +1,4 @@
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-
 import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
@@ -17,10 +16,11 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
-    selector: 'inventory-add-group',  // <home></home>
+    selector: 'inventory-add-group',
     templateUrl: './inventory.addgroup.component.html',
     styleUrls: [`./inventory.addgroup.component.scss`],
 })
+
 export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public addGroup: boolean;
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();

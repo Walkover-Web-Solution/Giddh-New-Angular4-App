@@ -707,16 +707,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
-        this.store.pipe(select(s => {
-            if (!s.session.companies) {
-                return;
+
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
             }
-            s.session.companies.forEach(cmp => {
-                if (cmp.uniqueName === s.session.companyUniqueName) {
-                    this.selectedCompany = cmp;
-                }
-            });
-        }), takeUntil(this.destroyed$)).subscribe();
+        });
 
         this.activeAccount$.subscribe(data => {
             if (data) {

@@ -75,6 +75,8 @@ export class CompanyActions {
     public static GET_ALL_INTEGRATED_BANK_RESPONSE = 'GET_ALL_INTEGRATED_BANK_RESPONSE';
     public static SET_COMPANY_BRANCH = 'SET_COMPANY_BRANCH';
 
+    public static SET_ACTIVE_COMPANY_DATA = 'SET_ACTIVE_COMPANY_DATA';
+
     public createCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_COMPANY),
@@ -246,17 +248,11 @@ export class CompanyActions {
                         let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
                         if (companyIndex > -1) {
                             // if active company find no action needed
-                            if (response.body.length === totalCompany) {     // if company created success then only change to new created company otherwise refres Api call will return null action
+                            if (response.body.length === totalCompany) { // if company created success then only change to new created company otherwise refresh Api call will return null action
                                 return { type: 'EmptyAction' };
-
                             } else {
-                                return {
-                                    type: 'CHANGE_COMPANY',
-                                    payload: response.body[companyIndex].uniqueName
-                                };
+                                return { type: 'EmptyAction' };
                             }
-
-                            // return { type: 'EmptyAction' };
                         } else {
                             // if no active company active next company from companies list
                             return {
@@ -698,6 +694,20 @@ export class CompanyActions {
         return {
             type: CompanyActions.SET_COMPANY_BRANCH,
             payload: organizationDetails
+        };
+    }
+
+    /**
+     * This will set the active company data in store
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public setActiveCompanyData(data: any): CustomActions {
+        return {
+            type: CompanyActions.SET_ACTIVE_COMPANY_DATA,
+            payload: data
         };
     }
 }
