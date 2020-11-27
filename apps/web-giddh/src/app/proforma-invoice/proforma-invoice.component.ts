@@ -114,6 +114,8 @@ import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
 import { PurchaseOrderService } from '../services/purchase-order.service';
 import { SearchService } from '../services/search.service';
 import { PURCHASE_ORDER_STATUS } from '../shared/helpers/purchaseOrderStatus';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../models/user-login-state';
 
 const THEAD_ARR_READONLY = [
     {
@@ -564,9 +566,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invoiceSelected: any;
     /** Stores the current index of entry whose TCS/TDS are entered */
     public tcsTdsIndex: number = 0;
-
     /** this is showing pending sales page **/
     public isPendingSales: boolean = false;
+    /** This will hold if deliver address filled **/
+    public isDeliverAddressFilled: boolean = false;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -612,7 +615,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private purchaseRecordAction: PurchaseRecordActions,
         private modalService: BsModalService,
         public purchaseOrderService: PurchaseOrderService,
-        private searchService: SearchService
+        private searchService: SearchService, 
+        private settingsBranchAction: SettingsBranchActions
     ) {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
@@ -625,6 +629,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({page: 1, count: 0}));
+        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
 
         this.invFormData = new VoucherClass();
         this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
@@ -6378,31 +6384,33 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public fillDeliverToAddress(): void {
-        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
-            if (profile.addresses && profile.addresses.length > 0) {
-                let companyAddresses = profile.addresses;
-                if (companyAddresses) {
-                    let isDefaultAddress;
-                    let isDefaultAddressUsed = false;
+        let branches = [];
+        let currentBranch;
+        this.isDeliverAddressFilled = false;
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.length && !this.isDeliverAddressFilled) {
+                branches = response;
 
-                    companyAddresses.forEach(address => {
-                        if(!isDefaultAddressUsed && address.branches && address.branches.length > 0) {
-                            isDefaultAddress = address.branches.filter(branch => branch.isDefault && branch.isHeadQuarter);
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    currentBranch =  branches.find(branch => !branch.parentBranch);
+                }
+                if (currentBranch && currentBranch.addresses) {
+                    const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+                    this.purchaseBillCompany.billingDetails.address = [];
+                    this.purchaseBillCompany.billingDetails.address.push(defaultAddress.address);
+                    this.purchaseBillCompany.billingDetails.state.code = defaultAddress.stateCode;
+                    this.purchaseBillCompany.billingDetails.state.name = defaultAddress.stateName;
+                    this.purchaseBillCompany.billingDetails.stateCode = defaultAddress.stateCode;
+                    this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
+                    this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.taxNumber;
+        
+                    this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.taxNumber;
 
-                            if (!isDefaultAddressUsed && isDefaultAddress && isDefaultAddress.length > 0 && isDefaultAddress[0]) {
-                                isDefaultAddressUsed = true;
-                                this.purchaseBillCompany.billingDetails.address = [];
-                                this.purchaseBillCompany.billingDetails.address.push(address.address);
-                                this.purchaseBillCompany.billingDetails.state.code = address.stateCode;
-                                this.purchaseBillCompany.billingDetails.state.name = address.stateName;
-                                this.purchaseBillCompany.billingDetails.stateCode = address.stateCode;
-                                this.purchaseBillCompany.billingDetails.stateName = address.stateName;
-                                this.purchaseBillCompany.billingDetails.gstNumber = address.taxNumber;
-
-                                this.purchaseBillCompany.shippingDetails.gstNumber = address.taxNumber;
-                            }
-                        }
-                    });
+                    this.isDeliverAddressFilled = true;
                 }
             }
         });
