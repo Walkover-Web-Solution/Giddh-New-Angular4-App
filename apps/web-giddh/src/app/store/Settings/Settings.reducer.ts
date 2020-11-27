@@ -730,6 +730,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             }
             return Object.assign({}, state, {});
         }
+        case SETTINGS_BRANCH_ACTIONS.RESET_ALL_BRANCHES_RESPONSE: {
+            return Object.assign({}, state, {branches: null});
+        }
 
         //  endregion discount reducer
         default: {
