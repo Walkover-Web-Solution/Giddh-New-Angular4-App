@@ -64,7 +64,7 @@ import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
@@ -438,11 +438,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.createNewCompanyUser = res;
             }
         });
-        this.generalService.isMobileSite.subscribe(s => {
-            this.isMobileSite = s;
-            this.menuItemsFromIndexDB = DEFAULT_MENUS;
-            this.accountItemsFromIndexDB = DEFAULT_AC;
-        });
         this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
         this.generalService.invokeEvent.subscribe(value => {
             if (value === 'openschedulemodal') {
@@ -483,6 +478,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.changeDetection.detectChanges();
                 });
             }
+        });
+
+        this.generalService.isMobileSite.subscribe(s => {
+            this.isMobileSite = s;
+            this.companyService.getMenuItems(this.isMobileSite).subscribe(response => {
+                if (response && response.body) {
+                    let branches = [];
+                    this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
+                        branches = data || [];
+                    });
+                    reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
+                    this.menuItemsFromIndexDB = DEFAULT_MENUS;
+                    this.accountItemsFromIndexDB = DEFAULT_AC;
+                }
+            });
         });
 
         this.sideBarStateChange(true);
