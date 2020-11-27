@@ -121,11 +121,11 @@
             outline: none;
         }
         .item {
-            height: 50px;
-            overflow: hidden;
+            min-height: 50px;
+            overflow: initial;
             padding: 0 24px;
             a {
-                height: 50px;
+                min-height: 50px;
             }
             .item-icon {
                 color: #979797;
@@ -143,6 +143,9 @@
                 font-size: 14px;
                 color: #333333;
                 text-transform: capitalize;
+                .width-60{
+                    width: 60%;
+                }
                 .smlP {
                     margin: 0;
                     width: 320px;
@@ -160,6 +163,8 @@
                     right: 0;
                     top: 10px;
                     text-transform: initial;
+                    width: 30%;
+                    word-break: break-word;
                 }
                 .brdcrmb {
                     max-width: 150px;
