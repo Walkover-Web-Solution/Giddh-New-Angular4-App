@@ -1,4 +1,4 @@
-describe('This is Sundry Debtors Test', function() {
+describe('This is Sundry Creditors Test', function() {
     let testData = "";
     let entryUniqueName = "";
 
@@ -32,8 +32,8 @@ describe('This is Sundry Debtors Test', function() {
 
 
     it('Ledger entry without taxes and Discount ', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']', 'vendor1', 'vendor1 A/c').then(()=>{
-            cy.createLedger('Sales','.hilighted > .list-item > .item', '100.50')
+        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'vendor1', 'vendor1 A/c').then(()=>{
+            cy.createLedger('Sales','#select-menu-0 > .list-item > .item', '100.50')
             // cy.getAllLedger().then((response) => {
             //     expect(response.status).to.eq(200)
             //     const respBody = response.body;
@@ -47,14 +47,14 @@ describe('This is Sundry Debtors Test', function() {
     });
 
     it('Ledger entry with Inventory ', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']', 'vendor1', 'vendor1 A/c').then(()=>{
+        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'vendor1', 'vendor1 A/c').then(()=>{
             cy.createLedger('Sales',':nth-child(2) > .list-item > .item', '177.80')
         })
     });
 
     it('Ledger entry with Inventory & Taxes', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']', 'vendor1', 'vendor1 A/c').then(()=>{
-            cy.createLedgerWithTaxes('Sales','.hilighted > .list-item > .item', '100.50')
+        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'vendor1', 'vendor1 A/c').then(()=>{
+            cy.createLedgerWithTaxes('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })
     });
 
