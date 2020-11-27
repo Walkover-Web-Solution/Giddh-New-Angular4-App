@@ -24,7 +24,7 @@ describe('This is Global Search Test', function() {
     });
 
     it('Verify Vendor module using Global Search', function () {
-        cy.globalSearch('.hamburger_menu > #giddh-page-heading-link > span','Vendor', 'Vendor ')
+        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Vendor', 'Vendor ')
     });
 
     it('Verify Settings module using Global Search', function () {
@@ -32,7 +32,7 @@ describe('This is Global Search Test', function() {
     });
 
     it('Verify Walkover Account module using Global Search', function () {
-        cy.globalSearch('.hamburger_menu > #giddh-page-heading-link > span','Walkover', 'Walkover Technologies Private Limited A/c')
+        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Walkover', 'Walkover Technologies Private Limited A/c')
     });
 
     it('Verify Cash Account module using Global Search', function () {
@@ -49,9 +49,9 @@ describe('This is Global Search Test', function() {
                 $e1.trigger("click")
                 cy.wait(2000)
                 cy.get('body').type('{enter}').then(()=>{
-                    cy.get('.hamburger_menu > #giddh-page-heading-link > span', {timeout: 50000}).should('be.visible')
+                    cy.get('.hamburger-menu > #giddh-page-heading-link > span', {timeout: 50000}).should('be.visible')
                     cy.wait(2000)
-                    cy.get('.hamburger_menu > #giddh-page-heading-link > span', {timeout: 50000}).then((elementText) => {
+                    cy.get('.hamburger-menu > #giddh-page-heading-link > span', {timeout: 50000}).then((elementText) => {
                         cy.wait(5000).then(() =>{
                             const text = elementText.text();
                             cy.log(text)
@@ -77,9 +77,9 @@ describe('This is Global Search Test', function() {
                 $e1.trigger("click")
                 cy.wait(2000)
                 cy.get('body').type('{enter}').then(()=>{
-                    cy.get('.hamburger_menu > #giddh-page-heading-link > span', {timeout: 50000}).should('be.visible')
+                    cy.get('.hamburger-menu > #giddh-page-heading-link > span', {timeout: 50000}).should('be.visible')
                     cy.wait(2000)
-                    cy.get('.hamburger_menu > #giddh-page-heading-link > span', {timeout: 50000}).then((elementText) => {
+                    cy.get('.hamburger-menu > #giddh-page-heading-link > span', {timeout: 50000}).then((elementText) => {
                         cy.wait(5000).then(() =>{
                             const text = elementText.text();
                             cy.log(text)
