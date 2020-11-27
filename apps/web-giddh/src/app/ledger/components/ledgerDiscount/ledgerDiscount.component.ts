@@ -117,8 +117,8 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	}
 
 	public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-		this.defaultDiscount.amount = parseFloat(String(val).replace(',',''));
-		this.defaultDiscount.discountValue = parseFloat(String(val).replace(',',''));
+		this.defaultDiscount.amount = parseFloat(String(val).replace(/,/g,''));
+		this.defaultDiscount.discountValue = parseFloat(String(val).replace(/,/g,''));
 		this.defaultDiscount.discountType = type;
 
 		this.change();
