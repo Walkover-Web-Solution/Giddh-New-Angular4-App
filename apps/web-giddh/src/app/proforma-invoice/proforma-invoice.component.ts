@@ -567,6 +567,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     /** this is showing pending sales page **/
     public isPendingSales: boolean = false;
+
     /**
      * Returns true, if Purchase Record creation record is broken
      *

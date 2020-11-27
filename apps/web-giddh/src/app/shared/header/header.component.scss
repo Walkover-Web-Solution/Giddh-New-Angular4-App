@@ -859,6 +859,14 @@ ul.sub-list {
                 .branch-alias-name{
                     width: 90%;
                 }
+                span{
+                    a{
+                        padding: 0;
+                    }
+                }
+                .branch-alias-name{
+                    width: 90%;
+                }
             }
             .go-to-company{
                 color: $deep-sky-blue;
