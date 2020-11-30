@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
@@ -16,7 +16,10 @@ import { AccountService } from 'apps/web-giddh/src/app/services/account.service'
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import {IForceClear} from "../../models/api-models/Sales";
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GeneralService } from '../../services/general.service';
 
 const COMPARISON_FILTER = [
 	{ label: 'Greater Than', value: 'greaterThan' },
@@ -98,11 +101,27 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	private moment = moment;
 	private fromDate: string = '';
 	private toDate: string = '';
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-       /** Mask format for decimal number and comma separation  */
+    /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
 
-	constructor(private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _accountService: AccountService) {
+	constructor(private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _accountService: AccountService, private generalService: GeneralService, private modalService: BsModalService) {
         this.initializeDaybookAdvanceSearchForm();
 		this.setVoucherTypes();
 		this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
@@ -141,16 +160,26 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	}
 
 	public ngOnChanges(changes: SimpleChanges) {
-		if ('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) {
-			//this.datePickerOptions.startDate = moment(changes.startDate.currentValue, GIDDH_DATE_FORMAT);
-			this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(changes.startDate.currentValue, GIDDH_DATE_FORMAT) };
-			this.fromDate = changes.startDate.currentValue;
-		}
-		if ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue) {
-			//this.datePickerOptions.endDate = moment(changes.endDate.currentValue, GIDDH_DATE_FORMAT);
-			this.datePickerOptions = { ...this.datePickerOptions, endDate: moment(changes.endDate.currentValue, GIDDH_DATE_FORMAT) };
-			this.toDate = changes.endDate.currentValue;
-		}
+		// if ('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) {
+		// 	//this.datePickerOptions.startDate = moment(changes.startDate.currentValue, GIDDH_DATE_FORMAT);
+		// 	this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(changes.startDate.currentValue, GIDDH_DATE_FORMAT) };
+		// 	this.fromDate = changes.startDate.currentValue;
+        //     this.selectedDateRange = { startDate: moment(changes.startDate.currentValue) };
+        //     this.selectedDateRangeUi = moment(changes.startDate.currentValue).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(changes.startDate.currentValue).format(GIDDH_NEW_DATE_FORMAT_UI);
+		// }
+		// if ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue) {
+		// 	//this.datePickerOptions.endDate = moment(changes.endDate.currentValue, GIDDH_DATE_FORMAT);
+		// 	this.datePickerOptions = { ...this.datePickerOptions, endDate: moment(changes.endDate.currentValue, GIDDH_DATE_FORMAT) };
+        //       this.selectedDateRange = { endDate: moment(changes.endDate.currentValue) };
+        //     this.selectedDateRangeUi = moment(changes.startDate.currentValue).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(changes.endDate.currentValue).format(GIDDH_NEW_DATE_FORMAT_UI);
+		// 	this.toDate = changes.endDate.currentValue;
+		// }
+        if('startDate' in changes && changes.startDate.currentValue && 'endDate' in changes && changes.endDate.currentValue) {
+            let dateRange = { fromDate: '', toDate: '' };
+            dateRange = this.generalService.dateConversionToSetComponentDatePicker(changes.startDate.currentValue, changes.endDate.currentValue);
+            this.selectedDateRange = { startDate: moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+            this.selectedDateRangeUi = moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+        }
 	}
 
 	public setVoucherTypes() {
@@ -186,18 +215,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 		this.datePickerOptions.endDate = this.endDate;
 		this.fromDate = this.startDate;
 		this.toDate = this.endDate;
-		this.dateRangePickerDir.render();
 		this.closeModelEvent.emit({
 			cancle: true
 		});
-	}
-
-    /**
-     * onDateRangeSelected
-     */
-	public onDateRangeSelected(value) {
-		this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
-		this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
 	}
 
     /**
@@ -441,5 +461,54 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 includeItemGreaterThan: false
             }),
         });
+    }
+
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof TbPlBsFilterComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof TbPlBsFilterComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof TbPlBsFilterComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+        }
     }
 }
