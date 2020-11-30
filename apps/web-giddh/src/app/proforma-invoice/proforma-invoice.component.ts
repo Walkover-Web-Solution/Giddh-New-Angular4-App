@@ -4573,13 +4573,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
 
                     } else {
+                        const selectedTax = this.companyTaxesList.find(tax => tax.uniqueName === ta.uniqueName);
                         salesEntryClass.taxes.push({
                             amount: ta.taxPercent,
                             uniqueName: ta.uniqueName,
                             isChecked: true,
                             isDisabled: false,
                             type: ta.taxType,
-                            name: ta.name || ''
+                            name: ta.name || (selectedTax && selectedTax.name) || ''
                         });
                     }
                 });
