@@ -37,7 +37,7 @@
 											</ng-container>
 										</ng-container>
 										<ng-container *ngIf="r.parentGroups">
-											<p class="smlP">
+											<p class="small-para-details">
 												<small>
 													<span *ngFor="let item of r.parentGroups; let idx = index">
 														<ng-container *ngIf="idx > 0">
@@ -49,7 +49,7 @@
 											</p>
 										</ng-container>
 										<ng-container *ngIf="r.type === 'ACCOUNT'">
-											<span class="hvrTxt">{{r.uniqueName}}</span>
+											<span class="command-hover-text">{{r.uniqueName}}</span>
 										</ng-container>
 									</div>
 								</a>
