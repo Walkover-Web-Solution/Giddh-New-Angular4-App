@@ -160,20 +160,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	}
 
 	public ngOnChanges(changes: SimpleChanges) {
-		// if ('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) {
-		// 	//this.datePickerOptions.startDate = moment(changes.startDate.currentValue, GIDDH_DATE_FORMAT);
-		// 	this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(changes.startDate.currentValue, GIDDH_DATE_FORMAT) };
-		// 	this.fromDate = changes.startDate.currentValue;
-        //     this.selectedDateRange = { startDate: moment(changes.startDate.currentValue) };
-        //     this.selectedDateRangeUi = moment(changes.startDate.currentValue).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(changes.startDate.currentValue).format(GIDDH_NEW_DATE_FORMAT_UI);
-		// }
-		// if ('endDate' in changes && changes.endDate.currentValue !== changes.endDate.previousValue) {
-		// 	//this.datePickerOptions.endDate = moment(changes.endDate.currentValue, GIDDH_DATE_FORMAT);
-		// 	this.datePickerOptions = { ...this.datePickerOptions, endDate: moment(changes.endDate.currentValue, GIDDH_DATE_FORMAT) };
-        //       this.selectedDateRange = { endDate: moment(changes.endDate.currentValue) };
-        //     this.selectedDateRangeUi = moment(changes.startDate.currentValue).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(changes.endDate.currentValue).format(GIDDH_NEW_DATE_FORMAT_UI);
-		// 	this.toDate = changes.endDate.currentValue;
-		// }
         if('startDate' in changes && changes.startDate.currentValue && 'endDate' in changes && changes.endDate.currentValue) {
             let dateRange = { fromDate: '', toDate: '' };
             dateRange = this.generalService.dateConversionToSetComponentDatePicker(changes.startDate.currentValue, changes.endDate.currentValue);
