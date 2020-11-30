@@ -1061,6 +1061,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.purchaseOrder.company.shippingDetails.stateCode = "";
         this.purchaseOrder.company.shippingDetails.state.name = "";
         this.purchaseOrder.company.shippingDetails.stateName = "";
+        this.purchaseOrder.company.shippingDetails.gstNumber = "";
     }
 
     /**
