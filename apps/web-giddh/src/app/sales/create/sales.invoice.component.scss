@@ -70,7 +70,7 @@ $greyClr: #6d6d6d;
 
 // common class for extend
 .white-bg {
-    background-color: white;
+    background-color: $white;
 }
 
 .cp {
@@ -133,13 +133,13 @@ $greyClr: #6d6d6d;
         right: 0;
         bottom: 0;
         padding: 0 1em;
-        color: #cccccc;
+        color: $very-light-gray;
         pointer-events: none;
     }
 
     /* Transition */
     &:hover::after {
-        color: #bbbbbb;
+        color: $valspar-paint-autumn-fog;
     }
 
     &::after {
@@ -234,7 +234,7 @@ $greyClr: #6d6d6d;
         li {
             a {
                 &:hover {
-                    background: #f4f5f8;
+                    background: $solitude;
                 }
             }
         }
@@ -377,13 +377,13 @@ ng-select.splSales {
 }
 
 .billing-address {
-    background: #fff;
-    border: 1px solid #d6d6d6;
+    background: $white;
+    border: 1px solid $light-gray;
     padding: 5px;
     padding-bottom: 10px;
 
     &.disabled {
-        background: #eee;
+        background: $whisper-light;
     }
 
     textarea {
@@ -406,7 +406,7 @@ textarea:focus {
 
 .input-custom {
     border: none;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro-light;
 }
 
 .pl0 {
@@ -415,7 +415,7 @@ textarea:focus {
 
 .balance-due {
     display: block;
-    color: #6b6c72;
+    color: $comet;
     line-height: 1.2rem;
     font-size: 14px;
     font-weight: 500;
@@ -430,7 +430,7 @@ textarea:focus {
     > thead {
         > tr {
             > th {
-                border: 1px solid #c7c7c7 !important;
+                border: 1px solid $extra-light-gray !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
@@ -452,7 +452,7 @@ textarea:focus {
     > tbody {
         > tr {
             > td {
-                border: 1px solid #c7c7c7 !important;
+                border: 1px solid $extra-light-gray !important;
                 padding: 10px 8px;
                 white-space: nowrap;
 
@@ -484,7 +484,7 @@ textarea:focus {
 }
 
 .disabled {
-    background: #eee;
+    background: $whisper-light;
     pointer-events: none;
     opacity: 0.7;
 }
@@ -508,18 +508,18 @@ textarea:focus {
 #deposit-dropdown {
     left: inherit;
     width: 300px;
-    background: #f4f5f8;
+    background: $solitude;
     display: block;
 }
 
 #deposit-dropdown .caret {
-    border-top: 7px dashed #d0d0d3;
+    border-top: 7px dashed $ghost;
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     right: -15px;
     position: absolute;
     top: 47%;
-    background: #f4f5f8;
+    background: $solitude;
     transform: rotate(-90deg) translateY(-50%);
 }
 
@@ -563,25 +563,25 @@ textarea:focus {
     background: rgba(112, 112, 112, 0.92);
     bottom: 0;
     width: 100%;
-    color: #fff;
+    color: $white;
     padding: 10px;
     text-align: center;
 }
 
 .modal-invoice-footer .btn {
-    background: #a7a7a7;
+    background: $dark-gray;
     font-size: 12px;
     border-radius: 90px;
     padding: 1px 6px;
     vertical-align: middle;
     margin-right: 0px;
     transition: 0.5s all ease;
-    color: #fff;
+    color: $white;
 }
 
 .modal-invoice-footer .btn:hover {
-    background: #229e2b;
-    color: #fff;
+    background: $dark-green;
+    color: $white;
 }
 
 .sales-invoice-modal .modal-body perfect-scrollbar {
@@ -593,8 +593,8 @@ textarea:focus {
 }
 
 .modal-invoice-footer ul > li > input:checked + label {
-    background: #229e2b;
-    color: #fff;
+    background: $dark-green;
+    color: $white;
 }
 
 // my css
@@ -606,12 +606,12 @@ textarea:focus {
 }
 
 .other-options {
-    color: #a9a9a9;
+    color: $dim-gray;
     padding-top: 5px;
 }
 
 .other-options a {
-    color: #0c8fe6;
+    color: $electric-blue;
     font-size: 12px;
 }
 
@@ -630,7 +630,7 @@ form label {
     border: none !important;
     padding-right: 2px !important;
     background-color: transparent !important;
-    border-bottom: 1px solid #c7c7c7 !important;
+    border-bottom: 1px solid $extra-light-gray !important;
     height: 28px;
 }
 
@@ -658,7 +658,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 
 .billingaddresFull p {
     font-size: 14px;
-    color: #666666;
+    color: $dark-gray;
     margin-bottom: 5px;
 }
 
@@ -671,7 +671,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .change-label {
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .wrap-invoiceNumberDetails .form-group {
@@ -683,7 +683,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .bg-white {
-    background-color: #fff;
+    background-color: $white;
     padding: 10px 0;
     margin: 0 0;
 }
@@ -699,7 +699,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .description textarea {
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -707,8 +707,8 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 
 .sales-invoice-table table input[disabled] {
     cursor: default;
-    background-color: #eeeeee;
-    border: 1px solid #ccc;
+    background-color: $whisper-light;
+    border: 1px solid $very-light-gray;
     padding: 5px;
     width: 100%;
     // max-width: 150px;
@@ -725,7 +725,7 @@ input[type="text"] {
 }
 
 a.copyInvoice {
-    color: #3597ec;
+    color: $primary;
     margin-left: 10px;
 }
 
@@ -746,7 +746,7 @@ a.copyInvoice img {
     padding: 0;
 }
 .shipping-address textarea {
-    border-bottom: 1px solid #ccc !important;
+    border-bottom: 1px solid $very-light-gray !important;
 }
 
 .mb-0 {
@@ -792,7 +792,7 @@ a.copyInvoice img {
 .add-bulk-items {
     font-size: 12px;
     padding-bottom: 0;
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .otherDetailTable th,
@@ -848,8 +848,8 @@ span.edit-icon {
 
 .hsn-code-dropdown {
     position: absolute;
-    background-color: #fff;
-    border: 1px solid #c7c7c7;
+    background-color: $white;
+    border: 1px solid $extra-light-gray;
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
@@ -872,18 +872,18 @@ span.edit-icon {
     height: 28px !important;
     padding: 5px;
     max-width: 200px;
-    border: 1px solid #c7c7c7;
+    border: 1px solid $extra-light-gray;
 }
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: #c6c6c6;
+    color: $light-silver;
 }
 
 .hsn-code-dropdown a {
     display: inline-block;
     text-align: center;
-    color: #cccccc;
+    color: $very-light-gray;
     padding: 5px 8px;
     font-size: 16px;
 }
@@ -895,8 +895,8 @@ span.edit-icon {
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success,
 .bulk-item-btn-group button.btn.btn-sm.btn-success {
-    background-color: #28ab00;
-    color: #fff;
+    background-color: $deep-green;
+    color: $white;
 }
 
 .template-footer {
@@ -907,13 +907,13 @@ span.edit-icon {
 }
 
 .update-text {
-    color: #0c8fe6;
+    color: $electric-blue;
     padding: 0 5px;
 }
 
 .select-account-label {
     font-size: 14px;
-    color: #c7c7c7;
+    color: $extra-light-gray;
     padding-bottom: 3px;
 }
 
@@ -976,9 +976,9 @@ section.static-invoice-table {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro-light;
     padding-left: 0;
-    border-bottom-color: rgb(214, 214, 214);
+    border-bottom-color: $light-gray;
 }
 
 .customer-invoice-form {
@@ -995,7 +995,7 @@ section.static-invoice-table {
     top: 110px;
     opacity: 0.6;
     z-index: 99;
-    background: #f7f8fa;
+    background: $alice-blue-light;
 }
 
 .customer-invoice-form-purchase:before {
@@ -1060,10 +1060,10 @@ section.static-invoice-table {
 }
 
 section.sales-invoiceBGwhite {
-    background-color: #fff;
+    background-color: $white;
 }
 .upper-layer {
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     padding-top: 10px;
 }
 .attention-to {

@@ -54,31 +54,31 @@
 }
 
 .invoice-sidebar .invoice-number-date span.invoice-number {
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .invoice-sidebar .invoice-number-date span.invoice-date {
-    color: #666666;
+    color: $dark-gray;
 }
 
 .invoice-sidebar .invoice-holder-name p {
-    color: #333333;
+    color: $night-rider;
     font-size: 14px;
     margin-top: 3px;
 }
 
 .invoice-sidebar .single-invoice-detail {
     padding: 10px 15px;
-    border-bottom: 1px solid #dedede;
+    border-bottom: 1px solid $gray-87;
     list-style: none;
 }
 
 .invoice-sidebar .single-invoice-detail:hover {
-    background-color: #f0f0f0;
+    background-color: $gray-94;
 }
 
 .invoice-sidebar .single-invoice-detail.activeItem {
-    background-color: #f0f0f0;
+    background-color: $gray-94;
 }
 
 .invoice-sidebar .single-invoice-detail:last-child {
@@ -122,7 +122,7 @@
 }
 
 .invoice-detail-header .edit-change-status .edit-link {
-    color: #0c8fe6;
+    color: $electric-blue;
     padding-right: 10px;
     font-size: 16px;
 }
@@ -133,11 +133,11 @@
 
 .invoice-detail-header .edit-change-status .edit-action-btn-groups {
     display: flex;
-    background-color: #ffffff;
-    border: 1px solid #cbcbcb;
+    background-color: $white;
+    border: 1px solid $cerebellum-gray;
     margin-right: 10px;
     span {
-        border-left: 1px solid #cbcbcb;
+        border-left: 1px solid $cerebellum-gray;
         padding: 5px;
         height: 30px;
         width: 30px;
@@ -145,7 +145,7 @@
             border-left: none;
         }
         a {
-            color: #666666;
+            color: $dark-gray;
             display: block;
             text-align: center;
         }
@@ -172,7 +172,7 @@
 .payment-detail .payment-icon {
     width: 35px;
     height: 35px;
-    background-color: #cccccc;
+    background-color: $very-light-gray;
     border-radius: 50%;
     text-align: center;
     vertical-align: middle;
@@ -183,13 +183,13 @@
 }
 
 .single-payment-detail a {
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .payment-detail p.payment-content {
     font-size: 14px;
     margin-bottom: 5px;
-    color: #333333;
+    color: $night-rider;
 }
 
 .payment-log {
@@ -223,7 +223,7 @@
         font-size: 36px;
         max-width: 60%;
         margin: 0 auto;
-        color: #ff0d0d;
+        color: $red;
     }
     .img-expand-collapse{
         padding: 50px 50px 0 50px;
@@ -254,7 +254,7 @@
 }
 
 .single-payment-detail {
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .payment-log-div li {
@@ -270,23 +270,23 @@
 .payment-log-div span.small-circle {
     height: 10px;
     width: 10px;
-    border: 1px solid #666666;
+    border: 1px solid $dark-gray;
     border-radius: 50%;
     display: inline-block;
     margin-right: 7px;
 }
 
 .payment-log-div .activeLog span.small-circle {
-    background-color: #0c8fe6;
-    border-color: #0c8fe6;
+    background-color: $electric-blue;
+    border-color: $electric-blue;
 }
 
 .payment-log-div .about-payment-log {
-    color: #666;
+    color: $dark-gray;
 }
 
 .payment-log-div .activeLog .about-payment-log {
-    color: #0c8fe6;
+    color: $electric-blue;
 }
 
 .payment-log-div ul {
@@ -298,7 +298,7 @@
     content: "";
     height: calc(100% - 30px);
     width: 1px;
-    border-left: 1px dashed #666666;
+    border-left: 1px dashed $dark-gray;
     top: 16px;
     left: 4.5px;
 }
@@ -308,7 +308,7 @@
 }
 
 .invoice-detail {
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     padding-bottom: 20px;
 }
 
@@ -318,7 +318,7 @@ span.close-modal.cp.pull-right {
     align-items: center;
     height: 32px;
     width: 32px;
-    background-color: #ddd;
+    background-color: $gainsboro-light;
     border: 1px solid $gainsboro;
     position: static;
     transform: inherit;
@@ -344,12 +344,12 @@ span.close-modal.cp.pull-right {
 
 .dropdown-menu>li>a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $gray-90;
 }
 
 .invoice-search-box input {
     flex: 1;
-    border: 1px solid #ddd;
+    border: 1px solid $gainsboro-light;
     height: 37px;
     padding: 0 30px;
     background-image: url("../../../../../assets/images/searchIcon.svg");
@@ -388,9 +388,9 @@ span.close-modal.cp.pull-right {
         display: flex;
         justify-content: space-between;
         height: 54px;
-        background-color: #ffffff;
-        border-top: 1px solid #c6c6c6;
-        border-bottom: 1px solid #c6c6c6;
+        background-color: $white;
+        border-top: 1px solid $light-silver;
+        border-bottom: 1px solid $light-silver;
         align-items: center;
         span {
             padding: 10px;
@@ -402,7 +402,7 @@ span.close-modal.cp.pull-right {
         span.close-modal {
             height: 32px;
             width: 32px;
-            background-color: #ddd;
+            background-color: $gainsboro-light;
             border: 1px solid $gainsboro;
             display: flex;
             justify-content: center;
@@ -442,17 +442,17 @@ span.close-modal.cp.pull-right {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: #5b64c9;
+    background-color: $chetwode-blue;
     animation: loading 2s linear infinite;
 }
 
 label.labeled {
-    border: 1px solid #ddd;
-    color: #333;
+    border: 1px solid $gainsboro-light;
+    color: $extra-dark-gray;
     padding: 5px 10px;
     border-radius: 3px;
     margin: 0 10px 0 0;
-    background-color: #d6d6d6;
+    background-color: $light-gray;
     position: relative;
     top: -1px;
 }
@@ -508,15 +508,15 @@ label.labeled {
     top: 40px;
     z-index: 10;
     right: 0;
-    border: 1px solid #c7c7c7;
+    border: 1px solid $extra-light-gray;
     .sendEmailModalWrapper {
         background-color: $white;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
         .sendEmailModalHeader {
-            background-color: #e2e2e2;
+            background-color: $light-gray-extra;
             padding: 8px 10px;
-            border-bottom: 1px solid #cccccc;
+            border-bottom: 1px solid $very-light-gray;
             span {
                 width: unset;
             }
@@ -530,7 +530,7 @@ label.labeled {
         margin-bottom: 7px;
     }
     .btn-success {
-        background: #28ab00;
+        background: $deep-green;
         color: $white;
     }
     .aqua-color {
@@ -594,7 +594,7 @@ label.labeled {
 }
 
 .select-file {
-    color: #089328;
+    color: $leave-green;
 }
 
 .file-upload-panel {
@@ -603,7 +603,7 @@ label.labeled {
     border: 1px solid $gainsboro;
     padding: 8px;
     border-radius: 4px;
-    color: #cccccc;
+    color: $very-light-gray;
 }
 
 .file-input-wrapper img {
@@ -1147,7 +1147,7 @@ strong {
         top: 3px;
     }
     .invoice-sidebar li.activeItem .invoice-number-date span.invoice-date:before {
-        background-color: #f0f0f0;
+        background-color: $gray-94;
     }
     .invoice-preview-sidebar {
         padding-right: 15px;

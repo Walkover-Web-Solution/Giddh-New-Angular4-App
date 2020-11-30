@@ -2,14 +2,14 @@
 
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid $medium-gray;
     display: inline-block;
     width: 57px;
     margin-right: 13px;
 }
 .or-line::after {
     content: "";
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid $medium-gray;
     display: inline-block;
     width: 57px;
     margin-left: 13px;
@@ -17,7 +17,7 @@
 .or-line {
     display: flex;
     align-items: center;
-    color: $gainsboro;
+    color: $medium-gray;
     margin-bottom: 10px;
 }
 .my-dropdown-men{

@@ -1,10 +1,10 @@
-<div id="exportModal">
+<div id="exportModal" ng-if="ledgerCtrl.LedgerExport">
     <div class="modal-header">
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportLedgerModal.emit()" aria-label="Close">×</span>
         <h3>Export Ledger</h3>
     </div>
     <div class="modal-body mr-b4" id="export-body">
-        <form name="addShareEmailForm" novalidate class="" autocomplete="off">
+        <form name="addShareEmailForm" novalidate autocomplete="off">
             <div class="pd-b2 clearfix export-type">
                 <label class="w100">Type:</label>
 

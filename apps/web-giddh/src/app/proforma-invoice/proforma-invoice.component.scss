@@ -425,7 +425,7 @@ textarea:focus {
     > thead {
         > tr {
             > th {
-                border: 1px solid $very-light-gray !important;
+                border: 1px solid $extra-light-gray !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
@@ -454,7 +454,7 @@ textarea:focus {
     > tbody {
         > tr {
             > td {
-                border: 1px solid $very-light-gray !important;
+                border: 1px solid $extra-light-gray !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 position: relative;
@@ -636,7 +636,7 @@ form label {
     border: none !important;
     padding-right: 2px !important;
     background-color: transparent !important;
-    border-bottom: 1px solid $very-light-gray !important;
+    border-bottom: 1px solid $extra-light-gray !important;
     height: 28px;
 }
 
@@ -862,7 +862,7 @@ span.edit-icon {
 .hsn-code-dropdown {
     position: absolute;
     background-color: $white;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $extra-light-gray;
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
@@ -885,7 +885,7 @@ span.edit-icon {
     height: 28px !important;
     padding: 5px;
     max-width: 100%;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $extra-light-gray;
 }
 
 .hsn-code-dropdown input::placeholder,
@@ -925,7 +925,7 @@ span.edit-icon {
 
 .select-account-label {
     font-size: 14px;
-    color: $very-light-gray;
+    color: $extra-light-gray;
     padding-bottom: 3px;
 }
 
@@ -1021,7 +1021,7 @@ section.newtable {
 }
 
 .newtable .thead {
-    border-right: 1px solid $very-light-gray;
+    border-right: 1px solid $extra-light-gray;
     padding: 8px 10px;
 }
 
@@ -1303,7 +1303,7 @@ section.newtable {
     position: absolute;
     top: 60px;
     z-index: 10;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $extra-light-gray;
 }
 
 .gst-treatment-header > span {

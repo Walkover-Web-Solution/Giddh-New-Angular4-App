@@ -21,7 +21,7 @@
     padding: 4px;
 
     &:hover {
-        background-color: #eeeff9;
+        background-color: $lavender;
         color: $chetwode-blue;
     }
 
@@ -37,7 +37,7 @@
 }
 
 .add-bulk-item-modal .single-product-wrapper h5 {
-    color: #333333;
+    color: $night-rider;
     font-size: 14px;
 }
 
@@ -61,8 +61,8 @@
 }
 
 .add-bulk-item-modal .right-content hr {
-    color: black;
-    border-color: #ccc;
+    color: $black;
+    border-color: $very-light-gray;
     margin: 10px -15px;
     margin-left: -15px;
 }
@@ -94,8 +94,8 @@
 }
 
 .add-bulk-item-modal .input-group .input-group-btn .btn {
-    background: #fff;
-    border-left: 1px solid #ccc;
+    background: $white;
+    border-left: 1px solid $very-light-gray;
 }
 
 .add-bulk-item-modal .btn {
@@ -103,7 +103,7 @@
 }
 
 .add-bulk-item-modal .input-group-btn .fa {
-    color: #c6c6c6;
+    color: $light-silver;
 }
 
 .add-bulk-item-modal .single-selected-stock {
@@ -111,13 +111,13 @@
 }
 
 .add-bulk-item-modal .left-content {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid $gainsboro-light;
     padding-right: 15px;
 }
 
 .add-bulk-item-modal .modal-title {
     font-size: 22px !important;
-    color: #fff;
+    color: $white;
 }
 
 .table-custom-invoice .salesTax .dropdown-menu-right li label {
