@@ -153,7 +153,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
         let dataToSave = _.cloneDeep(this.newTaxObj);
 
         if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
-            dataToSave.taxType = dataToSave.tdsTcsTaxSubTypes;
+            dataToSave.taxType = dataToSave.taxType+dataToSave.tdsTcsTaxSubTypes;
         }
 
         dataToSave.taxDetail = [{
