@@ -120,7 +120,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
                 taxValue: this.tax.taxDetail[0].taxValue,
                 date: moment(this.tax.taxDetail[0].date).toDate(),
                 tdsTcsTaxSubTypes: subTyp ? subTyp : null,
-                taxType: subTyp ? this.tax.taxType.replace(subTyp, '') : this.tax.taxType,
+                taxType: this.tax.taxType,
                 taxFileDate: this.tax.taxFileDate.toString()
             };
         }
