@@ -6414,9 +6414,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.purchaseBillCompany.billingDetails.stateCode = defaultAddress.stateCode;
                     this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
                     this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.taxNumber;
-        
-                    this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.taxNumber;
-
                     this.isDeliverAddressFilled = true;
                 }
             }
@@ -6441,6 +6438,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.purchaseBillCompany.shippingDetails.state.name = defaultAddress.stateName;
                     this.purchaseBillCompany.shippingDetails.stateCode = defaultAddress.stateCode;
                     this.purchaseBillCompany.shippingDetails.stateName = defaultAddress.stateName;
+                    this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.taxNumber;
                 } else {
                     this.resetShippingAddress();
                 }
@@ -6464,6 +6462,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.purchaseBillCompany.shippingDetails.stateCode = "";
         this.purchaseBillCompany.shippingDetails.state.name = "";
         this.purchaseBillCompany.shippingDetails.stateName = "";
+        this.purchaseBillCompany.shippingDetails.gstNumber = "";
     }
 
     /**
