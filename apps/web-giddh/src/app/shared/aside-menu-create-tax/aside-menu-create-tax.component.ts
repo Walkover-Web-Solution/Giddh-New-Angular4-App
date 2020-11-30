@@ -120,7 +120,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
                 taxValue: this.tax.taxDetail[0].taxValue,
                 date: moment(this.tax.taxDetail[0].date).toDate(),
                 tdsTcsTaxSubTypes: subTyp ? subTyp : null,
-                taxType: this.tax.taxType,
+                taxType: subTyp ? this.tax.taxType.replace(subTyp, '') : this.tax.taxType,
                 taxFileDate: this.tax.taxFileDate.toString()
             };
         }
@@ -153,7 +153,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
         let dataToSave = _.cloneDeep(this.newTaxObj);
 
         if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
-            dataToSave.taxType = dataToSave.tdsTcsTaxSubTypes;
+            dataToSave.taxType = dataToSave.taxType+dataToSave.tdsTcsTaxSubTypes;
         }
 
         dataToSave.taxDetail = [{
