@@ -1031,6 +1031,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     this.purchaseOrder.company.shippingDetails.stateCode = defaultAddress.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
+                    this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
                 } else {
                     this.resetShippingAddress();
                 }
@@ -2451,7 +2452,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.purchaseOrder.company.billingDetails.stateCode = defaultAddress ? defaultAddress.stateCode : '';
             this.purchaseOrder.company.billingDetails.stateName = defaultAddress ? defaultAddress.stateName : '';
             this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
-            this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
         }
     }
 
