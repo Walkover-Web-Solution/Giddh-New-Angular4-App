@@ -142,7 +142,7 @@
                         <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" (selected)="discountSelected()" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
                     </span>
                 <span class="pull-right">
-                        <button  class="btn btn-primary marge-btn"  [disabled]="(isDiscountSaveDisable$ | async)" (click)="applyDiscounts()">Apply</button>
+                        <button  class="btn btn-primary merge-btn"  [disabled]="(isDiscountSaveDisable$ | async)" (click)="applyDiscounts()">Apply</button>
                     </span>
 
             </div>

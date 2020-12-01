@@ -415,7 +415,7 @@
                         <sh-select class="pull-left" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" [placeholder]="'Select discounts'" style="width: calc(100% - 93px);"></sh-select>
                     </span>
                     <span class="pull-right">
-                        <button  class="btn btn-primary marge-btn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscount()">Apply</button>
+                        <button  class="btn btn-primary merge-btn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscount()">Apply</button>
                     </span>
 
                 </div>
@@ -444,7 +444,7 @@
                                 </sh-select>
                             </span>
                             <span class="pull-right">
-                                <button type="submit" class="btn btn-primary marge-btn"
+                                <button type="submit" class="btn btn-primary merge-btn"
                                     [disabled]="moveAccountForm.invalid">Move</button>
                             </span>
                         </div>
@@ -464,7 +464,7 @@
                                 [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"></sh-select>
                         </span>
                         <span class="pull-right">
-                            <button type="submit" class="btn btn-primary marge-btn"
+                            <button type="submit" class="btn btn-primary merge-btn"
                                 (click)="mergeAccounts()">Merge</button>
                         </span>
                     </div>
@@ -493,10 +493,10 @@
                         <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" (selected)="discountSelected()"  placeholder="Select discounts" ></sh-select>
                     </span>
                     <span class="pull-right">
-                        <button  class="btn btn-primary marge-btn" [disabled]="(isDiscountSaveDisable$ | async)"  (click)="applyDiscounts()">Apply</button>
+                        <button  class="btn btn-primary merge-btn" [disabled]="(isDiscountSaveDisable$ | async)"  (click)="applyDiscounts()">Apply</button>
                     </span>
                     <!-- <span class="pull-right">
-                        <button  class="btn btn-primary marge-btn" (click)="applyDiscounts()">Apply</button>
+                        <button  class="btn btn-primary merge-btn" (click)="applyDiscounts()">Apply</button>
                     </span> -->
                 </div>
             </div>
