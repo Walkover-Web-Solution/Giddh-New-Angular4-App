@@ -357,6 +357,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
             this.calculatePreAppliedTax();
+            this.preparePreAppliedDiscounts();
 
             if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
@@ -371,7 +372,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public calculatePreAppliedTax(): void {
         let activeAccountTaxes = [];
-          this.preparePreAppliedDiscounts();
         if (this.activeAccount && this.activeAccount.applicableTaxes) {
             activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
         }
@@ -451,11 +451,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 item.isActive = event.isActive.target.checked;
             }
         });
-        this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
-            if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                item.isActive = event.isActive.target.checked;
-            }
-        });
+        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts) {
+            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
+                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                    item.isActive = event.isActive.target.checked;
+                }
+            });
+        }
         this.currentTxn.convertedDiscount = this.calculateConversionRate(this.currentTxn.discount);
         this.calculateTax();
     }
