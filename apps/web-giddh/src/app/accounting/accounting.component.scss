@@ -57,7 +57,7 @@
     background: $gray-90;
 }
 
-.confirmation_box {
+.confirmation-box {
     background: $white;
     display: inline-block;
     padding: 20px;
@@ -69,7 +69,7 @@
     margin: 20px 0;
 }
 
-.total_box {
+.total-box {
     padding: 15px 0;
     border-top: 1px solid;
     border-bottom: 1px solid;
@@ -78,7 +78,7 @@
     font-size: 14px;
 }
 
-.total_box > span {
+.total-box > span {
     margin: 0 8px;
     display: inline-block;
     min-width: 120px;
@@ -128,7 +128,7 @@
     color: $dark-liver;
 }
 
-.sidebar_list {
+.sidebar-list {
     width: 300px;
     position: absolute;
     right: 0;
@@ -140,7 +140,7 @@
     border-left: 1px solid $light-gray;
 }
 
-.sidebar_list h3 {
+.sidebar-list h3 {
     background: $white;
 }
 /*

@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.secondry-dark-bg span {
+.secondary-dark-bg span {
     background: $teal;
     width: 15px;
     height: 15px;
@@ -7,7 +7,7 @@
     margin-right: 5px;
 }
 
-.secondry-light-bg span {
+.secondary-light-bg span {
     background: $light-sea-green;
     width: 15px;
     height: 15px;
@@ -20,11 +20,11 @@
     justify-content: center;
     align-items: center;
 }
-.dashboard-option li.secondry-dark-bg {
+.dashboard-option li.secondary-dark-bg {
     color: $teal;
     font-size: 14px;
 }
-.dashboard-option li.secondry-light-bg {
+.dashboard-option li.secondary-light-bg {
     color: $light-sea-green;
     font-size: 14px;
 }

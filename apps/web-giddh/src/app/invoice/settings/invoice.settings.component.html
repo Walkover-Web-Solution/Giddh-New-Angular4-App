@@ -409,7 +409,7 @@
                         <!--                                <div class="col-xs-5"><label>Custom Estimation</label></div>-->
                         <!--                                <div class="col-xs-7 p-0">-->
                         <!--                                    <div class="form-group clearfix ">-->
-                        <!--                                        <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimationCheck" name="customInvoice" />-->
+                        <!--                                        <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left d-inline-flex estimation-check" name="customInvoice" />-->
                         <!--                                        <div class=" d-inline-flex custom-estimation " *ngIf="invoiceSetting.useCustomInvoiceNumber">-->
                         <!--                                            <div class="d-inline-flex position-relative">-->
                         <!--                                                <label>Initial No.</label>-->
@@ -555,7 +555,7 @@
                         <!--                                <div class="col-xs-5"><label>Custom Proforma#</label></div>-->
                         <!--                                <div class="col-xs-7 p-0">-->
                         <!--                                    <div class="form-group clearfix ">-->
-                        <!--                                        <input type="checkbox" class="pull-left d-inline-flex estimationCheck" name="customInvoice" />-->
+                        <!--                                        <input type="checkbox" class="pull-left d-inline-flex estimation-check" name="customInvoice" />-->
 
                         <!--                                    </div>-->
                         <!--                                </div>-->
@@ -729,19 +729,23 @@
                         <div class="clearfix pd-t1">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-3">
-                                    <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left estimationCheck show-on-mobile" name="customInvoice" />
+                                    <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left estimation-check show-on-mobile" name="customInvoice" />
                                     <label>Custom Invoice#</label></div>
                                 <div class="col-sm-12 col-md-9">
-                                    <div class="form-group clearfix ">
-                                        <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left estimationCheck hide-on-mobile" name="customInvoice" />
-                                        <div class=" d-inline-flex custom-estimation" *ngIf="invoiceSetting.useCustomInvoiceNumber">
+                                    <div class="form-group clearfix">
+                                        <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left estimation-check hide-on-mobile" name="customInvoice" />
+                                        <div class="d-inline-flex custom-estimation" *ngIf="invoiceSetting.useCustomInvoiceNumber">
                                             <div class="d-inline-flex position-relative">
-                                                <label>Initial No.</label>
-                                                <input type="text" class="form-control text-right initial-number" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">
+                                                <label>Branch Prefix</label>
+                                                <input type="text" class="form-control" name="branchPrefix" [(ngModel)]="invoiceSetting.branchInvoiceNumberPrefix">
                                             </div>
                                             <div class="d-inline-flex position-relative">
-                                                <label class="prefix-label">Prefix</label>
-                                                <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">
+                                                <label>Sub Prefix</label>
+                                                <input type="text" class="form-control" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">
+                                            </div>
+                                            <div class="d-inline-flex position-relative">
+                                                <label>Initial No.</label>
+                                                <input type="text" class="form-control" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">
                                             </div>
                                         </div>
                                     </div>

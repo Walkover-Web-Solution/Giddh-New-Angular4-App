@@ -200,13 +200,13 @@
                                                         (click)="toggleEditMode()"><i class="icon-edit-pencil"></i></a>
                                                 </span>
 
-                                                <span class="position-relative" *ngIf="selectedItem?.voucherType !== 'purchase'">
+                                                <span *ngIf="selectedItem?.voucherType !== 'purchase'">
                                                     <a href="javascript:void 0" tooltip="Send Email" placement="top"
                                                         (click)="showEmailSendModal.toggle()"><i
                                                             class="fa fa-envelope-o"></i></a>
                                                 </span>
 
-                                                <span class="position-relative" *ngIf="selectedItem?.voucherType === 'purchase'">
+                                                <span *ngIf="selectedItem?.voucherType === 'purchase'">
                                                     <a href="javascript:;" tooltip="Send Email" placement="top"
                                                         (click)="openSendMailModal(sendEmailModal)"><i
                                                             class="fa fa-envelope-o"></i></a>

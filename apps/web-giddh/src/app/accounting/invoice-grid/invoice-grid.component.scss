@@ -8,11 +8,11 @@
     max-width: 350px;
 }
 
-.appearance_none:focus {
+.appearance-none:focus {
     background: $very-light-gray !important;
 }
 
-.appearance_none {
+.appearance-none {
     background: $gray-90 !important;
 }
 
@@ -38,4 +38,16 @@
 
 .mx-350 label {
     width: 160px;
+}
+
+.invoice-width{
+    width: 128px !important;
+}
+
+.invoice-no-width{
+    max-width:200px !important;
+}
+
+.modal-dialog{
+    width: 298px !important;
 }

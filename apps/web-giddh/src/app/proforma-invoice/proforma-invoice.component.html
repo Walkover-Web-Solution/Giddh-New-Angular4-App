@@ -608,10 +608,10 @@
                                                         <span><input type="checkbox" [checked]="linkedPo && linkedPo.includes(option.value)" [value]="option.value"></span>&nbsp;
                                                         <span>
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unqiue" *ngIf="option.additional?.pending">
+                                                            <div class="item-unique" *ngIf="option.additional?.pending">
                                                                 Pending: {{ option.additional?.pending }}
                                                             </div>
-                                                            <div class="item-unqiue" *ngIf="option.additional?.grandTotal">
+                                                            <div class="item-unique" *ngIf="option.additional?.grandTotal">
                                                                 Amount: {{ option.additional?.grandTotal }}
                                                             </div>
                                                         </span>

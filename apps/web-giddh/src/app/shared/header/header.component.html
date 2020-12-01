@@ -7,7 +7,7 @@
                 <div class="col-sm-5" *ngIf="hideAsDesignChanges">
                     <ul class="main-company-name">
                         <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="companyDetailsDropDownWeb.hide()" [exclude]="'.company-name'">
-                            <a id="company_wrap" href="javascript:void(0)" class="clearfix z1" dropdownToggle>
+                            <a id="company-wrap" href="javascript:void(0)" class="clearfix z1" dropdownToggle>
                                 <ng-template #companyBranchNameAlias> {{ (selectedCompany | async)?.name }}<span *ngIf="(selectedCompany | async)?.nameAlias"> (
                                         {{  (selectedCompany | async)?.nameAlias }} )</span>
                                 </ng-template>
@@ -161,7 +161,7 @@
                 <div class="col-sm-3">
                     <div class="giddh-logo" (click)="forceOpenNavigation = true;">
                         <li class="company-name position-relative" (click)="toggleBodyScroll()" [autoClose]="false" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false; toggleBodyScroll();">
-                            <a id="company_wrap" href="javascript:void(0)" class="clearfix z1 " dropdownToggle>
+                            <a id="company-wrap" href="javascript:void(0)" class="clearfix z1 " dropdownToggle>
                                 <ng-template #companyBranchNameAlias> {{ (selectedCompany | async)?.name }}<span *ngIf="(selectedCompany | async)?.nameAlias"> (
                                         {{  (selectedCompany | async)?.nameAlias }}
                                         )</span>

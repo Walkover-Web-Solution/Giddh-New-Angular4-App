@@ -2,7 +2,7 @@
 <ng-container>
     <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
     <div class="text-overdue ss" *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
-        <i class="text-middle">Please add GSTIN in company setting to view report.</i>
+        <i class="text-middle">Please add GSTIN to your default address in order to view report.</i>
     </div>
 
     <div *ngIf="taxes?.length" class="row mb-3 mt-3 ml-3">
