@@ -39,5 +39,5 @@ export const COMPANY_API = {
 
     CREATE_NEW_BRANCH: 'company/:companyUniqueName/branch',
     GET_ALL_BRANCHES: 'company/:companyUniqueName/branch',
-    GET_SIDE_BAR_ITEM: 'company/:companyUniqueName/ui_side_bar_items?isMobile=:isMobile'
+    GET_SIDE_BAR_ITEM: 'company/:companyUniqueName/ui_side_bar_items'
 };

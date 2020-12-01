@@ -120,7 +120,8 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
 
         case GENERAL_ACTIONS.SET_SMART_LIST: {
             let data: IUlist[] = action.payload;
-            return {...state, smartList: data};
+            const newState = _.cloneDeep(state);
+            return {...newState, smartList: data};
         }
 
         case GENERAL_ACTIONS.RESET_COMBINED_LIST: {

@@ -21,7 +21,6 @@ import { take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
-import { CompanyService } from './services/companyService.service';
 
 /**
  * App Component
@@ -57,7 +56,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private dbServices: DbService,
         private loadingService: LoaderService,
         private companyActions: CompanyActions,
-        private companyService: CompanyService,
         private loginAction: LoginActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
