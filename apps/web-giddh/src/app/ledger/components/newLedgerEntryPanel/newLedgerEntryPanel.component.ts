@@ -28,7 +28,7 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
 } from 'apps/web-giddh/src/app/app.constant';
-import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
@@ -165,8 +165,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public mapBodyContent: string;
     public selectedItemToMap: ReconcileResponse;
     public tags$: Observable<TagRequest[]>;
-    public activeAccount$: Observable<AccountResponse>;
-    public activeAccount: AccountResponse;
+    public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
+    public activeAccount: AccountResponse | AccountResponseV2;
     public currentAccountApplicableTaxes: string[] = [];
     public totalForTax: number = 0;
     public taxListForStock = []; // New
@@ -284,28 +284,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
-                this.accountOtherApplicableDiscount = [];
-                this.activeAccount = acc;
-                let parentAcc = acc.parentGroups[0].uniqueName;
-                let incomeAccArray = ['revenuefromoperations', 'otherincome'];
-                let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-                let assetsAccArray = ['assets'];
-                let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
-                if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-                    let appTaxes = [];
-                    acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-                    this.currentAccountApplicableTaxes = appTaxes;
-                }
-                if (acc.country && acc.country.countryName) {
-                    this.activeAccountCountryName = acc.country.countryName;
-                }
-                if (acc.applicableDiscounts && acc.applicableDiscounts.length) {
-                    this.accountOtherApplicableDiscount = acc.applicableDiscounts;
-                } else if (acc.inheritedDiscounts && acc.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
-                    acc.inheritedDiscounts.forEach(element => {
-                        this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
-                    });
-                }
+                this.assignUpdateActiveAccount(acc);
+            }
+        });
+        this.store.pipe(select(stateAccount => stateAccount.groupwithaccounts.activeAccount), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.assignUpdateActiveAccount(response);
             }
         });
 
@@ -503,7 +487,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 /** apply account's discount (default) */
                 if (this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
                     this.currentTxn.discounts.map(item => {
-                        item.isActive = this.accountOtherApplicableDiscount.some(element => element.uniqueName === item.discountUniqueName);
+                        let discountItem = this.accountOtherApplicableDiscount.find(element => element.uniqueName === item.discountUniqueName);
+                        if (discountItem && discountItem.uniqueName) {
+                            item.isActive = discountItem.isActive;
+                        }
                     });
                 }
 
