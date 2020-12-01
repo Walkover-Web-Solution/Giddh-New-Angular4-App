@@ -1,0 +1,26 @@
+.export-modal-wraaper {
+    font-size: 14px;
+    span{
+        min-width: 100px;
+        display: inline-flex;
+    }
+    .mulitiple-email{
+        min-height: 80px;
+    }
+    .show-on-mobile{
+        display: none;
+    }
+}
+@media(max-width:575px){
+    .export-modal-wraaper  {
+        label{
+            padding-bottom: 5px;
+        }
+        .hide-on-mobile{
+            display: none;
+        }
+        .show-on-mobile{
+            display: flex;
+        }
+    }
+}
