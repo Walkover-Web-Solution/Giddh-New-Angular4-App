@@ -241,13 +241,13 @@ export let DEFAULT_GROUPS_RESPONSIVE = [];
 
 export function reassignNavigationalArray(toAssign, isCompany, menuItems: Array<any>) {
     if (toAssign) {
-        NAVIGATION_ITEM_LIST = menuItems;
-        DEFAULT_MENUS = menuItems;
+        NAVIGATION_ITEM_LIST = menuItems.slice(0, 7);
+        DEFAULT_MENUS = menuItems.slice(0, 7);
         DEFAULT_AC = DEFAULT_AC_RESPONSIVE;
         DEFAULT_GROUPS = DEFAULT_GROUPS_RESPONSIVE;
     } else {
         NAVIGATION_ITEM_LIST = menuItems;
-        DEFAULT_MENUS = isCompany ? menuItems : menuItems.slice(0, 17);
+        DEFAULT_MENUS = menuItems.slice(0, 10);
         DEFAULT_AC = DEFAULT_AC_ORIGINAL;
         DEFAULT_GROUPS = DEFAULT_GROUPS_ORIGINAL;
     }
