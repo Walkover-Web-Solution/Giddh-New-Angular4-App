@@ -1886,7 +1886,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      *
      * @memberof HeaderComponent
      */
-    public getAllMenusModules() {
+    public getAllMenusModules(): void {
         this.permissionService.getSharedAllModules().subscribe(response => {
             if (response && response.status === 'success') {
                 this.allModulesList = response.body;
