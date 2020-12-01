@@ -21,12 +21,12 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="row">
 
-                            <div class="col-md-6 col-sm-6 col-12 mb-1">
+                            <!-- <div class="col-md-6 col-sm-6 col-12 mb-1">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'invoice')"></sh-select>
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-6 col-sm-6 col-12">
+                            <div class="col-md-12 col-sm-12 col-12">
                                 <giddh-datepicker name="invoiceDateRange" [(ngModel)]="request.invoiceDate"></giddh-datepicker>
                             </div>
 
@@ -45,12 +45,12 @@
 
                         <div class="total-amount row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
+                            <div class="col-md-6 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
                                     [ItemHeight]="33" (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
 
-                            <div class="col-md-4 col-sm-6 col-6 pr-0">
+                            <div class="col-md-6 col-sm-6 col-6 pr-0">
                                 <input class="form-control" type="tel" placeholder="00" name="total" [(ngModel)]="request.total">
 
                             </div>
@@ -72,14 +72,13 @@
 
                         <div class="row mr-0 ml-0">
 
-                            <div class="col-md-4 col-sm-6 col-6 pl-0 pr-0">
+                            <!-- <div class="col-md-4 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'due')"></sh-select>
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-8 col-sm-6 col-6 pr-0">
-                                <input type="text" bsDatepicker class="form-control w-100" name="dueDate"
-                                    [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" [(ngModel)]="request.dueDate" />
+                            <div class="col-md-12 col-sm-12 col-6 pl-0 pr-0">
+                                <giddh-datepicker name="invoiceDateRange" [(ngModel)]="request.dueDate"></giddh-datepicker>
                             </div>
 
                         </div>
@@ -96,12 +95,12 @@
 
                         <div class="due-amount row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
+                            <div class="col-md-6 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
                                     [ItemHeight]="33" (selected)="dueTotalRangeChanged($event)"></sh-select>
                             </div>
 
-                            <div class="col-md-4 col-sm-6 col-6 pr-0">
+                            <div class="col-md-6 col-sm-6 col-6 pr-0">
                                 <input class="form-control" type="tel" placeholder="00" name="balanceDue"
                                     [(ngModel)]="request.balanceDue">
                             </div>
@@ -110,7 +109,27 @@
                     </div>
 
                 </div>
-
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <label>Account</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="pr-0 col-sm-5 col-12">
+                                <div class="checkbox square-switch">
+                                    <input type="checkbox" id="includeParticulars" />
+                                    <label for="includeParticulars">
+                                        <span class="pull-left" >Include</span>
+                                        <span class="pull-right" hidden>Exclude</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-7 col-12">
+                                    <sh-select></sh-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row mt-2">
 
                     <div class="col-md-4 col-sm-12">
@@ -198,12 +217,12 @@
 
                         <div class="total-amount row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
+                            <div class="col-md-6 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
                                     (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
 
-                            <div class="col-md-4 col-sm-6 col-6 pr-0">
+                            <div class="col-md-6 col-sm-6 col-6 pr-0">
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
                             </div>
                        </div>
@@ -291,11 +310,11 @@
                     </div>
                     <div class="col-8">
                         <div class="status-description row mr-0 ml-0">
-                            <div class="col-md-8 col-sm-12 pl-0 pr-0">
+                            <div class="col-md-6 col-sm-12 pl-0 pr-0">
                                 <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
                                     (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
-                            <div class="col-md-4 col-sm-12 pr-0">
+                            <div class="col-md-6 col-sm-12 pr-0">
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
                             </div>
                         </div>

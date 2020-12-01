@@ -49,6 +49,7 @@ import { WebviewDirective } from './webview.directive';
 import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
+import { BulkExportModal } from './preview/models/bulk-export-modal/bulk-export.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
@@ -121,6 +122,7 @@ const INVOICE_ROUTES: Routes = [
         PreviewDownloadReceiptComponent,
         WebviewDirective,
         InvoiceAdvanceSearchComponent,
+        BulkExportModal,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,
         PurchaseBillTemplateComponent,

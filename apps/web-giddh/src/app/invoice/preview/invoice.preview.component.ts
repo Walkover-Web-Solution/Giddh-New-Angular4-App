@@ -39,6 +39,7 @@ import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/re
 import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
+import { BulkExportModal } from './models/bulk-export-modal/bulk-export.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
