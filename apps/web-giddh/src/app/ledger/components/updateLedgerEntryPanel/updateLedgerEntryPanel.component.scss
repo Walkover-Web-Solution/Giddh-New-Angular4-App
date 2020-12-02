@@ -285,6 +285,14 @@ span.eligible-ITC {
 .left-col-new .row, .right-col-new .row , .ledger-head .row{
     margin: 0;
 }
+.dropdown-container[disabled], .table-amount[disabled] {
+    pointer-events: none;
+}
+.tourist-scheme-wrapper{
+     input[type="checkbox"]{
+        opacity: 0;
+    }
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
