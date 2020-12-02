@@ -65,10 +65,10 @@ span.dr-label {
     margin-bottom: 20px;
     .input-group{
         .input-group-addon{
-            border-left: 1px solid $very-light-gray !important;
+            border-left: 1px solid $gainsboro !important;
         }
         input{
-            border-left: 1px solid $very-light-gray !important;
+            border-left: 1px solid $gainsboro !important;
             border-right: none !important;
             &:focus{
                 border-left: 1px solid $chetwode-blue !important;
@@ -119,7 +119,7 @@ form.gstin-form {
 
 .move-to-group{
     .list-item{
-        border-bottom:1px solid $very-light-gray;
+        border-bottom:1px solid $gainsboro;
     }
 }
 .name-of-field{

@@ -389,8 +389,8 @@ span.close-modal.cp.pull-right {
         justify-content: space-between;
         height: 54px;
         background-color: $white;
-        border-top: 1px solid $light-silver;
-        border-bottom: 1px solid $light-silver;
+        border-top: 1px solid $gainsboro;
+        border-bottom: 1px solid $gainsboro;
         align-items: center;
         span {
             padding: 10px;
@@ -516,7 +516,7 @@ label.labeled {
         .send-email-modal-header {
             background-color: $light-gray-extra;
             padding: 8px 10px;
-            border-bottom: 1px solid $very-light-gray;
+            border-bottom: 1px solid $gainsboro;
             span {
                 width: unset;
             }
@@ -980,7 +980,7 @@ p {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     margin: 3px 0;
 }
 

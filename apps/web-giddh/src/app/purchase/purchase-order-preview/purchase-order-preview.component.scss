@@ -127,10 +127,10 @@
 .invoice-detail-header .edit-change-status .edit-action-btn-groups {
     display: flex;
     background-color: $white;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     margin-right: 10px;
     span {
-        border-left: 1px solid $very-light-gray;
+        border-left: 1px solid $gainsboro;
         padding: 5px;
         height: 30px;
         width: 30px;
@@ -701,7 +701,7 @@ p {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     margin: 3px 0;
 }
 
@@ -836,7 +836,7 @@ strong {
     width: 60%;
     height: 1px;
     margin: 0px 0 auto auto;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .green-row {

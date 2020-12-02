@@ -271,19 +271,19 @@ body{
 }
 
 .bt-1 {
-    border-top: 1px solid $very-light-gray;
+    border-top: 1px solid $gainsboro;
 }
 
 .br-1 {
-    border-right: 1px solid $very-light-gray;
+    border-right: 1px solid $gainsboro;
 }
 
 .bb-1 {
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .bl-1 {
-    border-left: 1px solid $very-light-gray;
+    border-left: 1px solid $gainsboro;
 }
 
 .border-none {
@@ -1093,7 +1093,7 @@ ul.sub-list {
     position: absolute;
     left: 0;
     right: 0;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     padding: 20px;
     box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
     top: 75px;
@@ -1499,7 +1499,7 @@ modal-container.modal {
     color: $nobel;
 }
 .price-input {
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     font-size: 14px;
     background: $white;
     padding: 1px 2px;
@@ -2349,7 +2349,7 @@ input[type="checkbox"]:after {
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     width: 18px;
     height: 18px;
     background: $white;
@@ -2843,7 +2843,7 @@ li.no-click {
 .company-box h3 {
     font-weight: bold;
     margin-bottom: 7px;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     padding-bottom: 15px;
 }
 
@@ -3066,7 +3066,7 @@ li.no-click {
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
     color: $dark-gray;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     z-index: 9999 !important;
 }
 
@@ -3195,7 +3195,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .datePickr .dropdown-menu {
     box-shadow: 0 3px 28px 0 $black-russian-light;
     color: $dark-gray;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
 }
 
 .datePickr .dropdown-menu table {
@@ -3812,8 +3812,8 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 #select_view {
-    background: $very-light-gray !important;
-    border-color: $very-light-gray !important;
+    background: $gainsboro !important;
+    border-color: $gainsboro !important;
     color: $dark-liver;
 }
 
@@ -3859,7 +3859,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .dashed {
     border-style: dashed;
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
 }
 
 .input-group button {
@@ -4131,7 +4131,7 @@ select.form-control {
     text-align: left;
     background-color: $white;
     background-clip: padding-box;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px $black-russian-light;
@@ -4184,7 +4184,7 @@ select.form-control {
 .col-wrapper {
     width: 255px;
     float: left;
-    border-right: 1px solid $very-light-gray;
+    border-right: 1px solid $gainsboro;
     min-height: 100%;
     height: 100%;
     position: relative;
@@ -4233,7 +4233,7 @@ label {
 
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
 }
 
 #getGroupModal .detailed label {
@@ -4434,7 +4434,7 @@ label {
 
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
 }
 
 #getGroupModal .detailed label {
@@ -5214,7 +5214,7 @@ label {
     right: -2px; */
     top: 0;
     right: 0;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
 }
 
@@ -6214,7 +6214,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: relative;
     transition: all 0.3s ease;
     width: 100%;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     border-radius: 2px;
     color: $dark-gray;
     padding: 0 7px;
@@ -6288,8 +6288,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px !important;
-    border-bottom: 1px solid $very-light-gray;
-    border-right: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
     color: $dark-liver;
     text-overflow: ellipsis;
@@ -6308,8 +6308,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid $very-light-gray;
-    border-right: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
     color: $dark-liver;
     text-overflow: ellipsis;
@@ -6425,7 +6425,7 @@ table td[class*=col-]:last-child {
 }
 
 .ledger-book {
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     clear: both;
     /* // overflow: hidden; */
     position: relative;
@@ -6853,7 +6853,7 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li {
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .tbpl-dropdown > li:last-child {
@@ -6897,7 +6897,7 @@ panel.sFthanks.fieldset {
 
 .unit_action .btn {
     margin-right: 0;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     opacity: 0.5;
 }
 
@@ -7850,7 +7850,7 @@ app-header {
     background-color: transparent;
     border: none;
     display: block;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     width: 100%;
     text-align: left;
     padding: 6px;
@@ -8552,7 +8552,7 @@ ul.dropdown-menu p.lead.pd {
     color: $davy-grey;
     text-align: center;
     background-color: $whisper-light;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     border-left: none !important;
 }
 
@@ -10722,7 +10722,7 @@ input.mat-input-element{
             background-color: $white;
         }
         .breadcrumbs {
-            border-top: 1px solid $very-light-gray;
+            border-top: 1px solid $gainsboro;
         }
         #getGroupModal #middleBody {
             height: 100%;

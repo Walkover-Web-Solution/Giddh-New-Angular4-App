@@ -699,7 +699,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .description textarea {
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -708,7 +708,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 .sales-invoice-table table input[disabled] {
     cursor: default;
     background-color: $whisper-light;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     padding: 5px;
     width: 100%;
     // max-width: 150px;
@@ -746,7 +746,7 @@ a.copyInvoice img {
     padding: 0;
 }
 .shipping-address textarea {
-    border-bottom: 1px solid $very-light-gray !important;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .mb-0 {

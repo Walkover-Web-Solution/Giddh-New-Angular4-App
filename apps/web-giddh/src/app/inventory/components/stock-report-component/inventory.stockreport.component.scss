@@ -1,7 +1,7 @@
 @import "../../../../assets/css/color.scss";
 
 .bd-rt {
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
 }
 
 .flex-fill {
@@ -55,7 +55,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid $very-light-gray;
+    border-right: 1px solid $gainsboro;
 }
 
 .icon-pointer .glyphicon {
@@ -189,7 +189,7 @@
     border-radius: 0px;
     padding: 0px;
     input[type="checkbox"]:after {
-        border: 1px solid $very-light-gray;
+        border: 1px solid $gainsboro;
         width: 15px;
         height: 15px;
         top: 2px;

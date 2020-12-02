@@ -111,7 +111,7 @@ form{
                         line-height: 2;
                         border-bottom: 1px solid $gainsboro;
                         padding-left: 6px;
-                        border-bottom-color: $very-light-gray;
+                        border-bottom-color: $gainsboro;
                         width: 100%;
                     }
                     .input-custom {
@@ -278,7 +278,7 @@ form{
 
     .list-item {
         font-size: 14px;
-        border-bottom: 1px solid $very-light-gray;
+        border-bottom: 1px solid $gainsboro;
         display:flex !important;
     }
 
@@ -356,7 +356,7 @@ ng-select.splSales {
     text-align: right;
 }
 .description textarea {
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -365,7 +365,7 @@ ng-select.splSales {
 .create-purchase-order-table table input[disabled] {
     cursor: default;
     background-color: $whisper-color;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     padding: 5px;
     width: 100%;
     // max-width: 150px;
@@ -399,7 +399,7 @@ a.copyInvoice img {
     padding-right: 10px;
 }
 .shipping-address textarea {
-    border-bottom: 1px solid $very-light-gray !important;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .entry-date label {
@@ -637,7 +637,7 @@ section.static-purchase-table {
 
 .customer-purchase-table.bg-white {
     margin-top: 10px;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     margin-bottom: 20px;
 }
 
@@ -1032,7 +1032,7 @@ span.eligible-ITC {
     line-height: 2.4;
     border-bottom: 1px solid $gainsboro;
     padding-left: 6px;
-    border-bottom-color: $very-light-gray;
+    border-bottom-color: $gainsboro;
 }
 
 .loader-class {

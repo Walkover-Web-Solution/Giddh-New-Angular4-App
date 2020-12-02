@@ -297,7 +297,7 @@ $greyClr: #6d6d6d;
 
 .list-item {
     font-size: 14px;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     display:flex !important;
 }
 
@@ -705,7 +705,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .description textarea {
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -714,7 +714,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 .sales-invoice-table table input[disabled] {
     cursor: default;
     background-color: $whisper-light;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     padding: 5px;
     width: 100%;
     // max-width: 150px;
@@ -756,7 +756,7 @@ a.copyInvoice img {
     padding: 0;
 }
 .shipping-address textarea {
-    border-bottom: 1px solid $very-light-gray !important;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .mb-0 {
@@ -997,7 +997,7 @@ section.static-invoice-table {
 
 .customer-invoice-table.bg-white {
     margin-top: 10px;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     margin-bottom: 20px;
 }
 
@@ -1182,7 +1182,7 @@ section.newtable {
     line-height: 2.4;
     border-bottom: 1px solid $gainsboro;
     padding-left: 6px;
-    border-bottom-color: $very-light-gray;
+    border-bottom-color: $gainsboro;
 }
 
 .loader-class {
@@ -1230,7 +1230,7 @@ section.newtable {
 
 .add-bulk-item-modal .right-content hr {
     color: $black;
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
     margin: 10px -15px;
     margin-left: -15px;
 }
@@ -1262,7 +1262,7 @@ section.newtable {
 
 .add-bulk-item-modal .input-group .input-group-btn .btn {
     background: $white;
-    border-left: 1px solid $very-light-gray;
+    border-left: 1px solid $gainsboro;
 }
 
 .add-bulk-item-modal .btn {

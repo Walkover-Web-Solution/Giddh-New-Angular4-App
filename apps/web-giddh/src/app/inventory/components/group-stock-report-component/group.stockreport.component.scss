@@ -1,6 +1,6 @@
 @import "../../../../assets/css/color.scss";
 .bd-rt {
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
 }
 
 :host ::ng-deep .fb-1-container {
@@ -133,7 +133,7 @@ tfoot {
 }
 
 .basic>thead>tr>th {
-    border-right: 1px solid $very-light-gray;
+    border-right: 1px solid $gainsboro;
 }
 
 .icon-pointer .glyphicon {
