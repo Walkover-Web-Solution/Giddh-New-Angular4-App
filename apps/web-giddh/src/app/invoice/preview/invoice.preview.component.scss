@@ -194,10 +194,10 @@ td.card-header.clearfix {
 }
 
 .card #invoice-td {
-    border-bottom: 1px solid $gainsboro-light !important;
+    border-bottom: 1px solid $gainsboro !important;
     padding-bottom: 20px !important;
     background-color: $snow;
-    border-top: 1px solid $gainsboro-light !important;
+    border-top: 1px solid $gainsboro !important;
     padding-top: 10px !important;
 }
 
@@ -231,7 +231,7 @@ td.card-header.clearfix {
 
 .card .more-button .moreBtnWrapper {
     margin-right: 0;
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
     padding-top: 8px;
 }
 
@@ -530,7 +530,7 @@ span.icon-export-icon {
 }
 
 .giddh-table{
-    border-right: 1px solid $gainsboro-light;
+    border-right: 1px solid $gainsboro;
     border-bottom: 1px solid $gainsboro !important;
     tbody{
         tr{

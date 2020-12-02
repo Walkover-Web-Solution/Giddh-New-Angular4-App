@@ -30,12 +30,12 @@
 
 .basic > tbody > tr td:last-child,
 .basic > thead > tr th:last-child {
-    border-right: 1px solid $gainsboro-light !important;
+    border-right: 1px solid $gainsboro !important;
 }
 
 .basic > tbody > tr td:first-child,
 .basic > thead > tr th:first-child {
-    border-left: 1px solid $gainsboro-light !important;
+    border-left: 1px solid $gainsboro !important;
 }
 
 .basic > thead > tr > th {
@@ -1216,31 +1216,31 @@ ul.sub-list {
     color: $nobel;
 }
 
-.Advance-Search .input-group-addon {
+.advance-search .input-group-addon {
     border: 1px solid $gainsboro;
     background: none;
     border-left: 0 !important;
 }
 
-.Advance-Search .input-group .form-control {
+.advance-search .input-group .form-control {
     border-right: 0px;
 }
 
-.Advance-Search p small {
+.advance-search p small {
     color: $extra-silver;
 }
 
-.Advance-Search p {
+.advance-search p {
     line-height: 15px;
 }
 
-.Advance-Search .scrollable-content .item > a {
+.advance-search .scrollable-content .item > a {
     border-bottom: 0px solid !important;
     padding: 5px 10px !important;
     display: block;
 }
 
-.Advance-Search .scrollable-content .item {
+.advance-search .scrollable-content .item {
     height: auto !important;
 }
 
@@ -2756,7 +2756,7 @@ input[type="checkbox"]:checked:after {
     padding: 11px 20px;
     font-size: 14px;
     font-family: 'opensans-semibold';
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
 }
 
 .inner-box2 {
@@ -3740,7 +3740,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background-position: 96% !important;
 }
 
-.pItem .multi-select input.form-control {
+.item-padding .multi-select input.form-control {
     padding-right: 24px !important;
 }
 .card-invoice-table-wrapper .multi-select input.form-control {
@@ -4084,7 +4084,7 @@ select.form-control {
     margin-bottom: 0;
 }
 
-.no-marg {
+.no-margin {
     margin: 0 !important;
 }
 
@@ -4271,7 +4271,7 @@ label {
     min-height: 400px;
 }
 
-.vcenter {
+.vertical-center {
     display: table-cell;
     vertical-align: middle;
 }
@@ -4472,7 +4472,7 @@ label {
     height: 100%;
 }
 
-.vcenter {
+.vertical-center {
     display: table-cell;
     vertical-align: middle;
 }
@@ -4751,7 +4751,7 @@ label {
 }
 
 #manufacture .bd-rt {
-    border-color: $gainsboro-light;
+    border-color: $gainsboro;
 }
 
 #manufacture thead th {
@@ -4759,7 +4759,7 @@ label {
 }
 
 #manufacture .source thead {
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
 }
 
 #manufacture .source .linkstock {
@@ -4859,7 +4859,7 @@ label {
 
 .companyGst .gst {
     padding-bottom: 20px;
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .Default_box {
@@ -5054,7 +5054,7 @@ label {
 .pagination > li > span:focus,
 .pagination > li > span:hover {
     background-color: $gainsboro !important;
-    border-color: $gainsboro-light;
+    border-color: $gainsboro;
 }
 
 #manufacture .section-title {
@@ -5778,7 +5778,7 @@ datepicker-inner .well table tbody .btn-default.active {
 
 .calendar-dropdown {
     /* box-shadow: none; */
-    border-color: $gainsboro-light;
+    border-color: $gainsboro;
     margin-top: 1px;
     border-radius: 2px;
 }
@@ -6267,7 +6267,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .option-box {
     background: $lavender;
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
     margin-bottom: 10px;
 }
 
@@ -6514,7 +6514,7 @@ table td[class*=col-]:last-child {
     /* padding: 15px; */
 }
 
-.noHover:hover td {
+.no-hover:hover td {
     background: $white !important;
 }
 
@@ -6660,7 +6660,7 @@ table td[class*=col-]:last-child {
 .long-code-details figure ul li {
     list-style: none;
     padding: 12px 0;
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .long-code-details figure ul li:last-child {
@@ -6949,7 +6949,7 @@ GST filing
 
 .tax-engine .list-filter {
     padding: 15px !important;
-    border-bottom: 1px solid $gainsboro-light !important;
+    border-bottom: 1px solid $gainsboro !important;
     height: 80px;
 }
 
@@ -7221,7 +7221,7 @@ th:first-child {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
@@ -7231,7 +7231,7 @@ th:first-child {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine .table caption + thead tr:first-child td,
@@ -7581,7 +7581,7 @@ th:first-child {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .list-column.expanded-list-column .zi-table tr td:first-of-type,
@@ -7682,8 +7682,8 @@ tbody
     font-size: 12px;
     text-transform: uppercase;
     -webkit-font-smoothing: antialiased;
-    border-top: 1px solid $gainsboro-light;
-    border-bottom: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .subtabs-box1 {
@@ -7737,7 +7737,7 @@ tbody
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
 }
 
 .tax-engine svg.icon.filing-step-icon {
@@ -8723,7 +8723,7 @@ button.ladda-button .ladda-label {
 }
 
 .ng-select-wrap.liq.select-group .below {
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
     height: 36px;
     align-items: center;
     display: flex;
@@ -8731,7 +8731,7 @@ button.ladda-button .ladda-label {
 
 .ng-select-wrap.liq ng-select .below {
     width: 100% !important;
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
     height: 36px;
     display: flex;
     align-items: center;
@@ -10340,7 +10340,7 @@ input.mat-input-element{
         }
         .tax-engine .list-filter {
             padding: 15px !important;
-            border-bottom: 1px solid $gainsboro-light !important;
+            border-bottom: 1px solid $gainsboro !important;
             height: auto;
         }
         .list-style ul.list-inline.list-middle.download-drop-down {
@@ -10743,7 +10743,7 @@ input.mat-input-element{
         .col-wrapper.left-account-operation:nth-child(3),
         .col-wrapper.left-account-operation:nth-child(2),
         .col-wrapper.left-account-operation:nth-child(4) {
-            border-top: 1px solid $gainsboro-light;
+            border-top: 1px solid $gainsboro;
         }
         .manage-account-popup.modal {
             background-color: $solitude;
@@ -10770,7 +10770,7 @@ input.mat-input-element{
     }
 
     @media only screen and (max-width: 480px) {
-        td.pItem.price .my-dropdown-menu {
+        td.item-padding.price .my-dropdown-menu {
             width: 180px !important;
         }
         /* manage group account*/

@@ -7,7 +7,7 @@
           <ng-container *ngIf="selectedValues?.length">
               <span class="chip" *ngFor="let sl of selectedValues">
                   {{ sl.label }}
-                  <span class="chipclose-btn" (mousedown)="clearSingleSelection($event, sl)" (click)="clearSingleSelection($event, sl)">&times;</span>
+                  <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)" (click)="clearSingleSelection($event, sl)">&times;</span>
               </span>
           </ng-container>
           <input type="text" style="opacity: 0 !important;position: absolute" class="pd-l1" [ngClass]="{'hasValue':filter?.length}" #inputFilter (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">

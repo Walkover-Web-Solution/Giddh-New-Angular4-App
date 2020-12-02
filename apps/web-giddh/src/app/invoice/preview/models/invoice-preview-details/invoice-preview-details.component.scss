@@ -108,7 +108,7 @@
     font-weight: 600;
 }
 
-.invoice-detail-header p.acc-holder-name {
+.invoice-detail-header p.account-holder-name {
     font-size: 14px;
     margin-top: 3px;
 }
@@ -349,7 +349,7 @@ span.close-modal.cp.pull-right {
 
 .invoice-search-box input {
     flex: 1;
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
     height: 37px;
     padding: 0 30px;
     background-image: url("../../../../../assets/images/searchIcon.svg");
@@ -447,7 +447,7 @@ span.close-modal.cp.pull-right {
 }
 
 label.labeled {
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
     color: $extra-dark-gray;
     padding: 5px 10px;
     border-radius: 3px;
@@ -502,18 +502,18 @@ label.labeled {
     }
 }
 
-.sendEmailModal {
+.send-email-modal {
     min-width: 240px;
     position: absolute;
     top: 40px;
     z-index: 10;
     right: 0;
-    border: 1px solid $extra-light-gray;
-    .sendEmailModalWrapper {
+    border: 1px solid $gainsboro;
+    .send-email-modal-wrapper {
         background-color: $white;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
-        .sendEmailModalHeader {
+        .send-email-modal-header {
             background-color: $light-gray-extra;
             padding: 8px 10px;
             border-bottom: 1px solid $very-light-gray;
@@ -522,10 +522,10 @@ label.labeled {
             }
         }
     }
-    .sendEmailModalBody {
+    .send-email-modal-body {
         padding: 5px;
     }
-    .sendEmailModalBody label {
+    .send-email-modal-body label {
         font-size: 12px;
         margin-bottom: 7px;
     }

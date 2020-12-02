@@ -51,35 +51,35 @@
         font-weight: 400;
         margin-bottom: 5px;
     }
-    &.size_175 {
+    &.size-175 {
         input,
         select,
         textarea {
             width: 175px;
         }
     }
-    &.size_240 {
+    &.size-240 {
         input,
         select,
         textarea {
             width: 240px;
         }
     }
-    &.size_340 {
+    &.size-340 {
         input,
         select,
         textarea {
             width: 340px;
         }
     }
-    &.size_380 {
+    &.size-380 {
         input,
         select,
         textarea {
             width: 380px;
         }
     }
-    &.no-marg {
+    &.no-margin {
         margin: 0;
     }
 }

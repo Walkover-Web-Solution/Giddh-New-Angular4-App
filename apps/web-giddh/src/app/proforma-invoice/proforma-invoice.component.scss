@@ -167,35 +167,35 @@ $greyClr: #6d6d6d;
         font-weight: 400;
         @include marg(B, 0px);
     }
-    &.size_175 {
+    &.size-175 {
         input:not([type="checkbox"]),
         select,
         textarea {
             width: 175px;
         }
     }
-    &.size_240 {
+    &.size-240 {
         input:not([type="checkbox"]),
         select,
         textarea {
             width: 240px;
         }
     }
-    &.size_340 {
+    &.size-340 {
         input:not([type="checkbox"]),
         select,
         textarea {
             width: 340px;
         }
     }
-    &.size_380 {
+    &.size-380 {
         input:not([type="checkbox"]),
         select,
         textarea {
             width: 380px;
         }
     }
-    &.no-marg {
+    &.no-margin {
         @include marg(A, 0);
     }
     .form-control.voucher-selector {
@@ -396,7 +396,7 @@ textarea:focus {
 
 .input-custom {
     border: none;
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .pl0 {
@@ -425,7 +425,7 @@ textarea:focus {
     > thead {
         > tr {
             > th {
-                border: 1px solid $extra-light-gray !important;
+                border: 1px solid $gainsboro !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
@@ -454,7 +454,7 @@ textarea:focus {
     > tbody {
         > tr {
             > td {
-                border: 1px solid $extra-light-gray !important;
+                border: 1px solid $gainsboro !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 position: relative;
@@ -636,7 +636,7 @@ form label {
     border: none !important;
     padding-right: 2px !important;
     background-color: transparent !important;
-    border-bottom: 1px solid $extra-light-gray !important;
+    border-bottom: 1px solid $gainsboro !important;
     height: 28px;
 }
 
@@ -862,7 +862,7 @@ span.edit-icon {
 .hsn-code-dropdown {
     position: absolute;
     background-color: $white;
-    border: 1px solid $extra-light-gray;
+    border: 1px solid $gainsboro;
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
@@ -885,7 +885,7 @@ span.edit-icon {
     height: 28px !important;
     padding: 5px;
     max-width: 100%;
-    border: 1px solid $extra-light-gray;
+    border: 1px solid $gainsboro;
 }
 
 .hsn-code-dropdown input::placeholder,
@@ -1021,7 +1021,7 @@ section.newtable {
 }
 
 .newtable .thead {
-    border-right: 1px solid $extra-light-gray;
+    border-right: 1px solid $gainsboro;
     padding: 8px 10px;
 }
 
@@ -1180,7 +1180,7 @@ section.newtable {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
     padding-left: 6px;
     border-bottom-color: $very-light-gray;
 }
@@ -1278,7 +1278,7 @@ section.newtable {
 }
 
 .add-bulk-item-modal .left-content {
-    border-right: 1px solid $gainsboro-light;
+    border-right: 1px solid $gainsboro;
     padding-right: 15px;
 }
 
@@ -1303,7 +1303,7 @@ section.newtable {
     position: absolute;
     top: 60px;
     z-index: 10;
-    border: 1px solid $extra-light-gray;
+    border: 1px solid $gainsboro;
 }
 
 .gst-treatment-header > span {
@@ -1741,7 +1741,7 @@ span.eligible-ITC {
     }
     .showInMobile {
         background: $white;
-        border-top: 1px solid $gainsboro-light;
+        border-top: 1px solid $gainsboro;
         padding-right: 15px;
         padding-left: 15px;
     }

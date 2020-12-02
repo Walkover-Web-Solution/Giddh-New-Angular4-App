@@ -24,10 +24,10 @@
 }
 
 .ledger-panel table tbody tr td a {
-    color: #333;
+    color: $night-rider;
 }
 
-.pItem {
+.item-padding {
     padding: 0 4px;
 }
 
@@ -38,7 +38,7 @@
 
 .amount-total {
     font-size: 12px;
-    color: #999999;
+    color: $nobel;
     padding-left: 5px;
 }
 

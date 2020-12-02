@@ -2,7 +2,7 @@
 
     <div class="bd-rb clearfix">
         <div class="col-xs-6">
-            <div class="form-group size_380" *ngIf="templateHeader?.customerName?.display">
+            <div class="form-group size-380" *ngIf="templateHeader?.customerName?.display">
                 <label>Customer Name</label>
                 <input type="text" name="customerName" class="form-control" [(ngModel)]="invFormData.voucherDetails.customerName" />
             </div>
@@ -16,7 +16,7 @@
     <section class="clearfix mr-b4">
         <section class="form-inline col-xs-12">
             <div class="pd-t2 clearfix">
-                <div class="form-group size_340">
+                <div class="form-group size-340">
                     <label>Attention to</label>
                     <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
                 </div>
@@ -53,7 +53,7 @@
 
             <div class="pd-t2 clearfix flex-row">
                 <div class="flex-row-child">
-                    <div class="form-group size_340" *ngIf="templateHeader?.billingAddress?.display">
+                    <div class="form-group size-340" *ngIf="templateHeader?.billingAddress?.display">
                         <label>{{templateHeader?.billingAddress?.label}}</label>
                         <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.billingDetails.address"></textarea>
                     </div>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <div class="flex-row-child">
-                    <div class="form-group size_340" *ngIf="templateHeader?.shippingAddress?.display">
+                    <div class="form-group size-340" *ngIf="templateHeader?.shippingAddress?.display">
                         <label>{{templateHeader?.shippingAddress?.label}}</label>
                         <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address"></textarea>
                     </div>
@@ -87,29 +87,29 @@
             </div>
 
             <div class="pd-t2 clearfix">
-                <div class="form-group size_175" *ngIf="templateHeader?.shippingDate?.display">
+                <div class="form-group size-175" *ngIf="templateHeader?.shippingDate?.display">
                     <label>{{templateHeader?.shippingDate?.label}}</label>
                     <input type="text" [placeholder]="giddhDateFormat" name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #shippingDate="ngModel" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)"
                     />
                     <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">Invalid Date</p>
                 </div>
-                <div class="form-group size_175" *ngIf="templateHeader?.shippedVia?.display">
+                <div class="form-group size-175" *ngIf="templateHeader?.shippedVia?.display">
                     <label>{{templateHeader?.shippedVia?.label}}</label>
                     <input type="text" name="shippedVia" class="form-control" [(ngModel)]="invFormData.templateDetails.other.shippedVia" />
                 </div>
-                <div class="form-group size_175">
+                <div class="form-group size-175">
                     <label>Tracking No.</label>
                     <input type="text" name="country" class="form-control" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" />
                 </div>
-                <div class="form-group size_175">
+                <div class="form-group size-175">
                     <label>{{templateHeader?.customField1?.label || 'Custom Field 1'}}</label>
                     <input type="text" name="customField1" class="form-control" [(ngModel)]="invFormData.templateDetails.other.customField1" />
                 </div>
-                <div class="form-group size_175">
+                <div class="form-group size-175">
                     <label>{{templateHeader?.customField2?.label || 'Custom Field 2' }}</label>
                     <input type="text" name="customField2" class="form-control" [(ngModel)]="invFormData.templateDetails.other.customField2" />
                 </div>
-                <div class="form-group size_175">
+                <div class="form-group size-175">
                     <label>{{templateHeader?.customField3?.label || 'Custom Field 3' }}</label>
                     <input type="text" name="customField3" class="form-control" [(ngModel)]="invFormData.templateDetails.other.customField3" />
                 </div>

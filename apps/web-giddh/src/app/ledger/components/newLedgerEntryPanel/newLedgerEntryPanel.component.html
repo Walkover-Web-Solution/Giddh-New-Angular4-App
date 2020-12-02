@@ -14,7 +14,7 @@
 
                     <tr *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
 
-                        <td class="pItem qty-unit" *ngIf="currentTxn?.selectedAccount?.stock">
+                        <td class="item-padding qty-unit" *ngIf="currentTxn?.selectedAccount?.stock">
                             <table>
                                 <tbody>
                                     <tr>
@@ -52,7 +52,7 @@
                             <label class="font-20 pt-04">x</label>
                         </td>
 
-                        <td class="pItem text-right price" *ngIf="currentTxn?.selectedAccount?.stock">
+                        <td class="item-padding text-right price" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label class="font-12">Price</label>
                             <input type="text" id="ledger-price" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
@@ -72,7 +72,7 @@
                         </td>
 
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
-                            class="pItem text-right amount">
+                            class="item-padding text-right amount">
                             <label class="primary-color font-12">Amount</label>
                             <input id="new-ledger-enter-amount" *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
@@ -97,7 +97,7 @@
                         </td>
                         <!--discount-->
                         <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
-                            class="pItem text-right price new-ledger-text-right" (click)="$event.stopPropagation()">
+                            class="item-padding text-right price new-ledger-text-right" (click)="$event.stopPropagation()">
                             <ledger-discount #discount id="ledger-discount" [discountAccountsDetails]="currentTxn.discounts"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency" [ledgerAmount]="currentTxn.amount"
@@ -122,7 +122,7 @@
                         </td>
 
                         <td *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length"
-                            class="pItem amount position-relative dropdown-container text-right dropdown-width"
+                            class="item-padding amount position-relative dropdown-container text-right dropdown-width"
                             (clickOutside)="hideTax()" (click)="$event.stopPropagation()">
                             <!--tax control component-->
                             <!-- Login Changes by Sagar  -->
@@ -155,7 +155,7 @@
                         </td>
 
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
-                            class="pItem text-right total-amount-ledger" id="totalTd" (resized)="onResized($event)">
+                            class="item-padding text-right total-amount-ledger" id="totalTd" (resized)="onResized($event)">
                             <label class="primary-color font-12">Total</label>
                             <input type="text" id="ledger-total-amount" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right"

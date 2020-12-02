@@ -29,7 +29,7 @@
 
 .tax-engine .list-filter {
     padding:15px !important;
-    border-bottom: 1px solid $gainsboro-light !important;
+    border-bottom: 1px solid $gainsboro !important;
     height: 80px;
 }
 
@@ -267,7 +267,7 @@ address {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
@@ -277,7 +277,7 @@ address {
 }
 
 .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .table caption + thead tr:first-child td,
@@ -669,7 +669,7 @@ svg.icon.icon-sm {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .list-column.expanded-list-column .zi-table tr td:first-of-type,
@@ -770,8 +770,8 @@ tax-engine .table.reconciliations-table thead > tr > th {
     font-size: 12px;
     text-transform: uppercase;
     -webkit-font-smoothing: antialiased;
-    border-top: 1px solid $gainsboro-light;
-    border-bottom: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .subtabs-box1 {
@@ -802,7 +802,7 @@ tax-engine .table.reconciliations-table thead > tr > th {
 }
 
 .sub-filter-nav-bandnew{
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
 }
 
 #subtabnew-5{

@@ -2744,42 +2744,42 @@ background: #f9f9f9;
 
 /*div table*/
 
-.gTbl {
+.head-block {
     display: table;
     width: 100%;
 }
 
-.gTblRow {
+.head-block-row {
     display: table-row;
 }
 
-.gTblHead {
+.head-block-head {
     display: table-header-group;
     background-color: #ddd;
 }
 
-.gTblCell,
-.gTblHead {
+.head-block-cell,
+.head-block-head {
     display: table-cell;
     padding: 8px;
     border: 1px solid #ddd;
 }
 
-.gTblHead {
+.head-block-head {
     display: table-header-group;
     background-color: #ddd;
 }
 
-.gTblFoot {
+.head-block-foot {
     display: table-footer-group;
     background-color: #ddd;
 }
 
-.gTblBody {
+.head-block-body {
     display: table-row-group;
 }
 
-.gTbl .gTblRow:nth-of-type(odd) {
+.head-block .head-block-row:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
 

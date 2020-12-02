@@ -1,6 +1,6 @@
 @import "../../../../assets/css/color.scss";
 
-.upload-fil ul {
+.upload-file ul {
     display: flex;
     list-style-type: none;
     text-align: center;
@@ -8,11 +8,11 @@
     overflow-y: auto;
 }
 
-.upload-fil ul > li {
+.upload-file ul > li {
     padding-right: 15px;
 }
 
-.upload-fil ul li .upload-img {
+.upload-file ul li .upload-img {
     width: 120px;
     height: 120px;
     background: $cerebellum-gray;
@@ -25,7 +25,7 @@
     color: $nobel;
 }
 
-.upload-fil ul li .upload-img > a {
+.upload-file ul li .upload-img > a {
     color: $nobel;
     display: block;
     width: 100%;
@@ -35,7 +35,7 @@
     justify-content: center;
 }
 
-.upload-fil ul li .upload-img img {
+.upload-file ul li .upload-img img {
     max-height: 200px;
 }
 

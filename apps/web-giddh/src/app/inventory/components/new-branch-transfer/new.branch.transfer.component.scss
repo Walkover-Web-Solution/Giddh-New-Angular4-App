@@ -34,7 +34,7 @@ section.receipt-note {
 }
 #table-recipt th,
 #table-recipt td {
-    border-left: 1px solid $gainsboro-light !important;
+    border-left: 1px solid $gainsboro !important;
 }
 #table-recipt td {
     vertical-align: top !important;
@@ -128,7 +128,7 @@ tfoot td .table-sec.form-group {
 .hsn-code-dropdown {
     position: absolute;
     background-color: $white;
-    border: 1px solid $extra-light-gray;
+    border: 1px solid $gainsboro;
     border-radius: 3px;
     width: 100%;
     max-width: 250px;
@@ -153,7 +153,7 @@ tfoot td .table-sec.form-group {
     height: 28px !important;
     padding: 5px;
     max-width: 200px;
-    border: 1px solid $extra-light-gray;
+    border: 1px solid $gainsboro;
 }
 
 .hsn-code-dropdown input::placeholder,
@@ -326,10 +326,10 @@ tfoot td .table-sec.form-group {
 .recept-modal .modal-title {
     color: $white;
 }
-.transfertype-checked:before {
+.transfer-type-checked:before {
     border: 1px solid $chetwode-blue;
 }
-.transfertype-checked:after {
+.transfer-type-checked:after {
     content: " ";
     position: absolute;
     width: 8px;

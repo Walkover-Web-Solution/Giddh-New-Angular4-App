@@ -166,7 +166,7 @@ $greyClr: #6d6d6d;
         @include marg(B, 0px);
     }
 
-    &.size_175 {
+    &.size-175 {
         input:not([type="checkbox"]),
         select,
         textarea {
@@ -174,7 +174,7 @@ $greyClr: #6d6d6d;
         }
     }
 
-    &.size_240 {
+    &.size-240 {
         input:not([type="checkbox"]),
         select,
         textarea {
@@ -182,7 +182,7 @@ $greyClr: #6d6d6d;
         }
     }
 
-    &.size_340 {
+    &.size-340 {
         input:not([type="checkbox"]),
         select,
         textarea {
@@ -190,7 +190,7 @@ $greyClr: #6d6d6d;
         }
     }
 
-    &.size_380 {
+    &.size-380 {
         input:not([type="checkbox"]),
         select,
         textarea {
@@ -198,7 +198,7 @@ $greyClr: #6d6d6d;
         }
     }
 
-    &.no-marg {
+    &.no-margin {
         @include marg(A, 0);
     }
 
@@ -406,7 +406,7 @@ textarea:focus {
 
 .input-custom {
     border: none;
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .pl0 {
@@ -430,7 +430,7 @@ textarea:focus {
     > thead {
         > tr {
             > th {
-                border: 1px solid $extra-light-gray !important;
+                border: 1px solid $gainsboro !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
@@ -452,7 +452,7 @@ textarea:focus {
     > tbody {
         > tr {
             > td {
-                border: 1px solid $extra-light-gray !important;
+                border: 1px solid $gainsboro !important;
                 padding: 10px 8px;
                 white-space: nowrap;
 
@@ -630,7 +630,7 @@ form label {
     border: none !important;
     padding-right: 2px !important;
     background-color: transparent !important;
-    border-bottom: 1px solid $extra-light-gray !important;
+    border-bottom: 1px solid $gainsboro !important;
     height: 28px;
 }
 
@@ -849,7 +849,7 @@ span.edit-icon {
 .hsn-code-dropdown {
     position: absolute;
     background-color: $white;
-    border: 1px solid $extra-light-gray;
+    border: 1px solid $gainsboro;
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
@@ -872,7 +872,7 @@ span.edit-icon {
     height: 28px !important;
     padding: 5px;
     max-width: 200px;
-    border: 1px solid $extra-light-gray;
+    border: 1px solid $gainsboro;
 }
 
 .hsn-code-dropdown input::placeholder,
@@ -976,7 +976,7 @@ section.static-invoice-table {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
     padding-left: 0;
     border-bottom-color: $light-gray;
 }

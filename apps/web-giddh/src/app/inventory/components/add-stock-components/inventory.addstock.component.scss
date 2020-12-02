@@ -25,7 +25,7 @@
         background: none;
         border: none;
         max-width: 108px;
-        border-bottom: 1px solid $gainsboro-light;
+        border-bottom: 1px solid $gainsboro;
     }
     .item-label {
         display: inline-block;
@@ -39,7 +39,7 @@
     i {
         margin-left: 10px;
         padding-bottom: 3px;
-        border-bottom: 1px solid $gainsboro-light;
+        border-bottom: 1px solid $gainsboro;
     }
     .new-custom-btn {
         font-size: 12px;
@@ -94,12 +94,12 @@ tr.fsstock td {
     margin-top: 15px;
 }
 @media (max-width: 767px) {
-    section.form-body table.noHover td {
+    section.form-body table.no-hover td {
         width: 100%;
         display: block;
         margin-bottom: 0;
     }
-    tr.noHover.table_label {
+    tr.no-hover.table_label {
         display: none;
     }
     .inputLabelStock {

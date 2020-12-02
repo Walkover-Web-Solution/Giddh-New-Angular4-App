@@ -10,7 +10,7 @@
 
             <div class="bd-rb clearfix row">
                 <div class="col-sm-6">
-                    <div class="form-group size_380">
+                    <div class="form-group size-380">
                         <label>Customer Name</label>
                         <input type="text" name="customerName" class="form-control"
                             [(ngModel)]="voucherFormDetails.voucherDetails.customerName" />
@@ -25,7 +25,7 @@
             <section class="clearfix mr-b4 row">
                 <section class="form-inline col-md-12">
                     <div class="pd-t2 clearfix">
-                        <div class="form-group size_340">
+                        <div class="form-group size-340">
                             <label>Attention to</label>
                             <input type="text" name="attention" class="form-control"
                                 [(ngModel)]="voucherFormDetails.accountDetails.attentionTo" />
@@ -52,7 +52,7 @@
 
                     <div class="pd-t2 clearfix flex-row">
                         <div class="flex-row-child">
-                            <div class="form-group size_340">
+                            <div class="form-group size-340">
                                 <label>Billing Address</label>
                                 <textarea name="billingDetails.address" class="form-control"
                                     [(ngModel)]="voucherFormDetails.accountDetails.billingDetails.address"></textarea>
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                         <div class="flex-row-child">
-                            <div class="form-group size_340">
+                            <div class="form-group size-340">
                                 <label>Shipping Address</label>
                                 <textarea name="shippingDetails.address" class="form-control"
                                     [(ngModel)]="voucherFormDetails.accountDetails.shippingDetails.address"></textarea>
@@ -103,34 +103,34 @@
                     </div>
 
                     <div class="pd-t2 clearfix">
-                        <div class="form-group size_175">
+                        <div class="form-group size-175">
                             <label>Ship Date</label>
                             <input type="text" [placeholder]="giddhDateFormat" name="shippingDate"
                                 [(ngModel)]="voucherFormDetails.templateDetails.other.shippingDate" class="form-control"
                                 bsDatepicker
                                 value="{{ voucherFormDetails.templateDetails.other.shippingDate | date: giddhDateFormatUI }}" />
                         </div>
-                        <div class="form-group size_175">
+                        <div class="form-group size-175">
                             <label>Ship Via</label>
                             <input type="text" name="shippedVia" class="form-control"
                                 [(ngModel)]="voucherFormDetails.templateDetails.other.shippedVia" />
                         </div>
-                        <div class="form-group size_175">
+                        <div class="form-group size-175">
                             <label>Tracking No.</label>
                             <input type="text" name="country" class="form-control"
                                 [(ngModel)]="voucherFormDetails.templateDetails.other.trackingNumber" />
                         </div>
-                        <div class="form-group size_175">
+                        <div class="form-group size-175">
                             <label>Custom Field 1</label>
                             <input type="text" name="customField1" class="form-control"
                                 [(ngModel)]="voucherFormDetails.templateDetails.other.customField1" />
                         </div>
-                        <div class="form-group size_175">
+                        <div class="form-group size-175">
                             <label>Custom Field 2</label>
                             <input type="text" name="customField2" class="form-control"
                                 [(ngModel)]="voucherFormDetails.templateDetails.other.customField2" />
                         </div>
-                        <div class="form-group size_175">
+                        <div class="form-group size-175">
                             <label>Custom Field 3</label>
                             <input type="text" name="customField3" class="form-control"
                                 [(ngModel)]="voucherFormDetails.templateDetails.other.customField3" />

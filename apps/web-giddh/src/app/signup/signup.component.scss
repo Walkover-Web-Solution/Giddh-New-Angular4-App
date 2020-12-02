@@ -429,7 +429,7 @@ small {
     bottom: -38px;
     border-radius: 0;
     padding: 4px;
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
 }
 
 .hint:before {
@@ -440,7 +440,7 @@ small {
     position: absolute;
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
-    border-left: 8px solid $gainsboro-light;
+    border-left: 8px solid $gainsboro;
     /* right: -8px; */
     /* top: 3px; */
     left: 6px;

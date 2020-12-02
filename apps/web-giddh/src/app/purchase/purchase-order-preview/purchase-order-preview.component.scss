@@ -296,18 +296,18 @@ span.close-modal.cp.pull-right {
     right: 0;
 }
 
-.sendEmailModal {
+.send-email-modal {
     min-width: 240px;
     position: absolute;
     top: 40px;
     z-index: 10;
     right: 0;
     border: 1px solid $gainsboro;
-    .sendEmailModalWrapper {
+    .send-email-modal-wrapper {
         background-color: $white;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
-        .sendEmailModalHeader {
+        .send-email-modal-header {
             background-color: $whisper-color;
             padding: 8px 10px;
             border-bottom: 1px solid $gainsboro;
@@ -316,10 +316,10 @@ span.close-modal.cp.pull-right {
             }
         }
     }
-    .sendEmailModalBody {
+    .send-email-modal-body {
         padding: 5px;
     }
-    .sendEmailModalBody label {
+    .send-email-modal-body label {
         font-size: 12px;
         margin-bottom: 7px;
     }

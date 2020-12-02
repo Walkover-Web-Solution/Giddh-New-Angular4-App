@@ -100,7 +100,7 @@ i.close.icon.clear:hover::after {
     /* color: white; */
 }
 
-.chipclose-btn {
+.chip-close-btn {
     padding-left: 10px;
     font-weight: 500;
     float: right;
@@ -109,7 +109,7 @@ i.close.icon.clear:hover::after {
     opacity: 0.6;
 }
 
-.chipclose-btn:hover {
+.chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
     color: $black;
@@ -151,7 +151,7 @@ i.close.icon.clear:hover::after {
 .toggle {
     position: absolute;
     right: 0;
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
     height: 100%;
     width: 28px;
     text-align: center;
@@ -166,7 +166,7 @@ i.close.icon.clear:hover::after {
 }
 
 button.form-control:focus {
-    border-color: $gainsboro-light !important;
+    border-color: $gainsboro !important;
 }
 
 .label-btn {
@@ -193,6 +193,6 @@ button.form-control:focus {
     border-bottom: 1px solid $light-gray !important;
     border-radius: 0 !important;
 }
-.Advance-Search .header {
+.advance-search .header {
     position: relative;
 }

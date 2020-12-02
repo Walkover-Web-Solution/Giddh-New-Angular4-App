@@ -24,7 +24,7 @@
 }
 .tax-engine .list-filter {
     padding: 15px !important;
-    border-bottom: 1px solid $gainsboro-light !important;
+    border-bottom: 1px solid $gainsboro !important;
     height: 80px;
 }
 .tax-engine{
@@ -237,7 +237,7 @@ address {
     border-bottom: 1px solid $whisper-color;
 }
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
 }
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
     padding: 10px;
@@ -245,7 +245,7 @@ address {
     font-weight: 600;
 }
 .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
 }
 .table caption + thead tr:first-child td,
 .table caption + thead tr:first-child th,
@@ -332,7 +332,7 @@ address {
 }
 .tax-engine{
     .sub-filter-nav-band{
-        border-bottom: 1px solid $gainsboro-light;
+        border-bottom: 1px solid $gainsboro;
         ul{
             > li {
             display: inline-block;
@@ -523,7 +523,7 @@ svg.icon.icon-sm {
     width: 50%;
 }
 
-.failed-trans{
+.failed-transaction{
     padding: 10px 25px; 
     margin: 5px auto; 
     border-left: 1px solid $light-grey;

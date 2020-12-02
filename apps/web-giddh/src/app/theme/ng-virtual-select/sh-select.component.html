@@ -9,7 +9,7 @@
             <ng-container *ngIf="selectedValues?.length && !showCheckbox">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
-                    <span class="chipclose-btn" (mousedown)="clearSingleSelection($event, sl)"
+                    <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)"
                         (click)="clearSingleSelection($event, sl)">&times;</span>
                 </span>
             </ng-container>

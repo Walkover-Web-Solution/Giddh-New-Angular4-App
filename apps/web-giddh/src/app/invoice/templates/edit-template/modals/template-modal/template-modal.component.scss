@@ -16,7 +16,7 @@
 
 #email-template {
     background-color: $white;
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
 }
 
 #email-template .form-control {
@@ -24,7 +24,7 @@
     border: 0;
     border-radius: 0 !important;
     color: $black;
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
     background: transparent !important;
 }
 
@@ -34,7 +34,7 @@
     text-align: left;
     border: 0;
     border-radius: 0;
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
 }
 
 #email-body {

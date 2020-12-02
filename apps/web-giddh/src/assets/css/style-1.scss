@@ -677,6 +677,10 @@ aside-menu-account .container-fluid {
     color: $white;
 }
 
+.dark-grey-bg{
+    background: $matterhorn;
+}
+
 .grey-bg {
     background: $gray-95;
     /*min-width:320px;*/
@@ -808,7 +812,7 @@ aside-menu-account .container-fluid {
 .grey-box {
     color: $dark-gray;
     background: $gray-95;
-    border: solid 1px $gainsboro-light;
+    border: solid 1px $gainsboro;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     padding: 15px;
 }
@@ -934,7 +938,7 @@ aside-menu-account .container-fluid {
 
 .angular-ui-tree-handle {
     background: #f8faff;
-    border-top: 1px solid $gainsboro-light;
+    border-top: 1px solid $gainsboro;
     color: #567288;
     padding: 7px 10px;
     cursor: pointer;
@@ -949,7 +953,7 @@ aside-menu-account .container-fluid {
 }
 
 li:last-child .angular-ui-tree-handle {
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .angular-ui-tree-handle p {
@@ -1341,8 +1345,8 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .ldgrInnerTbl > tbody > tr > td {
-    border-right: 1px solid $gainsboro-light;
-    border-bottom: 1px solid $gainsboro-light;
+    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro;
     border-top: 0px;
 }
 
@@ -1351,7 +1355,7 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .ledger-table.table tfoot td {
-    border-bottom: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .ledger-top-header-left span,
@@ -2623,48 +2627,48 @@ background: #f9f9f9;
 } */
 
 /* #searchQueryForm span {
-    border-bottom: 2px dashed $gainsboro-light;
+    border-bottom: 2px dashed $gainsboro;
     margin: 0 10px;
 } */
 
 /*div table*/
 
-.gTbl {
+.head-block {
     display: table;
     width: 100%;
 }
 
-.gTblRow {
+.head-block-row {
     display: table-row;
 }
 
-.gTblHead {
+.head-block-head {
     display: table-header-group;
     background-color: $gainsboro-light;
 }
 
-.gTblCell,
-.gTblHead {
+.head-block-cell,
+.head-block-head {
     display: table-cell;
     padding: 8px;
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
 }
 
-.gTblHead {
+.head-block-head {
     display: table-header-group;
     background-color: $gainsboro-light;
 }
 
-.gTblFoot {
+.head-block-foot {
     display: table-footer-group;
     background-color: $gainsboro-light;
 }
 
-.gTblBody {
+.head-block-body {
     display: table-row-group;
 }
 
-.gTbl .gTblRow:nth-of-type(odd) {
+.head-block .head-block-row:nth-of-type(odd) {
     background-color: $snow;
 }
 
@@ -2882,7 +2886,7 @@ ul.pills li {
     background-color: $solitude;
     color: $night-rider;
     display: inline-block;
-    border: 1px solid $gainsboro-light;
+    border: 1px solid $gainsboro;
 }
 
 .load-more {
@@ -3742,7 +3746,7 @@ tr.db-bnk-account > td.reconnectDiv {
 
 .custom-tabset ul li a {
     border: 0px !important;
-    border-bottom: 1px solid $gainsboro-light !important;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .y-scroll {
