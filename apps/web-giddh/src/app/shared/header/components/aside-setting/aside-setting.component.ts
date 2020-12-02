@@ -51,7 +51,7 @@ export class AsideSettingComponent implements OnInit {
                 if(organization) {
                     if (organization.type === OrganizationType.Branch) {
                         organizationIndex = 1;
-                    } else if (organization.type === OrganizationType.Company) {
+                    } else if (organization.type === OrganizationType.Company || !organization.type) {
                         organizationIndex = 0;
                     }
                 }
