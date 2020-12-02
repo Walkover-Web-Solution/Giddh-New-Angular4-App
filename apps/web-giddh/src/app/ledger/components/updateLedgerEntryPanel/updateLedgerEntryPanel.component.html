@@ -438,7 +438,7 @@
         <!-- region new entry -->
         <div class="entrypanel width100 pt-2">
             <!-- reverse charge transction start -->
-            <div *ngIf="shouldShowRcmEntry" class="pd-b1 mTB1">
+            <div *ngIf="shouldShowRcmEntry" class="pd-b1 mTB1 tourist-scheme-wrapper">
                 <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
                     (click)="toggleRcmCheckbox($event)" [disabled]="currentOrganizationType === 'COMPANY'">
                 <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover"
