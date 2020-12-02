@@ -56,6 +56,7 @@ import { UpdateLedgerVm } from './updateLedger.vm';
 import { SearchService } from '../../../services/search.service';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 import { OrganizationType } from '../../../models/user-login-state';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -242,6 +243,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public entryAccountUniqueName: any = '';
     /** Stores the current organization type */
     public currentOrganizationType: string;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the current branches */
+    public branches: Array<any>;
 
     constructor(
         private _accountService: AccountService,
@@ -250,6 +255,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private _ledgerAction: LedgerActions,
         private _loaderService: LoaderService,
         private _settingsTagActions: SettingsTagActions,
+        private settingsBranchAction: SettingsBranchActions,
         private settingsUtilityService: SettingsUtilityService,
         private store: Store<AppState>,
         private searchService: SearchService,
@@ -290,6 +296,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public ngOnInit() {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response) {
+                this.branches = response;
+            } else {
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+            }
+        });
         this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
             if (response === true) {
                 this.store.dispatch(this._ledgerAction.refreshLedger(false));
@@ -720,7 +734,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
 
                     this.vm.reInitilizeDiscount(resp[0]);
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch || this.branches.length === 1) {
                         this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
                         this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
                     }
@@ -981,7 +995,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch || this.branches.length === 1) {
             if (Number(txn.amount) === 0) {
                 txn.amount = undefined;
             }
@@ -1611,7 +1625,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openHeaderDropDown() {
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch || this.branches.length === 1) {
             this.entryAccountUniqueName = "";
 
             if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
@@ -1693,6 +1707,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public toggleRcmCheckbox(event: any): void {
         event.preventDefault();
+        if (this.currentOrganizationType === 'COMPANY' && this.branches?.length > 1) {
+            return;
+        }
         this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
     }
 
@@ -1971,7 +1988,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public openAdjustInvoiceEditMode(): void {
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch || this.branches.length === 1) {
             this.handleVoucherAdjustment(true);
         }
     }

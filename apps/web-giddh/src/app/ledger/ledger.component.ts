@@ -620,6 +620,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     this.trxRequest.branchUniqueName = this.currentBranch.uniqueName;
                     this.advanceSearchRequest.branchUniqueName = this.currentBranch.uniqueName;
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch ||
+                        (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+                        // Add the blank transaction only if it is branch mode or company with single branch
+                        this.lc.blankLedger.transactions = [
+                            this.lc.addNewTransaction('DEBIT'),
+                            this.lc.addNewTransaction('CREDIT')
+                        ]
+                    }
                 } else {
                     if (this.generalService.companyUniqueName) {
                         // Avoid API call if new user is onboarded
@@ -1206,7 +1214,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public resetBlankTransaction() {
         this.lc.blankLedger = {
-            transactions: this.generalService.currentOrganizationType === OrganizationType.Branch ? [
+            transactions:
+                (this.generalService.currentOrganizationType === OrganizationType.Branch ||
+                    (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
                 this.lc.addNewTransaction('DEBIT'),
                 this.lc.addNewTransaction('CREDIT')
             ] : [],
