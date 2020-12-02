@@ -3,7 +3,7 @@
 .invoice-footer {
     h3 {
         font-size: 16px;
-        color: #999999;
+        color: $nobel;
         display: inline-block;
         margin-right: 10px;
     }
@@ -11,7 +11,7 @@
 .invoice-footer {
     h1 {
         font-size: 22px;
-        color: #333;
+        color: $extra-dark-gray;
         display: inline-block;
     }
 }
@@ -19,8 +19,8 @@
 .branch-transfer-report .basic > thead > tr > th {
     border-top: 1px solid $gainsboro !important;
 }
-.icon-pointer.activeTextColor {
-    color: #01a9f4;
+.icon-pointer.active-text-color {
+    color: $deep-sky-blue;
 }
 .voucher-type-dropdown {
     display: inline-block;
@@ -38,11 +38,11 @@
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: #999999;
+    color: $nobel;
     left: 0;
     font-size: 18px;
 }
-.input-grp-dateRangePicker input.form-control {
+.input-grp-date-range-picker input.form-control {
     padding-left: 45px !important;
     width: 210px;
     &:focus {
@@ -51,7 +51,7 @@
 }
 .btn-filter {
     background: $whisper-color;
-    border: 1px solid $whisper-color;
+    border: 1px solid $gainsboro;
     font-size: 16px;
     color: $midnight-blue;
     display: inline-flex;

@@ -1,6 +1,5 @@
 <div (clickOutside)="hideDiscountMenu()">
 	<label class="font-12">Discount</label>
-
 	<a id="discount">
 		<div class="multi-select adjust text-right">
 			<input type="text" [prefix]="prefixInput" id="ledger-discount" [suffix]="suffixInput" [mask]="maskInput" name=""
@@ -9,48 +8,37 @@
 			<span class="caret"></span>
 		</div>
 	</a>
-
-	<div class="my-dropdown-menu pd" (click)="$event.stopPropagation()" style="padding: 10px;"
+	<div class="my-dropdown-menu pd" (click)="$event.stopPropagation()"
 		[ngStyle]="{'display': discountMenu ? 'block': 'none'}" #disInptEle>
-
 		<div>
-
 			<div class="d-flex mb-1">
-
-				<label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
-
-				<div class="pos-rel">
+				<label class="mr-1 align-items-center d-flex percent-label">Percent</label>
+				<div class="position-relative ledger-percent-wrapper">
 					<input type="text" id="ledger-discount-percent" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
 						decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="discountPercentageModal"
-						(input)="discountFromInput('PERCENTAGE', $event.target.value)"
-						style="width: 100px;padding-right: 20px !important;">
-					<i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
+						(input)="discountFromInput('PERCENTAGE', $event.target.value)">
+					<i class="fa fa-percent pos-abs"></i>
 				</div>
-
 			</div>
-
 			<div class="d-flex mb-1">
-				<label class="mr-1 align-items-center d-flex" style="width: 50px">Value</label>
-				<input type="text" id="ledger-discount-value"  class="form-control text-right cursor-pointer" [disabled]="!discountFromVal"
+				<label class="mr-1 align-items-center d-flex value-label">Value</label>
+				<input type="text" id="ledger-discount-value"  class="form-control w-100 text-right cursor-pointer" [disabled]="!discountFromVal"
 					decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="discountFixedValueModal"
-					(input)="discountFromInput('FIX_AMOUNT', $event.target.value)" style="width: 100px">
+					(input)="discountFromInput('FIX_AMOUNT', $event.target.value)">
 			</div>
-
 		</div>
-
-		<div class="d-flex flex-col" style="justify-content: center" *ngIf="discountAccountsDetails.length > 1">
+		<div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails.length > 1">
 			<span class="or-line">AND</span>
 		</div>
-
 		<div *ngIf="discountAccountsDetails.length > 1">
-			<ul style="list-style: none;overflow: auto;max-height: 100px">
+			<ul class="discount-list">
 
 				<ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-					<li *ngIf="idx > 0" class="customItem" style="padding: 5px;margin-bottom: 5px;">
-						<label class="checkbox oh width100 p0 m0" (click)="$event.stopPropagation()">
+					<li *ngIf="idx > 0" class="custom-item">
+						<label class="checkbox overflow-hidden width100 p0 m0" (click)="$event.stopPropagation()">
 							<input id="{{'discount-checkbox-' + idx}}" class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
 								(change)="change($event, discount)" (click)="$event.stopPropagation()" />
-							<span class="pull-left ellp">{{discount.name}}</span>
+							<span class="pull-left text-ellipsis">{{discount.name}}</span>
 						</label>
 					</li>
 				</ng-container>

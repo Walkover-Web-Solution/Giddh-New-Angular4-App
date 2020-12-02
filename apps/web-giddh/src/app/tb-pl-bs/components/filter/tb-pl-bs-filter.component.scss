@@ -1,15 +1,14 @@
 @import "../../../../assets/css/color.scss";
-.daterange_picker_tb-pl-bs {
-    background-color: #fff !important;
+.daterange-picker-tb-pl-bs {
+    background-color: $white !important;
     text-decoration: none;
     text-align: left;
     border: 1px solid $gainsboro;
     vertical-align: middle;
     height: 36px;
-
     font-size: 14px;
 }
-.tb-btnApply {
+.tb-btn-apply {
     margin-top: 5px;
 }
 .liabilities-assets {
@@ -38,20 +37,20 @@
     z-index: 100;
     top: 0;
 }
-.expanIcon {
+.expand-icon {
     height: 36px;
     display: flex;
     align-items: flex-end;
 }
-.expanIcon span {
+.expand-icon span {
     display: flex;
     width: 36px;
     height: 36px;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
+    background-color: $white;
     font-size: 18px;
-    color: #1a237e !important;
+    color: $midnight-blue !important;
     border: 1px solid $gainsboro;
 }
 .download-data-icon{
@@ -81,7 +80,7 @@
     top: 14px;
 }
 @media (min-width: 768px) {
-    .form-inline.financial-selectYear .form-group {
+    .form-inline.financial-select-year .form-group {
         min-width: auto !important;
     }
 }
@@ -96,7 +95,7 @@
             height: 36px;
         }
     }
-     .form-inline.financial-selectYear{
+     .form-inline.financial-select-year{
         flex-flow: row nowrap !important;
      }
      .download-data-icon{

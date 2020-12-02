@@ -3,6 +3,7 @@
 .ledger-panel {
     overflow: visible;
     .more-details {
+        background-color: $white;
         .cheq {
             table {
                 td.remove-invoice {
@@ -23,10 +24,10 @@
 }
 
 .ledger-panel table tbody tr td a {
-    color: #333;
+    color: $night-rider;
 }
 
-.pItem {
+.item-padding {
     padding: 0 4px;
 }
 
@@ -35,9 +36,9 @@
     overflow-y: scroll;
 }
 
-.amnt-total {
+.amount-total {
     font-size: 12px;
-    color: #999999;
+    color: $nobel;
     padding-left: 5px;
 }
 
@@ -100,6 +101,9 @@ span.eligible-ITC {
         color: $deep-sky-blue;
     }
 }
+#ledger-unit{
+    width: 78px;
+}
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;
@@ -132,7 +136,7 @@ span.eligible-ITC {
         width: 10%;
         text-align: center;
     }
-    .total-amn {
+    .total-amount-ledger {
         width: 100%;
     }
     .total-detail-table > tbody > tr {
@@ -154,7 +158,7 @@ span.eligible-ITC {
     }
 }
 .sh-template {
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
 }
 
 /* Rotate animation for spinner in uploading file */

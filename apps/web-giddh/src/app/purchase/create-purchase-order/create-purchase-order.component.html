@@ -7,10 +7,10 @@
 </div>
 
 <form #poForm="ngForm" novalidate autocomplete="off"
-    [ngClass]="{'create-purchase-order-form': true, 'customer-purchase-order' : !purchaseOrder.voucherDetails.customerName, 'forMultiCurrency' : isMulticurrencyAccount  } "
+    [ngClass]="{'create-purchase-order-form': true, 'customer-purchase-order' : !purchaseOrder.voucherDetails.customerName, 'for-multi-currency' : isMulticurrencyAccount  } "
     *ngIf="!showLoader">
     <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
-        <div class="clearfix wrapper-customer-table  pdT2">
+        <div class="clearfix wrapper-customer-table  pd-t2">
             <div class="customer-purchase-table">
                 <div class="inner-container">
                     <div class="inner-container">
@@ -199,7 +199,7 @@
                     </div>
                 </div>
             </div>
-            <div class="customer-purchase-table bg-white pdB2 pdT2">
+            <div class="customer-purchase-table bg-white pd-b2 pd-t2">
                 <div class="inner-container">
                     <div class="row mb-1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
                         <!-- region customer name -->
@@ -370,7 +370,7 @@
                         </div>
                         <!-- endregion -->
                     </div>
-                    <div class="row mTB1" *ngIf="isMobileScreen">
+                    <div class="row mt-b1" *ngIf="isMobileScreen">
                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                             <label>Order Date</label>
                         </div>
@@ -383,7 +383,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mTB1" *ngIf="isMobileScreen">
+                    <div class="row mt-b1" *ngIf="isMobileScreen">
                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                             <label>Expected Delivery</label>
                         </div>
@@ -396,7 +396,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="row mTB1">
+                    <!-- <div class="row mt-b1">
                         <div class="col-sm-2" *ngIf="!isMobileScreen">
                             <label></label>
                         </div>
@@ -427,7 +427,7 @@
             <thead>
                 <tr>
                     <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display"
-                        class="theadOfSalesInvoice" [ngClass]="item.label">
+                        class="thead-sales-invoice" [ngClass]="item.label">
                         {{item.label}} <span *ngIf="item.label === 'Tax' && isRcmEntry">(RCM)<sup class="mandatory-asterisk">*</sup></span>
                     </th>
                 </tr>
@@ -438,10 +438,10 @@
                 <ng-container *ngFor="let transaction of entry.transactions;">
                     <tr (click)="setActiveIndex(entryIdx);$event.stopPropagation()" [hidden]="activeIndex === entryIdx"
                         class="entriesTr set-active"
-                        [ngClass]="{'isOtherTax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
+                        [ngClass]="{'is-other-tax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
-                            <div class="productName">
+                            <div class="product-name">
                                 <label *ngIf="!transaction.accountName" class="select-account-label">Click to
                                     Select
                                     Account</label> {{transaction.accountName}}
@@ -451,9 +451,9 @@
                             <div class="description">
                                 {{transaction.description}}
                             </div>
-                            <p class="small text-muted sku_and_customfields" *ngIf="transaction.sku_and_customfields">
+                            <p class="small text-muted sku-and-customfields" *ngIf="transaction.sku_and_customfields">
                                 {{transaction.sku_and_customfields}}</p>
-                            <div class="dateHsnCode">
+                            <div class="date-hsn-code">
                                 <div>
                                     <div class="col-xs-12" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                         <div class="hsn-code">
@@ -474,7 +474,7 @@
                                 {{transaction.quantity}} {{transaction.stockUnit}}
                             </div>
                         </td>
-                        <td class="text-right tra-rate item-rate">
+                        <td class="text-right trans-rate item-rate">
                             <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                 <div class="td-wrapper">
                                     <div>
@@ -546,7 +546,7 @@
                                             </span>{{ entry.otherTaxSum }}
                                         </span>
                                     </div>
-                                    <div class="texIncurrency"
+                                    <div class="tax-incurrency"
                                         *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported">
                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                         <span>{{baseCurrencySymbol}}</span>
@@ -572,11 +572,11 @@
 
                     <!-- region dynamic entries-->
                     <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                    <tr [hidden]="activeIndex !== entryIdx" class="entriesTr defaultActive"
+                    <tr [hidden]="activeIndex !== entryIdx" class="entriesTr default-active"
                         (click)="$event.stopPropagation();">
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
-                            <div class="productName">
+                            <div class="product-name">
                                 <div class="ng-select-wrap">
                                     <sh-select [options]="salesAccounts$ | async" #selectAccount
                                         [(ngModel)]="transaction.fakeAccForSelect2"
@@ -617,16 +617,16 @@
                                     <textarea type="text" placeholder="Add Description"
                                         name="transaction.description_{{entryIdx}}" class="form-control"
                                         [(ngModel)]="transaction.description" #description></textarea>
-                                    <p class="small text-muted sku_and_customfields"
+                                    <p class="small text-muted sku-and-customfields"
                                         *ngIf="transaction.sku_and_customfields">
                                         {{transaction.sku_and_customfields}}</p>
                                 </div>
 
                                 <!-- region entry date/ hsncode -->
-                                <div class="dateHsnCode">
+                                <div class="date-hsn-code">
                                     <div>
                                         <div class="col-xs-12">
-                                            <div class="wrap-hsnBox">
+                                            <div class="wrap-hsn-box">
                                                 <div class="hsn-code"
                                                     (click)="toggleHsnSacDropDown(transaction)">
                                                     <label>HSN/SAC:</label>
@@ -653,7 +653,7 @@
                                                         [(ngModel)]="transaction.sacNumber" />
                                                     <a>
                                                     </a>
-                                                    <div class="btngroup m-t-10">
+                                                    <div class="btn-group m-t-10">
                                                         <button class="btn btn-sm btn-success" type="button"
                                                             (click)="hsnSacDropdownShow=!hsnSacDropdownShow">Save
                                                         </button>
@@ -742,7 +742,7 @@
                             </div>
                         </td>
 
-                        <td class="pos-rel dropdown-container item-tax">
+                        <td class="position-relative dropdown-container item-tax">
                             <div class="td-wrapper">
                                 <div class="text-right">
                                     <tax-control [taxes]="companyTaxesList" [date]="purchaseOrder.voucherDetails.voucherDate"
@@ -750,7 +750,7 @@
                                         [applicableTaxes]="transaction.applicableTaxes"
                                         [exceptTaxTypes]="exceptTaxTypes"
                                         [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
-                                        [rootClass]="'salseInvoicetable'"
+                                        [rootClass]="'sales-invoice-table'"
                                         (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                                         (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
                                         [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
@@ -775,15 +775,15 @@
                                         [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                         (blur)="calculateTransactionValueInclusively(entry, transaction)" />
 
-                                    <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
-                                        <input type="checkbox" class="other-taxes-checkobx"
+                                    <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
+                                        <input type="checkbox" class="other-taxes-checkbox"
                                             [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
                                             (click)="tcsTdsIndex = entryIdx"
                                             name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                             id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                             (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                         <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                            *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable">Other Tax?</label>
+                                            *ngIf="!entry.isOtherTaxApplicable" class="other-tax-label">Other Tax?</label>
                                     </div>
                                     <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
 
@@ -810,7 +810,7 @@
                                     </div>
                                 </div>
                                 <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported"
-                                    class="texIncurrency">
+                                    class="tax-incurrency">
                                     {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                     <span>{{baseCurrencySymbol}}</span> :
                                     <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
@@ -861,7 +861,7 @@
                                     </div>
                                     <div class="ico-head">Other Details</div>
                                 </div>
-                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
+                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pd-l3 m-0">
                                     <div class="row">
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                 <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate" [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors &&(shippingDate.dirty || shippingDate.touched)">
@@ -1024,12 +1024,12 @@
                                 <p class="description">
                                     {{transaction.description}}
                                 </p>
-                                <p class="small text-muted sku-custom-fields" *ngIf="transaction.sku_and_customfields">
+                                <p class="small text-muted sku-and-customfields" *ngIf="transaction.sku_and_customfields">
                                     {{transaction.sku_and_customfields}}</p>
 
-                                <div class="date-hsn-code pdR0">
+                                <div class="date-hsn-code pr-0">
                                     <div class="row">
-                                        <div class="col-xs-12"
+                                        <div class="col-12"
                                             *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                             <div class="hsn-code text-right">
                                                 <label>HSN/SAC:
@@ -1194,7 +1194,7 @@
                                             <textarea type="text" placeholder="Add Description"
                                                 name="transaction.description_{{entryIdx}}" class="form-control"
                                                 [(ngModel)]="transaction.description"></textarea>
-                                            <p class="small text-muted sku-custom-fields"
+                                            <p class="small text-muted sku-and-customfields"
                                                 *ngIf="transaction.sku_and_customfields">
                                                 {{transaction.sku_and_customfields}}</p>
                                         </div>
@@ -1202,7 +1202,7 @@
                                         <!-- region entry date/ hsncode -->
                                         <div class="date-hsn-code">
                                             <div class="row">
-                                                <div class="col-xs-12 pdL0">
+                                                <div class="col-xs-12 pl-0">
                                                     <div class="wrap-hsn-box">
                                                         <div class="hsn-code text-right"  (click)="toggleHsnSacDropDown(transaction)">
                                                             <label>HSN/SAC:</label>
@@ -1231,7 +1231,7 @@
                                                                 [(ngModel)]="transaction.sacNumber" />
                                                             <a>
                                                             </a>
-                                                            <div class="btngroup m-t-10">
+                                                            <div class="btn-group m-t-10">
                                                                 <button class="btn btn-sm btn-success" type="button"
                                                                     (click)="hsnSacDropdownShow=!hsnSacDropdownShow">
                                                                     Save
@@ -1388,7 +1388,7 @@
                                             [applicableTaxes]="transaction.applicableTaxes"
                                             [exceptTaxTypes]="exceptTaxTypes"
                                             [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
-                                            [rootClass]="'salseInvoicetable'"
+                                            [rootClass]="'sales-invoice-table'"
                                             (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                                             (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
                                             [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
@@ -1416,7 +1416,7 @@
                                             [prefix]="purchaseOrder.accountDetails.currencySymbol"
                                             [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                         <div class="wrap-other-tax" *ngIf="isTcsTdsApplicable">
-                                            <input type="checkbox" class="other-taxes-checkobx"
+                                            <input type="checkbox" class="other-taxes-checkbox"
                                                 [(ngModel)]="entry.isOtherTaxApplicable"
                                                 *ngIf="!entry.isOtherTaxApplicable"
                                                 (click)="tcsTdsIndex = entryIdx"
@@ -1424,7 +1424,7 @@
                                                 id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                             <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                                *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable">Other
+                                                *ngIf="!entry.isOtherTaxApplicable" class="other-tax-label">Other
                                                 Tax?</label>
                                         </div>
                                         <div class="mt-1 other-taxes" *ngIf="entry.isOtherTaxApplicable">
@@ -1500,7 +1500,7 @@
                         <div class="ico-head">Other Details</div>
                     </div>
 
-                    <div class="clearfix max-600  mr0" [collapse]="isOthrDtlCollapsed">
+                    <div class="clearfix max-600  m-0" [collapse]="isOthrDtlCollapsed">
 
                         <div class="row">
 

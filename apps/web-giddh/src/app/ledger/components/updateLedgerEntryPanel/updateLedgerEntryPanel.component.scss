@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.pItem {
+.item-padding {
     padding: 0 4px;
 }
 
@@ -20,14 +20,14 @@ table.width100 {
     position: relative;
 }
 
-.currency_type {
+.currency-type {
     position: absolute;
     top: 50%;
     right: 6px;
     transform: translateY(-50%);
 }
 
-.multicurrency_input {
+.multi-currency-input {
     padding-right: 35px !important;
 }
 
@@ -66,32 +66,32 @@ ng-select>div {
     border: none;
 }
 
-ng-select .select_drop i.fa.fa-caret-up::before {
+ng-select .select-drop i.fa.fa-caret-up::before {
     color: $white;
     font-size: 20px;
 }
 
-.trxFakeInput {
+.transaction-particular-name {
     width: 100%;
     height: 38px;
     background: transparent;
     border: none !important;
     padding: 5px;
-    color: #b5b5b5;
+    color: $gray;
 }
 
 .notfound-option.active {
-    background: #efeff1 !important;
+    background: $lavender !important;
     padding: 2px 5px !important;
 }
 
-.no-padding {
+.p-0 {
     padding: 0px !important;
 }
 
-.amnt-total {
+.amount-total {
     font-size: 12px;
-    color: #999999;
+    color: $nobel;
 }
 
 .other-tax {
@@ -102,16 +102,11 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding-left: 8px;
 }
 
-.total-col span.bdrT {
+.total-col span.bd-rt {
     width: 150px;
     display: inline-block;
     padding: 2px 0;
 }
-
-
-/* .ledger-main .form-control {
-    height: 26px;
-} */
 
 .ledger-main .form-control {
     background: $white !important;
@@ -140,12 +135,6 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .custom-tabs {
     display: none !important;
 }
-
-
-/* .total-detail-table tbody tr td {
-  vertical-align: top;
-} */
-
 .total-detail-table {
     display: flex;
 }
@@ -244,6 +233,7 @@ span.eligible-ITC {
     }
 }
 .advanced {
+    background: $alice-blue;
     table.xs-table-block {
         tbody tr {
             td.remove-invoice {
@@ -262,7 +252,9 @@ span.eligible-ITC {
         }
     }
 }
-
+#update-ledger-select-account{
+    width:30%
+}
 .edit-adjustment {
     padding: 0 5px 0;
 }
@@ -326,7 +318,7 @@ span.eligible-ITC {
 }
 
 @media only screen and (max-width: 767px) {
-    .last-ttable-amount {
+    .last-table-amount {
         max-width: 100% !important;
     }
     .ledger-book .h-table tbody .ledger-row td {
@@ -357,7 +349,7 @@ span.eligible-ITC {
     .entrypanel:before {
         display: none;
     }
-    .total-amn {
+    .total-amount-ledger {
         width: 100%;
     }
     .xs-table-block {
@@ -367,7 +359,7 @@ span.eligible-ITC {
     .xs-table-block tbody tr td {
         display: block;
     }
-    .ledg-head .ledger-book .left-col-new.bdrR {
+    .ledg-head .ledger-book .left-col-new.bd-rr {
         border-right: 0 !important;
     }
     .remove-border-left-onmo {
@@ -382,7 +374,7 @@ span.eligible-ITC {
         width: 100%;
         display: inline-block;
     }
-    .entrypanel .primary_clr {
+    .entrypanel .primary-color {
         padding-left: 15px;
         padding-top: 5px;
     }
@@ -402,7 +394,7 @@ span.eligible-ITC {
         width: 185px;
         height: 36px !important;
     }
-    .debit-blank-row .amnt-total {
+    .debit-blank-row .amount-total {
         width: 185px;
         margin-top: 5px;
     }

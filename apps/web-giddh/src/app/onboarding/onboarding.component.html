@@ -3,28 +3,28 @@
     <div class="">
         <div class="row mt-2 mr-0 ml-0">
             <div class="col-xs-12 col-md-5 col-sm-6">
-                <h1 class="borderbtm">Try things out</h1>
-                <ul class="manage_invoice">
+                <h1 class="border-btm">Try things out</h1>
+                <ul class="manage-invoice">
                     <li>
                         <!-- <i class="icon-Create-Invoice"></i>proforma-invoice/invoice/sales -->
-                        <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img src="{{imgPath}}create-invoice.svg" alt="" class="mrR1"> Create and send an Invoice</a>
+                        <a [routerLink]="['/pages','proforma-invoice','invoice','sales']"> <img src="{{imgPath}}create-invoice.svg" alt="" class="mr-r1"> Create and send an Invoice</a>
                     </li>
                     <li>
                         <!-- <i class="icon-Add-customer"></i> -->
-                        <a [routerLink]="['/pages','contact', 'customer']"> <img src="{{imgPath}}add-customer.svg" alt="" class="mrR1"> Add a customer
+                        <a [routerLink]="['/pages','contact', 'customer']"> <img src="{{imgPath}}add-customer.svg" alt="" class="mr-r1"> Add a customer
                         </a>
                     </li>
                     <li>
                         <!-- <i class="icon-Invite-Accountant"></i> -->
-                        <a [routerLink]="['/pages','settings', 'taxes']"> <img src="{{imgPath}}updateGST.svg" alt="" class="mrR1"> Update Taxes </a>
+                        <a [routerLink]="['/pages','settings', 'taxes']"> <img src="{{imgPath}}updateGST.svg" alt="" class="mr-r1"> Update Taxes </a>
                     </li>
                     <li>
 
-                        <a href="javascript:void 0" (click)="selectConfigureBank()"> <img src="{{imgPath}}configure-bank-account.svg" alt="" class="mrR1"> Configure your bank account
+                        <a href="javascript:void 0" (click)="selectConfigureBank()"> <img src="{{imgPath}}configure-bank-account.svg" alt="" class="mr-r1"> Configure your bank account
                         </a>
                     </li>
                 </ul>
-                <h1 class="borderbtm m-t-50">Have data on Tally?</h1>
+                <h1 class="border-btm m-t-50">Have data on Tally?</h1>
                 <p>
                     Don't worry!<br> Easily get your accounting data on Giddh
                 </p>
@@ -36,8 +36,8 @@
                 Download TCP
                 </a>
 
-                <div class="mt-2 right_section">
-                    <h1 class="borderbtm">Have a question to ask?</h1>
+                <div class="mt-2 right-section">
+                    <h1 class="border-btm">Have a question to ask?</h1>
                     <span>Request a demo:</span>
                     <button class="btn btn-success m-t-10" (click)="scheduleNow()">Schedule Now</button>
                     <br>
@@ -60,19 +60,19 @@
 
             </div>
             <div class="col-xs-12 col-md-5 col-sm-6 ">
-                <div class="right_section">
-                    <h1 class="borderbtm">Select Inventory Type</h1>
+                <div class="right-section">
+                    <h1 class="border-btm">Select Inventory Type</h1>
                     <span>Inventory type</span>
                     <div class="pd-b1 clearfix">
 
-                        <span class="pd0 mrR3 d-inline-block">
-                            <input id="product" class="radio-custom cp ml0" type="radio" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                        <span class="p-0 mr-3 d-inline-block">
+                            <input id="product" class="radio-custom cp ml-0" type="radio" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
                             (change)="updateInventorySetting(true)" name="inventoryType">
                             <label for="product" class="radio-custom-label">Product</label>
                         </span>
 
-                        <span class="pd0 mrR3 d-inline-block">
-                            <input id="service" class="radio-custom cp ml0" type="radio" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                        <span class="p-0 mr-3 d-inline-block">
+                            <input id="service" class="radio-custom cp ml-0" type="radio" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
                             (change)="updateInventorySetting(false)" name="inventoryType">
                             <label for="service" class="radio-custom-label">Service</label>
                         </span>
@@ -81,7 +81,7 @@
                     <br><br><br>
 
                     <div class="importData">
-                        <h1 class="borderbtm">Import Data</h1>
+                        <h1 class="border-btm">Import Data</h1>
                         <span>Have data in CSV or Excel files?</span>
 
                         <div class="importData-blocks">

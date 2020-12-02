@@ -47,9 +47,9 @@
                             [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
                     </div>
                 </div>
-                <div class="content-view  mrL2">
+                <div class="content-view  mr-l2">
                     <div class="branch-views">
-                        <span (click)="changeBranchViewType('table');" class="mrR1">
+                        <span (click)="changeBranchViewType('table');" class="mr-r1">
                             <input id="radio-table" name="signatureType" class="radio-custom" name="radio-view"
                                 type="radio" [checked]="(branchViewType === 'table') ? true : false" checked>
                             <label for="radio-table" class="radio-custom-label">Table View</label>
@@ -297,18 +297,18 @@
     </div>
 
     <div *ngIf="(branches$ | async)?.length < 1">
-        <div class="col-xs-12  text-center">
-            <div class="illustration_box">
+        <div class="col-12  text-center">
+            <div class="illustration-box">
                 <img src="assets/images/new/branch-Illus.png" />
                 <div class="" *ngIf="!parentCompanyName">
                     <h3 class="lead mr-t2 mr-b2 fs18">Add branch under <strong
-                            class="primary_clr txtCpc">{{ currentBranch }} <span *ngIf="currentBranchNameAlias">(
+                            class="primary-color text-capitalize">{{ currentBranch }} <span *ngIf="currentBranchNameAlias">(
                                 {{currentBranchNameAlias}} )</span></strong> headquarter.
                     </h3>
                     <button class="btn btn-default mr-l1 btn-lg" (click)="openAddBranchModal()">Add Branch</button>
                 </div>
                 <div class="" *ngIf="parentCompanyName">
-                    <h3 class="lead mr-t2 fs18">This is a branch of <strong class="primary_clr txtCpc">{{ parentCompanyName
+                    <h3 class="lead mr-t2 font-18">This is a branch of <strong class="primary-color text-capitalize">{{ parentCompanyName
 					}}</strong> headquarter.</h3>
                 </div>
             </div>
@@ -359,12 +359,12 @@
 
                         </div>
                     </div>
-                    <div style="margin-top: 5px;">
+                    <div class="mr-t05">
                         <ul class="list-inline custom-multi-select">
                             <li *ngFor="let cmp of selectedCompaniesName">
-                                <a style="color: gray">
+                                <a>
                                     {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span
-                                        class="pdL" (click)="checkUncheckMe(cmp,$event)">×</span>
+                                        class="pd-l05" (click)="checkUncheckMe(cmp,$event)">×</span>
                                 </a>
                             </li>
 
@@ -394,7 +394,7 @@
 
 
     <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
-        class="modal fade openPoup" role="dialog">
+        class="modal fade open-popup" role="dialog" (onHidden)="onHide()">
         <div class="modal-dialog modal-xl modal-width">
             <div class="modal-content">
                 <ng-template element-view-container-ref #companyadd=elementviewcontainerref>

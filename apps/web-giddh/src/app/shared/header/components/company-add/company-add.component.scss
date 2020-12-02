@@ -1,3 +1,5 @@
+@import "../../../../../assets/css/color.scss";
+
 /* ::ng-deep .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -23,7 +25,7 @@
     height: 1px;
     margin: 0.5rem 0;
     overflow: hidden;
-    background-color: #eceeef;
+    background-color: $bright-gray;
 }
 
 ::ng-deep .dropdown-item {
@@ -32,7 +34,7 @@
     padding: 3px 7px;
     clear: both;
     font-weight: normal;
-    color: #292b2c;
+    color: $cinder;
     text-align: inherit;
     white-space: nowrap;
     background: none;
@@ -42,35 +44,35 @@
 
 ::ng-deep .dropdown-item:focus,
 .dropdown-item:hover {
-    color: #1d1e1f;
+    color: $black-pearl;
     text-decoration: none;
-    background-color: #f7f7f9;
+    background-color: $ghost-white-light;
 }
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 ::ng-deep .dropdown-item.disabled,
 .dropdown-item:disabled {
-    color: #636c72;
+    color: $mid-gray;
     cursor: not-allowed;
     background-color: transparent;
 }
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 .hasError {
-    border: 1px solid red;
+    border: 1px solid $red;
 }
 
 #createCompForm p {
     font-size: 14px;
-    color: #b3b3b3;
+    color: $extra-pink-swan;
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -88,7 +90,7 @@
     display: block;
 }
 
-.add-companyDetail p {
+.add-company-detail p {
     max-width: 300px;
     margin: 0 auto !important;
     display: block;
@@ -99,6 +101,11 @@
 #share-modal .btn.btn-sky-blue {
     width: 100%;
 }
-.add-companyDetail {
-    background-color: #f7f8fa;
+.add-company-detail {
+    background-color: $alice-blue-light;
+}
+
+.phone-code-caret{
+    width: 85px;
+    margin-right: 28px;
 }

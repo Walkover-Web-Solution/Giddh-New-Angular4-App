@@ -1,22 +1,22 @@
-<section class="reciptNote" autocomplete="off">
-    <div class="reciptNoteHeader d-flex pl-15 pr-15">
+<section class="receipt-note" autocomplete="off">
+    <div class="receipt-note-header d-flex pl-15 pr-15">
         <h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
         <h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</h3>
-        <div class="closeRecipt pointer" (click)="closeBranchTransferPopup()">
+        <div class="close-receipt pointer" (click)="closeBranchTransferPopup()">
             <span class="icon-cross"></span>
         </div>
     </div>
-    <div class="reciptNoteContent">
-        <div class="reciptNoteRadioBtn pr-15 pl-15 mb-15" *ngIf="!editBranchTransferUniqueName">
-            <span class="pd0 mrR3">
-                <input id="multipleProducts" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'products'}"
+    <div class="receipt-note-content">
+        <div class="receipt-note-radio-btn pr-15 pl-15 mb-15" *ngIf="!editBranchTransferUniqueName">
+            <span class="p-0 mr-3">
+                <input id="multipleProducts" class="radio-custom cp ml-0" type="radio" [ngClass]="{'radio-theme': 1 === 1, 'transfer-type-checked': transferType === 'products'}"
                 name="transferType"
                 (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'">
                 <label for="multipleProducts" class="radio-custom-label">Multiple Products</label>
             </span>
 
-            <span class="pd0 mrR3">
-                <input id="multipleSenders" class="radio-custom cp ml0" type="radio" [ngClass]="{'radio_theme': 1 === 1, 'transfertype-checked': transferType === 'senders'}"
+            <span class="p-0 mr-3">
+                <input id="multipleSenders" class="radio-custom cp ml-0" type="radio" [ngClass]="{'radio-theme': 1 === 1, 'transfer-type-checked': transferType === 'senders'}"
                 name="transferType" type="radio"
                 (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'">
                 <label for="multipleSenders" class="radio-custom-label" *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</label>
@@ -26,7 +26,7 @@
 
         </div>
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
-        <div class="multiple-products-wrapper  ">
+        <div class="multiple-products-wrapper">
             <form #newBranchTransferForm="ngForm" novalidate="">
                 <div class="multiple-products row clearfix pl-15 pr-15">
                     <div class="col-lg-6 col-md-8" *ngIf="branchTransferMode === 'deliverynote'">
@@ -331,7 +331,7 @@
                                 <td>
                                     <div *ngIf="activeRow === i">
                                         <sh-select name="productName{{i}}" #selectDropdown [notFoundLink]="true" (noResultsClicked)="onProductNoResultsClicked(i)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="stockList" [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product);"></sh-select>
-                                        <div class="pos-rel">
+                                        <div class="position-relative">
                                             <div class="skuCode" (click)="focusSkuNumber();" *ngIf="activeRow == i && product.uniqueName">
                                                 <label class="">SKU Code: </label>
                                                 <span>{{product.skuCode}}
@@ -340,10 +340,10 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <div class="hsnCodeDropdown skuNumberDropdown" *ngIf="skuNumberPopupShow && activeRow == i">
+                                            <div class="hsn-code-dropdown skuNumberDropdown" *ngIf="skuNumberPopupShow && activeRow == i">
                                                 <label>SKU Code:</label>
                                                 <input type="text" maxlength="50" placeholder="SKU Code" name="productSkuCode{{i}}" #productSkuCode [(ngModel)]="skuNumber" />
-                                                <div class="btngroup m-t-10">
+                                                <div class="btn-group m-t-10">
                                                     <button class="btn btn-sm btn-success" type="button" (click)="saveSkuNumberPopup(product)">Save</button>
                                                     <button class="btn btn-sm btn-primary" type="button" (click)="hideSkuNumberPopup()">Cancel</button>
                                                 </div>
@@ -359,8 +359,8 @@
                                         <div *ngIf="product.description">{{product.description}}</div>
                                         <div *ngIf="(!product?.name && !product?.description && !(product?.hsnNumber || product?.sacNumber) && !product?.skuCode)" class="placeholder-for-table">Enter product details</div>
                                     </div>
-                                    <div class="pos-rel">
-                                        <div class="hsnCode text-right" (click)="focusHsnNumber();" *ngIf="activeRow == i">
+                                    <div class="position-relative">
+                                        <div class="hsn-code text-right" (click)="focusHsnNumber();" *ngIf="activeRow == i">
                                             <label>HSN/SAC Code: </label>
                                             <span>{{ (inventorySettings?.manageInventory || !product.sacNumber) ? product.hsnNumber : product.sacNumber}}
                                                 <span class="edit-icon cp">
@@ -368,10 +368,10 @@
                                                 </span>
                                             </span>
                                         </div>
-                                        <div class="hsnCodeDropdown" *ngIf="hsnPopupShow && activeRow == i">
+                                        <div class="hsn-code-dropdown" *ngIf="hsnPopupShow && activeRow == i">
                                             <label>HSN/SAC Code</label>
                                             <input type="text" maxlength="8" placeholder="HSN/SAC Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
-                                            <div class="btngroup m-t-10">
+                                            <div class="btn-group m-t-10">
                                                 <button class="btn btn-sm btn-success" type="button" (click)="saveHsnNumberPopup(product)">Save</button>
                                                 <button class="btn btn-sm btn-primary" type="button" (click)="hideHsnNumberPopup()">Cancel</button>
                                             </div>
@@ -395,7 +395,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{product.stockDetails.rate | giddhCurrency}}</div>
                                     </div>
                                 </td>
-                                <td class="pos-rel">
+                                <td class="position-relative">
                                     <div *ngIf="activeRow === i">
                                         <input type="text" class="form-control text-right" name="productAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
                                     </div>
@@ -450,7 +450,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{destination.warehouse.stockDetails.rate | giddhCurrency}}</div>
                                     </div>
                                 </td>
-                                <td class="pos-rel">
+                                <td class="position-relative">
                                     <div *ngIf="activeRow === i">
                                         <input type="text" class="form-control text-right" name="destinationAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="destination.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat"
                                             (blur)="dispatchDate.show(); hideActiveRow();">
@@ -503,7 +503,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.rate | giddhCurrency}}</div>
                                     </div>
                                 </td>
-                                <td class="pos-rel">
+                                <td class="position-relative">
                                     <div *ngIf="activeRow === i">
                                         <input type="text" class="form-control text-right" name="sourceAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="source.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
                                     </div>
@@ -517,15 +517,15 @@
                             </tr>
                         </tbody>
                         <div class="addNewLine mr-t1">
-                            <a class="multipleRecivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add
+                            <a class="multiple-receivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add
                                 Multiple Receivers</a>
-                            <a class="multipleRecivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add
+                            <a class="multiple-receivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add
                                 Multiple Senders</a>
-                            <a class="multipleRecivers" (click)="addProduct()" *ngIf="transferType === 'products'"> <i class="icon-plus font-10"></i> Add Multiple Products</a>
+                            <a class="multiple-receivers" (click)="addProduct()" *ngIf="transferType === 'products'"> <i class="icon-plus font-10"></i> Add Multiple Products</a>
                         </div>
                         <tfoot id="tfoot">
                             <tr>
-                                <td colspan="4" class="no-padding">
+                                <td colspan="4" class="p-0">
                                     <div class="transportation-details pt-5">
                                         <h3 class="mr-b1">Transportation Details</h3>
                                         <div class="row">
@@ -559,12 +559,12 @@
                                     </div>
                                 </td>
                                 <td colspan="4">
-                                    <section class="tableSec form-group">
-                                        <div class="tableRow ">
-                                            <div class="tableCell bigger-dollar">
+                                    <section class="table-sec form-group">
+                                        <div class="table-row ">
+                                            <div class="table-cell bigger-dollar">
                                                 <strong>Total</strong>
                                             </div>
-                                            <div class="tableCell figureCell">
+                                            <div class="table-cell figure-cell">
                                                 {{activeCompany.baseCurrencySymbol}} {{overallTotal | giddhCurrency}}
                                             </div>
                                         </div>
@@ -614,11 +614,11 @@
                 </div>
                 <div class="form-group mt-3">
                     <div class="clearfix" *ngIf="!transportEditMode">
-                        <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid" [ladda]="isGenarateTransporterInProcess$ | async" (click)="generateTransporter(generateTransporterForm)" type="submit">Save</button>
+                        <button class="btn btn-md btn-success mr-r1" [disabled]="generateTransporterForm.invalid" [ladda]="isGenarateTransporterInProcess$ | async" (click)="generateTransporter(generateTransporterForm)" type="submit">Save</button>
                         <button class="btn btn-md btn-danger" (click)="clearTransportForm()" type="submit">Clear</button>
                     </div>
                     <div class="clearfix" *ngIf="transportEditMode">
-                        <button class="btn btn-md btn-green mrR1" [ladda]="updateTransporterInProcess$ | async" (click)="updateTransporter(generateTransporterForm)" type="submit">Update</button>
+                        <button class="btn btn-md btn-green mr-r1" [ladda]="updateTransporterInProcess$ | async" (click)="updateTransporter(generateTransporterForm)" type="submit">Update</button>
                         <button class="btn btn-md btn-danger" (click)="clearTransportForm()">Clear</button>
                     </div>
                 </div>
@@ -630,18 +630,18 @@
                     <tr>
                         <th width="45%">Name
                             <div class="icon-pointer pull-right">
-                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterName')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}">
+                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterName')" [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}">
                                 </div>
-                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterName')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}">
+                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterName')" [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}">
                                 </div>
                             </div>
                         </th>
                         <th width="45%">
                             Transporter ID
                             <div class="icon-pointer pull-right">
-                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterId')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}">
+                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterId')" [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}">
                                 </div>
-                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterId')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}">
+                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterId')" [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}">
                                 </div>
                             </div>
                         </th>
@@ -658,7 +658,7 @@
                 </tr>
             </table>
         </div>
-        <div class="alC mt-4 mb-4" *ngIf="transporterListDetails">
+        <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails">
             <pagination [totalItems]="transporterListDetails.totalPages" [(ngModel)]="transporterListDetails.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>

@@ -7,10 +7,10 @@
                 </ng-template>
                 <div class="single-tab-block">
                     <div class="box clearfix mb-2">
-                        <h4 class="clearfix bdrB">Integration<span> (These settings will be applicable on Purchase Order and Bill)</span></h4>
+                        <h4 class="clearfix bd-rb">Integration<span> (These settings will be applicable on Purchase Order and Bill)</span></h4>
                         <div class="clearfix">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-3 lh34"><label>From Email</label></div>
+                                <div class="col-sm-12 col-md-12 col-lg-3 lh-34"><label>From Email</label></div>
                                 <div class="col-sm-12 col-md-12 col-lg-9">
                                     <div class="row">
                                         <div class="col-md-5 col-sm-12 col-xs-12">
@@ -64,10 +64,10 @@
                 </ng-template>
                 <div class="sales-order-tab single-tab-block">
                     <div class="box clearfix mb-2">
-                        <h4 class="clearfix bdrB">Purchase Order</h4>
+                        <h4 class="clearfix bd-rb">Purchase Order</h4>
                         <div class="clearfix">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-3 lh34"><label>Default expiry days</label></div>
+                                <div class="col-sm-12 col-md-12 col-lg-3 lh-34"><label>Default expiry days</label></div>
                                 <div class="col-sm-12 col-md-12 col-lg-9">
                                     <div class="default-expiry row">
                                         <div class="col-md-5">
@@ -117,11 +117,11 @@
                                         <div class="form-group clearfix">
                                             <input type="checkbox" class="hide-on-mobile" name="useCustomPONumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber" />
                                             <div class=" d-inline-flex custom-estimation" *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber">
-                                                <div class="d-inline-flex pos-rel">
+                                                <div class="d-inline-flex position-relative">
                                                     <label>Initial No.</label>
                                                     <input type="text" class="form-control text-right initial-number" name="initialNumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.initialPONumber">
                                                 </div>
-                                                <div class="d-inline-flex pos-rel">
+                                                <div class="d-inline-flex position-relative">
                                                     <label class="r-0">Prefix</label>
                                                     <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.poNumberPrefix">
                                                 </div>
@@ -141,7 +141,7 @@
                 </ng-template>
                 <div class="single-tab-block">
                     <div class="box clearfix mb-2">
-                        <h4 class="clearfix bdrB">Purchase Bill</h4>
+                        <h4 class="clearfix bd-rb">Purchase Bill</h4>
                         <div class="clearfix">
                             <div class="clearfix">
                                 <div class="row">
@@ -177,7 +177,7 @@
 </section>
 <ng-template #buttonsSection>
     <div class="btn-group mrT2" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-success mrR1" (click)="updateForm()">Save</button>
+        <button type="button" class="btn btn-success mr-r1" (click)="updateForm()">Save</button>
         <button type="button" class="btn btn-cancel" (click)="resetForm()">Cancel</button>
     </div>
 </ng-template>

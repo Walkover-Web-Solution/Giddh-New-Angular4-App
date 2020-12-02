@@ -1,12 +1,12 @@
-<div class="previuos-estimate-wrapper" (click)="clickInside($event)">
-    <ul style="list-style: none">
+<div class="previous-estimate-wrapper" (click)="clickInside($event)">
+    <ul>
         <perfect-scrollbar>
             <li *ngFor="let item of data" (click)="onInvoiceSelected(item)">
-                <div class="d-flex" style="justify-content: space-between; padding: 4px;">
+                <div class="d-flex justify-content-between pd">
 
-                    <div style="display: flex;flex-direction: column">
-                        <span class="left-txtOrange">{{ item.versionNumber }}</span>
-                        <span class="left-txtOrange">{{ item.date }} ( {{ item.account?.name }} )</span>
+                    <div class="d-flex flex-column">
+                        <span class="left-text-orange">{{ item.versionNumber }}</span>
+                        <span class="left-text-orange">{{ item.date }} ( {{ item.account?.name }} )</span>
                     </div>
 
                     <span>{{ item.grandTotal?.amountForAccount }}</span>

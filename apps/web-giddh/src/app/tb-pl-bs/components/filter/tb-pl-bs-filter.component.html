@@ -5,7 +5,7 @@
 
             <div class="col-xl-9 col-lg-12 col-md-12">
 
-                <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-selectYear"
+                <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-select-year"
                     name="fromToDateForm" novalidate>
                     <!-- this code is commented for , need to remove this dropdown but for funcationality I am not removing this
                         will remove it after universal datepicker added
@@ -48,13 +48,13 @@
 
                         <div class="form-group pull-left">
 
-                            <a class="cp expanIcon" (click)="emitExpand()" data-placement="top" tooltip="Expand All"
+                            <a class="cp expand-icon" (click)="emitExpand()" data-placement="top" tooltip="Expand All"
                                 *ngIf="!expand">
 
                                 <span class="icon-expandIcon"></span>
                             </a>
 
-                            <a class="cp expanIcon" (click)="emitExpand()" data-placement="top" tooltip="Collapse All"
+                            <a class="cp expand-icon" (click)="emitExpand()" data-placement="top" tooltip="Collapse All"
                                 *ngIf="expand">
 
                                 <span class="icon-collapse"></span>

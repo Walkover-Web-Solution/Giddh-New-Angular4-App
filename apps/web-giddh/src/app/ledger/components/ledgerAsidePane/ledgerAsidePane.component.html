@@ -1,26 +1,18 @@
 <div class="aside-pane">
-
     <div class="form-header" *ngIf="!hideFirstScreen">
         <h3>Add</h3>
     </div>
-
-
-    <button id="close" [ngClass]="!hideFirstScreen ? 'closeBtnPosAbs' : 'defaultBtn' " (click)="closeAsidePane()"><i
+    <button id="close" [ngClass]="!hideFirstScreen ? 'close-btn-absolute' : 'default-button' " (click)="closeAsidePane()"><i
             class="icon-cross"></i></button>
-
-
-
     <button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
-
-    <div class="aside-body flexy-child vmiddle asidePanelLedger" *ngIf="!hideFirstScreen" vr-item>
-        <div class="pd-1 alC">
+    <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen" vr-item>
+        <div class="pd-1 text-center">
             <button class="btn btn-lg btn-primary" (click)="toggleAccountPane()">Add Account</button>
         </div>
-        <div class="pd-1 alC">
+        <div class="pd-1 text-center">
             <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Add Stock</button>
         </div>
     </div>
-
     <div class="aside-body  flexy-child-1" *ngIf="isAddAccountOpen">
         <ledger-aside-pane-account></ledger-aside-pane-account>
     </div>

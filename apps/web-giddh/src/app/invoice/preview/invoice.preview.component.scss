@@ -6,20 +6,20 @@
     flex-flow: row wrap;
 }
 
-.mh18_img img {
+.check-image img {
     max-height: 17px;
     cursor: pointer;
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid #c6c4c4;
+    border-right: 1px solid $gainsboro;
 }
 
 .flex-fill {
     flex: 1 1 auto;
 }
 
-.total-amt{
+.total-amount{
     flex: 0 !important;
 }
 .d-flex {
@@ -63,9 +63,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: #1c1c1c;
+    color: $nero;
     border: none;
-    background-color: #f2f2f2;
+    background-color: $white-smoke;
 }
 
 .td-search-box .input-container i {
@@ -85,7 +85,7 @@
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue !important;
-    background: #eeeff9 !important;
+    background: $lavender !important;
 }
 
 .dropdown-menu {
@@ -104,9 +104,9 @@
     list-style: none;
     position: absolute;
     left: -114px;
-    background-color: white;
+    background-color: $white;
     width: 131px;
-    box-shadow: 0px 4px 7px #bfbfbf;
+    box-shadow: 0px 4px 7px $gray-75;
     border-radius: 3px;
     z-index: 100;
     border: 1px solid $gainsboro;
@@ -119,7 +119,7 @@
 .click-dropdwon ul li {
     padding: 3px 6px;
     margin-bottom: 4px;
-    color: orange;
+    color: $orange;
     cursor: pointer;
 }
 
@@ -128,11 +128,11 @@
 }
 
 .click-dropdwon ul li:hover a {
-    color: orangered;
+    color: $orange-red;
 }
 
 .click-dropdwon ul li a {
-    color: black;
+    color: $black;
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -146,9 +146,15 @@
 
 .btn.btn-sky-blue:focus,
 .btn.btn-sky-blue:hover {
-    color: #fff;
+    color: $white;
     text-decoration: none;
     outline: none !important;
+}
+
+.input-grp-date-range-picker{
+    .form-group{
+        flex: 1 1 auto;
+    }
 }
 
 /* my css */
@@ -178,7 +184,7 @@
 }
 
 td.card-header.clearfix {
-    background-color: #eee;
+    background-color: $whisper-light;
     padding: 10px !important;
 }
 
@@ -187,22 +193,22 @@ td.card-header.clearfix {
     padding-right: 10px;
 }
 
-.card #inovice_td {
-    border-bottom: 1px solid #ddd !important;
+.card #invoice-td {
+    border-bottom: 1px solid $gainsboro !important;
     padding-bottom: 20px !important;
-    background-color: #f9f9f9;
-    border-top: 1px solid #ddd !important;
+    background-color: $snow;
+    border-top: 1px solid $gainsboro !important;
     padding-top: 10px !important;
 }
 
-.card .overDueDate {
+.card .over-due-date {
     position: absolute;
     font-size: 12px;
     bottom: -15px;
     right: 0;
 }
 
-.card .invoiceNumberA {
+.card .invoice-number-a {
     display: inline-block;
     padding-right: 20px;
 }
@@ -212,20 +218,20 @@ td.card-header.clearfix {
     text-align: right;
 }
 
-.card #inovice_td img {
+.card #invoice-td img {
     right: 0px !important;
     top: 5px;
     left: auto !important;
 }
 
-.card .moreBtn {
+.card .more-button {
     padding-bottom: 20px !important;
     text-align: right;
 }
 
-.card .moreBtn .moreBtnWrapper {
+.card .more-button .moreBtnWrapper {
     margin-right: 0;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $gainsboro;
     padding-top: 8px;
 }
 
@@ -233,11 +239,11 @@ td.card-header.clearfix {
     padding: 0;
 }
 
-.mobileTable {
+.mobile-table {
     display: none;
 }
 
-.paginationWrapper {
+.pagination-wrapper {
     background-color: transparent;
     padding: 20px 0;
     margin-bottom: 0;
@@ -265,7 +271,7 @@ td.card-header.clearfix {
     margin-left: 6px;
 }
 
-.icon-pointer .activeTextColor {
+.icon-pointer .active-text-color {
     color: $deep-sky-blue;
 }
 
@@ -279,24 +285,24 @@ button.btn.btn-orange.ladda-button {
     overflow: inherit;
 }
 
-ul.selectActionDropdown {
+ul.select-action-dropdown {
     list-style: none;
 }
 
-.selectActionDropdown a {
-    color: #333;
+.select-action-dropdown a {
+    color: $night-rider;
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
 
-.selectActionDropdown a:hover {
+.select-action-dropdown a:hover {
     color: $chetwode-blue !important;
-    background: #eeeff9 !important;
+    background: $lavender !important;
 }
 
 .add-invoice .dropdown-toggle {
-    color: #fff;
+    color: $white;
 }
 
 .invoice-container {
@@ -334,7 +340,7 @@ ul.selectActionDropdown {
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: #999999;
+    color: $nobel;
 }
 
 .advance-icon,
@@ -349,7 +355,7 @@ ul.selectActionDropdown {
     border: 1px solid $gainsboro;
     border-radius: 2px;
     color: $gray;
-    background: #fff;
+    background: $white;
     color: $gray;
 }
 
@@ -358,7 +364,7 @@ ul.selectActionDropdown {
 }
 
 .advance-icon:hover {
-    background: #eaeaea;
+    background: $whisper-color;
 }
 
 .dropdown-toggle.more-btn-dropdown {
@@ -372,21 +378,21 @@ ul.selectActionDropdown {
     align-items: center;
     margin-right: 15px;
     color: $midnight-express;
-    background-color: #fff;
+    background-color: $white;
 }
 
 .dropdown-toggle.more-btn-dropdown:hover {
     background: $chetwode-blue;
-    color: #fff !important;
+    color: $white !important;
     border-color: $chetwode-blue;
 }
 
 .dropdown-toggle.more-btn-dropdown:hover .caret {
-    color: #fff !important;
+    color: $white !important;
 }
 
 .dropdown-toggle.more-btn-dropdown .caret {
-    color: #999999;
+    color: $nobel;
 }
 
 button.btn.btn-default.ladda-button {
@@ -419,7 +425,7 @@ button.btn.btn-default.ladda-button {
 }
 
 .btn-link-2 {
-    color: #1c1c1c;
+    color: $nero;
 }
 
 .input-wrapper {
@@ -443,14 +449,14 @@ button.btn.btn-default.ladda-button {
 
 .invoice-footer h3 {
     font-size: 16px;
-    color: #999999;
+    color: $nobel;
     display: inline-block;
     margin-right: 10px;
 }
 
 .invoice-footer h1 {
     font-size: 18px;
-    color: #333;
+    color: $night-rider;
     display: inline-block;
 }
 
@@ -524,7 +530,7 @@ span.icon-export-icon {
 }
 
 .giddh-table{
-    border-right: 1px solid $gainsboro-light;
+    border-right: 1px solid $gainsboro;
     border-bottom: 1px solid $gainsboro !important;
     tbody{
         tr{
@@ -582,10 +588,10 @@ span.icon-export-icon {
     .search-icon-block {
         display: flex;
     }
-    .card-header .mh18_img {
+    .card-header .check-image {
         margin-right: 5px;
     }
-    .mobileTable {
+    .mobile-table {
         display: block;
     }
     // .desktop-table {
@@ -595,7 +601,7 @@ span.icon-export-icon {
         display: block;
         text-align: center;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         margin-top: 20px;
         border: none;
         background-color: transparent;
@@ -621,7 +627,7 @@ span.icon-export-icon {
         right: 14px;
         box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
         transform: rotate(45deg);
-        background-color: #fff;
+        background-color: $white;
         z-index: -1;
     }
     .displayBlock {
@@ -649,18 +655,18 @@ span.icon-export-icon {
         bottom: 120px;
         z-index: 99;
         line-height: 0;
-        background-color: #36a1ce;
-        color: #fff;
+        background-color: $shamrock;
+        color: $white;
         box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
         display: block;
     }
     .date-advance-search .dropdown-menu > li > a {
         padding: 8px 10px;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         top: 0px;
     }
-    .input-grp-dateRangePicker .form-group {
+    .input-grp-date-range-picker .form-group {
         margin-bottom: 2px;
     }
     .invoice-preview {
@@ -763,7 +769,7 @@ span.icon-export-icon {
 @media (max-width: 420px) {
     .smallLoading {
         padding-left: 0;
-        color: #333333;
+        color: $night-rider;
         font-size: 12px;
         position: relative;
         top: 2px;
@@ -772,7 +778,7 @@ span.icon-export-icon {
 }
 
 @media (max-width: 360px) {
-    .input-grp-dateRangePicker .btn {
+    .input-grp-date-range-picker .btn {
         padding-left: 0;
         padding-top: 10px;
         padding-bottom: 0;
@@ -819,10 +825,10 @@ span.icon-export-icon {
 
 
 @media (min-width:768px){
-    .mw-th-260{
+    .min-wid-status{
         min-width:260px;
     }
-    .mw-th-170{
+    .min-wid-amount{
         min-width:170px;
     }
 

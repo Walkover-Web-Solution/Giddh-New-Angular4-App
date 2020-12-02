@@ -113,7 +113,7 @@ i.close.icon.clear:hover::after {
     /* color: white; */
 }
 
-.chipClosebtn {
+.chip-close-btn {
     padding-left: 10px;
     font-weight: 500;
     float: right;
@@ -122,7 +122,7 @@ i.close.icon.clear:hover::after {
     opacity: 0.6;
 }
 
-.chipClosebtn:hover {
+.chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
     color: black;

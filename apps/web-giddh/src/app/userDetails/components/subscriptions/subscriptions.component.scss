@@ -38,7 +38,7 @@
     clear: both;
 }
 .subscription-dropdown .btn {
-    border: 1px solid #c4c0c0;
+    border: 1px solid $gainsboro;
     width: 342px;
     text-align: left;
     background: $white;
@@ -50,8 +50,6 @@
 
 .dropdown-menu {
     position: absolute;
-    /*top: 100%;*/
-    /* left: 0; */
     z-index: 99;
     min-width: 160px;
     padding: 5px 0 !important;
@@ -62,10 +60,9 @@
     background-color: $white;
     background-clip: padding-box;
     border: 1px solid $gainsboro;
-    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    -webkit-box-shadow: 0 6px 12px $black-russian-light;
+    box-shadow: 0 6px 12px $black-russian-light;
 }
 .subscription-dropdown .dropdown-menu {
     max-width: 400px;
@@ -77,7 +74,7 @@
 }
 .subscription-dropdown .dropdown-menu li {
     padding: 5px 4px;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: 1px solid $gainsboro;
     transition: 0.5s all ease;
 }
 .subscription-dropdown .dropdown-menu li.active {
@@ -95,7 +92,7 @@
 }
 .subscription-dropdown li:hover a,
 .subscription-dropdown li:hover {
-    background: #f1f1f1;
+    background: $white-smoke;
 }
 .subscription-dropdown .dropdown-menu li a span {
     position: absolute;
@@ -163,14 +160,14 @@
     color: $light-green;
     font-size: 14px;
 }
-.green-dote, .red-dote, .orange-dote {
+.green-dote, .red-dot, .orange-dote {
     width: 9px;
     height: 9px;
     display: inline-block;
     border-radius: 40px;
     background-color: $light-green;
 }
-.red-dote {
+.red-dot {
     background-color: $red;
 }
 .orange-dote {

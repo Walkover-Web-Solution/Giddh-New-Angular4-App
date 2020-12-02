@@ -53,39 +53,39 @@
     font-size: 12px;
 }
 
-.invoice-sidebar .invoice-number-date span.inoviceNumber {
-    color: #0c8fe6;
+.invoice-sidebar .invoice-number-date span.invoice-number {
+    color: $electric-blue;
 }
 
 .invoice-sidebar .invoice-number-date span.invoice-date {
-    color: #666666;
+    color: $dark-gray;
 }
 
-.invoice-sidebar .invoiceHolderName p {
-    color: #333333;
+.invoice-sidebar .invoice-holder-name p {
+    color: $night-rider;
     font-size: 14px;
     margin-top: 3px;
 }
 
-.invoice-sidebar .singleInvoiceDetail {
+.invoice-sidebar .single-invoice-detail {
     padding: 10px 15px;
-    border-bottom: 1px solid #dedede;
+    border-bottom: 1px solid $gray-87;
     list-style: none;
 }
 
-.invoice-sidebar .singleInvoiceDetail:hover {
-    background-color: #f0f0f0;
+.invoice-sidebar .single-invoice-detail:hover {
+    background-color: $gray-94;
 }
 
-.invoice-sidebar .singleInvoiceDetail.activeItem {
-    background-color: #f0f0f0;
+.invoice-sidebar .single-invoice-detail.activeItem {
+    background-color: $gray-94;
 }
 
-.invoice-sidebar .singleInvoiceDetail:last-child {
+.invoice-sidebar .single-invoice-detail:last-child {
     border-bottom: none;
 }
 
-.invoice-sidebar .inovice-amount {
+.invoice-sidebar .invoice-amount {
     font-size: 12px;
     line-height: 3.4;
 }
@@ -108,7 +108,7 @@
     font-weight: 600;
 }
 
-.invoice-detail-header p.acc-holderName {
+.invoice-detail-header p.account-holder-name {
     font-size: 14px;
     margin-top: 3px;
 }
@@ -122,7 +122,7 @@
 }
 
 .invoice-detail-header .edit-change-status .edit-link {
-    color: #0c8fe6;
+    color: $electric-blue;
     padding-right: 10px;
     font-size: 16px;
 }
@@ -131,13 +131,13 @@
     width: 15px;
 }
 
-.invoice-detail-header .edit-change-status .edit-action-btn-grps {
+.invoice-detail-header .edit-change-status .edit-action-btn-groups {
     display: flex;
-    background-color: #ffffff;
-    border: 1px solid #cbcbcb;
+    background-color: $white;
+    border: 1px solid $cerebellum-gray;
     margin-right: 10px;
     span {
-        border-left: 1px solid #cbcbcb;
+        border-left: 1px solid $cerebellum-gray;
         padding: 5px;
         height: 30px;
         width: 30px;
@@ -145,7 +145,7 @@
             border-left: none;
         }
         a {
-            color: #666666;
+            color: $dark-gray;
             display: block;
             text-align: center;
         }
@@ -172,7 +172,7 @@
 .payment-detail .payment-icon {
     width: 35px;
     height: 35px;
-    background-color: #cccccc;
+    background-color: $very-light-gray;
     border-radius: 50%;
     text-align: center;
     vertical-align: middle;
@@ -182,14 +182,14 @@
     margin-bottom: 5px;
 }
 
-.single-paymentDetail a {
-    color: #0c8fe6;
+.single-payment-detail a {
+    color: $electric-blue;
 }
 
 .payment-detail p.payment-content {
     font-size: 14px;
     margin-bottom: 5px;
-    color: #333333;
+    color: $night-rider;
 }
 
 .payment-log {
@@ -223,7 +223,7 @@
         font-size: 36px;
         max-width: 60%;
         margin: 0 auto;
-        color: #ff0d0d;
+        color: $red;
     }
     .img-expand-collapse{
         padding: 50px 50px 0 50px;
@@ -231,7 +231,7 @@
     .image-collapsed {
         max-height: 130px;
         overflow: hidden;
-    
+
         img{
             height:auto;
         }
@@ -253,8 +253,8 @@
     z-index: 40;
 }
 
-.single-paymentDetail {
-    color: #0c8fe6;
+.single-payment-detail {
+    color: $electric-blue;
 }
 
 .payment-log-div li {
@@ -270,23 +270,23 @@
 .payment-log-div span.small-circle {
     height: 10px;
     width: 10px;
-    border: 1px solid #666666;
+    border: 1px solid $dark-gray;
     border-radius: 50%;
     display: inline-block;
     margin-right: 7px;
 }
 
 .payment-log-div .activeLog span.small-circle {
-    background-color: #0c8fe6;
-    border-color: #0c8fe6;
+    background-color: $electric-blue;
+    border-color: $electric-blue;
 }
 
-.payment-log-div .aboutPaymentLog {
-    color: #666;
+.payment-log-div .about-payment-log {
+    color: $dark-gray;
 }
 
-.payment-log-div .activeLog .aboutPaymentLog {
-    color: #0c8fe6;
+.payment-log-div .activeLog .about-payment-log {
+    color: $electric-blue;
 }
 
 .payment-log-div ul {
@@ -298,13 +298,17 @@
     content: "";
     height: calc(100% - 30px);
     width: 1px;
-    border-left: 1px dashed #666666;
+    border-left: 1px dashed $dark-gray;
     top: 16px;
     left: 4.5px;
 }
 
+.less-more-details{
+    padding: 10px 0 10px 10px;
+}
+
 .invoice-detail {
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     padding-bottom: 20px;
 }
 
@@ -314,13 +318,13 @@ span.close-modal.cp.pull-right {
     align-items: center;
     height: 32px;
     width: 32px;
-    background-color: #ddd;
+    background-color: $gainsboro-light;
     border: 1px solid $gainsboro;
     position: static;
     transform: inherit;
 }
 
-.changeStatus-dropdown .dropdown-menu {
+.change-status-dropdown .dropdown-menu {
     width: 160px;
 }
 
@@ -328,24 +332,24 @@ span.close-modal.cp.pull-right {
     padding: 6px 16px;
 }
 
-.changeStatus-dropdown .dropdown-menu.show {
+.change-status-dropdown .dropdown-menu.show {
     display: inline-block !important;
     left: auto !important;
     right: 8px !important;
 }
 
-.btn-group.changeStatus-dropdown.open.show {
+.btn-group.change-status-dropdown.open.show {
     display: inline-block !important;
 }
 
 .dropdown-menu>li>a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $gray-90;
 }
 
 .invoice-search-box input {
     flex: 1;
-    border: 1px solid #ddd;
+    border: 1px solid $gainsboro;
     height: 37px;
     padding: 0 30px;
     background-image: url("../../../../../assets/images/searchIcon.svg");
@@ -380,13 +384,13 @@ span.close-modal.cp.pull-right {
 .invoice-edit-wrapper {
     height: 100vh;
     overflow-y: auto;
-    .invoice-editHeader {
+    .invoice-edit-header {
         display: flex;
         justify-content: space-between;
         height: 54px;
-        background-color: #ffffff;
-        border-top: 1px solid #c6c6c6;
-        border-bottom: 1px solid #c6c6c6;
+        background-color: $white;
+        border-top: 1px solid $gainsboro;
+        border-bottom: 1px solid $gainsboro;
         align-items: center;
         span {
             padding: 10px;
@@ -398,7 +402,7 @@ span.close-modal.cp.pull-right {
         span.close-modal {
             height: 32px;
             width: 32px;
-            background-color: #ddd;
+            background-color: $gainsboro-light;
             border: 1px solid $gainsboro;
             display: flex;
             justify-content: center;
@@ -408,12 +412,12 @@ span.close-modal.cp.pull-right {
             transform: inherit;
         }
     }
-    .invoice-editBody {
+    .invoice-edit-body {
         padding-bottom: 140px;
     }
 }
 
-.changeStatus-dropdown #setting-tab {
+.change-status-dropdown #setting-tab {
     width: 340px;
     left: auto;
     right: 0;
@@ -438,17 +442,17 @@ span.close-modal.cp.pull-right {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: #5b64c9;
+    background-color: $chetwode-blue;
     animation: loading 2s linear infinite;
 }
 
 label.labeled {
-    border: 1px solid #ddd;
-    color: #333;
+    border: 1px solid $gainsboro;
+    color: $extra-dark-gray;
     padding: 5px 10px;
     border-radius: 3px;
     margin: 0 10px 0 0;
-    background-color: #d6d6d6;
+    background-color: $light-gray;
     position: relative;
     top: -1px;
 }
@@ -498,35 +502,35 @@ label.labeled {
     }
 }
 
-.sendEmailModal {
+.send-email-modal {
     min-width: 240px;
     position: absolute;
     top: 40px;
     z-index: 10;
     right: 0;
-    border: 1px solid #c7c7c7;
-    .sendEmailModalWrapper {
+    border: 1px solid $gainsboro;
+    .send-email-modal-wrapper {
         background-color: $white;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
-        .sendEmailModalHeader {
-            background-color: #e2e2e2;
+        .send-email-modal-header {
+            background-color: $light-gray-extra;
             padding: 8px 10px;
-            border-bottom: 1px solid #cccccc;
+            border-bottom: 1px solid $gainsboro;
             span {
                 width: unset;
             }
         }
     }
-    .sendEmailModalBody {
+    .send-email-modal-body {
         padding: 5px;
     }
-    .sendEmailModalBody label {
+    .send-email-modal-body label {
         font-size: 12px;
         margin-bottom: 7px;
     }
     .btn-success {
-        background: #28ab00;
+        background: $deep-green;
         color: $white;
     }
     .aqua-color {
@@ -570,11 +574,11 @@ label.labeled {
     margin: 25px auto !important;
 }
 
-.max500 {
+.max-width-500 {
     max-width: 500px;
 }
 
-.dashed-bdr {
+.dashed-border {
     border: 2px dashed $gainsboro;
 }
 
@@ -590,16 +594,16 @@ label.labeled {
 }
 
 .select-file {
-    color: #089328;
+    color: $leave-green;
 }
 
-.file-uplod-penal {
+.file-upload-panel {
     width: 100%;
     text-align: left;
     border: 1px solid $gainsboro;
     padding: 8px;
     border-radius: 4px;
-    color: #cccccc;
+    color: $very-light-gray;
 }
 
 .file-input-wrapper img {
@@ -976,7 +980,7 @@ p {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
     margin: 3px 0;
 }
 
@@ -1116,7 +1120,7 @@ strong {
     .dropdown-toggle.btn-sky-blue {
         padding: 6px 8px;
     }
-    .invoice-sidebar .singleInvoiceDetail {
+    .invoice-sidebar .single-invoice-detail {
         padding: 4px 15px;
     }
 }
@@ -1143,7 +1147,7 @@ strong {
         top: 3px;
     }
     .invoice-sidebar li.activeItem .invoice-number-date span.invoice-date:before {
-        background-color: #f0f0f0;
+        background-color: $gray-94;
     }
     .invoice-preview-sidebar {
         padding-right: 15px;
@@ -1178,7 +1182,7 @@ strong {
         max-height: 46vmax;
         overflow-y: auto;
     }
-    .invoice-detail-header .edit-change-status .edit-action-btn-grps {
+    .invoice-detail-header .edit-change-status .edit-action-btn-groups {
         float: left !important;
     }
     .invoice-detail-header .edit-change-status {
@@ -1191,7 +1195,7 @@ strong {
     .invoice-modal-content {
         height: 100vh !important;
     }
-    .single-paymentDetail {
+    .single-payment-detail {
         margin-bottom: 10px;
     }
     .payment-detail .payment-icon {
@@ -1212,7 +1216,7 @@ strong {
         width: 100%;
         padding-top: 10px;
     }
-    .changeStatus-dropdown {
+    .change-status-dropdown {
         float: left;
     }
     span.close-modal.cp.pull-right {

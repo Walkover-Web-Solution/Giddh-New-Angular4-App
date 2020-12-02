@@ -1,16 +1,16 @@
 <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null;toggleTaxAsidePane()">
-    <div style="display: flex;justify-content: space-between">
-        <h1 class="section-head pd-t1" style="margin: 0;padding: 0;line-height: 2;">Added Taxes</h1>
+    <div class="d-flex justify-content-between">
+        <h1 class="section-head pd-t1 m-0 pl-0 pb-0 pr-0">Added Taxes</h1>
         <button class="btn btn-sky-blue mr-0" [tooltip]="'Create New Tax'"
             (click)="selectedTax = null;toggleTaxAsidePane($event)">
-            <i class="icon icon-plus" style="font-size:12px"></i> New Tax
+            <i class="icon icon-plus font-12"></i> New Tax
         </button>
     </div>
 
     <div class="col-sm-12 pt-15 tax-table-wrapper">
         <div class="row">
             <div class="table-responsive">
-                <table class="table table-bordered  basic mrB on-mobile-view">
+                <table class="table table-bordered  basic mr-b05 on-mobile-view">
 
                     <thead>
                         <tr>
@@ -74,8 +74,7 @@
                                         </span>
                                     </div>
 
-                                    <div *ngIf="showDatePickerInTable && taxToEdit[i]"
-                                        style="position: absolute; z-index:10; min-height:290px;">
+                                    <div *ngIf="showDatePickerInTable && taxToEdit[i]" class="tax-datepicker">
                                         <datepicker name="tableDate{{i}}_{{j}}" [(ngModel)]="t.date"
                                             (selectionDone)="showDatePickerInTable=!showDatePickerInTable"
                                             [showWeeks]="false"></datepicker>
@@ -111,7 +110,7 @@
                             <td *ngIf="!taxToEdit[i]" data-title="File Date">{{tax.taxFileDate}}</td>
 
                             <td *ngIf="taxToEdit[i]">
-                                <div class="custom-select pos-rel">
+                                <div class="custom-select position-relative">
                                     <sh-select [options]="days" [isFilterEnabled]="false"
                                         [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}"
                                         [placeholder]="'Select'" [ItemHeight]="33"></sh-select>
@@ -119,7 +118,7 @@
                             </td>
 
                             <td data-title="Duration">
-                                <div class="custom-select pos-rel">
+                                <div class="custom-select position-relative">
                                     <sh-select [options]="duration" [disabled]="true" [isFilterEnabled]="false"
                                         [(ngModel)]="availableTaxes[i].duration" name="duration{{i}}"
                                         [placeholder]="'Select'" [ItemHeight]="33"></sh-select>

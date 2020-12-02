@@ -1,12 +1,13 @@
+@import "../../../assets/css/color.scss";
 .panel {
     box-shadow: none;
 
     .running {
-        color: #0fa6e9;
+        color: $blue-shade;
     }
 
     .panel-heading {
-        background: #e6e6e6;
+        background: $whisper-new;
     }
 
     .panel-footer {
@@ -15,7 +16,7 @@
     }
 
     .panel-body {
-        color: #707070;
+        color: $gray-44;
         background: transparent;
         padding: 15px 0px 0px 0px;
 
@@ -23,12 +24,12 @@
             box-shadow: none;
             height: 5px;
             margin-bottom: 0px;
-            border: #dfdfdf 1px solid;
+            border: $gray-90 1px solid;
         }
 
         .progress-bar {
-            background: #bebebe;
-            border: 1px solid #bebebe;
+            background: $dark-silver;
+            border: 1px solid $dark-silver;
             box-shadow: none;
         }
 
@@ -57,7 +58,7 @@
     }
 
     .text-success {
-        color: #63b214;
+        color: $strong-green;
     }
 }
 @media(max-width:991px){

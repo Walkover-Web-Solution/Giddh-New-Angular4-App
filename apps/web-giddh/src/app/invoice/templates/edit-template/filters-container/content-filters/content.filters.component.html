@@ -1,8 +1,8 @@
-<div id="contentTab" class="tabcontent mr-t2 templateEditor" *ngIf="content && customTemplate && customTemplate.sections">
+<div id="contentTab" class="design-tab-content mr-t2 template-editor" *ngIf="content && customTemplate && customTemplate.sections">
     <!-- start header -->
     <div id="headerDiv" *ngIf="templateUISectionVisibility.header">
         <h2>Header</h2>
-        <div class="scrollAuto">
+        <div class="scroll-auto">
             <div class="clearfix">
                 <div *ngIf="fieldsAndVisibility.header.companyName && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Name
@@ -24,7 +24,7 @@
                 <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType !== 'gst_template_e'" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
                 </div>
-                <div class="form-group clearfix customField" *ngIf="showGstComposition === true && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
+                <div class="form-group clearfix custom-field" *ngIf="showGstComposition === true && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
                     <input type="checkbox" name="gstCompositionLabel" [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
                     <span>
                         <input class="form-control" maxlength="70" type="text" name="gstComposition" placeholder="Registered under Composition Scheme" [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label" (ngModelChange)='onFieldChange(null, null, null)'>
@@ -208,7 +208,7 @@
                     </div>
                 </div>
             </div>
-            <div class="clearfix customField mr-b2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d'">
+            <div class="clearfix custom-field mr-b2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d'">
                 <h3>
                     <i class="fa cp" aria-hidden="true" (click)="showCustomField = !showCustomField" [ngClass]="{'fa-minus-square-o': showCustomField, 'fa-plus-square-o': !showCustomField}"></i> Custom Field
                 </h3>
@@ -247,7 +247,7 @@
     <div id="tableDiv" *ngIf="templateUISectionVisibility.table">
         <h2>Table</h2>
 
-        <div class="clearfix scrollAuto">
+        <div class="clearfix scroll-auto">
             <table class="table">
                 <thead>
                     <tr>
@@ -325,11 +325,11 @@
                         </div>
                         <div class="ml-3">
                             <div class="clearfix mb-05">
-                                <input type="radio" class="radio_theme" name="tax-rate" /> Tax Rate
+                                <input type="radio" class="radio-theme" name="tax-rate" /> Tax Rate
                             </div>
 
                             <div class="clearfix">
-                                <input type="radio" class="radio_theme point" name="tax-rate" /> HSN/SAC
+                                <input type="radio" class="radio-theme point" name="tax-rate" /> HSN/SAC
                             </div>
                         </div>
                     </div> -->
@@ -498,12 +498,12 @@
                         </div>
                         <div class="ml-3" *ngIf="customTemplate.sections['table'].data['taxBifurcation'].display">
                             <div class="clearfix mb-05">
-                                <input type="radio" class="radio_theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','table' )" [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'taxRateBifurcation'"
+                                <input type="radio" class="radio-theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','table' )" [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'taxRateBifurcation'"
                                     [disabled]="!customTemplate.sections['table'].data['taxBifurcation'].display" /> Tax Rate
                             </div>
 
                             <div class="clearfix">
-                                <input type="radio" class="radio_theme point" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('hsnSac', 'table')" [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'hsnSac'"
+                                <input type="radio" class="radio-theme point" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('hsnSac', 'table')" [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'hsnSac'"
                                     [disabled]="!customTemplate.sections['table'].data['taxBifurcation'].display" /> HSN/SAC
                             </div>
                         </div>
@@ -515,7 +515,7 @@
     <div id="footerDiv" *ngIf="templateUISectionVisibility.footer">
         <div class="clearfix">
             <h2>Footer</h2>
-            <div class="clearfix bdrB scrollAuto">
+            <div class="clearfix bd-rb scroll-auto">
                 <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a' && voucherType==='sales'">
                     <div *ngIf="isTcsTdsApplicable" class="form-group">
                         <input type="checkbox" name="tcs" checked [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" /> TCS
@@ -571,11 +571,11 @@
                     </div>
                     <div class="ml-3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
                         <div class="clearfix mb-05">
-                            <input type="radio" class="radio_theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','footer')" [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'taxRateBifurcation'"
+                            <input type="radio" class="radio-theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','footer')" [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'taxRateBifurcation'"
                                 [disabled]="!customTemplate.sections['footer'].data['taxBifurcation'].display" /> Tax Rate
                         </div>
                         <div class="clearfix">
-                            <input type="radio" class="radio_theme point" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('hsnSac','footer')" [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'hsnSac'"
+                            <input type="radio" class="radio-theme point" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('hsnSac','footer')" [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'hsnSac'"
                                 [disabled]="!customTemplate.sections['footer'].data['taxBifurcation'].display" /> HSN/SAC
                         </div>
                     </div>
@@ -614,11 +614,11 @@
                 <div class="clearfix mr-t1 row">
                     <div class="clearfix" class="col-lg-6 col-md-12">
                         <div class="mb-4px">
-                            <input type="radio" class="radio_theme" style="margin-left: 0px !important;" name="signatureType" (change)="chooseSigntureType('image')" (ngModelChange)='onFieldChange(null, null, null)' [checked]="customTemplate.sections.footer.data.imageSignature.display"
+                            <input type="radio" class="radio-theme ml-0" name="signatureType" (change)="chooseSigntureType('image')" (ngModelChange)='onFieldChange(null, null, null)' [checked]="customTemplate.sections.footer.data.imageSignature.display"
                             /> Image Signature
                         </div>
                         <div class="form-group mrL clearfix">
-                            <span class="claerfix">
+                            <span class="clearfix">
                                 <label class="upload-button" for="signatureImg-edit" [hidden]="signatureImgAttached">
                                     <!--  -->
                                     <!--   -->
@@ -642,7 +642,7 @@
                     </div>
                     <div class="clearfix" class="col-lg-6 col-md-12">
                         <div>
-                            <input type="radio" class="radio_theme" name="signatureType" (change)="chooseSigntureType('slogan')" (ngModelChange)='onFieldChange(null, null, null)' [checked]="customTemplate.sections.footer.data.slogan.display" /> Slogan
+                            <input type="radio" class="radio-theme" name="signatureType" (change)="chooseSigntureType('slogan')" (ngModelChange)='onFieldChange(null, null, null)' [checked]="customTemplate.sections.footer.data.slogan.display" /> Slogan
                         </div>
                         <div class="form-group ml-3 clearfix">
                             <div>

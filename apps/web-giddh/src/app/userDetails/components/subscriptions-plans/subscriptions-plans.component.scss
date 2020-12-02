@@ -21,7 +21,7 @@
     color: $dark-gray;
     padding: 10px;
 }
-.noHeight {
+.height-auto {
     height: auto !important;
 }
 .payment-log-list > li {
@@ -279,7 +279,7 @@
 }
 .btn-cancel {
     background: $very-light-gray;
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
     color: $night-rider;
     font-family: "opensans-semibold" !important;
     margin-bottom: 15px !important;

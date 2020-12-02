@@ -197,8 +197,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
-    @ViewChild('discountComponent', { static: false }) public discountComponent: DiscountListComponent;
-    @ViewChild('taxControlComponent', { static: false }) public taxControlComponent: TaxControlComponent;
+    @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
+    @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
@@ -3340,13 +3340,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public closeDiscountPopup() {
         if (this.discountComponent) {
-            this.discountComponent.hideDiscountMenu();
+            this.discountComponent.forEach(disComp => {
+                disComp.hideDiscountMenu();
+            });
         }
     }
 
     public closeTaxControlPopup() {
         if (this.taxControlComponent) {
-            this.taxControlComponent.showTaxPopup = false;
+            this.taxControlComponent.forEach(taxComp => {
+                taxComp.showTaxPopup = false;
+            });
         }
     }
 

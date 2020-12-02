@@ -1,7 +1,7 @@
 <hamburger-menu [pageHeading]="'E-way Bill'"></hamburger-menu>
 <div class="clearfix pt-15 pb-15">
     <div class="col-xs-12 col-sm-12">
-        <div class="d-inline-block pull-left mr-2 middle ewayBill-date">
+        <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                 <i><img src="assets/images/custom-calender.svg"></i>
                 <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
@@ -17,9 +17,9 @@
                 <div class="col-md-12">
                     <div class="table-responsive">
                         <table class="table basic table-bordered giddh-table on-mobile-view">
-                            <thead class="t-h-bg1" (clickOutside)="clickedOutside();">
+                            <thead class="thead-background1" (clickOutside)="clickedOutside();">
                                 <tr>
-                                    <th style="width:50px">#</th>
+                                    <th width="50px">#</th>
                                     <th class="nowrap">
                                         <div class="d-flex">
                                             <div class="flex-fill">Date</div>
@@ -171,7 +171,7 @@
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table basic table-bordered">
-                        <thead class="t-h-bg1">
+                        <thead class="thead-background1">
                             <tr>
                                 <th>
                                     EWB.No & Date
@@ -343,20 +343,20 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mt-15 ">
 
-                        <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
-<span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
+                        <!-- <span class="mr-1 ">  <input type="radio "class="radio-theme " style="margin-right: 10px "/> Regular</span>
+<span>  <input type="radio "class="radio-theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
 
 
 
 
-                        <span class="pd0 mrR3">
-                            <input id="regular" class="radio-custom cp ml0" type="radio" name="vehicleType" required
+                        <span class="p-0 mr-3">
+                            <input id="regular" class="radio-custom cp ml-0" type="radio" name="vehicleType" required
                                 [(ngModel)]="updateEwayVehicleform.vehicleType" value="R">
                             <label for="regular" class="radio-custom-label">Regular</label>
                         </span>
 
-                        <span class="pd0 mrR3">
-                            <input id="dimensionalCargo" class="radio-custom cp ml0" type="radio" name="vehicleType"
+                        <span class="p-0 mr-3">
+                            <input id="dimensionalCargo" class="radio-custom cp ml-0" type="radio" name="vehicleType"
                                 required value="O" [(ngModel)]="updateEwayVehicleform.vehicleType">
                             <label for="dimensionalCargo" class="radio-custom-label">Over Dimensional Cargo</label>
                         </span>
@@ -458,8 +458,7 @@
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " placement="top"
                             [bsConfig]="{dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true}"
-                            [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker
-                            style="padding-right: 27px !important; " />
+                            [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control pd-r3" bsDatepicker />
                     </div>
                 </div>
 
@@ -576,7 +575,7 @@
         <h4 class="font-22 mb-2">2. Item Details</h4>
         <div class="table-responsive">
             <table class="table basic table-bordered">
-                <thead class="t-h-bg1">
+                <thead class="thead-background1">
                     <tr>
                         <th>#</th>
                         <th>E-Way Bill No. & Date</th>
