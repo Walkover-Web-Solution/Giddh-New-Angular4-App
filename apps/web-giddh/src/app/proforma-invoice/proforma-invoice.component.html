@@ -1066,7 +1066,7 @@
 
                                 <!-- region dynamic entries-->
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                                <tr *ngIf="activeIndx === entryIdx" class="entriesTr defaultActive"
+                                <tr [hidden]="activeIndx !== entryIdx" class="entriesTr defaultActive"
                                     (click)="$event.stopPropagation();">
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">{{ entryIdx + 1 }}</td>
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">
