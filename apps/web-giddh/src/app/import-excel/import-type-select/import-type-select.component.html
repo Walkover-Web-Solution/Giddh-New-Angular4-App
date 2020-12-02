@@ -9,7 +9,7 @@
         <!--Buttons-->
         <ul class="import-type mr-b2 mr-t4 pdT4">
 
-            <li>
+            <li *ngIf="!isBranch">
                 <a class="text-link-2" [routerLink]="['/pages','import','group']">
                     <img src="assets/images/new/group-import.svg" />
                     <h2>Groups</h2>
@@ -17,14 +17,14 @@
 
             </li>
 
-            <li>
+            <li *ngIf="!isBranch">
                 <a class="text-link-2" [routerLink]="['/pages','import','account']">
                     <img src="assets/images/new/acc-import.svg" />
                     <h2>Accounts</h2>
                 </a>
             </li>
 
-            <li>
+            <li *ngIf="!isBranch">
                 <a class="text-link-2" [routerLink]="['/pages','import','stock']">
                     <img src="assets/images/new/Inventory-13.svg" />
                     <h2>Inventory</h2>
@@ -38,7 +38,7 @@
                 </a>
             </li>
 
-            <li>
+            <li *ngIf="!isBranch">
                 <a class="text-link-2" [routerLink]="['/pages','import','trial-balance']">
                     <img src="assets/images/new/tb-import.svg" />
                     <h2>Trial Balance</h2>
