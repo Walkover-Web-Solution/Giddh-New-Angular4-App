@@ -830,6 +830,11 @@ ul.sub-list {
     }
 }
 @media (max-width: 767px) {
+    .not-today{
+        .input-date{
+            width: auto;
+        }
+    }
     .hide-today{
         display: none !important;
     }
