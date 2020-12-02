@@ -1,3 +1,4 @@
+<hamburger-menu [pageHeading]="'Reports > Receipt (Beta)'"></hamburger-menu>
 <div class="reverse-table-report">
     <div class="container-fluid">
 
@@ -11,8 +12,8 @@
                             (applyDaterangepicker)="onDateChange($event)" class="form-control cursor-pointer" />
                     </span>
                 </div>
-                <div class="advance-icon cursor-pointer" tooltip="Advance Search">
-                    <span class="icon-advance-filter" (click)="openModal()"></span>
+                <div class="advance-icon cursor-pointer" tooltip="Advance Search" (click)="openModal()">
+                    <span class="icon-advance-filter"></span>
                 </div>
                 </div>
                 <div class="clear-filter width-100 align-items-center d-flex justify-content-center"

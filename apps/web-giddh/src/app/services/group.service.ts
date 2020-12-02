@@ -241,6 +241,40 @@ export class GroupService {
     }
 
     /**
+     * API call to create custom fields for company
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof GroupService
+     */
+    public createCompanyCustomField(model: any): Observable<BaseResponse<any, string>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + GROUP_API.CREATE_COMPANY_CUSTOM_FIELD.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map(response => {
+            let data: BaseResponse<any, string> = response;
+            data.request = model;
+            return data;
+        }), catchError((exception) => this.errorHandler.HandleCatch<string, any>(exception, model)));
+    }
+
+     /**
+     * API call to get custom fields for company
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof GroupService
+     */
+    public getCompanyCustomField(): Observable<BaseResponse<any, string>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.get(this.config.apiUrl + GROUP_API.CREATE_COMPANY_CUSTOM_FIELD.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map(response => {
+            let data: BaseResponse<any, string> = response;
+            return data;
+        }), catchError((exception) => this.errorHandler.HandleCatch<string, any>(exception)));
+    }
+
+
+    /**
      * returns an URL after doing errands
      * @param cStr [company uniquename]
      * @param gStr [group uniquename]

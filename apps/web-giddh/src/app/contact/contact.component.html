@@ -1,3 +1,6 @@
+<div class="relative">
+<hamburger-menu *ngIf="activeTab !== 'vendor'"></hamburger-menu>
+<hamburger-menu [pageHeading]="'Vendor'" *ngIf="activeTab === 'vendor'"></hamburger-menu>
 <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <!-- region Customer/Vendor -->
     <tab heading="Customer" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
@@ -208,7 +211,7 @@
     </tab>
     <!-- endregion -->
 </tabset>
-
+</div>
 <!-- region Modal for Mail/SMS for vendore-->
 <div *ngIf="activeTab === 'vendor'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
@@ -316,12 +319,6 @@
                             <strong>Due as on </strong>
                             <span class="italic underline">
                                 <input type="text" (click)="showGiddhDatepicker($event)" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
-
-<!--                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
-<!--                                    (hideDaterangepicker)="selectedDate($event)"-->
-<!--                                    (applyDaterangepicker)="selectedDate($event)"-->
-<!--                                    class="form-control date-range-picker" />-->
-
                             </span>
                         </p>
                     </td>
@@ -331,6 +328,9 @@
                     <td *ngIf="showFieldFilter.gstin && shouldShowTaxFilter"></td>
                     <td *ngIf="showFieldFilter.state"></td>
                     <td *ngIf="showFieldFilter.comment"></td>
+                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                        <td *ngIf="item.key"></td>
+                    </ng-container>
                 </tr>
 
                 <tr>
@@ -416,6 +416,9 @@
                     <th *ngIf="showFieldFilter.comment" class="comment-field">Comment</th>
 
                     <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
+                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                        <th width="10%">{{item.key}}</th>
+                    </ng-container>
 
                 </tr>
 
@@ -582,11 +585,15 @@
                             </ng-container>
 
                         </td>
+                        <ng-container *ngFor="let item of account?.customFields">
+                            <td class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value || '-' }}</td>
+                        </ng-container>
 
                     </tr>
                     <!---->
                     <tr *ngIf="!(sundryDebtorsAccounts).length ">
-                        <td colspan="11" class="text-center empty-table ">
+                        <td [attr.colspan]="colspanLength" class="text-center empty-table ">
                             <h1>No Record Found !!</h1>
                         </td>
                     </tr>
@@ -651,7 +658,7 @@
                                                             </li>
 
                                                             <li class="li-link" *ngIf="!isMobileScreen">
-                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Generate Invoice
+                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Record Bill
                                                                 </a>
                                                             </li>
 
@@ -761,9 +768,13 @@
                             <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
+                        <ng-container *ngFor="let item of account?.customFields">
+                            <td class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value || '-' }}</td>
+                        </ng-container>
                     </tr>
                     <tr *ngIf="!(sundryCreditorsAccounts).length ">
-                        <td colspan="12 " class="text-center empty-table ">
+                        <td [attr.colspan]="colspanLength" class="text-center empty-table ">
                             <h1>No Record Found !!</h1>
                         </td>
                     </tr>

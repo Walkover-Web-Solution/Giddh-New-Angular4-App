@@ -1,15 +1,15 @@
+
 <section id="manufacture" class="clearfix" *ngIf="!(isGetManufactureStockInProgress$ | async)">
     <!--<div>
       {{ manufacturingDetails | json }}
   </div>-->
-
-    <!-- page Title -->
-    <div class="top-bar col-xs-12 col-sm-12 clearfix bdrB">
-        <h1 class="section-title d-inline-block"><strong>Manufacture of Product</strong><label *ngIf="isUpdateCase" class="mrL2">No.
-                {{manufacturingDetails.voucherNumber}}</label></h1>
-        <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
-    </div>
-
+<hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Manufacture of Product'"></hamburger-menu>
+<!-- <label *ngIf="isUpdateCase" class="mrL2">No.
+                {{manufacturingDetails.voucherNumber}}</label>
+-->
+<div class="col-sm-12 mt-15 clearfix">
+    <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
+</div>
     <!-- form -->
     <div class="col-xs-12 col-lg-8 col-md-12 mr-t2">
         <div>

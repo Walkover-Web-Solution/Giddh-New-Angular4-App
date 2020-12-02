@@ -5,10 +5,8 @@ import {
     Component,
     ComponentFactoryResolver,
     ElementRef,
-    OnChanges,
     OnDestroy,
     OnInit,
-    SimpleChanges,
     TemplateRef,
     ViewChild,
 } from '@angular/core';
@@ -47,17 +45,12 @@ import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { CompanyService } from '../services/companyService.service';
 import { ContactService } from '../services/contact.service';
-import { DashboardService } from '../services/dashboard.service';
 import { GeneralService } from '../services/general.service';
+import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
-
-const CustomerType = [
-    { label: 'Customer', value: 'customer' },
-    { label: 'Vendor', value: 'vendor' }
-];
 
 export interface PayNowRequest {
     accountUniqueName: string;
@@ -83,7 +76,7 @@ export interface PayNowRequest {
     ]
 })
 
-export class ContactComponent implements OnInit, OnDestroy, OnChanges {
+export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the current range of date picker */
     public selectedDateRange: any;
     public selectedDateRangeUi: any;
@@ -129,9 +122,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     public selectedWhileHovering: string;
     public searchLoader$: Observable<boolean>;
-    // public modalUniqueName: string;
-
-    // public showAsideOverlay = true;
     // sorting
     public key: string = 'name'; // set default
     public order: string = 'asc';
@@ -147,14 +137,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('messageBox', {static: false}) public messageBox: ElementRef;
     @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
-
-    // @Input('sort-direction')
-    // sortDirection: string = '';
-
-    // @HostListener('click')
-    // sort() {
-    //     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    // }
 
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
@@ -231,7 +213,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     /** Giddh decimal places set by user */
     public giddhDecimalPlaces = 2;
 
-
     private checkboxInfo: any = {
         selectedPage: 1
     };
@@ -243,22 +224,24 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public universalDate: any;
     /** model reference to open/close bulk payment model */
     public bulkPaymentModalRef: BsModalRef;
-    modalRef: BsModalRef;
+    public modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
     public dateFieldPosition: any = { x: 0, y: 0 };
     /**True, if get accounts request in process */
     public isGetAccountsInProcess: boolean = false;
     /* This will hold the current page number */
     public currentPage: number = 1;
+    /** company custom fields list */
+    public companyCustomFields$: Observable<any[]>;
+    /** Column span length */
+    public colspanLength: number = 11;
 
     constructor(
         private store: Store<AppState>,
-        private _toasty: ToasterService,
         private router: Router,
         private _companyServices: CompanyService,
         private commonActions: CommonActions,
         private _toaster: ToasterService,
-        private _dashboardService: DashboardService,
         private _contactService: ContactService,
         private settingsIntegrationActions: SettingsIntegrationActions,
         private _companyActions: CompanyActions,
@@ -267,12 +250,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
         private _router: Router, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions) {
+        private settingsProfileActions: SettingsProfileActions, private groupService: GroupService) {
         this.searchLoader$ = this.store.select(p => p.search.searchLoader);
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
@@ -285,15 +267,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (!appState.session.companies) {
                 return;
             }
-            // appState.session.companies.forEach(company => {
-            //     if (company.uniqueName === appState.session.companyUniqueName) {
-            //         this.selectedCompany = company;
-            //     }
-            // });
             this.selectedCompany = appState.session.companies.find((company) => company.uniqueName === appState.session.companyUniqueName);
         }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.getCompanyCustomField();
     }
 
     /**
@@ -327,6 +305,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             );
         }
     }
+
     public sort(key, ord = 'asc') {
         this.key = key;
         this.order = ord;
@@ -348,22 +327,22 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             }
         }
 
-        this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+        this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
-                this.toDate = moment(universalDate[1]).format('DD-MM-YYYY');
-                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
+                this.universalDate = cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+                this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        });
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
             if (yes) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
                 }
             }
         });
@@ -395,9 +374,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order);
                 }
             });
+            
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 
@@ -417,15 +397,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     }
                 }
             });
-
-        // this.store
-        //     .pipe(select(p => p.company.isAccountInfoLoading), takeUntil(this.destroyed$))
-        //     .subscribe(result => {
-                //ToDo logic to stop loader
-                // if (result && this.taxAsideMenuState === 'in') {
-                //   this.toggleTaxAsidePane();
-                // }
-            //});
 
         this.store
             .pipe(
@@ -448,9 +419,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.giddhDecimalPlaces = 2;
             }
         });
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
     }
 
     public performActions(type: number, account: any, event?: any) {
@@ -516,8 +484,23 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 selectedPage: 1
             };
         }
+
         if (tabName !== this.activeTab) {
+            this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
+            this.commonRequest = new ContactAdvanceSearchCommonModal();
+            this.isAdvanceSearchApplied = false;
+            this.key = 'name';
+            this.order = 'asc';
             this.activeTab = tabName;
+
+            if(this.universalDate) {
+                this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+                this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            
+                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+            }
+
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '');
 
             this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
@@ -546,21 +529,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.showFieldFilter = showColumnObj;
             this.setTableColspan();
         }
-
-        // if (this.activeTab !== 'aging-report') {
-        //   this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
-        // } else {
-        //   this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
-        // }
     }
 
     public ngOnDestroy() {
-        // if (this.activeTab !== 'aging-report') {
-        //   this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
-        // } else {
-        //   this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
-        // }
-
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -613,7 +584,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (grpName) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '');
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
                 }
             }
         }, 1000);
@@ -632,7 +603,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
         } else {
-            this._toasty.errorToast('Please enter Cashfree details.', 'Validation');
+            this._toaster.errorToast('Please enter Cashfree details.', 'Validation');
             return;
         }
     }
@@ -876,7 +847,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
+            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
             this.detectChanges();
         }
     }
@@ -963,9 +934,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             category = 'creditTotal';
             this.advanceSearchRequestModal.creditTotal = request.amount;
             this.setAmountType(category, request.amountType);
-        } else {
-
         }
+        
         switch (request.amountType) {
             case 'GreaterThan':
                 this.advanceSearchRequestModal[category + 'GreaterThan'] = true;
@@ -994,7 +964,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.isAdvanceSearchApplied = true;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'true', PAGINATION_LIMIT, '');
+            null, 'true', PAGINATION_LIMIT, '', this.key, this.order);
     }
 
     public setAmountType(category: string, amountType: string) {
@@ -1225,7 +1195,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         if (event) {
             this.clearSelectedContacts(false);
         }
-        
+
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
@@ -1290,7 +1260,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.modalRef.hide();
     }
 
-
     /**
      * To prepare selected contacts list
      *
@@ -1321,17 +1290,34 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ContactComponent
      */
     public clearSelectedContacts(resetPage:boolean = true): void {
-        this.searchStr = '';
-        this.selectedCheckedContacts = [];
-        this.selectedAccountsList = [];
-        this.allSelectionModel = false;
-
         if(resetPage) {
             this.checkboxInfo = {
                 selectedPage: 1
             };
+            this.searchStr = '';
+            this.selectedCheckedContacts = [];
+            this.selectedAccountsList = [];
+            this.allSelectionModel = false;
         }
 
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+    }
+
+    /**
+    * API call to get custom field data
+    *
+    * @memberof ContactComponent
+    */
+    public getCompanyCustomField(): void {
+        this.groupService.getCompanyCustomField().subscribe(response => {
+            if (response && response.status === 'success') {
+                this.companyCustomFields$ = observableOf(response.body);
+                if (response.body) {
+                    this.colspanLength = 11 + response.body.length;
+                }
+            } else {
+                this._toaster.errorToast(response.message);
+            }
+        });
     }
 }
