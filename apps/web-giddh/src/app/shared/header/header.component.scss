@@ -852,6 +852,11 @@ ul.sub-list {
             }
             .go-to-company{
                 color: $deep-sky-blue;
+                &.company-label {
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                }
             }
             div{
                 input{
