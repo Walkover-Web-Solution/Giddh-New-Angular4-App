@@ -245,8 +245,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Stores the HO branch data */
-    public hoBranchData: any;
     /** Stores the current branch data */
     public currentBranchData: any;
 
@@ -456,10 +454,18 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                const hoBranch = response.find(branch => !branch.parentBranch);
-                const currentBranchUniqueName = this._generalService.currentOrganizationType === OrganizationType.Branch ? this._generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
-                this.hoBranchData = hoBranch;
-                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                let currentBranchUniqueName;
+                if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                    currentBranchUniqueName = this._generalService.currentBranchUniqueName;
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                } else {
+                    currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                    this.currentBranch = {
+                        name: this.activeCompany ? this.activeCompany.name : '',
+                        alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                        uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    };
+                }
                 this.currentBranchData = _.cloneDeep(this.currentBranch);
                 this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
             } else {
@@ -534,9 +540,16 @@ export class ContactComponent implements OnInit, OnDestroy {
                 selectedPage: 1
             };
         }
-        if (this.hoBranchData && this.currentBranchData) {
-            this.currentBranch.name = this._generalService.currentOrganizationType === OrganizationType.Branch ? this.currentBranchData.name : this.hoBranchData.name;
-            this.currentBranch.uniqueName = this._generalService.currentOrganizationType === OrganizationType.Branch ? this.currentBranchData.uniqueName : this.hoBranchData.uniqueName;
+        if (this.activeCompany && this.currentBranchData) {
+            if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                this.currentBranch.name = this.currentBranchData.name;
+                this.currentBranch.uniqueName = this.currentBranchData.uniqueName;
+                this.currentBranch.alias = this.currentBranchData.alias;
+            } else {
+                this.currentBranch.name = this.activeCompany.name;
+                this.currentBranch.uniqueName = this.activeCompany.uniqueName;
+                this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : this.activeCompany.name;
+            }
         }
         if (tabName !== this.activeTab) {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
