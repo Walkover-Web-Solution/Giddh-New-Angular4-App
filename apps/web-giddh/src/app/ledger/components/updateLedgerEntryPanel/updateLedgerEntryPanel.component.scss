@@ -288,6 +288,11 @@ span.eligible-ITC {
 .dropdown-container[disabled], .table-amount[disabled] {
     pointer-events: none;
 }
+.tourist-scheme-wrapper{
+     input[type="checkbox"]{
+        opacity: 0;
+    }
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
