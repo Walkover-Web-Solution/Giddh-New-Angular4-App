@@ -989,7 +989,7 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid $whisper-color;
+    border-bottom: 1px solid $gainsboro;
     padding:10px 0px 0 43px !important;
     background-color: $alice-blue-light;
     z-index: 9;
@@ -3493,7 +3493,7 @@ a.btn.btn-xs.btn-link.pull-right {
     width: 100%;
     float: left;
     border: 0;
-    border-right: 1px solid $whisper-color;
+    border-right: 1px solid $gainsboro;
 }
 
 #linkedStock .table_theme {
@@ -5476,7 +5476,7 @@ a {
     width: 100%;
     object-fit: contain;
     border-radius: 4px;
-    border: 1px solid $whisper-color;
+    border: 1px solid $gainsboro;
 }
 
 .logo-preview {
@@ -5846,7 +5846,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container thead tr th:first-child {
-    border-left: 6px solid $whisper-color;
+    border-left: 6px solid $gainsboro;
 }
 
 .table-container .account {
@@ -6257,7 +6257,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .user-list {
     padding: 15px 0;
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     overflow: hidden;
 }
 
@@ -7172,7 +7172,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary {
@@ -7244,7 +7244,7 @@ th:first-child {
 }
 
 .tax-engine .table thead > tr > th {
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     color: $dark-gray;
 }
 
@@ -7269,7 +7269,7 @@ th:first-child {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine
@@ -7502,7 +7502,7 @@ th:first-child {
 }
 
 .tax-engine .transactions-overview .transaction-info:hover {
-    border: 1px solid $whisper-light;
+    border: 1px solid $gainsboro;
     box-shadow: 0 0 20px 3px $snow;
 }
 
@@ -7571,7 +7571,7 @@ th:first-child {
 }
 
 .zi-table {
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     table-layout: fixed;
 }
 
@@ -7618,7 +7618,7 @@ th:first-child {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine .details .details-info,
@@ -7718,7 +7718,7 @@ tbody
 
 .tax-engine .header-band {
     width: 100%;
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     padding: 5px 0;
     margin-bottom: 15px;
 }
@@ -9138,7 +9138,7 @@ ngx-daterangepicker-material {
             justify-content: space-between;
             padding-top: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid $whisper-color;
+            border-bottom: 1px solid $gainsboro;
             margin-bottom: 15px;
             span {
                 padding: 5px 10px;
@@ -10216,7 +10216,7 @@ input.mat-input-element{
             display: none;
         }
         .card-table tbody tr {
-            border-bottom: 1px solid $whisper-color;
+            border-bottom: 1px solid $gainsboro;
         }
         .card-table,
         .card-table tbody,

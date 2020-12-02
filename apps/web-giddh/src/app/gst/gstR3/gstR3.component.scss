@@ -115,13 +115,13 @@ input.gsc-input {
 .tax-engine .gstr3b-header:before {
     /* content: '';
     position: absolute;
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     top: 24px;
     width: 100%; */
 }
 
 .tax-engine .gstr3b-header .sel-tab {
-    border: 1px solid $whisper-light;
+    border: 1px solid $gainsboro;
     border-radius: 25px;
     overflow: hidden;
     padding: 0;
@@ -147,7 +147,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab li:before {
-    border-left: 23px solid $whisper-light;
+    border-left: 23px solid $gainsboro;
     top: 42%;
     margin-top: -22px;
     margin-left: 1px;
@@ -353,7 +353,7 @@ h6 {
 
 .modal-header {
     padding: 20px;
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     min-height: 21.43px;
     background-color: $gray-95;
 }

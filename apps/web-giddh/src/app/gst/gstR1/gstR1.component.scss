@@ -6,7 +6,7 @@
 .tax-engine .column.list-column {
     display: block;
 
-    border-right: 1px solid $whisper-light;
+    border-right: 1px solid $gainsboro;
 }
 .tax-engine .column {
     height: 100%;
@@ -33,7 +33,7 @@
             .btn-toolbar {
                 margin-top: 2px;
                 .btn-link{
-                    border: 1px solid $whisper-light;
+                    border: 1px solid $gainsboro;
                 }
             }
         } 
@@ -195,7 +195,7 @@ svg.icon.icon-sm {
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 .tax-engine .transactions-overview .gstr-transactions-summary {
     padding: 15px 35px;
@@ -214,7 +214,7 @@ hr {
     .transactions-overview
     .gstr-transactions-summary
     .transactions-table {
-    border: 1px solid $whisper-color;
+    border: 1px solid $gainsboro;
 }
 .tax-engine .table.transactions-table,
 .tax-engine .transactions-list .zi-table.table-scroll {
@@ -234,7 +234,7 @@ address {
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
     font-size: 13px;
-    border-bottom: 1px solid $whisper-color;
+    border-bottom: 1px solid $gainsboro;
 }
 .tax-engine .table thead:first-child tr:first-child th {
     border-top: 1px solid $gainsboro;
@@ -256,7 +256,7 @@ address {
     border-top: 0;
 }
 .table thead > tr > th {
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     color: $dark-gray;
 }
 .tax-engine .table.transactions-table tbody > tr > td {
@@ -275,7 +275,7 @@ address {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine
@@ -284,7 +284,7 @@ address {
     > tr:not(.secondary-row)
     + tr.secondary-row
     > td {
-    border-top: 1px solid $whisper-color;
+    border-top: 1px solid $gainsboro;
 }
 .tax-engine
     .table.transactions-summary-table
@@ -296,7 +296,7 @@ address {
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
     background-color: #fff;
-    border-right: 1px solid $whisper-color;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
     padding: 13px;
 }
@@ -530,5 +530,5 @@ svg.icon.icon-sm {
 }
 
 .zi-table-child{
-    border-left: 1px solid $whisper-color;
+    border-left: 1px solid $gainsboro;
 }

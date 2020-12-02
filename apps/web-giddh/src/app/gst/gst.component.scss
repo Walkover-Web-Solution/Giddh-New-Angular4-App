@@ -3,7 +3,7 @@
 .return-body .main-wrapper {
     background-color: $gray-95;
     padding: 0;
-    border-right: 1px solid $whisper-light;
+    border-right: 1px solid $gainsboro;
 }
 
 .return-content {
@@ -122,7 +122,7 @@ svg.icon.gstr-icon {
 
 .return-content .line {
     margin: 5px 18px;
-    border-bottom: 1px solid $whisper-color;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .return-content .line::before {
@@ -234,7 +234,7 @@ svg.icon.icon-xxlg-md {
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .filing-due-date {
@@ -243,7 +243,7 @@ hr {
 
 .filing-due-date .return-details {
     margin-top: 10px;
-    border: 1px solid $whisper-light;
+    border: 1px solid $gainsboro;
     border-radius: 4px;
 }
 

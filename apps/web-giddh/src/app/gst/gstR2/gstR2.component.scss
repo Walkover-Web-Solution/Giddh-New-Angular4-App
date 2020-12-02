@@ -6,7 +6,7 @@
 
 .tax-engine .column.list-column {
     display: block;
-    border-right: 1px solid $whisper-light;
+    border-right: 1px solid $gainsboro;
 }
 
 .tax-engine .column {
@@ -218,7 +218,7 @@ svg.icon.icon-sm {
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary {
@@ -239,7 +239,7 @@ hr {
     .transactions-overview
     .gstr-transactions-summary
     .transactions-table {
-    border: 1px solid $whisper-color;
+    border: 1px solid $gainsboro;
 }
 
 .tax-engine .table.transactions-table,
@@ -263,7 +263,7 @@ address {
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
     font-size: 13px;
-    border-bottom: 1px solid $whisper-color;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
@@ -290,7 +290,7 @@ address {
 }
 
 .table thead > tr > th {
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     color: $dark-gray;
 }
 
@@ -315,7 +315,7 @@ address {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine
@@ -324,7 +324,7 @@ address {
     > tr:not(.secondary-row)
     + tr.secondary-row
     > td {
-    border-top: 1px solid $whisper-color;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine
@@ -338,7 +338,7 @@ address {
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
     background-color: $white;
-    border-right: 1px solid $whisper-light;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
     padding: 13px;
 }
@@ -552,7 +552,7 @@ svg.icon.icon-sm {
 }
 
 .tax-engine .transactions-overview .transaction-info:hover {
-    border: 1px solid $whisper-light;
+    border: 1px solid $gainsboro;
     box-shadow: 0 0 20px 3px $snow;
 }
 
@@ -651,7 +651,7 @@ svg.icon.icon-sm {
 }
 
 .tax-engine .table.reconciliations-table {
-    border-bottom: 1px solid $whisper-color;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .tax-engine .table-fixed {
@@ -659,7 +659,7 @@ svg.icon.icon-sm {
 }
 
 .zi-table {
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     table-layout: fixed;
 }
 
@@ -706,7 +706,7 @@ tax-engine .table.reconciliations-table thead > tr > th {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .details .details-info,
@@ -724,7 +724,7 @@ tax-engine .table.reconciliations-table thead > tr > th {
 }
 
 .tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
-    border-right: 1px solid $whisper-color;
+    border-right: 1px solid $gainsboro;
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown {
@@ -798,7 +798,7 @@ tax-engine .table.reconciliations-table thead > tr > th {
 
 
 .gstr-2-filing{
-    border: 1px solid $whisper-light;
+    border: 1px solid $gainsboro;
 }
 
 .sub-filter-nav-bandnew{
@@ -808,5 +808,5 @@ tax-engine .table.reconciliations-table thead > tr > th {
 #subtabnew-5{
     padding: 10px 25px;
     margin: 5px auto; 
-    border-left: 1px solid $whisper-light;
+    border-left: 1px solid $gainsboro;
 }
