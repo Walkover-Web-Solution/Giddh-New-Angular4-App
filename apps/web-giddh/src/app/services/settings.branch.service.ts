@@ -36,9 +36,12 @@ export class SettingsBranchService {
         url = url.replace(':from', from);
         url = url.replace(':to', to);
 
+        let delimiter = '?';
         if (request.query !== undefined) {
             url = url.concat(`?q=${request.query}`);
+            delimiter = '&';
         }
+        url = url.concat(`${delimiter}branchUniqueName=`); // Empty branch unique name as we don't support sub-branch as of now
 
         return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;

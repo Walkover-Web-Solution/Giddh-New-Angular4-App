@@ -251,6 +251,9 @@ export class LedgerService {
         if (emailRequestParams.sort) {
             request += '&sort=' + encodeURIComponent(emailRequestParams.sort);
         }
+        if (emailRequestParams.branchUniqueName) {
+            request = request.concat(`&branchUniqueName=${emailRequestParams.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(emailRequestParams.branchUniqueName) : ''}`);
+        }
         request += '&withInvoice=' + emailRequestParams.withInvoice; // emailRequestParams.withInvoice is a boolean so in case of false need to send false as well that will be default
 
         return this._http.post(this.config.apiUrl + LEDGER_API.MAIL_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))

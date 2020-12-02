@@ -6249,6 +6249,11 @@ virtual-scroll .scrollable-content .item:hover .item,
 sh-select .header {
     line-height: 34px;
 }
+sh-select.small-text {
+    input {
+        font-size: 10px !important;
+    }
+}
 
 table input[type="number"] {
     text-align: right;

@@ -743,8 +743,11 @@ ul.sub-list {
 .unique-name-financial-year{
     display: flex;
     align-items: center;
-    .fyear{
-        margin-left: 5px;
+    flex-wrap: wrap;
+    .branch-unique-name{
+        margin-right: 5px;
+        white-space: normal;
+        word-break: break-word;
     }
 }
 
@@ -852,6 +855,11 @@ ul.sub-list {
             }
             .go-to-company{
                 color: $deep-sky-blue;
+                &.company-label {
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                }
             }
             div{
                 input{
