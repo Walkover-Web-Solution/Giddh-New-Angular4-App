@@ -115,7 +115,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
-        this.initialRequest();
         let companyUniqueName;
         let company;
         store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$))
@@ -172,11 +171,20 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                const hoBranch = response.find(branch => !branch.parentBranch);
-                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
-                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
-                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                let currentBranchUniqueName;
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                } else {
+                    currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                    this.currentBranch = {
+                        name: this.activeCompany ? this.activeCompany.name : '',
+                        alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                        uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    };
+                }
                 this.daybookQueryRequest.branchUniqueName = this.currentBranch.uniqueName;
+                this.initialRequest();
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded

@@ -128,15 +128,24 @@ export class ReportsDetailsComponent implements OnInit {
                         value: this.activeCompany ? this.activeCompany.uniqueName : '',
                         isCompany: true
                     });
-                    const hoBranch = response.find(branch => !branch.parentBranch);
-                    const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
                     if (!this.currentBranch.uniqueName) {
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
-                        this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                        let currentBranchUniqueName;
+                        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                            currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                            this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        } else {
+                            currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                            this.currentBranch = {
+                                name: this.activeCompany ? this.activeCompany.name : '',
+                                alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                                uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            };
+                        }
                     } else {
-                        const currentBranchName = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch.uniqueName));
-                        if (currentBranchName) {
-                            this.currentBranch.name = currentBranchName.name + (currentBranchName.alias ? ` (${currentBranchName.alias})` : '');
+                        const selectedBranch = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch.uniqueName));
+                        if (selectedBranch) {
+                            this.currentBranch.name = selectedBranch.name;
+                            this.currentBranch.alias = selectedBranch.alias;
                         } else {
                             // Company was selected from the branch dropdown
                             this.currentBranch.name = this.activeCompany.name;

@@ -83,7 +83,7 @@ export class CreateBranchComponent implements OnInit {
     ) {
         this.branchForm = this.formBuilder.group({
             alias: ['', [Validators.required, Validators.maxLength(50)]],
-            name: ['', [Validators.required, Validators.maxLength(100)]],
+            name: [''],
             address: ['']
         });
         this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe(response => {

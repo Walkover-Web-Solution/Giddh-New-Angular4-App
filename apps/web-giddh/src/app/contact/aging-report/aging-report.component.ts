@@ -181,9 +181,18 @@ export class AgingReportComponent implements OnInit {
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                const hoBranch = response.find(branch => !branch.parentBranch);
-                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
-                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                let currentBranchUniqueName;
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                } else {
+                    currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                    this.currentBranch = {
+                        name: this.activeCompany ? this.activeCompany.name : '',
+                        alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                        uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    };
+                }
                 this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
             } else {
                 if (this.generalService.companyUniqueName) {

@@ -18,6 +18,7 @@ import {
     TaxResponse,
 } from '../models/api-models/Company';
 import { IRegistration } from '../models/interfaces/registration.interface';
+import { OrganizationType } from '../models/user-login-state';
 import { CompanyService } from '../services/companyService.service';
 import { ToasterService } from '../services/toaster.service';
 import { CustomActions } from '../store/customActions';
@@ -494,6 +495,17 @@ export class CompanyActions {
     }
     public CreateNewCompanyResponse(value: BaseResponse<CompanyResponse, CompanyCreateRequest>): CustomActions {
         this.store.dispatch(this.ResetApplicationData());
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        const organization: Organization = {
+            type: OrganizationType.Company, // Mode to which user is switched to
+            uniqueName: '',
+            details
+        };
+        this.store.dispatch(this.setCompanyBranch(organization));
         return {
             type: CompanyActions.CREATE_NEW_COMPANY_RESPONSE,
             payload: value

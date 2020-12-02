@@ -31,7 +31,7 @@ export class DaybookService {
             .replace(':count', queryRequest.count.toString())
             .replace(':from', encodeURIComponent(queryRequest.from))
             .replace(':to', encodeURIComponent(queryRequest.to));
-        url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
+        url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(queryRequest.branchUniqueName) : ''}`);
         return this._http.post(url, request).pipe(
                 map((res) => {
                     let data: BaseResponse<DayBookResponseModel, DayBookRequestModel> = res;
