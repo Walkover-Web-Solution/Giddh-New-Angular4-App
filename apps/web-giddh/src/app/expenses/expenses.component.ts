@@ -410,10 +410,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *To show the datepicker
+     * To show the datepicker
      *
      * @param {*} element
-     * @memberof AuditLogsFormComponent
+     * @memberof ExpensesComponent
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -428,7 +428,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     /**
      * This will hide the datepicker
      *
-     * @memberof AuditLogsFormComponent
+     * @memberof ExpensesComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -438,7 +438,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof AuditLogsFormComponent
+     * @memberof ExpensesComponent
      */
     public dateSelectedCallback(value?: any): void {
         if(value && value.event === "cancel") {
