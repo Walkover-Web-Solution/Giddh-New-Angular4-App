@@ -25,15 +25,15 @@
                                 (click)="selectAllEntries($event, visibleTransactionTypeMobile)"> Select All
                         </div>
                         <div class="d-flex ml-15">
-                            <button class="btn btn-danger" id="delete-ledger-mobile-view" (click)="performBulkAction('delete')" container="body"
+                            <button [disabled]="currentOrganizationType === 'COMPANY'" class="btn btn-danger" id="delete-ledger-mobile-view" (click)="performBulkAction('delete')" container="body"
                                 tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
                             </button>
 
-                            <button class="btn btn-warning" id="generate-invoice-mobile-view" (click)="performBulkAction('generate')" container="body"
+                            <button [disabled]="currentOrganizationType === 'COMPANY'" class="btn btn-warning" id="generate-invoice-mobile-view" (click)="performBulkAction('generate')" container="body"
                                 tooltip="Generate Voucher" [placement]="'top'"><i class="icon-generate-invoice"></i>
                             </button>
 
-                            <button class="btn btn-success mr-0" id="attach-file-mobile-view"
+                            <button [disabled]="currentOrganizationType === 'COMPANY'" class="btn btn-success mr-0" id="attach-file-mobile-view"
                                 (click)="performBulkAction('upload', BulkUploadfileInput)" container="body"
                                 tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                             </button>
@@ -81,15 +81,15 @@
                     </a>
                     <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 && !isMobileScreen">
 
-                        <button class="btn btn-danger" id="delete-ledger" (click)="performBulkAction('delete')" container="body"
+                        <button [disabled]="currentOrganizationType === 'COMPANY'" class="btn btn-danger" id="delete-ledger" (click)="performBulkAction('delete')" container="body"
                             tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
                         </button>
 
-                        <button class="btn btn-warning" id="generate-invoice" (click)="performBulkAction('generate')" container="body"
+                        <button [disabled]="currentOrganizationType === 'COMPANY'" class="btn btn-warning" id="generate-invoice" (click)="performBulkAction('generate')" container="body"
                             tooltip="Generate Voucher" [placement]="'top'"><i class="icon-generate-invoice"></i>
                         </button>
 
-                        <button class="btn btn-success mr-0" id="attach-file" (click)="performBulkAction('upload', BulkUploadfileInput)"
+                        <button [disabled]="currentOrganizationType === 'COMPANY'" class="btn btn-success mr-0" id="attach-file" (click)="performBulkAction('upload', BulkUploadfileInput)"
                             container="body" tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                         </button>
                         <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"

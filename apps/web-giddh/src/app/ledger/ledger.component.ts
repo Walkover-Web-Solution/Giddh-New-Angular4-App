@@ -236,6 +236,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 30px !important'};
     /** True if current organization type is company */
     public showBranchSwitcher: boolean;
+    /** Stores the current organization type */
+    public currentOrganizationType: string;
 
     constructor(
         private store: Store<AppState>,
@@ -571,6 +573,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.breakPointObservar.observe([
             '(max-width: 991px)'
         ]).subscribe(result => {
