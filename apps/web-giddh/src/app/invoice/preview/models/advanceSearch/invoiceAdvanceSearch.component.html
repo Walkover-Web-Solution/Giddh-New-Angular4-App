@@ -22,8 +22,7 @@
                         <div class="row">
 
                             <div class="col-md-6 col-sm-6 col-12 mb-1">
-                                <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'invoice')"></sh-select>
+                                <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33" (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
 
                             <div class="col-md-6 col-sm-6 col-12">
@@ -46,8 +45,7 @@
                         <div class="total-amount row mr-0 ml-0">
 
                             <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
-                                    [ItemHeight]="33" (selected)="invoiceTotalRangeChanged($event)"></sh-select>
+                                <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal" [ItemHeight]="33" (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6 pr-0">
@@ -73,13 +71,11 @@
                         <div class="row mr-0 ml-0">
 
                             <div class="col-md-4 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'due')"></sh-select>
+                                <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33" (selected)="dateChanged($event, 'due')"></sh-select>
                             </div>
 
                             <div class="col-md-8 col-sm-6 col-6 pr-0">
-                                <input type="text" bsDatepicker class="form-control w-100" name="dueDate"
-                                    [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="request.dueDate" />
+                                <input type="text" bsDatepicker class="form-control w-100" name="dueDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="request.dueDate" />
                             </div>
 
                         </div>
@@ -97,13 +93,11 @@
                         <div class="due-amount row mr-0 ml-0">
 
                             <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
-                                    [ItemHeight]="33" (selected)="dueTotalRangeChanged($event)"></sh-select>
+                                <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal" [ItemHeight]="33" (selected)="dueTotalRangeChanged($event)"></sh-select>
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6 pr-0">
-                                <input class="form-control" type="tel" placeholder="00" name="balanceDue"
-                                    [(ngModel)]="request.balanceDue">
+                                <input class="form-control" type="tel" placeholder="00" name="balanceDue" [(ngModel)]="request.balanceDue">
                             </div>
 
                         </div>
@@ -122,9 +116,7 @@
                         <div class="status-description row mr-0 ml-0">
 
                             <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
-                                <sh-select placeholder="Select Action" [multiple]="true"
-                                    [options]="statusDropdownOptions" name="balanceStatus"
-                                    [(ngModel)]="request.balanceStatus" [ItemHeight]="33"></sh-select>
+                                <sh-select placeholder="Select Action" [multiple]="true" [options]="statusDropdownOptions" name="balanceStatus" [(ngModel)]="request.balanceStatus" [ItemHeight]="33"></sh-select>
                             </div>
 
                             <div class="col-sm-4 col-md-4 pr-0">
@@ -145,8 +137,7 @@
                         <div class="status-description row mr-0 ml-0">
 
                             <div class="col-md-8 col-sm-12 pl-0 pr-0">
-                                <textarea class="form-control" name="description"
-                                    [(ngModel)]="request.description"></textarea>
+                                <textarea class="form-control" name="description" [(ngModel)]="request.description"></textarea>
                             </div>
 
                             <div class="col-sm-4 col-md-4 pr-0">
@@ -173,13 +164,11 @@
                         <div class="row mr-0 ml-0">
 
                             <div class="col-sm-4 col-md-4 pl-0 pr-0">
-                                <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'invoice')"></sh-select>
+                                <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33" (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
 
                             <div class="col-sm-8 col-md-8 pr-0">
-                                <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100" [(ngModel)]="request.invoiceDate"
-                                    [bsConfig]="{dateInputFormat: giddhDateFormat}" />
+                                <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100" [(ngModel)]="request.invoiceDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                             </div>
 
                         </div>
@@ -199,14 +188,13 @@
                         <div class="total-amount row mr-0 ml-0">
 
                             <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
-                                    (selected)="invoiceTotalRangeChanged($event)"></sh-select>
+                                <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33" (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
 
                             <div class="col-md-4 col-sm-6 col-6 pr-0">
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
                             </div>
-                       </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -226,8 +214,11 @@
                         <div>
 
                             <div class="pr-0">
-                                <input type="text" name="invoiceDate" daterangepicker class="form-control w-100 cursor-pointer"  [options]="dateRangePickerOptions"
-                                    (applyDaterangepicker)="dateRangeChanged($event)" />
+                                <!-- <input type="text" name="invoiceDate" daterangepicker class="form-control w-100 cursor-pointer" [options]="dateRangePickerOptions" (applyDaterangepicker)="dateRangeChanged($event)" /> -->
+                                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <i><img src="assets/images/custom-calender.svg"></i>
+                                    <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
+                                </div>
                             </div>
 
                         </div>
@@ -247,9 +238,7 @@
                         <div class="total-amount row mr-0 ml-0">
 
                             <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
-                                <sh-select placeholder="Select Range" name="amountFieldSelector"
-                                    [options]="filtersForAmount" [(ngModel)]="request.amountFieldSelector"
-                                    [ItemHeight]="33" (selected)="amountRangeChanged($event)">
+                                <sh-select placeholder="Select Range" name="amountFieldSelector" [options]="filtersForAmount" [(ngModel)]="request.amountFieldSelector" [ItemHeight]="33" (selected)="amountRangeChanged($event)">
                                 </sh-select>
                             </div>
 
@@ -275,12 +264,10 @@
                     <div class="col-8">
                         <div class="row mr-0 ml-0">
                             <div class="col-5 pl-0 pr-0">
-                                <sh-select class="select-action" placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'invoice')"></sh-select>
+                                <sh-select class="select-action" placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33" (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
                             <div class="col-7 pr-0">
-                                <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100"
-                                    [(ngModel)]="request.invoiceDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
+                                <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100" [(ngModel)]="request.invoiceDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                             </div>
                         </div>
                     </div>
@@ -292,8 +279,7 @@
                     <div class="col-8">
                         <div class="status-description row mr-0 ml-0">
                             <div class="col-md-8 col-sm-12 pl-0 pr-0">
-                                <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
-                                    (selected)="invoiceTotalRangeChanged($event)"></sh-select>
+                                <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33" (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
                             <div class="col-md-4 col-sm-12 pr-0">
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
@@ -308,12 +294,10 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="status-description row mr-0 ml-0">
                             <div class="col-4 pl-0 pr-0">
-                                <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
-                                    (selected)="dateChanged($event, 'due')"></sh-select>
+                                <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33" (selected)="dateChanged($event, 'due')"></sh-select>
                             </div>
                             <div class="col-8 pr-0">
-                                <input type="text" bsDatepicker class="form-control w-100" name="dueDate"
-                                    [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="request.dueDate" />
+                                <input type="text" bsDatepicker class="form-control w-100" name="dueDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" [(ngModel)]="request.dueDate" />
                             </div>
                         </div>
                     </div>
