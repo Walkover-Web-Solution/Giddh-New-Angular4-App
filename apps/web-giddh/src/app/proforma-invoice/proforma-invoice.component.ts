@@ -2064,7 +2064,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 moment().add(duePeriod, 'days').toDate() : moment().toDate();
         }
         this.ngAfterViewInit();
-        this.clickAdjustAmount(false)
+        this.clickAdjustAmount(false);
+        this.autoFillCompanyShipping = false;
+        this.fillDeliverToAddress();
     }
 
     public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
