@@ -197,8 +197,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
-    @ViewChild('discountComponent', { static: false }) public discountComponent: DiscountListComponent;
-    @ViewChild('taxControlComponent', { static: false }) public taxControlComponent: TaxControlComponent;
+    @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
+    @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
@@ -3321,13 +3321,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public closeDiscountPopup() {
         if (this.discountComponent) {
-            this.discountComponent.hideDiscountMenu();
+            this.discountComponent.forEach(disComp => {
+                disComp.hideDiscountMenu();
+            });
         }
     }
 
     public closeTaxControlPopup() {
         if (this.taxControlComponent) {
-            this.taxControlComponent.showTaxPopup = false;
+            this.taxControlComponent.forEach(taxComp => {
+                taxComp.showTaxPopup = false;
+            });
         }
     }
 
@@ -4112,13 +4116,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                     let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                    taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                    taxableValue = (rawAmount + entry.taxSum);
                 }
                 entry.otherTaxType = 'tcs';
             } else {
                 taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 entry.otherTaxType = 'tds';
             }
+
 
             totalTaxes += tax.taxDetail[0].taxValue;
 
@@ -4228,7 +4233,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private parseEntriesFromResponse(entries: SalesEntryClass[]) {
         return entries.map((entry, index) => {
             this.activeIndx = index;
-            entry.otherTaxModal = new SalesOtherTaxesModal();
+            if(!entry.otherTaxModal) {
+                entry.otherTaxModal = new SalesOtherTaxesModal();
+            }
             entry.entryDate = (entry.entryDate) ? moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate() : this.universalDate || new Date();
 
             entry.discounts = this.parseDiscountFromResponse(entry);
@@ -4332,7 +4339,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                        taxableValue = (rawAmount + entry.taxSum);
                     }
 
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
@@ -4458,8 +4465,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             salesEntryClass.uniqueName = e.uniqueName;
             salesEntryClass.description = e.description;
             salesEntryClass.date = e.entryDate;
+            let calculationMethod = (e.otherTaxModal && e.otherTaxModal.tcsCalculationMethod) ? e.otherTaxModal.tcsCalculationMethod : "";
             e.taxList.forEach(t => {
-                salesEntryClass.taxes.push({uniqueName: t});
+                salesEntryClass.taxes.push({uniqueName: t, calculationMethod: calculationMethod});
             });
             if(this.isPurchaseInvoice) {
                 salesEntryClass.purchaseOrderItemMapping = e.purchaseOrderItemMapping;
