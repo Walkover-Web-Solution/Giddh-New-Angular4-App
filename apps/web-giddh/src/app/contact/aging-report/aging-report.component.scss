@@ -95,6 +95,12 @@ tr.aging-table-top td {
     border: 1px solid $gainsboro;
     margin-left: 10px !important;
 }
+.customer-right-wrap{
+    .customer-right, .total-result{
+        padding-right: 90px !important;
+    }
+}
+
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {
@@ -159,10 +165,11 @@ tr.aging-table-top td {
             }
         }
     }
-}
-@media (max-width: 575px) {
     .customer-right-wrap h4.mb-1.pdR2 {
         margin-bottom: 10px;
+        padding-left: 15px;
+    }
+    .customer-right-wrap{
         padding-left: 15px;
     }
     .customer-right table {
@@ -210,6 +217,8 @@ tr.aging-table-top td {
     .customer-right table tr td h3 {
         font-size: 14px;
     }
+}
+@media (max-width: 575px) {
     .top-aging-table-top {
         padding: 8px 3px !important;
         font-size: 14px;

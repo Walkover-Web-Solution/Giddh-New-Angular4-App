@@ -197,6 +197,8 @@ export class AccountRequestV2 {
     public currency?: string;
     public applicableDiscounts?: any[];
     public inheritedDiscounts?: any[];
+    public customFields?: CustomFieldsData[];
+
 }
 
 export class AccountResponseV2 {
@@ -271,4 +273,9 @@ export class UpdateAccountRequest {
         groupUniqueName: string;
         accountUniqueName: string;
     }
+}
+
+export class CustomFieldsData {
+    uniqueName: string;
+    value: AccountRequestV2
 }

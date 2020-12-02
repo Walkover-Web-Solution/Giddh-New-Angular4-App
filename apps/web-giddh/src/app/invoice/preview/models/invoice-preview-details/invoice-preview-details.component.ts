@@ -78,6 +78,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Output() public deleteVoucher: EventEmitter<any> = new EventEmitter();
     @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
+    /** Event emmiter when user search voucher */
+    @Output() public invoiceSearchEvent: EventEmitter<any> = new EventEmitter();
     @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }> = new EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }>();
     @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
@@ -135,6 +137,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
     public pdfPreviewHasError: boolean = false;
+    /** This will hold the search value */
+    @Input() public invoiceSearch: any = "";
+    /** This will hold the attached file in Purchase Bill */
+    private attachedAttachmentBlob: Blob;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -213,6 +219,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     return item.uniqueName === this.selectedItem.uniqueName;
                 })[0];
             }
+            if(this.invoiceSearch && this.searchElement && this.searchElement.nativeElement) {
+                this.searchElement.nativeElement.value = this.invoiceSearch;
+                this.filterVouchers(this.invoiceSearch);
+            }
             if (this.only4ProformaEstimates) {
                 this.getVoucherVersions();
             }
@@ -248,13 +258,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 map((ev: any) => ev.target.value)
             )
             .subscribe((term => {
-                this.filteredData = this.items.filter(item => {
-                    return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
-                        item.account.name.toLowerCase().includes(term.toLowerCase()) ||
-                        item.voucherDate.includes(term) ||
-                        item.grandTotal.toString().includes(term);
-                });
-                this.detectChanges();
+                this.filterVouchers(term);
             }))
 
         this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView.nativeElement.offsetHeight;
@@ -279,10 +283,15 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public toggleEditMode() {
         this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
         this.showEditMode = !this.showEditMode;
+
+        if(this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
+            this.filterVouchers(this.searchElement.nativeElement.value);
+        }
     }
 
     public onCancel() {
         this.performActionAfterClose();
+        this.invoiceSearchEvent.emit("");
         this.closeEvent.emit(true);
     }
 
@@ -377,7 +386,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         const fileExtention = data.body.fileType.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
+                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
                             let objectURL = `data:image/${fileExtention};base64,` + data.body.uploadedFile;
                             this.imagePreviewSource = this.sanitizer.bypassSecurityTrustUrl(objectURL);
                             this.attachedDocumentType = { name: data.body.name, type: 'image', value: fileExtention };
@@ -385,10 +394,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         } else if (FILE_ATTACHMENT_TYPE.PDF.includes(fileExtention)) {
                             // Attached file type is PDF
                             this.attachedDocumentType = { name: data.body.name, type: 'pdf', value: fileExtention };
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
+                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
                             setTimeout(() => {
-                                this.selectedItem.blob = this.attachedDocumentBlob;
-                                this.pdfViewer.pdfSrc = this.attachedDocumentBlob;
+                                this.selectedItem.blob = this.attachedAttachmentBlob;
+                                this.pdfViewer.pdfSrc = this.attachedAttachmentBlob;
                                 this.pdfViewer.showSpinner = true;
                                 this.pdfViewer.refresh();
                                 this.detectChanges();
@@ -396,7 +405,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.isVoucherDownloadError = false;
                         } else {
                             // Unsupported type
-                            this.attachedDocumentBlob = base64ToBlob(data.body.uploadedFile, '', 512);
+                            this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, '', 512);
                             this.attachedDocumentType = { name: data.body.name, type: 'unsupported', value: fileExtention };
                         }
                     }
@@ -486,7 +495,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.isVoucherDownloading || this.isVoucherDownloadError) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, `${this.attachedDocumentType.name}`);
+        saveAs(this.attachedAttachmentBlob, `${this.attachedDocumentType.name}`);
     }
 
     public printVoucher() {
@@ -727,7 +736,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+        saveAs(this.attachedDocumentBlob, 'purchasebill.pdf');
     }
 
     /**
@@ -744,5 +753,23 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 }
             });
         }
+    }
+
+    /**
+     * This will filter vouchers based on search
+     *
+     * @param {*} term
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public filterVouchers(term): void {
+        this.invoiceSearch = term;
+        this.invoiceSearchEvent.emit(this.invoiceSearch);
+        this.filteredData = this.items.filter(item => {
+            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
+                item.account.name.toLowerCase().includes(term.toLowerCase()) ||
+                item.voucherDate.includes(term) ||
+                item.grandTotal.toString().includes(term);
+        });
+        this.detectChanges();
     }
 }

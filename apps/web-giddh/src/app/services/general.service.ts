@@ -97,7 +97,6 @@ export class GeneralService {
 
     set currencyType(currencyType: string) {
         this._currencyType = currencyType;
-
     }
 
     get createNewCompany(): CompanyCreateRequest {
@@ -332,12 +331,10 @@ export class GeneralService {
      * @memberof CompletedComponent
      */
     public ConvertUTCTimeToLocalTime(UTCDateString) {
+        UTCDateString = UTCDateString.replace("@", "");
         let convertdLocalTime = new Date(UTCDateString);
-
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
-
         convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
-
         return convertdLocalTime;
     }
 
@@ -633,6 +630,80 @@ export class GeneralService {
         sessionStorage.removeItem(name);
     }
 
+    /**
+     * This will add value in array if doesn't exists
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public addValueInArray(array: Array<string>, value: any): Array<string> {
+        let exists = false;
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item === value) {
+                    exists = true;
+                }
+            });
+        }
+
+        if(!exists) {
+            array.push(value);
+        }
+
+        return array;
+    }
+
+    /**
+     * This will check if value exists in array
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkIfValueExistsInArray(array: Array<string>, value: any): boolean {
+        let exists = false;
+
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item === value) {
+                    exists = true;
+                }
+            });
+        }
+
+        return exists;
+    }
+
+    /**
+     * This will remove value from array
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public removeValueFromArray(array: Array<string>, value: any): Array<string> {
+        let index = -1;
+        if (array && array.length > 0) {
+            let loop = 0;
+            array.forEach(item => {
+                if (item === value) {
+                    index = loop;
+                }
+                loop++;
+            });
+        }
+
+        if(index > -1) {
+            array.splice(index, 1);
+        }
+
+        return array;
+    }
+  
     /**
      * This will set global cookie for main domain
      *
