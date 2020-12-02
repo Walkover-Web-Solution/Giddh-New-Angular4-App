@@ -557,7 +557,7 @@
                             <label class="icon-minus font-12"></label>
                         </div>
 
-                        <div [attr.disabled]="currentOrganizationType === 'COMPANY'" *ngIf="vm.showNewEntryPanel && !shouldShowAdvanceReceiptMandatoryFields"
+                        <div [attr.disabled]="currentOrganizationType === 'COMPANY' ? 'disabled' : null" *ngIf="vm.showNewEntryPanel && !shouldShowAdvanceReceiptMandatoryFields"
                             class="text-right table-amount">
                             <span auto-close="outsideClick">
                                 <update-ledger-discount id="update-ledger-discount-amount" #discount [discountAccountsDetails]="vm.discountArray"
@@ -586,7 +586,7 @@
                             <label class="fs20">=</label>
                         </div>
 
-                        <div [attr.disabled]="currentOrganizationType === 'COMPANY'" class="dropdown-container dropdown-left text-right table-amount"
+                        <div [attr.disabled]="currentOrganizationType === 'COMPANY' ? 'disabled' : null" class="dropdown-container dropdown-left text-right table-amount"
                             *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) && (vm.companyTaxesList$ | async)?.length">
                             <span auto-close="outsideClick">
                                 <update-ledger-tax-control id="update-ledger-tax-amount" #tax [taxes]="vm.companyTaxesList$ | async"
