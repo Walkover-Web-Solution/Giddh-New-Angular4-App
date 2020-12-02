@@ -427,26 +427,28 @@
                     <div class=" col-sm-12 ">
                         <div class="form-group ">
                             <label>Move to Group</label>
-                            <span>
-                                <sh-select formControlName="moveto" [placeholder]="'Group name'"
-                                    [options]="flatGroupsOptions" [customFilter]="customMoveGroupFilter"
-                                    class="pull-left" style="width: calc(100% - 93px); ">
-                                    <!--template for move group typeahead-->
-                                    <ng-template #optionTemplate let-model="option">
-                                        <a href="javascript:void(0)" class="list-item"
-                                            style="border-bottom:1px solid #ccc;">
-                                            <div class="item">{{ model.label }}</div>
-                                            <div class="item-unique">
-                                                {{ model.value }}
-                                            </div>
-                                        </a>
-                                    </ng-template>
-                                </sh-select>
-                            </span>
-                            <span class="pull-right">
-                                <button type="submit" class="btn btn-primary marge-btn"
-                                    [disabled]="moveAccountForm.invalid">Move</button>
-                            </span>
+                            <div>
+                                <span>
+                                    <sh-select formControlName="moveto" [placeholder]="'Group name'"
+                                        [options]="flatGroupsOptions" [customFilter]="customMoveGroupFilter"
+                                        class="pull-left" style="width: calc(100% - 93px); ">
+                                        <!--template for move group typeahead-->
+                                        <ng-template #optionTemplate let-model="option">
+                                            <a href="javascript:void(0)" class="list-item"
+                                                style="border-bottom:1px solid #ccc;">
+                                                <div class="item">{{ model.label }}</div>
+                                                <div class="item-unique">
+                                                    {{ model.value }}
+                                                </div>
+                                            </a>
+                                        </ng-template>
+                                    </sh-select>
+                                </span>
+                                <span class="pull-right">
+                                    <button type="submit" class="btn btn-primary marge-btn"
+                                        [disabled]="moveAccountForm.invalid">Move</button>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
