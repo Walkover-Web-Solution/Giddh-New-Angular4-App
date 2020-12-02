@@ -1,7 +1,7 @@
 <div class="recurring-container">
 
 
-    <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr" (ngSubmit)="submit()">
+    <form #recurringForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative" (ngSubmit)="submit()">
 
         <div class="d-flex search-icon-block mb-15"  *ngIf="isMobileScreen">
             <div (click)="openModal(template)">
@@ -23,8 +23,7 @@
                                     [(ngModel)]="filter.status" [options]="invoiceTypeOptions" [notFoundLink]="false"
                                     [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" class="list-item"
-                                            style="border-bottom: 1px solid #ccc;">
+                                        <a href="javascript:void(0)" class="list-item">
                                             <div class="item">{{ option.label }}</div>
                                         </a>
                                     </ng-template>
@@ -38,8 +37,7 @@
                                     [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration"
                                     [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" class="list-item"
-                                            style="border-bottom: 1px solid #ccc;">
+                                        <a href="javascript:void(0)" class="list-item">
                                             <div class="item">{{ option.label }}</div>
                                         </a>
                                     </ng-template>
@@ -53,7 +51,7 @@
                             </div>
                         </div>
                         <div class="form-group search-invoice-filed">
-                            <div class="searchInvoiceNo">
+                            <div class="search-invoice-no">
                                 <label class="d-block">Search Invoice No.</label>
                                 <div class="input-group">
                                     <input type="text" placeholder="Search Invoice No." class="w100"
@@ -63,7 +61,7 @@
                             </div>
                         </div>
                         <div class="form-group search-invoice-filed">
-                            <div class="searchCustomerNo">
+                            <div class="search-customer-no">
                                 <div class="input-container">
                                     <label class="d-block">Search Customer Name</label>
                                     <input type="text" placeholder="Search Customer Name" class="w100"
@@ -87,28 +85,28 @@
         </div>
         <div class="recurring-form-wrapper">
             <div class="recurring-form" *ngIf="!isMobileScreen">
-                <div class="form-group mrR1">
+                <div class="form-group mr-r1">
                     <label class="d-block mr-15">Invoice Type</label>
                     <div class="ng-select-wrap input-group">
                         <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
                             [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
                             [useInBuiltFilterForIOptionTypeItems]="true">
                             <ng-template #optionTemplate let-option="option">
-                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                <a href="javascript:void(0)" class="list-item">
                                     <div class="item">{{ option.label }}</div>
                                 </a>
                             </ng-template>
                         </sh-select>
                     </div>
                 </div>
-                <div class="form-group mrR1">
+                <div class="form-group mr-r1">
                     <label class="d-block mr-15">Interval</label>
                     <div class="ng-select-wrap input-group">
                         <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions"
                             [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
                             [useInBuiltFilterForIOptionTypeItems]="true">
                             <ng-template #optionTemplate let-option="option">
-                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                <a href="javascript:void(0)" class="list-item">
                                     <div class="item">{{ option.label }}</div>
                                 </a>
                             </ng-template>
@@ -116,15 +114,15 @@
                     </div>
                 </div>
 
-                <div class="form-group mrR1">
+                <div class="form-group mr-r1">
                     <label class="d-block mr-15">Last Invoice Date</label>
                     <div class="input-group">
                         <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate" [placeholder]="'Select Date'"></giddh-datepicker>
                     </div>
                 </div>
 
-                <div class="form-group mrR1" *ngIf="isMobileScreen">
-                    <div class="searchInvoiceNo">
+                <div class="form-group mr-r1" *ngIf="isMobileScreen">
+                    <div class="search-invoice-no">
                         <label class="d-block">Search Invoice No.</label>
                         <div class="input-group">
                             <input type="text" placeholder="Search Invoice No." class="w100" [formControl]="invoiceNumberInput"
@@ -133,8 +131,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group mrR1" *ngIf="isMobileScreen">
-                    <div class="searchCustomerNo">
+                <div class="form-group mr-r1" *ngIf="isMobileScreen">
+                    <div class="search-customer-no">
                         <div class="input-container">
                             <label class="d-block">Search Customer Name</label>
                             <input type="text" placeholder="Search Customer Name" class="w100" name="customerName"
@@ -144,7 +142,7 @@
                     </div>
                 </div>
 
-                <div class="form-group mrR1">
+                <div class="form-group mr-r1">
                     <label class="d-block">&nbsp;</label>
                     <button class="btn btn-success btn-sm">Search</button>
                     <a class="cp" href="javascript: void 0">
@@ -154,9 +152,8 @@
                 </div>
             </div>
             <div class="d-flex mb-2">
-                <div style="height: 30px;" *ngIf="selectedItems.length < 0">
-                    <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-                        style="margin-bottom: 10px;display:inline-block !important;">
+                <div class="more-dropdown" *ngIf="selectedItems.length < 0">
+                    <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
 
                         <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                             aria-controls="dropdown-basic">
@@ -164,8 +161,7 @@
                             <span class="caret"></span>
                         </button>
 
-                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic"
-                            style="right: -53px !important;">
+                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
                             <li role="menuitem">
                                 <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
@@ -207,11 +203,11 @@
     <div class="table-responsive">
         <table class="table basic giddh-table table-bordered on-mobile-view">
 
-            <thead class="t-h-bg1">
+            <thead class="thead-background1">
                 <tr>
 
-                    <th style="width:4%" *ngIf="selectedItems.length > 0">
-                        <div class="mh18_img" style="justify-content: center;display: flex">
+                    <th width="4%" *ngIf="selectedItems.length > 0">
+                        <div class="check-image d-flex justify-content-center">
                             <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                 (click)="toggleAllItems(true)">
                             <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -220,7 +216,7 @@
                     </th>
 
                     <th *ngIf="selectedItems.length === 0" width="4%">
-                        <div class="mh18_img" style="justify-content: center;display: flex">
+                        <div class="check-image d-flex justify-content-center">
                             #
                         </div>
                     </th>
@@ -318,7 +314,7 @@
 
                     <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0"
                         data-title="#">
-                        <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex">
+                        <div class="check-image justify-content-sm d-flex justify-content-center">
                             <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png"
                                 (click)="toggleItem(col, true)" />
                             <img *ngIf="col?.isSelected" src="assets/images/checked.png"
@@ -328,7 +324,7 @@
 
                     <td *ngIf="!col.isSelected && hoveredItemForAction !== col.uniqueName && selectedItems.length === 0"
                         data-title="#">
-                        <div style="justify-content: center;display: flex" class="justify-content-sm">{{ i + 1}}</div>
+                        <div class="justify-content-sm d-flex justify-content-center">{{ i + 1}}</div>
                     </td>
 
                     <td data-title="Invoice Number">
@@ -348,8 +344,8 @@
         </table>
     </div>
 
-    <div class="paginationWrapper" *ngIf="(recurringData$ | async)?.totalItems > 20">
-        <div class="alC">
+    <div class="pagination-wrapper" *ngIf="(recurringData$ | async)?.totalItems > 20">
+        <div class="text-center">
             <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="20"
                 (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
             </pagination>
@@ -386,15 +382,15 @@
 <ng-template #sortTemplate let-column="column">
 
     <div class="icon-sort-asc " *ngIf="filter.sortBy !== column" (click)="sortButtonClicked('asc', column)"
-        [ngClass]="{'activeTextColor': filter.sortBy === column && filter.sort === 'asc'}"></div>
+        [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'asc'}"></div>
 
     <div class="icon-sort-asc " *ngIf="filter.sortBy === column && filter.sort === 'asc'"
         (click)="sortButtonClicked('desc', column)"
-        [ngClass]="{'activeTextColor': filter.sortBy === column && filter.sort === 'asc'}"></div>
+        [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'asc'}"></div>
 
     <div class="icon-sort-dsc " *ngIf="filter.sortBy === column && filter.sort === 'desc'"
         (click)="sortButtonClicked('asc', column)"
-        [ngClass]="{'activeTextColor': filter.sortBy === column && filter.sort === 'desc'}"></div>
+        [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'desc'}"></div>
 
 </ng-template>
 <!-- endregion -->

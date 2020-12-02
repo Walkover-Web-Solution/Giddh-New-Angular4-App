@@ -18,7 +18,7 @@ table {
     border: none;
 } */
 
-.mh18_img img {
+.check-image img {
     max-height: 20px;
     cursor: pointer;
 }
@@ -53,7 +53,7 @@ tfoot {
 
 .td-search-box div i {
     margin-top: 3px;
-    color: #8080808c;
+    color: $olive;
     padding-right: 8px;
     cursor: pointer;
 }
@@ -86,7 +86,7 @@ tfoot {
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $gray-90;
 }
 
 .dropdown-menu {
@@ -132,8 +132,11 @@ tfoot {
     margin-bottom: 0;
 }
 
-.invoice-genrate-container {
+.invoice-generate-container {
     padding: 0 15px;
+    .btn-dropdown-dr-cr{
+        height: 44px;
+    }
 }
 
 .input-group {
@@ -188,7 +191,7 @@ tfoot {
 
 button.btn.btn-filter {
     background: $whisper-color;
-    border: 1px solid $whisper-color;
+    border: 1px solid $gainsboro;
     font-size: 14px;
     color: $midnight-blue;
     display: inline-flex;
@@ -279,6 +282,12 @@ span.close-modal.cp.pull-right {
     width: 85%;
 }
 
+.pending-advance-search{
+    flex: 1 1 auto !important;
+        div#dp-parent {
+            margin-right:8px;
+        }
+}
 // responsive
 @media (max-width: 1023px) {
     .pending-advance-search {
@@ -389,7 +398,7 @@ span.close-modal.cp.pull-right {
     .form-inline .form-group {
         margin: 0;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         margin-top: 20px;
         border: none;
         background-color: transparent;

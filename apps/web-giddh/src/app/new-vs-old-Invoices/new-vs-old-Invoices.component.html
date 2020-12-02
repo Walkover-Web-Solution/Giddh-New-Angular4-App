@@ -2,35 +2,34 @@
 <div class="container-fluid">
     <div class="top-bar clearfix">
         <div class="form-inline">
-
             <form #carried="ngForm" (ngSubmit)="go(carried)">
                 <div class="pull-left d-flex align-start select-fields">
-                    <div class="form-group mrR1 max500 d-initial">
+                    <div class="form-group mr-r1 max-width-500 d-initial">
                         <label>Select Year</label>
                         <sh-select placeholder="Search Year..." [multiple]='false' name="selectedYear" [(ngModel)]="selectedYear" #SelectYear="ngModel" [options]="yearOptions" required>
                         </sh-select>
                     </div>
-                    <div class="form-group mrR1 max500 d-initial">
+                    <div class="form-group mr-r1 max-width-500 d-initial">
                         <label>Select Type</label>
                         <sh-select placeholder="Search Type..." [multiple]='false' name="selectedType" [(ngModel)]="selectedType" #SelectType="ngModel" [options]="GetTypeOptions" required (selected)="ChangingValue($event)"></sh-select>
-                        <div class="h-25px"  *ngIf="SelectType.invalid">
+                        <div class="height-25px"  *ngIf="SelectType.invalid">
                             <div class="text-danger">please select type</div>
                         </div>
                     </div>
 
-                    <div class="form-group mrR1 max500  d-initial flex-column" *ngIf="selectedType==='month'">
+                    <div class="form-group mr-r1 max-width-500  d-initial flex-column" *ngIf="selectedType==='month'">
                         <label>Select Month</label>
                         <sh-select placeholder="Search Month..." [multiple]='false' name="selectedmonth" [(ngModel)]="selectedmonth" #SelectMonth="ngModel" [options]="monthOptions" required [customSorting]="customMonthSorting"></sh-select>
-                        <div class="h-25px" *ngIf="SelectMonth.invalid">
+                        <div class="height-25px" *ngIf="SelectMonth.invalid">
                             <div class="text-danger">please select month</div>
                         </div>
                     </div>
 
-                    <div class="form-group mrR1 max500  d-initial flex-column" *ngIf="selectedType==='quater'">
+                    <div class="form-group mr-r1 max-width-500  d-initial flex-column" *ngIf="selectedType==='quater'">
                         <label>Select Quater</label>
                         <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater" [(ngModel)]="selectedQuater" #SelectQuater="ngModel" [options]="quaterOptions" required>
                         </sh-select>
-                        <div class="h-25px" *ngIf="SelectQuater.invalid">
+                        <div class="height-25px" *ngIf="SelectQuater.invalid">
                             <div class="text-danger">please select quater</div>
                         </div>
                     </div>
@@ -49,7 +48,7 @@
         </div>
     </div>
 
-    <div style="display: flex;" *ngIf="selectedType==='month'">
+    <div class="d-flex" *ngIf="selectedType==='month'">
         <div class="div-table">
             <div class="head-row">
                 <div class="div-cell">Sales from</div>
@@ -57,7 +56,7 @@
                 <div class="div-cell align-end">Amount</div>
                 <div class="div-cell align-end">No.of Invoices</div>
             </div>
-            <div class="div-row" style="font-weight: bold">
+            <div class="div-row">
                 <div class="div-cell">{{columnName }} {{selectedYear}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.total | giddhCurrency}}</div>
@@ -65,19 +64,19 @@
             </div>
         </div>
     </div>
-    <div style="display: flex;" *ngIf="selectedType==='month'">
-        <div class="div-table" style="background-color: #E5E5E5;">
+    <div class="d-flex" *ngIf="selectedType==='month'">
+        <div class="div-table bg-gray-color">
             <div>
                 <h3 class="h3-heading">Bifurcation of clients in {{columnName}} </h3>
             </div>
-            <div class="div-row" style="margin: 30px 0">
-                <div class="div-cell" style="font-size: 16px;font-weight: bold">From new Clients</div>
+            <div class="div-row mr-t3 mr-b3">
+                <div class="div-cell font-16 strong">From new Clients</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.total | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount | giddhCurrency}}</div>
             </div>
-            <div class="div-row" style="margin: 30px 0">
-                <div class="div-cell" style="font-size: 16px;font-weight: bold">From old Clients</div>
+            <div class="div-row mr-t3 mr-b3">
+                <div class="div-cell font-16 strong">From old Clients</div>
                 <div class="div-cell align-end">{{clientTotal | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{crdTotal | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{invTotal | giddhCurrency}}</div>
@@ -114,7 +113,7 @@
             </div>
         </div>
     </div>
-    <div style="display: flex;margin-top: 30px " *ngIf="selectedType==='month'">
+    <div class="d-flex mr-t3" *ngIf="selectedType==='month'">
         <div class="div-table">
             <div class="head-row">
                 <div class="div-cell">Sales from</div>
@@ -122,7 +121,7 @@
                 <div class="div-cell align-end">Amount</div>
                 <div class="div-cell align-end">No.of Invoices</div>
             </div>
-            <div class="div-row" style="font-weight: bold">
+            <div class="div-row">
                 <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{selectedYear}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total | giddhCurrency}}</div>
@@ -130,7 +129,7 @@
             </div>
         </div>
     </div>
-    <div style="display: flex;margin-top: 30px" *ngIf="selectedType==='month'">
+    <div class="d-flex mr-t3" *ngIf="selectedType==='month'">
         <div class="div-table">
             <div class="head-row">
                 <div class="div-cell">Sales from</div>
@@ -138,7 +137,7 @@
                 <div class="div-cell align-end">Amount</div>
                 <div class="div-cell align-end">No.of Invoices</div>
             </div>
-            <div class="div-row" style="font-weight: bold">
+            <div class="div-row">
                 <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{selectedYear}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total | giddhCurrency}}</div>
@@ -147,7 +146,7 @@
         </div>
     </div>
 
-    <div style="display: flex;" *ngIf="selectedType==='quater'">
+    <div class="d-flex" *ngIf="selectedType==='quater'">
         <div class="div-table">
             <div class="head-row">
                 <div class="div-cell">Sales from</div>
@@ -155,7 +154,7 @@
                 <div class="div-cell align-end">Amount</div>
                 <div class="div-cell align-end">No.of Invoices</div>
             </div>
-            <div class="div-row" style="font-weight: bold">
+            <div class="div-row">
                 <div class="div-cell">{{columnName }} {{selectedYear}}</div>
                 <div class="div-cell align-end">{{clientAllTotal | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{totalAmount | giddhCurrency}}</div>
@@ -163,19 +162,19 @@
             </div>
         </div>
     </div>
-    <div style="display: flex;" *ngIf="selectedType==='quater'">
-        <div class="div-table" style="background-color: #E5E5E5;">
+    <div class="d-flex" *ngIf="selectedType==='quater'">
+        <div class="div-table bg-gray-color">
             <div>
                 <h3 class="h3-heading">Bifurcation of clients in {{columnName}} </h3>
             </div>
-            <div class="div-row" style="margin: 30px 0">
-                <div class="div-cell" style="font-size: 16px;font-weight: bold">From new Clients</div>
+            <div class="div-row mr-t3 mr-b3">
+                <div class="div-cell font-16 strong">From new Clients</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.uniqueCount | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.total | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.newSales.invoiceCount | giddhCurrency}}</div>
             </div>
-            <div class="div-row" style="margin: 30px 0">
-                <div class="div-cell" style="font-size: 16px;font-weight: bold">From old Clients</div>
+            <div class="div-row mr-t3 mr-b3">
+                <div class="div-cell font-16 strong">From old Clients</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.total | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount | giddhCurrency}}</div>
@@ -200,7 +199,7 @@
             </div>
         </div>
     </div>
-    <div style="display: flex; margin-top: 30px" *ngIf="selectedType==='quater'">
+    <div class="d-flex mr-t3" *ngIf="selectedType==='quater'">
         <div class="div-table">
             <div class="head-row">
                 <div class="div-cell">Sales from</div>
@@ -208,7 +207,7 @@
                 <div class="div-cell align-end">Amount</div>
                 <div class="div-cell align-end">No.of Invoices</div>
             </div>
-            <div class="div-row" style="font-weight: bold">
+            <div class="div-row">
                 <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{selectedYear}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total | giddhCurrency}}</div>
@@ -216,7 +215,7 @@
             </div>
         </div>
     </div>
-    <div style="display: flex;margin-top: 30px" *ngIf="selectedType==='quater'">
+    <div class="d-flex mr-t3" *ngIf="selectedType==='quater'">
         <div class="div-table">
             <div class="head-row">
                 <div class="div-cell">Sales from</div>
@@ -224,7 +223,7 @@
                 <div class="div-cell align-end">Amount</div>
                 <div class="div-cell align-end">No.of Invoices</div>
             </div>
-            <div class="div-row" style="font-weight: bold">
+            <div class="div-row">
                 <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{selectedYear}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount | giddhCurrency}}</div>
                 <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total | giddhCurrency}}</div>

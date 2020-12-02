@@ -1,6 +1,6 @@
 <div class="welcome-msg">
     <div class="row">
-        <div class="col-md-9 col-sm-9  font-14">
+        <div class="col-md-9 col-sm-9 font-14">
             <p class="mb-1">Hi {{logedInUser?.name}} !</p>
             <p class="mb-3 plan-msg">All the plan come with all the features with <span class="selected">90 days money
                     back guarantee.</span></p>
@@ -10,7 +10,7 @@
         </div>
     </div>
     <div #topAllPlans>
-        <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
+        <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan height-auto">
             <div>
                 <div class="main-row-plans">
                     <div class="row">
@@ -339,7 +339,7 @@
         </div>
     </div>
     <div #allPlans>
-        <div class="box clearfix pl-3 mb-15 xs-pl-15 pb-3 relative all-plans" *ngIf="showPlans">
+        <div class="box clearfix pd-l3 mb-15 xs-pl-15 pd-r3 relative all-plans" *ngIf="showPlans">
             <a class="close close-2" href="javascript:void(0)" (click)="showPlans = ''; navigate(topAllPlans)">
                 <i class="icon-cross"></i>
             </a>
@@ -387,7 +387,7 @@
     <div class="activation-key-wrapper">
         <div class="box">
             <div class="row">
-                <div class="col-md-6 col-sm-12 col-xs-12">
+                <div class="col-md-6 col-sm-12 col-12">
                     <div class="activation-key mb-1">
                         <h2 class="font-26 text-blue bold mb-3">Activation Key</h2>
                         <p class="font-14">You will get the activation key from resellers.</p>

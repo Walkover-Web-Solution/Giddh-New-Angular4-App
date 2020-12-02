@@ -2,7 +2,7 @@
     <div>
         <h3 class="">
             <span>Inward Note</span>
-            <span class="pull-right fs14">Multiple
+            <span class="pull-right font-14">Multiple
                 <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'sender' }"
                     (click)="modeChanged('sender')">Senders</a>
                 /
@@ -13,8 +13,8 @@
 
     </div>
 </div>
-<div class="form_body witBg clearfix margin-child-label">
-    <div class="form_bg clearfix">
+<div class="form-body white-bg  clearfix margin-child-label">
+    <div class="form-bg clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-xs-6 form-group">
@@ -53,18 +53,18 @@
 
             <div class="row">
                 <div class="col-xs-4" *ngIf="mode === 'sender'">
-                    <label class="fs14">Sender <sup>*</sup></label>
+                    <label class="font-14">Sender <sup>*</sup></label>
                 </div>
                 <div class="col-xs-4" *ngIf="mode === 'product'">
-                    <label class="fs14">Product Name <sup>*</sup></label>
+                    <label class="font-14">Product Name <sup>*</sup></label>
                 </div>
 
                 <div class="col-xs-4">
-                    <label class="fs14">Unit<sup>*</sup></label>
+                    <label class="font-14">Unit<sup>*</sup></label>
                 </div>
 
                 <div class="col-xs-4">
-                    <label class="fs14">Quantity <sup>*</sup></label>
+                    <label class="font-14">Quantity <sup>*</sup></label>
                 </div>
             </div>
 
@@ -102,10 +102,10 @@
                             </div>
 
 
-                            <div class="pull-right mr-t unit_add">
+                            <div class="pull-right mr-t05 unit-add">
                                 <button class="btn-link" (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last">
-                                    <i class="icon-plus add_row"></i>
+                                    <i class="icon-plus add-row"></i>
                                 </button>
                                 <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
                                     <i class="icon-cross dlet"></i>
@@ -121,7 +121,7 @@
             <ng-container *ngIf="mode === 'sender'">
                 <div class="row">
 
-                    <div class="mr-t1 pdL pdR">
+                    <div class="mr-t1 pd-l05 pd-r05">
                         <div class="col-xs-12">
                             <div class="checkbox">
                                 <label class="" for="isManufactured">
@@ -137,17 +137,17 @@
 
                     <section class="col-xs-12" *ngIf="form.value.isManufactured">
                         <div class="">
-                            <h1 class="section-head bdrB"><strong>{{form.controls['stock'].value}} (Made with)</strong>
+                            <h1 class="section-head bd-rb"><strong>{{form.controls['stock'].value}} (Made with)</strong>
                             </h1>
 
                             <div formGroupName="manufacturingDetails">
 
                                 <div class="row" style="padding-top: 5px">
                                     <div class="col-xs-4">
-                                        <label class="fs14">Output Qty <sup>*</sup></label>
+                                        <label class="font-14">Output Qty <sup>*</sup></label>
                                     </div>
                                     <div class="col-xs-5">
-                                        <label class="fs14">Stock Unit <sup>*</sup></label>
+                                        <label class="font-14">Stock Unit <sup>*</sup></label>
                                     </div>
                                 </div>
 
@@ -205,10 +205,10 @@
                                                 [multiple]="false" [placeholder]="'Select Unit'" [ItemHeight]="33">
                                             </sh-select>
                                         </div>
-                                        <div class="pull-right mr-t unit_add">
+                                        <div class="pull-right mr-t05 unit-add">
                                             <button class="btn-link" (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l" [disabled]="disableStockButton"><i
-                                                    class="icon-plus add_row"></i></button>
+                                                    class="icon-plus add-row"></i></button>
                                             <button class="btn-link" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i
                                                     class="icon-cross dlet"></i></button>
                                         </div>

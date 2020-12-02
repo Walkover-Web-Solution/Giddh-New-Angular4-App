@@ -1,17 +1,13 @@
 <div class="proforma-container">
 
     <div class="d-flex date-advance-search">
-        <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr">
+        <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
             <div class="d-flex">
-                <div class="form-group mrR1 d-flex">
-                    <div class="input-group ">
-                        <!-- <span class="icon-calender"></span> -->
-                        <span class="input-wrapper">
-                            <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                                class="form-control" (applyDaterangepicker)="dateRangeChanged($event)" />
-                        </span>
+                <div class="form-group mr-r1 d-flex">
+                    <div class=" input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <i><img src="assets/images/custom-calender.svg"></i>
+                        <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                     </div>
-
                     <div class="advance-icon cursor-pointer">
                         <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"
                             tooltip="Advance Search"></span>
@@ -44,10 +40,9 @@
             </div>
             <!--  -->
             <!-- region more items -->
-            <div *ngIf="selectedItems.length === 1" style="height: 30px;">
+            <div *ngIf="selectedItems.length === 1" class="btn-wrapper-more">
 
-                <div class="btn-group" dropdown #dp="bs-dropdown"
-                    style="margin-bottom: 10px;display: inline-block !important;">
+                <div class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">
@@ -68,13 +63,13 @@
             </div>
             <!-- endregion -->
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
@@ -84,14 +79,14 @@
 
     <div class="mobile-search mr-b1" >
         <div class="row">
-            <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+            <div class="col-sm-6 full-width-on-mobile">
                 <div class="input-container">
                     <input type="text"
                         placeholder="{{voucherType === 'proformas' ? 'Serach Proforma #' : 'Search Estimate #'}}"
                         class=" form-control" #searchBox [formControl]="voucherNumberInput" />
                 </div>
             </div>
-            <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+            <div class="col-sm-6 full-width-on-mobile">
                 <div class="input-container">
                     <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
                         name="customerNameInput" [formControl]="customerNameInput" />
@@ -100,19 +95,18 @@
         </div>
         <div class="d-flex mt-1">
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-15">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-15">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
-            <div *ngIf="selectedItems.length === 1" style="height: 30px;">
-                <div class="btn-group" dropdown #dp="bs-dropdown"
-                    style="margin-bottom: 10px;display: inline-block !important;">
+            <div *ngIf="selectedItems.length === 1" class="btn-wrapper-more">
+                <div class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">
@@ -145,7 +139,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                <div class="col-sm-6 full-width-on-mobile">
                     <div class="input-container">
                         <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox
                             name="voucherNumberInput" [formControl]="voucherNumberInput" />
@@ -157,7 +151,7 @@
                             name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
                     </div>
                 </div> -->
-                <div class="col-sm-6 col-xs-6 mt-2 mt-md-0">
+                <div class="col-sm-6 mt-2 mt-md-0">
                     <button class="btn btn-sky-blue">Submit</button>
                 </div>
 
@@ -169,12 +163,12 @@
     <div class="clearfix">
         <div class="table-responsive removeResponsive invoice-preview">
             <table class="table basic table-bordered mt-15 invoice-table on-mobile-view">
-                <thead class="t-h-bg1">
+                <thead class="thead-background1">
                     <tr>
 
-                        <th *ngIf="selectedItems.length > 0" style="min-width:50px; width: 4%">
+                        <th *ngIf="selectedItems.length > 0" width="4%" class="min-width-check">
 
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                            <div class="check-image d-flex justify-content-center">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                     (click)="toggleAllItems(true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -183,8 +177,8 @@
 
                         </th>
 
-                        <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%">
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                        <th *ngIf="selectedItems.length === 0" width="4%" class="min-width-check">
+                            <div class="check-image d-flex justify-content-center">
                                 #
                             </div>
                         </th>
@@ -262,9 +256,9 @@
                     <tr *ngFor="let item of voucherData.results; let i = index"
                         (mouseover)="hoveredItemUniqueName = item.uniqueName">
 
-                        <td class="mh18_img" data-title="#"
+                        <td class="check-image" data-title="#"
                             *ngIf="hoveredItemUniqueName === item.uniqueName || item.isSelected || selectedItems.length > 0">
-                            <div class="mh18_img"
+                            <div class="check-image"
                                 class="d-flex checkbox-td">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                     (click)="toggleItem(item, true)" />
@@ -289,7 +283,7 @@
 
 
                         <td attr.data-title="{{voucherType === 'proformas' ? 'Proforma No.' : 'Estimates No.'}} ">
-                            <div style="position: relative" class="d-flex">
+                            <div class="d-flex position-relative">
                                 <a href="javascript:void(0);" class="btn-link-2"
                                     (click)="onSelectInvoice(item)">{{item.uniqueName}}</a>
                                 <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
@@ -335,15 +329,15 @@
 
 
 
-                            <div class="d-flex" style="align-items: center">
-                                <div class="flex-fill selectAction">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-fill select-action">
                                     <span
                                         [ngClass]="{'text-light-2': !item.action}">{{ item.action ? item.action : 'Select Action' }}</span>
                                 </div>
 
                                 <!-- dropdown -->
 
-                                <div class="btn-group icon-ellipse selectAction" dropdown #dropdown="bs-dropdown"
+                                <div class="btn-group icon-ellipse select-action" dropdown #dropdown="bs-dropdown"
                                     container="body">
                                     <a href="javascript:void(0)" id="button-basic" dropdownToggle
                                         class="dropdown-toggle icon-dots-three-vertical pull-right"
@@ -353,7 +347,7 @@
                                     <div id="dropdown-basic" *dropdownMenu
                                         class="dropdown-menu dropdown-menu-right wd00" role="menu"
                                         aria-labelledby="edit-model-basic">
-                                        <ul role="menu" class="selectActionDropdown" aria-labelledby="button-basic">
+                                        <ul role="menu" class="select-action-dropdown" aria-labelledby="button-basic">
                                             <li (click)="updateVoucherAction('Accepted', item)">
                                                 <a class="cp" href="javascript:void(0)">Accepted</a>
                                             </li>
@@ -378,13 +372,13 @@
 
                                 <!-- <div *ngIf="hoveredItemUniqueName === item.uniqueName || clickedItemUniqueName === item.uniqueName">
                 <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false"
-                  class="icon-ellipse selectAction">
+                  class="icon-ellipse select-action">
                   <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right"
                     aria-controls="dropdown-basic"></a>
 
                   <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu"
                     aria-labelledby="edit-model-basic">
-                    <ul class="selectActionDropdown">
+                    <ul class="select-action-dropdown">
 
                       <li (click)="updateVoucherAction('Accepted', item)">
                         <a class="cp" href="javascript:void(0)">Accepted</a>
@@ -430,7 +424,7 @@
                 <tfoot *ngIf="voucherData && voucherData?.totalItems > 20 && !(isGetAllInProcess$ | async)">
                     <tr>
                         <td colspan="100%">
-                            <div class="alC">
+                            <div class="text-center">
 
                                 <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page"
                                     [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20"
@@ -487,17 +481,17 @@
 
         <div class="icon-sort-asc" *ngIf="advanceSearchFilter.sortBy !== column"
             (click)="sortButtonClicked('asc', column)"
-            [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
+            [ngClass]="{'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
         </div>
 
         <div class="icon-sort-asc" *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'"
             (click)="sortButtonClicked('desc', column)"
-            [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
+            [ngClass]="{'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'}">
         </div>
 
         <div class="icon-sort-dsc" *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'"
             (click)="sortButtonClicked('asc', column)"
-            [ngClass]="{'activeTextColor': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'}">
+            [ngClass]="{'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'}">
         </div>
 
     </ng-template>
@@ -537,3 +531,12 @@
             </div>
         </div>
     </div>
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                                        [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                                        [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>

@@ -17,7 +17,7 @@ import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/compan
 @Component({
     selector: 'content-selector',
     templateUrl: 'content.filters.component.html',
-    styleUrls: ['content.filters.component.css']
+    styleUrls: ['content.filters.component.scss']
 })
 
 export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {

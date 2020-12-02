@@ -30,10 +30,10 @@
 </div>
 <div class="top-bar clearfix">
     <div class="form-inline">
-        <div class="dis  mrR1 d-inline-block middle">
+        <div class="dis  mr-r1 d-inline-block middle">
             <div (clickOutside)="hideListItems()" class="btn-group d-flex" #filterDropDownList="bs-dropdown" dropdown
                 [autoClose]="false" [placement]="'right'">
-                <i dropdownToggle class="icon-options pd cp fs20"></i>
+                <i dropdownToggle class="icon-options pd cp font-20"></i>
                 <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
                     <li role="menuitem">
                         <a class="dropdown-item">
@@ -111,13 +111,13 @@
                             </div>
                         </th>
 
-                        <th class="td-search-box ">
+                        <th class="td-search-box">
                             <div><span> Account</span></div>
                         </th>
 
 
                         <th *ngIf="showFieldFilter.voucherType">
-                            <div class="d-flex ">
+                            <div class="d-flex">
                                 <div class="">Voucher Type</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
@@ -144,9 +144,9 @@
                             </div>
                         </th>
 
-                        <th *ngIf="(purchaseRegisteDetailedResponse$ | async).debitTotal" class=" text-right ">
+                        <th *ngIf="(purchaseRegisteDetailedResponse$ | async).debitTotal" class="text-right">
                             <div class="d-flex justify-content-end">
-                                <div class=" text-right ">Purchase</div>
+                                <div class="text-right">Purchase</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
                                             sortingTemplate;
@@ -159,9 +159,9 @@
                             </div>
                         </th>
 
-                        <th *ngIf="(purchaseRegisteDetailedResponse$ | async)?.creditTotal" class=" text-right ">
+                        <th *ngIf="(purchaseRegisteDetailedResponse$ | async)?.creditTotal" class="text-right">
                             <div class="d-flex justify-content-end">
-                                <div class=" text-right  ">Return</div>
+                                <div class="text-right ">Return</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
                                             sortingTemplate;
@@ -172,15 +172,15 @@
                             </div>
                         </th>
                         <th *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.quantityTotal"
-                            class=" text-right ">
+                            class="text-right">
                             <div class="d-flex justify-content-end">
-                                <div class=" text-right  ">Qty/Unit</div>
+                                <div class="text-right ">Qty/Unit</div>
                             </div>
                         </th>
                         <th *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.rateTotal"
-                            class=" text-right ">
+                            class="text-right">
                             <div class="d-flex justify-content-end">
-                                <div class=" text-right ">Rate</div>
+                                <div class="text-right">Rate</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
                                             sortingTemplate;
@@ -192,9 +192,9 @@
                         </th>
 
                         <th *ngIf="showFieldFilter.discount && (purchaseRegisteDetailedResponse$ | async)?.discountTotal"
-                            class=" text-right ">
+                            class="text-right">
                             <div class="d-flex justify-content-end">
-                                <div class=" text-right  ">Discount</div>
+                                <div class="text-right ">Discount</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
                                             sortingTemplate;
@@ -208,9 +208,9 @@
                         </th>
 
                         <th *ngIf="showFieldFilter.tax && (purchaseRegisteDetailedResponse$ | async).taxTotal"
-                            class=" text-right ">
+                            class="text-right">
                             <div class="d-flex justify-content-end">
-                                <div class=" text-right ">Tax</div>
+                                <div class="text-right">Tax</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="
                                             sortingTemplate;
@@ -310,7 +310,7 @@
             </table>
         </div>
 
-        <div class="text-center " *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > paginationLimit">
+        <div class="text-center" *ngIf="(purchaseRegisteDetailedResponse$ | async).totalItems > paginationLimit">
             <pagination [totalItems]="
                     (purchaseRegisteDetailedResponse$ | async).totalItems
                 " [(ngModel)]="getDetailedPurchaseRequestFilter.page" [maxSize]="5" class="pagination-sm "
@@ -318,7 +318,7 @@
                 nextText="&#9658; " (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
-    <div class="no-data " *ngIf="
+    <div class="no-data" *ngIf="
             (purchaseRegisteDetailedResponse$ | async).items.length === 0 &&
             !(isGetPurchaseDetailsInProcess$ | async)
         ">
@@ -425,7 +425,7 @@
 
     <div class="icon-sort-asc" *ngIf="getDetailedPurchaseRequestFilter.sortBy !== col" (click)="sortbyApi('asc', col)"
         [ngClass]="{
-            activeTextColor:
+            'active-text-color':
                 getDetailedPurchaseRequestFilter.sortBy === col &&
                 getDetailedPurchaseRequestFilter.sort === 'asc'
         }"></div>
@@ -434,7 +434,7 @@
             getDetailedPurchaseRequestFilter.sortBy === col &&
             getDetailedPurchaseRequestFilter.sort === 'asc'
         " (click)="sortbyApi('desc', col)" [ngClass]="{
-            activeTextColor:
+            'active-text-color':
                 getDetailedPurchaseRequestFilter.sortBy === col &&
                 getDetailedPurchaseRequestFilter.sort === 'asc'
         }"></div>
@@ -443,7 +443,7 @@
             getDetailedPurchaseRequestFilter.sortBy === col &&
             getDetailedPurchaseRequestFilter.sort === 'desc'
         " (click)="sortbyApi('asc', col)" [ngClass]="{
-            activeTextColor:
+            'active-text-color':
                 getDetailedPurchaseRequestFilter.sortBy === col &&
                 getDetailedPurchaseRequestFilter.sort === 'desc'
         }"></div>

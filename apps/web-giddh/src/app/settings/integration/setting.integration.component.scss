@@ -3,11 +3,11 @@
     max-height: 18px;
 }
 
-.fs18 {
+.font-18 {
     font-weight: bold;
 }
 
-.pdBth20 {
+.pd-t05th20 {
     padding: 0 20px;
 }
 /*
@@ -66,6 +66,11 @@
 .form-control, .linked-account{
     width:100% !important;
 }
+
+.payment-text{
+    color: $gray;
+}
+
 /*responsive*/
 @media(max-width:1359px) {
     .xs-pl-15 {
@@ -88,6 +93,7 @@
         height: 36px;
     }
 }
+
 @media(max-width:1199px){
     .edit-save-button{
         display: flex;

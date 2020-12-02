@@ -1,7 +1,9 @@
+@import '../../../../../assets/css/color.scss';
+
 .list-item:focus,
 .list-item:focus .list-item {
-    color: #fff !important;
-    background: #2d9ee0;
+    color: $white !important;
+    background: $primary;
 }
 .virtual-group-list {
     height: 100%;

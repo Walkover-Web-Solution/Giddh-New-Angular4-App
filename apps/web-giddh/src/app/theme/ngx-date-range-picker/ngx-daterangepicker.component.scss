@@ -585,7 +585,7 @@ $input-height: 3rem !default;
             width: 50px;
             margin: 0 auto;
             background: $whisper-light;
-            border: 1px solid $whisper-light;
+            border: 1px solid $gainsboro;
             padding: 2px;
             outline: 0;
             font-size: 12px;
@@ -675,7 +675,7 @@ $input-height: 3rem !default;
     /* ranges */
     .show-ranges {
         .drp-calendar.left {
-            border-left: 1px solid $gainsboro-light;
+            border-left: 1px solid $gainsboro;
         }
     }
 
@@ -858,7 +858,7 @@ $input-height: 3rem !default;
     .btn.btn-danger {
         background: $whisper-color;
         color: $scarlet;
-        border: 1px solid $whisper-color;
+        border: 1px solid $gainsboro;
         margin-right: 10px;
 
         &:hover,

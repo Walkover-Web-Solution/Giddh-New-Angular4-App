@@ -42,3 +42,9 @@
 .btn-icon .icon-trash {
     font-size: 20px;
 }
+.icon-pointer .active-text-color {
+    color: $wild-blue-yonder !important;
+}
+.icon-pointer {
+    cursor: pointer;
+}

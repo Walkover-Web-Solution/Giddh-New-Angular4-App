@@ -1,4 +1,4 @@
-<div class="branch-transfer-report pt-1">
+<div class="branch-transfer-report pd-t1">
     <div class="container-fluid">
         <div class="d-flex date-advance-search">
             <div class="d-flex">
@@ -30,11 +30,11 @@
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span
-                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'dateOfSupply' || (branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'dateOfSupply' || (branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
-                        <th width="17%" class="bdrR bdrB td-search-box">
+                        <th width="17%" class="bd-rr bd-rb td-search-box">
                             <div [hidden]="inlineSearch == 'senderReceiver'">
                                 <span>Sender/Receiver</span>
                                 <i class="icon-search" (click)="focusOnColumnSearch('senderReceiver');"></i>
@@ -58,7 +58,7 @@
                         </th>
                         <th width="10%" (click)="sortBranchTransferList('totalAmount')" class="text-right">Total Amount
                             <span
-                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'activeTextColor' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'totalAmount' || (branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'totalAmount' || (branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="10%">Action</th>
                     </tr>
@@ -117,7 +117,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="paginationWrapper" *ngIf="branchTransferResponse.totalPages > 1">
+        <div class="pagination-wrapper" *ngIf="branchTransferResponse.totalPages > 1">
             <pagination [totalItems]="branchTransferResponse.totalPages" [(ngModel)]="branchTransferResponse.page"
                 [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
                 (pageChanged)="pageChanged($event)"></pagination>
@@ -132,7 +132,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body pdL2 pdR2">
+    <div class="modal-body pd-l2 pd-r2">
         <form class="clearfix">
             <div class="row">
                 <div class="col-sm-4"><label>Voucher Type</label></div>
@@ -159,7 +159,7 @@
                 </div>
             </div>
             <div class="pull-right">
-                <button class="btn btn-md btn-success mrR1" type="button" (click)="search()">
+                <button class="btn btn-md btn-success mr-r1" type="button" (click)="search()">
                     Search
                 </button>
                 <button class="btn btn-md btn-cancel" type="button" (click)="refreshTempPostParams(); hideModal(false)">
@@ -181,7 +181,7 @@
 <!-- branch transfer modal -->
 <ng-template #branchtransfertemplate>
     <div class="recept-modal">
-        <div class="modal-body radius-none pr-0 pl-0 pt-0 no-padding">
+        <div class="modal-body radius-none pr-0 pl-0 pt-0 p-0">
             <new-branch-transfer (hideModal)="hideModal(true)"
                 [editBranchTransferUniqueName]="editBranchTransferUniqueName" [branchTransferMode]="branchTransferMode">
             </new-branch-transfer>
