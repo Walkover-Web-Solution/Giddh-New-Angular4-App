@@ -31,25 +31,21 @@
             <div class="branch-form">
                 <div class="branch-form-field">
                     <label>
-                        Alias <span class="red-text">*</span>
+                        Branch Name <span class="red-text">*</span>
                     </label>
                     <input [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
-                        type="text" class="form-control" formControlName="alias" placeholder="Enter Alias">
+                        type="text" class="form-control" formControlName="alias" placeholder="Enter Name">
                     <span class="danger pl-1"
                         *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength">
                         Max. 50 characters allowed
                     </span>
                 </div>
-                <div class="branch-form-field">
+                <!-- This field is kept hidden, DO NOT REMOVE -->
+                <div hidden class="branch-form-field">
                     <label>
                         Branch Name <span class="red-text">*</span>
                     </label>
-                    <input [class.error-box]="branchForm?.get('name')?.touched && branchForm?.get('name')?.invalid"
-                        type="text" class="form-control" formControlName="name" placeholder="Enter Name">
-                    <span class="danger pl-1"
-                        *ngIf="branchForm?.get('name')?.touched && branchForm?.get('name')?.errors?.maxlength">
-                        Max. 100 characters allowed
-                    </span>
+                    <input type="text" class="form-control" formControlName="name" placeholder="Enter Name">
                     <!-- <span class="ml-2">
                     <input type="checkbox" class="mr-4"> Is it a Sub-Branch ?
                 </span> -->
