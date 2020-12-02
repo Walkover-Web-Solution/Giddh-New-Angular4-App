@@ -1,16 +1,16 @@
 <div>
-    <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix">
+    <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
         <h3 class="modal-title bg" id="modal-title">{{confirmationMessages[module]?.title}}</h3>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
     </div>
-    <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+    <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
         <form name="newRole" novalidate class="" autocomplete="off">
-            <div class="modal_wrap mr-b2">
+            <div class="modal-wrap mr-b2">
                 <h3>{{confirmationMessages[module]?.message1}}</h3>
                 <p class="text-gray font-14 mt-05">{{confirmationMessages[module]?.message2}}</p>
             </div>
-            <div class="d-flex" style="justify-content: flex-start">
-                <button type="submit" class="btn btn-md btn-success mrR1" (click)="onConfirmation()">Yes</button>
+            <div class="d-flex justify-content-start">
+                <button type="submit" class="btn btn-md btn-success mr-r1" (click)="onConfirmation()">Yes</button>
                 <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">No</button>
             </div>
         </form>

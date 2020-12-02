@@ -1,23 +1,23 @@
 /**new modal design**/
 @import "../../../assets//css/color.scss";
 .modal-body label {
-    color: #707070;
+    color: $gray-44;
     margin-bottom: 5px;
 }
 
 label .required {
     position: relative;
     top: 0px;
-    color: #cf0606;
+    color: $strong-red;
 }
 
 .form-control {
-    color: #707070;
+    color: $gray-44;
 }
 
 .modal-body p {
     font-size: 14px;
-    color: #b3b3b3;
+    color: $extra-pink-swan;
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -29,26 +29,26 @@ label .required {
     display: block;
 }
 
-.welcome_wrapper {
+.welcome-wrapper {
     padding: 25px 0;
 }
 
-.welcome_header:after {
+.welcome-header:after {
     display: none;
 }
 
-.add-companyDetail {
-    background-color: #f7f8fa;
+.add-company-detail {
+    background-color: $alice-blue-light;
     margin-bottom: 0 !important;
 }
 
-.welcome_header h1 {
+.welcome-header h1 {
     font-size: 30px;
     font-family: "opensans-regular";
     color: $midnight-blue;
 }
 
-.add-companyDetail p {
+.add-company-detail p {
     max-width: 300px;
     margin: 0 auto !important;
     display: block;
@@ -61,13 +61,20 @@ label .required {
 }
 
 .name-error {
-    color: #e51f0c;
+    color: $scarlet;
     font-size: 11px;
     float: right;
 }
 
-.add-companyDetail {
-    background-color: #f7f8fa;
+.add-company-detail {
+    background-color: $alice-blue-light;
+}
+
+.welcome-select{
+    .select-caret{
+        width: 85px;
+        margin-right: 28px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -82,10 +89,10 @@ label .required {
         margin: 30px auto;
         display: block;
     }
-    .welcome_header h1 {
+    .welcome-header h1 {
         font-size: 20px !important;
     }
-    .welcome_wrapper {
+    .welcome-wrapper {
         padding: 15px 0;
     }
 }

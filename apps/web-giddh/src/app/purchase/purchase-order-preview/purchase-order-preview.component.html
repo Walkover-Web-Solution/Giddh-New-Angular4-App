@@ -28,7 +28,7 @@
                                         </div>
                                     </div>
                                     <div class="col-5 col-sm-5">
-                                        <div class="inovice-amount pull-right">
+                                        <div class="invoice-amount pull-right">
                                             {{row.grandTotal?.amountForAccount | giddhCurrency}}
                                         </div>
                                     </div>
@@ -41,7 +41,7 @@
             </div>
             <!-- endregion -->
 
-            <div class="col-sm-12 col-lg-8 pd0 invoice-detail-wrapper">
+            <div class="col-sm-12 col-lg-8 p-0 invoice-detail-wrapper">
 
                 <div class="scroll-half">
                     <div class="invoice-detail">
@@ -138,7 +138,7 @@
                     </div>
                     <div class="invoice-image-section">
                         <div class="relative">
-                            <div class="pos-rel" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
+                            <div class="position-relative" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
                                 <div class="loader"></div>
                             </div>
                             <div class="error" [hidden]="!pdfPreviewHasError">

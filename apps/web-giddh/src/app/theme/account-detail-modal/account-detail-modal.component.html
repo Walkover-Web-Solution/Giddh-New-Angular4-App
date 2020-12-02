@@ -1,6 +1,6 @@
 <!-- AccountInfo -->
-<div *ngIf="isModalOpen" class="p-modal-tolltip">
-    <div class="tb-pl-modal-header" style="padding: 0 !important;">
+<div *ngIf="isModalOpen" class="p-modal-tooltip">
+    <div class="tb-pl-modal-header p-0">
 
         <div class="account-detail-modal-header-div">
 
@@ -8,9 +8,9 @@
 
                 <div class="account-detail-custom-header">
 
-                    <div class="d-flex" style="padding: 0px; border-right:0px;">
+                    <div class="d-flex p-0 border-right-0">
 
-                        <div class="account-detail-padding" style="flex: 1;border-right: 0px;">
+                        <div class="account-detail-padding flex-grow-1 border-right-0">
                             <h3 class="account-detail-custom-title">{{accInfo?.name}}</h3>
                         </div>
 
@@ -61,29 +61,29 @@
 
 
 <!--Modal for Mail/SMS-->
-<div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true"
+<div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true"
     (click)="$event.stopPropagation()">
     <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
 
         <div class="modal-content" style="padding: 8px 8px 8px 8px;">
 
-            <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
+            <div class="border-radius-0" style="padding: 8px 8px 8px 8px;">
 
-                <div class="modal-header themeBg pdL2 pdR2 clearfix" style="padding: 8px 8px 8px 8px;">
+                <div class="modal-header theme-bg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
                     <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
                         (click)="mailModal.hide()">×</span>
                     <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
                 </div>
 
-                <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
+                <div class="modal-body pd-l2 pd-r2 clearfix" style="padding: 0px !important;">
                     <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:</h1>
                     <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject
                         [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
                     <h1 class="mr-b1" style="margin-top:15px;">Type message body:</h1>
                     <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4"
                         style="resize:none;" placeholder="start typing your message here"></textarea>
-                    <small class="mr-t mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to
+                    <small class="mr-t05 mr-b05 grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to
                         insert data
                         in your message body. Anything
                         followed by '%s_' represents the position where actual data will be placed.

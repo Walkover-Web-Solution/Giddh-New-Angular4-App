@@ -5,7 +5,7 @@
     </div>
     <!-- page Title -->
     <!-- <div class="top-bar col-xs-12 col-sm-12 clearfix bdrB">
-        <h1 class="section-title d-inline-block"><strong>Manufacture of Product</strong><label *ngIf="isUpdateCase" class="mrL2">No.
+        <h1 class="section-title d-inline-block"><strong>Manufacture of Product</strong><label *ngIf="isUpdateCase" class="mr-l2">No.
                 {{manufacturingDetails.voucherNumber}}</label></h1>
         <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
     </div> -->
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
-                        <div class="form-group pos-rel">
+                        <div class="form-group position-relative">
                             <label class="d-block">Quantity</label>
                             <input type="text" class="form-control" [disabled]="!manufacturingDetails.stockUniqueName" decimalDigitsDirective [DecimalPlaces]="4" (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)" (blur)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)"
                                 [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="manufacturingMultipleOf" />
@@ -34,14 +34,14 @@
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
-                        <div class="form-group mrR1">
+                        <div class="form-group mr-r1">
                             <label class="d-block">Date</label>
                             <div class="col-xs-8" style="padding: 0">
                                 <input type="text" name="invoiceDateRange" bsDatepicker required class="form-control" style="width: 100%" [(ngModel)]="manufacturingDetails.date" [bsValue]="bsValue" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                             </div>
                         </div>
 
-                        <!-- <div class="form-group mrR1" [attachOutsideOnClick]="true" (clickOutside)="showFromDatePicker=false;">
+                        <!-- <div class="form-group mr-r1" [attachOutsideOnClick]="true" (clickOutside)="showFromDatePicker=false;">
                             <label class="d-block">Date</label>
                             <div class="input-group">
                                 <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format(giddhDateFormat)" (focus)="showFromDatePicker = true;" class="form-control" required />
@@ -57,9 +57,9 @@
                                     <li>
                                         <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
                                     </li>
-                                    <li class="pd-1 clearfix pdT pdB">
+                                    <li class="pd-1 clearfix pdT pd-b05">
                                         <span class="btn-group pull-left">
-                                            <button type="button" class="btn btn-xs btn-primary mrR"
+                                            <button type="button" class="btn btn-xs btn-primary mr-r05"
                                                 (click)="setToday();showFromDatePicker = false;">Today</button>
                                             <button type="button" class="btn btn-xs btn-success"
                                                 (click)="showFromDatePicker = false">Done</button>
@@ -131,7 +131,7 @@
                                     <td> {{ getCalculatedAmount(linkedStockQuantity, linkedStockRate) | number:'1.0-2' }}
                                     </td>
                                     <td class="action">
-                                        <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks, $event)" class="ico-btn pd0"><i
+                                        <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks, $event)" class="ico-btn p-0"><i
                                                 class="icon-plus text-danger" aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
@@ -142,7 +142,7 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot class="bdrT pdT2 pdB2 bdrB">
+                            <tfoot class="bd-rt pd-t2 pd-b2 bd-rb">
                                 <tr>
                                     <th colspan="2">Total:</th>
                                     <th class="text-right"> {{ getTotal('linkedStocks', 'quantity') | number:'1.0-4' }}
@@ -179,7 +179,7 @@
                             <tbody *ngIf="manufacturingDetails && liabilityGroupAccounts$ | async">
                                 <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
                                     <td colspan="1">
-                                        <div class="custom-select pos-rel">
+                                        <div class="custom-select position-relative">
                                             <sh-select [options]="liabilityGroupAccounts$ | async" [ItemHeight]="56" [isFilterEnabled]="true" name="baseAccount{{i}}" [(ngModel)]="expense.baseAccount.uniqueName" class="pull-left  select-caret" style="width: 100%">
                                             </sh-select>
                                         </div>
@@ -188,7 +188,7 @@
                                         <label class="pd">to</label>
                                     </td>
                                     <td>
-                                        <div class="custom-select pos-rel">
+                                        <div class="custom-select position-relative">
                                             <sh-select [options]="expenseGroupAccounts$ | async" [ItemHeight]="56" [isFilterEnabled]="true" name="expense{{i}}" [(ngModel)]="expense.transactions[0].account.uniqueName" class="pull-left  select-caret" style="width: 100%">
                                             </sh-select>
                                         </div>
@@ -208,7 +208,7 @@
                                         <label class="pd">to</label>
                                     </td>
                                     <td>
-                                        <div class="pos-rel">
+                                        <div class="position-relative">
                                             <sh-select [forceClearReactive]="needForceClearGroup$ | async" (selected)="addExpense(otherExpenses)" [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'"
                                                 [ItemHeight]="56"></sh-select>
                                         </div>
@@ -219,13 +219,13 @@
                                                 #transactionAmount></div>
                                     </td>
                                     <td>
-                                        <button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="icon-plus text-danger"
+                                        <button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn p-0"><i class="icon-plus text-danger"
                                                 aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="bdrT clearfix pd-t1 mr-t1 mr-b1 row">
+                        <div class="bd-rt clearfix pd-t1 mr-t1 mr-b1 row">
                             <span class="col-xs-7 col-sm-7"><strong>Total Manufacturing Expense:</strong></span>
                             <span class="col-xs-5 col-sm-5 text-right"><strong>{{ getTotal('otherExpenses', 'amount') | number:'1.0-2' }}</strong></span>
                         </div>

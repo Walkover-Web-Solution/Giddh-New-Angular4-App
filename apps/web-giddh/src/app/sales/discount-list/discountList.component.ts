@@ -30,21 +30,21 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
       td {
           vertical-align: middle !important;
       }
-      .customItem {
+      .custom-item {
       padding-top: 5px;
 
       }
 
-      .customItem:hover {
+      .custom-item:hover {
           background-color:#e3e4ed !important;
       }
 
-      .customItem {
+      .custom-item {
           padding: 5px;
 
       }
 
-      .customItem:hover span {
+      .custom-item:hover span {
           color:#5B64C9 !important;
       }
 

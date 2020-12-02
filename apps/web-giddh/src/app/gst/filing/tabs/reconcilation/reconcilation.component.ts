@@ -19,6 +19,7 @@ import { AccountService } from '../../../../services/account.service';
 @Component({
 	selector: 'reconcile',
 	templateUrl: './reconcilation.component.html',
+	styleUrls: ['reconcilation.component.scss'],
 	providers: [
 		{
 			provide: BsDropdownConfig, useValue: { autoClose: true },

@@ -1,9 +1,11 @@
+@import "../../../assets/css/color.scss";
+
 footer#footer.absoulte-footer {
     text-align: left;
     margin-top: 0;
     height: 54px;
     background-color: transparent;
-    color: #ddd;
+    color: $gainsboro-light;
     line-height: 2.3;
     font-size: 12px;
     // position: absolute !important;

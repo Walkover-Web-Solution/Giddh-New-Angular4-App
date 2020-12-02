@@ -1,10 +1,14 @@
 @import "../../assets/css/color.scss";
 
+.inventory-main{
+    min-height:100%;
+}
+
 .inventory-control ::ng-deep.nav > li > a {
     padding: 2px 0px !important;
     margin-right: 35px !important;
     border-bottom: 4px solid transparent !important;
-    color: black !important;
+    color: $black !important;
     border-top: transparent !important;
     border-right: transparent !important;
     border-left: transparent !important;
@@ -15,11 +19,11 @@
 .inventory-control ::ng-deep.nav.nav-tabs {
     margin-bottom: 0;
     padding: 0 0px 0 15px !important;
-    background-color: #fff;
+    background-color: $white;
     z-index: 9;
     position: relative;
     top: -4px;
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
 
     position: absolute !important;
     top: 0;
@@ -35,7 +39,7 @@
 .inventory-control ::ng-deep.nav-tabs > ::ng-deep li.active > a,
 .nav-tabs > ::ng-deep li.active > a:focus,
 ::ng-deep.nav-tabs > li.active > a:hover {
-    color: #1c1c1c !important;
+    color: $nero !important;
     border-bottom: 4px solid $deep-sky-blue !important;
     cursor: pointer !important;
     background-color: unset !important;

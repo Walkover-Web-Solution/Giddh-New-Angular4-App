@@ -6,11 +6,11 @@
     </div>
 </div>
 <ng-container *ngIf="!showLoader">
-<div class="transactions-page pt-15 pos-rel clearfix">
+<div class="transactions-page pt-15 position-relative clearfix">
 
     <!-- ledger header -->
     <div class="col-md-12">
-        <div class="">
+        <div>
 
             <div class="form-inline d-block flex-row flex-nowrap">
                 <div class="form-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -18,15 +18,9 @@
                     <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                 </div>
                 <div class="form-group cursor-pointer">
-
-
-                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
+                    <div class="advance-icon align-items-center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
                         <span class="icon-advance-filter"></span>
                     </div>
-
-                    <!-- <button class="btn-link pdL0" (click)="onOpenAdvanceSearch()">Advance Search</button> -->
-                    <!-- <button type="button" class="btn btn-success" (click)="go()">GO</button> -->
-
                 </div>
                 <div class="form-group expand-collapse-btn">
 
@@ -41,29 +35,24 @@
                     </button>
                 </div>
                 <div class="expand-export">
-                    <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :'Expand All'}}
+                    <button type="button" class="btn btn-default expand-btn-hide-desktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :'Expand All'}}
                     </button>
                     <button type="button" class="btn btn-default export-btn pull-right"
                         (click)="exportDaybook()">Export</button>
                 </div>
-
             </div>
-
-
         </div>
     </div>
 </div>
 
 <div class="container-fluid">
     <div class="box clearfix mt-15">
-        <div class="text-center mr-b2 transctionReport">
-            <!-- <h2 class="account_Name fs20 primary_clr">{{companyName | uppercase}}</h2>
-      <br /> -->
+        <div class="text-center mr-b2 transaction-report">
             <p>Transaction Report</p>
             <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
         </div>
 
-        <div class=" clearfix trial-balance table-responsive">
+        <div class="clearfix trial-balance table-responsive">
 
             <table class="tb-head table-bordered table basic on-mobile-view">
                 <thead>
@@ -107,10 +96,10 @@
                     </tr>
                     <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                         <tr *ngFor="let details of entry.otherTransactions">
-                            <td class="hideTD"></td>
+                            <td class="hide-td"></td>
                             <td data-title="Particular">{{ details.particular.name }}</td>
-                            <td class="hideTD"></td>
-                            <td class="hideTD"></td>
+                            <td class="hide-td"></td>
+                            <td class="hide-td"></td>
                             <td class="text-right" data-title="Debit Amt">
                                 <span *ngIf="details.type === 'DEBIT'">{{ details.amount || 0 |giddhCurrency}}</span>
                                 <span *ngIf="details.type !== 'DEBIT'">-</span>
@@ -152,7 +141,7 @@
             </div>
         </div>
 
-        <div class=" mr-t2 text-center">
+        <div class="mr-t2 text-center">
             <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems  |giddhCurrency}}
                 Transactions
                 | {{(daybookData$ | async)?.totalPages  |giddhCurrency}} Pages

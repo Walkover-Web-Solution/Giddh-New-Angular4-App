@@ -1,4 +1,4 @@
-<div #dd [style.width]="width" class="pos-rel">
+<div #dd [style.width]="width" class="position-relative">
     <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
         (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)"
         (keydown)="keydownUp($event)">
@@ -9,7 +9,7 @@
             <ng-container *ngIf="selectedValues?.length && !showCheckbox">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
-                    <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)"
+                    <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)"
                         (click)="clearSingleSelection($event, sl)">&times;</span>
                 </span>
             </ng-container>

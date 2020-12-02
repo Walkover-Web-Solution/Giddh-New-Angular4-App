@@ -16,7 +16,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
-    styleUrls: ['./onboarding.component.css']
+    styleUrls: ['./onboarding.component.scss']
 
 })
 
