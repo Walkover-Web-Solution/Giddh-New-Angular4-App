@@ -615,7 +615,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private purchaseRecordAction: PurchaseRecordActions,
         private modalService: BsModalService,
         public purchaseOrderService: PurchaseOrderService,
-        private searchService: SearchService, 
+        private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions
     ) {
         this.getInventorySettings();
@@ -4384,6 +4384,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
                 }
             }
+            entry.taxes = [];
             entry.cessSum = 0;
             return entry;
         });
@@ -4604,13 +4605,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
 
                     } else {
+                        const selectedTax = this.companyTaxesList.find(tax => tax.uniqueName === ta.uniqueName);
                         salesEntryClass.taxes.push({
                             amount: ta.taxPercent,
                             uniqueName: ta.uniqueName,
                             isChecked: true,
                             isDisabled: false,
                             type: ta.taxType,
-                            name: ta.name || ''
+                            name: ta.name || (selectedTax && selectedTax.name) || ''
                         });
                     }
                 });
