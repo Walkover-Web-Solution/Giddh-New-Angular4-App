@@ -4376,6 +4376,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
                 }
             }
+            entry.taxes = [];
             entry.cessSum = 0;
             return entry;
         });
