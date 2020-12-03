@@ -1,29 +1,28 @@
 <div class="modal-header">
-    <h4 class="modal-title pull-left">Bulk Export - Total 30</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <h4 class="modal-title pull-left">Bulk Export - Total {{totalItems}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal();">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
 <div class="modal-body">
-   <div class="export-modal-wraaper">
-       <div class="row mb-15">
-           <div class="col-sm-4">
-               <label>Export</label>
-           </div>
-           <div class="col-sm-8">
-               <div class="export-container">
-                <span class="pd0 mrR3">
-                    <input id="radio-1" name="pdfType"
-                        type="radio" class="radio-custom cp ml0">
+    <div class="export-modal-wraaper">
+        <!-- <div class="row mb-15">
+            <div class="col-sm-4">
+                <label>Export</label>
+            </div>
+            <div class="col-sm-8">
+                <div class="export-container">
+                    <span class="pd0 mrR3">
+                        <input id="radio-1" name="pdfType" type="radio" class="radio-custom cp ml0">
                         <label for="radio-1" class="radio-custom-label">PDf</label>
-                </span>
-                <span class="pd0 mrR3">
-                    <input id="radio-2" name="pdfType" type="radio" class="radio-custom cp ml0">
-                    <label for="radio-2" class="radio-custom-label">Excel</label>
-                </span>
-               </div>
-           </div>
-       </div>
+                    </span>
+                    <span class="pd0 mrR3">
+                        <input id="radio-2" name="pdfType" type="radio" class="radio-custom cp ml0">
+                        <label for="radio-2" class="radio-custom-label">Excel</label>
+                    </span>
+                </div>
+            </div>
+        </div>
         <div class="row mb-15">
             <div class="col-sm-4">
                 <label>PDF</label>
@@ -40,8 +39,8 @@
                     </span>
                 </div>
             </div>
-        </div>
-        <div class="row mb-15">
+        </div> -->
+        <!-- <div class="row mb-15">
             <div class="col-sm-4">
                 <label>Order</label>
             </div>
@@ -57,16 +56,27 @@
                     </span>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row mb-15">
             <div class="col-sm-4">
                 <label>Select Copy</label>
             </div>
             <div class="col-sm-8">
-                <sh-select></sh-select>
+                <sh-select [options]="downloadCopyOptions" placeholder="Select Order" [multiple]="true" name="downloadCopy" [(ngModel)]="copyTypes" [isFilterEnabled]="true" [useInBuiltFilterForIOptionTypeItems]="true">
+                    <ng-template #optionTemplate let-option="option">
+                        <ng-container>
+                            <a href="javascript:void(0)" class="list-item d-flex">
+                                <span><input type="checkbox" [value]="option.value"></span>&nbsp;
+                                <span>
+                                    <div class="item">{{ option.label }}</div>
+                                </span>
+                            </a>
+                        </ng-container>
+                    </ng-template>
+                </sh-select>
             </div>
         </div>
-        <div class="row mb-15">
+        <!-- <div class="row mb-15">
             <div class="col-sm-4 d-flex">
                 <input type="checkbox" class="show-on-mobile mr-3">
                 <label>Attachment</label>
@@ -77,11 +87,11 @@
 
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row mb-15">
             <div class="col-sm-12">
-                <button class="btn btn-success">Download</button>
-                <button class="btn btn-success">Print</button>
+                <button class="btn btn-success" (click)="exportVouchers(false)">Download</button>
+                <!-- <button class="btn btn-success">Print</button> -->
             </div>
         </div>
         OR
@@ -89,13 +99,13 @@
         <br>
         <div class="row mb-15">
             <div class="col-sm-12">
-                <label class="mb-1">You can add multiple id's separeted comma</label>
+                <label class="mb-1">You can add multiple id's comma separated</label>
             </div>
             <div class="col-sm-12">
                 <!-- Email id could be mulitiple   -->
-                <textarea type="text" placeholder="Recipitent Email Id's" class="form-control mb-15 mulitiple-email"></textarea>
-                <button class="btn btn-success">Send Email</button>
+                <textarea type="text" placeholder="Recipient Email Id's" class="form-control mb-15 mulitiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
+                <button class="btn btn-success" (click)="exportVouchers(true)">Send Email</button>
             </div>
         </div>
-   </div>
+    </div>
 </div>
