@@ -26,12 +26,12 @@ describe('This is Sundry Debtors Test', function() {
         })
     })
 
-    before('Login in Giddh Web App', function () {
-        cy.log('I run before test in spec file!!!!!!')
-        cy.log(Cypress.env('url'))
-        cy.loginWithEmail(testData.Email, testData.Password);
+    // before('Login in Giddh Web App', function () {
+    //     cy.log('I run before test in spec file!!!!!!')
+    //     cy.log(Cypress.env('url'))
+    //     cy.loginWithEmail(testData.Email, testData.Password);
 
-    });
+    // });
 
     xit('Ledger entry without taxes and Discount ', function () {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{

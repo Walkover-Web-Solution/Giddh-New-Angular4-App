@@ -31,7 +31,7 @@ describe('This is Login Test', function() {
     //    cy.loginWithGoogle("anc", "abc")
     // })
 
-    it('Login with Email', () => {
+    xit('Login with Email', () => {
         cy.loginWithEmail(testData.Email, testData.Password)
 
     })
