@@ -1,6 +1,6 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
@@ -19,6 +19,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
     @Output() public pageChangeEvent: EventEmitter<any> = new EventEmitter(null);
     @Output() public FilterByAPIEvent: EventEmitter<any> = new EventEmitter(null);
+    /** Stores the current branch unique name */
+    @Input() public currentBranchUniqueName: string;
 
     public moment = moment;
     public companyUniqueName: string;
@@ -298,7 +300,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                     from: p.fromDate,
                     to: p.toDate,
                     groupUniqueName: p.groupName
-                }
+                },
+                branchUniqueName: this.currentBranchUniqueName
             };
 
             request.data = Object.assign({}, request.data, formattedQuery);

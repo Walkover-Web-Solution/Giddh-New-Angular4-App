@@ -101,11 +101,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
         this.tagManagerUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG');
 
-        this.breakpointObserver.observe([
-            '(max-width: 1023px)'
-        ]).subscribe(result => {
-            this.changeOnMobileView(result.matches);
-        });
         if (Configuration.isElectron) {
             // electronOauth2
             const { ipcRenderer } = (window as any).require("electron");
@@ -143,11 +138,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
-        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
+        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 
     public ngOnInit() {
+        this.breakpointObserver.observe([
+            '(max-width: 1023px)'
+        ]).subscribe(result => {
+            this.changeOnMobileView(result.matches);
+        });
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
 

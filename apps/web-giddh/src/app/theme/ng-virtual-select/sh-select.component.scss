@@ -126,6 +126,17 @@ i.close.icon.clear:hover::after {
     cursor: not-allowed;
 }
 
+:host(.disabled-ledger) {
+    .sh-select-disabled {
+        background: $white !important;
+        .selectedVal,
+        .form-control,
+        .form-control[readonly] {
+            background: $white !important;
+        }
+    }
+}
+
 .selectedVal {
     border: 1px solid $gainsboro !important;
     padding-right: 22px !important;

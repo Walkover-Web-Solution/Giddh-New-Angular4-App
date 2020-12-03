@@ -420,6 +420,12 @@ tfoot td .tableSec.form-group {
     width: 100%;
     margin-bottom: 20px !important;
 }
+.input-group {
+    sh-select.branch-dropdown {
+        width: 100%;
+        margin-right: 8px;
+    }
+}
 @media(max-width:991px){
     #table-recipt{
        width: calc(100% - 30px);

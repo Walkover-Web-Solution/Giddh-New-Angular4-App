@@ -64,7 +64,7 @@ import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
@@ -379,6 +379,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
                             this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
+                            this.activeCompanyForDb.uniqueName = this.currentBranch ? this.currentBranch.uniqueName : ''
                         }
                     });
                 }
@@ -442,8 +444,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
 
                 this.activeCompanyForDb = new CompAidataModel();
-                this.activeCompanyForDb.name = selectedCmp.name;
-                this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
+                    this.activeCompanyForDb.uniqueName = this.generalService.currentBranchUniqueName;
+                } else {
+                    this.activeCompanyForDb.name = selectedCmp.name;
+                    this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
+                }
             }
 
             this.selectedCompanyCountry = selectedCmp.country;
@@ -457,11 +464,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (res) {
                 this.createNewCompanyUser = res;
             }
-        });
-        this.generalService.isMobileSite.subscribe(s => {
-            this.isMobileSite = s;
-            this.menuItemsFromIndexDB = DEFAULT_MENUS;
-            this.accountItemsFromIndexDB = DEFAULT_AC;
         });
         this.totalNumberOfcompanies$ = this.store.select(state => state.session.totalNumberOfcompanies).pipe(takeUntil(this.destroyed$));
         this.generalService.invokeEvent.subscribe(value => {
@@ -480,6 +482,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch =>
                         (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                    this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
+                    this.activeCompanyForDb.uniqueName = this.currentBranch ? this.currentBranch.uniqueName : ''
                 } else {
                     this.currentBranch = '';
                 }
@@ -509,6 +513,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
         });
+        this.generalService.isMobileSite.subscribe(s => {
+            this.isMobileSite = s;
+            this.companyService.getMenuItems().subscribe(response => {
+                if (response && response.body) {
+                    let branches = [];
+                    this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
+                        branches = data || [];
+                    });
+                    reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
+                    this.menuItemsFromIndexDB = DEFAULT_MENUS;
+                    this.accountItemsFromIndexDB = DEFAULT_AC;
+                }
+            });
+        });
+
+        this.sideBarStateChange(true);
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
 
@@ -1105,18 +1125,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 17) : slice(this.menuItemsFromIndexDB, 0, 10);
+                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 10);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 7);
             } else {
-                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 17) : slice(this.menuItemsFromIndexDB, 0, 8);
+                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 5);
             }
 
             // sortby name
             this.menuItemsFromIndexDB = orderBy(this.menuItemsFromIndexDB, ['name'], ['asc']);
 
-            let combined = this._dbService.extractDataForUI(dbResult.aidata);
-            this.store.dispatch(this._generalActions.setSmartList(combined));
+            // let combined = this._dbService.extractDataForUI(dbResult.aidata);
+            // this.store.dispatch(this._generalActions.setSmartList(combined));
         } else {
             let data: IUlist[];
             this.smartCombinedList$.pipe(take(1)).subscribe(listResult => {
@@ -1229,6 +1249,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this._dbService.clearAllData();
             localStorage.setItem('isNewArchitecture', String(true));
         }
+        this.activeCompanyForDb.uniqueName = this.generalService.companyUniqueName;
+        this.activeCompanyForDb.name = this.selectedCompanyDetails.name;
         this.changeCompany(this.selectedCompanyDetails.uniqueName);
     }
 

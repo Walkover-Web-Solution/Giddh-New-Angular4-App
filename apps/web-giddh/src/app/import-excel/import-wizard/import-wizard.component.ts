@@ -80,8 +80,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public onFileUpload(file: File) {
-        this.store.dispatch(this._importActions.uploadFileRequest(this.entity, file));
+    public onFileUpload(data: any) {
+        this.store.dispatch(this._importActions.uploadFileRequest(this.entity, data));
     }
 
     public onContinueUpload(e) {

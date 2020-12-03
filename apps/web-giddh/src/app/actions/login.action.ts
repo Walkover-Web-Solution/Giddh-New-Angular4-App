@@ -468,18 +468,10 @@ export class LoginActions {
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
                 if (response.body.companyUniqueName) {
-                    let isCompanyRestrictedPath;
+
                     if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
                         this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                            if (this._generalService.currentOrganizationType === OrganizationType.Company) {
-                                // ledger is restricted in company mode
-                                isCompanyRestrictedPath = response.body.lastState.includes('ledger');
-                            }
-                            if (!isCompanyRestrictedPath) {
-                                this.finalNavigate(response.body.lastState);
-                            } else {
-                                this.finalNavigate('home');
-                            }
+                            this.finalNavigate(response.body.lastState);
                         });
                     } else {
                         if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
@@ -494,11 +486,7 @@ export class LoginActions {
                                 });
                                 if (path.length > 0 && parament) {
                                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                                        if (this._generalService.currentOrganizationType === OrganizationType.Company) {
-                                            // ledger is restricted in company mode
-                                            isCompanyRestrictedPath = path[0].includes('ledger');
-                                        }
-                                        if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1 && !isCompanyRestrictedPath) {
+                                        if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
                                             this.finalNavigate(path[0], parament);
                                         } else {
                                             this.finalNavigate('home');

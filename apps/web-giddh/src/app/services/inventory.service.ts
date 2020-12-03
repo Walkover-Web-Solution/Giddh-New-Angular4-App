@@ -151,17 +151,20 @@ export class InventoryService {
     /**
      * get Stocks
      */
-    public GetStocks(companyUniqueName: string = ''): Observable<BaseResponse<StocksResponse, string>> {
+    public GetStocks(payload: any = { companyUniqueName: '' }): Observable<BaseResponse<StocksResponse, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-
         let cmpUniqueName: string = this.companyUniqueName;
+        if (payload.companyUniqueName) {
+            cmpUniqueName = payload.companyUniqueName;
+        }
+        let url = this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName))
 
-        if (companyUniqueName) {
-            cmpUniqueName = companyUniqueName;
+        if (payload.branchUniqueName) {
+            url = url.concat(`?${payload.branchUniqueName !== cmpUniqueName ? encodeURIComponent(payload.branchUniqueName) : ''}`);
         }
 
-        return this._http.get(this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName))).pipe(map((res) => {
+        return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<StocksResponse, string> = res;
             data.request = '';
             data.queryString = {};
@@ -978,6 +981,9 @@ export class InventoryService {
         if (request.reportType === 'group' || request.reportType === 'stock') {
             return this._http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error, '', {})));
         } else {
+            if (request.branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
+            }
             return this._http.get(url)
                 .pipe(map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -1064,7 +1070,10 @@ export class InventoryService {
         url = url.replace(":count", getParams.count);
         url = url.replace(":sort", getParams.sort);
         url = url.replace(":sortBy", getParams.sortBy);
-
+        if (getParams.branchUniqueName) {
+            const branchUniqueName = getParams.branchUniqueName !== this.companyUniqueName ? getParams.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(branchUniqueName)}`);
+        }
         return this._http.post(url, postParams)
             .pipe(map((res) => {
                 let data: BaseResponse<any, any> = res;

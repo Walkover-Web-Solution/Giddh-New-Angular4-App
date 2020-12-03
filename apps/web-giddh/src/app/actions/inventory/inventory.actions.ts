@@ -424,10 +424,10 @@ export class InventoryAction {
         };
     }
 
-    public GetStock(companyUniqueName: string = ''): CustomActions {
+    public GetStock(companyUniqueName: string = '', branchUniqueName?: string): CustomActions {
         return {
             type: InventoryActionsConst.GetStock,
-            payload: companyUniqueName
+            payload: { companyUniqueName, branchUniqueName}
         };
     }
 

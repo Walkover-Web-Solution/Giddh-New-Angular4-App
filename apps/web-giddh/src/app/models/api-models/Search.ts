@@ -88,7 +88,8 @@ export interface SearchRequest {
 	fromDate: string;
 	toDate: string;
 	refresh: boolean;
-	page: number;
+    page: number;
+    branchUniqueName?: string;
 }
 
 export class SearchDataSet {
@@ -102,7 +103,8 @@ export class SearchDataSet {
 
 export interface BulkEmailRequest {
 	params: BulkEmailRequestParams;
-	data: BulkEmailRequestData;
+    data: BulkEmailRequestData;
+    branchUniqueName?: string;
 }
 
 export interface BulkEmailRequestData {

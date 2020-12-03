@@ -20,7 +20,32 @@
     <!-- ledger header -->
     <div class="col-md-12">
         <div class="">
-
+            <div class="form-group mr-15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+                <div class="form-group">
+                    <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
+                        [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                        placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                        <ng-template #optionTemplate let-option="option">
+                            <ng-container>
+                                <a href="javascript:void(0)" class="list-item d-flex">
+                                    <span class="entity-icon">
+                                        <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch"
+                                            tooltip="Branch"></i>
+                                        <i class="icon-company-HO pull-right"
+                                            *ngIf="!option.parentBranch && !option.isCompany" tooltip="HO Branch"></i>
+                                    </span>
+                                    <span class="entity-details">
+                                        <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                        <div class="item-unq giddh-limit single-line-clamp">
+                                            {{ option.name || '-' }}
+                                        </div>
+                                    </span>
+                                </a>
+                            </ng-container>
+                        </ng-template>
+                    </sh-select>
+                </div>
+            </div>
             <div class="form-inline d-block flex-row flex-nowrap">
                 <div class="form-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                     <i><img src="assets/images/custom-calender.svg"></i>

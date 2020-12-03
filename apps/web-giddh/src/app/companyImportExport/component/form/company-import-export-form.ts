@@ -1,4 +1,4 @@
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import * as moment from 'moment';
@@ -11,6 +11,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
 	selector: 'company-import-export-form-component',
@@ -58,9 +60,23 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Universal date observer */
     public universalDate$: Observable<any>;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private _store: Store<AppState>, private _companyImportExportActions: CompanyImportExportActions, private generalService: GeneralService, private modalService: BsModalService, private changeDetectorRef: ChangeDetectorRef,) {
+	constructor(
+        private _store: Store<AppState>,
+        private _companyImportExportActions: CompanyImportExportActions,
+        private settingsBranchAction: SettingsBranchActions,
+        private generalService: GeneralService,
+        private modalService: BsModalService,
+        private changeDetectorRef: ChangeDetectorRef) {
 		this.isExportInProcess$ = this._store.pipe(select(s => s.companyImportExport.exportRequestInProcess), takeUntil(this.destroyed$));
 		this.isExportSuccess$ = this._store.pipe(select(s => s.companyImportExport.exportRequestSuccess), takeUntil(this.destroyed$));
 		this.isImportInProcess$ = this._store.pipe(select(s => s.companyImportExport.importRequestInProcess), takeUntil(this.destroyed$));
@@ -91,6 +107,37 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             }
             this.changeDetectorRef.detectChanges();
         });
+        this._store.pipe(
+            select(state => state.session.companies), take(1)
+        ).subscribe(companies => {
+            companies = companies || [];
+            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        });
+        this.currentCompanyBranches$ = this._store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                const hoBranch = response.find(branch => !branch.parentBranch);
+                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this._store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
+	}
+
+	public selectedDate(value: any) {
+		this.from = moment(value.picker.startDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+		this.to = moment(value.picker.endDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
 	}
 
 	public fileSelected(file: File) {
@@ -103,9 +150,9 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
 	public save() {
 		if (this.mode === 'export') {
-			this._store.dispatch(this._companyImportExportActions.ExportRequest(parseInt(this.fileType), this.from, this.to));
+			this._store.dispatch(this._companyImportExportActions.ExportRequest(parseInt(this.fileType), this.from, this.to, this.currentBranch.uniqueName));
 		} else {
-			this._store.dispatch(this._companyImportExportActions.ImportRequest(parseInt(this.fileType), this.selectedFile));
+			this._store.dispatch(this._companyImportExportActions.ImportRequest(parseInt(this.fileType), this.selectedFile, this.currentBranch.uniqueName));
 		}
 	}
 
@@ -167,5 +214,14 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             this.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         }
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof CompanyImportExportFormComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
     }
 }
