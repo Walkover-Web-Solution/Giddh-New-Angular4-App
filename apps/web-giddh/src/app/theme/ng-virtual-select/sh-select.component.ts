@@ -62,6 +62,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public enableDynamicSearch: boolean;
     /** Border configuration for showing border around sh-select  */
     @Input() public borderConfiguration: BorderConfiguration;
+    /** True, if search suggesstion should not be displayed */
+    @Input() public showSearchSuggestion: boolean = true;
 
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
