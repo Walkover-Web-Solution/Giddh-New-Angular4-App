@@ -19,7 +19,7 @@
                             <div class="accounting-space bg-white">
                                 <section id="full-view">
                                     <h4 class="mb-4">Login to your secure accounting space</h4>
-                                    <form class="pos-rel mt-2 mb-3" id="login-with-pwd"
+                                    <form class="position-relative mt-2 mb-3" id="login-with-pwd"
                                         [formGroup]="loginWithPasswdForm"
                                         (ngSubmit)="loginWithPasswd(loginWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
@@ -34,7 +34,7 @@
                                                 Login
                                             </button>
                                         </div>
-                                        <a href="javascript:void(0)" class="pull-right btn-link fs14 forget-pw"
+                                        <a href="javascript:void(0)" class="pull-right btn-link font-14 forget-pw"
                                             (click)="showForgotPasswordModal()">Forgot
                                             password?</a>
                                     </form>
@@ -167,7 +167,7 @@
 <div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
 
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
@@ -213,7 +213,7 @@
 <div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
@@ -257,7 +257,7 @@
 <div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true" [config]="{backdrop: 'static'}" (onHidden)="onHiddenAuthModal($event)">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal"
@@ -288,7 +288,7 @@
 <!-- <div class="modal fade" tabindex="-1" bsModal #forgotPasswordModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Forgot Password</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideForgotPasswordModal()">×</span>

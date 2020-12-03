@@ -18,7 +18,7 @@
             </div>
         </div> -->
         <div class="col-md-12 mt-2 border-bottom pb-15">
-            <div class="row pb-1">
+            <div class="row pd-b1">
                 <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
                     <label *ngIf="organizationType === 'COMPANY'" class="font-14">Company Name</label>
                     <label *ngIf="organizationType === 'BRANCH'" class="font-14">Branch Name</label>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row pb-1 unique-name">
+            <div class="row pd-b1 unique-name">
                 <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2">
                     <label class="font-14">Unique Name:</label>
                 </div>
@@ -60,9 +60,9 @@
         </div>
 
     </div>
-    <div class="personal-other-deatils">
+    <div class="personal-other-details">
         <div class="row" *ngIf="organizationType === 'COMPANY'">
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
                 <div class="form-group">
                     <label>Business Type</label>
                     <sh-select disabled placeholder="Select Business Type" name="businessType" id="businessType"
@@ -73,13 +73,13 @@
                     </sh-select>
                 </div>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
                 <div class="form-group">
                     <label>Company Alias</label>
                     <input name="companyAlias" [(ngModel)]="profileData.nameAlias" (ngModelChange)="profileUpdated('nameAlias')"  type="text" class="form-control">
                 </div>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
                 <div class="form-group">
                     <label>Headquarter Alias</label>
                     <input name="headQuarterAlias" [(ngModel)]="profileData.headQuarterAlias" (ngModelChange)="profileUpdated('headQuarterAlias')"  type="text" class="form-control">
@@ -87,7 +87,7 @@
             </div>
         </div>
         <div class="row" *ngIf="organizationType === 'BRANCH'">
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
                 <div class="form-group">
                     <label>Alias</label>
                     <input name="alias" [(ngModel)]="profileData.alias" (ngModelChange)="profileUpdated('alias')"  type="text" class="form-control">

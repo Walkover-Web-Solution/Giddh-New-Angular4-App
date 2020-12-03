@@ -6,8 +6,8 @@
             <p class="company-name">{{selectedCompany.name}}</p>
             <p>
                 <small>
-                    <span *ngIf="selectedCompany && selectedCompany?.nameAlias">
-                        ({{selectedCompany?.nameAlias}})
+                    <span *ngIf="selectedCompany && selectedCompany?.alias">
+                        ({{selectedCompany?.alias}})
                     </span> {{selectedCompany.activeFinancialYear?.uniqueName}}
                 </small>
             </p>

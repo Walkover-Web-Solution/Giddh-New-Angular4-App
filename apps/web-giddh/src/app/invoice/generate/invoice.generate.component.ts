@@ -33,7 +33,7 @@ import {
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
@@ -41,6 +41,7 @@ import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/datera
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -185,6 +186,18 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public getLedgerDataInProcess$: Observable<boolean> = of(false);
     /** This will hold checked invoices */
     public selectedInvoices: any[] = [];
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
 
     constructor(
         private store: Store<AppState>,
@@ -192,7 +205,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         private _cdRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private generalActions: GeneralActions,
-        private _breakPointObservar: BreakpointObserver
+        private _breakPointObservar: BreakpointObserver,
+        private modalService: BsModalService
     ) {
         // set initial values
         this.ledgerSearchRequest.page = 1;
@@ -227,7 +241,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             .subscribe((res: GetAllLedgersForInvoiceResponse) => {
                 if (res && res.results) {
                     let response = _.cloneDeep(res);
-                    
+
                     response.results = _.orderBy(response.results, (item: ILedgersInvoiceResult) => {
                         return moment(item.entryDate, GIDDH_DATE_FORMAT);
                     }, 'desc');
@@ -298,6 +312,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate(), chosenLabel: this.universalDate[2] };
                 this.fromDate = moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate().toString();
                 this.toDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate().toString();
+
+                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 // assign date
                 // this.assignStartAndEndDateForDateRangePicker(dateObj[0], dateObj[1]);
 
@@ -308,21 +325,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp) {
-                let activeFinancialYear = selectedCmp.activeFinancialYear;
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
                     this.datePickerOptions.ranges['This Financial Year to Date'] = [
                         moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'),
@@ -757,5 +762,59 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         } catch (error) {
         }
         return item;
+    }
+
+    /**
+     *To show the datepicker
+     *
+     * @param {*} element
+     * @memberof InvoiceGenerateComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof InvoiceGenerateComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof InvoiceGenerateComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.ledgerSearchRequest.from = this.fromDate;
+            this.ledgerSearchRequest.to = this.toDate;
+            this.isUniversalDateApplicable = false;
+            this.getLedgersOfInvoice();
+        }
     }
 }

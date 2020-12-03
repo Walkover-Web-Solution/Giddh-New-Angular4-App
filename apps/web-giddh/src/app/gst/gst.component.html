@@ -1,8 +1,8 @@
 <!-- filter area-->
 <ng-container>
     <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
-    <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
-        <i class="text-middle" style="padding: 0 2%;">Please add GSTIN to your default address in order to view report.</i>
+    <div class="text-overdue ss" *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
+        <i class="text-middle">Please add GSTIN to your default address in order to view report.</i>
     </div>
 
     <div *ngIf="taxes?.length" class="row mb-3 mt-3 ml-3">
@@ -26,7 +26,7 @@
             <div class="header-info pull-left">
                 <ul class="list-inline list-middle">
                     <li>
-                        <span style="font-weight: 400;" class="text-muted"> GST Summary for </span>
+                        <span class="text-muted normal"> GST Summary for </span>
                     </li>
                     <li>
                         <div class="btn-group dropdown" dropdown [autoClose]="false"
@@ -104,8 +104,8 @@
     <div class="">
         <div class="col-md-12 main-wrapper">
 
-            <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!isMonthSelected">
-                <i class="text-middle" style="padding: 0 4%;">Select month Wise Date to download GSTR3B report.</i>
+            <div class="text-overdue ss"  *ngIf="!isMonthSelected">
+                <i class="text-middle">Select month Wise Date to download GSTR3B report.</i>
             </div>
             <!-- ============================ GSTR3B SUMMARY ================================== -->
             <div class="return-content" [ngClass]="{'content-disabled': !isMonthSelected || !activeCompanyGstNumber}">
@@ -117,7 +117,7 @@
                   class="icon-download"></i> Download</button>
                 <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                     aria-labelledby="button-triggers-manual" style="min-width: 350px;">
-                    <div class="pdL2 pdR2 pd-1">
+                    <div class="pd-l2 pd-r2 pd-1">
                         <div class="form-group">
                             <label>Email Id <i class='fa fa-info-circle' tooltip-placement="top"
                                                tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
@@ -151,7 +151,7 @@
                 </span>
                 <div><img src="{{imgPath}}summary.svg" class="icon gstr-icon text-middle" />
                     <div class="return-top text-middle">
-                        <div style="margin: 3px auto;" class="font-xlarge"><b>GSTR 3B SUMMARY</b>
+                        <div class="font-xlarge"><b>GSTR 3B SUMMARY</b>
                         </div>
                     </div>
                     <span class="btn-toolbar view-summary-btn pull-right">
@@ -163,7 +163,7 @@
             <!-- ============================ GSTR3B SUMMARY ================================== -->
 
             <!-- ============================ GSTR1 ================================== -->
-            <div style="position: relative" class="mt-2 parent">
+            <div class="mt-2 parent position-relative">
                 <div class="return-content"
                     [ngClass]="{'content-disabled': !activeCompanyGstNumber || (gstr1OverviewDataInProgress$ | async)}">
 
@@ -171,7 +171,7 @@
                     <div>
                         <img src="{{imgPath}}cart.svg" class="icon gstr-icon text-middle" />
                         <div class="return-top text-middle">
-                            <div style="margin: 3px auto;" class="font-xlarge"><b class="text-middle">GSTR-1
+                            <div class="font-xlarge"><b class="text-middle">GSTR-1
                                     <ng-container *ngIf="isMonthSelected">
                                         ({{ moment(selectedMonth).format('MMMM YYYY') }})
                                     </ng-container>
@@ -261,10 +261,10 @@
             <!-- ============================ GSTR1 ================================== -->
 
             <!-- ============================ GSTR2 ================================== -->
-            <div style="position: relative" class="mt-2">
+            <div class="mt-2 position-relative">
 
-                <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!isMonthSelected">
-                    <i class="text-middle" style="padding: 0 4%;">Select month Wise Date to view GSTR2 summary.</i>
+                <div class="text-overdue ss" *ngIf="!isMonthSelected">
+                    <i class="text-middle">Select month Wise Date to view GSTR2 summary.</i>
                 </div>
 
 
@@ -278,7 +278,7 @@
                     <div>
                         <img src="{{imgPath}}bag.svg" class="icon gstr-icon text-middle" />
                         <div class="return-top text-middle">
-                            <div style="margin: 3px auto;" class="font-xlarge"><b>GSTR-2
+                            <div class="font-xlarge"><b>GSTR-2
 
                                     <ng-container *ngIf="isMonthSelected">
                                         ({{ moment(selectedMonth).format('MMMM YYYY') }})
@@ -310,7 +310,7 @@
                                     <span>&nbsp;Transactions</span></a></div>
                         </div>
 
-                        <div style="margin: 35px 0px 0;" class="text-overdue ss">
+                        <div class="text-overdue ss mr-t3">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon text-middle">
                                 <path
                                     d="M437.2 74.8C388.8 26.4 324.4-.2 256-.2c-68.4 0-132.8 26.7-181.2 75.1C26.4 123.2-.2 187.6-.2 256c0 68.4 26.7 132.8 75.1 181.2 48.4 48.4 112.7 75.1 181.2 75.1 68.4 0 132.8-26.7 181.2-75.1s75.1-112.7 75.1-181.2c-.2-68.4-26.8-132.8-75.2-181.2z">
@@ -319,7 +319,7 @@
                                     d="M256.5 348.9c-17.7 0-32 14.1-32 31.6s14.3 31.6 32 31.6 32-14.2 32-31.6c.1-17.4-14.3-31.6-32-31.6zm-.8-246.2c-25.8 0-45.7 22.6-42.5 47.9 2.7 20.9 22.5 125.3 29.2 159.9 1.3 6.5 7 12.3 13.7 12.3h.3c6.5 0 12.1-5.7 13.3-12 6.5-34.1 26.5-138.9 29.1-160.2 3.3-25.6-17-47.9-43.1-47.9z">
                                 </path>
                             </svg>
-                            <i style="margin-left: 5px;" class="text-middle">We've temporarily disabled the GSTR-2 push
+                            <i class="text-middle p-0 ml-05">We've temporarily disabled the GSTR-2 push
                                 option in
                                 Giddh Books as GSTN has disabled it.</i></div>
                     </div>
@@ -387,7 +387,7 @@
                         </path>
                     </svg>
                     <div class="return-top text-middle">
-                        <div style="margin: 3px auto;" class="font-xlarge"><b>Final Return for July - 2017 (GSTR-3)</b>
+                        <div class="font-xlarge"><b>Final Return for July - 2017 (GSTR-3)</b>
                         </div>
                     </div>
                 </div>
@@ -407,7 +407,7 @@
                         </path>
                     </svg>
                     <div class="return-top text-middle">
-                        <div style="margin: 3px auto;" class="font-xlarge"><b>Tax Payments</b></div>
+                        <div class="font-xlarge"><b>Tax Payments</b></div>
                         <p class="text-muted">Record Your Tax Payments</p>
                     </div>
                 </div>

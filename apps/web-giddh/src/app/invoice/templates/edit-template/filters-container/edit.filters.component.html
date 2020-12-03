@@ -14,10 +14,10 @@
     <content-selector [hidden]="!ifContentSelected" [content]="ifContentSelected"></content-selector>
     <invoice-email-filter-component *ngIf="ifEmailSelected"></invoice-email-filter-component>
 
-    <div id="emails" class="tabcontent" *ngIf="ifEmailSelected">
+    <div id="emails" class="design-tab-content" *ngIf="ifEmailSelected">
 
         <div class="clearfix mr-t2">
-            <h2 style="margin-bottom: 0;">Standard email</h2>
+            <h2 class="mb-0">Standard email</h2>
             <small>Edit the email content your customer gets</small>
         </div>
         <div class="clearfix mr-t2">
@@ -32,23 +32,23 @@
                 <div class="col-12">
                     <input type="checkbox" /> Use greeting
                 </div>
-                <div class="col-4 pdL0">
-                    <div class="custom-select pos-rel">
+                <div class="col-4 pl-0">
+                    <div class="custom-select position-relative">
                         <select class="form-control">
                             <option value="dear">dear</option>
                         </select>
-                        <span class="select_drop">
+                        <span class="select-drop">
                             <i class="fa fa-caret-down"></i>
                         </span>
                     </div>
                 </div>
                 <div class="col-8">
                     <div>
-                        <div class="custom-select pos-rel">
+                        <div class="custom-select position-relative">
                             <select class="form-control">
                                 <option value="dear">Customer name</option>
                             </select>
-                            <span class="select_drop">
+                            <span class="select-drop">
                                 <i class="fa fa-caret-down"></i>
                             </span>
                         </div>

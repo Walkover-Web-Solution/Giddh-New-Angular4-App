@@ -128,7 +128,7 @@
                         <div class="wrap-selected-date">
                             <div class="relative" [ngClass]="{'focused-date' : ActiveDate ===0}">
                                 <span class="mr-2">
-                                    <img src="../../../assets/images/calender-icon.svg"> &nbsp; From &nbsp;
+                                    <img src="assets/images/calender-icon.svg"> &nbsp; From &nbsp;
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                 </span>
                                 <span class="fa fa-search"></span>
@@ -139,7 +139,7 @@
                                 <span *ngIf="invalidStartDate" class="invalid-date error-msg">{{invalidStartDate}}</span>
                             </div>
                             <div class="relative" [ngClass]="{'focused-date' : ActiveDate ===1}">
-                                <span class="mr-2"><img src="../../../assets/images/calender-icon.svg"> &nbsp; To &nbsp;
+                                <span class="mr-2"><img src="assets/images/calender-icon.svg"> &nbsp; To &nbsp;
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                 </span>
                                 <input [ngClass]="{'invalid-date-input':invalidEndDate, 'w-100': true}" placeholder="end date"

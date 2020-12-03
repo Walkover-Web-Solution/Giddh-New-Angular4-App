@@ -24,7 +24,7 @@
         }
     }
 }
-.createWarehouse {
+.create-warehouse {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,19 +34,19 @@
         text-align: center;
     }
 }
-.createWarehouse h2 {
+.create-warehouse h2 {
     font-size: 20px;
     font-family: "opensans-semibold";
     margin: 10px 0;
 }
-.createWarehouse p {
+.create-warehouse p {
     font-size: 14px;
     margin-bottom: 10px;
 }
-.createWarehouse p span {
-    color: #5b64c9;
+.create-warehouse p span {
+    color: $chetwode-blue;
 }
-.createWarehouse img {
+.create-warehouse img {
     margin-bottom: 20px;
 }
 .warehouse-card {
@@ -68,7 +68,7 @@
     .btn-group .btn {
         background-color: transparent;
         padding: 0;
-        color: #707070;
+        color: $gray-44;
         margin-right: 0;
         font-size: 20px;
         position: relative;
@@ -97,7 +97,7 @@
     word-break: break-all;
     color: $midnight-blue;
 }
-span.setAsDefault {
+span.set-as-default {
     background-color: $gainsboro;
     padding: 5px 10px;
     font-size: 14px;
@@ -130,11 +130,11 @@ span.setAsDefault {
     }
 }
 .gray-text {
-    color: #8f9091;
+    color: $aluminum;
     font-size: 12px;
 }
-.setAsDefault i.icon-favorite-selected {
-    color: #5b64c9;
+.set-as-default i.icon-favorite-selected {
+    color: $chetwode-blue;
 }
 .createNewWarehouseBtn {
     justify-content: center;

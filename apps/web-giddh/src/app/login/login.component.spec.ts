@@ -361,7 +361,7 @@ describe('Login Component', () => {
 
             it('should display login heading text in h1', async(() => {
                 expect(
-                    fixture.debugElement.query(By.css('h1.mrB3')).nativeElement.innerText
+                    fixture.debugElement.query(By.css('h1.mr-b3')).nativeElement.innerText
                 ).toContain('Login to your secure accounting space');
             }));
 
@@ -515,7 +515,7 @@ describe('Login Component', () => {
                 component.showForgotPasswordModal();
 
                 expect(
-                    fixture.debugElement.query(By.css('h1.mrB3')).nativeElement.innerText
+                    fixture.debugElement.query(By.css('h1.mr-b3')).nativeElement.innerText
                 ).toContain('Login to your secure accounting space');
             }));
 

@@ -22,7 +22,7 @@
     opacity: 1;
 }
 
-.checkbox_visible {
+.checkbox-visible {
     opacity: 1 !important;
     position: relative !important;
 }
@@ -34,7 +34,7 @@
 
 .icon-pointer.iconSearch {
     top: 30%;
-    color: #a9a9a9;
+    color: $dim-gray;
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -87,7 +87,7 @@
 }
 
 .custom-detail h4 {
-    color: #707070;
+    color: $gray-44;
     margin-top: 7px;
     font-size: 14px !important;
     font-family: opensans-regular !important;
@@ -97,15 +97,15 @@ ul.list-unstyled li a {
     color: black;
 }
 
-.p-modal-tolltip {
+.p-modal-tooltip {
     display: block;
     position: absolute;
-    background-color: white;
+    background-color: $white;
     z-index: 1000;
     width: 257px;
-    border: 1px solid #b4afaf;
+    border: 1px solid $pink-swan;
     border-radius: 4px;
-    box-shadow: 0 7px 24px #00000038;
+    box-shadow: 0 7px 24px $black-shadow;
     top: -2px;
 }
 
@@ -143,12 +143,15 @@ td.commentField {
     white-space: normal;
 }
 
+.date-range-picker{
+    width: 250px !important;
+}
 //  my css
 .aging-table tbody tr:first-child td {
     border-top: none;
 }
 
-td.pos-rel.word-wrap.customer-name.cursor-pointer {
+td.position-relative.word-wrap.customer-name.cursor-pointer {
     border-bottom: none;
     height: 37px;
     line-height: 1.4;
@@ -162,24 +165,24 @@ td.pos-rel.word-wrap.customer-name.cursor-pointer {
     padding-right: 35px;
 }
 
-td.pos-rel.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
+td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
     height: 42px;
     line-height: 1;
     border-right: none;
 }
 
-tr:last-child td.pos-rel.word-wrap.customer-name.cursor-pointer,
-tr:last-child td.pos-rel.word-wrap.vendor-customer-name.cursor-pointer {
-    border-bottom: 1px solid #ddd !important;
+tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
+tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
+    border-bottom: 1px solid $gainsboro !important;
 }
 
-.pos-rel.word-wrap {
+.position-relative.word-wrap {
     .icon-dots-three-vertical {
         transform: rotate(90deg);
         font-size: 20px;
         vertical-align: middle;
         display: none;
-        color: #333333;
+        color: $night-rider;
     }
     &:hover .icon-dots-three-vertical {
         display: block;
@@ -215,30 +218,30 @@ tr.aging-table-top td {
 
 #dropdown-basics {
     position: fixed !important;
-    background: red;
+    background: $red;
     bottom: initial;
 }
 
-.btn-group.moreBtn.open.show {
+.btn-group.more-button.open.show {
     display: inline-block !important;
 }
 
-.moreBtn li {
+.more-button li {
     padding: 5px;
     cursor: default;
 }
 
-.moreBtn li:hover {
-    background-color: #eeeff9;
+.more-button li:hover {
+    background-color: $lavender;
     color: $jacksons-purple;
 }
 
 .btn-primary.active,
 .btn-primary:active,
 .open>.dropdown-toggle.btn-primary {
-    color: #333;
-    background-color: #e7e7e8;
-    border-color: #e7e7e8;
+    color: $night-rider;
+    background-color: $lavender-dark;
+    border-color: $lavender-dark;
     box-shadow: none !important;
 }
 
@@ -251,7 +254,7 @@ i.icon-options {
     width: 36px;
     height: 36px;
     border: 1px solid $gainsboro;
-    background-color: #fff;
+    background-color: $white;
     color: $gray;
     font-size: 20px;
     padding: 0;
@@ -261,7 +264,7 @@ i.icon-options {
 }
 
 i.icon-options:hover {
-    background-color: #eaeaea;
+    background-color: $whisper-color;
 }
 
 .search-field {
@@ -271,12 +274,12 @@ i.icon-options:hover {
 
 .search-field input {
     width: 235px;
-    background-color: #e6e7e8 !important;
-    border-color: #e6e7e8 !important;
+    background-color: $solitude-dark !important;
+    border-color: $solitude-dark !important;
 }
 
 .search-field input:focus {
-    background-color: #fff !important;
+    background-color: $white !important;
     border-color: $midnight-express !important;
 }
 span.input-addon {
@@ -284,7 +287,7 @@ span.input-addon {
     right: 0px;
     padding: 4px 9px;
     background-color: $chetwode-blue;
-    color: #fff;
+    color: $white;
     font-size: 18px;
     border-radius: 2px;
     height: 36px;
@@ -335,7 +338,7 @@ span.input-addon {
 
 button.btn.btn-filter {
     background: $whisper-color;
-    border: 1px solid $whisper-color;
+    border: 1px solid $gainsboro;
     font-size: 14px;
     color: #1a237e;
     display: inline-flex;
@@ -361,6 +364,7 @@ button.btn.btn-filter span.icon-cross {
     align-items: center;
     justify-content: space-between;
 }
+
 /*responsive*/
 @media(max-width:800px){
     .customer-form-inline{
@@ -421,11 +425,11 @@ button.btn.btn-filter span.icon-cross {
     .aging-table>tbody>tr input[type="checkbox"] {
         top: 2px;
     }
-    .customer-right-wrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mb-1.pd-r2 {
         margin-bottom: 0;
     }
-    tr:last-child td.pos-rel.word-wrap.customer-name.cursor-pointer,
-    tr:last-child td.pos-rel.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
+    tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
+    tr:last-child td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
         border-bottom: none !important;
     }
     .table-responsive {
@@ -434,11 +438,11 @@ button.btn.btn-filter span.icon-cross {
     .aging-table .table-checkbox {
         top: 5px;
     }
-    .p-modal-tolltip {
+    .p-modal-tooltip {
         left: auto !important;
         right: -24px !important;
     }
-    .pos-rel.word-wrap .icon-dots-three-vertical {
+    .position-relative.word-wrap .icon-dots-three-vertical {
         transform: rotate(0deg);
     }
     .onDesktopView.btn-group {
@@ -449,18 +453,18 @@ button.btn.btn-filter span.icon-cross {
         position: fixed;
         bottom: 0;
         width: 100%;
-        background: #fff;
+        background: $white;
         padding: 10px 5px;
         z-index: 1;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     }
-    td.pos-rel.word-wrap.customer-name.cursor-pointer,
-    td.pos-rel.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
+    td.position-relative.word-wrap.customer-name.cursor-pointer,
+    td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer {
         max-width: 100%;
         white-space: inherit;
         line-height: 1.5;
     }
-    .pos-rel.word-wrap.vendor-customer-name .icon-dots-three-vertical {
+    .position-relative.word-wrap.vendor-customer-name .icon-dots-three-vertical {
         position: relative;
         top: 0;
         line-height: 1 !important;
@@ -471,7 +475,7 @@ button.btn.btn-filter span.icon-cross {
     .customer-name .icon-ellipse {
         top: 8px;
     }
-    .pos-rel.word-wrap {
+    .position-relative.word-wrap {
         .icon-dots-three-vertical {
             display: block;
         }
@@ -508,7 +512,7 @@ button.btn.btn-filter span.icon-cross {
     .pagination-main .mt-5 {
         margin-top: 0px;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         margin-bottom: 0px !important;
     }
     .customer-name,
@@ -538,17 +542,17 @@ button.btn.btn-filter span.icon-cross {
             padding-top: 6px;
             h5 {
                 font-size: 16px;
-                .numbertotal {
+                .number-total {
                     font-size: 20px;
                 }
             }
         }
     }
-    .customer-right-wrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mb-1.pd-r2 {
         margin-bottom: 10px;
     }
     .customer-right {
-        background: #fff;
+        background: $white;
         padding: 0 15px;
         float: left;
         width: 100%;
@@ -581,7 +585,7 @@ button.btn.btn-filter span.icon-cross {
     .customer-footer-box {
         padding-top: 10px;
     }
-    .pos-rel.word-wrap .icon-dots-three-vertical {
+    .position-relative.word-wrap .icon-dots-three-vertical {
         display: block;
     }
     .top-aging-table-top {
@@ -597,7 +601,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (min-width: 769px) and (max-width: 1023px) {
-    .seprta-top-aging {
+    .separate-top-aging {
         display: none;
     }
 }
@@ -649,5 +653,5 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .negative-balance {
-    color: #ff0000;
+    color: $red;
 }

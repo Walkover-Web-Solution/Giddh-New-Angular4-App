@@ -13,8 +13,8 @@
                 <div class="col-6 form-group payment-date">
                     <label>Payment Date <sup>*</sup></label>
 
-                    <input type="text" name="invoiceDateRange" bsDatepicker class="form-control" style="width: 100%"
-                        [(ngModel)]="paymentActionFormObj.paymentDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
+                    <input type="text" name="invoiceDateRange" bsDatepicker class="form-control w-100"
+                        [(ngModel)]="paymentActionFormObj.paymentDate" [bsConfig]="{dateInputFormat:giddhDateFormat}" />
                 </div>
 
                 <div class="col-6 form-group">
@@ -38,7 +38,7 @@
                         [useInBuiltFilterForIOptionTypeItems]="true" class="text-left" required>
 
                         <ng-template #optionTemplate1 let-option="option">
-                            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                            <a href="javascript:void(0)" class="list-item bb-1">
                                 <div class="item">{{ option.label }}</div>
                                 <div class="item-unique">{{ option.value }}</div>
                             </a>
@@ -83,7 +83,7 @@
 
                     <span class="left-currency middle">1 {{accountCurrency}}</span>
 
-                    <img class="switchIcon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
+                    <img class="switch-icon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
                         (click)="switchCurrencyImg(true)">
                     <span class="edit-icon cp">
                         <img src="assets/images/edit-pencilicon.svg" class="edit-pencil mr-1"
@@ -107,7 +107,7 @@
                 <div class="switch-currency mb-1" *ngIf="showSwitchedCurr">
                     <span class="text-light d-inline-block pr-1">Base Currency</span>
                     <span class="left-currency middle">1 {{companyCurrencyName}}</span>
-                    <img class="switchIcon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
+                    <img class="switch-icon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"
                         (click)="switchCurrencyImg(false)">
                     <span class="edit-icon cp">
                         <img src="assets/images/edit-pencilicon.svg" class="edit-pencil mr-1"

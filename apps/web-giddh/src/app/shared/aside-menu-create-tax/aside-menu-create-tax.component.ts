@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
+import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -9,7 +9,6 @@ import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
-import { createSelector } from "reselect";
 import { IForceClear } from "../../models/api-models/Sales";
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 
@@ -44,7 +43,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     public isUpdateTaxInProcess: boolean = false;
     public taxListSource$: Observable<IOption[]> = observableOf([]);
     public taxNameTypesMapping: any[] = [];
-    public selectedCompany: Observable<CompanyResponse>;
     public selectedTax: string = '';
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -59,27 +57,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        // tslint:disable-next-line:no-shadowed-variable
-        this.selectedCompany = this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            return selectedCmp;
-        })), takeUntil(this.destroyed$));
-
-        this.selectedCompany.subscribe((res: any) => {
-            if (res) {
-                this.getTaxList(res.countryV2.alpha2CountryCode);
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && activeCompany.countryV2) {
+                this.getTaxList(activeCompany.countryV2.alpha2CountryCode);
             }
         });
 
@@ -173,7 +153,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
         let dataToSave = _.cloneDeep(this.newTaxObj);
 
         if (dataToSave.taxType === 'tcs' || dataToSave.taxType === 'tds') {
-            dataToSave.taxType = dataToSave.tdsTcsTaxSubTypes;
+            if(this.tax && this.tax.uniqueName) {
+                dataToSave.taxType = dataToSave.taxType+dataToSave.tdsTcsTaxSubTypes;
+            } else {
+                dataToSave.taxType = dataToSave.tdsTcsTaxSubTypes;
+            }
         }
 
         dataToSave.taxDetail = [{

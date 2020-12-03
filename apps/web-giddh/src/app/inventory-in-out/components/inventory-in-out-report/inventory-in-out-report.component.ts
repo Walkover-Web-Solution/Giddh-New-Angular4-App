@@ -165,6 +165,6 @@ export class InventoryInOutReportComponent implements OnDestroy {
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
-        this.destroyed$.complete();       
+        this.destroyed$.complete();
 	}
 }

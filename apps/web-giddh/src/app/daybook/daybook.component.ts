@@ -1,22 +1,23 @@
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { DaybookAdvanceSearchModelComponent } from './advance-search/daybook-advance-search.component';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     selector: 'daybook',
@@ -50,70 +51,51 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
     /** Daybook advance search component reference */
     @ViewChild('daybookAdvanceSearch', {static: true}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
-    public datePickerOptions: any = {
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
-            ],
-            'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
-            ],
-            'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Moment object */
+    public moment = moment;
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
-
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private _companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private _daybookActions: DaybookActions,
-        private store: Store<AppState>
+        private store: Store<AppState>, private generalService: GeneralService, private modalService: BsModalService
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.initialRequest();
-        let companyUniqueName;
-        let company;
 
-        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$))
-            .subscribe(p => companyUniqueName = p);
+        // this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        //     if(activeCompany) {
+        //         this.companyName = activeCompany.name;
+        //     }
+        // });
 
-        this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$))
-            .subscribe(p => {
-                company = p.find(q => q.uniqueName === companyUniqueName);
-            });
-        this.companyName = company.name;
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {
@@ -163,10 +145,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.searchFilterData = null;
         if (!obj.cancle) {
             this.searchFilterData = cloneDeep(obj.dataToSend);
-            this.datePickerOptions = {
-                ...this.datePickerOptions, startDate: moment(obj.fromDate, GIDDH_DATE_FORMAT).toDate(),
-                endDate: moment(obj.toDate, GIDDH_DATE_FORMAT).toDate()
-            };
             if (this.dateRangePickerCmp) {
                 this.dateRangePickerCmp.render();
             }
@@ -203,11 +181,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()
-                };
-
+                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.go();
@@ -324,6 +301,63 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 };
             });
         });
+    }
+
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof DaybookComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof DaybookComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof DaybookComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            if ((this.daybookQueryRequest.from !== this.fromDate) || (this.daybookQueryRequest.to !== this.toDate)) {
+                this.showLoader = true;
+                this.daybookQueryRequest.from = this.fromDate;
+                this.daybookQueryRequest.to = this.toDate;
+                this.daybookQueryRequest.page = 0;
+                this.go();
+            }
+        }
     }
 }
 

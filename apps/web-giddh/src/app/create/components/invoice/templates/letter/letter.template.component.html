@@ -14,7 +14,7 @@
                                 <div class="ico-head">Sender’s Details</div>
                             </div>
                         </div>
-                        <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
+                        <div [collapse]="isOthrDtlCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 m-0">
                             <div class="row mt13" formGroupName="companyDetails">
                                 <!-- <div class="form-group col-xs-2">
           <label>Ship Date</label>
@@ -98,7 +98,7 @@
                                 <div class="ico-head">Customer Details</div>
                             </div>
                         </div>
-                        <div [collapse]="isCustDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
+                        <div [collapse]="isCustDtlCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 m-0">
                             <div class="row mt13" formGroupName="userDetails">
                                 <!-- commented by sagar sir -->
                                 <div class="form-group col-xs-4"
@@ -152,7 +152,7 @@
                                 <div class="ico-head">Mailing Details</div>
                             </div>
                         </div>
-                        <div [collapse]="isMlngAddrCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
+                        <div [collapse]="isMlngAddrCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 m-0">
                             <div class="row mt13">
                                 <div formGroupName="userDetails">
                                     <div class=""
@@ -238,7 +238,7 @@
                             </div>
 
                         </div>
-                        <div [collapse]="isGenDtlCollapsed" class="clearfix pdL3 pdR3 col-xs-12 mr0">
+                        <div [collapse]="isGenDtlCollapsed" class="clearfix pd-l3 pd-r3 col-xs-12 m-0">
                             <div class="row mt13">
                                 <!-- <div class="form-group col-xs-4">
     <label>Attention to</label>
@@ -318,8 +318,8 @@
             </section>
         </div>
     </div>
-    <div class="row mr-t">
-        <section class="clearfix pd-1 pdB2 mr-b2 whiteBg">
+    <div class="row mr-t05">
+        <section class="clearfix pd-1 pd-b2 mr-b2 white-bg">
             <div class="container">
                 <table class="table" formArrayName="entries">
                     <thead>
@@ -453,7 +453,7 @@ class="salesTax"
 <input type="number" name="transaction.total_{{entryIdx}}" class="form-control text-right" readonly [(ngModel)]="transaction.total"
 />
 </td>-->
-                            <td class="action-panel-td alR">
+                            <td class="action-panel-td text-right">
                                 <span class="cp" *ngIf="last" (click)="addBlankRow()">
                                     <i class="icon-add" aria-hidden="true"></i>
                                 </span>
@@ -477,54 +477,54 @@ class="salesTax"
                                 </div>
                             </td>
                             <td width="50%" formGroupName="uiCalculation">
-                                <section class="tableSec">
-                                    <div class="tableRow">
-                                        <div class="tableCell">Total Amount</div>
-                                        <div class="tableCell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value
+                                <section class="table-sec">
+                                    <div class="table-row">
+                                        <div class="table-cell">Total Amount</div>
+                                        <div class="table-cell figure-cell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value
                     | number:'1.2-2'}}
                                         </div>
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">Discount</div>
-                                        <div class="tableCell figureCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">Discount</div>
+                                        <div class="table-cell figure-cell">
                                             {{CreateInvoiceForm.controls['uiCalculation'].get('totalDiscount').value | number:'1.2-2'}}
                                         </div>
 
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">Taxable Value</div>
-                                        <div class="tableCell figureCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">Taxable Value</div>
+                                        <div class="table-cell figure-cell">
                                             {{CreateInvoiceForm.controls['uiCalculation'].get('totalTaxableValue').value | number:'1.2-2'}}
                                         </div>
 
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">Tax</div>
-                                        <div class="tableCell figureCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">Tax</div>
+                                        <div class="table-cell figure-cell">
                                             {{CreateInvoiceForm.controls['uiCalculation'].get('gstTaxesTotal').value | number:'1.2-2'}}
                                         </div>
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">
                                             <strong>Total</strong>
                                         </div>
-                                        <div class="tableCell figureCell">
+                                        <div class="table-cell figure-cell">
                                             <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('grandTotal').value |
                       number:'1.2-2'}}</strong>
                                         </div>
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">Deposit</div>
-                                        <div class="tableCell figureCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">Deposit</div>
+                                        <div class="table-cell figure-cell">
                                             <input type="number" placeholder="Amount" class="form-control"
                                                 formControlName="depositAmount" />
                                         </div>
                                     </div>
-                                    <div class="tableRow">
-                                        <div class="tableCell">
+                                    <div class="table-row">
+                                        <div class="table-cell">
                                             <strong>Balance Due</strong>
                                         </div>
-                                        <div class="tableCell figureCell">
+                                        <div class="table-cell figure-cell">
                                             <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('balanceDue').value |
                       number:'1.2-2'}}</strong>
                                         </div>
@@ -545,7 +545,7 @@ class="salesTax"
 <section class="">
     <section id="actionPane" class="text-center">
         <div class="container">
-            <div class="pull-right pr">
+            <div class="pull-right position-relative">
                 <!-- <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-danger">Clear</button>
   <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default">Generate {{toggleActionText}} &amp; Update A/c</button> -->
                 <button type="submit" class="btn btn-success" (click)="onSubmitInvoiceForm(invoiceForm)">Generate

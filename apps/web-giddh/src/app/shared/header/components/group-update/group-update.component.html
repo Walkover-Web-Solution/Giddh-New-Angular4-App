@@ -14,7 +14,7 @@
         <div class="row">
             <!-- <div class="form-group col-xs-6"  *ngIf=" uniqueName === 'currentassets' || uniqueName==='currentliabilities' " >
 
-        <div style="max-width:130px" class="pItem text-right" (click)="$event.stopPropagation()"
+        <div style="max-width:130px" class="item-padding text-right" (click)="$event.stopPropagation()"
               (mouseenter)="hideTax()">
             <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts"
                              [ledgerAmount]="currentTxn.amount"
@@ -69,7 +69,7 @@
                 [isFilterEnabled]="true" class="pull-left move-group-form">
                 <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
                 <ng-template #optionTemplate let-option="option">
-                    <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
+                    <a href="javascript:void(0)" class="list-item">
                         <div class="item">{{ option.label }}</div>
                         <div class="item-unique">{{ option.value }}</div>
                     </a>
@@ -87,7 +87,7 @@
 <!-- Taxes collapse -->
 <div class="clearfix tax-operation horizontal-form manage-group-account-form" *ngIf="isTaxableGroup$ | async">
     <div class="col-xs-12 col-sm-12">
-        <div class="form-group toggle-btn mrB">
+        <div class="form-group toggle-btn mr-b05">
             <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
                 <i class="fa cp" aria-hidden="true"
                     [ngClass]="{'fa-minus-square-o': showTaxes, 'fa-plus-square-o': !showTaxes}"></i>Taxes
@@ -106,7 +106,7 @@
                     <div class="input-group">
                         <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" (selected)="taxesSelected($event);" [options]="companyTaxDropDown" [multiple]="true">
                         </sh-select>
-                        <span class="input-group-btn pdL2"> <button type="submit" [disabled]="(isTaxesSaveDisable$ | async)"
+                        <span class="input-group-btn pd-l2"> <button type="submit" [disabled]="(isTaxesSaveDisable$ | async)"
                                 class="btn btn-success">Save</button></span>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
 </div>
 
 <div class="horizontal-form" *ngIf="isDebtorCreditorGroups">
-    <div class="mb-2 selectBox container-fluid mt-1">
+    <div class="mb-2 select-box container-fluid mt-1">
         <div class="form-group ">
             <label>Default Discounts <span
                         class="primary-color"></span></label>
@@ -142,8 +142,9 @@
                         <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" (selected)="discountSelected()" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
                     </span>
                 <span class="pull-right">
-                        <button  class="btn btn-primary mrgeBtn"  [disabled]="(isDiscountSaveDisable$ | async)" (click)="applyDiscounts()">Apply</button>
+                        <button  class="btn btn-primary merge-btn"  [disabled]="(isDiscountSaveDisable$ | async)" (click)="applyDiscounts()">Apply</button>
                     </span>
+
             </div>
         </div>
     </div>

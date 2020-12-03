@@ -6,7 +6,7 @@ declare var $: any;
 @Component({
     selector: 'file-gstr2',
     templateUrl: './gstR2.component.html',
-    styleUrls: ['gstR2.component.css'],
+    styleUrls: ['gstR2.component.scss'],
 })
 export class FileGstR2Component implements OnInit {
     constructor() {

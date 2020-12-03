@@ -230,6 +230,8 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profileRequest = true;
                 newState.getProfileInProgress = false;
                 return Object.assign({}, state, newState);
+            } else if (response.status === 'error' && response.code === 'UNAUTHORISED') {
+                return { ...state, updateProfileInProgress: false, getProfileInProgress: false };
             }
             return { ...state, updateProfileInProgress: true, getProfileInProgress: false };
         }
@@ -729,6 +731,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 });
             }
             return Object.assign({}, state, {});
+        }
+        case SETTINGS_BRANCH_ACTIONS.RESET_ALL_BRANCHES_RESPONSE: {
+            return Object.assign({}, state, {branches: null});
         }
 
         //  endregion discount reducer

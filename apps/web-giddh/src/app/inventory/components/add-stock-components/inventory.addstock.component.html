@@ -10,7 +10,7 @@
 
             <div class="aside-body">
                 <section class="aside-pane-form clearfix margin-child-label">
-                    <div class="form_bg clearfix">
+                    <div class="clearfix">
                         <div class="row">
                             <div class="form-group col-sm-5 col-12">
                                 <label>Under Group</label>
@@ -38,7 +38,7 @@
                         <!-- other details -->
                         <div class="row">
                             <div class="col-12 col-sm-12">
-                                <div class="form-group toggle-btn mrB" (click)="showOtherDetails = !showOtherDetails">
+                                <div class="form-group toggle-btn mr-b05" (click)="showOtherDetails = !showOtherDetails">
                                     <label class="cp">
                                         <i class="fa cp" aria-hidden="true"
                                             [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other
@@ -225,8 +225,8 @@
                                         <div class="form-group row col-4 col-sm-4">
                                             <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                         </div>
-                                        <div class="pull-right unit_add">
-                                            <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add_row"></i></button>
+                                        <div class="pull-right unit-add">
+                                            <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
                                             <button class="btn-link btn" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i
                                                     class="icon-cross dlet"></i></button>
                                         </div>
@@ -268,8 +268,8 @@
                                         <div class="form-group row col-4 col-sm-4">
                                             <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                         </div>
-                                        <div class="pull-right unit_add">
-                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add_row"></i></button>
+                                        <div class="pull-right unit-add">
+                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
                                             <button class="btn-link btn" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i class="icon-cross dlet"></i></button>
                                         </div>
                                     </div>
@@ -278,7 +278,7 @@
 
                         </div>
                     </div>
-                    <div class="row pdL pdR">
+                    <div class="row pd-l05 pd-r05">
                         <div class="col-12 col-sm-12">
                             <div class="checkbox">
                                 <label class="" for="isFsStock">
@@ -290,11 +290,11 @@
                     </div>
 
 
-                    <section class="mr-t2 row mrB3 col-12 col-sm-12" *ngIf="addStockForm.value.isFsStock">
-                        <div class="pdL pdR">
-                            <h1 class="section-head bdrB"><strong>{{addStockForm.controls['name'].value}} (Made
+                    <section class="mr-t2 row mr-b3 col-12 col-sm-12" *ngIf="addStockForm.value.isFsStock">
+                        <div class="pd-l05 pd-r05">
+                            <h1 class="section-head bd-rb"><strong>{{addStockForm.controls['name'].value}} (Made
                                     with)</strong></h1>
-                            <table class="noHover  width100">
+                            <table class="no-hover  width100">
                                 <tbody formGroupName="manufacturingDetails">
                                     <tr class="output_row">
                                         <td class="form-group">
@@ -314,7 +314,7 @@
                                         </td>
                                         <!-- <td colspan="1">&nbsp;</td> -->
                                     </tr>
-                                    <tr class="noHover  table_label" style="border-color:#ccc;">
+                                    <tr class="no-hover  table_label" style="border-color:#ccc;">
                                         <td [style.width.px]="200"><strong>Input Stock Name</strong></td>
                                         <td><strong>Stock Qty</strong></td>
                                         <td><strong>Stock Unit</strong></td>
@@ -338,7 +338,7 @@
                                             </td>
                                             <td>
                                                 <button class="btn-link btn" (click)="addItemInLinkedStocks(list, i, i)" *ngIf="l" [disabled]="disableStockButton"><i
-                                                        class="icon-plus add_row"></i></button>
+                                                        class="icon-plus add-row"></i></button>
                                                 <button class="btn-link btn" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i class="icon-cross dlet"></i></button>
                                             </td>
                                         </tr>
@@ -350,7 +350,7 @@
 
                     <div class="row">
                         <div class="col-12 col-sm-12 text-left">
-                            <div class="mt-5 pdL pdR">
+                            <div class="mt-5 pd-l05 pd-r05">
 
                                 <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success" [disabled]="addStockForm.invalid || disableStockButton">Save
                                 </button>

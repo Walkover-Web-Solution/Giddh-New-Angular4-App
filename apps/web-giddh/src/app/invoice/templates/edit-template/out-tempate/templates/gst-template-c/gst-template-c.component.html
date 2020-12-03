@@ -231,7 +231,7 @@
             </tbody>
         </table>
     </div>
-    <div id="template-table" class="pos-rel" (click)="onClickSection('table')"
+    <div id="template-table" class="position-relative" (click)="onClickSection('table')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
             <i class="icon-edit-pencil"></i>
@@ -403,7 +403,7 @@
                                         {{fieldsAndVisibility.footer.slogan?.label }}
                                     </small>
                                 </strong>
-                                <p class="bdrB"></p>
+                                <p class="bd-rb"></p>
                                 <strong>
                                     <small *ngIf="fieldsAndVisibility.header.companyName?.label">
                                         {{fieldsAndVisibility.header.companyName?.label}}
@@ -416,7 +416,7 @@
                             <ng-container>
                                 <img [hidden]="!showImageSignature" [src]="imageSignatureSrc" class="max-width-180"
                                     alt="" style="min-width: 60px;height: 60px;" />
-                                <p class="bdrB"></p>
+                                <p class="bd-rb"></p>
                                 <strong>
                                     <small *ngIf="fieldsAndVisibility.header.companyName?.label">
                                         {{fieldsAndVisibility.header.companyName?.label}}

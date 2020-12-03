@@ -9,10 +9,12 @@
                     </div>
                     <div class="mr-15" *ngIf="mode === 'export' && fileType === '0'">
                         <label class="d-block">Data Range</label>
-                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                        (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)" class="form-control" />
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i><img src="assets/images/custom-calender.svg"></i>
+                            <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
+                        </div>
                     </div>
-                    <button class="btn btn-primary " *ngIf="mode === 'export'" style="margin-top: 24px" (click)="save()"
+                    <button class="btn btn-primary " *ngIf="mode === 'export'" (click)="save()"
                         [ladda]="isExportInProcess$ | async" [disabled]="(!fileType || !from || !to)"> Export
                     </button>
                     <div class="select-file-lable mr-15" *ngIf="mode === 'import'">
@@ -20,21 +22,21 @@
 
                         <div class="form-group input-upload">
                             <div class="input-file">
-                                <label for="fileUpload" class="form-control ellp">
+                                <label for="fileUpload" class="form-control text-ellipsis">
                                     <span class="text-success" *ngIf="selectedFile">
                                         {{ selectedFile?.name }}
                                     </span>
                                     <span *ngIf="!selectedFile">
                                         Browse file
                                     </span></label>
-                                <input type="file" id="fileUpload" accept="application/json" style="display: none;"
+                                <input type="file" id="fileUpload" accept="application/json" class="d-none"
                                     (change)="fileSelected($event.target.files)" />
                             </div>
 
                         </div>
                     </div>
                     <div>
-                    <button class="btn btn-success" *ngIf="mode === 'import'" style="margin-top: 24px" (click)="save()"
+                    <button class="btn btn-success" *ngIf="mode === 'import'" (click)="save()"
                         [ladda]="isImportInProcess$ | async" [disabled]="(!fileType || !selectedFile)"> Import
                     </button>
                     </div>
@@ -47,3 +49,12 @@
             </div>
     </div>
 </div>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                                    [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                                    [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

@@ -1,15 +1,15 @@
-<div id="getGroupModal" class="full-screen-modal getGroupModal manageGroupAcc" #myModel keyboardShortcut="esc" (onShortcutPress)="closePopupEvent()" (click)="keyupInitialized = true">
+<div id="getGroupModal" class="full-screen-modal get-group-modal manage-group-acc" #myModel keyboardShortcut="esc" (onShortcutPress)="closePopupEvent()" (click)="keyupInitialized = true">
 
     <!-- start header -->
     <div class="modal-header" #header>
         <span aria-hidden="true" class="close" [style.line-height.px]="64" [style.height.px]="64" data-dismiss="modal" (click)="closePopupEvent()">×</span>
         <!-- <i class="icon-cross text-right close_modal" data-dismiss="modal" (click)="()" aria-label="Close" aria-hidden="true"></i> -->
         <span class="row mr-0 ml-0">
-            <h3 class="modal-title bg pdT">Manage Groups &amp; Accounts</h3>
+            <h3 class="modal-title bg pd-t05">Manage Groups &amp; Accounts</h3>
         </span>
-        <div class="pull-right mrR3 searchBarWrapper">
+        <div class="pull-right mr-3 search-bar-wrapper">
             <div class="form-inline">
-                <div class="form-group searchBar">
+                <div class="form-group search-bar">
                     <input type="text" name="grpSrch" #grpSrch id="grpSrch" [(ngModel)]="searchString" (keyup)="searchGroups(grpSrch.value)" class="form-control" placeholder="Search accounts" trial-accordion="search" [style.width.px]="260" />
                     <a href="javascript:void(0);" class="pos-abs btn-link" (click)="resetGroupSearchString()" *ngIf="grpSrch.value">Clear</a>
 
@@ -20,19 +20,19 @@
     </div>
     <!-- end header -->
 
-    <div class="modal-body pd0">
+    <div class="modal-body p-0">
         <tabset class="custom-tabs master-custom-tabs">
             <tab heading="Master" id="tab1">
                 <div class="clearfix">
-                    <div class="grp-col pd0 " style="max-width:58.333%;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}">
+                    <div class="grp-col p-0"  [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}">
                         <!-- <perfect-scrollbar> -->
                         <div class="search-loading" *ngIf="(searchLoad | async)">
-                            <div class="vcenter">
+                            <div class="vertical-center">
                                 <span class="spinner small"></span> Loading…
                             </div>
                         </div>
                         <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
-                            <div class="vcenter">
+                            <div class="vertical-center">
                                 <h1>No Result Found</h1>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                         <!-- </perfect-scrollbar> -->
                     </div>
                     <!-- middle body -->
-                    <div class="form-box form-bg hieghtInVH">
+                    <div class="form-box form-bg height-in-vh">
                         <account-operations [columnsRef]="currentColumns" [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))" [breadcrumbPath]="breadcrumbPath" [breadcrumbUniquePath]="breadcrumbUniquePath" #form>
                         </account-operations>
                     </div>
@@ -77,9 +77,9 @@
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
                                             <label *ngIf="first || isMobileScreen">Length</label>
-                                            <input *ngIf="item.get('dataType').value ==='BOOLEAN' || item.get('dataType').value ==='NUMERIC' || !item.get('dataType').value" type="number" [max]="30" class="form-control" formControlName="valueLength" name="valueLength" [attr.disabled]="(item.get('uniqueName').value &&  isEnabledIndex!==index) || item.get('dataType').value ==='BOOLEAN' ?'': null"
+                                            <input *ngIf="item.get('dataType').value ==='BOOLEAN' || item.get('dataType').value ==='NUMERIC' || !item.get('dataType').value" type="number" [max]="30" [maxLength]='2' class="form-control" formControlName="valueLength" name="valueLength" [attr.disabled]="(item.get('uniqueName').value &&  isEnabledIndex!==index) || item.get('dataType').value ==='BOOLEAN' ?'': null"
                                                 (blur)="checkValidation('length', index);" autocomplete="off" />
-                                            <input *ngIf="item.get('dataType').value ==='STRING'" type="text" class="form-control" [max]="150" formControlName="valueLength" name="valueLength" [attr.disabled]="(item.get('uniqueName').value &&  isEnabledIndex!==index) || item.get('dataType').value ==='BOOLEAN' ?'': null"
+                                            <input *ngIf="item.get('dataType').value ==='STRING'" type="text" class="form-control" [max]="150" [maxLength]='3' formControlName="valueLength" name="valueLength" [attr.disabled]="(item.get('uniqueName').value &&  isEnabledIndex!==index) || item.get('dataType').value ==='BOOLEAN' ?'': null"
                                                 (blur)="checkValidation('length', index);" autocomplete="off" />
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12 edit-close-btn">
@@ -118,7 +118,7 @@
                     </ng-container>
                 </div>
                 <div class="search-loading" *ngIf="isGetCustomInProgress">
-                    <div class="vcenter">
+                    <div class="vertical-center">
                         <span class="spinner small"></span> Loading…
                     </div>
                 </div>

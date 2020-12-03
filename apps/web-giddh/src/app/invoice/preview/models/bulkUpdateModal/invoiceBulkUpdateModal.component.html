@@ -4,7 +4,7 @@
         <span class="close" aria-hidden="true" (click)="onCancel()">×</span>
     </div>
     <form #bulkUpdateForm="ngForm" autocomplete="off" (ngSubmit)="updateBulkInvoice();">
-        <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+        <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
 
             <small>Choose a field from the dropdown and update with new information.</small>
             <div class="row mb-1 mt-2">
@@ -45,7 +45,7 @@
                             <input type="file" style="display: none;" name="bulkUploadfileInput"
                                 id="bulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
                                 [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
-                            <label class="cp fs16 text-gray font-14" for="bulkUploadfileInput">
+                            <label class="cp font-16 text-gray font-14" for="bulkUploadfileInput">
                                 Upload your logo
                             </label>
                         </label>
@@ -134,7 +134,7 @@
                     <h3 class="modal-title bg" id="modal-title">Confirmation</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancelBulkUpdateImageSloganModal()">×</span>
                 </div>
-                <div class="model-body clearfix pd2">
+                <div class="model-body clearfix pd-2">
                     <h3>The image / slogan will show only if the 'image / slogan' option is enabled from the invoice templates.
                     </h3>
                     <h4 class="mr-t2"><b> Do you want to proceed?</b></h4>

@@ -4,7 +4,7 @@ import { PAGINATION_LIMIT } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -27,7 +27,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     @ViewChild('supplierCountryField', {static: true}) public supplierCountryField;
 
     public showEntryDate = true;
-    public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public reverseChargeReportGetRequest: ReverseChargeReportGetRequest = {
@@ -55,7 +54,6 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private toasty: ToasterService, private cdRef: ChangeDetectorRef, private reverseChargeService: ReverseChargeService, private router: Router, private generalActions: GeneralActions) {
         this.setCurrentPageTitle();
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -65,18 +63,11 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public ngOnInit(): void {
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
-            this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
-                if (!res) {
-                    return;
-                }
-                res.forEach(cmp => {
-                    if (!this.activeCompany && cmp.uniqueName === activeCompanyName) {
-                        this.activeCompany = cmp;
-                        this.getReverseChargeReport(false);
-                    }
-                });
-            });
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (!this.activeCompany && activeCompany) {
+                this.activeCompany = activeCompany;
+                this.getReverseChargeReport(false);
+            }
         });
 
         this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {

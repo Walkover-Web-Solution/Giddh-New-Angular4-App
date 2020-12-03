@@ -49,7 +49,7 @@
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
                         <div class="font-14" [ngClass]="{'active': calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'}" *ngIf="activeCompany.subscription.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) !== 'Active'">{{calculateRemainingDays(activeCompany.subscription.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'"></span> {{calculateRemainingDays(activeCompany.subscription.expiry) === 'Active' ? 'Active' : ""}} </div>
                         <div class="active font-14" *ngIf="activeCompany.subscription.status==='active'"><span class="green-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
-                        <div class="text-danger font-14" *ngIf="activeCompany.subscription.status==='expired'"><span class="red-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
+                        <div class="text-danger font-14" *ngIf="activeCompany.subscription.status==='expired'"><span class="red-dot"></span> {{activeCompany.subscription.status | titlecase}} </div>
                     </div>
                 </div>
             </div>
@@ -192,7 +192,7 @@
                                         <span class="orange-dote"> </span> Trial
                                     </div>
                                     <div class="text-danger d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'expired'">
-                                        <span class="red-dote"> </span> Expired
+                                        <span class="red-dot"> </span> Expired
                                     </div>
                                     <!-- <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 middle" dropdown
                                         placement="bottom right">
@@ -229,7 +229,7 @@
                                                     <div class="d-flex associated-company-name">
                                                         <p>
                                                             <img src="assets/images/blue-check.svg" class="mr-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
-                                                            {{company.name}} ({{company.alias}})
+                                                            {{company.name}} {{(company.alias) ? "(" + company.alias + ")" : ""}}
                                                         </p>
                                                         <p class="font-12 mt-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
                                                     </div>
@@ -281,9 +281,9 @@
 
                 <!-- <div class="row">
                 <div class="col-sm-7 transaction-list">
-                    <div class="box clearfix mr-t2 no-padding">
+                    <div class="box clearfix mr-t2 p-0">
                         <div class="table-responsive">
-                            <table class="table basic mr0 subscription-table">
+                            <table class="table basic m-0 subscription-table">
                                 <thead>
                                     <tr>
                                         <th>Date</th> <span class="text-light-2">(previous+current)</span>
@@ -354,7 +354,7 @@
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
                         <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === 'Active'}" *ngIf="item?.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(item?.expiry) !== 'Active'">{{calculateRemainingDays(item?.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === 'Active'"></span> {{calculateRemainingDays(item?.expiry) === 'Active' ? 'Active' : ""}} </div>
                         <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span> {{item?.status | titlecase}} </div>
-                        <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dote"></span> {{item?.status | titlecase}} </div>
+                        <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dot"></span> {{item?.status | titlecase}} </div>
                     </div>
                 </div>
             </div>
@@ -392,7 +392,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table basic mr0 ">
+            <table class="table basic m-0 ">
                 <thead>
                     <tr>
                         <th>Date</th>

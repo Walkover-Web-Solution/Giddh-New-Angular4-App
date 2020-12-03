@@ -1,6 +1,5 @@
 <div id="live">
     <div class="card">
-
         <div class="panel-heading">
             <strong>Total Overdues</strong>
             <div class="pull-right dashboard-filter">
@@ -17,8 +16,8 @@
             </div>
         </div>
 
-        <div class="card-body pos-rel {{requestInFlight}}">
-            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+        <div class="card-body position-relative {{requestInFlight}}">
+            <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <div class="no-data mr-t2 loader-main">
                     <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                     <div class="spinner2">
@@ -30,7 +29,7 @@
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
                 <!-- <chart [chart]="totaloverDueChart" *ngIf="dataFound" #currentRatio></chart> -->
                 <highcharts-chart *ngIf="chartOptions && dataFound" [Highcharts]="totaloverDueChart" [options]="chartOptions"></highcharts-chart>
-                <div class="noDataAvailable" *ngIf="!dataFound">
+                <div class="no-data-available" *ngIf="!dataFound">
                     <img src="{{imgPath}}noDataChart.svg" alt="no data found">
                 </div>
                 <div class="clearfix mr-b2">

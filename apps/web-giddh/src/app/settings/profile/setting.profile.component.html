@@ -20,16 +20,16 @@
                     <label>Contact No.</label>
                     <input type="tel" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                 </div>
-                <div class="col-lg-4 col-md-12 col-sm-12 pd0 d-flex">
-                    <div class="form-group col-sm-4 pdR0">
+                <div class="col-lg-4 col-md-12 col-sm-12 p-0 d-flex">
+                    <div class="form-group col-sm-4 pr-0">
                         <label>Currency</label><br>
-                        <div class="custom-select pos-rel">
+                        <div class="custom-select position-relative">
                             <input type="text" placeholder="Currency" class="form-control" disabled [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
                         </div>
 
                     </div>
                     <div class="form-group col-sm-8">
-                        <div class="checkbox pt-26 noMarg">
+                        <div class="checkbox pt-26 no-margin">
                             <span>
                                 <input id="isMultiple" (change)="changeEventOfForm('isMultipleCurrency')"
                                     [(ngModel)]="companyProfileObj.isMultipleCurrency" class="checkbox-custom"
@@ -45,7 +45,7 @@
             <div class="row">
                 <div class="form-group col-lg-4 col-md-12 col-sm-12">
                     <label>Address</label><br>
-                    <textarea rows="4" style="height: 170px;" type="text" placeholder="Address" class="form-control" [(ngModel)]="companyProfileObj.address" name="address" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
+                    <textarea rows="4" type="text" placeholder="Address" class="form-control address-textarea" [(ngModel)]="companyProfileObj.address" name="address" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
                 </div>
                 <div class="form-group  col-lg-4 col-md-12 col-sm-12">
                     <div class="clearfix">
@@ -65,19 +65,19 @@
                     <div class="row ">
                         <div class="form-group col-sm-12 col-md-12 col-lg-6 decimal-system">
                             <label>Digits After Decimal</label><br>
-                            <div class="custom-select pos-rel ">
+                            <div class="custom-select position-relative ">
                                 <sh-select [options]="decimalDigitSource " placeholder="select type " [isFilterEnabled]="true " name="digitafterdecimal " [(ngModel)]="companyProfileObj.balanceDecimalPlaces" (selected)="checkDigitAfterDecimal($event) "></sh-select>
                             </div>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-6 decimal-system number-system">
                             <label>Number System</label><br>
-                            <div class="custom-select pos-rel ">
+                            <div class="custom-select position-relative ">
                                 <sh-select #shnumberSystemSource [options]="numberSystemSource " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) " [placeholder]=" 'Select type'
                                     " [ItemHeight]="41 ">
                                     <ng-template #optionTemplate let-option="option ">
                                         <ng-container>
-                                            <a href="javascript:void(0) " class="list-item " style="border-bottom: 1px solid #ccc; ">
-                                                <p class="numberSystem ">{{ option.label }} <span class="pull-right ">{{ option.additional.type}}</span></p>
+                                            <a href="javascript:void(0) " class="list-item number-border">
+                                                <p class="number-system ">{{ option.label }} <span class="pull-right ">{{ option.additional.type}}</span></p>
                                             </a>
                                         </ng-container>
                                     </ng-template>
@@ -88,12 +88,12 @@
                     <div class="form-group ">
                         <div *ngIf="companyProfileObj.branchCount>0" class="form-group">
                             <label>Branch Unique Name</label><br>
-                            <div class="custom-select pos-rel">
+                            <div class="custom-select position-relative">
                                 <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Branch unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                         </div>
                         <div *ngIf="companyProfileObj.branchCount==0" class="form-group">
                             <label>Headquarter Unique Name</label><br>
-                            <div class="custom-select pos-rel">
+                            <div class="custom-select position-relative">
                                 <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Headquarter unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                         Add
                     </button>
                     <div *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length > 0">
-                        <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mr-t1 company_gst" [ngClass]="{'mr-t2': i != gst.length-1, 'bdrB': i != gst.length-1}">
+                        <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mr-t1 company-gst" [ngClass]="{'mr-t2': i != gst.length-1, 'bd-rb': i != gst.length-1}">
                             <div class="row">
                                 <div class="col-lg-4 col-md-12 col-sm-12">
                                     <div class="row">
@@ -128,7 +128,7 @@
                                                     <input type="text" placeholder="{{formFields['taxName'].label}}" class="form-control" (keyup)="setChildState(gstNumberField, i);" #gstNumberField (blur)="setChildState(gstNumberField, i); checkGstNumValidation(gstNumberField);gstKeyDownSubject$.next($event)"
                                                         [(ngModel)]="gst.taxNumber" name="newgstNumber+{{i}}" />
                                                     <div class="input-group-addon">
-                                                        <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true" style="font-size:18px;" tooltip="Delete {{formFields['taxName'].label}}" placement="right"></i>
+                                                        <i class="fa fa-trash-o cp font-18" (click)="removeGstEntry(i)" aria-hidden="true" tooltip="Delete {{formFields['taxName'].label}}" placement="right"></i>
                                                     </div>
                                                 </div>
                                             </div>
@@ -167,8 +167,6 @@
         <div class="cube2"></div>
     </div>
 </div>
-
-
 
 <!--Tabs of Company Profile-->
 <div *ngIf="!(getCompanyProfileInProgress$ | async)" class="settings-profile-tabs">

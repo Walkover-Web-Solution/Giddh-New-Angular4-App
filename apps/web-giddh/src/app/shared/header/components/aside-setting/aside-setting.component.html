@@ -4,7 +4,7 @@
             <h2>Settings</h2>
             <div id="close" class="cursor-pointer" (click)="closeAsidePane($event)"><i class="icon-cross"></i></div>
             <div class="search-field relative">
-                <i class="icon-search pos-abs"></i>
+                <i class="icon-search position-absolute"></i>
                 <input type="text" class="form-control" name="search" #searchField [(ngModel)]="search"
                     (ngModelChange)="searchMenu($event)" placeholder="Search Settings">
             </div>
