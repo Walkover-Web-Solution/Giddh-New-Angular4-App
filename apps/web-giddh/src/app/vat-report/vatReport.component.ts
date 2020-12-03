@@ -1,4 +1,4 @@
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
@@ -17,6 +17,8 @@ import { CompanyActions } from "../actions/company.actions";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReconcileService } from '../services/GstReconcile.service';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../models/user-login-state';
 
 @Component({
     selector: 'app-vat-report',
@@ -52,6 +54,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public isTaxApiInProgress: boolean;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -61,9 +69,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private cdRef: ChangeDetectorRef,
         private companyActions: CompanyActions,
-        private _route: Router
+        private _route: Router,
+        private settingsBranchAction: SettingsBranchActions,
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -89,7 +98,40 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.saveLastState(activeCompany.uniqueName);
             }
         });
-        
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                    currentBranchUniqueName = this._generalService.currentBranchUniqueName;
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                } else {
+                    currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                    this.currentBranch = {
+                        name: this.activeCompany ? this.activeCompany.name : '',
+                        alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                        uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    };
+                }
+            } else {
+                if (this._generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
         if (this.taxNumber) {
             this.getVatReport();
         }
@@ -106,7 +148,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
             vatReportRequest.taxNumber = this.taxNumber;
-
+            vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
             this.vatReport = [];
 
             this.vatService.getVatReport(vatReportRequest).subscribe((res) => {
@@ -127,7 +169,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.from = this.fromDate;
         vatReportRequest.to = this.toDate;
         vatReportRequest.taxNumber = this.taxNumber;
-
+        vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
         this.vatService.downloadVatReport(vatReportRequest).subscribe((res) => {
             if (res.status === "success") {
                 let blob = this._generalService.base64ToBlob(res.body, 'application/xls', 512);
@@ -228,6 +270,16 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public viewVatReportTransactions(section) {
         this._route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to, taxNumber: this.taxNumber } });
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof VatReportComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.getVatReport();
     }
 
     /**

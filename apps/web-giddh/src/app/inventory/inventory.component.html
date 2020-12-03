@@ -8,7 +8,7 @@
                     [active]="activeTabIndex === 0" [id]="(activeTabIndex === 0) ? 'giddh-page-heading': ''">
                     <!--sidebar-->
                     <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
-                        <inventory-sidebar *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')"></inventory-sidebar>
+                        <inventory-sidebar [currentBranchUniqueName]="currentBranchAndWarehouseFilterValues.branch" *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')"></inventory-sidebar>
                         <!--/sidebar-->
 
                         <section class="right-bar" *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')"

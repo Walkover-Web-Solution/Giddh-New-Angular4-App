@@ -1,5 +1,5 @@
-import { takeUntil } from 'rxjs/operators';
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, EventEmitter, ElementRef, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { AppState } from '../../../store/roots';
 import * as _ from '../../../lodash-optimized';
 import { Store, select } from '@ngrx/store';
@@ -13,6 +13,9 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../../models/user-login-state';
+import { GroupService } from '../../../services/group.service';
 
 @Component({
 	selector: 'search-sidebar',
@@ -22,7 +25,10 @@ import { GeneralService } from '../../../services/general.service';
 export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
 	@Input() public pageChangeEvent: any = null;
-	@Input() public filterEventQuery: any = null;
+    @Input() public filterEventQuery: any = null;
+
+    /** Emits the current selected branch */
+    @Output() public currentBranchChanged: EventEmitter<string> = new EventEmitter();
 
 	public showFromDatePicker: boolean;
 	public showToDatePicker: boolean;
@@ -68,7 +74,15 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 		},
 		startDate: moment().subtract(30, 'days'),
 		endDate: moment()
-	};
+    };
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private paginationPageNumber: number;
     /** This holds giddh date format */
@@ -92,7 +106,14 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 	/**
 	 * TypeScript public modifiers
 	 */
-	constructor(private store: Store<AppState>, public searchActions: SearchActions, private generalService: GeneralService, private modalService: BsModalService) {
+	constructor(
+        private store: Store<AppState>,
+        public searchActions: SearchActions,
+        private generalService: GeneralService,
+        private groupService: GroupService,
+        private modalService: BsModalService,
+        private settingsBranchAction: SettingsBranchActions
+    ) {
 		this.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
 	}
 
@@ -125,6 +146,46 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
+        this.store.pipe(
+            select(appState => appState.session.companies), take(1)
+        ).subscribe(companies => {
+            companies = companies || [];
+            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                } else {
+                    currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                    this.currentBranch = {
+                        name: this.activeCompany ? this.activeCompany.name : '',
+                        alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                        uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    };
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
             }
         });
 	}
@@ -161,7 +222,8 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 			refresh: isRefresh,
 			toDate: this.toDate,
 			fromDate: this.fromDate,
-			page: page ? page : 1
+            page: page ? page : 1,
+            branchUniqueName: this.currentBranch.uniqueName
 		};
 		this.store.dispatch(this.searchActions.GetStocksReport(searchRequest, searchReqBody));
 		if (event) {
@@ -259,5 +321,26 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         }
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof SearchSidebarComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.currentBranchChanged.emit(selectedEntity.value);
+        this.groupService.GetGroupsWithAccounts('', this.currentBranch.uniqueName).subscribe(response => {
+            if (response && response.body && response.body.length) {
+				let accountList = this.flattenGroup(response.body, []);
+				let groups = [];
+				accountList.map((d: any) => {
+					groups.push({ name: d.name, id: d.uniqueName });
+				});
+				this.dataSource = groups;
+			}
+        });
+
     }
 }

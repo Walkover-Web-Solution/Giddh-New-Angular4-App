@@ -6029,6 +6029,11 @@ virtual-scroll .scrollable-content .item:hover .item,
 sh-select .header {
     line-height: 34px;
 }
+sh-select.small-text {
+    input {
+        font-size: 10px !important;
+    }
+}
 
 table input[type="number"] {
     text-align: right;
@@ -9484,6 +9489,30 @@ span#HW_badge_cont:nth-child(3) {
     &.create .popover {
         .popover-body {
             padding: 8px 15px;
+        }
+    }
+}
+.linked-entities {
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            .item {
+                font-family:'opensans-semibold'
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: $rich-blue;
+            }
+            .icon-favorite-selected {
+                color: $rich-blue;
+            }
         }
     }
 }

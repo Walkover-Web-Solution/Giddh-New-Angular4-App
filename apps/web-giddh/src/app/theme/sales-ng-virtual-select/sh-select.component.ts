@@ -3,7 +3,7 @@
  */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IOption } from './sh-options.interface';
+import { BorderConfiguration, IOption } from './sh-options.interface';
 import { SalesShSelectMenuComponent } from './sh-select-menu.component';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
@@ -41,6 +41,8 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
     @Input() public ItemHeight: number = 41;
+    /** Border configuration for showing border around sh-select  */
+    @Input() public borderConfiguration: BorderConfiguration;
     @Input() public NoFoundMsgHeight: number = 35;
     @Input() public NoFoundLinkHeight: number = 35;
     @Input() public dropdownMinHeight: number = 35;

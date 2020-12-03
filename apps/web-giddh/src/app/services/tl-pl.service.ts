@@ -32,6 +32,11 @@ export class TlPlService {
         if (request.tagName) {
             params.tagName = request.tagName;
         }
+        if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
+            params.branchUniqueName = encodeURIComponent(request.branchUniqueName);
+        } else {
+            params.branchUniqueName = '';
+        }
         return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
                 map((res) => {
@@ -52,6 +57,11 @@ export class TlPlService {
         if (request.tagName) {
             params.tagName = request.tagName;
         }
+        if (request.branchUniqueName && request.branchUniqueName !== this.companyUniqueName) {
+            params.branchUniqueName = encodeURIComponent(request.branchUniqueName);
+        } else {
+            params.branchUniqueName = '';
+        }
         return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_V2_TRIAL_BALANCE
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
                 map((res) => {
@@ -68,6 +78,9 @@ export class TlPlService {
     public GetProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
         let filteredRequest = (Object.keys(request)
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
@@ -108,6 +121,9 @@ export class TlPlService {
     public GetBalanceSheet(request: BalanceSheetRequest): Observable<BaseResponse<AccountDetails, BalanceSheetRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
         let filteredRequest = (Object.keys(request)
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));

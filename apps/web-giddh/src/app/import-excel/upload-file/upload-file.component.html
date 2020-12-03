@@ -1,6 +1,34 @@
 <!-- upload And Map Content start-->
 <div class="upload-and-map-content">
     <h2 class="text-center"> Import {{ title | titlecase}}</h2>
+    <div *ngIf="currentCompanyBranches?.length > 1" class="form-group max500 center-block">
+        <label class="mt-4 mb-8">Select Branch/Headquarter you want to Import data into <sup>*</sup></label>
+        <div class="form-group linked-entities">
+            <div class="form-group">
+                <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
+                    [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
+                    [isFilterEnabled]="true" placeholder="Select Branch" [fixedValue]="currentBranch?.alias">
+                    <ng-template #optionTemplate let-option="option">
+                        <ng-container>
+                            <a href="javascript:void(0)" class="list-item d-flex">
+                                <span class="entity-icon">
+                                    <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
+                                    <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
+                                        tooltip="HO Branch"></i>
+                                </span>
+                                <span class="entity-details">
+                                    <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                    <div class="item-unq giddh-limit single-line-clamp">
+                                        {{ option.name || '-' }}
+                                    </div>
+                                </span>
+                            </a>
+                        </ng-container>
+                    </ng-template>
+                </sh-select>
+            </div>
+        </div>
+    </div>
     <div class="upload-excel max-width-500 center-block box mr-t2 dashed-border">
         <input type="file" id="csvUploadInput" placeholder="Upload an EXCEL or CSV file"
             (change)="onFileChange($event.target.files)" droppable="true" class="form-control" />
@@ -40,7 +68,7 @@
         <div class="pull-right mr-t2">
             <button class="btn btn-default" [routerLink]="['/pages/import']">Back</button>
             <button class="btn btn-success" [ladda]="isLoading" [disabled]="file === null"
-                (click)="onFileUpload.emit(file)">
+                (click)="handleFileUpload(file)">
                 Next
             </button>
         </div>

@@ -179,11 +179,11 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public loadComponent(): void {
-        this.store.dispatch(this.inventoryAction.GetStock());
+        this.store.dispatch(this.inventoryAction.GetStock(undefined, this.advanceSearchRequest.branchUniqueName));
         // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
 
         // Get groups with accounts
-        this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this._groupService.GetFlattenGroupsAccounts(undefined, undefined, undefined, undefined, this.advanceSearchRequest.branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.status === 'success' && data.body && data.body.results ) {
                 let groups: IOption[] = [];
                 data.body.results.map(d => {

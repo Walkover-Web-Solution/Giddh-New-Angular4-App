@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { fromEvent as observableFromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
@@ -29,7 +29,9 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 	/** Stores data related to stock group for inventory module */
 	public stockGroupData: Array<any>;
 	@ViewChild('search', {static: true}) public search: ElementRef;
-	@ViewChild('sidebar', {static: true}) public sidebar: ElementRef;
+    @ViewChild('sidebar', {static: true}) public sidebar: ElementRef;
+    /** Stores the current branch unique name selected in inventory */
+    @Input() public currentBranchUniqueName: string;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	/**
@@ -96,7 +98,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 		obj.format = reportFormat;
 		obj.reportType = reportType;
 		obj.from = this.fromDate;
-		obj.to = this.toDate;
+        obj.to = this.toDate;
+        obj.branchUniqueName = this.currentBranchUniqueName;
 		this.inventoryService.downloadAllInventoryReports(obj)
 			.subscribe(res => {
 				if (res.status === 'success') {

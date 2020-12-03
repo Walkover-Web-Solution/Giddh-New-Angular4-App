@@ -10,6 +10,29 @@
 </div>
 <div class="container-fluid font-14 mt-15">
     <div class="select-financial-year mb-15">
+        <div *ngIf="currentCompanyBranches?.length > 2" class="xs-mb-1 inner-button linked-entities">
+            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
+                [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
+                [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                <ng-template #optionTemplate let-option="option">
+                    <ng-container>
+                        <a href="javascript:void(0)" class="list-item d-flex">
+                            <span class="entity-icon">
+                                <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
+                                <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
+                                    tooltip="HO Branch"></i>
+                            </span>
+                            <span class="entity-details">
+                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                <div class="item-unq giddh-limit single-line-clamp">
+                                    {{ option.name || '-' }}
+                                </div>
+                            </span>
+                        </a>
+                    </ng-container>
+                </ng-template>
+            </sh-select>
+        </div>
         <div class="xs-mb-1 inner-button">
             <sh-select [options]="financialOptions" [isFilterEnabled]="true" [placeholder]="activeFinacialYr?.uniqueName"
                 name="currentActiveFinacialYear" [(ngModel)]='currentActiveFinacialYear.value' [showClear]="false"
@@ -17,7 +40,7 @@
         </div>
         <div class="inner-button xs-mb-1 pr-5 xs-pr-0">
             <div class="btn-group xs-pr-0" dropdown [autoClose]="true" container="body">
-                <button id="button-nested" dropdownToggle type="button" class="btn  dropdown-toggle"
+                <button id="button-nested" dropdownToggle type="button" class="btn text-capitalize dropdown-toggle"
                     aria-controls="dropdown-nested"> {{selectedType}}<span class="caret"></span>
                 </button>
                 <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu sales-register-menu" role="menu"
@@ -42,7 +65,7 @@
             </div>
         </div>
     </div>
-	<purchase-register-table-component [reportRespone]="reportRespone" [purchaseRegisterTotal]="purchaseRegisterTotal"></purchase-register-table-component>
+	<purchase-register-table-component [currentBranchUniqueName]="currentBranch?.uniqueName" [reportRespone]="reportRespone" [purchaseRegisterTotal]="purchaseRegisterTotal"></purchase-register-table-component>
 	<!-- <div class="clearfix">
     <reports-graph-component></reports-graph-component>
   </div> -->

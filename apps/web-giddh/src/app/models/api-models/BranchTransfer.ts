@@ -146,7 +146,8 @@ export class NewBranchTransferListGetRequestParams {
 	public page: any;
 	public count: any;
 	public sort: string;
-	public sortBy: string;
+    public sortBy: string;
+    public branchUniqueName: string;
 }
 
 export class NewBranchTransferListPostRequestParams {

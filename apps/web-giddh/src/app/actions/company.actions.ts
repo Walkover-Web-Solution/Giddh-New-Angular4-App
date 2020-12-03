@@ -18,6 +18,7 @@ import {
     TaxResponse,
 } from '../models/api-models/Company';
 import { IRegistration } from '../models/interfaces/registration.interface';
+import { OrganizationType } from '../models/user-login-state';
 import { CompanyService } from '../services/companyService.service';
 import { ToasterService } from '../services/toaster.service';
 import { CustomActions } from '../store/customActions';
@@ -490,6 +491,17 @@ export class CompanyActions {
     }
     public CreateNewCompanyResponse(value: BaseResponse<CompanyResponse, CompanyCreateRequest>): CustomActions {
         this.store.dispatch(this.ResetApplicationData());
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        const organization: Organization = {
+            type: OrganizationType.Company, // Mode to which user is switched to
+            uniqueName: '',
+            details
+        };
+        this.store.dispatch(this.setCompanyBranch(organization));
         return {
             type: CompanyActions.CREATE_NEW_COMPANY_RESPONSE,
             payload: value
@@ -637,12 +649,12 @@ export class CompanyActions {
     /**
      * Returns the action to set the financial year chosen in either sales or purchase register
      *
-     * @param {string} financialYearUniqueName Unique name of chosen financial year
+     * @param {string} filterValues Stores the filter values
      * @returns {CustomActions} Action to set the financial year
      * @memberof CompanyActions
      */
-    public setUserChosenFinancialYear(financialYearUniqueName: string): CustomActions {
-        return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: financialYearUniqueName };
+    public setUserChosenFinancialYear(filterValues: {financialYear: string, branchUniqueName: string, timeFilter: string}): CustomActions {
+        return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: filterValues };
     }
 
     /**

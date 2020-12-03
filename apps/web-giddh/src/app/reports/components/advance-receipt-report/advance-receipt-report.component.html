@@ -6,18 +6,40 @@
             <!-- Invoice filter section -->
             <div class="mr-r1 d-flex w-100">
                 <div class="d-flex">
-                <div class="input-group">
-                    <span class="input-wrapper">
-                        <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                            (applyDaterangepicker)="onDateChange($event)" class="form-control cursor-pointer" />
-                    </span>
+                    <div class="input-group linked-entities mr-15" *ngIf="currentCompanyBranches?.length > 2">
+                        <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
+                            [ItemHeight]="33" class="entity-dropdown" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                            placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                            <ng-template #optionTemplate let-option="option">
+                                <ng-container>
+                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                        <span class="entity-icon">
+                                            <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
+                                            <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
+                                                tooltip="HO Branch"></i>
+                                        </span>
+                                        <span class="entity-details">
+                                            <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                            <div class="item-unq giddh-limit single-line-clamp">
+                                                {{ option.name || '-' }}
+                                            </div>
+                                        </span>
+                                    </a>
+                                </ng-container>
+                            </ng-template>
+                        </sh-select>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-wrapper">
+                            <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
+                                (applyDaterangepicker)="onDateChange($event)" class="form-control cursor-pointer" />
+                        </span>
+                    </div>
+                    <div class="advance-icon cursor-pointer" tooltip="Advance Search" (click)="openModal()">
+                        <span class="icon-advance-filter"></span>
+                    </div>
                 </div>
-                <div class="advance-icon cursor-pointer" tooltip="Advance Search" (click)="openModal()">
-                    <span class="icon-advance-filter"></span>
-                </div>
-                </div>
-                <div class="clear-filter width-100 align-items-center d-flex justify-content-center"
-                    *ngIf="showClearFilter">
+                <div class="clear-filter ml-15 align-items-center d-flex justify-content-center" *ngIf="showClearFilter">
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span> Clear
                         Filter</button>
                 </div>

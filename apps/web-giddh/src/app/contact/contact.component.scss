@@ -364,7 +364,9 @@ button.btn.btn-filter span.icon-cross {
     align-items: center;
     justify-content: space-between;
 }
-
+.linked-entities {
+    width: 200px;
+}
 /*responsive*/
 @media(max-width:800px){
     .customer-form-inline{

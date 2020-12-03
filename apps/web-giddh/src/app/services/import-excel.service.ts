@@ -19,14 +19,17 @@ export class ImportExcelService {
 		@Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 	}
 
-	public uploadFile(entity: string, model: File) {
+	public uploadFile(entity: string, model: any) {
 		const companyUniqueName = this._generalService.companyUniqueName;
-		const url = this.config.apiUrl + IMPORT_EXCEL_API.UPLOAD_FILE
+		let url = this.config.apiUrl + IMPORT_EXCEL_API.UPLOAD_FILE
 			.replace(':companyUniqueName', companyUniqueName)
 			.replace(':entity', entity)
-			;
+            ;
+        if (model.data.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(model.data.branchUniqueName)}`);
+        }
 		const formData: FormData = new FormData();
-		formData.append('file', model, model.name);
+		formData.append('file', model.data.file, model.data.file.name);
 		return this._http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
 			let data: BaseResponse<ImportExcelResponseData, string> = res;
 			return data;

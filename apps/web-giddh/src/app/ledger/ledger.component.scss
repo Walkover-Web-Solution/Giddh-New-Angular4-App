@@ -705,6 +705,36 @@ sh-select:focus {
 .show-if-ledger-open{
     height: 300px;
 }
+.linked-entities {
+    width: 200px;
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            text-align: left;
+            .item {
+                font-family:'opensans-semibold'
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: $rich-blue;
+            }
+            .icon-favorite-selected {
+                color: $rich-blue;
+            }
+        }
+    }
+    i {
+        font-size: unset;
+        line-height: normal;
+    }
+}
 @media only screen and (max-width: 1540px) {
     .modal-ledger {
         width: 85%;
@@ -743,6 +773,10 @@ sh-select:focus {
 
 }
 @media (max-width: 991px) {
+    .linked-entities{
+        margin-top: 10px;
+        margin-bottom: 0;
+    }
     .date-range-options {
         margin-bottom: 10px;
         text-align: left !important;
@@ -998,6 +1032,9 @@ sh-select:focus {
     justify-content: flex-end !important;
 }
 @media (max-width: 767px) {
+    .linked-entities{
+        width: 100%;
+    }
     .ledger-head {
         th {
             padding: 0 0 10px !important;
@@ -1021,7 +1058,7 @@ sh-select:focus {
     .ledg-head {
         .single-search-box {
             position: relative;
-            width: calc(100% - 45px);
+            width: calc(100% - 100px);
             .default-width-input {
                 width: calc(100% - 100px);
             }
