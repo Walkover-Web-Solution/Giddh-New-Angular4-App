@@ -100,6 +100,12 @@ span.eligible-ITC {
         color: $deep-sky-blue;
     }
 }
+.disabled-item {
+    pointer-events: none;
+}
+.custom-component[disabled] {
+    pointer-events: none;
+}
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;

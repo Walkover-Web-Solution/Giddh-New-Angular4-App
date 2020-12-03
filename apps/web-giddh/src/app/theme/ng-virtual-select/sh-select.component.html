@@ -1,6 +1,6 @@
 <div #dd [style.width]="width" class="pos-rel">
     <div [attr.style]="borderConfiguration?.style" class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
-        (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)"
+        (click)="showSearchSuggestion ? show($event) : ''" [class.open]="isOpen" tabindex="0" (focus)="showSearchSuggestion ? show($event) : ''" (blur)="hide($event)"
         (keydown)="keydownUp($event)">
 
 
@@ -17,20 +17,20 @@
             <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
             <input type="text" autocomplete="disabled" class="pd-l1 form-control" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
                 [attr.style]="borderConfiguration?.style"
-                (click)="show($event);" [placeholder]="selectedValues?.length > 0 && !showCheckbox ? filter : placeholder"
+                (click)="showSearchSuggestion ? show($event) : '';" [placeholder]="selectedValues?.length > 0 && !showCheckbox ? filter : placeholder"
                 [(ngModel)]="filter" (ngModelChange)="handleInputChange($event)">
         </div>
         <!--endregion-->
 
         <!--region single-->
         <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-        <input type="text" autocomplete="disabled" [attr.readonly]="readonlyInput" class="form-control " #inputFilter tabindex="0"
-            *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);"
+        <input type="text" autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null" class="form-control " #inputFilter tabindex="0"
+            *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="showSearchSuggestion ? show($event) : '';"
             (focus)="subscribeToQueryChange()" [attr.style]="borderConfiguration?.style"
             [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="handleInputChange($event)"
             style="padding-right: 14px !important;">
 
-        <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
+        <div (click)="showSearchSuggestion ? show($event) : '';" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
                     <input autocomplete="disabled" type="text" readonly value="{{selectedValues[0].label}}"
@@ -38,7 +38,7 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input autocomplete="disabled" [attr.readonly]="readonlyInput" class="form-control focused"
+                <input autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null" class="form-control focused"
                     (focus)="subscribeToQueryChange()" [attr.style]="borderConfiguration?.style"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [disabled]="disabled"
                     [value]="filter" style="padding-right: 13px !important;" />
