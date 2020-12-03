@@ -32,16 +32,6 @@ describe('This is Login Test', function() {
     // })
 
     it('Login with Email', () => {
-        // cy.visit('https://shop.demoqa.com/my-account/');
-        // cy.get('#reg_username').type(this.data.Username);
-        // cy.get('#reg_email').type(this.data.Email);
-        // cy.get('#reg_password').type(this.data.Password)
-        // const loginPage = new LoginPage()
-        // const mainPage = new MainPage()
-        // cy.visit(Cypress.env('url'))
-        // //mainPage.getLoginButton().click()
-        // loginPage.getLoginWithGoogle().click()
-        // //cy.visit(Cypress.env('baseUrl'))
         cy.loginWithEmail(testData.Email, testData.Password)
 
     })
