@@ -31,7 +31,7 @@ describe('This is Sundry Creditors Test', function() {
     });
 
 
-    it('Ledger entry without taxes and Discount ', function () {
+    xit('Ledger entry without taxes and Discount ', function () {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'vendor1', 'vendor1 A/c').then(()=>{
             cy.createLedger('Sales','#select-menu-0 > .list-item > .item', '100.50')
             // cy.getAllLedger().then((response) => {
@@ -46,13 +46,13 @@ describe('This is Sundry Creditors Test', function() {
         })
     });
 
-    it('Ledger entry with Inventory ', function () {
+    xit('Ledger entry with Inventory ', function () {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'vendor1', 'vendor1 A/c').then(()=>{
             cy.createLedger('Sales',':nth-child(2) > .list-item > .item', '177.80')
         })
     });
 
-    it('Ledger entry with Inventory & Taxes', function () {
+    xit('Ledger entry with Inventory & Taxes', function () {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'vendor1', 'vendor1 A/c').then(()=>{
             cy.createLedgerWithTaxes('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })
