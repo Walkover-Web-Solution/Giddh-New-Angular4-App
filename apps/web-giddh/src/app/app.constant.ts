@@ -262,5 +262,5 @@ export enum SearchResultText {
 export const TCS_TDS_TAXES_TYPES = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
 export const SUPPORT_TEAM_NUMBERS = [
-    "8889500411", "8889500350", "8889378604"
+    "+918889500411", "+918889500350", "+918889378604"
 ];
