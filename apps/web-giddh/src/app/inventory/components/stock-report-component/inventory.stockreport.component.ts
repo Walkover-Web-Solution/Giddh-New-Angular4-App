@@ -21,9 +21,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of as observableOf, ReplaySubject, Subscription, combineLatest as observableCombineLatest } from 'rxjs';
-
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
@@ -37,7 +35,7 @@ import { InvViewService } from '../../inv.view.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { ESCAPE } from '@angular/cdk/keycodes';
+import { KEYS } from '../../../accounting/journal-voucher/journal-voucher.component';
 
 @Component({
     selector: 'invetory-stock-report',  // <home></home>
@@ -432,7 +430,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             this.toggleAsidePane();
         }
 
-        if (event.which === ESCAPE) {
+        if (event.key === KEYS.ESC) {
             event.preventDefault();
             event.stopPropagation();
             this.asideTransferPaneState = 'out';
