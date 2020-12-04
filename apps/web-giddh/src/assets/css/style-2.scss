@@ -1653,7 +1653,7 @@ modal-container.modal {
 .custom-datepicker i {
     position: absolute;
     left: 12px;
-    top: 10px;
+    top: 4px;
     z-index: 9;
     font-size: 17px;
     color: $gray;
@@ -1667,7 +1667,7 @@ modal-container.modal {
     width: 230px !important;
     max-width: 230px;
     display: block;
-    padding-left: 25px !important;
+    padding-left: 20px !important;
     border: 1px solid $gainsboro;
     height: 36px;
 }

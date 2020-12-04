@@ -484,9 +484,9 @@ a[vr-item]:focus {
     padding:0px !important;
     border:0px !important;
     .calendar-addon {
-    position: absolute;
-    left:auto;
-    margin:auto;
+        position: absolute;
+        left:4px;
+        margin:auto;
     }
     .input-date{
         border: 1px solid $white;
