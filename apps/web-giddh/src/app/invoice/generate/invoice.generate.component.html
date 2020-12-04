@@ -37,15 +37,15 @@
                             </button>
                         </div>
                         <span>
-                            <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
+                            <button [disabled]="isCompany" [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
                                 (click)="generateBulkInvoice(false)">
                                 Generate Multiple
                             </button>
-                            <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
+                            <button [disabled]="isCompany" [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
                                 (click)="generateBulkInvoice(true)">
                                 Generate Compound
                             </button>
-                            <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView"
+                            <button [disabled]="isCompany" placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView"
                                 [hidden]="selectedLedgerItems.length === 0  || !togglePrevGenBtn"
                                 class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
                             </button>

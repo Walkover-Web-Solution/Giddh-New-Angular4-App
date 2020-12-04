@@ -231,7 +231,7 @@
     .image-collapsed {
         max-height: 130px;
         overflow: hidden;
-    
+
         img{
             height:auto;
         }
@@ -332,6 +332,9 @@ span.close-modal.cp.pull-right {
     display: inline-block !important;
     left: auto !important;
     right: 8px !important;
+}
+.disabled-change-status {
+    opacity: 0.65;
 }
 
 .btn-group.changeStatus-dropdown.open.show {
