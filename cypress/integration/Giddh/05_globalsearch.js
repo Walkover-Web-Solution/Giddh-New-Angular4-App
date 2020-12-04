@@ -5,35 +5,35 @@ describe('This is Global Search Test', function() {
 
     const globalSearchPage = new GlobalSearchPage()
 
-    before(function() {
-        cy.loginWithEmail("giddhautomation@gmail.com", "giddhautomation1@")
-    })
+    // before(function() {
+    //     cy.loginWithEmail("giddhautomation@gmail.com", "giddhautomation1@")
+    // })
 
-    xit('Verify Trial Balance using Global Search', function () {
-        cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
+    // xit('Verify Trial Balance using Global Search', function () {
+    //     cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
 
-    });
+    // });
 
-    xit('Verify Invoice using Global Search', function () {
-        cy.globalSearch('#giddh-page-heading-link > span','Invoice', 'Invoice ')
+    // xit('Verify Invoice using Global Search', function () {
+    //     cy.globalSearch('#giddh-page-heading-link > span','Invoice', 'Invoice ')
 
-    });
+    // });
 
-    xit('Verify Customer module using Global Search', function () {
-        cy.globalSearch('#giddh-page-heading-link > span','Customer', 'Customer ')
-    });
+    // xit('Verify Customer module using Global Search', function () {
+    //     cy.globalSearch('#giddh-page-heading-link > span','Customer', 'Customer ')
+    // });
 
-    xit('Verify Vendor module using Global Search', function () {
-        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Vendor', 'Vendor ')
-    });
+    // xit('Verify Vendor module using Global Search', function () {
+    //     cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Vendor', 'Vendor ')
+    // });
 
-    xit('Verify Settings module using Global Search', function () {
-        cy.globalSearch('#giddh-page-heading-link > span','Settings', 'Settings > Taxes ')
-    });
+    // xit('Verify Settings module using Global Search', function () {
+    //     cy.globalSearch('#giddh-page-heading-link > span','Settings', 'Settings > Taxes ')
+    // });
 
-    xit('Verify Walkover Account module using Global Search', function () {
-        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Walkover', 'Walkover Technologies Private Limited A/c')
-    });
+    // xit('Verify Walkover Account module using Global Search', function () {
+    //     cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Walkover', 'Walkover Technologies Private Limited A/c')
+    // });
 
     // xit.only('Verify Cash Account module using Global Search', function () {
     //     cy.get('body').type('{ctrl}g', {force: true})
