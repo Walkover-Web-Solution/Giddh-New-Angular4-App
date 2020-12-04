@@ -6,7 +6,7 @@ class GlobalSearchPage {
     }
 
     getGlobalSearch(timeOut) {
-        return cy.get('.search-element' , {timeout: timeOut})
+        return cy.get('.search-element', {timeout: timeOut})
     }
 
     selectFirstValueAfterSearch() {

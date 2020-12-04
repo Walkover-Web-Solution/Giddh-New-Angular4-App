@@ -21,17 +21,8 @@ describe('This is Login Test', function() {
     })
 
 
-    // it('Login with Gmail', () => {
-    //     // const loginPage = new LoginPage()
-    //     // const mainPage = new MainPage()
-    //     // cy.visit(Cypress.env('url'))
-    //     // //mainPage.getLoginButton().click()
-    //     // loginPage.getLoginWithGoogle().click()
-    //     // //cy.visit(Cypress.env('baseUrl'))
-    //    cy.loginWithGoogle("anc", "abc")
-    // })
 
-    xit('Login with Email', () => {
+    it('Login with Email1', () => {
         cy.loginWithEmail(testData.Email, testData.Password)
 
     })
