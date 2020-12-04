@@ -65,6 +65,11 @@
 .warehouse-name {
     white-space: normal;
 }
+.custom-datepicker {
+    i{
+        top: 10px;
+    }
+}
 /*responsive */
 @media (max-width: 768px) {
     .on-mobile-view th {
