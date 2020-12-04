@@ -1018,6 +1018,18 @@ strong {
 .invoice-detail-wrapper{
     padding-left: 0;
 }
+.wrap-edit-history-btn {
+    .history-btn {
+        i.icon-history-icon{
+        color: $gray;
+        }
+        &:hover{
+            i.icon-history-icon{
+                color: $white;
+            }
+        }
+    }
+}
 @media (max-width: 767px) {
     .center-block .btn-sm {
         float: none !important;
