@@ -1653,9 +1653,10 @@ modal-container.modal {
 .custom-datepicker i {
     position: absolute;
     left: 12px;
-    top: 4px;
+    top: 10px;
     z-index: 9;
     font-size: 17px;
+    color: $gray;
 }
 
 .custom-datepicker input {
@@ -9524,6 +9525,9 @@ span#HW_badge_cont:nth-child(3) {
         padding-left: 10px;
         border-bottom: none !important;
     }
+}
+.giddh-calendar.show {
+    margin-top: 0;
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {
