@@ -274,3 +274,7 @@ export const RESTRICTED_BRANCH_ROUTES = [
     '/pages/settings/financial-year',
     '/pages/user-details/subscription'
 ];
+
+export const SUPPORT_TEAM_NUMBERS = [
+    "8889500411", "8889500350", "8889378604"
+];
