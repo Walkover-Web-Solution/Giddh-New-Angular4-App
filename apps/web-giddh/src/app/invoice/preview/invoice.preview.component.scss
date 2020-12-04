@@ -553,6 +553,10 @@ span.icon-export-icon {
     }
 }
 
+.disabled-action {
+    opacity: 0.65;
+}
+
 /* responsive */
 @media(max-width:1024px){
     .perform-payment {

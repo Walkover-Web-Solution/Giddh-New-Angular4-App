@@ -12,7 +12,7 @@
                     <div class="invoice-search-box">
                         <input type="text" placeholder="search" #searchElement>
 
-                        <div class="btn-group" dropdown *ngIf="voucherType === 'sales'"
+                        <div [isDisabled]="isCompany" class="btn-group" dropdown *ngIf="voucherType === 'sales'"
                              [autoClose]="true">
                             <button id="button-basic2" dropdownToggle type="button"
                                 class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0" aria-controls="dropdown-basic3">
@@ -31,7 +31,7 @@
                             </ul>
                         </div>
 
-                        <button class="btn btn-sky-blue mr-0" *ngIf="voucherType !== 'sales'"
+                        <button [disabled]="isCompany" class="btn btn-sky-blue mr-0" *ngIf="voucherType !== 'sales'"
                                 (click)="goToInvoice()">+ New
                             {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
@@ -99,7 +99,7 @@
                                             <img src="assets/images/multiply.svg"></span>
 
                                         <!-- region for proforma and estimates -->
-                                        <div class="btn-group changeStatus-dropdown pull-right" dropdown
+                                        <div [isDisabled]="isCompany" [class.disabled-change-status]="isCompany" class="btn-group changeStatus-dropdown pull-right" dropdown
                                              *ngIf="only4ProformaEstimates">
 
                                             <button id="button-basic" dropdownToggle type="button"
@@ -139,7 +139,7 @@
                                         <!-- endregion -->
 
                                         <!-- region for invoice -->
-                                        <div class="btn-group changeStatus-dropdown pull-right" dropdown
+                                        <div [isDisabled]="isCompany" [class.disabled-change-status]="isCompany" class="btn-group changeStatus-dropdown pull-right" dropdown
                                              *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
                                             <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
                                                 {{ selectedItem.voucherStatus }}
@@ -178,7 +178,7 @@
                                         <!-- endregion -->
 
                                         <!-- region for purchase -->
-                                        <div class="btn-group changeStatus-dropdown pull-right" dropdown
+                                        <div [isDisabled]="isCompany" [class.disabled-change-status]="isCompany" class="btn-group changeStatus-dropdown pull-right" dropdown
                                              *ngIf="selectedItem?.voucherType === 'purchase'">
 
                                             <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2">Change Status <span class="caret"></span></button>
@@ -195,9 +195,9 @@
                                         <!-- endregion -->
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-grps pull-right">
-                                                <span>
+                                                <span [class.disabled]="isCompany">
                                                     <a href="javascript:void 0" tooltip="Edit" placement="top"
-                                                        (click)="toggleEditMode()"><i class="icon-edit-pencil"></i></a>
+                                                        (click)="isCompany ? '' : toggleEditMode()"><i class="icon-edit-pencil"></i></a>
                                                 </span>
 
                                                 <span class="pos-rel" *ngIf="selectedItem?.voucherType !== 'purchase'">
@@ -237,9 +237,9 @@
                                                         (click)="downloadFile()"><i class="icon-download"></i></a>
                                                 </span>
 
-                                                <span>
+                                                <span [class.disabled]="isCompany">
                                                     <a href="javascript:void 0" tooltip="Delete" placement="top"
-                                                        (click)="deleteConfirmationModel.toggle()"><i
+                                                        (click)="isCompany ? '' : deleteConfirmationModel.toggle()"><i
                                                             class="fa fa-trash"></i></a>
                                                 </span>
                                             </div>
@@ -259,7 +259,7 @@
 
                             <div class="row">
 
-                                <div class="col-md-4 col-12" *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
+                                <div class="col-md-4 col-12" *ngIf="!isCompany && (selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
                                     (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
                                     <div class="single-paymentDetail clearfix pr-4">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
@@ -340,7 +340,7 @@
                                 <img
                                     class="image-preview img-expand" [src]="imagePreviewSource"/>
                             </div>
-                            <div *ngIf="shouldShowUploadAttachment"
+                            <div *ngIf="shouldShowUploadAttachment && !isCompany"
                                 class="upload-excel max500 center-block box dashed-bdr">
                                 <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
                                     droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect

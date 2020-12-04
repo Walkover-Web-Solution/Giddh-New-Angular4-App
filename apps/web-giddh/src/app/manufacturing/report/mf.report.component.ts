@@ -66,6 +66,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
 	constructor(
         private store: Store<AppState>,
@@ -86,7 +88,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	public ngOnInit() {
 		this.initializeSearchReqObj();
 		// Refresh the stock list
-		this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
 		this.store.select(p => p.inventory.manufacturingStockList).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
 			if (o) {
@@ -145,6 +147,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches.length > 2;
                 let currentBranchUniqueName;
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     currentBranchUniqueName = this.generalService.currentBranchUniqueName;

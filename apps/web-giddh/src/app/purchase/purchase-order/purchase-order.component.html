@@ -24,7 +24,7 @@
         </div>
         <div class="d-flex add-invoice">
             <div *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0">
-                <div class="btn-group" dropdown #dp="bs-dropdown">
+                <div [isDisabled]="isCompany" class="btn-group" dropdown #dp="bs-dropdown">
                     <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
                         aria-controls="dropdown-basic">
                         More
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="btn-wrapper">
-                <button class="btn btn-sky-blue desktop-view-btn mr-0"
+                <button [disabled]="isCompany" class="btn btn-sky-blue desktop-view-btn mr-0"
                     [routerLink]="['/pages/purchase-management/purchase-order/new']">+
                     New Order
                 </button>
@@ -65,7 +65,7 @@
             </button>
         </div>
         <div>
-            <div class="btn-group" dropdown #dp="bs-dropdown">
+            <div [isDisabled]="isCompany" class="btn-group" dropdown #dp="bs-dropdown">
                 <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
                     aria-controls="dropdown-basic">
                     More
@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="btn-wrapper">
-            <button class="btn btn-sky-blue desktop-view-btn mr-0"
+            <button [disabled]="isCompany" class="btn btn-sky-blue desktop-view-btn mr-0"
                 [routerLink]="['/pages/purchase-management/purchase-order/new']">+
                 New Order
             </button>
@@ -212,16 +212,16 @@
                         <span class="d-flex">
                             {{item.status}}</span>
                         <div class="action-icon ml-auto" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
-                            <a tooltip="Convert to bill" *ngIf="item.status === 'open'" (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)">
+                            <a tooltip="Convert to bill" *ngIf="item.status === 'open' && !isCompany" (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)">
                                 <span class="icon-tick font-12"></span>
                             </a>
                             <a tooltip="Send Email" (click)="openSendMailModal(item, sendEmailModal)">
                                 <span class="icon-envelope font-12"></span>
                             </a>
-                            <a tooltip="Copy" [routerLink]="['/pages/purchase-management/purchase-order/new/'+item.uniqueName]">
+                            <a *ngIf="!isCompany" tooltip="Copy" [routerLink]="['/pages/purchase-management/purchase-order/new/'+item.uniqueName]">
                                 <span class="icon-copy-small font-14"></span>
                             </a>
-                            <a tooltip="Delete" (click)="confirmDelete(item)">
+                            <a *ngIf="!isCompany" tooltip="Delete" (click)="confirmDelete(item)">
                                 <i class="icon-trash"></i>
                             </a>
                         </div>
@@ -331,7 +331,10 @@
         </div>
     </div>
 </div>
-<purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders" [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName" [purchaseOrderUniqueName]="purchaseOrderUniqueName"></purchase-order-preview>
+<purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders"
+    [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName" [purchaseOrderUniqueName]="purchaseOrderUniqueName"
+    [isCompany]="isCompany">
+</purchase-order-preview>
 <ng-template #sendEmailModal>
     <purchase-send-email-modal [module]="'purchase-order'" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>

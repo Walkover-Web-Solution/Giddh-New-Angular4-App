@@ -46,7 +46,7 @@
             <!-- region more items -->
             <div *ngIf="selectedItems.length === 1" style="height: 30px;">
 
-                <div class="btn-group" dropdown #dp="bs-dropdown"
+                <div [isDisabled]="isCompany" class="btn-group" dropdown #dp="bs-dropdown"
                     style="margin-bottom: 10px;display: inline-block !important;">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
@@ -68,13 +68,13 @@
             </div>
             <!-- endregion -->
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button [disabled]="isCompany" class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button [disabled]="isCompany" class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
@@ -100,18 +100,18 @@
         </div>
         <div class="d-flex mt-1">
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-15">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button [disabled]="isCompany" class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-15">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button [disabled]="isCompany" class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
             <div *ngIf="selectedItems.length === 1" style="height: 30px;">
-                <div class="btn-group" dropdown #dp="bs-dropdown"
+                <div [isDisabled]="isCompany" class="btn-group" dropdown #dp="bs-dropdown"
                     style="margin-bottom: 10px;display: inline-block !important;">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
@@ -505,7 +505,7 @@
 
     <!-- region invoice-preview-details -->
     <div *ngIf="selectedVoucher">
-        <invoice-preview-details-component [selectedItem]="selectedVoucher" [items]="itemsListForDetails"
+        <invoice-preview-details-component [selectedItem]="selectedVoucher" [items]="itemsListForDetails" [isCompany]="isCompany"
             [voucherType]="selectedVoucher.voucherType" [invoiceSetting]="invoiceSetting" [invoiceSearch]="invoiceSearch"
             [voucherNoForDetail]="voucherNoForDetail" [voucherDetailAction]="voucherDetailAction" (invoiceSearchEvent)="invoiceSearch = $event;"
             (closeEvent)="invoicePreviewClosed()" [appSideMenubarIsOpen]="appSideMenubarIsOpen"

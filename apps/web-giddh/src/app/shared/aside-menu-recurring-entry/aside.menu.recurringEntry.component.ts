@@ -31,7 +31,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	@Input() public voucherNumber: string;
 	@Input() public voucherType?: string;
 	@Input() public mode: 'create' | 'update' = 'create';
-	@Input() public invoice: RecurringInvoice;
+    @Input() public invoice: RecurringInvoice;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    @Input() public isCompany: boolean;
 	@Output() public closeAsideEvent: EventEmitter<RecurringInvoice> = new EventEmitter(true);
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
