@@ -31,7 +31,7 @@
                 </a>
             </li>
 
-            <li>
+            <li *ngIf="isBranch || branches?.length === 1">
                 <a class="text-link-2" [routerLink]="['/pages','import','entries']">
                     <img src="assets/images/new/entries-import.svg" />
                     <h2>Entries</h2>
