@@ -30,6 +30,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public imgPath: string = '';
     public companyCountry: string;
+    /** This will hold displayed support team number */
     public supportTeamNumber: any;
 
     constructor(
