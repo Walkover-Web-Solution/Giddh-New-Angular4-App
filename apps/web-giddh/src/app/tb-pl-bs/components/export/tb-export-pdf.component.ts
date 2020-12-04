@@ -41,7 +41,7 @@ class FormatPdf implements IFormatable {
                 .forEach(p => this.pdf.text(10, this.colY += 5, p));
         }
 
-        this.pdf.text(10, this.colY += 5, selectedCompany.city + '-' + selectedCompany.pincode);
+        this.pdf.text(10, this.colY += 5, (selectedCompany.city || '') + (selectedCompany.pincode ? ('-' + selectedCompany.pincode) : ''));
         this.pdf.text(10, this.colY += 5, `Trial Balance: ${this.request.from} to ${this.request.to}`);
         this.pdf.line(10, this.colY += 5, 200, this.colY);
 
@@ -208,7 +208,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
                     this.selectedCompany.address.split('\n')
                         .forEach(p => pdf.text(40, colY += 15, p));
                 }
-                pdf.text(40, colY += 15, this.selectedCompany.city + '-' + this.selectedCompany.pincode);
+                pdf.text(40, colY += 15, (this.selectedCompany.city || '') + (this.selectedCompany.pincode ? ('-' + this.selectedCompany.pincode) : ''));
                 pdf.text(40, colY += 15, `Trial Balance: ${this.trialBalanceRequest.from} to ${this.trialBalanceRequest.to}`);
             }
         });

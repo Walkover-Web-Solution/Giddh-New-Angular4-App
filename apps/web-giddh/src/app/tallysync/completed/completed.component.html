@@ -6,7 +6,8 @@
                 <sh-select [options]="CompanyList" [multiple]="false" [placeholder]="'Select Company'" #shCompany
                     formControlName="filterCompany" (selected)="onDDElementCompanySelect($event)"></sh-select>
             </div>
-            <div *ngIf="currentCompanyBranches?.length" class="col-lg-3 col-md-12 form-group company linked-entities">
+            <!-- Commented as currently the Tally plugin doesn't support branch wise import -->
+            <!-- <div *ngIf="currentCompanyBranches?.length" class="col-lg-3 col-md-12 form-group company linked-entities">
                 <label>Branch</label>
                 <sh-select [options]="currentCompanyBranches" formControlName="branchUniqueName" [showClear]="false"
                     [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
@@ -29,7 +30,7 @@
                         </ng-container>
                     </ng-template>
                 </sh-select>
-            </div>
+            </div> -->
             <div class="col-lg-3 col-md-12 form-group date">
                 <label>Date</label>
                 <input name="filterDate" formControlName="filterDate" type="text" autocomplete="off"
