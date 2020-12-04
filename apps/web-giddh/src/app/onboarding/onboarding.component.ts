@@ -31,7 +31,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     public imgPath: string = '';
     public companyCountry: string;
     /** This will hold displayed support team number */
-    public supportTeamNumber: any;
+    public supportTeamNumber: any = [];
 
     constructor(
         private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
