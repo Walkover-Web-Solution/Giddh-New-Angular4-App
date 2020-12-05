@@ -163,6 +163,7 @@ ul.list-unstyled li a {
     bottom: 0;
     z-index: 2;
     width: calc(100% - 200px);
+    padding-right: 90px !important;
 }
 
 .responsive {
@@ -340,7 +341,7 @@ table th {
         }
     }
 }
-@media (max-width: 1366px) {
+@media (max-width: 1019px) {
     .sales-register {
         width: 100%;
     }

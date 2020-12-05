@@ -12,7 +12,7 @@
                         <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
                     </a>
                 </div>
-                <button class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-warehouse']">
+                <button *ngIf="showCreateEditOption" class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-warehouse']">
                     Create Warehouse
                 </button>
             </div>
@@ -32,7 +32,7 @@
                     <div class="d-flex">
                         <h3>{{ warehouse.name }}</h3>
                         <div class="warehouse-options">
-                            <div class="btn-group" dropdown>
+                            <div *ngIf="showCreateEditOption" class="btn-group" dropdown>
                                 <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
                                     aria-controls="dropdown-basic">
                                     <span class="icon-dots-three-vertical"></span>

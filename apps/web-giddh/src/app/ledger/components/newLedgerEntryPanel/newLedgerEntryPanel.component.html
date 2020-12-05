@@ -21,7 +21,7 @@
                                         <td class="text-right width-70">
                                             <label class="mr-05 font-12">Qty</label>
                                             <input id="ledger-quantity" type="text" name="" class="form-control text-right"
-                                                [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
+                                                [disabled]="shouldShowAdvanceReceiptMandatoryFields || isReadOnly ? 'disabled' : null"
                                                 (change)="changeQuantity($event.target.value)"
                                                 [(ngModel)]="currentTxn?.inventory.quantity" decimalDigitsDirective
                                                 [DecimalPlaces]="4" />
@@ -54,7 +54,7 @@
 
                         <td class="pItem text-right price" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label class="font-12">Price</label>
-                            <input type="text" id="ledger-price" [(ngModel)]="currentTxn.inventory.unit.rate"
+                            <input [disabled]="isReadOnly" type="text" id="ledger-price" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat" [customDecimalPlaces]="ratePrecision"
@@ -74,12 +74,12 @@
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right amount">
                             <label class="primary_clr font-12">Amount</label>
-                            <input id="new-ledger-enter-amount" *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right"
+                            <input [disabled]="isReadOnly" id="new-ledger-enter-amount" *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged();calculateTotal()" />
 
-                            <input id="new-ledger-enter-amount-advance-receipt" *ngIf="isAdvanceReceipt" type="text" name="advanceAmount"
+                            <input [disabled]="isReadOnly" id="new-ledger-enter-amount-advance-receipt" *ngIf="isAdvanceReceipt" type="text" name="advanceAmount"
                                 class="form-control text-right" [prefix]="selectedPrefixForCurrency"
                                 [suffix]="selectedSuffixForCurrency" disabled [mask]="inputMaskFormat"
                                 [(ngModel)]="currentTxn.advanceReceiptAmount" (focus)="hideDiscountTax()"
@@ -97,8 +97,8 @@
                         </td>
 
                         <!--discount-->
-                        <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
-                            class="pItem text-right price new-ledger-text-right" (click)="$event.stopPropagation()">
+                        <td [attr.disabled]="isReadOnly ? 'disabled' : null" *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
+                            class="custom-component pItem text-right price new-ledger-text-right" (click)="$event.stopPropagation()">
                             <ledger-discount #discount id="ledger-discount" [discountAccountsDetails]="currentTxn.discounts"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency" [ledgerAmount]="currentTxn.amount"
@@ -122,8 +122,8 @@
                             <label class="fs20">=</label>
                         </td>
 
-                        <td *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length"
-                            class="pItem amount pos-rel dropdown-container text-right dropdown-width"
+                        <td [attr.disabled]="isReadOnly ? 'disabled' : null" *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length"
+                            class="custom-component pItem amount pos-rel dropdown-container text-right dropdown-width"
                             (clickOutside)="hideTax()" (click)="$event.stopPropagation()">
                             <!--tax control component-->
                             <!-- Login Changes by Sagar  -->
@@ -158,7 +158,7 @@
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
                             <label class="primary_clr font-12">Total</label>
-                            <input type="text" id="ledger-total-amount" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
+                            <input [disabled]="isReadOnly" type="text" id="ledger-total-amount" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right"
                                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
                                 [disabled]="isAdvanceReceipt ? 'disabled' : null" />
@@ -177,7 +177,7 @@
             <div *ngIf="currentTxn?.selectedAccount?.stock" class="col-sm-4 col-xs-12">
                 <div class="source-warehouse">
                     <label>Select Warehouse</label>
-                    <sh-select id="ledger-select-warehouse" [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
+                    <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-select-warehouse" [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
                         [options]="warehouses"></sh-select>
                 </div>
             </div>
@@ -185,7 +185,7 @@
                 <div class="text-right mb-1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
                     <ng-container *ngIf="isTcsTdsApplicable">
-                        <input id="ledger-other-tax" type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
+                        <input [disabled]="isReadOnly" id="ledger-other-tax" type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
                             *ngIf="!blankLedger.isOtherTaxesApplicable"
                             (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)" />
                         <span *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</span>
@@ -196,11 +196,11 @@
                                 <label>Other Tax</label>
                                 <span class="d-flex">
                                     <span class="d-flex align-item-center">
-                                        <a href="javascript:void(0)" (click)="toggleOtherTaxesAsidePane(true)">
+                                        <a href="javascript:void(0)" (click)="isReadOnly ? '' : toggleOtherTaxesAsidePane(true)">
                                             <img src="assets/images/edit-pencilicon.svg">
                                         </a>
                                     </span>
-                                    <input id="ledger-other-tax-disabled" class="text-right form-control mr-l1" disabled="disabled"
+                                    <input [disabled]="isReadOnly" id="ledger-other-tax-disabled" class="text-right form-control mr-l1" disabled="disabled"
                                         [(ngModel)]="blankLedger.otherTaxesSum" name="entry.otherTaxesSum"
                                         [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                         [mask]="inputMaskFormat" />
@@ -218,7 +218,7 @@
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
                 <label class="primary_clr">Taxable Amount</label>
-                <input id="ledger-taxable-amount" type="text" name="taxable-amount" class="form-control text-right"
+                <input [disabled]="isReadOnly" id="ledger-taxable-amount" type="text" name="taxable-amount" class="form-control text-right"
                     [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                     [(ngModel)]="currentTxn.reverseChargeTaxableAmount" />
             </div>
@@ -226,14 +226,14 @@
         <ng-container *ngIf="shouldShowItcSection">
             <div class="taxable-amount-section">
                 <label class="primary_clr">ITC Type</label>
-                <sh-select id="ledger-itc-type" [(ngModel)]="currentTxn.itcAvailable" [placeholder]="'ITC Type'"
+                <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-itc-type" [(ngModel)]="currentTxn.itcAvailable" [placeholder]="'ITC Type'"
                     [options]="availableItcList">
                 </sh-select>
             </div>
         </ng-container>
 
         <div class="clearfix">
-            <textarea id="ledger-description" rows="3" cols="" name="des" class="form-control" placeholder="Description"
+            <textarea [disabled]="isReadOnly" id="ledger-description" rows="3" cols="" name="des" class="form-control" placeholder="Description"
                 [(ngModel)]="blankLedger.description"></textarea>
         </div>
 
@@ -270,7 +270,7 @@
                             <td class="select2-parent pd-r1">
                                 <div class="form-group">
                                     <label class="default_clr">Voucher Type</label>
-                                    <sh-select id="ledger-voucher-type" #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"
+                                    <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-voucher-type" #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"
                                         (selected)="getInvoiceListsData($event)" [placeholder]="'Select Vouchers'"
                                         [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'"
                                         [style.width.px]="161"></sh-select>
@@ -282,7 +282,7 @@
                             <td class="pd-r1"
                                 *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'pay')">
                                 <label class="default_clr">Invoice No.</label>
-                                <input id="ledger-invoice-number" type="text" placeholder="Invoice no." class="form-control"
+                                <input [disabled]="isReadOnly" id="ledger-invoice-number" type="text" placeholder="Invoice no." class="form-control"
                                     [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
 
@@ -318,7 +318,7 @@
                                 <div class="form-group">
                                     <label class="default_clr">Voucher No.</label>
 
-                                    <sh-select id="ledger-voucher-type-debit-note" [options]="invoiceList" #invoice placeholder="Select Invoice"
+                                    <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-voucher-type-debit-note" [options]="invoiceList" #invoice placeholder="Select Invoice"
                                         [(ngModel)]="selectedInvoiceForCreditNote" [notFoundLink]="false"
                                         [forceClearReactive]="forceClear$ | async"
                                         (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
@@ -347,7 +347,7 @@
                             <td *ngIf="blankLedger.voucherType &&
                                 (blankLedger.voucherType !== 'jr' && blankLedger.voucherType !== 'cntr' && blankLedger.voucherType !== 'rcpt'
                                 && blankLedger.voucherType !== 'advance-receipt')" class="pd-r1 pt-2 hidden-xs">
-                                <input id="ledger-adjust-sale" type="checkbox" name="adjustSales" (change)="handleVoucherAdjustment()"
+                                <input [disabled]="isReadOnly" id="ledger-adjust-sale" type="checkbox" name="adjustSales" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustVoucherSelected">
                                 Adjust {{
                                     blankLedger.voucherType === 'sal' ? 'Sales' :
@@ -358,16 +358,16 @@
                                 }}
                             </td>
                             <td *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt" class="pd-r1 pt-2 hidden-xs">
-                                <input id="ledger-adjust-receipt" type="checkbox" name="adjustReceipt" (change)="handleVoucherAdjustment()"
+                                <input [disabled]="isReadOnly" id="ledger-adjust-receipt" type="checkbox" name="adjustReceipt" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustReceiptSelected">
                                 Adjust Receipt
                             </td>
                             <td *ngIf="blankLedger.voucherType == 'advance-receipt' && shouldShowAdvanceReceipt" class="pd-r1 pt-2 hidden-xs">
-                                <input id="ledger-adjust-advance-receipt" type="checkbox" name="adjustAdvanceReceipt" (change)="handleVoucherAdjustment()"
+                                <input [disabled]="isReadOnly" id="ledger-adjust-advance-receipt" type="checkbox" name="adjustAdvanceReceipt" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustAdvanceReceiptSelected">
                                 Adjust Advance Receipt
                             </td>
-                            <td (click)="handleVoucherAdjustment()"
+                            <td (click)="isReadOnly ? '' : handleVoucherAdjustment()"
                                 class="cp pd-r1 pt-2" *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount">
                                 <span class="text-gray advance-receipt-edit ml-05">
                                     <i class="icon-edit-pencil"></i>
@@ -385,13 +385,13 @@
 
                                 <td class="pd-r1">
                                     <label class="default_clr">Cheque Number</label>
-                                    <input id="ledger-cheque-number" type="text" placeholder="XXXX2619" class="form-control"
+                                    <input [disabled]="isReadOnly" id="ledger-cheque-number" type="text" placeholder="XXXX2619" class="form-control"
                                         [(ngModel)]="blankLedger.chequeNumber" />
                                 </td>
 
                                 <td>
                                     <label class="default_clr">Cheque Clearance Date</label>
-                                    <input type="text" autocomplete="off" class="form-control" id="chequeClearanceDate"
+                                    <input [disabled]="isReadOnly" type="text" autocomplete="off" class="form-control" id="chequeClearanceDate"
                                         [(ngModel)]="blankLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
                                         [outsideClick]="true"
                                         [bsConfig]="{ dateInputFormat: giddhDateFormat, containerClass: 'chkclrbsdp theme-green' }" />
@@ -410,7 +410,7 @@
 
                                 <td class="">
                                     <label class="default_clr">Assign Tag</label>
-                                    <sh-select id="ledger-assign-tag" [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true"
+                                    <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-assign-tag" [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true"
                                         [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames"
                                         [ItemHeight]="'auto'"></sh-select>
                                 </td>
@@ -428,7 +428,7 @@
         <!--map bank transactions-->
         <div class="row">
 
-            <div class="col-7 form-group pr" *ngIf="isBankTransaction">
+            <div [class.disabled-item]="isReadOnly" class="col-7 form-group pr" *ngIf="isBankTransaction">
                 <a href="javascript:void(0)" (click)="getReconciledEntries()">Map Transaction
                     <span *ngIf="showMatchingEntries">with</span>
                 </a>
@@ -459,7 +459,7 @@
                 <div class="mrR1 form-group pull-left cp">
 
                     <label class="pull-left cp fs16">
-                        <input id="ledger-generate-voucher" class="pull-left" type="checkbox" name="generateInvoice" [disabled]="(isAdvanceReceipt || isAdjustReceiptSelected || isAdjustVoucherSelected || blankLedger.voucherType === 'credit note' || blankLedger.voucherType === 'debit note') && blankLedger.generateInvoice ? 'disabled' : null"
+                        <input id="ledger-generate-voucher" class="pull-left" type="checkbox" name="generateInvoice" [disabled]="((isAdvanceReceipt || isAdjustReceiptSelected || isAdjustVoucherSelected || blankLedger.voucherType === 'credit note' || blankLedger.voucherType === 'debit note') && blankLedger.generateInvoice) || isReadOnly ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Voucher
                     </label>
@@ -494,7 +494,7 @@
                         </li>
 
                         <li>
-                            <input id="ledger-price-input" class="price-input" [(ngModel)]="blankLedger.exchangeRateForDisplay" type="text"
+                            <input [disabled]="isReadOnly" id="ledger-price-input" class="price-input" [(ngModel)]="blankLedger.exchangeRateForDisplay" type="text"
                                 (blur)="exchangeRateChanged()"> {{ blankLedger.selectedCurrencyToDisplay === 0 ? blankLedger.foreignCurrencyToDisplay?.code : blankLedger.baseCurrencyToDisplay?.code
               }}
                         </li>
@@ -503,7 +503,7 @@
                 </div>
 
                 <div class="pull-right">
-                    <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
+                    <input [disabled]="isReadOnly" type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
                         ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput
                         (click)="onUploadOutput()">
                     <label class="upload_div pr-15"
@@ -540,7 +540,7 @@
                         to CR
                     </button>
 
-                    <button id="saveLedger" class="btn btn-success btn-sm mr-0" [disabled]="isFileUploading"
+                    <button id="saveLedger" class="btn btn-success btn-sm mr-0" [disabled]="isFileUploading || isReadOnly"
                         [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
                     </button>
                 </div>
@@ -595,8 +595,8 @@
 
 <ng-template #rcmEntryCheckbox>
     <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-1">
-        <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
-            (click)="toggleRcmCheckbox($event)">
+        <input [disabled]="isReadOnly" id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
+            (click)="!isReadOnly ? toggleRcmCheckbox($event) : ''">
         <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover" [popover]="rcmTemplate"
             placement="right" containerClass="update-ledger-rcm">
             Is this transaction applicable for <strong> Reverse Charge? </strong>
@@ -609,7 +609,7 @@
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
-                    <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"
+                    <input [disabled]="isReadOnly" id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"
                         [(ngModel)]="blankLedger.touristSchemeApplicable"
                         (ngModelChange)="touristSchemeApplicableToggle($event)">
 
@@ -621,7 +621,7 @@
         <div class="col-md-6" *ngIf="blankLedger.touristSchemeApplicable">
             <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
                 Passport Number
-                <input id="ledger-passport-number" type="text" name="passportNumber" placeholder="Passport Number"
+                <input [disabled]="isReadOnly" id="ledger-passport-number" type="text" name="passportNumber" placeholder="Passport Number"
                     class="form-control width-115 ml-1" #passportNumber (blur)="allowAlphanumericChar(passportNumber)"
                     (keypress)="allowAlphanumericChar(passportNumber)" [(ngModel)]="blankLedger.passportNumber" />
             </div>

@@ -150,7 +150,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
 	public save() {
 		if (this.mode === 'export') {
-			this._store.dispatch(this._companyImportExportActions.ExportRequest(parseInt(this.fileType), this.from, this.to, this.currentBranch.uniqueName));
+			this._store.dispatch(this._companyImportExportActions.ExportRequest(parseInt(this.fileType), this.from, this.to, this.currentBranch.uniqueName, this.currentBranch.name));
 		} else {
 			this._store.dispatch(this._companyImportExportActions.ImportRequest(parseInt(this.fileType), this.selectedFile, this.currentBranch.uniqueName));
 		}
