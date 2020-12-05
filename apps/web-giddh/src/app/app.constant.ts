@@ -278,3 +278,6 @@ export const RESTRICTED_BRANCH_ROUTES = [
 export const SUPPORT_TEAM_NUMBERS = [
     "+918889500411", "+918889500350", "+918889378604"
 ];
+
+/** Email Validation Regex */
+export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

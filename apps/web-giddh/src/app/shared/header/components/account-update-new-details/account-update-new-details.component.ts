@@ -51,6 +51,7 @@ import { digitsOnly } from '../../../helpers';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'account-update-new-details',
@@ -599,7 +600,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             openingBalance: [''],
             mobileNo: [''],
             mobileCode: [''],
-            email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+            email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
             description: [''],

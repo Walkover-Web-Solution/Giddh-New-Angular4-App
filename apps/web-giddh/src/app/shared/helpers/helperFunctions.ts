@@ -1,3 +1,5 @@
+import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
+
 /**
  * invalid string replacer in uniqueName
  * @param {string} val
@@ -48,8 +50,7 @@ export const base64ToBlob = (b64Data, contentType, sliceSize) => {
  * @param emailStr
  */
 export const validateEmail = (emailStr: string) => {
-    const pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return pattern.test(emailStr);
+    return EMAIL_VALIDATION_REGEX.test(emailStr);
 };
 
 

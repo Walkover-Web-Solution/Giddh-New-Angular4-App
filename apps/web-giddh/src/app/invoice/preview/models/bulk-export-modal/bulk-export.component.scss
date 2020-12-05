@@ -10,6 +10,9 @@
     .show-on-mobile{
         display: none;
     }
+    span.mwauto {
+        min-width: auto;
+    }
 }
 @media(max-width:575px){
     .export-modal-wraaper  {
