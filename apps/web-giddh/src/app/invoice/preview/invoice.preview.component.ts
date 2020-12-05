@@ -675,6 +675,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                 if (response.advanceReceiptAdjustment) {
                     this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
+                } else if (response.voucherAdjustments) {
+                    this.advanceReceiptAdjustmentData = response.voucherAdjustments;
                 }
                 if (response.taxTotal) {
                     if (response.taxTotal.taxBreakdown) {
