@@ -156,7 +156,9 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filterForm.get('filterDate').patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
         this.filterForm.get('filterTimeInterval').patchValue(this.timeInterval[5].value);
         this.filter.timeRange = this.timeInterval[5].value;
-        this.filter.startDate = moment(this.maxDate).format(GIDDH_DATE_FORMAT);
+        this.filter.startDate = moment(this.maxDate).format('DD-MM-YYYY');
+        this.getReport();
+        /** Commented as currently the Tally plugin doesn't support branch wise import
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -171,14 +173,13 @@ export class CompletedComponent implements OnInit, OnDestroy {
                 this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
                 this.filterForm.get('branchUniqueName').patchValue(this.currentBranch.uniqueName);
                 this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
-                this.getReport();
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
                 }
             }
-        });
+        });*/
     }
 
     public getReport() {
@@ -311,7 +312,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public onDDElementCompanySelect(event: IOption) {
         this.filter.company = event.value;
-        this.loadBranches(event.value);
+        // this.loadBranches(event.value);
     }
 
     public onValueChange(event: Date): void {

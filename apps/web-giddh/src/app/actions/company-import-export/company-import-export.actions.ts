@@ -27,7 +27,7 @@ export class CompanyImportExportActions {
                             if (response.status === 'success') {
                                 let res = { body: response.body };
                                 let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
-                                saveAs(blob, this._generalService.companyUniqueName + '.json');
+                                saveAs(blob, `${action.payload.entityName}_Master_Except_Accounts_${action.payload.from}_${action.payload.to}_${this._generalService.companyUniqueName}` + '.json');
                                 this._toasty.successToast('data exported successfully');
                             } else {
                                 this._toasty.errorToast(response.message);
@@ -40,7 +40,7 @@ export class CompanyImportExportActions {
                             if (response.status === 'success') {
                                 let res = { body: response.body };
                                 let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
-                                saveAs(blob, this._generalService.companyUniqueName + '.json');
+                                saveAs(blob, `${action.payload.entityName}_Accounting_Entries_${action.payload.from}_${action.payload.to}_${this._generalService.companyUniqueName}` + '.json');
                             } else {
                                 this._toasty.errorToast(response.message);
                             }
@@ -84,10 +84,10 @@ export class CompanyImportExportActions {
         private _generalService: GeneralService) {
     }
 
-    public ExportRequest(fileType: CompanyImportExportFileTypes, from?: string, to?: string, branchUniqueName?: string): CustomActions {
+    public ExportRequest(fileType: CompanyImportExportFileTypes, from?: string, to?: string, branchUniqueName?: string, entityName?: string): CustomActions {
         return {
             type: COMPANY_IMPORT_EXPORT_ACTIONS.EXPORT_REQUEST,
-            payload: { fileType, from, to, branchUniqueName }
+            payload: { fileType, from, to, branchUniqueName, entityName }
         };
     }
 

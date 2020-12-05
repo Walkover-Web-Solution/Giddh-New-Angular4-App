@@ -27,6 +27,8 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { OrganizationType } from '../../../models/user-login-state';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'invetory-group-stock-report',  // <home></home>
@@ -59,6 +61,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
+    /** List of branches */
+    public branches: Array<any> = [];
 
     public today: Date = new Date();
     public activeGroup$: Observable<StockGroupResponse>;
@@ -211,6 +215,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public branchTransferMode: string = '';
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private modalService: BsModalService,
@@ -221,7 +227,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         private _toasty: ToasterService,
         private inventoryAction: InventoryAction,
         private invViewService: InvViewService,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService
     ) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -247,6 +254,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 }
             }
         });
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         // tslint:disable-next-line:no-shadowed-variable
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
@@ -255,6 +263,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             } else {
                 this.branchAvailable = false;
             }
+            this.branches = branches;
         })), takeUntil(this.destroyed$)).subscribe();
 
     }

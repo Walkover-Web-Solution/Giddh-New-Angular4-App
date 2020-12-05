@@ -7,6 +7,8 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { SidebarAction } from '../../actions/inventory/sidebar.actions';
 import { StateDetailsRequest } from '../../models/api-models/Company';
+import { OrganizationType } from '../../models/user-login-state';
+import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { TallyModuleService } from '../tally-service';
 
@@ -139,6 +141,10 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public saveEntryInInvoice: boolean = false;
     /** Current date to show the balance till date */
     public currentDate: string;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -148,7 +154,8 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private tallyModuleService: TallyModuleService,
         private accountService: AccountService,
-        private sidebarAction: SidebarAction
+        private sidebarAction: SidebarAction,
+        private generalService: GeneralService
     ) {
         this.tallyModuleService.selectedPageInfo.pipe(takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
@@ -241,6 +248,13 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'journal-voucher';
+
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
+        });
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 

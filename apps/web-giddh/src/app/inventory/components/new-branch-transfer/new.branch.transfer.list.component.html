@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="clearfix">
-                <button class="btn btn-sky-blue pull-right mr-0 mobile-none" data-toggle="tooltip" tooltip="Alt+N"
+                <button [disabled]="currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2" class="btn btn-sky-blue pull-right mr-0 mobile-none" data-toggle="tooltip" tooltip="Alt+N"
                     (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>

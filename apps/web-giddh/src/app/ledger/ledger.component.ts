@@ -239,7 +239,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** True if current organization type is company */
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
-    public currentOrganizationType: string;
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private store: Store<AppState>,
@@ -1038,7 +1038,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
-                    this.lc.getReadyBankTransactionsForUI(res.body);
+                    this.lc.getReadyBankTransactionsForUI(res.body,
+                        (this.generalService.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches.length > 2));
                 }
             });
         }

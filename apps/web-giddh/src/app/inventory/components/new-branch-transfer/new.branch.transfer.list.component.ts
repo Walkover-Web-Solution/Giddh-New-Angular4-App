@@ -105,6 +105,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private _generalService: GeneralService,
@@ -120,6 +122,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                 this.activeCompany = companyInfo;
             }
         });
+        this.currentOrganizationType = this._generalService.currentOrganizationType;
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 

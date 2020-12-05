@@ -6,13 +6,14 @@ import { ImportExcelActions } from '../../actions/import-excel/import-excel.acti
 import { ImportExcelStatusPaginatedResponse, ImportExcelStatusResponse } from '../../models/api-models/import-excel';
 import { ReplaySubject } from 'rxjs';
 import { ImportExcelRequestStates } from '../../store/import-excel/import-excel.reducer';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'import-report',
@@ -24,9 +25,15 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     public importStatusResponse: ImportExcelStatusPaginatedResponse;
     public importRequestStatus: ImportExcelRequestStates;
     public importPaginatedRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
+    /** Stores the current company */
+    public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _router: Router, private store: Store<AppState>, private _importActions: ImportExcelActions) {
+    constructor(
+        private _router: Router,
+        private store: Store<AppState>,
+        private _importActions: ImportExcelActions,
+        private generalService: GeneralService) {
         this.store.pipe(select(s => s.importExcel.importStatus), takeUntil(this.destroyed$)).subscribe(s => {
             if (s && s.results) {
                 s.results = s.results.map(res => {
@@ -47,6 +54,12 @@ export class ImportReportComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.getStatus();
+        this.store.pipe(
+            select(state => state.session.companies), take(1)
+        ).subscribe(companies => {
+            companies = companies || [];
+            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        });
     }
 
     public importFiles() {

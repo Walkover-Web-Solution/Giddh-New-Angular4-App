@@ -1,7 +1,7 @@
 <section id="manufacture" class="clearfix">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
     <div class="col-sm-12 mt-15 clearfix">
-        <button class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
+        <button [disabled]="isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
         Manufacture</button>
     </div>
     <!-- form -->

@@ -44,9 +44,9 @@
 					(click)="saveRecurringInvoice()">Save</button>
 			</div>
 			<div class="clearfix text-right" *ngIf="mode === 'update'">
-				<button class="btn btn-danger btn-sm" [ladda]="isDeleteLoading"
+				<button [disabled]="isCompany" class="btn btn-danger btn-sm" [ladda]="isDeleteLoading"
 					(click)="deleteInvoice()">Delete</button>
-				<button class="btn btn-success btn-sm" [ladda]="isLoading"
+				<button [disabled]="isCompany" class="btn btn-success btn-sm" [ladda]="isLoading"
 					(click)="saveRecurringInvoice()">Update</button>
 			</div>
         </form>

@@ -171,7 +171,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public handleFileUpload(file: File): void {
         this.onFileUpload.emit({
             file,
-            branchUniqueName: this.currentBranch.uniqueName
+            branchUniqueName: this.entity === 'entries' ? this.currentBranch.uniqueName : ''
         });
     }
 }

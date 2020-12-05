@@ -21,6 +21,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
 import { OnBoardingType, PAGINATION_LIMIT } from '../../app.constant';
+import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -88,6 +89,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public warehouseToUpdate: any;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
+     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public showCreateEditOption: boolean;
 
 
     /** View container to carry out on boarding */
@@ -136,6 +139,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit(): void {
         this.imgPath = (isElectron ||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
+        this.showCreateEditOption = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.initSubscribers();
     }
 
