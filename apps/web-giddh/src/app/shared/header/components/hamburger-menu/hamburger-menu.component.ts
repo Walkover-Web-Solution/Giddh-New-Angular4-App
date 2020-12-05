@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ReplaySubject } from 'rxjs';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'hamburger-menu',
@@ -13,8 +14,9 @@ import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.a
 export class HamburgerMenuComponent implements OnInit, OnDestroy {
     /* This inputs the heading which is needed to show */
     @Input() public pageHeading: string = '';
-    /* This will show sidebar is not open */
-    public sideMenu: { isopen: boolean } = { isopen: false };
+
+    /* This will show sidebar is open */
+    public sideMenu: { isopen: boolean } = { isopen: true };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private generalActions: GeneralActions) {
@@ -27,7 +29,9 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
      * @memberof HamburgerMenuComponent
      */
     public ngOnInit(): void {
-        this.sideBarStateChange(true);
+        this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
+            this.sideMenu.isopen = response;
+        });
     }
 
     /**

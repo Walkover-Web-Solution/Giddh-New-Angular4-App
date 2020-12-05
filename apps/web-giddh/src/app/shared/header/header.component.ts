@@ -336,6 +336,32 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.setCurrentAccountNameInHeading();
                 }
             }
+            if (event instanceof NavigationStart) {
+                this.navigationEnd = false;
+            }
+            if (event instanceof NavigationError) {
+                this.navigationEnd = true;
+                let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+                    return item.uniqueName.toLocaleLowerCase() === event.url.toLowerCase();
+                });
+                if (menuItem) {
+                    this._dbService.removeItem(this.generalService.companyUniqueName, 'menus', menuItem.uniqueName).then((dbResult) => {
+                        this.findListFromDb(dbResult);
+                        this._generalActions.updateUiFromDb();
+                    });
+                }
+            }
+            if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
+                this.navigationEnd = true;
+                if (event instanceof NavigationEnd) {
+                    let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+                        return item.uniqueName.toLocaleLowerCase() === event.url.toLowerCase();
+                    });
+                    if (menuItem) {
+                        this.doEntryInDb('menus', menuItem);
+                    }
+                }
+            }
         });
 
         // GETTING CURRENT PAGE
