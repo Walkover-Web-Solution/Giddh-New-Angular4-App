@@ -87,6 +87,7 @@ export interface SessionState {
     currentCompanyCurrency: CompanyCountry;
     registerReportFilters: any;
     currentOrganizationDetails: Organization;
+    activeCompany: any;
 }
 
 /**
@@ -144,7 +145,8 @@ const sessionInitialState: SessionState = {
     currentCompanyCurrency: null,
     totalNumberOfcompanies: 0,
     registerReportFilters: null,
-    currentOrganizationDetails: null
+    currentOrganizationDetails: null,
+    activeCompany: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -779,6 +781,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return Object.assign({}, state, {
                 currentOrganizationDetails: action.payload
             });
+        case CompanyActions.SET_ACTIVE_COMPANY_DATA: {
+            return Object.assign({}, state, {
+                activeCompany: action.payload
+            });
+        }
         default:
             return state;
     }

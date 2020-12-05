@@ -107,10 +107,9 @@ export class ReportsDetailsComponent implements OnInit {
                 this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
             });
             this.store.pipe(
-                select(state => state.session.companies), take(1)
-            ).subscribe(companies => {
-                companies = companies || [];
-                this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+                select(state => state.session.activeCompany), take(1)
+            ).subscribe(activeCompany => {
+                this.activeCompany = activeCompany;
             });
             this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
             this.currentCompanyBranches$.subscribe(response => {
@@ -248,7 +247,7 @@ export class ReportsDetailsComponent implements OnInit {
         let currentBranchUniqueName = '';
         let currentTimeFilter = '';
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.company && state.company.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.company && state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
             currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
             currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';

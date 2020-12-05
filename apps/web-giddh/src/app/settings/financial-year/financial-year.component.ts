@@ -60,7 +60,7 @@ export class FinancialYearComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.currentCompanyName = activeCompany.name;
                 this.currentCompanyFinancialYearUN = activeCompany.activeFinancialYear.uniqueName;
