@@ -10,7 +10,7 @@
                 <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
                 <div class="aside-pane-form">
                     <section class="form-body white-bg clearfix margin-child-label">
-                        <div class="form-bg clearfix">
+                        <div class="clearfix">
                             <div class="row">
                                 <div class="form-group col-5 col-sm-5">
                                     <label>Under Group</label>
@@ -74,9 +74,9 @@
                                     </div>
 
 
-                                    <div class="form-group col-4 col-sm-4" [hidden]="!(isManageInventory$ | async)">
+                                    <div class="form-group col-4 col-sm-4">
                                         <label>HSN Code</label>
-                                        <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
+                                        <input type="text" class="form-control" maxlength="10"
                                             formControlName="hsnNumber" />
                                     </div>
 
@@ -156,9 +156,9 @@
                                 </div>
 
                                 <div class="row sku-row">
-                                    <div class="form-group col-4 col-sm-4" [hidden]="(isManageInventory$ | async)">
+                                    <div class="form-group col-4 col-sm-4">
                                         <label>SAC Code</label>
-                                        <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
+                                        <input type="text" class="form-control" maxlength="10"
                                             formControlName="sacNumber" />
                                     </div>
 

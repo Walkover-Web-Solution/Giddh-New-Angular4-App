@@ -12,6 +12,7 @@ import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Co
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
+import { SUPPORT_TEAM_NUMBERS } from '../app.constant';
 
 @Component({
     selector: 'onboarding-component',
@@ -26,10 +27,11 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     public sideMenu: { isopen: boolean } = { isopen: true };
     public loadAPI: Promise<any>;
     public CompanySettingsObj: any = {};
-    // public selectedPlans: CreateCompanyUsersPlan;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public imgPath: string = '';
     public companyCountry: string;
+    /** This will hold displayed support team number */
+    public supportTeamNumber: any = [];
 
     constructor(
         private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
@@ -39,6 +41,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         private generalActions: GeneralActions
     ) {
         this._window.nativeWindow.superformIds = ['Jkvq'];
+        this.supportTeamNumber = SUPPORT_TEAM_NUMBERS[Math.floor(Math.random() * SUPPORT_TEAM_NUMBERS.length)];
     }
 
     public ngOnInit() {

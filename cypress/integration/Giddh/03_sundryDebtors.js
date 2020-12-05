@@ -13,6 +13,7 @@ describe('This is Sundry Debtors Test', function() {
             })
     });
 
+
     afterEach("Get Ledger and delete Ledger entries", ()=>{
         cy.log('I run before after each test in spec file!!!!!!')
         cy.getAllLedger(testData.uitest).then((response) => {
@@ -26,26 +27,27 @@ describe('This is Sundry Debtors Test', function() {
         })
     })
 
-    before('Login in Giddh Web App', function () {
+    before('Login in Giddh Web App', () => {
         cy.log('I run before test in spec file!!!!!!')
+        cy.viewport(1366, 768)
         cy.log(Cypress.env('url'))
         cy.loginWithEmail(testData.Email, testData.Password);
 
     });
 
-    it('Ledger entry without taxes and Discount ', function () {
+    it('Ledger entry without taxes and Discount ', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedger('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })
     });
 
-    it('Ledger entry with Inventory ', function () {
+    it('Ledger entry with Inventory ', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedger('Sales',':nth-child(2) > .list-item > .item', '177.80')
         })
     });
 
-    it('Ledger entry with Inventory & Taxes', function () {
+    it('Ledger entry with Inventory & Taxes', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedgerWithTaxes('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })
