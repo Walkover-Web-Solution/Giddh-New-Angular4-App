@@ -82,7 +82,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             this.loggedInUser = this.generalService.user;
         }
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -102,7 +102,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 this.allAssociatedCompanies = filteredCompanies;
                 this.companyListForFilter = filteredCompanies;
 
-                this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if(activeCompany) {
                         this.sortAssociatedCompanies();
                         this.showCurrentCompanyPlan();

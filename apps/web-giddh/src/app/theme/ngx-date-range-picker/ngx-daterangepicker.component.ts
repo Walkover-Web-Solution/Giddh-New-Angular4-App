@@ -304,7 +304,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public ngOnInit(): void {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.activeFinancialYear) {
                 this.currentFinancialYearUniqueName = activeCompany.activeFinancialYear.uniqueName;
             }

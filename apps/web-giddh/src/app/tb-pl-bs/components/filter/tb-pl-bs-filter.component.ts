@@ -209,10 +209,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(
-            select(state => state.session.companies), take(1)
-        ).subscribe(companies => {
-            companies = companies || [];
-            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
@@ -255,7 +254,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
 
     public setCurrentFY() {
         // set financial years based on company financial year
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany && this.universalDateICurrent) {
                 let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {

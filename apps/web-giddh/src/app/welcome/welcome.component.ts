@@ -220,7 +220,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this._generalActions.resetStatesList());
         this.store.dispatch(this.commonActions.resetOnboardingForm());
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }

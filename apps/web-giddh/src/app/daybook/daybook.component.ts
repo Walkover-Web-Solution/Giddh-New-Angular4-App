@@ -104,7 +104,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.initialRequest();
 
-        // this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        // this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
         //     if(activeCompany) {
         //         this.companyName = activeCompany.name;
         //     }
@@ -135,10 +135,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.changeDetectorRef.detectChanges();
         });
         this.store.pipe(
-            select(appState => appState.session.companies), take(1)
-        ).subscribe(companies => {
-            companies = companies || [];
-            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+            select(appState => appState.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {

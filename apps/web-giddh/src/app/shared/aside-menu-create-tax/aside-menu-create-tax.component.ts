@@ -57,7 +57,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.countryV2) {
                 this.getTaxList(activeCompany.countryV2.alpha2CountryCode);
             }
