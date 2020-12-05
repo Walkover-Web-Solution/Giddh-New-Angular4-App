@@ -260,3 +260,7 @@ export enum SearchResultText {
 
 /** Types of tcs and tds taxes */
 export const TCS_TDS_TAXES_TYPES = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+
+export const SUPPORT_TEAM_NUMBERS = [
+    "+918889500411", "+918889500350", "+918889378604"
+];
