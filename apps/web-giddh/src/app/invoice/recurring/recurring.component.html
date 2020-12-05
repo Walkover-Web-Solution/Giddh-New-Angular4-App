@@ -210,17 +210,17 @@
             <thead class="t-h-bg1">
                 <tr>
 
-                    <th style="width:4%" *ngIf="selectedItems.length > 0">
-                        <div class="mh18_img" style="justify-content: center;display: flex">
+                    <!-- <th width="4%" *ngIf="selectedItems.length > 0">
+                        <div class="check-image d-flex justify-content-center">
                             <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                 (click)="toggleAllItems(true)">
                             <img src="assets/images/checked.png" *ngIf="allItemsSelected"
                                 (click)="toggleAllItems(false)">
                         </div>
-                    </th>
+                    </th> -->
 
-                    <th *ngIf="selectedItems.length === 0" width="4%">
-                        <div class="mh18_img" style="justify-content: center;display: flex">
+                    <th width="4%">
+                        <div class="check-image d-flex justify-content-center">
                             #
                         </div>
                     </th>
@@ -316,7 +316,7 @@
                 <tr *ngFor="let col of recurringVoucherDetails;let i = index"
                     (mouseover)="hoveredItemForAction = col.uniqueName">
 
-                    <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0"
+                    <!-- <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0"
                         data-title="#">
                         <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex">
                             <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png"
@@ -324,11 +324,10 @@
                             <img *ngIf="col?.isSelected" src="assets/images/checked.png"
                                 (click)="toggleItem(col, false)" />
                         </div>
-                    </td>
+                    </td> -->
 
-                    <td *ngIf="!col.isSelected && hoveredItemForAction !== col.uniqueName && selectedItems.length === 0"
-                        data-title="#">
-                        <div style="justify-content: center;display: flex" class="justify-content-sm">{{ i + 1}}</div>
+                    <td data-title="#">
+                        <div class="justify-content-sm d-flex justify-content-center">{{ i + 1}}</div>
                     </td>
 
                     <td data-title="Invoice Number">
