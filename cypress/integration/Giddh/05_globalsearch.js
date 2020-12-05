@@ -5,37 +5,48 @@ describe('This is Global Search Test', function() {
 
     const globalSearchPage = new GlobalSearchPage()
 
-    before(function() {
-        cy.loginWithEmail("giddhautomation@gmail.com", "giddhautomation1@")
+    let testData = "";
+    let entryUniqueName = "";
+
+    before(() => {
+        cy.fixture('example.json')
+            .then((data) => {
+                // "this" is still the test context object
+                testData = data
+            })
+    });
+
+    before(() => {
+        cy.loginWithEmail(testData.Email, testData.Password);
     })
 
-    it('Verify Trial Balance using Global Search', function () {
+    it('Verify Trial Balance using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
 
     });
 
-    it('Verify Invoice using Global Search', function () {
+    it('Verify Invoice using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span','Invoice', 'Invoice ')
 
     });
 
-    it('Verify Customer module using Global Search', function () {
+    it('Verify Customer module using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span','Customer', 'Customer ')
     });
 
-    it('Verify Vendor module using Global Search', function () {
+    it('Verify Vendor module using Global Search', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Vendor', 'Vendor ')
     });
 
-    it('Verify Settings module using Global Search', function () {
+    it('Verify Settings module using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span','Settings', 'Settings > Taxes ')
     });
 
-    it('Verify Walkover Account module using Global Search', function () {
+    it('Verify Walkover Account module using Global Search', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Walkover', 'Walkover Technologies Private Limited A/c')
     });
 
-    xit('Verify Cash Account module using Global Search', function () {
+    xit('Verify Cash Account module using Global Search', () => {
         cy.get('body').type('{ctrl}g', {force: true})
         if (globalSearchPage.getGlobalSearch(90000).should('be.visible')){
             globalSearchPage.typeGlobalSearch("Cash")
@@ -64,7 +75,7 @@ describe('This is Global Search Test', function() {
         })
     })
 
-    xit('Verify Sales Account module using Global Search', function () {
+    xit('Verify Sales Account module using Global Search', () => {
         cy.get('body').type('{ctrl}g', {force: true})
         if (globalSearchPage.getGlobalSearch(90000).should('be.visible')){
             globalSearchPage.typeGlobalSearch("sales")
