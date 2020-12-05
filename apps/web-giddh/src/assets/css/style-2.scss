@@ -1648,12 +1648,15 @@ modal-container.modal {
 
 .custom-datepicker {
     position: relative;
+        .border-radius-2{
+        border-radius: 2px;
+    }
 }
 
 .custom-datepicker i {
     position: absolute;
-    left: 12px;
-    top: 4px;
+    left: 0;
+    top: 0;
     z-index: 9;
     font-size: 17px;
     color: $gray;
@@ -1667,7 +1670,7 @@ modal-container.modal {
     width: 230px !important;
     max-width: 230px;
     display: block;
-    padding-left: 20px !important;
+    padding-left: 30px !important;
     border: 1px solid $gainsboro;
     height: 36px;
 }
@@ -8565,6 +8568,7 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     color: $nobel !important;
+    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -9105,7 +9109,6 @@ input.form-control.focused {
 }
 
 /*datepicker common css*/
-
 .giddh-datepicker-modal .modal-content {
     background: none !important;
 }
