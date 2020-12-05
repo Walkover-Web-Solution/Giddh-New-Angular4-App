@@ -66,7 +66,7 @@
                     <ng-template #optionTemplate let-option="option">
                         <ng-container>
                             <a href="javascript:void(0)" class="list-item d-flex">
-                                <span><input type="checkbox" [value]="option.value"></span>&nbsp;
+                                <span class="mwauto"><input type="checkbox" [checked]="copyTypes.includes(option.value)" [value]="option.value"></span>&nbsp;
                                 <span>
                                     <div class="item">{{ option.label }}</div>
                                 </span>
@@ -90,7 +90,7 @@
         </div> -->
         <div class="row mb-15">
             <div class="col-sm-12">
-                <button class="btn btn-success" (click)="exportVouchers(false)">Download</button>
+            <button class="btn btn-success" [disabled]="!copyTypes || copyTypes.length === 0 || isLoading" (click)="exportVouchers(false)">Download</button>
                 <!-- <button class="btn btn-success">Print</button> -->
             </div>
         </div>
@@ -104,7 +104,7 @@
             <div class="col-sm-12">
                 <!-- Email id could be mulitiple   -->
                 <textarea type="text" placeholder="Recipient Email Id's" class="form-control mb-15 mulitiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
-                <button class="btn btn-success" (click)="exportVouchers(true)">Send Email</button>
+                <button class="btn btn-success" [disabled]="!recipients || copyTypes.length === 0 || isLoading" (click)="exportVouchers(true)">Send Email</button>
             </div>
         </div>
     </div>
