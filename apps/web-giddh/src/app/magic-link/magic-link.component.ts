@@ -15,6 +15,7 @@ import { WindowRef } from 'apps/web-giddh/src/app/shared/helpers/window.object';
 import { underStandingTextData } from 'apps/web-giddh/src/app/ledger/underStandingTextData';
 import { CompanyService } from 'apps/web-giddh/src/app/services/companyService.service';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { EMAIL_VALIDATION_REGEX } from '../app.constant';
 
 @Component({
     selector: 'magic',
@@ -236,8 +237,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
     }
 
     public validateEmail(emailStr) {
-        let pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return pattern.test(emailStr);
+        return EMAIL_VALIDATION_REGEX.test(emailStr);
     }
 
     public submitForm(formObj) {
