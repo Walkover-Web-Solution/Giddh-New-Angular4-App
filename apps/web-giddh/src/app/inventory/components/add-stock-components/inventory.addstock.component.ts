@@ -196,7 +196,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             isFsStock: [false],
             parentGroup: [''],
             hsnNumber: [''],
-            sacNumber: ['', Validators.pattern('^$|^[A-Za-z0-9]+')],
+            sacNumber: [''],
             taxes: [[]]
         });
         this.taxTempArray = [];
