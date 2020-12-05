@@ -248,7 +248,7 @@ export class PurchaseRegisterComponent implements OnInit {
         let currentTimeFilter = '';
 
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.company && state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
             currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
             currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';

@@ -170,7 +170,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.prepareTaxDropdown();
         this.getDiscountList();
 
-        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
@@ -382,7 +382,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         //     }
         // });
 
-        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.activeCompany = activeCompany;
             }

@@ -82,7 +82,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (!this.activeCompany && activeCompany) {
                 this.activeCompany = activeCompany;
                 this.getReverseChargeReport(false);

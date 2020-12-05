@@ -91,7 +91,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
         this.getCurrentCompanyData();
 
-        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.activeCompany = activeCompany;
                 this.getStates();

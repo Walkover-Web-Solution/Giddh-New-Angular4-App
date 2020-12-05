@@ -92,7 +92,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.fromDate = this.currentPeriod.from;
         this.toDate = this.currentPeriod.to;
 
-        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.saveLastState(activeCompany.uniqueName);

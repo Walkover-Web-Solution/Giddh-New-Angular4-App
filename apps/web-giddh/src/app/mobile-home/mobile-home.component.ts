@@ -106,7 +106,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.searchSubject.next("");
 
-        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.activeCompanyUniqueName = activeCompany.uniqueName;
                 let selectedCompanyArray = activeCompany.name.split(" ");

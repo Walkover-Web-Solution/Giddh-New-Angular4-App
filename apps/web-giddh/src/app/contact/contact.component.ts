@@ -276,7 +276,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.dueAmountReportData$ = observableOf(data);
         });
 
-        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.selectedCompany = activeCompany;
             }
