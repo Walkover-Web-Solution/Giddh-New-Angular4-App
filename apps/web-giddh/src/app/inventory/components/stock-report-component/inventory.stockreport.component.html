@@ -80,6 +80,7 @@
                     </ul>
                 </div>
                 <button class="btn btn-sky-blue" (click)="editStock()"  >Edit Stock</button> -->
+                <button class="btn btn-sky-blue transfer-btn" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">New Transfer </button>
                 <button class="btn btn-sky-blue mr-0" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i">Create New</button>
             </div>
         </div>
@@ -512,3 +513,17 @@
     </div>
 </div>
 <!-- Advance  search popup -->
+<!-- aside inwards/outwards/transfer pane -->
+<div class="aside-overlay" *ngIf="asideTransferPaneState === 'in'"></div>
+<aside-branch-transfer-pane *ngIf="asideTransferPaneState === 'in'" [class]="asideTransferPaneState" [@slideInOut]="asideTransferPaneState" (transferType)="openBranchTransferPopup($event);" (closeAsideEvent)="toggleTransferAsidePane()"></aside-branch-transfer-pane>
+<!-- aside inwards/outwards/transfer pane -->
+
+<!-- branch transfer modal -->
+<ng-template #template>
+    <div class="recept-modal">
+        <div class="modal-body">
+            <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode">
+            </new-branch-transfer>
+        </div>
+    </div>
+</ng-template>

@@ -16,15 +16,16 @@
     width: 100%;
 }
 .date-range-picker {
-    padding-left: 35px !important;
+    padding-left: 25px !important;
     background-image: url("../../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
-    padding-left: 45px !important;
     position: relative;
     z-index: 99;
     cursor: default;
+    width: 225px !important;
+    max-width: 225px !important;
 }
 .input-wrapper:before {
     position: absolute;
@@ -110,8 +111,8 @@
 }
 @media(max-width:991px){
     .datepicker-field{
-        min-width: 190px !important;
-        width: 190px !important;
+        min-width: 220px !important;
+        width: 220px !important;
     }
     .download-data-icon{
         a{

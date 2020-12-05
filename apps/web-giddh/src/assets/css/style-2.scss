@@ -1656,6 +1656,7 @@ modal-container.modal {
     top: 4px;
     z-index: 9;
     font-size: 17px;
+    color: $gray;
 }
 
 .custom-datepicker input {
@@ -1666,7 +1667,7 @@ modal-container.modal {
     width: 230px !important;
     max-width: 230px;
     display: block;
-    padding-left: 25px !important;
+    padding-left: 20px !important;
     border: 1px solid $gainsboro;
     height: 36px;
 }
@@ -9553,6 +9554,9 @@ span#HW_badge_cont:nth-child(3) {
         padding-left: 10px;
         border-bottom: none !important;
     }
+}
+.giddh-calendar.show {
+    margin-top: 0;
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {

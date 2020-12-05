@@ -64,7 +64,7 @@ const initialState: GeneralState = {
     isCalendlyModelOpen: false,
     updateIndexDbComplete: false,
     updateIndexDbInProcess: false,
-    openSideMenu: false
+    openSideMenu: true
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {

@@ -63,9 +63,7 @@ Cypress.Commands.add("loginWithEmail", (email, password) => {
     loginPage.enterPassword().type(password)
     loginPage.clickLoginButton().click()
     cy.wait(10000);
-    //  cy.visit(Cypress.env('dashBoardUrl'))
-    //  cy.location('pathname', {timeout: 60000})
-    //      .should('include', '/pages/home');
+
     headerPage.clickGiddhLogoIcon().should('have.attr', 'src')
         .should('include','assets/images/giddh-white-logo.svg')
     // headerPage.clickGiddhLogoIcon().find('img').should('have.attr', 'src').should('include','assets/images/giddh-white-logo.svg')

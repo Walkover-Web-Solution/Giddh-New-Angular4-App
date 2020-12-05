@@ -306,7 +306,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.navigationEnd = true;
                 if (event instanceof NavigationEnd) {
-                    this.adjustNavigationBar();
                     let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                         return item.uniqueName.toLocaleLowerCase() === event.url.toLowerCase();
                     });
