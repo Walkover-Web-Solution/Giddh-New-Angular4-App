@@ -39,7 +39,7 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
      * @memberof MobileHomeSidebarComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.company && state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.selectedCompany = cloneDeep(activeCompany);
                 let selectedCompanyArray = activeCompany.name.split(" ");

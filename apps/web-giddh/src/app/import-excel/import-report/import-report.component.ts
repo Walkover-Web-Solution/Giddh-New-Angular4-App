@@ -55,10 +55,11 @@ export class ImportReportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getStatus();
         this.store.pipe(
-            select(state => state.session.companies), take(1)
-        ).subscribe(companies => {
-            companies = companies || [];
-            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+            }
         });
     }
 
