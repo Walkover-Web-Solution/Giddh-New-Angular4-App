@@ -567,9 +567,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
 
-            if (this.fromDate && this.toDate) {
-                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '', null, null, this.currentBranch.uniqueName);
-            }
+            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '', null, null, this.currentBranch.uniqueName);
 
             this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
 
