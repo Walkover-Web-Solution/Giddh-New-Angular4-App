@@ -17,9 +17,11 @@ describe('This is Sundry Creditors Test', function() {
             const respBody = response.body;
             entryUniqueName =  respBody.body.debitTransactions[0].entryUniqueName;
         }).then(()=> {
-            cy.deleteLedger(testData.vendor1, entryUniqueName).should((resp) =>{
-                expect(resp.status).to.eq(200)
-            })
+            if (entryUniqueName != null || entryUniqueName !== undefined){
+                cy.deleteLedger(testData.vendor1, entryUniqueName).should((resp) =>{
+                    expect(resp.status).to.eq(200)
+                })
+            }
         })
     })
 
@@ -35,15 +37,6 @@ describe('This is Sundry Creditors Test', function() {
     it('Ledger entry without taxes and Discount ', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'vendor1', 'vendor1 A/c').then(()=>{
             cy.createLedger('Sales','#select-menu-0 > .list-item > .item', '100.50')
-            // cy.getAllLedger().then((response) => {
-            //     expect(response.status).to.eq(200)
-            //     const respBody = response.body;
-            //     entryUniqueName =  respBody.body.debitTransactions[0].entryUniqueName;
-            // }).then(()=> {
-            //     cy.getLedger("uitest", entryUniqueName).should((resp) =>{
-            //         expect(resp.status).to.eq(200)
-            //     })
-            // })
         })
     });
 
