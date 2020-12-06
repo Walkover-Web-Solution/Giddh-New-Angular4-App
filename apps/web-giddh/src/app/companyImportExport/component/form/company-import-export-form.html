@@ -9,9 +9,9 @@
                     </div>
                     <div class="mr-15" *ngIf="mode === 'export' && fileType === '0'">
                         <label class="d-block">Data Range</label>
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i><img src="assets/images/custom-calender.svg"></i>
-                            <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
+                        <div class="custom-datepicker relative" (click)="showGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon"></i>
+                            <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker border-radius-2"/>
                         </div>
                     </div>
                     <button class="btn btn-primary " *ngIf="mode === 'export'" (click)="save()"

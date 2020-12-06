@@ -7,8 +7,8 @@
                 class="form-inline input-grp-dateRangePicker pr">
                 <div class="form-group mr-r1 d-flex flex-fill">
                     <div class=" input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <i><img src="assets/images/custom-calender.svg"></i>
-                        <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
+                        <i class="icon-calender calendar-addon"></i>
+                        <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker border-radius-2"/>
                     </div>
                     <div class="advance-icon cursor-pointer align-items-center" tooltip="Advance Search"
                     (click)="toggleAdvanceSearchPopup(false)">
