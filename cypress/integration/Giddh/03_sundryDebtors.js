@@ -21,9 +21,11 @@ describe('This is Sundry Debtors Test', function() {
             const respBody = response.body;
             entryUniqueName =  respBody.body.debitTransactions[0].entryUniqueName;
         }).then(()=> {
-            cy.deleteLedger(testData.uitest, entryUniqueName).should((resp) =>{
-                expect(resp.status).to.eq(200)
-            })
+            if (entryUniqueName != null || entryUniqueName !== undefined){
+                cy.deleteLedger(testData.uitest, entryUniqueName).should((resp) =>{
+                    expect(resp.status).to.eq(200)
+                })
+            }
         })
     })
 

@@ -43,9 +43,6 @@ const createNewCompanyPage = new CreateNewCompanyPage();
 
 
 Cypress.Commands.add("loginWithGoogle", (email, password) => {
-
-    cy.visit('https://www.google.com/gmail/')
-
     cy.visit(Cypress.env('url'))
     //mainPage.getLoginButton().click()
     loginPage.getLoginWithGoogle().click()
@@ -105,11 +102,19 @@ Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>
     cy.wait(2000)
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
-    cy.get(accountElementPath).click({force : true})
-    ledgerPage.enterAmount().clear().type(amount)
-    ledgerPage.saveButton().click().then(()=>{
-        cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+    cy.xpath('//input[@id=\'giddh-datepicker\']').scrollIntoView({ easing: 'linear' }).should('be.visible')
+    cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView({ offset: { top: 500, left: 0 } })
+    cy.get('body').type('{pageup}')
+    cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView( { easing: 'linear' }).should('be.visible').then(()=>{
+        cy.wait(1000)
+        cy.get(accountElementPath).click({force : true})
+       // cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').click()
+        ledgerPage.enterAmount().clear().type(amount)
+        ledgerPage.saveButton().click().then(()=>{
+            cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+        })
     })
+
 })
 
 Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, amount)=>{
@@ -119,6 +124,8 @@ Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, 
     cy.wait(2000)
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
+    cy.get('body').type('{pageup}')
+    cy.get(accountElementPath).scrollIntoView({ easing: 'linear' }).should('be.visible')
     cy.get(accountElementPath).click({force : true})
     ledgerPage.selectTax()
     ledgerPage.enterAmount().clear().type(amount)
