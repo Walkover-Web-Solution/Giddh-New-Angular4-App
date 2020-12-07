@@ -1,9 +1,8 @@
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import * as _ from '../../lodash-optimized';
@@ -23,6 +22,8 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 import { CommonService } from '../../services/common.service';
 import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 export interface IGstObj {
     newGstNumber: string;
@@ -57,6 +58,10 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
+
+    /** Instance of tabset */
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];
@@ -163,7 +168,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private commonActions: CommonActions,
         private settingsProfileService: SettingsProfileService,
-        private settingsUtilityService: SettingsUtilityService
+        private settingsUtilityService: SettingsUtilityService,
+        private router: Router,
+        public route: ActivatedRoute
     ) {
 
         this.getCountry();
@@ -235,6 +242,21 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.companyProfileObj.businessTypes = res.businessType.map(businessType => ({
                     label: businessType, value: businessType
                 }));
+            }
+        });
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
+            if(this.staticTabs && params['referrer']) {
+                if(params['referrer'] === "personal") {
+                    this.staticTabs.tabs[0].active = true;
+                } else if(params['referrer'] === "address") {
+                    this.staticTabs.tabs[1].active = true;
+                } else if(params['referrer'] === "other") {
+                    this.staticTabs.tabs[2].active = true;
+                } else {
+                    this.staticTabs.tabs[0].active = true;
+                }
             }
         });
     }
@@ -795,6 +817,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             }
         }
+        this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
     /**
