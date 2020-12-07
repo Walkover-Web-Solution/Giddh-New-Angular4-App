@@ -1107,7 +1107,7 @@
                             <!--                            </div>-->
 
                             <div class="d-flex">
-                                <button [attr.disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1" class="btn btn-danger" id="update-ledger-delete-button" (click)="showDeleteEntryModal()">Delete</button>
+                                <button [disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1" class="btn btn-danger" id="update-ledger-delete-button" (click)="showDeleteEntryModal()">Delete</button>
                                 <button class="btn btn-success" id="update-ledger-update-button" [disabled]="isFileUploading || (currentOrganizationType === 'COMPANY' && branches?.length > 1)" [ladda]="(isTxnUpdateInProcess$ | async)"
                                     (click)="saveLedgerTransaction()">Update
                                 </button>

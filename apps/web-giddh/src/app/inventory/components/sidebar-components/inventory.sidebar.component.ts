@@ -8,6 +8,8 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InventoryDownloadRequest } from '../../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { OrganizationType } from '../../../models/user-login-state';
+import { GeneralService } from '../../../services/general.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
@@ -30,8 +32,6 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 	public stockGroupData: Array<any>;
 	@ViewChild('search', {static: true}) public search: ElementRef;
     @ViewChild('sidebar', {static: true}) public sidebar: ElementRef;
-    /** Stores the current branch unique name selected in inventory */
-    @Input() public currentBranchUniqueName: string;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	/**
@@ -40,7 +40,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 	constructor(private store: Store<AppState>, private sidebarAction: SidebarAction, private inventoryAction: InventoryAction, private router: Router,
 		private inventoryService: InventoryService,
 		private invViewService: InvViewService,
-		private _toasty: ToasterService) {
+        private _toasty: ToasterService,
+        private generalService: GeneralService) {
 		this.store.pipe(select(inventoryStore => inventoryStore.inventory.groupsWithStocks),takeUntil(this.destroyed$)).subscribe((data: any) => {
 			this.stockGroupData = data;
 		});
@@ -99,7 +100,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 		obj.reportType = reportType;
 		obj.from = this.fromDate;
         obj.to = this.toDate;
-        obj.branchUniqueName = this.currentBranchUniqueName;
+        obj.branchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : '';
 		this.inventoryService.downloadAllInventoryReports(obj)
 			.subscribe(res => {
 				if (res.status === 'success') {
