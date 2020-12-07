@@ -59,6 +59,7 @@ export interface IGstObj {
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
 
+    /** Instance of tabset */
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     
     public countrySource: IOption[] = [];
