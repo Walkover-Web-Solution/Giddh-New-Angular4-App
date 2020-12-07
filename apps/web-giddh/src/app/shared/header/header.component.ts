@@ -1185,6 +1185,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public switchToBranch(branchUniqueName: string, event: any): void {
         event.stopPropagation();
+        if (branchUniqueName === this.generalService.currentBranchUniqueName) {
+            return;
+        }
         this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
             if (response) {
                 this.currentBranch = response.find(branch => branch.uniqueName === branchUniqueName);
