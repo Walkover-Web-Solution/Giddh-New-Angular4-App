@@ -88,6 +88,7 @@ export interface SessionState {
     financialYearChosenInReport: string;
     currentOrganizationDetails: Organization;
     activeCompany: any;
+    companyUser: any;
 }
 
 /**
@@ -146,7 +147,8 @@ const sessionInitialState: SessionState = {
     totalNumberOfcompanies: 0,
     financialYearChosenInReport: '',
     currentOrganizationDetails: null,
-    activeCompany: null
+    activeCompany: null,
+    companyUser: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -454,11 +456,6 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     isForgotPasswordInProcess: false
                 });
             }
-        }
-        case CompanyActions.SET_ACTIVE_COMPANY_DATA: {
-            return Object.assign({}, state, {
-                activeCompany: action.payload
-            });
         }
         default:
             return state;
@@ -786,6 +783,21 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return Object.assign({}, state, {
                 currentOrganizationDetails: action.payload
             });
+        case CompanyActions.GET_COMPANY_USER_RESPONSE: {
+            let res: BaseResponse<any, any> = action.payload;
+            if (res.status === 'success') {
+                return Object.assign({}, state, {
+                    companyUser: res.body
+                });
+            }
+            return state;
+        }
+        case CompanyActions.SET_ACTIVE_COMPANY_DATA: {
+            return Object.assign({}, state, {
+                activeCompany: action.payload
+            });
+        }
+
         default:
             return state;
     }

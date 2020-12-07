@@ -77,6 +77,9 @@ export class CompanyActions {
 
     public static SET_ACTIVE_COMPANY_DATA = 'SET_ACTIVE_COMPANY_DATA';
 
+    public static GET_COMPANY_USER = 'GET_COMPANY_USER';
+    public static GET_COMPANY_USER_RESPONSE = 'GET_COMPANY_USER_RESPONSE';
+
     public createCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_COMPANY),
@@ -402,6 +405,24 @@ export class CompanyActions {
                 return { type: 'EmptyAction' };
             })));
 
+    public getCompanyUser$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CompanyActions.GET_COMPANY_USER),
+            switchMap((action: CustomActions) => this._companyService.getCompanyUser(action.payload)),
+            map(response => {
+                return this.getCompanyUserResponse(response);
+            })));
+
+    public getCompanyUserResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CompanyActions.GET_COMPANY_USER_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                }
+                return { type: 'EmptyAction' };
+            })));
+
     constructor(
         private action$: Actions,
         private _companyService: CompanyService,
@@ -708,6 +729,34 @@ export class CompanyActions {
         return {
             type: CompanyActions.SET_ACTIVE_COMPANY_DATA,
             payload: data
+        };
+    }
+
+    /**
+     * This will initiate get company uer api
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getCompanyUser(data: any): CustomActions {
+        return {
+            type: CompanyActions.GET_COMPANY_USER,
+            payload: data
+        };
+    }
+
+    /**
+     * This will set the company uer data in store
+     *
+     * @param {BaseResponse<any, string>} value
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getCompanyUserResponse(value: BaseResponse<any, string>): CustomActions {
+        return {
+            type: CompanyActions.GET_COMPANY_USER_RESPONSE,
+            payload: value
         };
     }
 }
