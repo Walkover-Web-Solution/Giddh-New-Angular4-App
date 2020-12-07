@@ -201,7 +201,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
         //     }
         // });
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.activeCompany = activeCompany;
                 if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
