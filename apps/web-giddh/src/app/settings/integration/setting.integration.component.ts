@@ -1388,4 +1388,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 break;
         }
     }
+
+    /**
+     * This will navigate to selected tab
+     *
+     * @param {string} tab
+     * @memberof SettingIntegrationComponent
+     */
+    public tabChanged(tab: string): void {
+        this.router.navigateByUrl('/pages/settings/integration/' + tab);
+    }
 }
