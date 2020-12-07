@@ -206,7 +206,7 @@
                         <div class="">
                             <h1>Accept?</h1>
                             <div class="pdT2">
-                                <button [disabled]="isCompany" class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
+                                <button *ngIf="!isCompany" class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
                                     (click)="saveEntry();">Yes</button>
                                 <button class="btn btn-default" #resetButton
                                     (keyup)="keyUpOnResetButton($event)" (click)="acceptCancel()">No</button>
