@@ -30,6 +30,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { IRegistration, GetOTPRequest, BulkPaymentResponse, BulkPaymentConfirmRequest } from "../models/interfaces/registration.interface";
 import { ReportsRequestModel, ReportsResponseModel } from "../models/api-models/Reports";
 
+
 @Injectable()
 export class CompanyService {
 
@@ -542,5 +543,20 @@ export class CompanyService {
         return this._http.put(contextPath
             .replace(':companyUniqueName', encodeURIComponent(requestObject.companyUniqueName)), requestPayload).pipe(
                 catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
+    }
+
+    /**
+     * Calls the company uer api
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CompanyService
+     */
+    public getCompanyUser(model: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMPANY_API.GET_COMPANY_USER.replace(':companyUniqueName', encodeURIComponent(model.companyUniqueName)).replace(':userUniqueName', encodeURIComponent(model.userUniqueName));
+        return this._http.get(url).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, '')));
     }
 }
