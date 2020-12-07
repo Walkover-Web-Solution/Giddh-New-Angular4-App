@@ -23,7 +23,6 @@ import { CommonService } from '../../services/common.service';
 import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 export interface IGstObj {
     newGstNumber: string;
@@ -58,10 +57,6 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
-
-    /** Instance of tabset */
-    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];
@@ -247,17 +242,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
-            if(this.staticTabs && params['referrer']) {
-                if(params['referrer'] === "personal") {
-                    this.staticTabs.tabs[0].active = true;
-                } else if(params['referrer'] === "address") {
-                    this.staticTabs.tabs[1].active = true;
-                } else if(params['referrer'] === "other") {
-                    this.staticTabs.tabs[2].active = true;
-                } else {
-                    this.staticTabs.tabs[0].active = true;
-                }
-            }
         });
     }
 
@@ -276,6 +260,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 this.currentOrganizationType = OrganizationType.Company;
             }
+
+            this.loadAddresses('GET');
         });
     }
 
