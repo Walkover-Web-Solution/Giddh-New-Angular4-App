@@ -932,7 +932,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 try {
                     this.poFilterDates = {from: moment(dateObj[0]).format(GIDDH_DATE_FORMAT), to: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)}
                     this.universalDate = moment(dateObj[1]).toDate();
-                    this.assignDates();
+                    if(!this.isUpdateMode) {
+                        this.assignDates();
+                    }
                 } catch (e) {
                     this.universalDate = new Date();
                 }
@@ -943,21 +945,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.addBlankRow(null);
             this.selectedWarehouse = String(this.defaultWarehouse);
         }
-        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
-            if (setting) {
-                let duePeriod: number;
-                if (this.isEstimateInvoice) {
-                    duePeriod = setting.estimateSettings ? setting.estimateSettings.duePeriod : 0;
-                } else if (this.isProformaInvoice) {
-                    duePeriod = setting.proformaSettings ? setting.proformaSettings.duePeriod : 0;
-                } else {
-                    duePeriod = setting.invoiceSettings ? setting.invoiceSettings.duePeriod : 0;
-                    this.useCustomInvoiceNumber = setting.invoiceSettings ? setting.invoiceSettings.useCustomInvoiceNumber : false;
-                }
-                this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
-                    moment().add(duePeriod, 'days').toDate() : moment().toDate();
-            }
-        });
 
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = {concurrency: 0};
@@ -2046,20 +2033,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.startLoader(false);
 
         this.assignDates();
-        let invoiceSettings: InvoiceSetting = null;
-        this.store.pipe(select(s => s.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
-        if (invoiceSettings) {
-            let duePeriod: number;
-            if (this.isEstimateInvoice) {
-                duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
-            } else if (this.isProformaInvoice) {
-                duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
-            } else {
-                duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
-            }
-            this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
-                moment().add(duePeriod, 'days').toDate() : moment().toDate();
-        }
+        
         this.ngAfterViewInit();
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;
@@ -3260,7 +3234,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
                 entry.isNewEntryInUpdateMode = true;
             } else {
-                entry.entryDate = this.universalDate || new Date();
+                entry.entryDate = this.invFormData.voucherDetails.voucherDate;
             }
             this.invFormData.entries.push(entry);
             setTimeout(() => {
@@ -3606,7 +3580,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             this.activeIndx = lastIndex;
-            this.invFormData.entries[lastIndex].entryDate = this.universalDate;
+            this.invFormData.entries[lastIndex].entryDate = this.invFormData.voucherDetails.voucherDate;
             this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
             this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
             this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex], true);
@@ -4821,6 +4795,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
             this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
+        }
+
+        let invoiceSettings: InvoiceSetting = null;
+        this.store.pipe(select(state => state.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
+        if (invoiceSettings) {
+            let duePeriod: number;
+            if (this.isEstimateInvoice) {
+                duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
+            } else if (this.isProformaInvoice) {
+                duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
+            } else {
+                duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
+                this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
+            }
+
+            this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? moment(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.invFormData.voucherDetails.voucherDate).toDate();
         }
     }
 
