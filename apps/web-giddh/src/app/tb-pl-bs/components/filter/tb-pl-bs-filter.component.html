@@ -19,6 +19,7 @@
                                                 <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
                                                 <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
                                                     tooltip="HO Branch"></i>
+                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
                                             </span>
                                             <span class="entity-details">
                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
