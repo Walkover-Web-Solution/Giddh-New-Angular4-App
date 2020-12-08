@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="d-flex date-advance-search">
             <div class="d-flex">
-                <div class="input-group form-group linked-entities">
+                <div *ngIf="currentCompanyBranches?.length > 2" class="input-group form-group linked-entities">
                     <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
                         [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
                         [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="clearfix">
-                <button [disabled]="currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2" class="btn btn-sky-blue pull-right mr-0 mobile-none" data-toggle="tooltip" tooltip="Alt+N"
+                <button *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)" class="btn btn-sky-blue pull-right mr-0 mobile-none" data-toggle="tooltip" tooltip="Alt+N"
                     (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>

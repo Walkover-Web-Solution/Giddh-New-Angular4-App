@@ -12,7 +12,7 @@
                     <div class="invoice-search-box">
                         <input type="text" placeholder="search" #searchElement>
 
-                        <div [isDisabled]="isCompany" class="btn-group" dropdown *ngIf="voucherType === 'sales'"
+                        <div class="btn-group" dropdown *ngIf="!isCompany && voucherType === 'sales'"
                              [autoClose]="true">
                             <button id="button-basic2" dropdownToggle type="button"
                                 class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0" aria-controls="dropdown-basic3">
@@ -31,7 +31,7 @@
                             </ul>
                         </div>
 
-                        <button [disabled]="isCompany" class="btn btn-sky-blue mr-0" *ngIf="voucherType !== 'sales'"
+                        <button class="btn btn-sky-blue mr-0" *ngIf="!isCompany && voucherType !== 'sales'"
                                 (click)="goToInvoice()">+ New
                             {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
@@ -99,8 +99,8 @@
                                             <img src="assets/images/multiply.svg"></span>
 
                                         <!-- region for proforma and estimates -->
-                                        <div [isDisabled]="isCompany" [class.disabled-change-status]="isCompany" class="btn-group changeStatus-dropdown pull-right" dropdown
-                                             *ngIf="only4ProformaEstimates">
+                                        <div [class.disabled-change-status]="isCompany" class="btn-group changeStatus-dropdown pull-right" dropdown
+                                             *ngIf="!isCompany && only4ProformaEstimates">
 
                                             <button id="button-basic" dropdownToggle type="button"
                                                     class="btn btn-sky-blue dropdown-toggle" aria-controls="dropdown-basic">
@@ -139,8 +139,8 @@
                                         <!-- endregion -->
 
                                         <!-- region for invoice -->
-                                        <div [isDisabled]="isCompany" [class.disabled-change-status]="isCompany" class="btn-group changeStatus-dropdown pull-right" dropdown
-                                             *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
+                                        <div [class.disabled-change-status]="isCompany" class="btn-group changeStatus-dropdown pull-right" dropdown
+                                             *ngIf="!isCompany && !only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
                                             <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
                                                 {{ selectedItem.voucherStatus }}
                                             </label>
@@ -178,8 +178,8 @@
                                         <!-- endregion -->
 
                                         <!-- region for purchase -->
-                                        <div [isDisabled]="isCompany" [class.disabled-change-status]="isCompany" class="btn-group changeStatus-dropdown pull-right" dropdown
-                                             *ngIf="selectedItem?.voucherType === 'purchase'">
+                                        <div [class.disabled-change-status]="isCompany" class="btn-group changeStatus-dropdown pull-right" dropdown
+                                             *ngIf="!isCompany && selectedItem?.voucherType === 'purchase'">
 
                                             <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2">Change Status <span class="caret"></span></button>
 
@@ -195,7 +195,7 @@
                                         <!-- endregion -->
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-grps pull-right">
-                                                <span [class.disabled]="isCompany">
+                                                <span *ngIf="!isCompany">
                                                     <a href="javascript:void 0" tooltip="Edit" placement="top"
                                                         (click)="isCompany ? '' : toggleEditMode()"><i class="icon-edit-pencil"></i></a>
                                                 </span>
@@ -237,9 +237,9 @@
                                                         (click)="downloadFile()"><i class="icon-download"></i></a>
                                                 </span>
 
-                                                <span [class.disabled]="isCompany">
+                                                <span *ngIf="!isCompany">
                                                     <a href="javascript:void 0" tooltip="Delete" placement="top"
-                                                        (click)="isCompany ? '' : deleteConfirmationModel.toggle()"><i
+                                                        (click)="deleteConfirmationModel.toggle()"><i
                                                             class="fa fa-trash"></i></a>
                                                 </span>
                                             </div>
