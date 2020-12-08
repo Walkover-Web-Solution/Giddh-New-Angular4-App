@@ -5,7 +5,7 @@
 
 
         <!--region multiple-->
-        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
+        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}"  class="bdr">
             <ng-container *ngIf="selectedValues?.length && !showCheckbox">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
