@@ -225,6 +225,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**Adjust advance receipts */
     @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
     @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
+
+    @ViewChild('dateChangeConfirmationModel', {static: true}) public dateChangeConfirmationModel: ModalDirective;
     public showAdvanceReceiptAdjust: boolean = false;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -570,6 +572,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isPendingSales: boolean = false;
     /** This will hold if deliver address filled **/
     public isDeliverAddressFilled: boolean = false;
+    /** This will hold if voucher date is manually changed */
+    public isVoucherDateChanged: boolean = false;
+    /** Date Change modal configuration */
+    public dateChangeConfiguration: ConfirmationModalConfiguration;
+    /** This will hold which date got changed (voucher/entry) */
+    public dateChangeType: string = '';
+    /** This will hold updated entry index */
+    public updatedEntryIndex: number;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1637,21 +1647,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public assignDates() {
-        let date = _.cloneDeep(this.universalDate);
-        this.invFormData.voucherDetails.voucherDate = date;
+        if(!this.isVoucherDateChanged) {
+            let date = _.cloneDeep(this.universalDate);
+            this.invFormData.voucherDetails.voucherDate = date;
 
-        // get exchange rate when application date is changed
-        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(date).format(GIDDH_DATE_FORMAT));
-        }
+            // get exchange rate when application date is changed
+            if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
+                this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(date).format(GIDDH_DATE_FORMAT));
+            }
 
-        this.invFormData.entries.forEach((entry: SalesEntryClass) => {
-            entry.transactions.forEach((txn: SalesTransactionItemClass) => {
-                if (!txn.accountUniqueName) {
-                    entry.entryDate = date;
-                }
+            this.invFormData.entries.forEach((entry: SalesEntryClass) => {
+                entry.entryDate = date;
             });
-        });
+        }
     }
 
     /**
@@ -2049,9 +2057,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
             }
-            this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
-                moment().add(duePeriod, 'days').toDate() : moment().toDate();
-
             this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
                 moment().add(duePeriod, 'days').toDate() : moment().toDate();
         }
@@ -5051,10 +5056,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onBlurInvoiceDate(index) {
+        this.isVoucherDateChanged = true;
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.onBlurDueDate(index);
         }
+        this.dateChangeType = "voucher";
+        this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(true);
+        this.dateChangeConfirmationModel.show();
     }
 
     public focusInCustomerName() {
@@ -6619,5 +6628,46 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         return discountArray;
+    }
+
+    /**
+     * This will handle date change modal confirmation
+     *
+     * @param {string} action
+     * @memberof ProformaInvoiceComponent
+     */
+    public handleDateChangeConfirmation(action: string): void {
+        if (action === CONFIRMATION_ACTIONS.YES) {
+            if(this.dateChangeType === "voucher") {
+                this.invFormData.entries.forEach(entry => {
+                    entry.entryDate = this.invFormData.voucherDetails.voucherDate;
+                });
+            } else if(this.dateChangeType === "entry") {
+                let entryLoop = 0;
+                this.invFormData.entries.forEach(entry => {
+                    if(entryLoop !== this.updatedEntryIndex) {
+                        entry.entryDate = this.invFormData.entries[this.updatedEntryIndex].entryDate;
+                    }
+                    entryLoop++;
+                });
+            }
+        }
+
+        this.dateChangeConfirmationModel.hide();
+    }
+
+    /**
+     * Callback for entry date change
+     *
+     * @param {number} entryIdx
+     * @memberof ProformaInvoiceComponent
+     */
+    public onBlurEntryDate(entryIdx: number, isDatepickerOpen: boolean): void {
+        if(isDatepickerOpen) {
+            this.dateChangeType = "entry";
+            this.updatedEntryIndex = entryIdx;
+            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(false);
+            this.dateChangeConfirmationModel.show();
+        }
     }
 }
