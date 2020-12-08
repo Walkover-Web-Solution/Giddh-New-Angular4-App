@@ -357,12 +357,12 @@
                                 <div class="invoice-due-date">
                                 <div class="d-flex">
                                     <label>Order Date<span class="red-text">*</span></label>
-                                    <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
+                                    <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker (blur)="onBlurOrderDate()">
                                 </div>
                                 <div class="d-flex">
                                     <label>Expected Delivery</label>
                                     <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                        name="purchaseDueDate" [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker>
+                                        name="purchaseDueDate" [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker (blur)="onBlurOrderDate()">
                                 </div>
                             </div>
                         </div>
