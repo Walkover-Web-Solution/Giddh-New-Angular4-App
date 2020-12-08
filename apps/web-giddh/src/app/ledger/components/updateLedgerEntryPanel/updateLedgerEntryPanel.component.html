@@ -741,7 +741,7 @@
                             Adjusted Amount
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" (click)="openAdjustInvoiceEditMode();$event.stopPropagation();">
                                 <i class="edit-adjustment icon-edit11 font-10"
-                                *bgIf="((currentOrganizationType === 'COMPANY' && branches?.length === 1) || (currentOrganizationType === 'BRANCH'))"></i>
+                                *ngIf="((currentOrganizationType === 'COMPANY' && branches?.length === 1) || (currentOrganizationType === 'BRANCH'))"></i>
                             </a>
                             <i class="icon-info" [popover]="adjustmentPopOverTemplate" [outsideClick]="true" containerClass="adjustment-popover" placement="bottom right"></i>
                         </p>
