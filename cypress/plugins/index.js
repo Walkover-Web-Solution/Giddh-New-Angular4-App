@@ -38,7 +38,7 @@ module.exports = (on, config) => {
     //   // return config
     //   return config
 
-    const file = config.env.configFile || 'production'
+    const file = config.env.configFile || 'test'
 
     return getConfigurationByFile(file)
 }
