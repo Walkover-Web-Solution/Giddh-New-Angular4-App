@@ -1,9 +1,8 @@
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import * as _ from '../../lodash-optimized';
@@ -23,6 +22,7 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 import { CommonService } from '../../services/common.service';
 import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 export interface IGstObj {
     newGstNumber: string;
@@ -163,7 +163,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private commonActions: CommonActions,
         private settingsProfileService: SettingsProfileService,
-        private settingsUtilityService: SettingsUtilityService
+        private settingsUtilityService: SettingsUtilityService,
+        private router: Router,
+        public route: ActivatedRoute
     ) {
 
         this.getCountry();
@@ -237,6 +239,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }));
             }
         });
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
+        });
     }
 
     public getInitialProfileData() {
@@ -254,6 +260,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 this.currentOrganizationType = OrganizationType.Company;
             }
+
+            this.loadAddresses('GET');
         });
     }
 
@@ -795,6 +803,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             }
         }
+        this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
     /**
