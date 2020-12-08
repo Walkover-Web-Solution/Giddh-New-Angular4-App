@@ -5,6 +5,7 @@ describe('This is Sundry Debtors Test', function() {
     let testData = "";
     let entryUniqueName = "";
 
+
     before(function() {
         cy.fixture('example.json')
             .then((data) => {
