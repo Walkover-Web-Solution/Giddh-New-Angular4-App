@@ -2163,6 +2163,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 customerUniqueName.push(transaction.particular.uniqueName);
             }
         });
+        if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
+            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
+                if (!adjustment.balanceDue) {
+                    adjustment.balanceDue = cloneDeep(adjustment.adjustmentAmount);
+                } else if (!adjustment.adjustmentAmount) {
+                    adjustment.adjustmentAmount = cloneDeep(adjustment.balanceDue);
+                }
+            });
+        }
         customerUniqueName.push(this.baseAcc);
         customerUniqueName = _.union(customerUniqueName);
         this.adjustVoucherConfiguration = {
