@@ -173,7 +173,7 @@
 
                                         <ng-template [ngIf]="txn.isDiscount">
                                             To
-                                            <input [disabled]="true" [disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1" [(ngModel)]="txn.particular.name"
+                                            <input [disabled]="true" [(ngModel)]="txn.particular.name"
                                                 class="trxFakeInput" />
                                         </ng-template>
 
@@ -740,7 +740,8 @@
                         <p class="bold">
                             Adjusted Amount
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" (click)="openAdjustInvoiceEditMode();$event.stopPropagation();">
-                                <i class="edit-adjustment icon-edit11 font-10" *ngIf="!currentOrganizationType === 'COMPANY' && !branches?.length> 1"></i>
+                                <i class="edit-adjustment icon-edit11 font-10"
+                                *bgIf="((currentOrganizationType === 'COMPANY' && branches?.length === 1) || (currentOrganizationType === 'BRANCH'))"></i>
                             </a>
                             <i class="icon-info" [popover]="adjustmentPopOverTemplate" [outsideClick]="true" containerClass="adjustment-popover" placement="bottom right"></i>
                         </p>
@@ -1089,8 +1090,7 @@
                                         (click)="showDeleteAttachedFileModal()">(remove)</label>
                                 </div>
 
-                                <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}"
-                                *ngif="((currentOrganizationType === 'COMPANY' && branches?.length === 1) || (currentOrganizationType === 'BRANCH')) && !vm.selectedLedger.attachedFile">
+                                <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
                                     <input [disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1" type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
                                         [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                                     <label for="invoiceFile" class="cp fs16">

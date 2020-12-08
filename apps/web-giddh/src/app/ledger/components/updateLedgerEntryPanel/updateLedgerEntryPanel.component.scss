@@ -288,12 +288,8 @@ span.eligible-ITC {
 .dropdown-container[disabled], .table-amount[disabled] {
     pointer-events: none;
 }
-.disabled-ledger{
-    .sh-select-disabled{
-        input{
-                background-color: $whisper-light;
-        }
-    }
+#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white{
+    background-color: $whisper-light !important;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep input ,
 #update-ledger-select-warehouse.disabled-ledger::ng-deep input,
