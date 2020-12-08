@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://localhost:3000/login",
+  "baseUrl": "http://staging1.giddh.com/login",
   "pageLoadTimeout" : 80000,
   "env": {
     "url": "http://staging1.giddh.com/login",

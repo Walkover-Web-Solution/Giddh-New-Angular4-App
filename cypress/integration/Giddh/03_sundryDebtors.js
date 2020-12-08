@@ -16,6 +16,7 @@ describe('This is Sundry Debtors Test', function() {
 
     afterEach("Get Ledger and delete Ledger entries", ()=>{
         cy.log('I run before after each test in spec file!!!!!!')
+        cy.wait(2000)
         cy.getAllLedger(testData.uitest).then((response) => {
             expect(response.status).to.eq(200)
             const respBody = response.body;
