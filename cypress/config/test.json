@@ -6,6 +6,6 @@
     "dashBoardUrl" : "http://localhost:3000/pages/home",
     "authKey" : "vMvGKUiRYvyZqvwhljopR3R6-5XqBd-JWYu7GmO3xiZp-ySdHroKfx5cxM1KVsrOcVmdKqp3_XyPvBltp2GiZjjPPLGBsZOjeYI6kiHA_84=",
     "apiBaseURI" : "https://apitest.giddh.com/company/giddhain15954854091070a8hu6",
-    "getLedgerAPI" : "/accounts/uitest/giddh-ledger"
+    "uiTestLedgerAPI" : "/accounts/uitest/giddh-ledger"
   }
 }
