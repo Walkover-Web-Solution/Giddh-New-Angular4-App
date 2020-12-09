@@ -81,6 +81,10 @@ var app = new Vue({
             forwardedBalance: {
                 amount: '',
                 type: ''
+            },
+            closingBalance: {
+                amount: '',
+                type: ''
             }
         },
         reckoningDebitTotal: 0,
