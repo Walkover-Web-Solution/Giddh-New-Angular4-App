@@ -48,7 +48,9 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	public showToDatePicker: boolean = false;
 	public moment = moment;
 	public startDate: Date;
-	public endDate: Date;
+    public endDate: Date;
+    /* To check page is not inventory page */
+    public isInventoryPage: boolean = false;
 	public activeStockGroup: string;
 	private universalDate: Date[];
 	private isUniversalDateApplicable: boolean = false;
@@ -67,6 +69,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
+        this.isInventoryPage = this.router.url.includes('/pages/inventory');
 		this.initializeSearchReqObj();
 		// Refresh the stock list
 		this.store.dispatch(this.inventoryAction.GetManufacturingStock());

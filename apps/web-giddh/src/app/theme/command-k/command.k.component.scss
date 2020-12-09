@@ -8,6 +8,7 @@
         flex-wrap: wrap !important;
         border-bottom: 1px solid #ccc;
         width:100% !important;
+        max-width: 580px;
         .searchEle {
             outline: none;
             border: none;
@@ -120,15 +121,14 @@
             outline: none;
         }
         .item {
-            height: 50px;
-            overflow: hidden;
+            min-height: auto;
+            overflow: initial;
             padding: 0 24px;
             a {
-                height: 50px;
+                min-height: auto;
             }
             .item-icon {
                 color: #979797;
-                width: 2.7rem;
                 font-size: 14px;
                 .icon-account {
                     font-size: 11px;
@@ -142,6 +142,11 @@
                 font-size: 14px;
                 color: #333333;
                 text-transform: capitalize;
+                margin-left: 25px;
+                padding: 5px 0;
+                .width-65{
+                    width: 65%;
+                }
                 .smlP {
                     margin: 0;
                     width: 320px;
@@ -155,10 +160,11 @@
                 }
                 .hvrTxt {
                     color: white;
-                    position: absolute;
                     right: 0;
-                    top: 10px;
                     text-transform: initial;
+                    width: 25%;
+                    word-break: break-word;
+                    text-align: right;
                 }
                 .brdcrmb {
                     max-width: 150px;
@@ -201,6 +207,7 @@
         .search-wrapper {
             padding: 1rem 2rem 1rem 3.9rem;
             margin-bottom: 10px;
+            max-width: 100%;
             .searh-ico {
                 left: -3px;
             }

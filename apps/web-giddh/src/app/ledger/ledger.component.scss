@@ -150,7 +150,6 @@ input {
 }
 .ledger-head th {
     color: $jacksons-purple;
-    padding-left: 0;
     padding-top: 5px;
     padding-bottom: 10px;
     &.first-child{
@@ -656,6 +655,13 @@ sh-select:focus {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+.ledger-row{
+    .ellp{
+        min-width: 160px;
+        max-width: 400px;
+        width: 100%;
+    }
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;
@@ -671,6 +677,9 @@ sh-select:focus {
     background-color: $alice-blue-light;
     padding-left: 5px;
 }
+.show-if-ledger-open{
+    height: 230px;
+}
 @media only screen and (max-width: 1540px) {
     .modal-ledger {
         width: 85%;
@@ -682,6 +691,9 @@ sh-select:focus {
         width: 100%;
         margin: 0 auto;
         padding: 15px;
+    }
+    .show-if-update-ledger-open{
+        height: 230px;
     }
 }
 

@@ -1,3 +1,4 @@
+<hamburger-menu [pageHeading]="'New Purchase Order'"></hamburger-menu>
 <div class="no-data mr-t2 loader-main" *ngIf="showLoader">
     <div class="spinner2">
         <div class="cube1"></div>
@@ -251,10 +252,10 @@
                                                             <sales-sh-select [placeholder]="'State'"
                                                                 class="select-border-bottom"
                                                                 (selected)="fillShippingBillingDetails($event, true, 'company'); autoFillShippingDetails('company')"
-                                                                #companyStatesBilling
                                                                 [showBottomBorderOnly]="true"
                                                                 [options]="companyStatesSource"
                                                                 name="companyBillingDetailsStateCode"
+                                                                [disabled]="(purchaseOrder.company.billingDetails.gstNumber && purchaseOrder.company.billingDetails.gstNumber.length >= 2) ? true : null"
                                                                 [(ngModel)]="purchaseOrder.company.billingDetails.state.code">
                                                             </sales-sh-select>
                                                         </div>
@@ -265,7 +266,7 @@
                                                                 [(ngModel)]="purchaseOrder.company.billingDetails.gstNumber"
                                                                 class="form-control input-custom"
                                                                 (blur)="autoFillShippingDetails('company')"
-                                                                (change)="getStateCode('billingDetails', companyStatesBilling, 'company')"
+                                                                (change)="getStateCode('billingDetails', 'company')"
                                                                 placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                         </div>
                                                     </div>
@@ -306,10 +307,10 @@
                                                                     [disabled]="autoFillCompanyShipping"
                                                                     class="select-border-bottom disabled"
                                                                     (selected)="fillShippingBillingDetails($event, false, 'company');"
-                                                                    #companyStatesShipping
                                                                     [showBottomBorderOnly]="true"
                                                                     [options]="companyStatesSource"
                                                                     name="companyShippingDetailsStateCode"
+                                                                    [disabled]="(purchaseOrder.company.shippingDetails.gstNumber && purchaseOrder.company.shippingDetails.gstNumber.length >= 2) ? true : null"
                                                                     [(ngModel)]="purchaseOrder.company.shippingDetails.state.code">
                                                                 </sales-sh-select>
                                                             </div>
@@ -319,7 +320,7 @@
                                                                     name="companyShippingDetailsTax"
                                                                     [(ngModel)]="purchaseOrder.company.shippingDetails.gstNumber"
                                                                     class="form-control input-custom"
-                                                                    (change)="getStateCode('shippingDetails', companyStatesShipping, 'company')"
+                                                                    (change)="getStateCode('shippingDetails', 'company')"
                                                                     placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                             </div>
                                                         </div>
@@ -776,6 +777,7 @@
                                     <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                         <input type="checkbox" class="other-taxes-checkobx"
                                             [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
+                                            (click)="tcsTdsIndex = entryIdx"
                                             name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                             id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                             (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -1417,6 +1419,7 @@
                                             <input type="checkbox" class="other-taxes-checkobx"
                                                 [(ngModel)]="entry.isOtherTaxApplicable"
                                                 *ngIf="!entry.isOtherTaxApplicable"
+                                                (click)="tcsTdsIndex = entryIdx"
                                                 name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -1679,7 +1682,8 @@
 
 <!-- endregion -->
 <div class="aside-overlay"
-    *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForOtherTaxes === 'in'">
+    *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForOtherTaxes === 'in'"
+    (click)="closeAsideMenuStateForOtherTaxes()">
 </div>
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
     (closeAsideEvent)="toggleAccountAsidePane($event)"

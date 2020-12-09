@@ -133,6 +133,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     /** Emit event for getting invoice list for credit note linking */
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
+    /** Emits when more detail is opened */
+    @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
@@ -981,6 +983,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 ]
             }
             this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
+            this.blankLedger.generateInvoice = true;
         }
     }
 
@@ -993,6 +996,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.forceClear$ = observableOf({ status: true });
         this.currentTxn.invoiceLinkingRequest = null;
         this.selectedInvoiceForCreditNote = null;
+        this.blankLedger.generateInvoice = false;
     }
 
     /**
@@ -1269,6 +1273,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 } else {
                     this.isAdjustReceiptSelected = false;
                 }
+                this.isAdjustVoucherSelected = false;
+                this.blankLedger.generateInvoice = false;
             }
         }
 
@@ -1289,11 +1295,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
-            if (this.blankLedger.voucherType === 'pur') {
-                this.blankLedger.generateInvoice = false;
-            }
+            this.blankLedger.generateInvoice = false;
         }
         this.adjustPaymentModal.hide();
+    }
+
+    /**
+     * Toggles the more detail section
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public toggleMoreDetail(): void {
+        this.showAdvanced = !this.showAdvanced;
+        this.moreDetailOpen.emit(this.showAdvanced);
     }
 
     /**

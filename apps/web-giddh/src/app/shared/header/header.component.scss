@@ -477,7 +477,7 @@ a[vr-item]:focus {
     display: none;
 }
 
-.calender-addone {
+.calendar-addon {
     color: $white;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
@@ -490,7 +490,7 @@ a[vr-item]:focus {
 .not-today{
     padding:0px !important;
     border:0px !important;
-    .calender-addone {
+    .calendar-addon {
         position: absolute;
         left:auto;
         margin:auto;
@@ -499,6 +499,7 @@ a[vr-item]:focus {
         border: 1px solid #ffffff;
         border-radius: 20px !important;
         height: 34px;
+        width: 220px;
         input{
             margin-right: 44px;
             text-align:center !important;
@@ -746,11 +747,18 @@ ul.sub-list {
 .unique-name-financial-year{
     display: flex;
     align-items: center;
-    .fyear{
-        margin-left: 5px;
+    flex-wrap: wrap;
+    .branch-unique-name{
+        margin-right: 5px;
+        white-space: normal;
+        word-break: break-word;
     }
 }
-
+.desktop-header{
+    .navbar{
+        display: none;
+    }
+}
 .name-year{
     font-size:12px !important;
     color:$deep-sky-blue !important;
@@ -843,6 +851,14 @@ ul.sub-list {
                     &:hover{
                         color: $chetwode-blue !important;
                     }
+                }
+                span{
+                    a{
+                        padding: 0;
+                    }
+                }
+                .branch-alias-name{
+                    width: 90%;
                 }
                 span{
                     a{
@@ -980,6 +996,7 @@ ul.sub-list {
             margin-bottom: 5px;
             display: flex;
             flex-direction: row;
+            flex-wrap: inherit;
             .hamburger-menu {
                 display: flex;
                 align-items: center;
@@ -1050,7 +1067,7 @@ ul.sub-list {
             line-height: 1.8;
         }
     }
-    .calender-addone {
+    .calendar-addon {
         height: 30px;
         vertical-align: middle;
         align-items: center;

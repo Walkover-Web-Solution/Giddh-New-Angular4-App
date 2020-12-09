@@ -69,15 +69,17 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
         this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);
 
-        this._permissionDataService.getData.forEach(f => {
-            if (f.name === 'LEDGER') {
-                let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
-                this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
-                this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
-                this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
+        if(this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
+            this._permissionDataService.getData.forEach(f => {
+                if (f.name === 'LEDGER') {
+                    let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
+                    this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
+                    this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
+                    this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
 
-            }
-        });
+                }
+            });
+        }
     }
 
     public exportLedger() {

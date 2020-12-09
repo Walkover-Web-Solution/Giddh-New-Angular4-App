@@ -15,6 +15,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -31,6 +32,7 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
         TooltipModule,
         ElementViewChildModule,
         CurrencyModule,
+        SharedModule,
         NgxMaskModule.forRoot(),
     ],
     entryComponents: [

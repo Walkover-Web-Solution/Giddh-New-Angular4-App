@@ -17,7 +17,6 @@ import { WarehouseDetails } from '../../ledger/ledger.vm';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest, CurrentPage } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
@@ -51,6 +50,7 @@ import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { OrganizationType } from '../../models/user-login-state';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 
 const THEAD_ARR_READONLY = [
     {
@@ -319,8 +319,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public newlyCreatedStockAc$: Observable<INameUniqueName>;
     /* This will hold the transaction amount */
     public transactionAmount: number = 0;
+    /** Stores the current index of entry whose TCS/TDS are entered */
+    public tcsTdsIndex: number = 0;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService, private settingsBranchAction: SettingsBranchActions) {
         this.getInvoiceSettings();
         this.store.dispatch(this.generalActions.getFlattenAccount());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -329,6 +331,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.store.dispatch(this.settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.companyActions.getTax());
+        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
 
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
         this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
@@ -1033,6 +1037,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     this.purchaseOrder.company.shippingDetails.stateCode = defaultAddress.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
+                    this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
                 } else {
                     this.resetShippingAddress();
                 }
@@ -1056,6 +1061,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.purchaseOrder.company.shippingDetails.stateCode = "";
         this.purchaseOrder.company.shippingDetails.state.name = "";
         this.purchaseOrder.company.shippingDetails.stateName = "";
+        this.purchaseOrder.company.shippingDetails.gstNumber = "";
     }
 
     /**
@@ -1137,10 +1143,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * get state code using Tax number to prefill state
      *
      * @param {string} type billingDetails || shipping
-     * @param {SalesShSelectComponent} statesEle state input box
      * @memberof CreatePurchaseOrderComponent
      */
-    public getStateCode(type: string, statesEle: SalesShSelectComponent, addressType: string): void {
+    public getStateCode(type: string, addressType: string): void {
         let gstVal;
         if (addressType === "vendor") {
             gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
@@ -1168,9 +1173,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
                 this.toaster.clearAllToaster();
             }
-            statesEle.disabled = true;
         } else {
-            statesEle.disabled = false;
             if (addressType === "vendor") {
                 this.purchaseOrder.account[type].stateCode = null;
                 this.purchaseOrder.account[type].state.code = null;
@@ -2456,7 +2459,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.purchaseOrder.company.billingDetails.stateCode = defaultAddress ? defaultAddress.stateCode : '';
             this.purchaseOrder.company.billingDetails.stateName = defaultAddress ? defaultAddress.stateName : '';
             this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
-            this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
         }
     }
 
@@ -2497,6 +2499,20 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         }
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    /**
+     * Closes the other taxes side menu panel on click of overlay
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public closeAsideMenuStateForOtherTaxes(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true, null);
+            if (this.purchaseOrder.entries[this.tcsTdsIndex]) {
+                this.purchaseOrder.entries[this.tcsTdsIndex].isOtherTaxApplicable = false;
+            }
+        }
     }
 
     /**

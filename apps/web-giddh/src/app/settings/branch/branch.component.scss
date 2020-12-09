@@ -304,7 +304,7 @@
 .branch-vector{
     text-align: right;
     position: absolute;
-    bottom: 8px;
+    bottom: -70px;;
     right: 90px;
 }
 @media (max-width: 375px) {
@@ -335,9 +335,19 @@
                 margin-right: 0;
             }
         }
+        .search-field{
+            margin-right: 0;
+            .search-branch-box{
+                max-width: 180px;
+            }
+            .clear-filter-btn{
+                width: 122px !important;
+                padding: 0 12px;
+            }
+        }
     }
     .input-group-date-range-picker {
-        width: 66%;
+        width: 100%;
         .form-group {
             margin-bottom: 0;
         }
@@ -345,6 +355,11 @@
     .btn-sky-blue.pull-right{
         float: none;
         margin-bottom: 15px;
+    }
+    .branch-vector{
+        img{
+            width: 150px;
+        }
     }
 }
 @media (max-width: 370px) {
@@ -358,6 +373,20 @@
         .btn {
             float: left !important;
         }
+    }
+    .branch-header-content {
+        margin-right: 0;
+        .search-field{
+            margin-right: 0;
+            .search-branch-box{
+                max-width: 160px;
+            }
+            .clear-filter-btn{
+                width: 122px !important;
+                padding: 0 6px;
+            }
+        }
+
     }
 }
 
@@ -391,7 +420,6 @@
     }
 }
 
-
 @media(max-width:575px){
     .date-advance-search {
         .input-group-date-range-picker {
@@ -412,5 +440,5 @@
             font-size: 12px;
             height: 36px;
         }
-    } 
+    }
 }

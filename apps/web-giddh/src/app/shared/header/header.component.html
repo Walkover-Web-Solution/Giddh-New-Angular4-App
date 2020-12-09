@@ -194,7 +194,7 @@
                                 <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Today</button>
                             </li>
                             <li class="not-today cursor-pointer">
-                                <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                                <span class="icon-calender calendar-addon" (click)="showGiddhDatepicker($event)"></span>
                                 <div class="input-date" [ngClass]="{'today-date pl-2': isTodaysDateSelected}">
                                     <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
                                         [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
@@ -379,30 +379,22 @@
         <div class="container-fluid pd-t1 pd-b1">
             <div class="navbar-header">
                 <ul class="nav navbar-nav">
-                    <li class="hamburger-menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+                    <!-- <li class="hamburger-menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                         <button class="btn mr-0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
                             <i class="icon-bar"></i>
                         </button>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
-                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
+                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">
+                            {{selectedPage}}
+                            <span *ngIf="isLedgerAccSelected">A/</span>
+                            <span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span>
+                        </h4>
 
                         <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
-                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
-
-                    </li>
-                    <li>
-
-                    </li>
+                            <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
+                                class="txt-lwc">c</span></h4>
+                    </li> -->
                 </ul>
-
-                <div class="giddh_logo">
-
-                </div>
-
-                <div class="pull-right">
-                    <button *ngIf="shouldShowBackButton" (click)="navigateToPreviousRoute()" class="btn btn-primary mr-15">Back</button>
-                </div>
             </div>
         </div>
     </nav>
@@ -480,7 +472,7 @@
                             <!--                            <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button>-->
                         </li>
                         <li class="daterang-picker not-today cursor-pointer">
-                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                            <span class="icon-calender calendar-addon" (click)="showGiddhDatepicker($event)"></span>
                             <div class="input-date" [ngClass]="{'today-date pl-2': isTodaysDateSelected}">
                                 <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
                             </div>

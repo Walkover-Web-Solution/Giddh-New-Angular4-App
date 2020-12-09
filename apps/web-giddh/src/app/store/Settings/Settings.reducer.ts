@@ -300,6 +300,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 // newState.profile = _.cloneDeep(response.body);
                 newState.updateProfileSuccess = true;
                 newState.profileRequest = true;
+                newState.inventory = action.payload.request;
                 return Object.assign({}, state, newState);
             }
             return Object.assign({}, state, {
@@ -728,6 +729,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 });
             }
             return Object.assign({}, state, {});
+        }
+        case SETTINGS_BRANCH_ACTIONS.RESET_ALL_BRANCHES_RESPONSE: {
+            return Object.assign({}, state, {branches: null});
         }
 
         //  endregion discount reducer

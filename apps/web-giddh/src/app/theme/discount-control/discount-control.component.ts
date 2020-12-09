@@ -29,7 +29,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public ledgerAmount: number = 0;
     @Input() public totalAmount: number = 0;
     @Input() public showHeaderText: boolean = true;
-    @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
+    @Output() public discountTotalUpdated: EventEmitter<{discount: any, isActive: boolean}> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() public discountSum: number;
     @Input() public maskInput: string;
@@ -159,8 +159,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
 	/**
 	 * on change of discount amount
 	 */
-    public change() {
-        this.discountTotalUpdated.emit();
+    public change(discount?: any, event?: boolean) {
+        this.discountTotalUpdated.emit({discount: discount, isActive: event});
     }
 
     public trackByFn(index) {

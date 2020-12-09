@@ -114,6 +114,8 @@ import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
 import { PurchaseOrderService } from '../services/purchase-order.service';
 import { SearchService } from '../services/search.service';
 import { PURCHASE_ORDER_STATUS } from '../shared/helpers/purchaseOrderStatus';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../models/user-login-state';
 
 const THEAD_ARR_READONLY = [
     {
@@ -197,8 +199,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
-    @ViewChild('discountComponent', { static: false }) public discountComponent: DiscountListComponent;
-    @ViewChild('taxControlComponent', { static: false }) public taxControlComponent: TaxControlComponent;
+    @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
+    @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
@@ -226,7 +228,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
     @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
     public showAdvanceReceiptAdjust: boolean = false;
-
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -561,6 +562,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public tcsTdsTaxesAccount: any[] = [];
     /** account's applied discounts list */
     public accountAssignedApplicableDiscounts: any[] = [];
+    /** Stores the current invoice selected */
+    public invoiceSelected: any;
+    /** Stores the current index of entry whose TCS/TDS are entered */
+    public tcsTdsIndex: number = 0;
+    /** this is showing pending sales page **/
+    public isPendingSales: boolean = false;
+    /** This will hold if deliver address filled **/
+    public isDeliverAddressFilled: boolean = false;
+
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -605,7 +615,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private purchaseRecordAction: PurchaseRecordActions,
         private modalService: BsModalService,
         public purchaseOrderService: PurchaseOrderService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private settingsBranchAction: SettingsBranchActions
     ) {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
@@ -618,6 +629,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({page: 1, count: 0}));
+        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
 
         this.invFormData = new VoucherClass();
         this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
@@ -702,7 +715,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
-
+        this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales' && '/pages/purchase-management/purchase/bill');
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
@@ -1178,6 +1191,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 if(obj && obj.entries) {
                                     obj.entries.forEach((entry, index) => {
                                         obj.entries[index].entryDate = this.universalDate || new Date();
+                                        obj.entries[index].uniqueName = "";
                                     });
                                     obj.entries = obj.entries;
                                 }
@@ -1185,6 +1199,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 let date = _.cloneDeep(this.universalDate);
                                 obj.voucherDetails.voucherDate = date;
                                 obj.voucherDetails.dueDate = date;
+                                obj.voucherDetails.voucherNumber = "";
                             }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
@@ -1724,6 +1739,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
                     } else {
                         this.invoiceForceClearReactive$ = observableOf({ status: true });
+                        this.invoiceSelected = '';
                     }
                     let invoiceSelected;
                     if (this.isUpdateMode) {
@@ -1743,6 +1759,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     _.uniqBy(this.invoiceList, 'value');
+                    this.invoiceSelected = invoiceSelected;
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
                     this._cdr.detectChanges();
                 }
@@ -1758,6 +1775,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public removeSelectedInvoice(): void {
         this.invoiceForceClearReactive$ = observableOf({ status: true });
         this.selectedInvoice = '';
+        this.invoiceSelected = '';
     }
 
     public prepareInvoiceTypeFlags() {
@@ -1993,6 +2011,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isOthrDtlCollapsed = false;
         this.forceClear$ = observableOf({ status: true });
         this.invoiceForceClearReactive$ = observableOf({ status: true });
+        this.invoiceSelected = '';
         this.isCustomerSelected = false;
         this.selectedFileName = '';
         this.selectedWarehouse = '';
@@ -2045,7 +2064,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 moment().add(duePeriod, 'days').toDate() : moment().toDate();
         }
         this.ngAfterViewInit();
-        this.clickAdjustAmount(false)
+        this.clickAdjustAmount(false);
+        this.autoFillCompanyShipping = false;
+        this.fillDeliverToAddress();
     }
 
     public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
@@ -2509,6 +2530,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.toggleBodyClass();
     }
 
+    /**
+     * Closes the other taxes side menu panel on click of overlay
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public closeAsideMenuStateForOtherTaxes(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true, null);
+            if (this.invFormData.entries[this.tcsTdsIndex]) {
+                this.invFormData.entries[this.tcsTdsIndex].isOtherTaxApplicable = false;
+            }
+        }
+    }
+
     public checkForInfinity(value): number {
         return (value === Infinity) ? 0 : value;
     }
@@ -2586,10 +2621,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateBalanceDue();
     }
 
-    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false) {
+    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
         if(fromTransactionField && this.transactionAmount === trx.amount) {
             this.transactionAmount = 0;
             return;
+        }
+        if (event && event.discount && event.isActive) {
+            this.accountAssignedApplicableDiscounts.forEach(item => {
+                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                    item.isActive = event.isActive.target.checked;
+                }
+            });
+        }
+
+        if (event || !this.isUpdateMode) {
+            if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                entry.discounts.map(item => {
+                    let discountItem = this.accountAssignedApplicableDiscounts.find(element => element.uniqueName === item.discountUniqueName);
+                    if (discountItem && discountItem.uniqueName) {
+                        item.isActive = discountItem.isActive;
+                    }
+                });
+            }
         }
 
         if(trx.amount) {
@@ -2621,11 +2674,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
             this.applyRoundOff = true;
         }
-        if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-            entry.discounts.map(item => {
-                item.isActive = this.accountAssignedApplicableDiscounts.some(element => element.uniqueName === item.discountUniqueName);
-            });
-        }
 
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
@@ -2633,7 +2681,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
-
+        this.checkVoucherEntries();
         this.transactionAmount = 0;
         // /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
         // if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
@@ -2709,6 +2757,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
+        this.checkVoucherEntries();
     }
 
     public calculateTotalDiscount() {
@@ -2902,6 +2951,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             mobileNo: data.body.mobileNo,
                             nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                             stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
+                            hsnNumber: (selectedAcc.stock) ? selectedAcc.stock.hsnNumber : "",
+                            sacNumber: (!selectedAcc.stock) ? data.body.sacNumber : "",
                             uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
                         txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
@@ -3297,13 +3348,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public closeDiscountPopup() {
         if (this.discountComponent) {
-            this.discountComponent.hideDiscountMenu();
+            this.discountComponent.forEach(disComp => {
+                disComp.hideDiscountMenu();
+            });
         }
     }
 
     public closeTaxControlPopup() {
         if (this.taxControlComponent) {
-            this.taxControlComponent.showTaxPopup = false;
+            this.taxControlComponent.forEach(taxComp => {
+                taxComp.showTaxPopup = false;
+            });
         }
     }
 
@@ -4293,14 +4348,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
                 }
 
-                this.calculateTotalDiscountOfEntry(entry, trx, false);
-                this.calculateEntryTaxSum(entry, trx);
+                this.calculateTotalDiscountOfEntry(entry, newTrxObj, false);
+                this.calculateEntryTaxSum(entry, newTrxObj);
                 return newTrxObj;
-            });
-
-            entry.transactions.map(trx => {
-                this.calculateTotalDiscountOfEntry(entry, trx, false);
-                this.calculateEntryTaxSum(entry, trx);
             });
 
             // tcs tax calculation
@@ -4555,13 +4605,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
 
                     } else {
+                        const selectedTax = this.companyTaxesList.find(tax => tax.uniqueName === ta.uniqueName);
                         salesEntryClass.taxes.push({
                             amount: ta.taxPercent,
                             uniqueName: ta.uniqueName,
                             isChecked: true,
                             isDisabled: false,
                             type: ta.taxType,
-                            name: ta.name || ''
+                            name: ta.name || (selectedTax && selectedTax.name) || ''
                         });
                     }
                 });
@@ -5983,6 +6034,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
             });
         }
+            this.accountAssignedApplicableDiscounts.map(item => item.isActive = true);
     }
 
     /**
@@ -6284,25 +6336,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * This will assign state based on GST/TRN
      *
      * @param {string} type
-     * @param {SalesShSelectComponent} statesEle
      * @memberof ProformaInvoiceComponent
      */
-    public getStateCodeCompany(type: string, statesEle: SalesShSelectComponent): void {
+    public getStateCodeCompany(type: string): void {
         let gstVal = _.cloneDeep(this.purchaseBillCompany[type].gstNumber).toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.companyStatesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
                 this.purchaseBillCompany[type].stateCode = selectedState.value;
                 this.purchaseBillCompany[type].state.code = selectedState.value;
-
             } else {
                 this.purchaseBillCompany[type].stateCode = null;
                 this.purchaseBillCompany[type].state.code = null;
                 this._toasty.clearAllToaster();
             }
-            statesEle.disabled = true;
         } else {
-            statesEle.disabled = false;
             this.purchaseBillCompany[type].stateCode = null;
             this.purchaseBillCompany[type].state.code = null;
         }
@@ -6344,31 +6392,30 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public fillDeliverToAddress(): void {
-        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
-            if (profile.addresses && profile.addresses.length > 0) {
-                let companyAddresses = profile.addresses;
-                if (companyAddresses) {
-                    let isDefaultAddress;
-                    let isDefaultAddressUsed = false;
+        let branches = [];
+        let currentBranch;
+        this.isDeliverAddressFilled = false;
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.length && !this.isDeliverAddressFilled) {
+                branches = response;
 
-                    companyAddresses.forEach(address => {
-                        if(!isDefaultAddressUsed && address.branches && address.branches.length > 0) {
-                            isDefaultAddress = address.branches.filter(branch => branch.isDefault && branch.isHeadQuarter);
-
-                            if (!isDefaultAddressUsed && isDefaultAddress && isDefaultAddress.length > 0 && isDefaultAddress[0]) {
-                                isDefaultAddressUsed = true;
-                                this.purchaseBillCompany.billingDetails.address = [];
-                                this.purchaseBillCompany.billingDetails.address.push(address.address);
-                                this.purchaseBillCompany.billingDetails.state.code = address.stateCode;
-                                this.purchaseBillCompany.billingDetails.state.name = address.stateName;
-                                this.purchaseBillCompany.billingDetails.stateCode = address.stateCode;
-                                this.purchaseBillCompany.billingDetails.stateName = address.stateName;
-                                this.purchaseBillCompany.billingDetails.gstNumber = address.taxNumber;
-
-                                this.purchaseBillCompany.shippingDetails.gstNumber = address.taxNumber;
-                            }
-                        }
-                    });
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    currentBranch =  branches.find(branch => !branch.parentBranch);
+                }
+                if (currentBranch && currentBranch.addresses) {
+                    const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+                    this.purchaseBillCompany.billingDetails.address = [];
+                    this.purchaseBillCompany.billingDetails.address.push(defaultAddress.address);
+                    this.purchaseBillCompany.billingDetails.state.code = defaultAddress.stateCode;
+                    this.purchaseBillCompany.billingDetails.state.name = defaultAddress.stateName;
+                    this.purchaseBillCompany.billingDetails.stateCode = defaultAddress.stateCode;
+                    this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
+                    this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.taxNumber;
+                    this.isDeliverAddressFilled = true;
                 }
             }
         });
@@ -6382,19 +6429,41 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public autoFillDeliverToWarehouseAddress(warehouse: any): void {
         if (warehouse) {
-            this.purchaseBillCompany.shippingDetails.address = [];
-            this.purchaseBillCompany.shippingDetails.address.push(warehouse.address);
-            this.purchaseBillCompany.shippingDetails.state.code = warehouse.stateCode;
-            this.purchaseBillCompany.shippingDetails.state.name = warehouse.stateName;
-            this.purchaseBillCompany.shippingDetails.stateCode = warehouse.stateCode;
-            this.purchaseBillCompany.shippingDetails.stateName = warehouse.stateName;
+            if (warehouse.addresses && warehouse.addresses.length) {
+                // Search the default linked address of warehouse
+                const defaultAddress = warehouse.addresses.find(address => address.isDefault);
+                if (defaultAddress) {
+                    this.purchaseBillCompany.shippingDetails.address = [];
+                    this.purchaseBillCompany.shippingDetails.address.push(defaultAddress.address);
+                    this.purchaseBillCompany.shippingDetails.state.code = defaultAddress.stateCode;
+                    this.purchaseBillCompany.shippingDetails.state.name = defaultAddress.stateName;
+                    this.purchaseBillCompany.shippingDetails.stateCode = defaultAddress.stateCode;
+                    this.purchaseBillCompany.shippingDetails.stateName = defaultAddress.stateName;
+                    this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.taxNumber;
+                } else {
+                    this.resetShippingAddress();
+                }
+            } else {
+                this.resetShippingAddress();
+            }
         } else {
-            this.purchaseBillCompany.shippingDetails.address = [];
-            this.purchaseBillCompany.shippingDetails.state.code = "";
-            this.purchaseBillCompany.shippingDetails.stateCode = "";
-            this.purchaseBillCompany.shippingDetails.state.name = "";
-            this.purchaseBillCompany.shippingDetails.stateName = "";
+            this.resetShippingAddress();
         }
+    }
+
+    /**
+     Resets the shipping address if no default linked address is
+     * found in a warehouse
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public resetShippingAddress(): void {
+        this.purchaseBillCompany.shippingDetails.address = [];
+        this.purchaseBillCompany.shippingDetails.state.code = "";
+        this.purchaseBillCompany.shippingDetails.stateCode = "";
+        this.purchaseBillCompany.shippingDetails.state.name = "";
+        this.purchaseBillCompany.shippingDetails.stateName = "";
+        this.purchaseBillCompany.shippingDetails.gstNumber = "";
     }
 
     /**

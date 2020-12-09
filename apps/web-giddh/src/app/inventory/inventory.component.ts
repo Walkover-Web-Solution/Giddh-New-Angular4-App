@@ -507,7 +507,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 // Remove the head quarter if the current company is a branch as branches don't have access to view head quarter details
                 this.branchesWithWarehouse.splice(companyIndex, 1);
             }
-            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: branch.name, value: branch.uniqueName }));
+            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.name} ${branch.alias ? '(' + branch.alias + ')' : ''}`, value: branch.uniqueName }));
             this.loadBranchWarehouse(currentCompanyUniqueName);
         }
     }
