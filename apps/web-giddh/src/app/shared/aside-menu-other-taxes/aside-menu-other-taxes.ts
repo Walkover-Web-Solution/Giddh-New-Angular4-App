@@ -56,13 +56,12 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
 
     ngOnChanges(changes: SimpleChanges): void {
         if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
-
+            this.otherTaxesModal = changes.otherTaxesModal.currentValue;
             if (this.otherTaxesModal.appliedOtherTax) {
                 this.selectedTaxUniqueName = this.otherTaxesModal.appliedOtherTax.uniqueName;
                 this.applyTax({ label: this.otherTaxesModal.appliedOtherTax.name, value: this.otherTaxesModal.appliedOtherTax.uniqueName });
             }
         }
-
     }
 
     public applyTax(tax: IOption) {
@@ -70,7 +69,6 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
             let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
             this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
-            this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
         }
     }
 

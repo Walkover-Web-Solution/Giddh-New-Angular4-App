@@ -1,3 +1,4 @@
+<hamburger-menu [pageHeading]="'Reports > Monthly Columnar Report'"></hamburger-menu>
 <div class="columnar-report-page mr-t2">
     <div class="container-fluid font-14">
         <div class="row">
@@ -51,7 +52,7 @@
     <pagination [totalItems]="columnarReportResponse.totalItems" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paginationCount" (pageChanged)="pageChanged($event)"></pagination>
 </div>
 <div *ngIf="isLoading && isShowColumnarReport">
-    <div class="no-data mr-t2 loader-main">
+    <div class="no-data mt-15 loader-main">
         <div class="spinner2">
             <div class="cube1"></div>
             <div class="cube2"></div>

@@ -493,6 +493,7 @@ a[vr-item]:focus {
         border: 1px solid #ffffff;
         border-radius: 20px !important;
         height: 34px;
+        width: 220px;
         input{
             margin-right: 44px;
             text-align:center !important;
@@ -744,7 +745,11 @@ ul.sub-list {
         margin-left: 5px;
     }
 }
-
+.desktop-header{
+    .navbar{
+        display: none;
+    }
+}
 .name-year{
     font-size:12px !important;
     color:$deep-sky-blue !important;
@@ -825,6 +830,11 @@ ul.sub-list {
     }
 }
 @media (max-width: 767px) {
+    .not-today{
+        .input-date{
+            width: auto;
+        }
+    }
     .hide-today{
         display: none !important;
     }
@@ -881,6 +891,7 @@ ul.sub-list {
             margin-bottom: 5px;
             display: flex;
             flex-direction: row;
+            flex-wrap: inherit;
             .hamburger-menu {
                 display: flex;
                 align-items: center;
