@@ -194,12 +194,12 @@
                                                 </td>
                                             </tr>
                                             <tr class="total-col row mr-0 ml-0"
-                                                v-if="legderBalanceData.forwardedBalance.type === 'CREDIT' && isResponsive">
+                                                v-if="legderBalanceData.closingBalance.type === 'CREDIT' && isResponsive">
                                                 <td colspan="12" class="col-12 text-right h32">
                                                     <span v-tooltip="'(-) Asset ( ohh no!)'" class="">
                                                         <!-- | number: '1.2-2'  -->
-                                                        By Balance C/F: Cr
-                                                        {{ legderBalanceData.forwardedBalance.amount | currency }}
+                                                        To Balance C/F: {{legderBalanceData.forwardedBalance ? legderBalanceData.forwardedBalance.type === 'CREDIT' ? 'Cr' : 'Dr' : ''}}
+                                                        {{ legderBalanceData.closingBalance.amount | currency }}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -315,15 +315,15 @@
                                                 </td>
                                             </tr>
                                             <tr
-                                                v-if="legderBalanceData.forwardedBalance.type === 'DEBIT' && isResponsive" class="row mr-0 ml-0">
+                                                v-if="legderBalanceData.closingBalance && legderBalanceData.closingBalance.type === 'DEBIT' && isResponsive" class="row mr-0 ml-0">
                                                 <td colspan="12" class="col-12 text-right h32">
                                                     <!-- tooltip="" -->
                                                     <!-- [placement]="'top'" -->
                                                     <span>
-                                                        To Balance C/F: Dr
+                                                        By Balance C/F: {{legderBalanceData.forwardedBalance ? legderBalanceData.forwardedBalance.type === 'CREDIT' ? 'Cr' : 'Dr' : ''}}
                                                         <!-- | number: '1.2-2' -->
                                                         <span
-                                                            class="primary_clr">{{legderBalanceData.forwardedBalance.amount | currency }}
+                                                            class="primary_clr">{{legderBalanceData.closingBalance.amount | currency }}
                                                         </span>
                                                     </span>
                                                 </td>
@@ -351,11 +351,11 @@
                                                 <!-- [tooltip]="'(-) Asset ( ohh no!)'" -->
                                                 <!-- [placement]="'top'" -->
                                                 <span
-                                                    v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.type === 'CREDIT'"
+                                                    v-if="legderBalanceData.closingBalance && legderBalanceData.closingBalance.type === 'CREDIT'"
                                                     v-tooltip="'(-) Asset ( ohh no!)'">
                                                     <!-- | number: '1.2-2'  -->
-                                                    By Balance C/F: Cr
-                                                    {{ legderBalanceData.forwardedBalance.amount | currency }}
+                                                    To Balance C/F: {{legderBalanceData.forwardedBalance ? legderBalanceData.forwardedBalance.type === 'CREDIT' ? 'Cr' : 'Dr' : ''}}
+                                                    {{ legderBalanceData.closingBalance.amount | currency }}
                                                 </span>
                                             </td>
                                         </tr>
@@ -376,11 +376,11 @@
                                                 style="padding-right:10px !important">
                                                 <!-- tooltip="" [placement]="'top'" -->
                                                 <span
-                                                    v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.type === 'DEBIT'">
-                                                    To Balance C/F: Dr
+                                                    v-if="legderBalanceData.closingBalance && legderBalanceData.closingBalance.type === 'DEBIT'">
+                                                    By Balance C/F: {{legderBalanceData.forwardedBalance ? legderBalanceData.forwardedBalance.type === 'CREDIT' ? 'Cr' : 'Dr' : ''}}
                                                     <!-- | number: '1.2-2' -->
                                                     <span
-                                                        class="primary_clr">{{legderBalanceData.forwardedBalance.amount | currency }}
+                                                        class="primary_clr">{{legderBalanceData.closingBalance.amount | currency }}
                                                     </span>
                                                 </span>
                                             </td>
