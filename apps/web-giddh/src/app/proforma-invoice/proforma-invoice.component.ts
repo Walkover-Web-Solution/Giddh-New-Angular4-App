@@ -197,8 +197,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
-    @ViewChild('discountComponent', { static: false }) public discountComponent: DiscountListComponent;
-    @ViewChild('taxControlComponent', { static: false }) public taxControlComponent: TaxControlComponent;
+    @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
+    @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
@@ -334,6 +334,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public modalRef: BsModalRef;
     public message: string;
     public isDropup: boolean = true;
+    /** this is showing pending sales page **/
+    public isPendingSales: boolean = false;
 
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
@@ -561,6 +563,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public tcsTdsTaxesAccount: any[] = [];
     /** account's applied discounts list */
     public accountAssignedApplicableDiscounts: any[] = [];
+    /** Stores the current index of entry whose TCS/TDS are entered */
+    public tcsTdsIndex: number = 0;
+
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -702,7 +707,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
-
+        this.isPendingSales = this.router.url.includes('/pages/invoice/preview/pending/sales' && '/pages/purchase-management/purchase/bill');
         this.autoFillShipping = true;
         this.isUpdateMode = false;
         this.getAllDiscounts();
@@ -1178,6 +1183,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 if(obj && obj.entries) {
                                     obj.entries.forEach((entry, index) => {
                                         obj.entries[index].entryDate = this.universalDate || new Date();
+                                        obj.entries[index].uniqueName = "";
                                     });
 
                                     obj.entries = obj.entries;
@@ -1186,6 +1192,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 let date = _.cloneDeep(this.universalDate);
                                 obj.voucherDetails.voucherDate = date;
                                 obj.voucherDetails.dueDate = date;
+                                obj.voucherDetails.voucherNumber = "";
                             }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
@@ -2509,6 +2516,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.toggleBodyClass();
     }
 
+    /**
+     * Closes the other taxes side menu panel on click of overlay
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public closeAsideMenuStateForOtherTaxes(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.toggleOtherTaxesAsidePane(true, null);
+            if (this.invFormData.entries[this.tcsTdsIndex]) {
+                this.invFormData.entries[this.tcsTdsIndex].isOtherTaxApplicable = false;
+            }
+        }
+    }
+
     public checkForInfinity(value): number {
         return (value === Infinity) ? 0 : value;
     }
@@ -2633,7 +2654,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
-
+        this.checkVoucherEntries();
         this.transactionAmount = 0;
         // /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
         // if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
@@ -2709,6 +2730,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
+        this.checkVoucherEntries();
     }
 
     public calculateTotalDiscount() {
@@ -2902,6 +2924,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             mobileNo: data.body.mobileNo,
                             nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                             stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
+                            hsnNumber: (selectedAcc.stock) ? selectedAcc.stock.hsnNumber : "",
+                            sacNumber: (!selectedAcc.stock) ? data.body.sacNumber : "",
                             uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
                         txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
@@ -3297,13 +3321,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public closeDiscountPopup() {
         if (this.discountComponent) {
-            this.discountComponent.hideDiscountMenu();
+            this.discountComponent.forEach(disComp => {
+                disComp.hideDiscountMenu();
+            });
         }
     }
 
     public closeTaxControlPopup() {
         if (this.taxControlComponent) {
-            this.taxControlComponent.showTaxPopup = false;
+            this.taxControlComponent.forEach(taxComp => {
+                taxComp.showTaxPopup = false;
+            });
         }
     }
 
@@ -4293,14 +4321,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
                 }
 
-                this.calculateTotalDiscountOfEntry(entry, trx, false);
-                this.calculateEntryTaxSum(entry, trx);
+                this.calculateTotalDiscountOfEntry(entry, newTrxObj, false);
+                this.calculateEntryTaxSum(entry, newTrxObj);
                 return newTrxObj;
-            });
-
-            entry.transactions.map(trx => {
-                this.calculateTotalDiscountOfEntry(entry, trx, false);
-                this.calculateEntryTaxSum(entry, trx);
             });
 
             // tcs tax calculation
@@ -4555,13 +4578,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
 
                     } else {
+                        const selectedTax = this.companyTaxesList.find(tax => tax.uniqueName === ta.uniqueName);
                         salesEntryClass.taxes.push({
                             amount: ta.taxPercent,
                             uniqueName: ta.uniqueName,
                             isChecked: true,
                             isDisabled: false,
                             type: ta.taxType,
-                            name: ta.name || ''
+                            name: ta.name || (selectedTax && selectedTax.name) || ''
                         });
                     }
                 });

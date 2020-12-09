@@ -21,9 +21,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of as observableOf, ReplaySubject, Subscription, combineLatest as observableCombineLatest } from 'rxjs';
-
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
@@ -32,10 +30,12 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { BranchFilterRequest, CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { InvViewService } from '../../inv.view.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { KEYS } from '../../../accounting/journal-voucher/journal-voucher.component';
 
 @Component({
     selector: 'invetory-stock-report',  // <home></home>
@@ -60,6 +60,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     @ViewChild('shCategory', { static: true }) public shCategory: ShSelectComponent;
     @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
     @ViewChild('shValueCondition', { static: true }) public shValueCondition: ShSelectComponent;
+    /** Template reference */
+    @ViewChild('template', {static: true}) public template: ElementRef;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -243,18 +245,24 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public advanceSearchModalShow: boolean = false;
     public updateStockSuccess$: Observable<boolean>;
     public activeStockUniqueName$: Observable<string>;
-
+    /** Hold the state of new transfer side pan */
+    public asideTransferPaneState: string = 'out';
+    /** Hold branch transfer mode */
+    public branchTransferMode: string = '';
+    /** Modal Reference */
+    public modalRef: BsModalRef;
 
     /**
      * TypeScript public modifiers
      */
-    constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-        private stockReportActions: StockReportActions, private router: Router,
+    constructor(private store: Store<AppState>, private sideBarAction: SidebarAction,
+        private stockReportActions: StockReportActions,
         private _toasty: ToasterService,
         private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
         private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private modalService: BsModalService
     ) {
         this.stockReport$ = this.store.pipe(select(stockReportStore => stockReportStore.inventory.stockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.stockReportRequest = new StockReportRequest();
@@ -420,6 +428,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             event.preventDefault();
             event.stopPropagation();
             this.toggleAsidePane();
+        }
+
+        if (event.key === KEYS.ESC) {
+            event.preventDefault();
+            event.stopPropagation();
+            this.asideTransferPaneState = 'out';
+            this.toggleBodyClass();
         }
     }
 
@@ -861,6 +876,53 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
         this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
         this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
+    }
+
+    /**
+     * Toggle's the branch transfer side pan
+     *
+     * @param {*} [event]
+     * @memberof InventoryStockReportComponent
+     */
+    public toggleTransferAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideTransferPaneState = this.asideTransferPaneState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    /**
+     * This will open branch transfer popup
+     *
+     * @param {*} event
+     * @memberof InventoryStockReportComponent
+     */
+    public openBranchTransferPopup(event: any): void {
+        this.branchTransferMode = event;
+        this.toggleTransferAsidePane();
+        this.openModal();
+    }
+
+    /**
+     * Open's modal
+     *
+     * @memberof InventoryStockReportComponent
+     */
+    public openModal(): void {
+        this.modalRef = this.modalService.show(
+            this.template,
+            Object.assign({}, { class: 'modal-xl receipt-note-modal ' })
+        );
+    }
+
+    /**
+     * Hide's modal
+     *
+     * @memberof InventoryStockReportComponent
+     */
+    public hideModal(): void {
+        this.modalRef.hide();
     }
 
     //************************************//

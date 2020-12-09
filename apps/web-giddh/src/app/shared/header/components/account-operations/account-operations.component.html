@@ -9,7 +9,7 @@
                 </li>
             </ol>
         </div>
-        <div class="pull-right col-sm-4 pdR0 text-right" *ngIf="(showEditGroup$ | async)">
+        <div class="pull-right col-sm-4 pr-0 pl-0 text-right" *ngIf="(showEditGroup$ | async)">
             <button class="btn btn-share export-group-ledger" (click)="exportGroupLedger()">
                 Export
             </button>
@@ -21,7 +21,7 @@
             </div>
         </div>
         <!--account-->
-        <div class="pull-right col-sm-4 pdR0" *ngIf="(showEditAccount$ | async)">
+        <div class="pull-right col-sm-4 pr-0 pl-0" *ngIf="(showEditAccount$ | async)">
             <button class="btn btn-share pull-right" (click)="showShareAccountModal()">
                 Share
             </button>

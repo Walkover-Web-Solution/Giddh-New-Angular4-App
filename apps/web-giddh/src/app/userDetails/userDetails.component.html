@@ -2,7 +2,8 @@
     <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)"></aside-setting>
 </div>
 
-<div class="setting-page user-detail-page" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+<div class="setting-page user-detail-page relative" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+    <hamburger-menu></hamburger-menu>
     <!-- start of tab set -->
     <tabset #staticTabs>
 
