@@ -17,7 +17,7 @@ class LedgerPage {
     }
 
     enterAmount(){
-        // cy.xpath('//td[@class=\'col-xs-4 col-md-3 col-lg-3 pos-rel\']//input[@class=\'form-control alR ng-untouched ng-valid ng-dirtyl\']').click()
+        // cy.xpath('//td[@class=\'col-xs-4 col-md-3 col-lg-3 position-relative\']//input[@class=\'form-control text-right ng-untouched ng-valid ng-dirtyl\']').click()
         return cy.xpath('//input[@name=\'totalAmount\']')
     }
 

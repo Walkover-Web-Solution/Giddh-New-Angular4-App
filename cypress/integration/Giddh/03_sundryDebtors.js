@@ -13,6 +13,7 @@ describe('This is Sundry Debtors Test', function() {
             })
     });
 
+
     afterEach("Get Ledger and delete Ledger entries", ()=>{
         cy.log('I run before after each test in spec file!!!!!!')
         cy.getAllLedger(testData.uitest).then((response) => {
@@ -20,34 +21,37 @@ describe('This is Sundry Debtors Test', function() {
             const respBody = response.body;
             entryUniqueName =  respBody.body.debitTransactions[0].entryUniqueName;
         }).then(()=> {
-            cy.deleteLedger(testData.uitest, entryUniqueName).should((resp) =>{
-                expect(resp.status).to.eq(200)
-            })
+            if (entryUniqueName != null || entryUniqueName !== undefined){
+                cy.deleteLedger(testData.uitest, entryUniqueName).should((resp) =>{
+                    expect(resp.status).to.eq(200)
+                })
+            }
         })
     })
 
-    before('Login in Giddh Web App', function () {
+    before('Login in Giddh Web App', () => {
         cy.log('I run before test in spec file!!!!!!')
+        cy.viewport(1366, 768)
         cy.log(Cypress.env('url'))
         cy.loginWithEmail(testData.Email, testData.Password);
 
     });
 
-    it('Ledger entry without taxes and Discount ', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']', 'uitest', 'uitest A/c').then(()=>{
-            cy.createLedger('Sales','.hilighted > .list-item > .item', '100.50')
+    xit('Ledger entry without taxes and Discount ', () => {
+        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
+            cy.createLedger('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })
     });
 
-    it('Ledger entry with Inventory ', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']', 'uitest', 'uitest A/c').then(()=>{
+    xit('Ledger entry with Inventory ', () => {
+        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedger('Sales',':nth-child(2) > .list-item > .item', '177.80')
         })
     });
 
-    it('Ledger entry with Inventory & Taxes', function () {
-        cy.globalSearch('//h4[@id=\'giddh-page-heading\']', 'uitest', 'uitest A/c').then(()=>{
-            cy.createLedgerWithTaxes('Sales','.hilighted > .list-item > .item', '100.50')
+    xit('Ledger entry with Inventory & Taxes', () => {
+        cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
+            cy.createLedgerWithTaxes('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })
     });
 })
