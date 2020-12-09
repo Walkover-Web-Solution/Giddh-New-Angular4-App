@@ -32,24 +32,24 @@
 									<div class="item-details flex-grow-1">
 										<div class="d-flex justify-content-between align-items-center">
 											<div class="width-65">
-													<p>{{r.name}}</p>
-													<ng-container [ngSwitch]="r.type">
-														<ng-container *ngSwitchCase="'MENU'">
-															<small>Menu</small>
-														</ng-container>
-													</ng-container>
-													<ng-container *ngIf="r.parentGroups">
-														<p class="smlP">
-															<small>
-																<span *ngFor="let item of r.parentGroups; let idx = index">
-																	<ng-container *ngIf="idx > 0">
-																		<span>&nbsp;❯&nbsp;</span>
-																	</ng-container>
-																	{{item.name}}
-																</span>
-															</small>
-														</p>
-													</ng-container>
+                                                <p id="{{ (r.type.toLowerCase()) + '-' + (r.type === 'MENU' ? getPageUniqueName(r.route) : r.uniqueName) }}">{{r.name}}</p>
+                                                <ng-container [ngSwitch]="r.type">
+                                                    <ng-container *ngSwitchCase="'MENU'">
+                                                        <small>Menu</small>
+                                                    </ng-container>
+                                                </ng-container>
+                                                <ng-container *ngIf="r.parentGroups">
+                                                    <p class="small-para-details">
+                                                        <small>
+                                                            <span *ngFor="let item of r.parentGroups; let idx = index">
+                                                                <ng-container *ngIf="idx > 0">
+                                                                    <span>&nbsp;❯&nbsp;</span>
+                                                                </ng-container>
+                                                                {{item.name}}
+                                                            </span>
+                                                        </small>
+                                                    </p>
+                                                </ng-container>
 											</div>
 											<ng-container *ngIf="r.type === 'ACCOUNT'">
 													<span class="hvrTxt">{{r.uniqueName}}</span>
