@@ -1906,7 +1906,7 @@ input:-moz-placeholder {
     font-size: 14px;
 }
 
-.company-name .c-text .c-name {
+.company-name .company-name .c-name {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
@@ -1924,7 +1924,7 @@ input:-moz-placeholder {
     color: $white !important;
 }
 
-.company-name .c-text .fyear {
+.company-name .company-name .fyear {
     font-size: 12px;
 }
 
@@ -2419,7 +2419,7 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
 }
 
-/* #cmpWrp .c-text {
+/* #cmpWrp .company-name {
     margin: 5px 0 5px 0px;
     font-size: 9px;
     padding-right: 5px;
@@ -10549,7 +10549,7 @@ input.mat-input-element{
     #cmpWrp {
         display: block;
     }
-    .c-text span.c-name {
+    .company-name span.c-name {
         color: $white !important;
     }
     .user-dropdown-header {
