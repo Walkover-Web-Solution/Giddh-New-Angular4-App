@@ -56,6 +56,7 @@ import { Location } from '@angular/common';
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
+import { CommonActions } from '../../actions/common.actions';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
@@ -279,6 +280,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** This will hold if updated is account in master to refresh the list of vouchers */
+    public isAccountUpdated: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -299,7 +302,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private location: Location,
         private salesService: SalesService,
         private modalService: BsModalService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private commonActions: CommonActions
     ) {
         this.advanceReceiptAdjustmentData = null;
         this.invoiceSearchRequest.page = 1;
@@ -707,7 +711,20 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
             }
-        })
+        });
+
+        this.store.pipe(select(state => state.common.isAccountUpdated), takeUntil(this.destroyed$)).subscribe(response => {
+            if(!response) {
+                if(this.isAccountUpdated) {
+                    this.getVoucher(this.isUniversalDateApplicable);
+                    this.isAccountUpdated = false;
+                }
+            }
+            if(response) {
+                this.isAccountUpdated = true;
+                this.store.dispatch(this.commonActions.accountUpdated(false));
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
