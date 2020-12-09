@@ -31,7 +31,7 @@ describe('This is Login Test', function() {
     //    cy.loginWithGoogle("anc", "abc")
     // })
 
-    it('Login with Email', () => {
+    xit('Login with Email', () => {
         // cy.visit('https://shop.demoqa.com/my-account/');
         // cy.get('#reg_username').type(this.data.Username);
         // cy.get('#reg_email').type(this.data.Email);

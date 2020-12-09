@@ -331,12 +331,10 @@ export class GeneralService {
      * @memberof CompletedComponent
      */
     public ConvertUTCTimeToLocalTime(UTCDateString) {
+        UTCDateString = UTCDateString.replace("@", "");
         let convertdLocalTime = new Date(UTCDateString);
-
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
-
         convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
-
         return convertdLocalTime;
     }
 
@@ -546,7 +544,7 @@ export class GeneralService {
     public getRevisionField(type: any): string {
         return type.replace(/_/g, " ");
     }
-    
+
     /**
      * Returns the account category
      *
@@ -704,5 +702,20 @@ export class GeneralService {
         }
 
         return array;
+    }
+  
+    /**
+     * This will set global cookie for main domain
+     *
+     * @param {string} cookieName
+     * @param {*} cookieValue
+     * @param {number} expiryDays
+     * @memberof GeneralService
+     */
+    public setCookie(cookieName: string, cookieValue: any, expiryDays: number): void {
+        const date = new Date();
+        date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
     }
 }

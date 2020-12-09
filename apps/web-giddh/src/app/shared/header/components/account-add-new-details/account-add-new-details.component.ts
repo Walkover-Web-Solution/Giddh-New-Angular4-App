@@ -95,6 +95,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public companyCustomFields: any[] = [];
     /** Observable for selected active group  */
     private activeGroup$: Observable<any>;
+    /** This will handle if we need to disable country selection */
+    public disableCountrySelection: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -133,6 +135,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }
+
+        this.disableCountryIfSundryCreditor();
+
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
@@ -275,7 +280,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             this.isDebtorCreditor = true;
         }
-
     }
 
     public isShowBankDetails(accountType: string) {
@@ -683,6 +687,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public isParentDebtorCreditor(activeParentgroup: string) {
+        this.disableCountryIfSundryCreditor(activeParentgroup);
+
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -1049,4 +1055,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         customField.controls[index].get('value').setValue(isChecked);
     }
 
+    /**
+     * This will disable country field if selected group or parent group is sundry creditor
+     *
+     * @param {string} [groupName]
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public disableCountryIfSundryCreditor(groupName?: string): void {
+        if((groupName && groupName === "sundrycreditors") || this.activeGroupUniqueName === "sundrycreditors") {
+            this.disableCountrySelection = true;
+        } else {
+            this.disableCountrySelection = false;
+        }
+    }
 }

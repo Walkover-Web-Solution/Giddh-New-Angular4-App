@@ -377,7 +377,7 @@ span.close-modal.cp.pull-right {
     //overflow-y: auto;
 }
 
-.invoice-editWrapper {
+.invoice-edit-wrapper {
     height: 100vh;
     overflow-y: auto;
     .invoice-editHeader {
@@ -1017,6 +1017,18 @@ strong {
 }
 .invoice-detail-wrapper{
     padding-left: 0;
+}
+.wrap-edit-history-btn {
+    .history-btn {
+        i.icon-history-icon{
+        color: $gray;
+        }
+        &:hover{
+            i.icon-history-icon{
+                color: $white;
+            }
+        }
+    }
 }
 @media (max-width: 767px) {
     .center-block .btn-sm {

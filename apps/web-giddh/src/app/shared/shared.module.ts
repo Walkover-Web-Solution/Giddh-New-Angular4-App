@@ -86,6 +86,7 @@ import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/pur
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
+import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -175,7 +176,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        GiddhDaterangepickerComponent
+        GiddhDaterangepickerComponent,
+        HamburgerMenuComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -268,7 +270,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDatepickerComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
-        PurchaseSendEmailModalComponent
+        PurchaseSendEmailModalComponent,
+        HamburgerMenuComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

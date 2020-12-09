@@ -1,3 +1,4 @@
+<hamburger-menu [pageHeading]="'New Purchase Order'"></hamburger-menu>
 <div class="no-data mr-t2 loader-main" *ngIf="showLoader">
     <div class="spinner2">
         <div class="cube1"></div>
@@ -776,6 +777,7 @@
                                     <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
                                         <input type="checkbox" class="other-taxes-checkobx"
                                             [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
+                                            (click)="tcsTdsIndex = entryIdx"
                                             name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                             id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                             (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -1416,6 +1418,7 @@
                                             <input type="checkbox" class="other-taxes-checkobx"
                                                 [(ngModel)]="entry.isOtherTaxApplicable"
                                                 *ngIf="!entry.isOtherTaxApplicable"
+                                                (click)="tcsTdsIndex = entryIdx"
                                                 name="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
@@ -1678,7 +1681,8 @@
 
 <!-- endregion -->
 <div class="aside-overlay"
-    *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForOtherTaxes === 'in'">
+    *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForOtherTaxes === 'in'"
+    (click)="closeAsideMenuStateForOtherTaxes()">
 </div>
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
     (closeAsideEvent)="toggleAccountAsidePane($event)"

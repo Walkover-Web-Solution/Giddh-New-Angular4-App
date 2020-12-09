@@ -894,7 +894,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     voucherType: this.selectedVoucher
                 };
 
-                let account = (selectedVoucher) ? encodeURIComponent(selectedVoucher.account.uniqueName) : encodeURIComponent(this.selectedInvoice.account.uniqueName);
+                let account = (selectedVoucher) ? selectedVoucher.account.uniqueName : this.selectedInvoice.account.uniqueName;
 
                 this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
             }
@@ -1352,6 +1352,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         
         if(this.invoiceSearchRequest && this.invoiceSearchRequest.q) {
             request.q = this.invoiceSearchRequest.q;
+        }
+
+        if(this.invoiceSearchRequest && this.invoiceSearchRequest.sort) {
+            request.sort = this.invoiceSearchRequest.sort;
+        }
+        if(this.invoiceSearchRequest && this.invoiceSearchRequest.sortBy) {
+            request.sortBy = this.invoiceSearchRequest.sortBy;
         }
 
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
