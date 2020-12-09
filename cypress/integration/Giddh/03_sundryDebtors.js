@@ -21,9 +21,11 @@ describe('This is Sundry Debtors Test', function() {
             const respBody = response.body;
             entryUniqueName =  respBody.body.debitTransactions[0].entryUniqueName;
         }).then(()=> {
-            cy.deleteLedger(testData.uitest, entryUniqueName).should((resp) =>{
-                expect(resp.status).to.eq(200)
-            })
+            if (entryUniqueName != null || entryUniqueName !== undefined){
+                cy.deleteLedger(testData.uitest, entryUniqueName).should((resp) =>{
+                    expect(resp.status).to.eq(200)
+                })
+            }
         })
     })
 
@@ -35,19 +37,19 @@ describe('This is Sundry Debtors Test', function() {
 
     });
 
-    it('Ledger entry without taxes and Discount ', () => {
+    xit('Ledger entry without taxes and Discount ', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedger('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })
     });
 
-    it('Ledger entry with Inventory ', () => {
+    xit('Ledger entry with Inventory ', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedger('Sales',':nth-child(2) > .list-item > .item', '177.80')
         })
     });
 
-    it('Ledger entry with Inventory & Taxes', () => {
+    xit('Ledger entry with Inventory & Taxes', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedgerWithTaxes('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })

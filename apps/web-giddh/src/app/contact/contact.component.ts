@@ -262,7 +262,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.dueAmountReportData$ = observableOf(data);
         });
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.selectedCompany = activeCompany;
             }
@@ -1116,14 +1116,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public columnFilter(event, column) {
-        // if (event && column) {
         this.showFieldFilter[column] = event;
         this.setTableColspan();
-        this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
         }
-        // }
+        setTimeout(() => {
+            this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== 'selectAll').every(filterName => this.showFieldFilter[filterName]);
+        }, 500);
     }
 
     /**
