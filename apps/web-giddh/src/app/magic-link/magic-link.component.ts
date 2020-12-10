@@ -1,4 +1,4 @@
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { BaseResponse } from './../models/api-models/BaseResponse';
 import { IMagicLinkLedgerRequest, IMagicLinkLedgerResponse } from './../models/api-models/MagicLink';
@@ -14,6 +14,7 @@ import { DOCUMENT } from '@angular/common';
 import { WindowRef } from 'apps/web-giddh/src/app/shared/helpers/window.object';
 import { underStandingTextData } from 'apps/web-giddh/src/app/ledger/underStandingTextData';
 import { CompanyService } from 'apps/web-giddh/src/app/services/companyService.service';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'magic',
@@ -88,7 +89,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.route.queryParams.pipe(
-            filter(params => params.id))
+            filter(params => params.id), takeUntil(this.destroyed$))
             .subscribe(params => {
                 if (params && params.id) {
                     this.id = params.id;
@@ -132,8 +133,8 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
 	 * onDateRangeSelected
 	 */
     public onDateRangeSelected(value) {
-        this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-        this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         let DataToSend = {
             data: {
                 id: this.id,

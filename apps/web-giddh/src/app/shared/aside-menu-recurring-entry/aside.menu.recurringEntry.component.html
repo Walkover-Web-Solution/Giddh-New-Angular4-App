@@ -11,14 +11,14 @@
 					<label class="mr-b1">Start Date<span class="text-danger">*</span></label>
 					<input name="dateRange" formControlName="nextCronDate" type="text" autocomplete="off"
 						class="form-control" bsDatepicker [minDate]="today"
-						[bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+						[bsConfig]=" {dateInputFormat: giddhDateFormat}">
 				</div>
 
 				<div class="col-xs-4 col-sm-4 form-group" *ngIf="!IsNotExpirable">
 					<label class="mr-b1">End Date<span class="text-danger">*</span></label>
 					<input name="dateRange" formControlName="cronEndDate" type="text" autocomplete="off"
 						[minDate]="maxEndDate" class="form-control" bsDatepicker
-						[bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}">
+						[bsConfig]="{dateInputFormat: giddhDateFormat}">
 				</div>
 			</div>
 

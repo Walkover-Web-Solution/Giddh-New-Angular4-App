@@ -91,7 +91,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             }
         });
 
-        this._route.params.subscribe(params => {
+        this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
                 this.setStateDetails(params['type'], params['referrer']);
                 if (params['type'] === 'integration' && params['referrer']) {
@@ -288,7 +288,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     private setStateDetails(type, referer?: string) {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         if (referer) {

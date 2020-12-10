@@ -1,5 +1,4 @@
 import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
-
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
@@ -15,11 +14,8 @@ import {
     PaymentClass,
     RazorPayClass,
     SmsKeyClass,
-    UserAmountRangeRequests,
-    IntegratedBankList,
-    UserAmountRange,
+    IntegratedBankList
 } from '../../models/api-models/SettingsIntegraion';
-import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
@@ -38,7 +34,6 @@ import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { SettingsPermissionService } from '../../services/settings.permission.service';
 import { SettingsIntegrationTab } from '../constants/settings.constant';
 
 export declare const gapi: any;
@@ -139,7 +134,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private router: Router,
         private store: Store<AppState>,
         private settingsIntegrationActions: SettingsIntegrationActions,
-        private accountService: AccountService,
         private ecommerceService: EcommerceService,
         private toasty: ToasterService,
         private _companyActions: CompanyActions,
@@ -149,8 +143,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsPermissionActions: SettingsPermissionActions,
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private settingsIntegrationService: SettingsIntegrationService,
-        private settingsPermissionService: SettingsPermissionService) {
+        private settingsIntegrationService: SettingsIntegrationService) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -270,11 +263,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         // this.store.dispatch(this._companyActions.getAllRegistrations());
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o.account) {
+            if (o && o.account) {
                 this.registeredAccount = o.account;
                 if (this.registeredAccount && this.registeredAccount.length === 0) {
                     this.openNewRegistration = true;
-
                 }
                 if (this.registeredAccount && this.registeredAccount.length) {
                     this.registeredAccount.map(item => {

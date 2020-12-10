@@ -19,10 +19,8 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { createSelector } from 'reselect';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-
 import { cloneDeep, find, forEach, map as lodashMap, uniq } from '../../app/lodash-optimized';
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -251,24 +249,25 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
         private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
         private settingsProfileActions: SettingsProfileActions,  private groupService: GroupService) {
-        this.searchLoader$ = this.store.select(p => p.search.searchLoader);
+        this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
-        this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
-        this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+        this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
                 this.dueAmountReportRequest.page = data.page;
                 this.loadPaginationComponent(data);
             }
             this.dueAmountReportData$ = observableOf(data);
         });
-        this.store.pipe(select(appState => {
-            if (!appState.session.companies) {
-                return;
+
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
             }
-            this.selectedCompany = appState.session.companies.find((company) => company.uniqueName === appState.session.companyUniqueName);
-        }), takeUntil(this.destroyed$)).subscribe();
+        });
+
         this.store.dispatch(this._companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.getCompanyCustomField();
@@ -365,7 +364,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.searchStr$.pipe(
             debounceTime(1000),
-            distinctUntilChanged())
+            distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((term: any) => {
                 this.searchStr = term;
                 if (this.activeTab === 'customer') {
@@ -398,20 +397,18 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             });
 
-        this.store
-            .pipe(
-                select(p => p.company.account), takeUntil(this.destroyed$)
-            )
-            .subscribe(res => {
-                if (res && Array.isArray(res)) {
-                    this.isICICIIntegrated = res.length > 0;
-                } else {
-                    this.isICICIIntegrated = false;
-                }
-            });
+        this.store.pipe(select(p => p.company && p.company.account), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res && Array.isArray(res)) {
+                this.isICICIIntegrated = res.length > 0;
+            } else {
+                this.isICICIIntegrated = false;
+            }
+        });
+
         if (this.selectedCompany && this.selectedCompany.countryV2) {
             this.getOnboardingForm(this.selectedCompany.countryV2.alpha2CountryCode);
         }
+
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.balanceDecimalPlaces) {
                 this.giddhDecimalPlaces = response.balanceDecimalPlaces;
@@ -823,7 +820,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
-            componentInstance.pageChanged.subscribe(e => {
+            componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
         }
@@ -1178,7 +1175,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     private setStateDetails(url) {
         // save last state with active tab
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = `contact/${url}`;

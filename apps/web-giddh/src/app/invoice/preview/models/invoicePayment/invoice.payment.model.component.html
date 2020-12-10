@@ -14,7 +14,7 @@
                     <label>Payment Date <sup>*</sup></label>
 
                     <input type="text" name="invoiceDateRange" bsDatepicker class="form-control" style="width: 100%"
-                        [(ngModel)]="paymentActionFormObj.paymentDate" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
+                        [(ngModel)]="paymentActionFormObj.paymentDate" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                 </div>
 
                 <div class="col-6 form-group">
@@ -71,7 +71,7 @@
                     <label>Cheque Clearance Date</label>
                     <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control"
                         [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="chequeClearance"
-                        placeholder="DD-MM-YYYY" />
+                        [placeholder]="giddhDateFormat" />
                 </div>
 
             </div>

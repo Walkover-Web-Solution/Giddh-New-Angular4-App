@@ -3,10 +3,8 @@ import { Observable, ReplaySubject, of } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
-import { take, takeUntil } from "rxjs/operators";
-import { createSelector } from "reselect";
+import { takeUntil } from "rxjs/operators";
 import * as moment from 'moment/moment';
-import { CompanyResponse } from "../../../models/api-models/Company";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
@@ -43,8 +41,6 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public drAccounts: any[] = [];
     public showRecords: number = 5;
     public dueDate: any;
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any = {};
     /* This will store the dates returned by api */
     public apiFromDate: string;
@@ -56,10 +52,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
     /** True, if date picker initialization with universal date is successful */
     public isDatePickerInitialized: boolean;
 
-    constructor(private store: Store<AppState>, private _contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService,
-        private generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
+    constructor(private store: Store<AppState>, private _contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
     }
 
@@ -78,15 +71,9 @@ export class CrDrComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.activeCompany = activeCompany;
-                    }
-                });
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
             }
         });
     }

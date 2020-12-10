@@ -8,6 +8,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
 import { each } from '../../lodash-optimized';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'sales-tax-list',
@@ -177,10 +178,10 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     private isTaxApplicable(tax: TaxResponse): boolean {
-        const today = moment(moment().format('DD-MM-YYYY'), 'DD-MM-YYYY', true).valueOf();
+        const today = moment(moment().format(GIDDH_DATE_FORMAT), GIDDH_DATE_FORMAT, true).valueOf();
         let isApplicable = false;
         each(tax.taxDetail, (det: ITaxDetail) => {
-            if (today >= moment(det.date, 'DD-MM-YYYY', true).valueOf()) {
+            if (today >= moment(det.date, GIDDH_DATE_FORMAT, true).valueOf()) {
                 return isApplicable = true;
             }
         });

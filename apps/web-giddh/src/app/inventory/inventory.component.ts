@@ -28,6 +28,7 @@ import { ToasterService } from '../services/toaster.service';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -112,11 +113,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isMobileScreen = result.matches;
         });
 
-        this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).pipe(takeUntil(this.destroyed$));
+        this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
+        this.groupsWithStocks$ = this.store.pipe(select(s => s.inventory.groupsWithStocks), takeUntil(this.destroyed$));
 
-        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
                 let companyInfo = _.cloneDeep(o);
                 this.currentBranch = companyInfo.name;
@@ -130,7 +131,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
-        this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
             if (branches) {
                 if (branches.length) {
                     _.each(branches, (branch) => {
@@ -170,7 +171,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.parentCompanyName = null;
                 }, 10);
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
         // get view from sidebar while clicking on group/stock
         this.invViewService.getActiveView().subscribe(activeViewData => {
@@ -188,7 +189,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.isBranchVisible$ = this.store.select(s => s.inventory.showBranchScreen).pipe(takeUntil(this.destroyed$));
+        this.isBranchVisible$ = this.store.pipe(select(s => s.inventory.showBranchScreen), takeUntil(this.destroyed$));
         document.querySelector('body').classList.add('inventory-page');
 
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
@@ -225,8 +226,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.GroupStockReportRequest = new GroupStockReportRequest();
                 let firstElement = a[0];
                 if (firstElement) {
-                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-                    this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
                     this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
                     this.activeView = 'group';
                     this.firstDefaultActiveGroup = firstElement.uniqueName;
