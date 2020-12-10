@@ -81,7 +81,7 @@
                             </div>
                             <div class="col-xl-4 col-lg-6">
                                 <input *ngIf="isBranch" name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required
-                                    [disabled]="isBranch">
+                                    [disabled]="isBranch" [class.small-text]="isBranch && myCurrentCompany?.length > 25">
                                 <sh-select *ngIf="!isBranch" #defaultSource name="sourceName" [isFilterEnabled]="true"
                                     [class.small-text]="isUpdateMode && sourceBranchAlias?.length > 25"
                                     [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].uniqueName"
@@ -262,7 +262,7 @@
                                     [forceClearReactive]="forceClear$ | async" [options]="branches$ | async"
                                     (selected)="selectCompany($event, 'destinations', 0); focusDestinationWarehouse();" required
                                     [disabled]="isUpdateMode" [class.small-text]="isUpdateMode && destinationBranchAlias?.length > 25"></sh-select>
-                                <input *ngIf="isBranch" name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required
+                                <input *ngIf="isBranch" [class.small-text]="isBranch && myCurrentCompany?.length > 25" name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required
                                     [disabled]="isBranch">
                             </div>
                         </div>
