@@ -108,15 +108,18 @@ export class BulkExportModal implements OnInit {
             this.isLoading = false;
             if (response.status === "success" && response.body) {
                 if(response.body.type === "base64") {
-                    let blob = this.generalService.base64ToBlob(response.body, 'application/zip', 512);
+                    this.closeModal();
+                    let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
                     return saveAs(blob, this.type+`.zip`);
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(response.body.file);
+                    this.closeModal();
                 }
             } else {
                 this.toaster.clearAllToaster();
                 this.toaster.errorToast(response.message);
+                this.closeModal();
             }
         });
     }
