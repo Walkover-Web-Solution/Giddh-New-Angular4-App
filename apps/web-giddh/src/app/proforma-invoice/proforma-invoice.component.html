@@ -13,7 +13,9 @@
                     <div class="btn-group proformaSalesTime" dropdown>
                         <button id="giddh-page-heading-link" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                             aria-controls="dropdown-basic">
-
+                                <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                                    Cash
+                                </span>
                                 <small *ngIf="invoiceType==='estimates'"> (Beta) </small>
                                 <span class="caret" *ngIf="!isUpdateMode"></span>
                             </button>
