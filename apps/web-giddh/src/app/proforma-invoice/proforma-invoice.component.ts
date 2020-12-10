@@ -2032,7 +2032,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         };
         this.startLoader(false);
 
+        this.isVoucherDateChanged = false;
         this.assignDates();
+        this.updateDueDate();
         
         this.ngAfterViewInit();
         this.clickAdjustAmount(false);
@@ -4797,21 +4799,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
 
-        let invoiceSettings: InvoiceSetting = null;
-        this.store.pipe(select(state => state.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
-        if (invoiceSettings) {
-            let duePeriod: number;
-            if (this.isEstimateInvoice) {
-                duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
-            } else if (this.isProformaInvoice) {
-                duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
-            } else {
-                duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
-                this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
-            }
-
-            this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? moment(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.invFormData.voucherDetails.voucherDate).toDate();
-        }
+        this.updateDueDate();
     }
 
     /**
@@ -5051,9 +5039,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.onBlurDueDate(index);
         }
-        this.dateChangeType = "voucher";
-        this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(true);
-        this.dateChangeConfirmationModel.show();
+        setTimeout(() => {
+            if(this.invFormData.voucherDetails.voucherDate) {
+                this.dateChangeType = "voucher";
+                this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(true);
+                this.dateChangeConfirmationModel.show();
+            }
+        }, 200);
     }
 
     public focusInCustomerName() {
@@ -6658,6 +6650,31 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.updatedEntryIndex = entryIdx;
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(false);
             this.dateChangeConfirmationModel.show();
+        }
+    }
+
+    /**
+     * This will update due date based on invoice date
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public updateDueDate(): void {
+        let invoiceSettings: InvoiceSetting = null;
+        this.store.pipe(select(state => state.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
+        if (invoiceSettings) {
+            let duePeriod: number;
+            if (this.isEstimateInvoice) {
+                duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
+            } else if (this.isProformaInvoice) {
+                duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
+            } else {
+                duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
+                this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
+            }
+
+            if(this.invFormData.voucherDetails.voucherDate) {
+                this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? moment(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.invFormData.voucherDetails.voucherDate).toDate();
+            }
         }
     }
 }
