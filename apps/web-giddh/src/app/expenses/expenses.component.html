@@ -43,8 +43,9 @@
                     <div class="main-expense-details ">
                         <app-expense-details [selectedRowItem]="selectedRowItem" (toggleDetailsMode)="closeDetailedMode($event);" (refreshPendingItem)="refreshPendingItem($event);"></app-expense-details>
                     </div>
-                </ng-container>
-            </tab>
+                </div>
+            </ng-container>
+         </tab>
 
         <tab heading="Rejected" (selectTab)="tabChanged('rejected', $event);"
         [id]="(currentSelectedTab === 'rejected')?'giddh-page-heading': ''" >
