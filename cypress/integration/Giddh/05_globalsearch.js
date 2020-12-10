@@ -20,29 +20,29 @@ describe('This is Global Search Test', function() {
         cy.loginWithEmail(testData.Email, testData.Password);
     })
 
-    xit('Verify Trial Balance using Global Search', () => {
+    it('Verify Trial Balance using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
 
     });
 
-    xit('Verify Invoice using Global Search', () => {
+    it('Verify Invoice using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span','Invoice', 'Invoice ')
 
     });
 
-    xit('Verify Customer module using Global Search', () => {
+    it('Verify Customer module using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span','Customer', 'Customer ')
     });
 
-    xit('Verify Vendor module using Global Search', () => {
+    it('Verify Vendor module using Global Search', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Vendor', 'Vendor ')
     });
 
-    xit('Verify Settings module using Global Search', () => {
+    it('Verify Settings module using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span','Settings', 'Settings > Taxes ')
     });
 
-    xit('Verify Walkover Account module using Global Search', () => {
+    it('Verify Walkover Account module using Global Search', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Walkover', 'Walkover Technologies Private Limited A/c')
     });
 
