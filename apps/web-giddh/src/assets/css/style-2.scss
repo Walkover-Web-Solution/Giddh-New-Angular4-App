@@ -2,10 +2,14 @@
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 @import "../css/ngx-bs-datepicker.scss";
+@import "../css/typography.css";
 
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact shalinee..)
 */
+html, body{
+    font-family: 'opensans-regular';
+}
 
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,
