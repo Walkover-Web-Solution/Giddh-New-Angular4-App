@@ -41,6 +41,7 @@ import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/datera
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { CommonActions } from '../../actions/common.actions';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 const COUNTS = [
@@ -185,6 +186,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public getLedgerDataInProcess$: Observable<boolean> = of(false);
     /** This will hold checked invoices */
     public selectedInvoices: any[] = [];
+    /** This will hold if updated is account in master to refresh the list of vouchers */
+    public isAccountUpdated: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -192,7 +195,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         private _cdRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private generalActions: GeneralActions,
-        private _breakPointObservar: BreakpointObserver
+        private _breakPointObservar: BreakpointObserver,
+        private commonActions: CommonActions
     ) {
         // set initial values
         this.ledgerSearchRequest.page = 1;
@@ -348,6 +352,19 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.showEditMode = false;
+
+        this.store.pipe(select(state => state.common.isAccountUpdated), takeUntil(this.destroyed$)).subscribe(response => {
+            if(!response) {
+                if(this.isAccountUpdated) {
+                    this.getLedgersOfInvoice();
+                    this.isAccountUpdated = false;
+                }
+            }
+            if(response) {
+                this.isAccountUpdated = true;
+                this.store.dispatch(this.commonActions.accountUpdated(false));
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
