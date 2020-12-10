@@ -87,8 +87,6 @@ export class GstComponent implements OnInit, OnDestroy {
     public isTaxApiInProgress: boolean;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
-    /** Current branches */
-    public branches: Array<any>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -130,12 +128,7 @@ export class GstComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
-        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
-            }
-        });
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
         this._route.events.pipe(filter(route => route instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (!event.url.includes('pages/gstfiling')) {
