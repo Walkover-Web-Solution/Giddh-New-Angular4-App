@@ -1165,7 +1165,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.companyActions.RefreshCompanies());
     }
 
-    public changeCompany(selectedCompanyUniqueName: string) {
+    public changeCompany(selectedCompanyUniqueName: string, fetchLastState?: boolean) {
         this.companyDropdown.isOpen = false;
         const details = {
             branchDetails: {
@@ -1174,7 +1174,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.setOrganizationDetails(OrganizationType.Company, details);
         this.toggleBodyScroll();
-        this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
+        this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName, fetchLastState));
     }
 
     /**
@@ -1202,12 +1202,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
         this.setOrganizationDetails(OrganizationType.Branch, details);
-        const isBranchRestrictedPath = RESTRICTED_BRANCH_ROUTES.find(route => this.router.url.includes(route));
-        if (!isBranchRestrictedPath) {
-            window.location.reload();
-        } else {
-            window.location.href = '/pages/home';
-        }
+        this.companyService.getStateDetails(this.generalService.companyUniqueName).subscribe(response => {
+            if (response && response.body) {
+                if (screen.width <= 767 || isCordova) {
+                    window.location.href = '/pages/mobile-home';
+                } else {
+                    window.location.href = response.body.lastState;
+                }
+            }
+        });
     }
 
     /**
@@ -1226,7 +1229,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.activeCompanyForDb.uniqueName = this.generalService.companyUniqueName;
         this.activeCompanyForDb.name = this.selectedCompanyDetails.name;
-        this.changeCompany(this.selectedCompanyDetails.uniqueName);
+        this.companyDropdown.isOpen = false;
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        this.setOrganizationDetails(OrganizationType.Company, details);
+        this.toggleBodyScroll();
+        this.changeCompany(this.selectedCompanyDetails.uniqueName, false);
     }
 
     public deleteCompany(e: Event) {
