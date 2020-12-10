@@ -140,7 +140,7 @@ a[vr-item]:focus {
     }
 }
 
-.main-company-name > li > a:hover .c-text .c-name,
+.main-company-name > li > a:hover .company-text .c-name,
 .main-company-name > li > a:hover .icon-dots-three-vertical {
     color: #fff;
 }
@@ -597,11 +597,11 @@ span.icon-support.dropdown-toggle {
     vertical-align: middle;
 }
 
-.primary-header .c-text {
+.primary-header .company-text {
     display: flex;
     align-items: center;
 }
-.c-text {
+.company-text {
     padding: 6px 8px 6px 0 !important;
     overflow: hidden;
 }
@@ -625,7 +625,7 @@ ul.sub-list {
     padding-left: 0 !important;
 }
 
-.nav-left-bar .company-name .c-text span {
+.nav-left-bar .company-name .company-text span {
     color: $nero;
     word-break: break-all;
 }
@@ -1082,10 +1082,10 @@ ul.sub-list {
         width: 200px;
         float: left;
     }
-    .c-text {
+    .company-text {
         overflow: hidden;
     }
-    .c-text.head-nav {
+    .company-text.head-nav {
         display: none;
     }
     .universal-date li {
