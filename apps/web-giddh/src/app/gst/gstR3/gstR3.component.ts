@@ -41,6 +41,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public dateSelected: boolean = false;
     public userEmail: string = '';
     public selectedMMYYYY: string = '';
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
     private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
     private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
     private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;
@@ -74,6 +76,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 from: params['from'],
                 to: params['to']
             };
+            this.isCompany = params['isCompany'] === 'true';
             this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
             this.selectedMonth = moment(this.selectedMonth).format('MMMM YYYY');
             this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));

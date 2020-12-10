@@ -47,6 +47,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isMonthSelected: boolean = false;
     @Input() public fileReturn: {} = { isAuthenticate: false };
     @Input() public fileGstr3b: {} = { via: null };
+    /** True if current organization is company */
+    @Input() public isCompany: boolean;
     @ViewChild('cancelConfirmationModel', {static: true}) public cancelConfirmationModel: ModalDirective;
 
     public gstAuthenticated$: Observable<boolean>;
@@ -113,6 +115,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         request.to = this.currentPeriod.to;
         request.refresh = true;
         request.action = GstReconcileActionsEnum.notfoundonportal;
+        request.gstin = this.activeCompanyGstNumber;
         this.store.dispatch(this._reconcileAction.GstReconcileInvoiceRequest(request));
         //  }
     }

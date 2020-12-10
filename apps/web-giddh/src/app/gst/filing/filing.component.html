@@ -4,7 +4,7 @@
         <div class="column list-column expanded-list-column transactions-list">
 
             <div class="list-header">
-                <filing-header [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [showTaxPro]="showTaxPro"
+                <filing-header [isCompany]="isCompany" [currentPeriod]="currentPeriod" [selectedGst]="selectedGst" [showTaxPro]="showTaxPro"
                     [fileReturn]="fileReturn"></filing-header>
             </div>
 
@@ -45,7 +45,7 @@
                     </tab>
 
                     <!-- Assigned by meghna  -->
-                    <tab *ngIf="selectedGst !== 'gstr2'" (selectTab)="selectTab($event, true, '3. File your Return')">
+                    <tab *ngIf="isCompany && selectedGst !== 'gstr2'" (selectTab)="selectTab($event, true, '3. File your Return')">
                         <ng-template tabHeading>
                             3. File your Return
                         </ng-template>

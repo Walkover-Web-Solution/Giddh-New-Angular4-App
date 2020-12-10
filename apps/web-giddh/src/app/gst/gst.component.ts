@@ -21,6 +21,8 @@ import {GstOverViewRequest} from '../models/api-models/GstReconcile';
 import {createSelector} from 'reselect';
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReconcileService } from '../services/GstReconcile.service';
+import { GeneralService } from '../services/general.service';
+import { OrganizationType } from '../models/user-login-state';
 
 
 @Component({
@@ -83,6 +85,10 @@ export class GstComponent implements OnInit, OnDestroy {
     public taxes: IOption[] = [];
     /** True, if API is in progress */
     public isTaxApiInProgress: boolean;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -93,7 +99,8 @@ export class GstComponent implements OnInit, OnDestroy {
         private _invoicePurchaseActions: InvoicePurchaseActions,
         private _toasty: ToasterService,
         private _cdRf: ChangeDetectorRef,
-        private gstReconcileService: GstReconcileService
+        private gstReconcileService: GstReconcileService,
+        private generalService: GeneralService
     ) {
         this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
         this.gstr1TransactionCounts$ = this.store.pipe(select(s => s.gstR.gstr1OverViewData.count), takeUntil(this.destroyed$));
@@ -122,6 +129,13 @@ export class GstComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = 'gstfiling';
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
+        });
 
         this._route.events.pipe(filter(route => route instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (!event.url.includes('pages/gstfiling')) {
@@ -229,7 +243,7 @@ export class GstComponent implements OnInit, OnDestroy {
     * navigateToOverview
     */
     public navigateTogstR3B(type) {
-        this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to } });
+        this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany } });
     }
 
     public emailSheet(isDownloadDetailSheet: boolean) {

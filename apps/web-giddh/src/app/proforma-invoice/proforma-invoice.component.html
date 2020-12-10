@@ -2572,7 +2572,7 @@
                                 <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                                <button type="button" [disabled]="isFileUploading || !hasVoucherEntry"
+                                <button *ngIf="!isCompany" type="button" [disabled]="isFileUploading || !hasVoucherEntry"
                                     (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                     class="btn btn-default">Save
                                 </button>
@@ -2585,13 +2585,13 @@
 
                                 <button type="button" [disabled]="!hasVoucherEntry"
                                     (click)="triggerSubmitInvoiceForm(invoiceForm, true)" class="btn btn-default"
-                                    *ngIf="isCustomerSelected && !isPendingVoucherType">Generate
+                                    *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType">Generate
                                     <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                         Cash
                                     </span> &amp; Update A/c
                                 </button>
 
-                                <div class="btn-group" [dropup]="isDropup" dropdown  [isDisabled]="!hasVoucherEntry">
+                                <div *ngIf="!isCompany" class="btn-group" [dropup]="isDropup" dropdown  [isDisabled]="!hasVoucherEntry">
                                     <button type="button" [disabled]="!hasVoucherEntry"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default generateInvoie">Generate
@@ -2601,7 +2601,7 @@
                                     </button>
                                 </div>
 
-                                <div class="btn-group" dropdown [dropup]="isDropup">
+                                <div *ngIf="!isCompany" class="btn-group" dropdown [dropup]="isDropup">
                                     <button id="button-dropup"  *ngIf="invoiceType === 'sales'"
                                      dropdownToggle type="button" class="btn btn-default dropdown-toggle"
                                         aria-controls="dropdown-dropup">
@@ -2629,11 +2629,11 @@
                             <!-- endregion -->
 
                             <!-- region proforma/estimates -->
-                            <span class="d-inline-block v-align-middle" *ngIf="isProformaInvoice || isEstimateInvoice">
+                            <span class="d-inline-block v-align-middle" *ngIf="!isCompany && (isProformaInvoice || isEstimateInvoice)">
 
                                 <div class="btn-group" dropdown [dropup]="isDropup" [isDisabled]="!hasVoucherEntry">
 
-                                    <button type="button" [disabled]="!hasVoucherEntry"
+                                    <button *ngIf="!isCompany" type="button" [disabled]="!hasVoucherEntry"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default">Create
                                     </button>
@@ -2668,7 +2668,7 @@
                                 (click)="cancelUpdate()">Cancel
                             </button>
 
-                            <button type="button" class="btn btn-default"
+                            <button *ngIf="!isCompany" type="button" class="btn btn-default"
                                 [disabled]="isFileUploading || !hasVoucherEntry"
                                 (click)="submitUpdateForm(invoiceForm)">
                                 Update
