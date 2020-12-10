@@ -37,19 +37,19 @@ describe('This is Sundry Debtors Test', function() {
 
     });
 
-    xit('Ledger entry without taxes and Discount ', () => {
+    it('Ledger entry without taxes and Discount ', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedger('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })
     });
 
-    xit('Ledger entry with Inventory ', () => {
+    it('Ledger entry with Inventory ', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedger('Sales',':nth-child(2) > .list-item > .item', '177.80')
         })
     });
 
-    xit('Ledger entry with Inventory & Taxes', () => {
+    it('Ledger entry with Inventory & Taxes', () => {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span', 'uitest', 'uitest A/c').then(()=>{
             cy.createLedgerWithTaxes('Sales','#select-menu-0 > .list-item > .item', '100.50')
         })
