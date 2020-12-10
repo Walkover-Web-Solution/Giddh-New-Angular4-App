@@ -5,10 +5,10 @@
             <div class="row mr-0 ml-0">
             <!-- hide div for future use of design if shubhndra wants to change deisgn as per preious one -->
                 <div class="col-sm-5" *ngIf="hideAsDesignChanges">
-                    <ul class="main-company-text">
-                        <li class="company-text pos-rel" dropdown #companyDetailsDropDownWeb="bs-dropdown"
+                    <ul class="main-company-name">
+                        <li class="company-name pos-rel" dropdown #companyDetailsDropDownWeb="bs-dropdown"
                             [autoClose]="false" [attachOutsideOnClick]="true"
-                            (clickOutside)="companyDetailsDropDownWeb.hide()" [exclude]="'.company-text'">
+                            (clickOutside)="companyDetailsDropDownWeb.hide()" [exclude]="'.company-name'">
                             <a id="cmpWrp" href="javascript:void(0)" class="clearfix z1" dropdownToggle>
                                 <ng-template #companyBranchNameAlias> {{ (selectedCompany | async)?.name }}<span
                                         *ngIf="(selectedCompany | async)?.nameAlias"> (
@@ -18,7 +18,7 @@
                                     <span class="c-name ellp pd-r1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                                     </span>
 
-                                    <div class="company-text-finance-year" placement="bottom">
+                                    <div class="company-name-finance-year" placement="bottom">
                                         <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
                                         </span>
 
@@ -190,7 +190,7 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="giddh-logo" (click)="forceOpenNavigation = true;">
-                        <li class="company-text pos-rel" (click)="toggleBodyScroll()" [autoClose]="false" dropdown
+                        <li class="company-name pos-rel" (click)="toggleBodyScroll()" [autoClose]="false" dropdown
                             #dropdown="bs-dropdown" [attachOutsideOnClick]="true"
                             (clickOutside)="dropdown.isOpen = false; toggleBodyScroll();">
                             <a id="cmpWrp" href="javascript:void(0)" class="clearfix z1 " dropdownToggle>
@@ -257,8 +257,8 @@
 <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }" (clickOutside)="closeSidebarMobile($event)">
 
     <div class="menu-wrapper">
-        <ul class="main-company-text">
-            <li *ngIf="isMobileSite" [autoClose]="false" class="company-text pos-rel hidden-lg hidden-md hidden-sm"
+        <ul class="main-company-name">
+            <li *ngIf="isMobileSite" [autoClose]="false" class="company-name pos-rel hidden-lg hidden-md hidden-sm"
                 dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
 
                 <a href="javascript:void(0)" class="clearfix z1 d-block" dropdownToggle>
@@ -269,7 +269,7 @@
                     <div class="company-text d-flex">
                         <span class="c-name ellp pd-r1 alice">{{companyInitials}}</span>
 
-                        <div class="company-text-finance-year" placement="bottom">
+                        <div class="company-name-finance-year" placement="bottom">
                             <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
                             </span>
 
@@ -623,7 +623,7 @@
 
     <li>
         <div class="company-text head-nav">
-            <div class="company-text-finance-year" placement="bottom">
+            <div class="company-name-finance-year" placement="bottom">
                 <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
                 </span>
 
