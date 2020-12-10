@@ -234,7 +234,7 @@
                                     </svg>
                                     <div class="font-large"><b>2. Push to GSTN</b></div>
                                 </div>
-                                <div class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
+                                <div *ngIf="isCompany" class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
                                     (click)="navigateToTab(2, 'gstr1')">
                                     <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                         class="icon filing-step-icon">t
@@ -425,4 +425,4 @@
 </div>
 <!-- main data-->
 
-<filing-header [currentPeriod]="currentPeriod" [fileGstr3b]="returnGstr3B"></filing-header>
+<filing-header [isCompany]="isCompany" [currentPeriod]="currentPeriod" [fileGstr3b]="returnGstr3B"></filing-header>

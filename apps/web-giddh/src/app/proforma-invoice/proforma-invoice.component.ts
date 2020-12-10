@@ -114,6 +114,7 @@ import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
 import { PurchaseOrderService } from '../services/purchase-order.service';
 import { SearchService } from '../services/search.service';
 import { PURCHASE_ORDER_STATUS } from '../shared/helpers/purchaseOrderStatus';
+import { OrganizationType } from '../models/user-login-state';
 
 const THEAD_ARR_READONLY = [
     {
@@ -562,6 +563,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public accountAssignedApplicableDiscounts: any[] = [];
     /** Stores the current invoice selected */
     public invoiceSelected: any;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -718,6 +723,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         }).pipe(takeUntil(this.destroyed$)).subscribe();
+
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
+        });
 
         this.activeAccount$.subscribe(data => {
             if (data) {

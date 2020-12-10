@@ -8,6 +8,8 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../store';
 import { createSelector } from 'reselect';
+import { GeneralService } from '../../services/general.service';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
 	// tslint:disable-next-line:component-selector
@@ -33,13 +35,23 @@ export class FilingComponent implements OnInit, OnDestroy {
 	public fileReturnSucces: boolean = false;
 
 	public gstr1OverviewDataInProgress$: Observable<boolean>;
-	public gstr2OverviewDataInProgress$: Observable<boolean>;
+    public gstr2OverviewDataInProgress$: Observable<boolean>;
+
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
 
 	private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
 	private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private _cdr: ChangeDetectorRef, private _route: Router, private activatedRoute: ActivatedRoute, private store: Store<AppState>, private _gstAction: GstReconcileActions) {
+    constructor(private _cdr: ChangeDetectorRef,
+        private _route: Router,
+        private activatedRoute: ActivatedRoute,
+        private store: Store<AppState>,
+        private _gstAction: GstReconcileActions,
+        private generalService: GeneralService) {
 		this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
 		this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
 		this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -61,7 +73,11 @@ export class FilingComponent implements OnInit, OnDestroy {
 			this.currentPeriod = {
 				from: params['from'],
 				to: params['to']
-			};
+            };
+            if (params['selectedGst']) {
+                this.activeCompanyGstNumber = params['selectedGst'];
+                this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+            }
 			this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
 			this.selectedGst = params['return_type'];
 			//
@@ -69,11 +85,20 @@ export class FilingComponent implements OnInit, OnDestroy {
 			if (tab > -1) {
 				this.selectTabFromUrl(tab);
 			}
-		});
+        });
+
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
+        });
 
 		// get activeCompany gst number
 		this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
-			this.activeCompanyGstNumber = result;
+            if (result) {
+                this.activeCompanyGstNumber = result;
+            }
 
 			let request: GstOverViewRequest = new GstOverViewRequest();
 			request.from = this.currentPeriod.from;
