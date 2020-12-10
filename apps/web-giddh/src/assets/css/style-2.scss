@@ -9738,6 +9738,22 @@ span#HW_badge_cont:nth-child(3) {
         white-space: nowrap;
     }
 }
+.table-amount[disabled]{
+   input{
+        background-color: $whisper-light !important;
+    }
+}
+
+
+#update-ledger-voucher-type-default.disabled-ledger, #update-ledger-assign-tag.disabled-ledger{
+    .sh-select-disabled{
+        background-color: $whisper-light !important;
+        input.selectedVal.form-control, input[disabled]{
+                background-color: $whisper-light !important;
+        }
+    }
+}
+
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
