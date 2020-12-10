@@ -39,8 +39,6 @@ export class FilingComponent implements OnInit, OnDestroy {
 
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
-    /** Current branches */
-    public branches: Array<any>;
 
 	private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
 	private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
@@ -87,12 +85,7 @@ export class FilingComponent implements OnInit, OnDestroy {
 			}
         });
 
-        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
-            }
-        });
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
 		// get activeCompany gst number
 		this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
