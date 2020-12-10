@@ -266,7 +266,7 @@ aside-menu-account .container-fluid {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-    z-index: 1;
+    z-index: 1 !important;
 }
 
 /*Dashboard*/
