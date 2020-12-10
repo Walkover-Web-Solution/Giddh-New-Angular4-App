@@ -73,7 +73,11 @@ export class FilingComponent implements OnInit, OnDestroy {
 			this.currentPeriod = {
 				from: params['from'],
 				to: params['to']
-			};
+            };
+            if (params['selectedGst']) {
+                this.activeCompanyGstNumber = params['selectedGst'];
+                this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+            }
 			this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
 			this.selectedGst = params['return_type'];
 			//
@@ -92,7 +96,9 @@ export class FilingComponent implements OnInit, OnDestroy {
 
 		// get activeCompany gst number
 		this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
-			this.activeCompanyGstNumber = result;
+            if (result) {
+                this.activeCompanyGstNumber = result;
+            }
 
 			let request: GstOverViewRequest = new GstOverViewRequest();
 			request.from = this.currentPeriod.from;

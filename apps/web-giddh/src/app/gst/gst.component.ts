@@ -236,14 +236,14 @@ export class GstComponent implements OnInit, OnDestroy {
      * navigateToOverview
      */
     public navigateToOverview(type) {
-        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0 } });
+        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
     }
 
     /**
     * navigateToOverview
     */
     public navigateTogstR3B(type) {
-        this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany } });
+        this._route.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
     }
 
     public emailSheet(isDownloadDetailSheet: boolean) {
@@ -275,7 +275,7 @@ export class GstComponent implements OnInit, OnDestroy {
     }
 
     public navigateToTab(tab, returnType) {
-        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab } });
+        this._route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: returnType, from: this.currentPeriod.from, to: this.currentPeriod.to, tab, selectedGst: this.activeCompanyGstNumber } });
     }
     public onOpenChange(data: boolean) {
         this.openMonthWiseCalendar(data);

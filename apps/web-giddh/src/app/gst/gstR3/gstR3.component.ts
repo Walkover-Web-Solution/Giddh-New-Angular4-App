@@ -76,6 +76,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 from: params['from'],
                 to: params['to']
             };
+            if (params['selectedGst']) {
+                this.activeCompanyGstNumber = params['selectedGst'];
+                this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+            }
             this.isCompany = params['isCompany'] === 'true';
             this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
             this.selectedMonth = moment(this.selectedMonth).format('MMMM YYYY');
@@ -85,7 +89,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
-            this.activeCompanyGstNumber = result;
+            if (result) {
+                this.activeCompanyGstNumber = result;
+            }
 
             let request: GstOverViewRequest = new GstOverViewRequest();
             request.from = this.currentPeriod.from;
