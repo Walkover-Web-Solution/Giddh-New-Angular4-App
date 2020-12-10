@@ -3,16 +3,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
 import { base64ToBlob, validateEmail } from '../../../shared/helpers/helperFunctions';
-import { saveAs } from 'file-saver';
 import { ToasterService } from '../../../services/toaster.service';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { download } from '@giddh-workspaces/utils';
 @Component({
     selector: 'export-ledger',
@@ -41,14 +39,11 @@ export class ExportLedgerComponent implements OnInit {
     public balanceTypeAsSign: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private breakPointObservar: BreakpointObserver,private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+    constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.breakPointObservar.observe([
-            '(max-width: 767px)'
-        ])
         this._permissionDataService.getData.forEach(f => {
             if (f.name === 'LEDGER') {
                 let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
@@ -129,7 +124,7 @@ export class ExportLedgerComponent implements OnInit {
             if (!body.dataToSend.bsRangeValue) {
                 this.universalDate$.pipe(take(1)).subscribe(a => {
                     if (a) {
-                        body.dataToSend.bsRangeValue = [moment(a[0], 'DD-MM-YYYY').toDate(), moment(a[1], 'DD-MM-YYYY').toDate()];
+                        body.dataToSend.bsRangeValue = [moment(a[0], GIDDH_DATE_FORMAT).toDate(), moment(a[1], GIDDH_DATE_FORMAT).toDate()];
                     }
                 });
             }

@@ -22,11 +22,9 @@ import {
 } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { IGroupsWithAccounts } from 'apps/web-giddh/src/app/models/interfaces/groupsWithAccounts.interface';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
-import { DbService } from 'apps/web-giddh/src/app/services/db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-
+import { take, takeUntil } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -99,7 +97,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public isTaxableAccount$: Observable<boolean>;
-    public companiesList$: Observable<CompanyResponse[]>;
     public companyTaxDropDown$: Observable<IOption[]>;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
@@ -155,13 +152,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** This will handle if we need to disable country selection */
     public disableCountrySelection: boolean = false;
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
-        private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
-        this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
-        this.discountList$ = this.store.select(s => s.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
-        this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
-        this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).pipe(takeUntil(this.destroyed$));
-        this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
+    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction, private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
+        this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
+        this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.getCompanyCustomField();
@@ -174,21 +169,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         this.prepareTaxDropdown();
         this.getDiscountList();
-        this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
-            let companyUniqueName: string;
-            if (session.companyUniqueName) {
-                companyUniqueName = _.cloneDeep(session.companyUniqueName);
-            }
-            if (session.companies && session.companies.length) {
-                let companies = _.cloneDeep(session.companies);
-                let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
-                if (currentCompany) {
-                    if (currentCompany.countryV2) {
-                        this.selectedCompanyCountryName = currentCompany.countryV2.alpha2CountryCode + ' - ' + currentCompany.country;
-                        this.companyCountry = currentCompany.countryV2.alpha2CountryCode;
-                    }
-                    this.companyCurrency = _.clone(currentCompany.baseCurrency);
+
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                if (activeCompany.countryV2) {
+                    this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
+                    this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
                 }
+                this.companyCurrency = _.clone(activeCompany.baseCurrency);
             }
         });
     }
@@ -328,7 +316,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
 
         });
-        this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
+        this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
@@ -380,7 +368,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         //     }
         // });
         // get openingblance value changes
-        this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
+        this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
@@ -393,11 +381,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         //         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
         //     }
         // });
-        this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
-            if (a) {
-                this.companiesList$.pipe(take(1)).subscribe(companies => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
-                });
+
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
             }
         });
 
@@ -451,7 +438,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.accountsAction.mergeAccountResponse$.subscribe(res => {
             this.selectedaccountForMerge = '';
         });
-        this.isTaxableAccount$ = this.store.select(createSelector([
+        this.isTaxableAccount$ = this.store.pipe(select(createSelector([
             (state: AppState) => state.groupwithaccounts.groupswithaccounts,
             (state: AppState) => state.groupwithaccounts.activeAccount],
             (groupswithaccounts, activeAccount) => {
@@ -462,7 +449,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     result = false;
                 }
                 return result;
-            }));
+            })), takeUntil(this.destroyed$));
     }
     public ngAfterViewInit() {
         if (this.flatGroupsOptions === undefined) {
@@ -511,7 +498,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public prepareTaxDropdown() {
         // prepare drop down for taxes
-        this.companyTaxDropDown$ = this.store.select(createSelector([
+        this.companyTaxDropDown$ = this.store.pipe(select(createSelector([
             (state: AppState) => state.groupwithaccounts.activeAccount,
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
             (state: AppState) => state.company.taxes],
@@ -556,7 +543,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
                 return arr;
-            })).pipe(takeUntil(this.destroyed$));
+            })), takeUntil(this.destroyed$));
     }
     public getDiscountList() {
         this.discountList$.pipe(takeUntil(this.destroyed$)).subscribe(res => {

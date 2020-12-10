@@ -59,10 +59,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         private toasterService: ToasterService
     ) {
         this.customUnitObj = new StockUnitRequest();
-        this.stockUnit$ = this.store.select(p => p.inventory.stockUnits).pipe(takeUntil(this.destroyed$));
-        this.isStockUnitCodeAvailable$ = this.store.select(state => state.inventory.isStockUnitCodeAvailable).pipe(takeUntil(this.destroyed$));
+        this.stockUnit$ = this.store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
+        this.isStockUnitCodeAvailable$ = this.store.pipe(select(state => state.inventory.isStockUnitCodeAvailable), takeUntil(this.destroyed$));
 
-        this.store.select(state => state.inventory.stockUnits).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+        this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
                 let units = p;
                 let unitArr = units.map(unit => {
@@ -94,11 +94,11 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
-        this.activeGroupUniqueName$ = this.store.select(s => s.inventory.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
-        this.createCustomStockInProcess$ = this.store.select(s => s.inventory.createCustomStockInProcess).pipe(takeUntil(this.destroyed$));
-        this.updateCustomStockInProcess$ = this.store.select(s => s.inventory.updateCustomStockInProcess).pipe(takeUntil(this.destroyed$));
-        this.deleteCustomStockInProcessCode$ = this.store.select(s => s.inventory.deleteCustomStockInProcessCode).pipe(takeUntil(this.destroyed$));
-        this.createCustomStockSuccess$ = this.store.select(s => s.inventory.createCustomStockSuccess).pipe(takeUntil(this.destroyed$));
+        this.activeGroupUniqueName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
+        this.createCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.createCustomStockInProcess), takeUntil(this.destroyed$));
+        this.updateCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.updateCustomStockInProcess), takeUntil(this.destroyed$));
+        this.deleteCustomStockInProcessCode$ = this.store.pipe(select(s => s.inventory.deleteCustomStockInProcessCode), takeUntil(this.destroyed$));
+        this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
@@ -49,7 +49,7 @@ import { takeUntil } from 'rxjs/operators';
   `],
 	templateUrl: './aside-menu-purchase-invoice-setting.component.html'
 })
-export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChanges, OnDestroy {
+export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnDestroy {
 
 	@Input() public selectedService: 'JIO_GST' | 'TAXPRO' | 'RECONCILE' | 'VAYANA';
 	@Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -76,17 +76,17 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
 		private invoicePurchaseActions: InvoicePurchaseActions,
 		private gstReconcileActions: GstReconcileActions
 	) {
-		this.store.select(p => p.invoicePurchase.isTaxProOTPSentSuccessfully).subscribe((yes: boolean) => {
+		this.store.pipe(select(p => p.invoicePurchase.isTaxProOTPSentSuccessfully), takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
 			this.otpSentSuccessFully = yes;
 		});
-		this.reconcileOtpInProcess$ = this.store.select(p => p.gstReconcile.isGenerateOtpInProcess).pipe(takeUntil(this.destroyed$));
-		this.reconcileOtpSuccess$ = this.store.select(p => p.gstReconcile.isGenerateOtpSuccess).pipe(takeUntil(this.destroyed$));
-		this.reconcileOtpVerifyInProcess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpInProcess).pipe(takeUntil(this.destroyed$));
-		this.reconcileOtpVerifySuccess$ = this.store.select(p => p.gstReconcile.isGstReconcileVerifyOtpSuccess).pipe(takeUntil(this.destroyed$));
-		this.gstAuthenticated$ = this.store.select(p => p.gstR.gstAuthenticated).pipe(takeUntil(this.destroyed$));
-		this.companyGst$ = this.store.select(p => p.gstR.activeCompanyGst).pipe(takeUntil(this.destroyed$));
+		this.reconcileOtpInProcess$ = this.store.pipe(select(p => p.gstReconcile.isGenerateOtpInProcess), takeUntil(this.destroyed$));
+		this.reconcileOtpSuccess$ = this.store.pipe(select(p => p.gstReconcile.isGenerateOtpSuccess), takeUntil(this.destroyed$));
+		this.reconcileOtpVerifyInProcess$ = this.store.pipe(select(p => p.gstReconcile.isGstReconcileVerifyOtpInProcess), takeUntil(this.destroyed$));
+		this.reconcileOtpVerifySuccess$ = this.store.pipe(select(p => p.gstReconcile.isGstReconcileVerifyOtpSuccess), takeUntil(this.destroyed$));
+		this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
+		this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
 
-		this.store.select(s => s.settings.profile).subscribe(pro => {
+		this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(pro => {
 			if (pro && pro.addresses) {
 				let gstNo = pro.addresses.filter(f => {
 					return f.isDefault === true;
@@ -114,12 +114,6 @@ export class AsideMenuPurchaseInvoiceSettingComponent implements OnInit, OnChang
 				this.taxProForm.gstin = a;
 			}
 		});
-	}
-
-	public ngOnChanges(changes) {
-		if ('selectedService' in changes && changes['selectedService'].currentValue) {
-			// alert('selectedService ' + changes['selectedService'].currentValue);
-		}
 	}
 
 	public closeAsidePane(event) {

@@ -505,7 +505,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
         (componentRef.instance as OnBoardingComponent).onBoardingType = OnBoardingType.Warehouse;
-        (componentRef.instance as OnBoardingComponent).closeCompanyModal.subscribe((data: any) => {
+        (componentRef.instance as OnBoardingComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
             if (data && data.isFirstStepCompleted) {
                 this.showWelcomePage();
             } else {

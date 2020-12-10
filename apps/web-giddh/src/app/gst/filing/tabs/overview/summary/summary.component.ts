@@ -1,8 +1,7 @@
 import { GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
-import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { ReconcileActionState } from '../../../../../store/GstReconcile/GstReconcile.reducer';
 import { AppState } from '../../../../../store';
@@ -69,7 +68,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private gstAction: GstReconcileActions, private _store: Store<AppState>, private _route: Router, private activatedRoute: ActivatedRoute) {
+    constructor(private _store: Store<AppState>, private _route: Router) {
         this.gstr1OverviewData$ = this._store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
 
         this.gstr2OverviewData$ = this._store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));

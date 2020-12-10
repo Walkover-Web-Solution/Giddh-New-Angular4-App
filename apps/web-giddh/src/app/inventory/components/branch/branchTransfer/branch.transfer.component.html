@@ -27,7 +27,7 @@
                             <label>Date <sup>*</sup></label>
                             <input name="dateRange" formControlName="transferDate" type="text" autocomplete="off"
                                 class="form-control" bsDatepicker [minDate]="today"
-                                [bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
+                                [bsConfig]=" {dateInputFormat: giddhDateFormat}">
                             <span *ngIf="transferDate.invalid && (transferDate.dirty || transferDate.touched)">
                                 <span *ngIf="transferDate?.errors && transferDate?.errors['required']"
                                     class="text-danger">Please select Date.</span>

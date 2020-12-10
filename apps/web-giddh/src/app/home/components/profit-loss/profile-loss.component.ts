@@ -1,15 +1,12 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
-import { HomeActions } from '../../../actions/home/home.actions';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { DashboardService } from '../../../services/dashboard.service';
 import {
     ProfitLossData,
     ProfitLossRequest,
@@ -30,6 +27,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 })
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
+    @Input() public refresh: boolean = false;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
@@ -50,10 +48,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
-    @Input() public refresh: boolean = false;
     public imgPath: string = '';
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
     public profitLossChart: typeof Highcharts = Highcharts;
     public chartOptions: Highcharts.Options;
@@ -69,29 +64,20 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe,
-        private cdRef: ChangeDetectorRef,
-        private modalService: BsModalService,
-        private generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
-                    }
-                });
-            }
-        });
         // img path
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+            }
+        });
+        
         // listen for universal date
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {

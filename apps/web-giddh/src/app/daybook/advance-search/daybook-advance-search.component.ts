@@ -44,16 +44,16 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	@Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
 	@ViewChild('dateRangePickerDir', { read: DaterangePickerComponent, static: true }) public dateRangePickerDir: DaterangePickerComponent;
 
-    public advanceSearchObject: DayBookRequestModel = null;
-    public advanceSearchForm: FormGroup;
-    public showOtherDetails: boolean = false;
-    public showChequeDatePicker: boolean = false;
-    public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
-    public accounts$: Observable<IOption[]>;
-    public groups$: Observable<IOption[]>;
-    public voucherTypeList: Observable<IOption[]>;
-    public stockListDropDown$: Observable<IOption[]>;
-    public comparisonFilterDropDown$: Observable<IOption[]>;
+	public advanceSearchObject: DayBookRequestModel = null;
+	public advanceSearchForm: FormGroup;
+	public showOtherDetails: boolean = false;
+	public showChequeDatePicker: boolean = false;
+	public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT };
+	public accounts$: Observable<IOption[]>;
+	public groups$: Observable<IOption[]>;
+	public voucherTypeList: Observable<IOption[]>;
+	public stockListDropDown$: Observable<IOption[]>;
+	public comparisonFilterDropDown$: Observable<IOption[]>;
     /** Sh-select force clear observable for voucher type  */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** Sh-select force clear observable for amount range  */
@@ -144,16 +144,16 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             }
         });
 
-        this.stockListDropDown$ = this.store.select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
-            let data = _.cloneDeep(allStocks);
-            if (data && data.results) {
-                let units = data.results;
+		this.stockListDropDown$ = this.store.pipe(select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
+			let data = _.cloneDeep(allStocks);
+			if (data && data.results) {
+				let units = data.results;
 
 				return units.map(unit => {
 					return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
 				});
 			}
-		})).pipe(takeUntil(this.destroyed$));
+		})), takeUntil(this.destroyed$));
          this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });

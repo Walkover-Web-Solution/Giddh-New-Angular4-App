@@ -8,7 +8,6 @@ import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
@@ -79,7 +78,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
 
-
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private _companyActions: CompanyActions,
@@ -90,24 +88,20 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.initialRequest();
-        let companyUniqueName;
-        let company;
-        store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$))
-            .subscribe(p => companyUniqueName = p);
 
-        store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$))
-            .subscribe(p => {
-                company = p.find(q => q.uniqueName === companyUniqueName);
-            });
-        this.companyName = company.name;
+        // this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        //     if(activeCompany) {
+        //         this.companyName = activeCompany.name;
+        //     }
+        // });
+
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {
         // set state details
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'daybook';
@@ -128,8 +122,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-        let from = moment(value.picker.startDate).format('DD-MM-YYYY');
-        let to = moment(value.picker.endDate).format('DD-MM-YYYY');
+        let from = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        let to = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
             this.showLoader = true;
             this.daybookQueryRequest.from = from;
@@ -230,7 +224,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 componentInstance.maxSize = 5;
                 componentInstance.writeValue(data.page);
                 componentInstance.boundaryLinks = true;
-                componentInstance.pageChanged.subscribe(e => {
+                componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                     this.pageChanged(e);
                 });
             }
