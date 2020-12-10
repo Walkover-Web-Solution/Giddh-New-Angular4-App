@@ -120,8 +120,13 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
                 const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
-                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
-                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                }
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
