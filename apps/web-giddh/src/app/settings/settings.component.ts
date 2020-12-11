@@ -169,6 +169,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
         switch (childTab) {
             case 'payment':
                 return 4;
+            case 'ecommerce':
+                return 3;
+            case 'collection':
+                return 2;
             case 'email':
                 return 1;
             default:
