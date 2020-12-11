@@ -100,7 +100,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 if (this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)) {
                     this.datePicker = [moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(), moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()];
                 }
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
