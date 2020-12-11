@@ -29,7 +29,7 @@ export const settingsPageTabs: PageTabs[] = [
             { label: 'Warehouse', link: '/pages/settings/warehouse', icon: '<i class="icon-warehouse"></i>' }
         ],
         [3]: [
-            { label: 'Invoice Management', link: '/pages/invoice/preview/sales', icon: '<i class="icon-invoice-managment"></i>' },
+            { label: 'Invoice Management', link: '/pages/invoice/preview/settings/sales', icon: '<i class="icon-invoice-managment"></i>' },
             { label: 'Subscription', link: '/pages/user-details/subscription', icon: '<i class="icon-subscription"></i>' }
         ]
     },
@@ -51,7 +51,7 @@ export const settingsPageTabs: PageTabs[] = [
             { label: 'Warehouse', link: '/pages/settings/warehouse', icon: '<i class="icon-warehouse"></i>' }
         ],
         [3]: [
-            { label: 'Invoice Management', link: '/pages/invoice/preview/sales', icon: '<i class="icon-invoice-managment"></i>' },
+            { label: 'Invoice Management', link: '/pages/invoice/preview/settings/sales', icon: '<i class="icon-invoice-managment"></i>' },
         ]
     }
 ];
