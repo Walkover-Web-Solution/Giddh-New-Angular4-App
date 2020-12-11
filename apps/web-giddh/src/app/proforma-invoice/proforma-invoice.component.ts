@@ -582,6 +582,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public updatedEntryIndex: number;
     /** This will hold voucher date on focus */
     public voucherDateBeforeUpdate: any;
+    /** This will hold if confirmation popup from entry date is displayed to not display again */
+    public isEntryDateChangeConfirmationDisplayed: boolean = false;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -2033,7 +2035,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         };
         this.startLoader(false);
-
+        this.isEntryDateChangeConfirmationDisplayed = false;
         this.isVoucherDateChanged = false;
         this.assignDates();
         this.updateDueDate();
@@ -6647,7 +6649,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public onBlurEntryDate(entryIdx: number, isDatepickerOpen: boolean): void {
-        if(isDatepickerOpen) {
+        if(!this.isEntryDateChangeConfirmationDisplayed && isDatepickerOpen && this.invFormData.entries && this.invFormData.entries.length > 1) {
+            this.isEntryDateChangeConfirmationDisplayed = true;
             this.dateChangeType = "entry";
             this.updatedEntryIndex = entryIdx;
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(false);
