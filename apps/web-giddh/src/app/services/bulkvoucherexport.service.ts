@@ -17,7 +17,14 @@ export class BulkVoucherExportService {
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
-    
+    /**
+     * This will bulk export the vouchers
+     *
+     * @param {*} getRequest
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof BulkVoucherExportService
+     */
     public bulkExport(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + BULK_VOUCHER_EXPORT_API.BULK_EXPORT;

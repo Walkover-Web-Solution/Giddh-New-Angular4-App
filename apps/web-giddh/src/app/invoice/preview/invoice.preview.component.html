@@ -117,7 +117,7 @@
             <div class="row">
                 <div class="col-12 d-flex w-100 align-items-center pt-1 pb-1">
                     <div class="export-butn-wrap">
-                        <button class="btn btn-primary" (click)="openModal(BulkExport)">Export</button>
+                        <button class="btn btn-primary" [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"  (click)="openModal(BulkExport)">Export</button>
                     </div>
                     <div class="more-export-btn d-flex mt-1" *ngIf="showAdvanceSearchIcon">
                         <div class="clear-filter visible-on-mobile"
