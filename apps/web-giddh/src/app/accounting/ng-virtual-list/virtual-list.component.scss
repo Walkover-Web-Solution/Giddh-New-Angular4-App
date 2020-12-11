@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 :host {
     display: block;
     position: relative;
@@ -71,11 +73,11 @@ i.close.icon.clear::after {
     content: "✕";
     padding-right: 8px;
     font-weight: 800;
-    color: gray;
+    color: $gray;
 }
 
 i.close.icon.clear:hover::after {
-    color: red;
+    color: $red;
 }
 
 .clear {
@@ -89,12 +91,12 @@ i.close.icon.clear:hover::after {
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
-    color: black;
+    color: $black;
     transform: translateY(-50%);
 }
 
 .sh-select-disabled {
-    background-color: #e3e3e3;
+    background-color: $whisper;
     color: $bay-of-many;
     cursor: not-allowed;
 }
@@ -106,12 +108,12 @@ i.close.icon.clear:hover::after {
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: #f4f5f8;
+    background-color: $solitude;
     margin: 0px 0 4px 4px;
     /* color: white; */
 }
 
-.chipClosebtn {
+.chip-close-btn {
     padding-left: 10px;
     font-weight: 500;
     float: right;
@@ -120,27 +122,27 @@ i.close.icon.clear:hover::after {
     opacity: 0.6;
 }
 
-.chipClosebtn:hover {
+.chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
-    color: black;
+    color: $black;
 }
 
 .sh-select-disabled .selectedVal,
 .sh-select-disabled .form-control {
-    background: #eee !important;
+    background: $whisper-light !important;
     pointer-events: none;
     cursor: not-allowed;
 }
 
 .selectedVal {
-    border: 1px solid #d6d6d6 !important;
+    border: 1px solid $light-gray !important;
     padding-right: 22px !important;
-    background: #fff !important;
+    background: $white !important;
 }
 
 .header.open > input[type="text"] {
-    border-color: #d6d6d6;
+    border-color: $light-gray;
 }
 
 .header .bdr > input[type="text"] {

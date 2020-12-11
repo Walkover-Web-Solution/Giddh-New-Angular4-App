@@ -1,6 +1,6 @@
 <div>
-    <div class="bg_wrap">
-            <div class="clearfix pdT2">
+    <div class="bg-wrap">
+            <div class="clearfix pd-t2">
                 <div class="day-date pull-right text-right mr-b1" (clickOutside)="showFromDatePicker = false;">
                     <span>{{ displayDay }},</span>
                     <input size="10" type="text" onReturn #dateField name="entryDate" [(ngModel)]="journalDate"
@@ -10,8 +10,8 @@
                 </div>
             </div>
             <div class="clearfix" [style.min-height.vh]="61">
-                <div class="bdrT">
-                    <table class="table entry_table">
+                <div class="bd-rt">
+                    <table class="table entry-table">
                         <thead>
                             <tr>
                                 <th> &nbsp;</th>
@@ -23,9 +23,9 @@
                         <br />
                         <tbody (clickOutside)="hideListItems()">
                             <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last"
-                                [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
+                                [ngClass]="{'active-row': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
                                 <td [style.width.px]="40">
-                                    <input onReturn type="text" class="form-control txtCpc byTo"
+                                    <input onReturn type="text" class="form-control text-capitalize by-to"
                                         [disabled]="(i === 0 && !isFirstRowDeleted) || (requestObj.voucherType === 'Receipt')"
                                         [ngModel]="transaction.type"
                                         (ngModelChange)="selectEntryType(transaction, $event, i)"
@@ -106,7 +106,7 @@
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last"
-                                                    [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
+                                                    [ngClass]="{'active-row': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
                                                     <td [style.width.px]="250"><input onReturn
                                                             (keydown)="detectKey($event)"
                                                             (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
@@ -202,10 +202,10 @@
                 </div>
 
                 <div class="col-xs-8 col-sm-8">
-                    <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd2">
+                    <div [hidden]="!showConfirmationBox" class="confirmation-box bdr text-center pd-2">
                         <div class="">
                             <h1>Accept?</h1>
-                            <div class="pdT2">
+                            <div class="pd-t2">
                                 <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
                                     (click)="saveEntry();">Yes</button>
                                 <button class="btn btn-default" #resetButton
@@ -216,16 +216,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="total_box text-right pull-right">
+                    <div class="total-box text-right pull-right">
                         <span><strong>{{totalDebitAmount | giddhCurrency }}</strong></span>
                         <span><strong>{{totalCreditAmount | giddhCurrency }}</strong></span>
                     </div>
                 </div>
             </div>
     </div>
-    <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
-        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
-        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
+    <div class="sidebar-list form-control" [hidden]="!showLedgerAccountList">
+        <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
+        <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
             [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
@@ -243,7 +243,7 @@
 
 <!-- Cheque Detail Modal-->
 <div bsModal #chequeEntryModal="bs-modal" [config]="{ backdrop: 'static' }" class="cheque-popup modal" role="dialog">
-    <div class="modal-dialog modal-sm" style="width: 298px">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <form autocomplete="off" novalidate name="chequeDetailForm" [formGroup]="chequeDetailForm"
                 class="new-account-form">

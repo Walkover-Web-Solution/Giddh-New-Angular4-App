@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="upload-fil" *ngIf="!isImageZoomView">
+        <div class="upload-file" *ngIf="!isImageZoomView">
             <ul>
                 <ng-container *ngFor="let item of imageURL let i=index;">
                     <li>
@@ -45,7 +45,7 @@
 
     </div>
 
-    <div class="pettycash">
+    <div class="petty-cash">
         <div class="bg-white p-15 pb-0">
             <div class="form-group mb-2">
                 <label>Description</label>
@@ -67,8 +67,7 @@
                                 [forceClearReactive]="forceClear$ | async" [multiple]="false" [ItemHeight]="33"
                                 [useInBuiltFilterForIOptionTypeItems]="true">
                                 <ng-template #optionTemplate1 let-option="option">
-                                    <a href="javascript:void(0)" class="list-item"
-                                        style="border-bottom: 1px solid #ccc;">
+                                    <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{ option.label }}</div>
                                         <div class="item-unique">{{ option.value }}</div>
                                     </a>

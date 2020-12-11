@@ -35,7 +35,7 @@ const CustomShortcode = [
 @Component({
     selector: 'voucher-grid',
     templateUrl: './voucher-grid.component.html',
-    styleUrls: ['../accounting.component.css'],
+    styleUrls: ['../accounting.component.scss'],
     animations: [
         trigger('slideInOut', [
             state('in', style({

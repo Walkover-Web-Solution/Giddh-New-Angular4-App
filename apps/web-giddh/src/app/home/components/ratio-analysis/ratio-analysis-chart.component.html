@@ -1,6 +1,5 @@
 <div id="live">
     <div class="card">
-
         <div class="panel-heading">
             <strong>Ratio Analysis</strong>
             <div class="pull-right dashboard-filter">
@@ -8,9 +7,9 @@
             </div>
         </div>
 
-        <div class="card-body pos-rel ratioAnalysisPanelBody">
-            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                <div class="no-data mr-t2 loader-main" ng-if="errorMessage == ''">
+        <div class="card-body position-relative ratio-analysis-panel-body">
+            <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
+                <div class="no-data mr-t2 loader-main" *ngIf="errorMessage == ''">
                     <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                     <div class="spinner2">
                         <div class="cube1"></div>
@@ -18,7 +17,7 @@
                     </div>
                 </div>
 
-                <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
+                <label class="font-black" *ngIf="errorMessage != ''">{{"a"}}</label>
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
                     <div class="row">

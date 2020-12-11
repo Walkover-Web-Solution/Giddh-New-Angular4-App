@@ -6416,7 +6416,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 /**end new modal design**/
 
 .col-wrapper .btn-link {
-    color: #10aae0 !important;
+    color: $deep-sky-blue-hover !important;
 }
 
 .form-group sup {
@@ -8370,7 +8370,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     padding-right: 0;
 }
 
-.paginationWrapper {
+.pagination-wrapper {
     padding: 20px 0;
     text-align: center;
     display: flex;
@@ -10122,7 +10122,7 @@ input.mat-input-element{
         text-align: left;
         margin-bottom: 10px;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         margin-top: 20px;
         border: none;
         background-color: transparent;

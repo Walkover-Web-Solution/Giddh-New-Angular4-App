@@ -86,8 +86,8 @@
                                         class="icon-trash mr-05"></i>Remove</span>
                             </p>
                         </div>
-                        <div class="bank-deatils-wrapper">
-                            <div class="readonly-bank-deatils">
+                        <div class="bank-details-wrapper">
+                            <div class="readonly-bank-details">
                                 <div class="label-value-data">
                                     <label>Bank Name</label>
                                     <label>{{item?.accountBankDetails?.bankName}}</label>
@@ -133,9 +133,9 @@
                 </ng-container>
 
 
-                <!-- <div class="creditors_detail">
+                <!-- <div class="creditors-detail">
             <p>{{accountDetails?.name}}</p>
-            <div class="contactDetails">
+            <div class="contact-details">
                 <p class="contactNo">
                     {{accountDetails?.mobileNo}}
                 </p>
@@ -189,12 +189,12 @@
 
                 <!-- <div>
             <div>
-                <div class="accountDetils">
+                <div class="account-details">
                     <div class="selectMode">
                         <form #paymentForm="ngForm" autocomplete="off">
                             <div class="row mr-b2">
                                 <div class="col-sm-6 col-xs-12">contact-detail
-                                    <div class="form-group custom-select pos-rel">
+                                    <div class="form-group custom-select position-relative">
                                         <label>Select Mode<span class="text-danger">*</span></label>
                                         <div dropdown>
                                             <select class="form-control" [disabled]="OTPsent" [(ngModel)]="mode" name="mode" id="mode">

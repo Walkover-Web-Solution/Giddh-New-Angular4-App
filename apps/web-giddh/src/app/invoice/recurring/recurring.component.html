@@ -347,7 +347,7 @@
         </table>
     </div>
 
-    <div class="paginationWrapper" *ngIf="(recurringData$ | async)?.totalItems > 20">
+    <div class="pagination-wrapper" *ngIf="(recurringData$ | async)?.totalItems > 20">
         <div class="alC">
             <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="20"
                 (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">

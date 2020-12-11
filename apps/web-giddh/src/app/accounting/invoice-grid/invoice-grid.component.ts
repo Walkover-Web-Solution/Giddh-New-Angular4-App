@@ -40,7 +40,7 @@ const CustomShortcode = [
 @Component({
 	selector: 'invoice-grid',
 	templateUrl: './invoice-grid.component.html',
-	styleUrls: ['./invoice-grid.component.css', '../accounting.component.css'],
+	styleUrls: ['./invoice-grid.component.scss', '../accounting.component.scss'],
 	animations: [
 		trigger('slideInOut', [
 			state('in', style({

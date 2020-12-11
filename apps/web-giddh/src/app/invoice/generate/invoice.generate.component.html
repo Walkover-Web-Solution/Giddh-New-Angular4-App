@@ -275,7 +275,7 @@
         </table>
     </div>
 
-    <div *ngIf="ledgersData?.totalItems > 20" class="paginationWrapper">
+    <div *ngIf="ledgersData?.totalItems > 20" class="pagination-wrapper">
         <div class="alC">
             <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5"
                 class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"

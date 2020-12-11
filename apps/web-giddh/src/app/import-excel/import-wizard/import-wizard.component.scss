@@ -1,4 +1,4 @@
-.steps_wizard {
+.steps-wizard {
     padding: 30px 70px;
     background: #fff;
     text-align: center;
@@ -34,11 +34,11 @@
     }
 }
 
-.steps_wizard li.active > label {
+.steps-wizard li.active > label {
     color: #fff;
 }
 
-.steps_wizard:before {
+.steps-wizard:before {
     content: " ";
     position: absolute;
     border-top: 2px solid #ddd;

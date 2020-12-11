@@ -18,12 +18,12 @@ h4 {
     display: block;
 }
 
-.invoice_area {
+.invoice-area {
     max-width: 8.3in;
     float: left;
 }
 
-.invoice_sidebar {
+.invoice-sidebar {
     float: left;
     margin-left: 30px;
     .form-group {
@@ -98,13 +98,10 @@ h4 {
         padding: 10px 0 0;
         line-height: 20px;
     }
-    .pos-rel {
-        position: relative;
-    }
     .pos-abs {
         position: absolute;
     }
-    .primary-clr {
+    .primary-color {
         color: $color_punch_approx;
     }
     .text-center {
@@ -117,7 +114,7 @@ h4 {
         color: $color_mountain_mist_approx;
     }
     .btn-link {
-        color: #10aae0;
+        color: #019ce1;
         text-decoration: underline;
     }
     .text-right {
@@ -136,7 +133,7 @@ h4 {
         float: center;
     }
 
-    .mrL2 {
+    .mr-l2 {
         margin-left: 20px;
     }
     .mr-b2 {
@@ -146,8 +143,8 @@ h4 {
         margin-bottom: 10px;
     }
 
-    .bdrB {
-        border-bottom: 1px solid $color_storm_dust_approx;
+    .bd-rb {
+        border-bottom: 1px solid #ddd;
     }
     .pdRL3 {
         padding-right: 30px !important;
@@ -195,7 +192,7 @@ h4 {
     border-left: 1px solid $color_punch_approx !important;
 }
 
-.inv_header {
+.invoice-steps-header {
     background: #fff8eb;
     h1 {
         font-size: 20px;
