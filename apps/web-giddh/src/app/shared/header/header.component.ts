@@ -1233,7 +1233,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.addClassInBodyIfPageHasTabs();
     }
 
     public getUserAvatar(userId) {
