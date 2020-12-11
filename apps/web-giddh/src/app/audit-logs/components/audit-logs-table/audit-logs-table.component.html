@@ -810,7 +810,7 @@
 
     <!-- End -->
 
-    <div class="mr-t" *ngIf="log?.log != null && log?.log?.transactions != undefined && log?.log?.transactions.length > 0">
+    <div class="mr-t05" *ngIf="log?.log != null && log?.log?.transactions != undefined && log?.log?.transactions.length > 0">
         <table class="table table-bordered ">
             <thead>
                 <tr>
@@ -832,7 +832,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mr-t text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+    <div class="mr-t05 text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -877,7 +877,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mr-t text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+    <div class="mr-t05 text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>

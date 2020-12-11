@@ -96,7 +96,7 @@
             vertical-align: baseline;
         }
     }
-    .vmiddle {
+    .vertical-align-middle {
         vertical-align: middle;
     }
     .note {
@@ -181,7 +181,7 @@ $themeClr: #fe5f00;
 }
 
 // common class for extend
-.whiteBg {
+.white-bg {
     background-color: white;
 }
 
@@ -269,35 +269,35 @@ $themeClr: #fe5f00;
         font-weight: 400;
         @include marg(B, 5px);
     }
-    &.size_175 {
+    &.size-175 {
         input:not([type="checkbox"]),
         select,
         textarea {
             width: 175px;
         }
     }
-    &.size_240 {
+    &.size-240 {
         input:not([type="checkbox"]),
         select,
         textarea {
             width: 240px;
         }
     }
-    &.size_340 {
+    &.size-340 {
         input:not([type="checkbox"]),
         select,
         textarea {
             width: 340px;
         }
     }
-    &.size_380 {
+    &.size-380 {
         input:not([type="checkbox"]),
         select,
         textarea {
             width: 380px;
         }
     }
-    &.noMarg {
+    &.no-margin {
         @include marg(A, 0);
     }
     .form-control.voucher-selector {

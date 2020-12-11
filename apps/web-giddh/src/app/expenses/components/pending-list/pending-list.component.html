@@ -106,7 +106,7 @@
     </div>
 </div>
 
-<div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems > 20" class="paginationWrapper">
+<div *ngIf="(pettyCashReportsResponse$ | async)?.totalItems > 20" class="pagination-wrapper">
     <pagination [totalItems]="(pettyCashReportsResponse$ | async)?.totalItems" [maxSize]="5" class="pagination-sm"
         [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" previousText="&#9668;" nextText="&#9658;"
         (pageChanged)="pageChanged($event)"></pagination>
@@ -135,17 +135,17 @@
 <ng-template #sortingTemplate let-col>
 
     <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy !== col" (click)="sort('asc', col)"
-        [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
+        [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
     </div>
 
     <div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'"
         (click)="sort('desc', col)"
-        [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
+        [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
     </div>
 
     <div class="icon-sort-dsc" *ngIf="pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'"
         (click)="sort('asc', col)"
-        [ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
+        [ngClass]="{'active-text-color': pettycashRequest.sortBy === col && pettycashRequest.sort === 'desc'}">
     </div>
 
 </ng-template>
