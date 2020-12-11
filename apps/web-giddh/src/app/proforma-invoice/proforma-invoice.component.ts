@@ -580,6 +580,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public dateChangeType: string = '';
     /** This will hold updated entry index */
     public updatedEntryIndex: number;
+    public voucherDateBeforeUpdate: any;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -5040,7 +5041,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.onBlurDueDate(index);
         }
         setTimeout(() => {
-            if(this.invFormData.voucherDetails.voucherDate) {
+            if(this.invFormData.voucherDetails.voucherDate && this.voucherDateBeforeUpdate !== this.invFormData.voucherDetails.voucherDate) {
                 this.dateChangeType = "voucher";
                 this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(true);
                 this.dateChangeConfirmationModel.show();
@@ -6676,5 +6677,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? moment(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.invFormData.voucherDetails.voucherDate).toDate();
             }
         }
+    }
+
+    /**
+     * This will hold voucher date for comparision after change
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public onFocusInvoiceDate(): void {
+        this.voucherDateBeforeUpdate = this.invFormData.voucherDetails.voucherDate;
     }
 }
