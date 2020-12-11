@@ -128,7 +128,7 @@ export class LoginActions {
                             type: 'EmptyAction'
                         };
                     } else {
-                        return this.LoginSuccess();
+                        return this.LoginSuccess(response);
                     }
                 } else {
                     return {
@@ -371,7 +371,7 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
-                return this.LoginSuccess();
+                return this.LoginSuccess(response);
             })));
 
 
@@ -393,7 +393,7 @@ export class LoginActions {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
-                return this.LoginSuccess();
+                return this.LoginSuccess(response);
             })));
 
 
@@ -877,8 +877,10 @@ export class LoginActions {
         };
     }
 
-    public LoginSuccess(): CustomActions {
-
+    public LoginSuccess(response?: any): CustomActions {
+        if (response && response.body && response.body.session) {
+            this._generalService.setCookie("giddh_session_id", response.body.session.id, 30);
+        }
         return {
             type: LoginActions.LoginSuccess,
             payload: null

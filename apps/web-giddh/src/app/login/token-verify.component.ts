@@ -48,10 +48,12 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        if(this.generalService.user) {
+        if(this.route.snapshot.queryParams['signup']) {
             this.authService.ClearSession().subscribe(response => {
-                this.store.dispatch(this._loginAction.socialLogoutAttempt());
-                this.processLogin();
+                if (response.status === 'success') {
+                    this.store.dispatch(this._loginAction.socialLogoutAttempt());
+                    this.processLogin();
+                }
             });
         } else {
             this.store.dispatch(this._loginAction.socialLogoutAttempt());
