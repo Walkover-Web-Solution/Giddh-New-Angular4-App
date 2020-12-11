@@ -108,6 +108,11 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     padding: 2px 0;
 }
 
+
+/* .ledger-main .form-control {
+    height: 26px;
+} */
+
 .ledger-main .form-control {
     background: $white !important;
     height: 45px;
@@ -135,6 +140,12 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 .custom-tabs {
     display: none !important;
 }
+
+
+/* .total-detail-table tbody tr td {
+  vertical-align: top;
+} */
+
 .total-detail-table {
     display: flex;
 }
@@ -233,7 +244,6 @@ span.eligible-ITC {
     }
 }
 .advanced {
-    background: $alice-blue;
     table.xs-table-block {
         tbody tr {
             td.remove-invoice {
