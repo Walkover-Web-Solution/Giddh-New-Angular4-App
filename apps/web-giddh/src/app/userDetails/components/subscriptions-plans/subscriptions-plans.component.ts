@@ -125,6 +125,12 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this._route.navigate(['/pages', 'user-details', 'subscription'], {
+            queryParams: {
+                showPlans: true
+            }
+        });
+        
         if (this._generalService.user) {
             this.logedInUser = this._generalService.user;
         }
@@ -165,6 +171,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
     public backClicked() {
         this.isSubscriptionPlanShow.emit(true);
+        this._route.navigate(['/pages', 'user-details', 'subscription']);
     }
 
     public buyPlanClicked(plan: any) {

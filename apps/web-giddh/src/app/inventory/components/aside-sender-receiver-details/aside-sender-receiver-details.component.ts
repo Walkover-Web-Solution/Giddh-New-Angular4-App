@@ -144,7 +144,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             }
         });
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 if (activeCompany.countryV2 !== undefined && activeCompany.countryV2 !== null) {
                     this.getStates(activeCompany.countryV2.alpha2CountryCode);

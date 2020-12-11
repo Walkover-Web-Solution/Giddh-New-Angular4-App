@@ -15,18 +15,6 @@
     max-width: 760px;
     width: 100%;
 }
-.date-range-picker {
-    padding-left: 25px !important;
-    background-image: url("../../../../assets/images/calender-icon.svg") !important;
-    background-size: 17px !important;
-    background-position: 9px 8px !important;
-    background-repeat: no-repeat !important;
-    position: relative;
-    z-index: 99;
-    cursor: default;
-    width: 225px !important;
-    max-width: 225px !important;
-}
 .input-wrapper:before {
     position: absolute;
     content: "";
@@ -79,6 +67,18 @@
     font-size: 9px;
     color: $very-light-gray;
     top: 14px;
+}
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px !important;
+    border-right: 1px solid $gainsboro !important;
+    cursor: pointer;
 }
 @media (min-width: 768px) {
     .form-inline.financial-select-year .form-group {

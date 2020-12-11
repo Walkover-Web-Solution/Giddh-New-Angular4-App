@@ -225,6 +225,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**Adjust advance receipts */
     @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
     @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
+
+    @ViewChild('dateChangeConfirmationModel', {static: true}) public dateChangeConfirmationModel: ModalDirective;
     public showAdvanceReceiptAdjust: boolean = false;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -570,6 +572,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isPendingSales: boolean = false;
     /** This will hold if deliver address filled **/
     public isDeliverAddressFilled: boolean = false;
+    /** This will hold if voucher date is manually changed */
+    public isVoucherDateChanged: boolean = false;
+    /** Date Change modal configuration */
+    public dateChangeConfiguration: ConfirmationModalConfiguration;
+    /** This will hold which date got changed (voucher/entry) */
+    public dateChangeType: string = '';
+    /** This will hold updated entry index */
+    public updatedEntryIndex: number;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -715,7 +725,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isUpdateMode = false;
         this.getAllDiscounts();
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.selectedCompany = activeCompany;
             }
@@ -921,7 +931,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 try {
                     this.poFilterDates = {from: moment(dateObj[0]).format(GIDDH_DATE_FORMAT), to: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)}
                     this.universalDate = moment(dateObj[1]).toDate();
-                    this.assignDates();
+                    if(!this.isUpdateMode) {
+                        this.assignDates();
+                    }
                 } catch (e) {
                     this.universalDate = new Date();
                 }
@@ -932,21 +944,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.addBlankRow(null);
             this.selectedWarehouse = String(this.defaultWarehouse);
         }
-        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
-            if (setting) {
-                let duePeriod: number;
-                if (this.isEstimateInvoice) {
-                    duePeriod = setting.estimateSettings ? setting.estimateSettings.duePeriod : 0;
-                } else if (this.isProformaInvoice) {
-                    duePeriod = setting.proformaSettings ? setting.proformaSettings.duePeriod : 0;
-                } else {
-                    duePeriod = setting.invoiceSettings ? setting.invoiceSettings.duePeriod : 0;
-                    this.useCustomInvoiceNumber = setting.invoiceSettings ? setting.invoiceSettings.useCustomInvoiceNumber : false;
-                }
-                this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
-                    moment().add(duePeriod, 'days').toDate() : moment().toDate();
-            }
-        });
 
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = {concurrency: 0};
@@ -1637,21 +1634,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public assignDates() {
-        let date = _.cloneDeep(this.universalDate);
-        this.invFormData.voucherDetails.voucherDate = date;
+        if(!this.isVoucherDateChanged) {
+            let date = _.cloneDeep(this.universalDate);
+            this.invFormData.voucherDetails.voucherDate = date;
 
-        // get exchange rate when application date is changed
-        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(date).format(GIDDH_DATE_FORMAT));
-        }
+            // get exchange rate when application date is changed
+            if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
+                this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(date).format(GIDDH_DATE_FORMAT));
+            }
 
-        this.invFormData.entries.forEach((entry: SalesEntryClass) => {
-            entry.transactions.forEach((txn: SalesTransactionItemClass) => {
-                if (!txn.accountUniqueName) {
-                    entry.entryDate = date;
-                }
+            this.invFormData.entries.forEach((entry: SalesEntryClass) => {
+                entry.entryDate = date;
             });
-        });
+        }
     }
 
     /**
@@ -2037,24 +2032,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         };
         this.startLoader(false);
 
+        this.isVoucherDateChanged = false;
         this.assignDates();
-        let invoiceSettings: InvoiceSetting = null;
-        this.store.pipe(select(s => s.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
-        if (invoiceSettings) {
-            let duePeriod: number;
-            if (this.isEstimateInvoice) {
-                duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
-            } else if (this.isProformaInvoice) {
-                duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
-            } else {
-                duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
-            }
-            this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
-                moment().add(duePeriod, 'days').toDate() : moment().toDate();
-
-            this.invFormData.voucherDetails.dueDate = duePeriod > 0 ?
-                moment().add(duePeriod, 'days').toDate() : moment().toDate();
-        }
+        this.updateDueDate();
+        
         this.ngAfterViewInit();
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;
@@ -3255,7 +3236,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
                 entry.isNewEntryInUpdateMode = true;
             } else {
-                entry.entryDate = this.universalDate || new Date();
+                entry.entryDate = this.invFormData.voucherDetails.voucherDate;
             }
             this.invFormData.entries.push(entry);
             setTimeout(() => {
@@ -3601,7 +3582,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             this.activeIndx = lastIndex;
-            this.invFormData.entries[lastIndex].entryDate = this.universalDate;
+            this.invFormData.entries[lastIndex].entryDate = this.invFormData.voucherDetails.voucherDate;
             this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
             this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
             this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex], true);
@@ -4817,6 +4798,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
             this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
+
+        this.updateDueDate();
     }
 
     /**
@@ -5051,10 +5034,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onBlurInvoiceDate(index) {
+        this.isVoucherDateChanged = true;
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.onBlurDueDate(index);
         }
+        setTimeout(() => {
+            if(this.invFormData.voucherDetails.voucherDate) {
+                this.dateChangeType = "voucher";
+                this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(true);
+                this.dateChangeConfirmationModel.show();
+            }
+        }, 200);
     }
 
     public focusInCustomerName() {
@@ -6619,5 +6610,71 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         return discountArray;
+    }
+
+    /**
+     * This will handle date change modal confirmation
+     *
+     * @param {string} action
+     * @memberof ProformaInvoiceComponent
+     */
+    public handleDateChangeConfirmation(action: string): void {
+        if (action === CONFIRMATION_ACTIONS.YES) {
+            if(this.dateChangeType === "voucher") {
+                this.invFormData.entries.forEach(entry => {
+                    entry.entryDate = this.invFormData.voucherDetails.voucherDate;
+                });
+            } else if(this.dateChangeType === "entry") {
+                let entryLoop = 0;
+                this.invFormData.entries.forEach(entry => {
+                    if(entryLoop !== this.updatedEntryIndex) {
+                        entry.entryDate = this.invFormData.entries[this.updatedEntryIndex].entryDate;
+                    }
+                    entryLoop++;
+                });
+            }
+        }
+
+        this.dateChangeConfirmationModel.hide();
+    }
+
+    /**
+     * Callback for entry date change
+     *
+     * @param {number} entryIdx
+     * @memberof ProformaInvoiceComponent
+     */
+    public onBlurEntryDate(entryIdx: number, isDatepickerOpen: boolean): void {
+        if(isDatepickerOpen) {
+            this.dateChangeType = "entry";
+            this.updatedEntryIndex = entryIdx;
+            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(false);
+            this.dateChangeConfirmationModel.show();
+        }
+    }
+
+    /**
+     * This will update due date based on invoice date
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public updateDueDate(): void {
+        let invoiceSettings: InvoiceSetting = null;
+        this.store.pipe(select(state => state.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
+        if (invoiceSettings) {
+            let duePeriod: number;
+            if (this.isEstimateInvoice) {
+                duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
+            } else if (this.isProformaInvoice) {
+                duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
+            } else {
+                duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
+                this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
+            }
+
+            if(this.invFormData.voucherDetails.voucherDate) {
+                this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? moment(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.invFormData.voucherDetails.voucherDate).toDate();
+            }
+        }
     }
 }

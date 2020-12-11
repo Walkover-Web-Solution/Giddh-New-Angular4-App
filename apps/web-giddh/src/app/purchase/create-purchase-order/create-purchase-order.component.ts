@@ -321,6 +321,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public transactionAmount: number = 0;
     /** Stores the current index of entry whose TCS/TDS are entered */
     public tcsTdsIndex: number = 0;
+    /** This will hold if order date is manually changed */
+    public isOrderDateChanged: boolean = false;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService, private settingsBranchAction: SettingsBranchActions) {
         this.getInvoiceSettings();
@@ -380,7 +382,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.selectedCompany = activeCompany;
                 if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
@@ -572,11 +574,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public assignDates(): void {
-        let date = _.cloneDeep(this.universalDate);
-        this.purchaseOrder.voucherDetails.voucherDate = date;
+        if(!this.isOrderDateChanged) {
+            let date = _.cloneDeep(this.universalDate);
+            this.purchaseOrder.voucherDetails.voucherDate = date;
 
-        if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
-            this.assignDueDate();
+            if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
+                this.assignDueDate();
+            }
         }
     }
 
@@ -2897,11 +2901,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public assignDueDate(): void {
-        if (!this.isUpdateMode) {
-            let duePeriod: number;
-            duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
-            this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment().add(duePeriod, 'days').toDate() : moment().toDate();
-        }
+        let duePeriod: number;
+        duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
+        this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment(this.purchaseOrder.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.purchaseOrder.voucherDetails.voucherDate).toDate();
     }
 
     /**
@@ -2983,5 +2985,20 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         }
         this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    /**
+     * Callback for on blur event of order date
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public onBlurOrderDate(): void {
+        this.isOrderDateChanged = true;
+
+        if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
+            setTimeout(() => {
+                this.assignDueDate();
+            }, 200);    
+        }
     }
 }
