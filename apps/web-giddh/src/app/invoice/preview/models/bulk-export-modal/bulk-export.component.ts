@@ -62,13 +62,17 @@ export class BulkExportModal implements OnInit {
             return;
         }
 
-        let getRequest: any = { from: "", to: "", type: "", mail: false };
+        let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
         let postRequest: any;
 
-        getRequest.from = this.dateRange.from;
-        getRequest.to = this.dateRange.to;
+        if(!this.advanceSearch.invoiceDate && !this.advanceSearch.dueDate) {
+            getRequest.from = this.dateRange.from;
+            getRequest.to = this.dateRange.to;
+        }
+        
         getRequest.type = this.type;
         getRequest.mail = event;
+        getRequest.q = (this.advanceSearch.q) ? this.advanceSearch.q : "";
 
         postRequest = this.advanceSearch;
         postRequest.voucherUniqueNames = this.voucherUniqueNames;
@@ -76,6 +80,7 @@ export class BulkExportModal implements OnInit {
 
         delete postRequest.count;
         delete postRequest.page;
+        delete postRequest.q;
 
         let validRecipients: boolean = true;
 

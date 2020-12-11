@@ -26,6 +26,7 @@ export class BulkVoucherExportService {
         url = url.replace(':to', getRequest.to);
         url = url.replace(':type', getRequest.type);
         url = url.replace(':mail', getRequest.mail);
+        url = url.replace(':q', getRequest.q);
 
         return this.http.post(url, postRequest).pipe(
             map((res) => {
