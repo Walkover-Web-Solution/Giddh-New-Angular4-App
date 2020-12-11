@@ -1,27 +1,27 @@
-<h1 class="page-title" style="margin-left:0; margin-bottom:15px;">
+<h1 class="page-title ml-0 mb-15">
     Apply Log Filters</h1>
-<div class="clearfix mr-t2">
+<div class="clearfix mt-15">
     <label>Filter By:</label>
     <sh-select [options]="vm.dateOptions" [isFilterEnabled]="true" [placeholder]="'Select Option'"
         [(ngModel)]="vm.selectedDateOption"></sh-select>
     <!--<select2 [data]="vm.dateOptions" [options]="vm.options" [value]="vm.selectedDateOption" (valueChanged)="selectDateOption($event)"></select2>-->
 </div>
 
-<div class="clearfix mr-t2" *ngIf="vm.selectedDateOption == '1'">
+<div class="clearfix mt-15" *ngIf="vm.selectedDateOption == '1'">
     <label>From date</label>
     <input type="text" name="from" [placeholder]="giddhDateFormat" #fromdp="bsDatepicker" bsDatepicker
         [(ngModel)]="vm.selectedFromDate" class="form-control" />
 
 </div>
 
-<div class="clearfix mr-t2" *ngIf="vm.selectedDateOption == '1'">
+<div class="clearfix mt-15" *ngIf="vm.selectedDateOption == '1'">
     <label>To date</label>
     <input type="text" name="to" [placeholder]="giddhDateFormat" #todp="bsDatepicker" bsDatepicker
         [(ngModel)]="vm.selectedToDate" class="form-control" />
 
 </div>
 
-<div class="clearfix mr-t2" *ngIf="vm.selectedDateOption == '0'">
+<div class="clearfix mt-15" *ngIf="vm.selectedDateOption == '0'">
     <!-- <label>Select Log Date or Entry Date</label> -->
     <div class="mb-2 select-log" >
         <p class="input-group pull-left" for="entryDate">
@@ -44,28 +44,28 @@
 
 </div>
 
-<div class="clearfix mr-t2">
+<div class="clearfix mt-15">
     <label>Select Operation</label>
     <!-- <input type="text" class="form-control" /> -->
     <sh-select [options]="vm.filters" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedOperation"></sh-select>
     <!--<select2 [data]="vm.filters" [options]="vm.options" [value]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>-->
 </div>
 
-<div class="clearfix mr-t2">
+<div class="clearfix mt-15">
     <label>Select Entity</label>
     <sh-select [options]="vm.entities" [isFilterEnabled]="true" [placeholder]="'Select Option'"
         [(ngModel)]="vm.selectedEntity"></sh-select>
     <!--<select2 [data]="vm.entities" [options]="vm.options" [value]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>-->
 </div>
 
-<div class="clearfix mr-t2">
+<div class="clearfix mt-15">
     <label>Select Account</label>
     <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'"
         [customFilter]="genralCustomFilter" [(ngModel)]="vm.selectedAccountUnq"></sh-select>
     <!--<select2 [data]="vm.accounts$ | async" [options]="vm.options" [value]="vm.selectedAccountUnq" (valueChanged)="selectAccount($event)"></select2>-->
 </div>
 
-<div class="clearfix mr-t2">
+<div class="clearfix mt-15">
     <label>Select Group</label>
     <sh-select [options]="vm.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'"
         [customFilter]="genralCustomFilter" [(ngModel)]="vm.selectedGroupUnq"></sh-select>
@@ -73,15 +73,15 @@
 </div>
 
 
-<div class="clearfix mr-t2">
+<div class="clearfix mt-15">
     <label>Select User</label>
     <sh-select [options]="vm.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true"
         [placeholder]="'Select Option'" [(ngModel)]="vm.selectedUserUnq"></sh-select>
     <!--<select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>-->
 </div>
 
-<button class='btn btn-success pull-left mr-t2' [ladda]="vm.getLogsInprocess$ | async" (click)='getLogfilters()'>Get Logs
+<button class='btn btn-success pull-left mt-15' [ladda]="vm.getLogsInprocess$ | async" (click)='getLogfilters()'>Get Logs
 </button>
-<button class="btn btn-warning pull-left mr-t2 mrL" (click)="resetFilters()">Reset</button>
+<button class="btn btn-warning pull-left mt-15 ml-05" (click)="resetFilters()">Reset</button>
 
 <br />

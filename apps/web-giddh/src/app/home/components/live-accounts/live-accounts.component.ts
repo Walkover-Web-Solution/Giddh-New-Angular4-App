@@ -10,7 +10,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
     selector: 'live-accounts',
-    templateUrl: 'live-accounts.component.html'
+    templateUrl: 'live-accounts.component.html',
+    styleUrls: ['./live-accounts.component.scss'],
 })
 
 export class LiveAccountsComponent implements OnInit, OnDestroy {
