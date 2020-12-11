@@ -71,10 +71,12 @@
                 <!-- E-way bill generation and export to excel for a single selected item in invoice ends sizes -->
 
                 <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
+                <div class="export-button-wrap">
+                    <button class="btn btn-primary"
+                        [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"
+                        (click)="openModal(bulkExport)">Export</button>
+                </div>
                 <div class="btn-group desktop-view-btn" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
-                    <div class="export-button-wrap">
-                        <button class="btn btn-primary" [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0" (click)="openModal(bulkExport)">Export</button>
-                    </div>
                     <button id="ddl-newinv" dropdownToggle type="button"
                         class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0" aria-controls="dropdown-ddl-newinv">
                         + New Invoice
