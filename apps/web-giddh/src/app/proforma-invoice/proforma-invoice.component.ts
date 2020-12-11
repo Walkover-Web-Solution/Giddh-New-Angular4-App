@@ -581,6 +581,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public dateChangeType: string = '';
     /** This will hold updated entry index */
     public updatedEntryIndex: number;
+    /** This will hold voucher date on focus */
     public voucherDateBeforeUpdate: any;
 
     /**
