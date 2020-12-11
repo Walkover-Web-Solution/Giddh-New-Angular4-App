@@ -5,7 +5,7 @@
     </button>
 </div>
 <div class="modal-body">
-    <div class="export-modal-wraaper">
+    <div class="export-modal-wrapper">
         <!-- <div class="row mb-15">
             <div class="col-sm-4">
                 <label>Export</label>
@@ -104,7 +104,7 @@
             <div class="col-sm-12">
                 <!-- Email id could be mulitiple   -->
                 <textarea type="text" placeholder="Recipient Email Id's" class="form-control mb-15 mulitiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
-                <button class="btn btn-success" [disabled]="!recipients || copyTypes.length === 0 || isLoading" (click)="exportVouchers(true)">Send Email</button>
+                <button class="btn btn-success" [disabled]="!recipients || recipients.length === 0 || !copyTypes || copyTypes.length === 0 || isLoading" (click)="exportVouchers(true)">Send Email</button>
             </div>
         </div>
     </div>

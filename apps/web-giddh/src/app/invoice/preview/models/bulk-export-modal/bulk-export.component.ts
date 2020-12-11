@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvoucherexport.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -10,7 +10,7 @@ import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
     styleUrls: [`./bulk-export.component.scss`]
 })
 
-export class BulkExportModal implements OnInit {
+export class BulkExportModal {
     /** Type of voucher */
     @Input() public type: string = "sales";
     /** Selected Vouchers */
@@ -38,17 +38,11 @@ export class BulkExportModal implements OnInit {
     /** Will handle if api call is in process */
     public isLoading: boolean = false;
 
-    constructor(private bulkVoucherExportService: BulkVoucherExportService, private generalService: GeneralService, private toaster: ToasterService) {
+    constructor(
+        private bulkVoucherExportService: BulkVoucherExportService, 
+        private generalService: GeneralService, 
+        private toaster: ToasterService) {
 
-    }
-
-    /**
-     * Initializes the component
-     *
-     * @memberof BulkExportModal
-     */
-    public ngOnInit(): void {
-        
     }
 
     /**
