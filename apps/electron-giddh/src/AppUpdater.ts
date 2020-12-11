@@ -42,9 +42,6 @@ export default class AppUpdaterV1 {
         });
 
         autoUpdater.on('update-downloaded', () => {
-            // setTimeout(() => {
-            //     this.isUpdateDownloaded = true;
-            // }, 60000);
             dialog.showMessageBox({
                 title: 'Install Updates',
                 message: 'Updates downloaded, application will be quit for update...'
@@ -56,9 +53,9 @@ export default class AppUpdaterV1 {
             );
 
         });
-        autoUpdater.on('error', (error) => {
-            dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
-        })
+        // autoUpdater.on('error', (error) => {
+        //     dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
+        // })
         autoUpdater.checkForUpdatesAndNotify();
 
     }
