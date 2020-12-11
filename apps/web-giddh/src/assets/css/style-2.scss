@@ -9751,7 +9751,13 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
-
+.branch-ho-tooltip{
+    left: -7px !important;
+     .arrow{
+        left: auto !important;
+        right:  7px !important;
+    }
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
