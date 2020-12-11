@@ -490,21 +490,21 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             openingBalance: null,
             openingBalanceGreaterThan: false,
             openingBalanceLessThan: false,
-            openingBalanceEqual: true,
+            openingBalanceEqual: false,
             openingBalanceType: 'DEBIT',
             closingBalance: null,
             closingBalanceGreaterThan: false,
             closingBalanceLessThan: false,
-            closingBalanceEqual: true,
+            closingBalanceEqual: false,
             closingBalanceType: 'DEBIT',
             creditTotal: null,
             creditTotalGreaterThan: false,
             creditTotalLessThan: false,
-            creditTotalEqual: true,
+            creditTotalEqual: false,
             debitTotal: null,
             debitTotalGreaterThan: false,
             debitTotalLessThan: false,
-            debitTotalEqual: true
+            debitTotalEqual: false
         };
     }
 
