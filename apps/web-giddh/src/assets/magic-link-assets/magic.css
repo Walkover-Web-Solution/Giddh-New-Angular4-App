@@ -665,7 +665,7 @@ body {
 
 #transaction_table table td[class*="col-"],
 table th[class*="col-"] {
-    padding: 8px;
+    padding: 10px;
 }
 
 .compoundEntry td,
@@ -710,6 +710,18 @@ table th[class*="col-"] {
 
 .cmnPd80 {
     padding: 80px 0;
+}
+
+.ledger-footer-1.float-left{
+    width:50%;
+    left:0;
+    bottom:0;
+}
+
+.ledger-footer-1.float-right{
+    width:50%;
+    bottom:0;
+    right: 0 !important;
 }
 
 .ylwBg {
