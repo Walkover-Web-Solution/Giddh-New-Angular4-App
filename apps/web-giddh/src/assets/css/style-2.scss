@@ -7234,8 +7234,7 @@ GST filing
 
 .tax-engine .btn-link,
 .tax-engine .btn-link:active,
-.tax-engine .btn-link:focus,
-.tax-engine .btn-link:hover {
+.tax-engine .btn-link:focus{
     border-color: transparent;
 }
 
@@ -7464,8 +7463,8 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
-    font-size: 13px;
-    border-bottom: 1px solid #ededed;
+    font-size: 14px;
+    border-bottom: 1px solid $whisper;
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
@@ -7927,8 +7926,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: #263035;
     background: $white;
     font-weight: 700;
-    font-size: 12px;
-    text-transform: uppercase;
+    font-size: 14px;
+    text-transform: capitalize;
     -webkit-font-smoothing: antialiased;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
