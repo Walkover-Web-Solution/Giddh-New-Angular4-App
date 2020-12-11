@@ -713,7 +713,7 @@ body {
     width: 150px !important;
 }
 
-.ledger-footer-1{
+.ledger-footer-1.float-left{
     width: 50%;
     bottom: 0;
     left: 0;
@@ -724,7 +724,9 @@ body {
     height: auto;
 }
 
-.ledger-footer-1:nth-child(2){
+.ledger-footer-1.float-right{
+    width: 50%;
+    bottom: 0;
     right:0 !important;
 }
 
@@ -738,7 +740,7 @@ body {
 
 #transaction_table table td[class*="col-"],
 table th[class*="col-"] {
-    padding: 8px;
+    padding: 10px;
 }
 
 .compound-entry td,
@@ -977,10 +979,10 @@ h4 {
     color: #d8d5d5;
 }
 
-.magicTable .download-invoice-ledger {
+.magic-table .download-invoice-ledger {
     padding: 0 5px;
 }
-.magicTable .pr-25 {
+.magic-table .pr-25 {
     padding-right: 25px !important;
 }
 /*footer style end*/
