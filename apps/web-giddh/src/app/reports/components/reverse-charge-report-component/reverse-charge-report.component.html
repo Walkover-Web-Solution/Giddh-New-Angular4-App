@@ -127,7 +127,13 @@
             </table>
         </div>
         <div class="pagination-wrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
+<<<<<<< HEAD
             <pagination [totalItems]="reverseChargeReportResults.totalItems" [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+=======
+            <pagination [totalItems]="reverseChargeReportResults.totalItems"
+                [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true"
+                [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+>>>>>>> 8b7bde5078... code designing fix
         </div>
     </div>
     <div class="mt-5 invoice-footer">
