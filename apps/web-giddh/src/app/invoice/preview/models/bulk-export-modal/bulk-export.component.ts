@@ -1,0 +1,134 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvoucherexport.service';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+
+@Component({
+    selector: 'invoice-bulk-export',
+    templateUrl: './bulk-export.component.html',
+    styleUrls: [`./bulk-export.component.scss`]
+})
+
+export class BulkExportModal {
+    /** Type of voucher */
+    @Input() public type: string = "sales";
+    /** Selected Vouchers */
+    @Input() public voucherUniqueNames: any[] = [];
+    /** Advance Search Parameters */
+    @Input() public advanceSearch: any;
+    /** From/To Date On Page */
+    @Input() public dateRange: any;
+    /** Total Items For Export */
+    @Input() public totalItems: any = 0;
+    /** Emit the close modal event */
+    @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+
+    /** Download Voucher Copy Options */
+    public downloadCopyOptions: any[] = [
+        { label: 'Original', value: 'ORIGINAL' },
+        { label: 'Customer', value: 'CUSTOMER' },
+        { label: 'Transport', value: 'TRANSPORT' }
+    ];
+
+    /** Selected download Voucher Copy Options */
+    public copyTypes: any = [];
+    /** Email Receivers */
+    public recipients: any = "";
+    /** Will handle if api call is in process */
+    public isLoading: boolean = false;
+
+    constructor(
+        private bulkVoucherExportService: BulkVoucherExportService, 
+        private generalService: GeneralService, 
+        private toaster: ToasterService) {
+
+    }
+
+    /**
+     * Export the vouchers
+     *
+     * @param {boolean} event
+     * @memberof BulkExportModal
+     */
+    public exportVouchers(event: boolean): void {
+        if(this.isLoading) {
+            return;
+        }
+
+        let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
+        let postRequest: any;
+
+        if(!this.advanceSearch.invoiceDate && !this.advanceSearch.dueDate) {
+            getRequest.from = this.dateRange.from;
+            getRequest.to = this.dateRange.to;
+        }
+        
+        getRequest.type = this.type;
+        getRequest.mail = event;
+        getRequest.q = (this.advanceSearch.q) ? this.advanceSearch.q : "";
+
+        postRequest = this.advanceSearch;
+        postRequest.voucherUniqueNames = this.voucherUniqueNames;
+        postRequest.copyTypes = this.copyTypes;
+
+        delete postRequest.count;
+        delete postRequest.page;
+        delete postRequest.q;
+
+        let validRecipients: boolean = true;
+
+        if (event && this.recipients) {
+            let recipients = this.recipients.split(",");
+            let validEmails = [];
+            if(recipients && recipients.length > 0) {
+                recipients.forEach(email => {
+                    if(validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
+                        this.toaster.clearAllToaster();
+                        this.toaster.errorToast(email + " is invalid email!");
+                        validRecipients = false;
+                    }
+
+                    if(validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
+                        validEmails.push(email.trim());
+                    }
+                });
+            }
+            postRequest.sendTo = { recipients: validEmails };
+        }
+
+        if(!validRecipients) {
+            return;
+        }
+
+        this.isLoading = true;
+
+        this.bulkVoucherExportService.bulkExport(getRequest, postRequest).subscribe(response => {
+            this.isLoading = false;
+            if (response.status === "success" && response.body) {
+                if(response.body.type === "base64") {
+                    this.closeModal();
+                    let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
+                    return saveAs(blob, this.type+`.zip`);
+                } else {
+                    this.toaster.clearAllToaster();
+                    this.toaster.successToast(response.body.file);
+                    this.closeModal();
+                }
+            } else {
+                this.toaster.clearAllToaster();
+                this.toaster.errorToast(response.message);
+                this.closeModal();
+            }
+        });
+    }
+
+    /**
+     * Emit the close modal event
+     *
+     * @memberof BulkExportModal
+     */
+    public closeModal(): void {
+        this.closeModelEvent.emit(true);
+    }
+}

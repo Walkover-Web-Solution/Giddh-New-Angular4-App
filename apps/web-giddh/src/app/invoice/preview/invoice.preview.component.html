@@ -61,6 +61,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <button class="btn btn-default desktop-view-btn mr-15" tooltip="Export" (click)="exportCsvDownload()"
                     [ladda]="exportInvoiceRequestInProcess$ | async"
                     *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
@@ -71,6 +72,9 @@
 
                 <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                 <div class="btn-group desktop-view-btn" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
+                    <div class="export-button-wrap">
+                        <button class="btn btn-primary" [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0" (click)="openModal(bulkExport)">Export</button>
+                    </div>
                     <button id="ddl-newinv" dropdownToggle type="button"
                         class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0" aria-controls="dropdown-ddl-newinv">
                         + New Invoice
@@ -112,6 +116,9 @@
                 New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
             <div class="row">
                 <div class="col-12 d-flex w-100 align-items-center pt-1 pb-1">
+                    <div class="export-button-wrap">
+                        <button class="btn btn-primary" [disabled]="((selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems) === 0"  (click)="openModal(bulkExport)">Export</button>
+                    </div>
                     <div class="more-export-btn d-flex mt-1" *ngIf="showAdvanceSearchIcon">
                         <div class="clear-filter visible-on-mobile"
                             (click)="resetAdvanceSearch()">
@@ -918,3 +925,8 @@
     </div>
 </ng-template>
 
+<!-- Bulk export modal -->
+<ng-template #bulkExport>
+    <invoice-bulk-export [dateRange]="invoiceSearchRequest" [advanceSearch]="lastListingFilters" [voucherUniqueNames]="selectedInvoices" [totalItems]="(selectedInvoices && selectedInvoices.length > 0) ? selectedInvoices.length : voucherData && voucherData.totalItems"
+        (closeModelEvent)="modalRef.hide();"></invoice-bulk-export>
+</ng-template>

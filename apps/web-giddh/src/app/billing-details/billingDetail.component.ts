@@ -20,6 +20,7 @@ import { CommonActions } from '../actions/common.actions';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { environment } from '../../environments/environment.prod';
 import { SettingsProfileService } from '../services/settings.profile.service';
+import { EMAIL_VALIDATION_REGEX } from '../app.constant';
 
 @Component({
     selector: 'billing-details',
@@ -231,8 +232,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public validateEmail(emailStr) {
-        let pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return pattern.test(emailStr);
+        return EMAIL_VALIDATION_REGEX.test(emailStr);
     }
 
     public autoRenewSelected(event) {
