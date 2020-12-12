@@ -11,7 +11,7 @@
                                 <ng-template #companyBranchNameAlias> {{ (selectedCompany | async)?.name }}<span *ngIf="(selectedCompany | async)?.nameAlias"> (
                                         {{  (selectedCompany | async)?.nameAlias }} )</span>
                                 </ng-template>
-                                <div class="c-text">
+                                <div class="company-text">
                                     <span class="c-name ellp pd-r1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                                     </span>
 
@@ -166,7 +166,7 @@
                                         {{  (selectedCompany | async)?.nameAlias }}
                                         )</span>
                                 </ng-template>
-                                <div class="c-text no-padding">
+                                <div class="company-text no-padding">
 
                                     <span class="c-name ellp pd-r1 pd-l1 alice">{{companyInitials}}</span>
 
@@ -274,7 +274,7 @@
                             )</span>
                     </ng-template>
                     <!-- <span class="icon-dots-three-vertical"></span> -->
-                    <div class="c-text d-flex">
+                    <div class="company-text d-flex">
                         <span class="c-name ellp pd-r1 alice">{{companyInitials}}</span>
 
                         <div class="company-name-finance-year" placement="bottom">
@@ -618,7 +618,7 @@
 <ng-template #headDropdownMenu>
 
     <li>
-        <div class="c-text head-nav">
+        <div class="company-text head-nav">
             <div class="company-name-finance-year" placement="bottom">
                 <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
                 </span>
