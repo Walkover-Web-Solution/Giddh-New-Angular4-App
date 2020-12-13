@@ -477,7 +477,7 @@ a[vr-item]:focus {
     display: none;
 }
 
-.calender-addone {
+.calendar-addon {
     color: $white;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
@@ -490,15 +490,16 @@ a[vr-item]:focus {
 .not-today{
     padding:0px !important;
     border:0px !important;
-    .calender-addone {
+    .calendar-addon {
         position: absolute;
-        left:auto;
+        left:4px;
         margin:auto;
     }
     .input-date{
         border: 1px solid #ffffff;
         border-radius: 20px !important;
         height: 34px;
+        width: 220px;
         input{
             margin-right: 44px;
             text-align:center !important;
@@ -518,6 +519,7 @@ a[vr-item]:focus {
     border: 1px solid $white;
     border-radius: 20px;
     margin-right: 15px;
+    display: inline-block !important;
     i {
         font-size: 12px;
         padding-right: 5px;
@@ -1066,7 +1068,7 @@ ul.sub-list {
             line-height: 1.8;
         }
     }
-    .calender-addone {
+    .calendar-addon {
         height: 30px;
         vertical-align: middle;
         align-items: center;

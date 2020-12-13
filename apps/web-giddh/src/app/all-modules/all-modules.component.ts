@@ -54,34 +54,16 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @memberof AllModulesComponent
      */
     public ngOnInit(): void {
-        // commenting for later use if required
-        this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
-            companies = companies || [];
-            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
-            if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
-                this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompanyForDb = new CompAidataModel();
+                this.activeCompanyForDb.name = activeCompany.name;
+                this.activeCompanyForDb.uniqueName = activeCompany.uniqueName;
+
+                // if(activeCompany && activeCompany.createdBy && activeCompany.createdBy.email) {
+                //     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(activeCompany.createdBy.email);
+                // }
             }
-        });
-        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (!companies) {
-                return;
-            }
-            if (companies.length === 0) {
-                return;
-            }
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === this.generalService.companyUniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            this.activeCompanyForDb = new CompAidataModel();
-            this.activeCompanyForDb.name = selectedCmp.name;
-            this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
         });
         // commenting for later use
         // this.getSharedAllModules();
@@ -122,11 +104,11 @@ export class AllModulesComponent implements OnInit, OnDestroy {
         let viewContainerRef = this.addmanage.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.subscribe((a) => {
+        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideManageGroupsModal();
             viewContainerRef.remove();
         });
-        this.manageGroupsAccountsModal.onShown.subscribe((a => {
+        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
             (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
             (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
         }));
@@ -138,7 +120,7 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @memberof AllModulesComponent
      */
     public hideManageGroupsModal(): void {
-        this.store.select(company => company.session.lastState).pipe(take(1)).subscribe((state: string) => {
+        this.store.pipe(select(company => company.session.lastState), take(1)).subscribe((state: string) => {
             if (state && (state.indexOf('ledger/') > -1 || state.indexOf('settings') > -1)) {
                 this.store.dispatch(this.generalActions.addAndManageClosed());
             }

@@ -10,3 +10,10 @@ input.form-control.date-range-picker {
 .square-switch {
     width: 110px;
 }
+.custom-datepicker {
+    i{
+        left: 26px;
+        top: 10px;
+        color: $gray;
+    }
+}

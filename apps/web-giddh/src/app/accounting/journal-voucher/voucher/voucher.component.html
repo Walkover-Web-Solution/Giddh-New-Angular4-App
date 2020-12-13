@@ -4,7 +4,7 @@
                 <div class="day-date pull-right text-right mr-b1" (clickOutside)="showFromDatePicker = false;">
                     <span>{{ displayDay }},</span>
                     <input size="10" type="text" onReturn #dateField name="entryDate" [(ngModel)]="journalDate"
-                        (blur)="dateEntered();" readonly placeholder="DD-MM-YYYY"
+                        (blur)="dateEntered();" readonly [placeholder]="giddhDateFormat"
                         class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()" bsDatepicker
                         (bsValueChange)="handleVoucherDateChange()" [bsConfig]="bsConfig" />
                 </div>

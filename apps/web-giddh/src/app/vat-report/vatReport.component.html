@@ -1,6 +1,6 @@
 <section>
     <nav class="navbar">
-        <div class="relative">
+        <div class="relative w-100">
             <hamburger-menu></hamburger-menu>
             <div class="invoice-control w-100">
                 <div class="row mr-0 ml-0">
@@ -39,9 +39,9 @@
                                                             {{ moment(selectedMonth).format('MMMM YYYY') }}
                                                         </ng-container>
                                                         <ng-container *ngIf="!isMonthSelected">
-                                                            {{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                                            {{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
                                                             -
-                                                            {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                                            {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}}
                                                         </ng-container>
                                                         <span class="caret"></span>
                                                     </button>

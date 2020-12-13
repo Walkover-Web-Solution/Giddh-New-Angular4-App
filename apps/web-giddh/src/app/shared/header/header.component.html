@@ -64,17 +64,17 @@
                                                         <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
 
                                                             <ng-template #CompanyBranchname> {{ cmp.name }}
-                                                                <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
+                                                                <span *ngIf="cmp.alias">({{(cmp.alias)}})</span>
                                                             </ng-template>
 
                                                             <span container="body" [tooltip]="CompanyBranchname" placement="top">
                                                                 {{ cmp.name }} <span
-                                                                    *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
+                                                                    *ngIf="cmp.alias">({{(cmp.alias)}})</span>
                                                             </span>
 
-                                                            <img class="pull-right permission-icon" *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users.svg">
+                                                            <img class="pull-right permission-icon" *ngIf="hoveredIndx !== i && cmp?.createdBy?.email !== (user$ | async)?.email" src="assets/images/users.svg">
 
-                                                            <img class="pull-right permission-icon" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
+                                                            <img class="pull-right permission-icon" *ngIf="hoveredIndx === i && cmp?.createdBy?.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
 
                                                         </a>
                                                     </li>
@@ -194,7 +194,7 @@
                                 <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Today</button>
                             </li>
                             <li class="not-today cursor-pointer">
-                                <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                                <span class="icon-calender calendar-addon" (click)="showGiddhDatepicker($event)"></span>
                                 <div class="input-date" [ngClass]="{'today-date pl-2': isTodaysDateSelected}">
                                     <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
                                         [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
@@ -384,13 +384,13 @@
                             <i class="icon-bar"></i>
                         </button>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">
+                        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="navigationEnd && !navigateToUser">
                             {{selectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span>
                             <span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span>
                         </h4>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
+                        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
                                 class="txt-lwc">c</span></h4>
                     </li> -->
@@ -415,10 +415,10 @@
                                     class="icon-back-arrow"></i></span>
                         </li>
                         <li class="hamburger-menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
+                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
-                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">
+                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="!navigationEnd && !navigateToUser">
                                 {{oldSelectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
                         </li>
@@ -472,7 +472,7 @@
                             <!--                            <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button>-->
                         </li>
                         <li class="daterang-picker not-today cursor-pointer">
-                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                            <span class="icon-calender calendar-addon" (click)="showGiddhDatepicker($event)"></span>
                             <div class="input-date" [ngClass]="{'today-date pl-2': isTodaysDateSelected}">
                                 <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
                             </div>
@@ -666,15 +666,15 @@
                                 <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
 
                                     <ng-template #CompanyBranchname> {{ cmp.name }}
-                                        <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
+                                        <span *ngIf="cmp.alias">({{(cmp.alias)}})</span>
                                     </ng-template>
 
                                     <span container="body" [tooltip]="CompanyBranchname" placement="top">
-                                    {{ cmp.name }} <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span> </span>
+                                    {{ cmp.name }} <span *ngIf="cmp.alias">({{(cmp.alias)}})</span> </span>
 
-                                    <img class="pull-right permission-icon" *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users.svg">
+                                    <img class="pull-right permission-icon" *ngIf="hoveredIndx !== i && cmp?.createdBy?.email !== (user$ | async)?.email" src="assets/images/users.svg">
 
-                                    <img class="pull-right permission-icon" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
+                                    <img class="pull-right permission-icon" *ngIf="hoveredIndx === i && cmp?.createdBy?.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
 
                                 </a>
                             </li>

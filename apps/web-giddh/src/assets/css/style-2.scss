@@ -2,10 +2,14 @@
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 @import "../css/ngx-bs-datepicker.scss";
+@import "../css/typography.css";
 
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact shalinee..)
 */
+html, body{
+    font-family: 'opensans-regular';
+}
 
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,
@@ -1770,9 +1774,10 @@ modal-container.modal {
 .custom-datepicker i {
     position: absolute;
     left: 12px;
-    top: 4px;
+    top: 10px;
     z-index: 9;
     font-size: 17px;
+    color: $gray;
 }
 
 .custom-datepicker input {
@@ -4633,7 +4638,7 @@ label {
     overflow-y: scroll;
     height: 100%;
     //min-height: 550px;
-    padding-bottom: 80px;
+    padding-bottom: 180px;
 }
 
 .breadcrumbs {
@@ -7229,8 +7234,7 @@ GST filing
 
 .tax-engine .btn-link,
 .tax-engine .btn-link:active,
-.tax-engine .btn-link:focus,
-.tax-engine .btn-link:hover {
+.tax-engine .btn-link:focus{
     border-color: transparent;
 }
 
@@ -7459,8 +7463,8 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
-    font-size: 13px;
-    border-bottom: 1px solid #ededed;
+    font-size: 14px;
+    border-bottom: 1px solid $whisper;
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
@@ -7922,8 +7926,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: #263035;
     background: $white;
     font-weight: 700;
-    font-size: 12px;
-    text-transform: uppercase;
+    font-size: 14px;
+    text-transform: capitalize;
     -webkit-font-smoothing: antialiased;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
@@ -9698,7 +9702,7 @@ span#HW_badge_cont:nth-child(3) {
     right: -22px;
 }
 #rcw-p91-widget-button{
-    z-index: 98;
+    z-index: 992;
 }
 .linked-add{
     .popover{
@@ -9759,6 +9763,9 @@ span#HW_badge_cont:nth-child(3) {
     .mobile-view-padding{
         padding-left: 10px;
     }
+}
+.giddh-calendar.show {
+    margin-top: 0;
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {

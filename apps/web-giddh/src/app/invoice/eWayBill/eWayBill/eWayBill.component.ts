@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
@@ -140,27 +139,24 @@ export class EWayBillComponent implements OnInit {
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService,
-        private _activatedRoute: ActivatedRoute,
         private _toaster: ToasterService,
         private modalService: BsModalService,
-        private router: Router,
         private _location: LocationService,
         private _cd: ChangeDetectorRef
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
-        this.EwayBillfilterRequest.fromDate = moment(this.datePickerOptions.startDate).format('DD-MM-YYYY');
-        this.EwayBillfilterRequest.toDate = moment(this.datePickerOptions.endDate).format('DD-MM-YYYY');
+        this.EwayBillfilterRequest.fromDate = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
+        this.EwayBillfilterRequest.toDate = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
 
-        this.isGetAllEwaybillRequestInProcess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess).pipe(takeUntil(this.destroyed$));
-        this.isGetAllEwaybillRequestSuccess$ = this.store.select(p => p.ewaybillstate.isGetAllEwaybillRequestSuccess).pipe(takeUntil(this.destroyed$));
+        this.isGetAllEwaybillRequestInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGetAllEwaybillRequestInProcess), takeUntil(this.destroyed$));
+        this.isGetAllEwaybillRequestSuccess$ = this.store.pipe(select(p => p.ewaybillstate.isGetAllEwaybillRequestSuccess), takeUntil(this.destroyed$));
 
-        this.cancelEwayInProcess$ = this.store.select(p => p.ewaybillstate.cancelEwayInProcess).pipe(takeUntil(this.destroyed$));
-        this.cancelEwaySuccess$ = this.store.select(p => p.ewaybillstate.cancelEwaySuccess).pipe(takeUntil(this.destroyed$));
+        this.cancelEwayInProcess$ = this.store.pipe(select(p => p.ewaybillstate.cancelEwayInProcess), takeUntil(this.destroyed$));
+        this.cancelEwaySuccess$ = this.store.pipe(select(p => p.ewaybillstate.cancelEwaySuccess), takeUntil(this.destroyed$));
 
-        this.updateEwayvehicleProcess$ = this.store.select(p => p.ewaybillstate.updateEwayvehicleInProcess).pipe(takeUntil(this.destroyed$));
-        this.updateEwayvehicleSuccess$ = this.store.select(p => p.ewaybillstate.updateEwayvehicleSuccess).pipe(takeUntil(this.destroyed$));
-        this.store.dispatch(this.invoiceActions.getALLEwaybillList());
+        this.updateEwayvehicleProcess$ = this.store.pipe(select(p => p.ewaybillstate.updateEwayvehicleInProcess), takeUntil(this.destroyed$));
+        this.updateEwayvehicleSuccess$ = this.store.pipe(select(p => p.ewaybillstate.updateEwayvehicleSuccess), takeUntil(this.destroyed$));
 
         // bind state sources
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
@@ -197,7 +193,7 @@ export class EWayBillComponent implements OnInit {
                 this.modalRef.hide();
             }
         });
-        this.store.select(p => p.ewaybillstate.EwayBillList).pipe(takeUntil(this.destroyed$)).subscribe((o: IEwayBillAllList) => {
+        this.store.pipe(select(p => p.ewaybillstate.EwayBillList), takeUntil(this.destroyed$)).subscribe((o: IEwayBillAllList) => {
             if (o) {
                 this.EwaybillLists = _.cloneDeep(o);
                 this.EwaybillLists.results = o.results;
@@ -227,7 +223,7 @@ export class EWayBillComponent implements OnInit {
                     let data = res.map(item => item.city);
                     this.dataSourceBackup = res;
                     return data;
-                }));
+                }), takeUntil(this.destroyed$));
         };
 
         // Refresh report data according to universal date

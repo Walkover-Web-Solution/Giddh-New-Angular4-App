@@ -2,7 +2,7 @@ import { distinctUntilKeyChanged, take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
@@ -16,7 +16,7 @@ import { GeneralActions } from '../actions/general/general.actions';
     styleUrls: ['./tb-pl-bs.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TbPlBsComponent implements OnInit, AfterViewInit {
+export class TbPlBsComponent implements OnInit, OnDestroy {
 
     public selectedCompany: CompanyResponse;
     public CanTBLoad: boolean = true;
@@ -29,10 +29,11 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private cd: ChangeDetectorRef, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions) {
-        this.store.pipe(select(p => p.session), distinctUntilKeyChanged('companyUniqueName')).subscribe(p => {
-            let companies = p.companies;
-            this.selectedCompany = companies.find(q => q.uniqueName === p.companyUniqueName);
+    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions) {
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
+            }
         });
     }
 
@@ -46,7 +47,7 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
         }
 
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         // Sagar: show new trial balance for Walkover company only
         this.isWalkoverCompany = (companyUniqueName === 'walkpvindore14504197149880siqli') ? true : false;
@@ -62,10 +63,6 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
-    public ngAfterViewInit() {
-        //
-    }
-
     public selectTab(id: number) {
         this.staticTabs.tabs[id].active = true;
     }
@@ -75,5 +72,15 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
         currentPageObj.name = title;
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    }
+
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof TbPlBsComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

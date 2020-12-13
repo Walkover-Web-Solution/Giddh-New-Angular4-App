@@ -7,13 +7,12 @@ import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
-import { GroupService } from '../../../services/group.service';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
-	selector: 'search-sidebar',  // <home></home>
+	selector: 'search-sidebar',
     templateUrl: './search.sidebar.component.html',
     styleUrls: [`./search.sidebar.component.scss`],
 })
@@ -68,18 +67,20 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 		endDate: moment()
 	};
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-	private paginationPageNumber: number;
+    private paginationPageNumber: number;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
 	/**
 	 * TypeScript public modifiers
 	 */
-	constructor(private store: Store<AppState>, public searchActions: SearchActions, private _groupService: GroupService) {
-		this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+	constructor(private store: Store<AppState>, public searchActions: SearchActions) {
+		this.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {
-		this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
-		this.toDate = moment().format('DD-MM-YYYY');
+		this.fromDate = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+		this.toDate = moment().format(GIDDH_DATE_FORMAT);
 
 		// Get source for Group Name Input selection
 		this.groupsList$.subscribe(data => {
@@ -185,7 +186,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	public selectedDate(value: any) {
-		this.fromDate = moment(value.picker.startDate).format('DD-MM-YYYY');
-		this.toDate = moment(value.picker.endDate).format('DD-MM-YYYY');
+		this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+		this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
 	}
 }
