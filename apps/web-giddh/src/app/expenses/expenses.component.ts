@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild, } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild, } from '@angular/core';
 import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
 import { ExpencesAction } from '../actions/expences/expence.action';
@@ -6,7 +6,7 @@ import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment/moment';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { ExpenseResults } from '../models/api-models/Expences';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -18,6 +18,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 
 @Component({
     selector: 'app-expenses',
@@ -112,6 +113,26 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         sort: "",
         sortBy: ""
     };
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Moment object */
+    public moment = moment;
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
 
     constructor(private store: Store<AppState>,
         private _expenceActions: ExpencesAction,
@@ -154,6 +175,11 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 let universalDate = _.cloneDeep(dateObj);
                 this.universalFrom = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.universalTo = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+
+                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
                 this.datePickerOptions = {
                     ...this.datePickerOptions,
@@ -237,7 +263,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
             this.getPettyCashRejectedReports(this.pettycashRequest);
-            
+
             setTimeout(() => {
                 if(this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                     this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
@@ -293,6 +319,11 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             if (res) {
                 this.universalFrom = moment(res[0]).format(GIDDH_DATE_FORMAT);
                 this.universalTo = moment(res[1]).format(GIDDH_DATE_FORMAT);
+                let universalDate = _.cloneDeep(res);
+                this.selectedDateRange = { startDate: moment(res[0]), endDate: moment(res[1]) };
+                this.selectedDateRangeUi = moment(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
             this.datePickerOptions = {
                 ...this.datePickerOptions, startDate: res[0],
@@ -375,6 +406,73 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             } else {
                 this.tabset.tabs[1].active = true;
             }
+        }
+    }
+
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof ExpensesComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this._generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof ExpensesComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof ExpensesComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.pettycashRequest.from = this.fromDate;
+            this.pettycashRequest.to = this.toDate;
+            this.selectedDate.dateFrom = this.pettycashRequest.from;
+            this.selectedDate.dateTo = this.pettycashRequest.to;
+            this.isFilterSelected = true;
+
+            if(this.pendingListComponent && this.pendingListComponent.pettycashRequest) {
+                this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
+                this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
+            }
+            this.getPettyCashPendingReports(this.pettycashRequest);
+
+            if(this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
+                this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
+                this.pettycashRequest.sortBy = this.rejectedListComponent.pettycashRequest.sortBy;
+            }
+            this.getPettyCashRejectedReports(this.pettycashRequest);
         }
     }
 }
