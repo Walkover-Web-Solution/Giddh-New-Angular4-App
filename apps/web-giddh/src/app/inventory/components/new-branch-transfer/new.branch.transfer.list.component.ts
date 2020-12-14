@@ -190,16 +190,21 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
-                    currentBranchUniqueName = this._generalService.currentBranchUniqueName;
-                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
-                } else {
-                    currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
-                    this.currentBranch = {
-                        name: this.activeCompany ? this.activeCompany.name : '',
-                        alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                        uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
-                    };
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this._generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
                 }
                 this.branchTransferGetRequestParams.branchUniqueName = this.currentBranch.uniqueName;
             } else {

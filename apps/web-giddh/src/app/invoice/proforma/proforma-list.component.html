@@ -42,7 +42,7 @@
             <!-- region more items -->
             <div *ngIf="selectedItems.length === 1" class="btn-wrapper-more">
 
-                <div [isDisabled]="isCompany" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
+                <div *ngIf="!isCompany" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">
@@ -63,13 +63,13 @@
             </div>
             <!-- endregion -->
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
-                <button [disabled]="isCompany" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">+ New
+                <button *ngIf="!isCompany" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
-                <button [disabled]="isCompany" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">+ New
+                <button *ngIf="!isCompany" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
@@ -95,18 +95,18 @@
         </div>
         <div class="d-flex mt-1">
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-15">
-                <button [disabled]="isCompany" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">+ New
+                <button *ngIf="!isCompany" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-15">
-                <button [disabled]="isCompany" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">+ New
+                <button *ngIf="!isCompany" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
             <div *ngIf="selectedItems.length === 1" class="btn-wrapper-more">
-                <div [isDisabled]="isCompany" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
+                <div *ngIf="!isCompany" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">
@@ -337,7 +337,7 @@
 
                                 <!-- dropdown -->
 
-                                <div class="btn-group icon-ellipse select-action" dropdown #dropdown="bs-dropdown"
+                                <div *ngIf="!isCompany" class="btn-group icon-ellipse select-action" dropdown #dropdown="bs-dropdown"
                                     container="body">
                                     <a href="javascript:void(0)" id="button-basic" dropdownToggle
                                         class="dropdown-toggle icon-dots-three-vertical pull-right"

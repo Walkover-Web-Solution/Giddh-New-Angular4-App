@@ -70,7 +70,7 @@
 
                         <div *ngIf="showTaxPro">
 
-                            <button class="btn-2 pull-right btn authenticate-btn" [ngClass]="{'btn-success': gstAuthenticated }"
+                            <button *ngIf="isCompany" class="btn-2 pull-right btn authenticate-btn" [ngClass]="{'btn-success': gstAuthenticated }"
                                 (click)="returnGstr3B = { via: 'VAYANA' }">{{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
                             </button>
 
@@ -90,7 +90,7 @@
         </div>
         <div class="scroll-y noscroll-x fill body scrollbox">
             <div class="gstr3b-header hidden-print">
-                <ul class="sel-tab">
+                <ul class="sel-tab" [class.no-border]="!isCompany">
                     <li class="text-center col-md-6" [ngClass]="{active: selectedGstr3BTab==='pushGSTN'}">
                         <div class="gstr3b-nav" (click)="selectedTab('pushGSTN')" data-ember-action="" data-ember-action-1212="1212"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-xxlg text-middle">
                                 <path fill="#FFF"
@@ -133,7 +133,7 @@
               <path fill="#35AF6E" d="M185.1 257.6L65.8 297.3c-4.3 1.4-6.7 6.1-5.2 10.5 1.4 4.3 6.1 6.7 10.5 5.2l119.3-39.7c4.3-1.4 6.7-6.1 5.2-10.5-1.5-4.3-6.2-6.6-10.5-5.2zm81.9-27.2l-59.6 19.8c-4.3 1.4-6.7 6.1-5.2 10.5 1.4 4.3 6.1 6.7 10.5 5.2l59.6-19.8c4.3-1.4 6.7-6.1 5.2-10.5-1.4-4.3-6.1-6.7-10.5-5.2z"></path>
               </svg> <a class="text-middle">GST Payment</a></div>
                     </li> -->
-                    <li class="text-center col-md-6 " [ngClass]="{active: selectedGstr3BTab==='filing'}">
+                    <li *ngIf="isCompany" class="text-center col-md-6 " [ngClass]="{active: selectedGstr3BTab==='filing'}">
                         <div class="gstr3b-nav" (click)="selectedTab('filing')" data-ember-action="" data-ember-action-1215="1215"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-xxlg text-middle">
                                 <path fill="#FFF"
                                     d="M467.4 338.9L387.9 99.6c-2.8-8.6-9.1-15.8-17.2-19.8L258.3 23.9c-8.1-4-17.4-4.7-26-1.8l-150.6 50c-7.2 2.4-13.1 7-17.2 12.8l147-48.9c12.8-4.3 26.5-3.3 38.6 2.7l112.4 55.9c12 6 21.3 16.7 25.6 29.4L467 361.5c2.6-7 3-14.9.4-22.6z">
@@ -580,4 +580,4 @@
         </div>
     </div>
 </div> -->
-<filing-header [currentPeriod]="currentPeriod" [fileGstr3b]="returnGstr3B"></filing-header>
+<filing-header [isCompany]="isCompany" [currentPeriod]="currentPeriod" [fileGstr3b]="returnGstr3B"></filing-header>

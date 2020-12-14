@@ -24,7 +24,7 @@
         </div>
         <div class="d-flex add-invoice">
             <div *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0">
-                <div [isDisabled]="isCompany" class="btn-group" dropdown #dp="bs-dropdown">
+                <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
                     <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
                         aria-controls="dropdown-basic">
                         More
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="btn-wrapper">
-                <button [disabled]="isCompany" class="btn btn-sky-blue desktop-view-btn mr-0"
+                <button *ngIf="!isCompany" class="btn btn-sky-blue desktop-view-btn mr-0"
                     [routerLink]="['/pages/purchase-management/purchase-order/new']">+
                     New Order
                 </button>
@@ -65,7 +65,7 @@
             </button>
         </div>
         <div>
-            <div [isDisabled]="isCompany" class="btn-group" dropdown #dp="bs-dropdown">
+            <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
                 <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
                     aria-controls="dropdown-basic">
                     More
@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="btn-wrapper">
-            <button [disabled]="isCompany" class="btn btn-sky-blue desktop-view-btn mr-0"
+            <button *ngIf="!isCompany" class="btn btn-sky-blue desktop-view-btn mr-0"
                 [routerLink]="['/pages/purchase-management/purchase-order/new']">+
                 New Order
             </button>

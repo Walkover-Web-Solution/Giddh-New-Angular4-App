@@ -198,9 +198,13 @@ export class LedgerService {
     public GenerateMagicLink(model: MagicLinkRequest, accountUniqueName: string): Observable<BaseResponse<MagicLinkResponse, MagicLinkRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + LEDGER_API.MAGIC_LINK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
-            .replace(':from', model.from).replace(':to', model.to), model).pipe(
+        let url = this.config.apiUrl + LEDGER_API.MAGIC_LINK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+        .replace(':from', model.from).replace(':to', model.to);
+        if (model.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
+        }
+        return this._http.post(url, model).pipe(
                 map((res) => {
                     let data: BaseResponse<MagicLinkResponse, MagicLinkRequest> = res;
                     data.request = model;

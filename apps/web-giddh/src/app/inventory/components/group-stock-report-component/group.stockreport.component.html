@@ -188,7 +188,7 @@
                 </div>
                 <!-- <button class="btn btn-sky-blue" data-toggle="tooltip" tooltip="Alt+i" (click)="editGroup()">Edit group
                 </button> -->
-                <button [disabled]="currentOrganizationType !== 'BRANCH' && branches?.length > 2" class="btn btn-sky-blue transfer-btn" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">New Transfer </button>
+                <button *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)" class="btn btn-sky-blue transfer-btn" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">New Transfer </button>
                 <button class="btn btn-sky-blue mr-0" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create
                     New
                 </button>

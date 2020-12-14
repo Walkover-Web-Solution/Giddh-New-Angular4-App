@@ -46,11 +46,11 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
 	constructor(private fb: FormBuilder) {
 		this.searchQueryForm = this.fb.group({
 			searchQuery: this.fb.array([this.fb.group({
-				queryType: ['closingBalance', Validators.required],
+				queryType: ['', Validators.required],
 				openingBalanceType: ['DEBIT', Validators.required],
 				closingBalanceType: ['DEBIT', Validators.required],
-				queryDiffer: ['Greater', Validators.required],
-				amount: ['1', [Validators.required, digitsOnly]],
+				queryDiffer: ['', Validators.required],
+				amount: ['', [Validators.required, digitsOnly]],
 			})])
 		});
 		this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as FormArray;

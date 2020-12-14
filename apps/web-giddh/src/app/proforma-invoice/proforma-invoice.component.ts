@@ -584,6 +584,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public voucherDateBeforeUpdate: any;
     /** This will hold if confirmation popup from entry date is displayed to not display again */
     public isEntryDateChangeConfirmationDisplayed: boolean = false;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -732,6 +736,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.selectedCompany = activeCompany;
+            }
+        });
+
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
             }
         });
 
@@ -2039,7 +2050,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isVoucherDateChanged = false;
         this.assignDates();
         this.updateDueDate();
-        
+
         this.ngAfterViewInit();
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;

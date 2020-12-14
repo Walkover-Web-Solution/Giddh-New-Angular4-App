@@ -35,7 +35,8 @@
         display: inherit;
         .country-flag {
             display: inline-block;
-            padding-right: 8px;
+            margin-right: 8px;
+            width: 24px;
         }
     }
 }
