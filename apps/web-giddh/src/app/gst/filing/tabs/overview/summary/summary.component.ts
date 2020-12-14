@@ -119,7 +119,7 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 			to: this.currentPeriod.to,
 			status: 'all'
 		};
-		this._route.navigate(['pages', 'gstfiling', 'filing-return', 'transaction'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param.status } });
+		this._route.navigate(['pages', 'gstfiling', 'filing-return', 'transaction'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, type: param.type, entityType: param.entityType, status: param.status, selectedGst: this.activeCompanyGstNumber } });
 	}
 
 	public ngOnChanges(s: SimpleChanges) {

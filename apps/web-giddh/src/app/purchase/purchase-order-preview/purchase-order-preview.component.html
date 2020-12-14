@@ -5,7 +5,7 @@
                 <div>
                     <div class="invoice-search-box">
                         <input type="text" placeholder="search" #searchElement>
-                        <button [disabled]="isCompany" class="btn btn-sky-blue" [routerLink]="['/pages/purchase-management/purchase-order/new']">+
+                        <button *ngIf="!isCompany" class="btn btn-sky-blue" [routerLink]="['/pages/purchase-management/purchase-order/new']">+
                             New Order</button>
                     </div>
                     <ul class="invoice-sidebar">
@@ -64,7 +64,7 @@
                                             [routerLink]="['/pages/purchase-management/purchase']">
                                             <img src="assets/images/multiply.svg"></span>
 
-                                        <div [isDisabled]="isCompany" class="btn-group change-status-dropdown pull-right" dropdown>
+                                        <div *ngIf="!isCompany" class="btn-group change-status-dropdown pull-right" dropdown>
                                             <button id="button-basic" dropdownToggle type="button"
                                                 class="btn btn-sky-blue dropdown-toggle"
                                                 aria-controls="dropdown-basic">Change Status
@@ -97,7 +97,7 @@
 
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-groups pull-right">
-                                                <span [class.disabled]="isCompany">
+                                                <span *ngIf="!isCompany">
                                                     <a  href="javascript:;" tooltip="Edit" placement="top"
                                                         [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrderUniqueName]"><i
                                                             class="fa fa-pencil"></i></a>
@@ -119,7 +119,7 @@
                                                         (click)="downloadFile()"><i class="fa fa-file-pdf-o"></i></a>
                                                 </span>
 
-                                                <span [class.disabled]="isCompany">
+                                                <span *ngIf="!isCompany">
                                                     <a href="javascript:;" tooltip="Delete" placement="top"
                                                         (click)="confirmDelete()"><i class="fa fa-trash"></i></a>
                                                 </span>

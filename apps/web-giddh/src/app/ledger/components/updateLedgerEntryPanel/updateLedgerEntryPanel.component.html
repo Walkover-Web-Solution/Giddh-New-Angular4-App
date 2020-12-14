@@ -497,7 +497,7 @@
 
                             <div class="text-right table-amount width-80">
                                 <label class="font-12">Unit</label>
-                                <select id="update-ledger-unit" class="form-control text-right no-padding"
+                                <select id="update-ledger-unit" [disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1" class="form-control text-right no-padding"
                                     [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
                                     (change)="vm.unitChanged($event.target.value)">
                                     <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.code">
@@ -731,8 +731,7 @@
 
                     <div class="row">
                         <div class="col-12 col-sm-12">
-                            <textarea id="update-ledger-description" rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
-                                placeholder="Description"></textarea>
+                            <textarea id="update-ledger-description" rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control" placeholder="Description" [attr.disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1 ? 'disabled' : null"></textarea>
                         </div>
                     </div>
 
@@ -742,7 +741,8 @@
                         <p class="bold">
                             Adjusted Amount
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" (click)="openAdjustInvoiceEditMode();$event.stopPropagation();">
-                                <i class="edit-adjustment icon-edit11 font-10"></i>
+                                <i class="edit-adjustment icon-edit11 font-10"
+                                *ngIf="((currentOrganizationType === 'COMPANY' && branches?.length === 1) || (currentOrganizationType === 'BRANCH'))"></i>
                             </a>
                             <i class="icon-info" [popover]="adjustmentPopOverTemplate" [outsideClick]="true" containerClass="adjustment-popover" placement="bottom right"></i>
                         </p>
@@ -1107,9 +1107,9 @@
                             <!--                                        update them first and try again.</p>-->
                             <!--                            </div>-->
 
-                            <div class="d-flex">
-                                <button [disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1" class="btn btn-danger" id="update-ledger-delete-button" (click)="showDeleteEntryModal()">Delete</button>
-                                <button class="btn btn-success" id="update-ledger-update-button" [disabled]="isFileUploading || (currentOrganizationType === 'COMPANY' && branches?.length > 1)" [ladda]="(isTxnUpdateInProcess$ | async)"
+                            <div *ngIf="!(currentOrganizationType === 'COMPANY' && branches?.length > 1)" class="d-flex">
+                                <button class="btn btn-danger" id="update-ledger-delete-button" (click)="showDeleteEntryModal()">Delete</button>
+                                <button class="btn btn-success" id="update-ledger-update-button" [disabled]="isFileUploading" [ladda]="(isTxnUpdateInProcess$ | async)"
                                     (click)="saveLedgerTransaction()">Update
                                 </button>
                             </div>
@@ -1117,9 +1117,11 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
+    <p class="edit-message" *ngIf="currentOrganizationType === 'COMPANY' && branches?.length > 1">To edit, switch "Branch"
+    </p>
 </div>
 <!-- endregion -->
 <!-- region modals -->

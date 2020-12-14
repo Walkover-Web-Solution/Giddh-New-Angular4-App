@@ -2,7 +2,7 @@
     <!-- page Title -->
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
     <div class="col-sm-12 mt-15 clearfix">
-        <button [disabled]="isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
+        <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
             Manufacture</button>
     </div>
     <!-- form -->
@@ -11,7 +11,7 @@
             <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-15 mb-05 manufacturing-form" (submit)="getReports()"
                 autocomplete="off">
                 <div class="row">
-                    <div class="form-group col-lg-2 col-md-6 linked-entities">
+                    <div *ngIf="currentCompanyBranches?.length > 2" class="form-group col-lg-2 col-md-6 linked-entities">
                         <label class="d-block">Entity</label>
                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
                             name="entityDropdown" [showClear]="false" [ItemHeight]="33" width="100%"
@@ -24,6 +24,7 @@
                                             <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
                                             <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
                                                 tooltip="HO Branch"></i>
+                                            <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
                                         </span>
                                         <span class="entity-details">
                                             <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>

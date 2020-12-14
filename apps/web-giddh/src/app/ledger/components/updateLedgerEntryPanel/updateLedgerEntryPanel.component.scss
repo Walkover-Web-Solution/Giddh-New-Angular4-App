@@ -279,6 +279,16 @@ span.eligible-ITC {
 .dropdown-container[disabled], .table-amount[disabled] {
     pointer-events: none;
 }
+#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white{
+    background-color: $whisper-light !important;
+}
+#update-ledger-assign-tag.disabled-ledger::ng-deep input ,
+#update-ledger-select-warehouse.disabled-ledger::ng-deep input,
+#update-ledger-price-input.disabled-ledger,
+#update-ledger-invoice-voucher-number.disabled-ledger::ng-deep input,
+#update-ledger-invoice-number.disabled-ledger::ng-deep input  {
+     background-color: $whisper-light !important;
+}
 .tourist-scheme-wrapper{
      input[type="checkbox"]{
         opacity: 0;
@@ -286,6 +296,15 @@ span.eligible-ITC {
 }
 .show-if-ledger-open{
     height: 230px;
+}
+p.edit-message{
+    background-color: $whisper-light;
+    text-align: center;
+    padding: 8px 0;
+    border-top: 1px solid $gainsboro;
+    font-size: 16px;
+    font-family: 'opensans-semibold';
+    margin-top: 15px;
 }
 /* responsive */
 

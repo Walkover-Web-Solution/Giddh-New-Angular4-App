@@ -148,12 +148,18 @@ export class CompanyService {
 	/**
 	 * get state details
 	 */
-    public getStateDetails(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
+    public getStateDetails(cmpUniqueName?: string, fetchLastState?: boolean): Observable<BaseResponse<StateDetailsResponse, string>> {
         let url = '';
+        let delimeter = '';
         if (cmpUniqueName) {
             url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName ? cmpUniqueName : ''));
+            delimeter = '&';
         } else {
             url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
+            delimeter = '?';
+        }
+        if (fetchLastState) {
+            url = url.concat(`${delimeter}fetchLastState=true`);
         }
         return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<StateDetailsResponse, string> = res;

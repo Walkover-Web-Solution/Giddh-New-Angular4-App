@@ -8,7 +8,7 @@
                     [active]="activeTabIndex === 0" [id]="(activeTabIndex === 0) ? 'giddh-page-heading': ''">
                     <!--sidebar-->
                     <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
-                        <inventory-sidebar [currentBranchUniqueName]="currentBranchAndWarehouseFilterValues.branch" *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')"></inventory-sidebar>
+                        <inventory-sidebar *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')"></inventory-sidebar>
                         <!--/sidebar-->
 
                         <section class="right-bar" *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')"
@@ -22,7 +22,7 @@
                                         <button class="btn btn-sky-blue" [routerLink]="['/pages/inventory/']" (click)="activeView = null">Back</button>
                                 </div>
                                 <div *ngIf="activeView" class="d-flex mr-b1 branch-warehouse-filter">
-                                    <sh-select *ngIf="branches && branches.length > 2" class="multi-select branch-filter sh-select-border"
+                                    <sh-select *ngIf="currentOrganizationType === 'COMPANY' && branches && branches.length > 2" class="multi-select branch-filter sh-select-border"
                                         (ngModelChange)="loadReportByBranch($event)" [options]="branches" [placeholder]="'Select Branch'"
                                         [(ngModel)]="currentBranchAndWarehouseFilterValues.branch"></sh-select>
                                     <sh-select *ngIf="warehouses && warehouses.length > 1" class="multi-select sh-select-border warehouse-filter"

@@ -250,8 +250,8 @@
                                 </a>
                             </span>
                             <span>
-                                <i class="icon-branch-icon pull-right branch-icon-tooltip" *ngIf="branch.parentBranch" tooltip="Branch"></i>
-                                <i class="icon-company-HO pull-right branch-icon-tooltip" *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
+                                <i class="icon-branch-icon pull-right branch-icon-tooltip"  containerClass="branch-ho-tooltip" *ngIf="branch.parentBranch" tooltip="Branch"></i>
+                                <i class="icon-company-HO pull-right branch-icon-tooltip"  containerClass="branch-ho-tooltip" *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
                             </span>
                         </a>
 
@@ -338,7 +338,7 @@
                 </ul>
 
                 <!-- Main menu -->
-                <ul class="left-fixed-header mr-t4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                <ul class="left-fixed-header mr-t4" [ngClass]="{'open':sideMenu.isopen , 'pb-5': (currentCompanyBranches$ | async)?.length > 1}" *ngIf="(selectedCompany | async)">
                     <h6 class="mr-b1">MENU
                         <a (click)="navigateToAllModules()">
                             <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body">

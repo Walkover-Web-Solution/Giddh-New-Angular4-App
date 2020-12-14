@@ -946,7 +946,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             branchName = selectedBranch ? selectedBranch.alias : '';
         } else {
             // Company session find the HO branch
-            hoBranch = branches.find(branch => !branch.parentBranchUniqueName);
+            hoBranch = branches.find(branch => !branch.parentBranch);
             branchName = hoBranch ? hoBranch.alias : '';
         }
         if (!this.editBranchTransferUniqueName) {

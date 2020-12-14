@@ -2,8 +2,8 @@
     <hamburger-menu></hamburger-menu>
     <div class="report-breadcrum">
         <ul class="list-inline d-inline-block middle nav-report">
-            <li class="active" id="giddh-page-heading-link"><a href="javascript:void(0)" (click)="goToDashboard()">Report</a> <span
-                    class="d-inline-block pl-1"> ></span></li>
+            <li class="active" id="giddh-page-heading-link"><a href="javascript:void(0)"
+                    (click)="goToDashboard()">Report</a> <span class="d-inline-block pl-1"> ></span></li>
             <li><a href="javascript:void(0)">Sales Register</a></li>
         </ul>
     </div>
@@ -12,86 +12,81 @@
 
 <div class="container-fluid font-14 pt-15">
     <div class="select-financial-year">
+        <div *ngIf="currentCompanyBranches?.length > 2" class="xs-mb-1 inner-button linked-entities">
+            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
+                [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                <ng-template #optionTemplate let-option="option">
+                    <ng-container>
+                        <a href="javascript:void(0)" class="list-item d-flex">
+                            <span class="entity-icon">
+                                <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
+                                <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
+                                    tooltip="HO Branch"></i>
+                            </span>
+                            <span class="entity-details">
+                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                <div class="item-unq giddh-limit single-line-clamp">
+                                    {{ option.name || '-' }}
+                                </div>
+                            </span>
+                        </a>
+                    </ng-container>
+                </ng-template>
+            </sh-select>
+        </div>
         <div class="xs-mb-1 inner-button">
             <sh-select [options]="financialOptions" [isFilterEnabled]="true" [placeholder]="activeFinacialYr.uniqueName"
                 name="currentActiveFinacialYear" [(ngModel)]='currentActiveFinacialYear.value' [showClear]="false"
                 (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
         </div>
-    <div class="container-fluid font-14 pt-15">
-        <div class="select-financial-year">
-            <div *ngIf="currentCompanyBranches?.length > 2" class="xs-mb-1 inner-button linked-entities">
-                <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
-                    [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
-                    [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
-                    <ng-template #optionTemplate let-option="option">
-                        <ng-container>
-                            <a href="javascript:void(0)" class="list-item d-flex">
-                                <span class="entity-icon">
-                                    <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
-                                    <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
-                                        tooltip="HO Branch"></i>
-                                </span>
-                                <span class="entity-details">
-                                    <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                    <div class="item-unq giddh-limit single-line-clamp">
-                                        {{ option.name || '-' }}
-                                    </div>
-                                </span>
-                            </a>
-                        </ng-container>
-                    </ng-template>
-                </sh-select>
-            </div>
-            <div class="xs-mb-1 inner-button">
-                <sh-select [options]="financialOptions" [isFilterEnabled]="true" [placeholder]="activeFinacialYr.uniqueName"
-                    name="currentActiveFinacialYear" [(ngModel)]='currentActiveFinacialYear.value' [showClear]="false"
-                    (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
-            </div>
-            <div class="inner-button xs-mb-1 pr-5 xs-pr-0" dropdown placement="bottom left">
-                <div class="btn-group xs-pr-0" dropdown [autoClose]="true" container="body">
-                    <button id="button-nested" dropdownToggle type="button" class="btn text-capitalize dropdown-toggle"
-                        aria-controls="dropdown-nested"> {{selectedType}}<span class="caret"></span>
-                    </button>
-                    <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu sales-register-menu" role="menu"
-                        aria-labelledby="button-nested">
-                        <li role="menuitem" dropdown placement="right" container="body">
-                            <a dropdownToggle (click)="populateRecords('monthly')"
-                                class="dropdown-item dropdown-toggle cursor-pointer">Monthly</a>
-                        </li>
-                        <li role="menuitem" dropdown placement="right" container="body">
-                            <a dropdownToggle (click)="populateRecords('quarterly')"
-                                class="dropdown-item dropdown-toggle cursor-pointer">Quarterly</a>
-                        </li>
-                        <li role="menuitem" dropdown placement="right" container="body">
-                            <a dropdownToggle class="dropdown-item dropdown-toggle cursor-pointer" (click)="false">Weekly <span class="caret"></span></a>
-                            <ul class="dropdown-menu reportDropdown" role="menu">
-                                <li role="menuitem" *ngFor="let month of monthNames"><a (click)="populateRecords('weekly', month)"
-                                        class="dropdown-item">{{month | slice:0:3}}</a></li>
-                            </ul>
-                        </li>
+        <div class="inner-button xs-mb-1 pr-5 xs-pr-0" dropdown placement="bottom left">
+            <div class="btn-group xs-pr-0" dropdown [autoClose]="true" container="body">
+                <button id="button-nested" dropdownToggle type="button" class="btn text-capitalize dropdown-toggle"
+                    aria-controls="dropdown-nested"> {{selectedType}}<span class="caret"></span>
+                </button>
+                <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu sales-register-menu" role="menu"
+                    aria-labelledby="button-nested">
+                    <li role="menuitem" dropdown placement="right" container="body">
+                        <a dropdownToggle (click)="populateRecords('monthly')"
+                            class="dropdown-item dropdown-toggle cursor-pointer">Monthly</a>
+                    </li>
+                    <li role="menuitem" dropdown placement="right" container="body">
+                        <a dropdownToggle (click)="populateRecords('quarterly')"
+                            class="dropdown-item dropdown-toggle cursor-pointer">Quarterly</a>
+                    </li>
+                    <li role="menuitem" dropdown placement="right" container="body">
+                        <a dropdownToggle class="dropdown-item dropdown-toggle cursor-pointer" (click)="false">Weekly
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu reportDropdown" role="menu">
+                            <li role="menuitem" *ngFor="let month of monthNames"><a
+                                    (click)="populateRecords('weekly', month)" class="dropdown-item">{{month |
+                                    slice:0:3}}</a></li>
+                        </ul>
+                    </li>
 
-                    </ul>
-                </div>
+                </ul>
             </div>
         </div>
-        <div class="row font-12 mb-15">
-            <div class="col-xl-2  col-lg-4 col-xs-10">
+    </div>
+    <div class="row font-12 mb-15">
+        <div class="col-xl-2  col-lg-4 col-xs-10">
 
-            </div>
-            <div class="col-xl-2 col-lg-4 col-xs-10">
+        </div>
+        <div class="col-xl-2 col-lg-4 col-xs-10">
 
-            </div>
-            <!--<div class="col-md-2 col-sm-4 col-xs-10">
+        </div>
+        <!--<div class="col-md-2 col-sm-4 col-xs-10">
                 <input type="text" placeholder="Custom Range" class="form-control" (bsValueChange)="bsValueChange($event)" bsDaterangepicker>
             </div>-->
 
-        </div>
-        <reports-table-component [currentBranchUniqueName]="currentBranch?.uniqueName" [reportRespone]="reportRespone" [salesRegisterTotal]="salesRegisterTotal">
-        </reports-table-component>
+    </div>
+    <reports-table-component [currentBranchUniqueName]="currentBranch?.uniqueName" [reportRespone]="reportRespone"
+        [salesRegisterTotal]="salesRegisterTotal">
+    </reports-table-component>
 
-        <!-- <div class="clearfix">
+    <!-- <div class="clearfix">
         <reports-graph-component></reports-graph-component>
     </div> -->
 
-    </div>
 </div>

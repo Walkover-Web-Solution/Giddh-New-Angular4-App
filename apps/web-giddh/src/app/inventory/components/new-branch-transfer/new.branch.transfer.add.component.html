@@ -80,9 +80,9 @@
                                 </label>
                             </div>
                             <div class="col-xl-4 col-lg-6">
-                                <input *ngIf="isBranch" name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required
-                                    [disabled]="isBranch">
-                                <sh-select *ngIf="!isBranch" #defaultSource name="sourceName" [isFilterEnabled]="true"
+                                <input *ngIf="isBranch && !isUpdateMode" name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required
+                                    [disabled]="isBranch" [class.small-text]="isBranch && myCurrentCompany?.length > 25">
+                                <sh-select *ngIf="isUpdateMode" #defaultSource name="sourceName" [isFilterEnabled]="true"
                                     [class.small-text]="isUpdateMode && sourceBranchAlias?.length > 25"
                                     [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].uniqueName"
                                     [options]="branches$ | async" (selected)="selectCompany($event, 'sources', 0); focusSourceWarehouse()" required
@@ -209,7 +209,7 @@
                             </div>
                         </div>
                         <div class="row mr-b2" *ngIf="transferType !== 'senders'">
-                            <div class="col-xl-3 col-lg-4">
+                            <div class="col-xl-3 col-lg-4 transfer-type-based">
                                 <label>
                                     Sender's Name <span class="red-text">*</span>
                                 </label>
@@ -257,12 +257,12 @@
                                 </label>
                             </div>
                             <div class="col-xl-4 col-lg-6">
-                                <sh-select *ngIf="!isBranch" #destinationName name="destinationName"
+                                <sh-select *ngIf="isUpdateMode" #destinationName name="destinationName"
                                     [(ngModel)]="branchTransfer.destinations[0].uniqueName" [isFilterEnabled]="true"
                                     [forceClearReactive]="forceClear$ | async" [options]="branches$ | async"
                                     (selected)="selectCompany($event, 'destinations', 0); focusDestinationWarehouse();" required
                                     [disabled]="isUpdateMode" [class.small-text]="isUpdateMode && destinationBranchAlias?.length > 25"></sh-select>
-                                <input *ngIf="isBranch" name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required
+                                <input *ngIf="isBranch && !isUpdateMode" [class.small-text]="isBranch && myCurrentCompany?.length > 25" name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required
                                     [disabled]="isBranch">
                             </div>
                         </div>

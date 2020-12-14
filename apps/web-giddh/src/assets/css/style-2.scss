@@ -6277,10 +6277,8 @@ virtual-scroll .scrollable-content .item:hover .item,
 sh-select .header {
     line-height: 34px;
 }
-sh-select.small-text {
-    input {
-        font-size: 10px !important;
-    }
+sh-select.small-text input, input.small-text {
+    font-size: 10px !important;
 }
 
 table input[type="number"] {
@@ -9795,6 +9793,28 @@ span#HW_badge_cont:nth-child(3) {
 }
 .giddh-calendar.show {
     margin-top: 0;
+}
+.table-amount[disabled]{
+   input{
+        background-color: $whisper-light !important;
+    }
+}
+
+
+#update-ledger-voucher-type-default.disabled-ledger, #update-ledger-assign-tag.disabled-ledger{
+    .sh-select-disabled{
+        background-color: $whisper-light !important;
+        input.selectedVal.form-control, input[disabled]{
+                background-color: $whisper-light !important;
+        }
+    }
+}
+.branch-ho-tooltip{
+    left: -7px !important;
+     .arrow{
+        left: auto !important;
+        right:  7px !important;
+    }
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {

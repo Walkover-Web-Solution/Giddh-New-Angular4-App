@@ -297,6 +297,7 @@ export class ReconcileResponse {
 export class MagicLinkRequest {
     public from: string = '';
     public to: string = '';
+    public branchUniqueName?: string = '';
 }
 
 export class MagicLinkResponse {
