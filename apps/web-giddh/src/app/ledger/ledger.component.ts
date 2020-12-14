@@ -458,7 +458,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.newLedgerComponent.calculateTax();
                 this.newLedgerComponent.calculateTotal();
                 setTimeout(() => {
-                    if (this.newLedgerComponent) {
+                    if(this.newLedgerComponent) {
                         this.newLedgerComponent.detectChanges();
                     }
                 }, 200);
