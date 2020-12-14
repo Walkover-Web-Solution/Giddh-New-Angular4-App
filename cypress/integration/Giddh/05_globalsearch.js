@@ -16,14 +16,14 @@ describe('This is Global Search Test', function() {
             })
     });
 
-    before(() => {
-        cy.loginWithEmail(testData.Email, testData.Password);
-    })
+    // before(() => {
+    //     cy.loginWithEmail(testData.Email, testData.Password);
+    // })
 
-    xit('Verify Trial Balance using Global Search', () => {
-        cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
+    // xit('Verify Trial Balance using Global Search', () => {
+    //     cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
 
-    });
+    // });
 
     xit('Verify Invoice using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span', 'Invoice', 'Invoice ')
