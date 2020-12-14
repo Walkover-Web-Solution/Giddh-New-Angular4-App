@@ -4814,6 +4814,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
 
+        if(this.voucherDateBeforeUpdate && this.invFormData.voucherDetails.voucherDate && this.voucherDateBeforeUpdate !== this.invFormData.voucherDetails.voucherDate) {
+            this.dateChangeType = "voucher";
+            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(true);
+            this.dateChangeConfirmationModel.show();
+        }
+
+        this.voucherDateBeforeUpdate = "";
+
         this.updateDueDate();
     }
 
@@ -5054,13 +5062,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.onBlurDueDate(index);
         }
-        setTimeout(() => {
-            if(this.invFormData.voucherDetails.voucherDate && this.voucherDateBeforeUpdate !== this.invFormData.voucherDetails.voucherDate) {
-                this.dateChangeType = "voucher";
-                this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(true);
-                this.dateChangeConfirmationModel.show();
-            }
-        }, 200);
     }
 
     public focusInCustomerName() {
