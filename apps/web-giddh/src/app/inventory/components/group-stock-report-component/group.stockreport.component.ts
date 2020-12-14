@@ -1,8 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -10,11 +9,8 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
-
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
-import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import {
@@ -23,7 +19,6 @@ import {
     InventoryDownloadRequest,
     StockGroupResponse,
 } from '../../../models/api-models/Inventory';
-import { GeneralService } from '../../../services/general.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
@@ -32,6 +27,8 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { OrganizationType } from '../../../models/user-login-state';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'invetory-group-stock-report',  // <home></home>
@@ -86,7 +83,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public valueFilterDropDown$: Observable<IOption[]>;
     public asidePaneState: string = 'out';
     public asideTransferPaneState: string = 'out';
-    public selectedCompany$: Observable<any>;
     public selectedCmp: CompanyResponse;
     public isWarehouse: boolean = false;
     public showAdvanceSearchIcon: boolean = false;
@@ -103,7 +99,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public filterValueCondition: string = null;
     public isFilterCorrect: boolean = false;
     public groupUniqueNameFromURL: string = null;
-    public _DDMMYYYY: string = 'DD-MM-YYYY';
     public pickerSelectedFromDate: string;
     public pickerSelectedToDate: string;
     public transactionTypes: any[] = [
@@ -224,20 +219,16 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public currentOrganizationType: OrganizationType;
 
     constructor(
-        private _generalService: GeneralService,
         private modalService: BsModalService,
         private store: Store<AppState>,
-        private route: ActivatedRoute,
-        private sideBarAction: SidebarAction,
         private stockReportActions: StockReportActions,
-        private router: Router,
         private inventoryService: InventoryService,
         private fb: FormBuilder,
         private _toasty: ToasterService,
         private inventoryAction: InventoryAction,
-        private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService
     ) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -245,10 +236,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             this.isMobileScreen = result.matches;
         });
 
-        this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
+        this.groupStockReport$ = this.store.pipe(select(p => p.inventory.groupStockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();
         this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup), takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 const stockGroup = _.cloneDeep(a);
@@ -263,17 +254,16 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 }
             }
         });
-        this.currentOrganizationType = this._generalService.currentOrganizationType;
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         // tslint:disable-next-line:no-shadowed-variable
-        this.store.select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
             if (branches && branches.length > 0) {
                 this.branchAvailable = true;
             } else {
                 this.branchAvailable = false;
             }
-            this.branches = branches;
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
 
     }
 
@@ -298,9 +288,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                     if (this.groupUniqueName) {
                         this.initReport();
                     }
-                    if (this.dateRangePickerCmp) {
-                        //this.dateRangePickerCmp.nativeElement.value = `${this.GroupStockReportRequest.from} - ${this.GroupStockReportRequest.to}`;
-                    }
                 }
             }
         });
@@ -324,32 +311,18 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(this._DDMMYYYY);
-                this.toDate = moment(a[1]).format(this._DDMMYYYY);
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
                 this.getGroupReport(true);
             }
         });
-        this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            this.selectedCmp = selectedCmp;
 
-            this.getAllBranch();
-
-            return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
-        this.selectedCompany$.subscribe();
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCmp = activeCompany;
+                this.getAllBranch();
+            }
+        });
 
         this.productUniqueNameInput.valueChanges.pipe(
             debounceTime(700),
@@ -451,7 +424,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * getAllBranch
      */
     public getAllBranch() {
-        this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
                 let newEntities = [];
                 if (entities.length) {
@@ -468,7 +441,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                     this.entities$ = observableOf(null);
                 }
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
     }
 
     public ngOnDestroy() {
@@ -476,12 +449,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.destroyed$.complete();
     }
 
-
     public goToManageGroup() {
         if (this.groupUniqueName) {
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
             this.setInventoryAsideState(true, true, true);
-            // this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName]);
         }
     }
 
@@ -508,8 +479,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     public selectedDate(value: any, from?: string) { //from like advance search
-        this.fromDate = moment(value.picker.startDate).format(this._DDMMYYYY);
-        this.toDate = moment(value.picker.endDate).format(this._DDMMYYYY);
+        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.pickerSelectedFromDate = value.picker.startDate;
         this.pickerSelectedToDate = value.picker.endDate;
         if (!from) {
@@ -675,8 +646,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(this._DDMMYYYY);
-                this.toDate = moment(a[1]).format(this._DDMMYYYY);
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
 

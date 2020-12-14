@@ -120,6 +120,7 @@ export class CompanyResponse {
     public branches?: Array<any>;
     public parentBranch?: ParentBranch;
     public warehouseResource?: Array<any>;
+    public showOnSubscription?: boolean;
 }
 
 export interface UserEntityRole {

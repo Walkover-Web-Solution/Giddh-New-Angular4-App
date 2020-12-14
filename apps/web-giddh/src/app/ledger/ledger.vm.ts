@@ -15,6 +15,7 @@ import { TaxControlData } from '../theme/tax-control/tax-control.component';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { ICurrencyResponse } from '../models/api-models/Company';
 import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 export class LedgerVM {
     public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -85,7 +86,7 @@ export class LedgerVM {
                     isInclusiveTax: true,
                 }],
             voucherType: 'sal',
-            entryDate: moment().format('DD-MM-YYYY'),
+            entryDate: moment().format(GIDDH_DATE_FORMAT),
             unconfirmedEntry: false,
             attachedFile: '',
             attachedFileName: '',
@@ -167,7 +168,7 @@ export class LedgerVM {
     public prepareBlankLedgerRequestObject(): BlankLedgerVM {
         let requestObj: BlankLedgerVM;
         requestObj = cloneDeep(this.blankLedger);
-        // requestObj.entryDate = moment(requestObj.entryDate).format('DD-MM-YYYY');
+        // requestObj.entryDate = moment(requestObj.entryDate).format(GIDDH_DATE_FORMAT);
 
         // filter transactions which have selected account
         requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);

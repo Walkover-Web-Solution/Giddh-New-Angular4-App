@@ -1,7 +1,7 @@
 export const COMPANY_API = {
     GET_STATE_DETAILS: 'state-details?companyUniqueName=:companyUniqueName',
     SET_STATE_DETAILS: 'state-details',
-    COMPANY_LIST: 'users/:uniqueName/companies',
+    COMPANY_LIST: 'users/:uniqueName/v2/companies',
     CREATE_COMPANY: 'company',
     // SEND_EMAIL: 'company/:companyUniqueName/accounts/bulk-email/?from=:from&to=:to',
     SEND_EMAIL: 'v2/company/:companyUniqueName/groups/:groupUniqueName/email-account-closing-balance?from=:from&to=:to',

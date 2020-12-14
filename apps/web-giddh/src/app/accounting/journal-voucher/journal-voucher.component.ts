@@ -157,7 +157,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         private sidebarAction: SidebarAction,
         private generalService: GeneralService
     ) {
-        this.tallyModuleService.selectedPageInfo.subscribe((data) => {
+        this.tallyModuleService.selectedPageInfo.pipe(takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
                 this.gridType = data.gridType;
                 this.selectedPage = data.page;

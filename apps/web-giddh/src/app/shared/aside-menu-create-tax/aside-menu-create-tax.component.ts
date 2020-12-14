@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { CompanyResponse, StatesRequest, TaxResponse } from '../../models/api-models/Company';
+import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -8,10 +8,9 @@ import { takeUntil } from 'rxjs/operators';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
-import { ToasterService } from '../../services/toaster.service';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
-import { createSelector } from "reselect";
 import { IForceClear } from "../../models/api-models/Sales";
+import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -44,12 +43,13 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     public isUpdateTaxInProcess: boolean = false;
     public taxListSource$: Observable<IOption[]> = observableOf([]);
     public taxNameTypesMapping: any[] = [];
-    public selectedCompany: Observable<CompanyResponse>;
     public selectedTax: string = '';
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private store: Store<AppState>, private _settingsTaxesActions: SettingsTaxesActions, private _toaster: ToasterService) {
+    constructor(private store: Store<AppState>, private _settingsTaxesActions: SettingsTaxesActions) {
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i.toString(), value: i.toString() });
         }
@@ -57,27 +57,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        // tslint:disable-next-line:no-shadowed-variable
-        this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            return selectedCmp;
-        })).pipe(takeUntil(this.destroyed$));
-
-        this.selectedCompany.subscribe((res: any) => {
-            if (res) {
-                this.getTaxList(res.countryV2.alpha2CountryCode);
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && activeCompany.countryV2) {
+                this.getTaxList(activeCompany.countryV2.alpha2CountryCode);
             }
         });
 
@@ -195,7 +177,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
             });
         }
 
-        dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+        dataToSave.date = moment(dataToSave.date).format(GIDDH_DATE_FORMAT);
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
 

@@ -9,23 +9,24 @@ import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { take, takeUntil } from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
-import { WindowRefService } from '../theme/universal-list/service';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import { CommonActions } from '../actions/common.actions';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { environment } from '../../environments/environment.prod';
+import { SettingsProfileService } from '../services/settings.profile.service';
 
 @Component({
     selector: 'billing-details',
     templateUrl: 'billingDetail.component.html',
     styleUrls: ['billingDetail.component.scss']
 })
+
 export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public logedInuser: UserDetails;
@@ -79,29 +80,27 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     private activeCompany;
 
-    constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router,
-        private activatedRoute: ActivatedRoute, private _companyService: CompanyService, private _generalActions: GeneralActions,
-        private companyActions: CompanyActions, private winRef: WindowRefService, private cdRef: ChangeDetectorRef,
-        private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions) {
-        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
+    constructor(private store: Store<AppState>, private _generalService: GeneralService, private _toasty: ToasterService, private _route: Router, private _companyService: CompanyService, private _generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
+        private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService) {
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.fromSubscription = this._route.routerState.snapshot.url.includes('buy-plan');
-        this.isUpdateCompanySuccess$ = this.store.select(s => s.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+        this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
-        // set active company
-        this.store.pipe(
-            select(state => state.session.companies), take(1)
-        ).subscribe(companies => {
-            companies = companies || [];
-            this.activeCompany = companies.find(company => company.uniqueName === this._generalService.companyUniqueName);
+        this.getCurrentCompanyData();
+
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
+                this.getStates();
+                this.reFillForm();
+            }
         });
 
-        this.getStates();
-
-        this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
-        this.isRefreshing$ = this.store.select(s => s.session.isRefreshing).pipe(takeUntil(this.destroyed$));
+        this.isCompanyCreationInProcess$ = this.store.pipe(select(s => s.session.isCompanyCreationInProcess), takeUntil(this.destroyed$));
+        this.isRefreshing$ = this.store.pipe(select(s => s.session.isRefreshing), takeUntil(this.destroyed$));
         this.logedInuser = this._generalService.user;
 
         if (this._generalService.createNewCompany) {
@@ -114,6 +113,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.subscriptionPrice = this.selectedPlans.planDetails.amount;
             }
         });
+
         this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (!res.isBranch && !res.city) {
@@ -166,7 +166,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.razorpayAuthKey = this.testRazorPayKeyforAuthentication;
         } else {
             this.razorpayAuthKey = this.liveRazorPayKeyforAuthentication;
-
         }
     }
 
@@ -355,7 +354,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         setTimeout(() => {
             this.razorpay = new (window as any).Razorpay(this.options);
         }, 1000);
-        this.reFillForm();
     }
 
     public reFillForm() {
@@ -471,5 +469,19 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this._toasty.errorToast('Invalid Contact number');
             ele.classList.add('error-box');
         }
+    }
+
+    /**
+     * This will get the current company data
+     *
+     * @memberof BillingDetailComponent
+     */
+    public getCurrentCompanyData(): void {
+        this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
+            if (response && response.status === "success" && response.body) {
+                this.store.dispatch(this.settingsProfileActions.handleCompanyProfileResponse(response));
+                this.store.dispatch(this.companyActions.setActiveCompanyData(response.body));
+            }
+        });
     }
 }

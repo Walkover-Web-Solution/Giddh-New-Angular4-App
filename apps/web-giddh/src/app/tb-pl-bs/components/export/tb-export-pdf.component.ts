@@ -3,7 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import * as jsPDF from 'jspdf';
 import { DataFormatter, IFormatable } from './data-formatter.class';
 import { AppState } from '../../../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType/recType.pipe';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { ChildGroup } from '../../../models/api-models/Search';
@@ -11,6 +11,7 @@ import { Total } from './tb-export-csv.component';
 import 'jspdf-autotable';
 import { JsPDFAutoTable } from '../../../../customTypes/jsPDF/index';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
+import { takeUntil } from 'rxjs/operators';
 
 interface GroupViewModel {
     credit: number;
@@ -116,7 +117,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     private dataFormatter: DataFormatter;
 
     constructor(private store: Store<AppState>, private recType: RecTypePipe) {
-        this.store.select(p => p.tlPl.tb.exportData).subscribe(p => {
+        this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
             this.exportData = p;
             this.dataFormatter = new DataFormatter(p, this.selectedCompany, recType);
         });
@@ -142,7 +143,8 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     private downloadPdfGroupWise() {

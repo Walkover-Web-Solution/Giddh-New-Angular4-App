@@ -4,19 +4,19 @@ import { AppState } from '../../store';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { CompanyActions } from "../../actions/company.actions";
 import { takeUntil, take } from 'rxjs/operators';
-import { Observable, of as observableOf, ReplaySubject, of } from "rxjs";
-import { VerifyEmailResponseModel, VerifyMobileModel } from "../../models/api-models/loginModels";
+import { Observable, ReplaySubject, of } from "rxjs";
+import { VerifyEmailResponseModel } from "../../models/api-models/loginModels";
 import { AccountResponseV2 } from "../../models/api-models/Account";
 import { CompanyService } from "../../services/companyService.service";
-import { BankTransferRequest } from "../../models/api-models/Company";
 import { IRegistration, IntegratedBankList, BankTransactionForOTP, GetOTPRequest, BulkPaymentConfirmRequest } from "../../models/interfaces/registration.interface";
 import { ToasterService } from "../../services/toaster.service";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { FormGroup, NgForm, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { cloneDeep } from '../../lodash-optimized';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { GeneralService } from '../../services/general.service';
+
 @Component({
     selector: 'payment-aside',
     templateUrl: './payment-aside.component.html',
@@ -130,13 +130,12 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         private _toaster: ToasterService,
         private generalService: GeneralService
     ) {
-        this.userDetails$ = this.store.select(p => p.session.user);
+        this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
-        this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
 
         this.integratedBankList$ = this.store.pipe(select(p => p.company.integratedBankList), takeUntil(this.destroyed$));
         this.isGetAllIntegratedBankInProgress$ = this.store.pipe(select(storeBank => storeBank.company.isGetAllIntegratedBankInProgress), takeUntil(this.destroyed$));
-
     }
 
     /**

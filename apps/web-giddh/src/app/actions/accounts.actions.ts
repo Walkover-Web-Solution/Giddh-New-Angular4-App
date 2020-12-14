@@ -6,7 +6,7 @@ import { AccountService } from '../services/account.service';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { Action, Store } from '@ngrx/store';
+import { Action, Store, select } from '@ngrx/store';
 import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 
@@ -18,6 +18,7 @@ import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eve
 import { Observable } from 'rxjs';
 import { ApplyDiscountRequest, AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import {IUpdateDbRequest} from "../models/interfaces/ulist.interface";
+import { CommonActions } from './common.actions';
 
 @Injectable()
 export class AccountsAction {
@@ -143,7 +144,7 @@ export class AccountsAction {
                 }
                 this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 let groupSearchString: string;
-                this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).pipe(take(1)).subscribe(a => groupSearchString = a);
+                this.store.pipe(select(p => p.groupwithaccounts.groupAndAccountSearchString), take(1)).subscribe(a => groupSearchString = a);
                 if (groupSearchString) {
                     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
                 } else {
@@ -185,8 +186,8 @@ export class AccountsAction {
                     //   this._toasty.warningToast(action.payload.body.errorMessageForBankDetails);
                     // }
                 }
-                let groupSearchString: string;
-                this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).pipe(take(1)).subscribe(a => groupSearchString = a);
+                //let groupSearchString: string;
+                //this.store.pipe(select(p => p.groupwithaccounts.groupAndAccountSearchString), take(1)).subscribe(a => groupSearchString = a);
                 //if (groupSearchString) {
                 // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
                 //} else {
@@ -292,6 +293,7 @@ export class AccountsAction {
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value)),
             map(response => {
                 if (response.status === 'success') {
+                    this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                     const updateIndexDb: IUpdateDbRequest = {
                         newUniqueName: response.body.uniqueName,
@@ -676,7 +678,8 @@ export class AccountsAction {
         private store: Store<AppState>,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private _generalActions: GeneralActions,
-        private _generalServices: GeneralService) {
+        private _generalServices: GeneralService,
+        private commonActions: CommonActions) {
     }
 
     public createAccount(value: string, account: AccountRequest): CustomActions {

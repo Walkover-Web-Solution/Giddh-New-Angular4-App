@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
@@ -28,7 +28,6 @@ import { OrganizationType } from '../models/user-login-state';
 
 export class VatReportComponent implements OnInit, OnDestroy {
     public vatReport: any[] = [];
-    public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
     public datePickerOptions: any = {
         alwaysShowCalendars: true,
@@ -59,6 +58,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -71,7 +72,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private _route: Router,
         private settingsBranchAction: SettingsBranchActions,
     ) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
+
     }
 
     public ngOnInit() {
@@ -91,18 +92,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.fromDate = this.currentPeriod.from;
         this.toDate = this.currentPeriod.to;
 
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
-            this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
-                if (!res) {
-                    return;
-                }
-                res.forEach(cmp => {
-                    if (cmp.uniqueName === activeCompanyName) {
-                        this.activeCompany = cmp;
-                        this.saveLastState(activeCompanyName);
-                    }
-                });
-            });
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+                this.saveLastState(activeCompany.uniqueName);
+            }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {

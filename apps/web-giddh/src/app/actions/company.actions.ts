@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Action, Store, select } from '@ngrx/store';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
@@ -76,6 +76,8 @@ export class CompanyActions {
     public static GET_ALL_INTEGRATED_BANK_RESPONSE = 'GET_ALL_INTEGRATED_BANK_RESPONSE';
     public static SET_COMPANY_BRANCH = 'SET_COMPANY_BRANCH';
 
+    public static SET_ACTIVE_COMPANY_DATA = 'SET_ACTIVE_COMPANY_DATA';
+
     public createCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_COMPANY),
@@ -116,11 +118,11 @@ export class CompanyActions {
                 // check if new uer has created first company then set newUserLoggedIn false
                 let isNewUser = false;
                 let prevTab = '';
-                this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+                this.store.pipe(select(s => s.session), take(1)).subscribe(s => {
                     isNewUser = s.userLoginState === 2;
                     prevTab = s.lastState;
                 });
-                //
+                
                 if (isNewUser) {
                     this.store.dispatch({
                         type: 'SetLoginStatus',
@@ -183,7 +185,7 @@ export class CompanyActions {
                 // check if new uer has created first company then set newUserLoggedIn false
                 let isNewUser = false;
                 let prevTab = '';
-                this.store.select(s => s.session).pipe(take(1)).subscribe(s => {
+                this.store.pipe(select(s => s.session), take(1)).subscribe(s => {
                     isNewUser = s.userLoginState === 2;
                     prevTab = s.lastState;
                 });
@@ -240,8 +242,8 @@ export class CompanyActions {
                 if (response.body.length) {
                     let activeCompanyName = null;
                     let totalCompany = 0;
-                    this.store.select(s => s.session.companyUniqueName).pipe(take(1)).subscribe(a => activeCompanyName = a);
-                    this.store.select(s => s.session.totalNumberOfcompanies).pipe(take(1)).subscribe(res => totalCompany = res);
+                    this.store.pipe(select(s => s.session.companyUniqueName), take(1)).subscribe(a => activeCompanyName = a);
+                    this.store.pipe(select(s => s.session.totalNumberOfcompanies), take(1)).subscribe(res => totalCompany = res);
 
                     if (activeCompanyName) {
                         let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
@@ -710,6 +712,20 @@ export class CompanyActions {
         return {
             type: CompanyActions.SET_COMPANY_BRANCH,
             payload: organizationDetails
+        };
+    }
+
+    /**
+     * This will set the active company data in store
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public setActiveCompanyData(data: any): CustomActions {
+        return {
+            type: CompanyActions.SET_ACTIVE_COMPANY_DATA,
+            payload: data
         };
     }
 }

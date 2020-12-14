@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule, OnDestroy, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject, Observable } from 'rxjs';
@@ -8,7 +8,6 @@ import { CompanyResponse } from '../../models/api-models/Company';
 import { cloneDeep } from '../../lodash-optimized';
 import { LoginActions } from '../../actions/login.action';
 import { AuthService } from '../../theme/ng-social-login-module/index';
-import { UserDetails } from '../../models/api-models/loginModels';
 
 @Component({
     selector: 'mobile-home-sidebar',
@@ -40,29 +39,19 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
      * @memberof MobileHomeSidebarComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (companies) {
-                let selectedCmp = companies.find(cmp => {
-                    if (cmp && cmp.uniqueName) {
-                        return cmp.uniqueName === this.generalService.companyUniqueName;
+        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = cloneDeep(activeCompany);
+                let selectedCompanyArray = activeCompany.name.split(" ");
+                let companyInitials = [];
+                for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
+                    if (loop <= 1) {
+                        companyInitials.push(selectedCompanyArray[loop][0]);
                     } else {
-                        return false;
+                        break;
                     }
-                });
-
-                if (selectedCmp) {
-                    this.selectedCompany = cloneDeep(selectedCmp);
-                    let selectedCompanyArray = selectedCmp.name.split(" ");
-                    let companyInitials = [];
-                    for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
-                        if (loop <= 1) {
-                            companyInitials.push(selectedCompanyArray[loop][0]);
-                        } else {
-                            break;
-                        }
-                    }
-                    this.companyInitials = companyInitials.join(" ");
                 }
+                this.companyInitials = companyInitials.join(" ");
             }
         });
 
@@ -72,7 +61,7 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.isLoggedInWithSocialAccount$ = this.store.select(state => state.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
     }
 
     /**

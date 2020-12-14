@@ -84,7 +84,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
 		this.mfStockSearchRequest.product = '';
 		this.mfStockSearchRequest.searchBy = '';
 		this.mfStockSearchRequest.searchOperation = '';
-		this.isReportLoading$ = this.store.select(p => p.manufacturing.isMFReportLoading).pipe(takeUntil(this.destroyed$));
+		this.isReportLoading$ = this.store.pipe(select(p => p.manufacturing.isMFReportLoading), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {
@@ -93,7 +93,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
 		// Refresh the stock list
         this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
-		this.store.select(p => p.inventory.manufacturingStockList).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
+		this.store.pipe(select(p => p.inventory.manufacturingStockList), takeUntil(this.destroyed$)).subscribe((o: any) => {
 			if (o) {
 				if (o.results) {
 					this.stockListDropDown = [];
@@ -109,26 +109,26 @@ export class MfReportComponent implements OnInit, OnDestroy {
 				this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 			}
 		});
-		this.store.select(p => p.manufacturing.reportData).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
+		this.store.pipe(select(p => p.manufacturing.reportData), takeUntil(this.destroyed$)).subscribe((o: any) => {
 			if (o) {
 				this.reportData = _.cloneDeep(o);
 			}
 		});
 
 		// Refresh stock list on company change
-		this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$), distinct((val) => val === 'companyUniqueName')).subscribe((value: any) => {
+		this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$), distinct((val) => val === 'companyUniqueName')).subscribe((value: any) => {
 			this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 		});
 
 		// Refresh report data according to universal date
-		this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+		this.store.pipe(select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
 			if (dateObj) {
 				this.universalDate = _.cloneDeep(dateObj);
 				this.mfStockSearchRequest.dateRange = this.universalDate;
 				this.isUniversalDateApplicable = true;
 				this.getReportDataOnFresh();
 			}
-        })).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
         this.store.pipe(
             select(state => state.session.companies), take(1)
         ).subscribe(companies => {

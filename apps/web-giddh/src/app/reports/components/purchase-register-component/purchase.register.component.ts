@@ -88,7 +88,7 @@ export class PurchaseRegisterComponent implements OnInit {
     public financialOptions: IOption[] = [];
     public selectedCompany: CompanyResponse;
     private interval: any;
-    public currentActiveFinacialYear: IOption;
+    public currentActiveFinacialYear: IOption = {label: '', value: ''};
 
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
@@ -247,46 +247,37 @@ export class PurchaseRegisterComponent implements OnInit {
         let financialYearChosenInReportUniqueName = '';
         let currentBranchUniqueName = '';
         let currentTimeFilter = '';
-        // set financial years based on company financial year
-        this.store.pipe(select(createSelector(
-            [(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName, (state: AppState) => state.session.registerReportFilters], (companies, uniqueName, registerReportFilters) => {
-                financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
-                currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
-                currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';
-                if (!companies) {
-                    return;
-                }
 
-                return companies.find(cmp => {
-                    if (cmp && cmp.uniqueName) {
-                        return cmp.uniqueName === uniqueName;
-                    } else {
-                        return false;
-                    }
+        // set financial years based on company financial year
+        this.store.pipe(select(createSelector([(state: AppState) => state.company && state.company.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
+            financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
+            currentBranchUniqueName = registerReportFilters ? registerReportFilters.branchChosenInReport : '';
+            currentTimeFilter = registerReportFilters ? registerReportFilters.timeFilter : '';
+            return activeCompany;
+        })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.selectedCompany = activeCompany;
+                this.financialOptions = activeCompany.financialYears.map(q => {
+                    return { label: q.uniqueName, value: q.uniqueName };
                 });
-            })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-                if (selectedCmp) {
-                    this.selectedCompany = selectedCmp;
-                    this.financialOptions = selectedCmp.financialYears.map(q => {
-                        return { label: q.uniqueName, value: q.uniqueName };
-                    });
-                    let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
-                    if (financialYearChosenInReportUniqueName) {
-                        // User is navigating back from details page hence show the selected filter as pre-filled
-                        uniqueNameToSearch = financialYearChosenInReportUniqueName;
-                    } else {
-                        uniqueNameToSearch = selectedCmp.activeFinancialYear.uniqueName;
-                    }
-                    selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
-                    activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
-                    this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
-                    this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch.uniqueName;
-                    this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
-                    this.activeFinacialYr = activeFinancialYear;
-                    this.populateRecords(this.selectedType);
-                    this.purchaseRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
+                if (financialYearChosenInReportUniqueName) {
+                    // User is navigating back from details page hence show the selected filter as pre-filled
+                    uniqueNameToSearch = financialYearChosenInReportUniqueName;
+                } else {
+                    uniqueNameToSearch = activeCompany.activeFinancialYear.uniqueName;
                 }
-            });
+                selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
+                activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
+                this.activeFinacialYr = activeFinancialYear;
+                this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch.uniqueName;
+                this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
+                this.store.dispatch(this.companyActions.setUserChosenFinancialYear(this.currentActiveFinacialYear.value));
+                this.populateRecords(this.selectedType);
+                this.purchaseRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+            }
+        });
     }
 
     public selectFinancialYearOption(v: IOption) {
