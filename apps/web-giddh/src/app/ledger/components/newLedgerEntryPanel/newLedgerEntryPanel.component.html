@@ -102,7 +102,7 @@
                             <ledger-discount #discount id="ledger-discount" [discountAccountsDetails]="currentTxn.discounts"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency" [ledgerAmount]="currentTxn.amount"
-                                (hideOtherPopups)="hideTax()" (discountTotalUpdated)="calculateDiscount($event);">
+                                (hideOtherPopups)="hideTax()" (discountTotalUpdated)="preparePreAppliedDiscounts();calculateDiscount($event);">
                             </ledger-discount>
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>

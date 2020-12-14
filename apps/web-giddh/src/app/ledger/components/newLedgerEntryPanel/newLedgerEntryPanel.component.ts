@@ -359,6 +359,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
             this.calculatePreAppliedTax();
+            this.preparePreAppliedDiscounts();
 
             if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
@@ -445,7 +446,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.generateInvoice = false;
     }
 
-    public calculateDiscount(event: any) {
+    /**
+     * To calculate discount
+     *
+     * @param {*} event
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public calculateDiscount(event: any): void {
         this.currentTxn.discount = event.discountTotal;
         this.accountOtherApplicableDiscount.forEach(item => {
             if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
@@ -1083,7 +1090,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-            this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
+            if(tax) {
+                this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
+            }
             if (tax) {
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
@@ -1447,6 +1456,57 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             accountDetails.inheritedDiscounts.forEach(element => {
                 this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
             });
+        }
+    }
+
+    /**
+     * To prepare pre applied discount for current transactions
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public preparePreAppliedDiscounts(): void {
+        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts && this.currentTxn.selectedAccount.accountApplicableDiscounts.length) {
+            this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
+            this.currentTxn.discounts.map(item => { item.isActive = false });
+            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                this.currentTxn.discounts.map(item => {
+                    if (element.uniqueName === item.discountUniqueName) {
+                        item.isActive = true;
+                    }
+                    return item;
+                });
+            });
+        } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+            this.currentTxn.discounts.map(item => { item.isActive = false });
+            this.accountOtherApplicableDiscount.forEach(element => {
+                this.currentTxn.discounts.map(item => {
+                    if (element.uniqueName === item.discountUniqueName) {
+                        item.isActive = true;
+                    }
+                    return item;
+                });
+            });
+        } else {
+            this.currentTxn.discounts.map(item => {
+                item.isActive = false;
+                return item;
+            });
+            this.currentTxn.discount = 0;
+        }
+        /** if percent or value type discount applied */
+        if (this.currentTxn.discounts && this.currentTxn.discounts[0]) {
+            if (this.currentTxn.discounts[0].amount) {
+                this.currentTxn.discounts[0].isActive = true;
+            } else {
+                this.currentTxn.discounts[0].isActive = false;
+            }
+        }
+        if (this.discountControl) {
+            if (this.discountControl.discountAccountsDetails) {
+                this.discountControl.discountAccountsDetails = this.currentTxn.discounts;
+                this.currentTxn.discount = giddhRoundOff(this.discountControl.generateTotal());
+                this.discountControl.discountTotal = this.currentTxn.discount;
+            }
         }
     }
 }
