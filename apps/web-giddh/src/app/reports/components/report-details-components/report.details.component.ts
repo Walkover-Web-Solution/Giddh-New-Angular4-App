@@ -271,7 +271,6 @@ export class ReportsDetailsComponent implements OnInit {
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch.uniqueName;
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
-                this.store.dispatch(this.companyActions.setUserChosenFinancialYear(this.currentActiveFinacialYear.value));
                 this.populateRecords(this.selectedType);
                 this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
             }

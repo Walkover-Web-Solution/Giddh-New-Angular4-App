@@ -263,6 +263,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             } else {
                 this.branchAvailable = false;
             }
+            this.branches = branches;
         })), takeUntil(this.destroyed$)).subscribe();
 
     }
