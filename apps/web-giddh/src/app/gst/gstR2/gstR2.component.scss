@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 .column.list-column.expanded-list-column {
     width: auto;
 }
@@ -263,8 +265,8 @@ address {
 
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
-    font-size: 13px;
-    border-bottom: 1px solid #ededed;
+    font-size: 14px;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
@@ -763,4 +765,19 @@ tax-engine .table.reconciliations-table thead > tr > th {
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(even) > th {
     background-color: #fff;
+}
+
+
+.gstr-2-filing{
+    border: 1px solid $gainsboro;
+}
+
+.sub-filter-nav-bandnew{
+    border-bottom: 1px solid $gainsboro;
+}
+
+#subtabnew-5{
+    padding: 10px 25px;
+    margin: 5px auto;
+    border-left: 1px solid $gainsboro;
 }
