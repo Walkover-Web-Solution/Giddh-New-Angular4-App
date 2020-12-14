@@ -925,6 +925,18 @@ table.tax-table.item {
         top: 10px;
     }
 }
+.wrap-edit-history-btn {
+    .history-btn {
+        i.icon-history-icon{
+        color: $gray;
+        }
+        &:hover{
+            i.icon-history-icon{
+                color: $white;
+            }
+        }
+    }
+}
 @media (max-width:1024px) and (min-width:992px){
     .invoice-search-box{
         flex-direction: column;

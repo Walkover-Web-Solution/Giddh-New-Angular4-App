@@ -1245,7 +1245,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.showNewLedgerPanel = false;
     }
 
-    public showUpdateLedgerModal(txn: ITransactionItem) {
+    public showUpdateLedgerModal(txn: ITransactionItem ) {
         let transactions: TransactionsResponse = null;
         this.store.select(t => t.ledger.transactionsResponse).pipe(take(1)).subscribe(trx => transactions = trx);
         if (transactions) {
