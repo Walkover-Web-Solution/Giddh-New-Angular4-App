@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CompanyResponse, ICurrencyResponse, StateDetailsResponse } from '../models/api-models/Company';
-import { Action, Store } from '@ngrx/store';
+import { Action, Store, select, createSelector } from '@ngrx/store';
 import {
     LinkedInRequestModel,
     SignupwithEmaillModel,
@@ -726,7 +726,6 @@ export class LoginActions {
         private _companyService: CompanyService,
         private http: HttpClient,
         private _generalService: GeneralService,
-        private _accountService: AccountService,
         private activatedRoute: ActivatedRoute,
         private _generalAction: GeneralActions,
         private _dbService: DbService,
@@ -884,7 +883,6 @@ export class LoginActions {
     }
 
     public LoginSuccessByOtherUrl(): CustomActions {
-        console.log("LOGINS");
         return {
             type: LoginActions.LoginSuccessBYUrl,
             payload: null
@@ -1077,7 +1075,6 @@ export class LoginActions {
     }
 
     public userAutoLoginResponse(response): CustomActions {
-        console.log(response);
         return {
             type: LoginActions.AutoLoginWithPasswdResponse,
             payload: response
@@ -1123,6 +1120,10 @@ export class LoginActions {
     }
 
     private finalThingTodo(stateDetail: any, companies: any) {
+        this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
+            let request = { userUniqueName: response.user.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
+            this.store.dispatch(this.comapnyActions.getCompanyUser(request));
+        });
         this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));

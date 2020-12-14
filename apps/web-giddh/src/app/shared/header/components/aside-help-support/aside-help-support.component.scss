@@ -156,7 +156,20 @@
 @media(max-height:900px){
     .aside-pane {
         .help-aside-body{
+            padding-bottom: 0;
+            .contact-block{
+                font-size: 16px;
+            }
+        }
+    }
+}
+@media(max-height:755px){
+    .aside-pane {
+        .help-aside-body{
             padding-bottom: 25%;
+            .contact-block{
+                font-size: 16px;
+            }
         }
     }
 }

@@ -1648,14 +1648,24 @@ modal-container.modal {
 
 .custom-datepicker {
     position: relative;
+        .border-radius-2{
+        border-radius: 2px;
+    }
 }
 
 .custom-datepicker i {
     position: absolute;
-    left: 12px;
-    top: 4px;
+    left: 0;
+    top: 0;
     z-index: 9;
     font-size: 17px;
+    color: $gray;
+    height: 36px;
+    width: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $gainsboro;
     color: $gray;
 }
 
@@ -1667,7 +1677,7 @@ modal-container.modal {
     width: 230px !important;
     max-width: 230px;
     display: block;
-    padding-left: 20px !important;
+    padding-left: 30px !important;
     border: 1px solid $gainsboro;
     height: 36px;
 }
@@ -6992,8 +7002,7 @@ GST filing
 
 .tax-engine .btn-link,
 .tax-engine .btn-link:active,
-.tax-engine .btn-link:focus,
-.tax-engine .btn-link:hover {
+.tax-engine .btn-link:focus{
     border-color: transparent;
 }
 
@@ -7222,7 +7231,7 @@ th:first-child {
 
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
-    font-size: 13px;
+    font-size: 14px;
     border-bottom: 1px solid $whisper;
 }
 
@@ -7685,8 +7694,8 @@ tbody
     color: $oxford-blue;
     background: $white;
     font-weight: 700;
-    font-size: 12px;
-    text-transform: uppercase;
+    font-size: 14px;
+    text-transform: capitalize;
     -webkit-font-smoothing: antialiased;
     border-top: 1px solid $gainsboro;
     border-bottom: 1px solid $gainsboro;
@@ -8570,6 +8579,7 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     color: $nobel !important;
+    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -9110,7 +9120,6 @@ input.form-control.focused {
 }
 
 /*datepicker common css*/
-
 .giddh-datepicker-modal .modal-content {
     background: none !important;
 }
@@ -10480,12 +10489,11 @@ input.mat-input-element{
             z-index: 9993;
         }
         .page-has-tabs .invoice-generate-container,
-        .page-has-tabs .invoice-container,
         .page-has-tabs .proforma-container,
         .page-has-tabs .proforma-container {
             padding-top: 15px !important;
         }
-        .page-has-tabs .proforma-container{
+        .page-has-tabs .proforma-container, .page-has-tabs .invoice-container{
             padding-top: 0 !important;
         }
         .page-has-tabs

@@ -25,9 +25,9 @@
                 <div class="d-flex form-group mobile-width-100 flex-none">
                     <div class="form-group date-advance-search pending-advance-search flex-fill">
                         <div class="input-group mr-r1 mb-0" id="dp-parent">
-                            <div class=" input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i><img src="assets/images/custom-calender.svg"></i>
-                                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
+                            <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <i class="icon-calender calendar-addon"></i>
+                                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker border-radius-2"/>
                             </div>
                             <button class="clear-filter btn btn-filter align-items-center d-flex justify-content-center"
                                 *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">

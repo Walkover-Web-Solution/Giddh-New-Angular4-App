@@ -1768,6 +1768,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addClassInBodyIfPageHasTabs(): void {
+        this.toggleSidebarPane(false, false);
+        this.toggleHelpSupportPane(false);
         setTimeout(() => {
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
                 this.sideBarStateChange(true);
@@ -1792,7 +1794,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, 500);
-    }
+
+        }
 
     /**
      * This will show the datepicker

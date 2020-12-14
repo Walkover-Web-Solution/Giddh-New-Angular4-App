@@ -689,6 +689,7 @@
                                                     [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                     [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null"
                                                     [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                                                    (focus)="onFocusInvoiceDate()"
                                                     (blur)="onBlurInvoiceDate(0)"
                                                     (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" />
                                                 <p class="text-danger"
@@ -730,6 +731,7 @@
                                             name="voucherDate" class="form-control date-invoice" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                             [(ngModel)]="invFormData.voucherDetails.voucherDate"
+                                            (focus)="onFocusInvoiceDate()"
                                             (blur)="onBlurInvoiceDate(0)"
                                             (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)"
                                             [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null"
@@ -1145,6 +1147,7 @@
                                                                     [disabled]="isUpdateMode"
                                                                     (onShown)="hsnDropdownShow = false;"
                                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                    (bsValueChange)="onBlurEntryDate(entryIdx, dp.isOpen)"
                                                                     #dp="bsDatepicker" placement="right" />
                                                                 <span class="edit-icon cp" (click)="dp.toggle()"
                                                                     [attr.aria-expanded]="dp.isOpen">
@@ -2008,6 +2011,7 @@
                                                                             [disabled]="isUpdateMode"
                                                                             (onShown)="hsnDropdownShow = false"
                                                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                            (bsValueChange)="onBlurEntryDate(entryIdx, dp.isOpen)"
                                                                             #dp="bsDatepicker" />
                                                                         <span class="edit-icon cp" (click)="dp.toggle()"
                                                                             [attr.aria-expanded]="dp.isOpen">
@@ -2839,7 +2843,13 @@
         </div>
     </div>
 
-
+    <div bsModal #dateChangeConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <confirmation-modal [configuration]="dateChangeConfiguration" (buttonClicked)="handleDateChangeConfirmation($event)"></confirmation-modal>
+            </div>
+        </div>
+    </div>
 
     <!-- Need to remove  -->
     <!-- <ng-template>

@@ -39,6 +39,7 @@ import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/re
 import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
+import { BulkExportModal } from './models/bulk-export-modal/bulk-export.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
@@ -57,6 +58,7 @@ import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../models/api-
 import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
+import { CommonActions } from '../../actions/common.actions';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
@@ -284,6 +286,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public isCompany: boolean;
     /** Current branches */
     public branches: Array<any>;
+    /** This will hold if updated is account in master to refresh the list of vouchers */
+    public isAccountUpdated: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -304,7 +308,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private location: Location,
         private salesService: SalesService,
         private modalService: BsModalService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private commonActions: CommonActions
     ) {
         this.advanceReceiptAdjustmentData = null;
         this.invoiceSearchRequest.page = 1;
@@ -563,7 +568,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             };
                             this.fromDate = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                            this.selectedDateRange = { startDate: moment(this.fromDate), endDate: moment(this.toDate) };
+                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                             this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                             this.fromDate = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
@@ -582,7 +587,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         this.fromDate = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
                         this.toDate = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                        this.selectedDateRange = { startDate: moment(this.fromDate), endDate: moment(this.toDate) };
+                        this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                         // assign dates
 
                         this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
@@ -685,6 +690,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                 if (response.advanceReceiptAdjustment) {
                     this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
+                } else if (response.voucherAdjustments) {
+                    this.advanceReceiptAdjustmentData = response.voucherAdjustments;
                 }
                 if (response.taxTotal) {
                     if (response.taxTotal.taxBreakdown) {
@@ -715,7 +722,20 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }
             }
-        })
+        });
+
+        this.store.pipe(select(state => state.common.isAccountUpdated), takeUntil(this.destroyed$)).subscribe(response => {
+            if(!response) {
+                if(this.isAccountUpdated) {
+                    this.getVoucher(this.isUniversalDateApplicable);
+                    this.isAccountUpdated = false;
+                }
+            }
+            if(response) {
+                this.isAccountUpdated = true;
+                this.store.dispatch(this.commonActions.accountUpdated(false));
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -901,7 +921,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     voucherType: this.selectedVoucher
                 };
 
-                let account = (selectedVoucher) ? encodeURIComponent(selectedVoucher.account.uniqueName) : encodeURIComponent(this.selectedInvoice.account.uniqueName);
+                let account = (selectedVoucher) ? selectedVoucher.account.uniqueName : this.selectedInvoice.account.uniqueName;
 
                 this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
             }

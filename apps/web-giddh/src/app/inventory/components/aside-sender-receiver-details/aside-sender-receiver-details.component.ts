@@ -19,6 +19,7 @@ import { CountryRequest, OnboardingFormRequest } from '../../../models/api-model
 import { digitsOnly } from '../../../shared/helpers';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
+import { EMAIL_VALIDATION_REGEX } from '../../../app.constant';
 
 @Component({
     selector: 'aside-sender-receiver-details-pane',
@@ -238,7 +239,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
             openingBalance: [0],
             mobileNo: [''],
             mobileCode: [''],
-            email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+            email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
             description: [''],

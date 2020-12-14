@@ -37,6 +37,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
+import { CommonActions } from '../../actions/common.actions';
 
 const VOUCHER_TYPES = ['proformas', 'estimates'];
 
@@ -183,9 +184,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** This will hold if updated is account in master to refresh the list of vouchers */
+    public isAccountUpdated: boolean = false;
 
-    constructor(private store: Store<AppState>, private proformaActions: ProformaActions,
-        private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService) {
+    constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = 20;
         this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
@@ -458,6 +460,19 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                         moment(activeCompany.activeFinancialYear.financialYearEnds, GIDDH_DATE_FORMAT).subtract(1, 'year')
                     ];
                 }
+            }
+        });
+
+        this.store.pipe(select(state => state.common.isAccountUpdated), takeUntil(this.destroyed$)).subscribe(response => {
+            if(!response) {
+                if(this.isAccountUpdated) {
+                    this.getAll();
+                    this.isAccountUpdated = false;
+                }
+            }
+            if(response) {
+                this.isAccountUpdated = true;
+                this.store.dispatch(this.commonActions.accountUpdated(false));
             }
         });
     }

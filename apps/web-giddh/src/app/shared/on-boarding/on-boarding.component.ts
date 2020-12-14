@@ -325,7 +325,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
         });
-
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 const countryDetails = activeCompany.countryV2;

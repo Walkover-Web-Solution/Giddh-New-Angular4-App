@@ -1,4 +1,4 @@
-import { distinctUntilKeyChanged, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -82,5 +82,16 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will navigate to selected tab
+     *
+     * @param {string} tab
+     * @param {number} tabIndex
+     * @memberof TbPlBsComponent
+     */
+    public tabChanged(tab: string, tabIndex: number): void {
+        this.router.navigateByUrl('/pages/trial-balance-and-profit-loss?tab=' + tab + '&tabIndex=' + tabIndex);
     }
 }

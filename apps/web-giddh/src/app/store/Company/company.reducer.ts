@@ -62,7 +62,7 @@ const initialState: CurrentCompanyState = {
     isCompanyActionInProgress: false,
     isAccountInfoLoading: false,
     isTcsTdsApplicable: false,
-    isGetAllIntegratedBankInProgress: false,
+    isGetAllIntegratedBankInProgress: false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {

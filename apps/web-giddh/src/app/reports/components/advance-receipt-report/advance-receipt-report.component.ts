@@ -10,13 +10,13 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import { BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AdvanceReceiptSummaryRequest, GetAllAdvanceReceiptsRequest } from '../../../models/api-models/Reports';
@@ -24,7 +24,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
 import {
@@ -184,6 +184,26 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Company unique name for API calls */
     private activeCompanyUniqueName: string;
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* Universal date observer */
+    public universalDate$: Observable<any>;
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
 
     /** @ignore */
     constructor(
@@ -194,7 +214,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private store: Store<AppState>,
         private toastService: ToasterService,
         private generalService: GeneralService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private modalService: BsModalService
     ) { }
 
     /** Subscribe to universal date and set header title */
@@ -210,6 +231,11 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     endDate: moment(applicationDate[1], GIDDH_DATE_FORMAT).toDate(),
                     chosenLabel: applicationDate[2]
                 }
+                let universalDate = _.cloneDeep(applicationDate);
+                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                this.selectedDateRangeUi = moment(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
             this.fetchReceiptsData();
         });
@@ -409,6 +435,11 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate(),
             chosenLabel: this.universalDate[2]
         }
+        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+
         this.searchQueryParams = {
             receiptTypes: [],
             receiptNumber: '',
@@ -501,8 +532,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     private fetchAllReceipts(additionalRequestParameters?: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
         let requestObject: GetAllAdvanceReceiptsRequest = {
             companyUniqueName: this.activeCompanyUniqueName,
-            from: moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT),
-            to: moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT),
+            from: this.fromDate,
+            to: this.toDate,
             count: PAGINATION_LIMIT,
             receiptTypes: this.searchQueryParams.receiptTypes,
             receiptNumber: this.searchQueryParams.receiptNumber,
@@ -541,8 +572,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     private fetchSummary(): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
         const requestObject: AdvanceReceiptSummaryRequest = {
             companyUniqueName: this.activeCompanyUniqueName,
-            from: moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT),
-            to: moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT),
+            from: this.fromDate,
+            to: this.toDate,
             branchUniqueName: this.currentBranch.uniqueName
         };
         return this.receiptService.fetchSummary(requestObject);
@@ -585,6 +616,60 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             } else {
                 this.toastService.errorToast(response.message, response.code);
             }
+        }
+    }
+
+     /**
+     *To show the datepicker
+     *
+     * @param {*} element
+     * @memberof AuditLogsFormComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof AuditLogsFormComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.datePickerOptions.startDate = this.fromDate;
+            this.datePickerOptions.endDate = this.toDate;
+            this.showClearFilter = true;
+            this.fetchReceiptsData();
         }
     }
 }

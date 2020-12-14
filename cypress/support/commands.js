@@ -43,9 +43,6 @@ const createNewCompanyPage = new CreateNewCompanyPage();
 
 
 Cypress.Commands.add("loginWithGoogle", (email, password) => {
-
-    cy.visit('https://www.google.com/gmail/')
-
     cy.visit(Cypress.env('url'))
     //mainPage.getLoginButton().click()
     loginPage.getLoginWithGoogle().click()
@@ -105,11 +102,19 @@ Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>
     cy.wait(2000)
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
-    cy.get(accountElementPath).click({force : true})
-    ledgerPage.enterAmount().clear().type(amount)
-    ledgerPage.saveButton().click().then(()=>{
-        cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+    cy.xpath('//input[@id=\'giddh-datepicker\']').scrollIntoView({ easing: 'linear' }).should('be.visible')
+    cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView({ offset: { top: 500, left: 0 } })
+    cy.get('body').type('{pageup}')
+    cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView( { easing: 'linear' }).should('be.visible').then(()=>{
+        cy.wait(1000)
+        cy.get(accountElementPath).click({force : true})
+       // cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').click()
+        ledgerPage.enterAmount().clear().type(amount)
+        ledgerPage.saveButton().click().then(()=>{
+            cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+        })
     })
+
 })
 
 Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, amount)=>{
@@ -119,6 +124,8 @@ Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, 
     cy.wait(2000)
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
+    cy.get('body').type('{pageup}')
+    cy.get(accountElementPath).scrollIntoView({ easing: 'linear' }).should('be.visible')
     cy.get(accountElementPath).click({force : true})
     ledgerPage.selectTax()
     ledgerPage.enterAmount().clear().type(amount)
@@ -163,6 +170,20 @@ Cypress.Commands.add("getLedger", (accountUniqueName, entryUniqueID) => {
     }).as('getLedgerAPI')
 
     return  cy.get('@getLedgerAPI')
+})
+
+Cypress.Commands.add("createLedgerAPI", (accountUniqueName) => {
+    cy.request({
+        method: 'POST',
+        url: Cypress.env('apiBaseURI')+ "/accounts/"+ accountUniqueName + "/ledgers-v2",
+        body : '{"transactions":[{"amount":169.49,"particular":"sales","taxes":["18"],"taxesVm":[{"name":"18","uniqueName":"18","type":"gst","amount":18,"isChecked":true,"isDisabled":false}],"tax":30.51,"convertedTax":30.51,"total":200,"convertedTotal":200,"discount":0,"convertedDiscount":0,"isStock":false,"convertedRate":0,"convertedAmount":169.49,"isChecked":false,"showTaxationDiscountBox":true,"itcAvailable":"","advanceReceiptAmount":0,"type":"DEBIT","discounts":[],"selectedAccount":{"currency":"INR","currencySymbol":"\u20b9","mobileNo":null,"stocks":null,"isFixed":true,"uniqueName":"sales","email":null,"parentGroups":[{"uniqueName":"revenuefromoperations","name":"Revenue From Operations"},{"uniqueName":"sales","name":"Sales"}],"mergedAccounts":"","applicableTaxes":[],"name":"Sales","nameStr":"Revenue From Operations, Sales","uNameStr":"revenuefromoperations, sales"},"isInclusiveTax":false,"shouldShowRcmEntry":false}],"voucherType":null,"entryDate":"19-08-2020","unconfirmedEntry":false,"attachedFile":"","attachedFileName":"","tag":null,"description":"","generateInvoice":false,"chequeNumber":"","chequeClearanceDate":"","invoiceNumberAgainstVoucher":"","compoundTotal":200,"convertedCompoundTotal":200,"invoicesToBePaid":[],"otherTaxModal":{"tcsCalculationMethod":"OnTaxableAmount"},"otherTaxesSum":0,"tdsTcsTaxesSum":0,"otherTaxType":"tcs","exchangeRate":1,"exchangeRateForDisplay":1,"valuesInAccountCurrency":true,"selectedCurrencyToDisplay":0,"baseCurrencyToDisplay":{"code":"INR","symbol":"\u20b9"},"foreignCurrencyToDisplay":{"code":"INR","symbol":"\u20b9"},"isOtherTaxesApplicable":false}',
+        headers: {
+            'Auth-Key': Cypress.env('authKey'),
+            'content-type': 'application/json'
+        }
+    }).as('createLedgerAPI')
+
+    return  cy.get('@createLedgerAPI')
 })
 
 Cypress.Commands.add("SignUp", (email, password) => {

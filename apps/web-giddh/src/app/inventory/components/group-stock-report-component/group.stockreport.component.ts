@@ -26,7 +26,8 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 
@@ -217,6 +218,20 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public isMobileScreen: boolean = false;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
 
     constructor(
         private modalService: BsModalService,
@@ -314,6 +329,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
                 this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
+                this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.getGroupReport(true);
             }
         });
@@ -649,6 +666,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
                 this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                let universalDate = _.cloneDeep(a);
+                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
 
@@ -810,5 +830,61 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public editGroup(): void {
         this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
         this.setInventoryAsideState(true, true, true);
+    }
+
+    /**
+     *To show the datepicker
+     *
+     * @param {*} element
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public dateSelectedCallback(value?: any, from?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.pickerSelectedFromDate = value.startDate;
+            this.pickerSelectedToDate = value.endDate;
+            if (!from) {
+                this.isFilterCorrect = true;
+            }
+            this.getGroupReport(true);
+        }
     }
 }
