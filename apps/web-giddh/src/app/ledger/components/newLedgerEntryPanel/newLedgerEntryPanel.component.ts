@@ -493,7 +493,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 /** apply account's discount (default) */
                 if (this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
                     this.currentTxn.discounts.map(item => {
-                        item.isActive = this.accountOtherApplicableDiscount.some(element => element.uniqueName === item.discountUniqueName);
+                        let discountItem = this.accountOtherApplicableDiscount.find(element => element.uniqueName === item.discountUniqueName);
+                        if (discountItem && discountItem.uniqueName) {
+                            item.isActive = discountItem.isActive;
+                        }
                     });
                 }
 
@@ -1389,7 +1392,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             });
 
         }
-        return mergedAccountTaxes.reverse();
+        return mergedAccountTaxes;
     }
 
     /**
@@ -1457,6 +1460,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
             });
         }
+        this.accountOtherApplicableDiscount.map(item => item.isActive = true);
     }
 
     /**
