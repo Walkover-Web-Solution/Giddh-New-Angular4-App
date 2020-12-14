@@ -335,6 +335,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public modalRef: BsModalRef;
     public message: string;
     public isDropup: boolean = true;
+    /** this is showing pending sales page **/
+    public isPendingSales: boolean = false;
 
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
@@ -2037,7 +2039,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isVoucherDateChanged = false;
         this.assignDates();
         this.updateDueDate();
-        
+
         this.ngAfterViewInit();
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;

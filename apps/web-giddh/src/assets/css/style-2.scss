@@ -1911,7 +1911,7 @@ input:-moz-placeholder {
     font-size: 14px;
 }
 
-.company-name .c-text .c-name {
+.company-name .company-text .c-name {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
@@ -1929,7 +1929,7 @@ input:-moz-placeholder {
     color: $white !important;
 }
 
-.company-name .c-text .fyear {
+.company-name .company-text .fyear {
     font-size: 12px;
 }
 
@@ -2424,7 +2424,7 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
 }
 
-/* #cmpWrp .c-text {
+/* #cmpWrp .company-name {
     margin: 5px 0 5px 0px;
     font-size: 9px;
     padding-right: 5px;
@@ -9859,7 +9859,7 @@ input.mat-input-element{
     }
 }
 .delete-modal-overlay {
-        z-index: 9992; /*for delete custom zIndex modal*/
+    z-index: 9992; /*for delete custom zIndex modal*/
 }
 /* responsive */
 @media (max-width: 1440px) {
@@ -10501,7 +10501,7 @@ input.mat-input-element{
           margin-top: 0;
     }
     .custom-tabs.hide-header .top-bar {
-        margin-top: 10px;
+        margin-top: 0;
     }
     .invoice-control .nav.nav-tabs {
         padding: 0 0 0 15px !important;
@@ -10578,7 +10578,7 @@ input.mat-input-element{
     #cmpWrp {
         display: block;
     }
-    .c-text span.c-name {
+    .company-text span.c-name {
         color: $white !important;
     }
     .user-dropdown-header {
@@ -10622,7 +10622,7 @@ input.mat-input-element{
     // }
     .page-has-tabs .padding-top-fixed-mobile,
     .on-user-page .padding-top-fixed-mobile {
-       padding-top: 130px !important;
+       padding-top: 135px !important;
    }
     .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile {
         padding-top: 85px !important;

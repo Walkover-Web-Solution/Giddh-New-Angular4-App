@@ -48,8 +48,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Settings > Discount', uniqueName: '/pages/settings/discount', additional: { tab: 'discount', tabIndex: 9 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 }, hasTabs: true },
-    { type: 'MENU', name: 'Create Warehouse', uniqueName: '/pages/settings/create-warehouse' },
-    { type: 'MENU', name: 'Create Branch', uniqueName: '/pages/settings/create-branch' },
     // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
     // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
     { type: 'MENU', name: 'Import', uniqueName: '/pages/import', hasTabs: false },
@@ -96,14 +94,14 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Petty Cash Management > Pending', uniqueName: '/pages/expenses-manager', additional: { tab: 'pending', tabIndex: 0 }, hasTabs: true },
     { type: 'MENU', name: 'Petty Cash Management > Rejected', uniqueName: '/pages/expenses-manager', additional: { tab: 'rejected', tabIndex: 1 }, hasTabs: true },
 
-    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', hasTabs: false },
+    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', hasTabs: true },
     { type: 'MENU', name: 'Reports > Receipt', uniqueName: '/pages/reports/receipt', hasTabs: false },
 
-    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' },
-    { type: 'MENU', name: 'Purchase Management > Purchase Order', uniqueName: '/pages/purchase-management/purchase/order' },
-    { type: 'MENU', name: 'Purchase Management > Purchase Bill', uniqueName: '/pages/purchase-management/purchase/bill' },
-    { type: 'MENU', name: 'New Purchase Order', uniqueName: '/pages/purchase-management/purchase-order/new' },
-    { type: 'MENU', name: 'Purchase Management > Settings', uniqueName: '/pages/purchase-management/purchase/settings' }
+    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules', hasTabs: false },
+    { type: 'MENU', name: 'Purchase Management > Purchase Order', uniqueName: '/pages/purchase-management/purchase/order', hasTabs: false },
+    { type: 'MENU', name: 'Purchase Management > Purchase Bill', uniqueName: '/pages/purchase-management/purchase/bill', hasTabs: false },
+    { type: 'MENU', name: 'New Purchase Order', uniqueName: '/pages/purchase-management/purchase-order/new', hasTabs: false },
+    { type: 'MENU', name: 'Purchase Management > Settings', uniqueName: '/pages/purchase-management/purchase/settings', hasTabs: true }
 ];
 export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['journal-voucher', 'inventory',
     'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
@@ -192,10 +190,11 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 }, hasTabs: true },
     { type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding', hasTabs: false },
     { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook', hasTabs: false },
-    { type: 'MENU', name: 'New Purchase Bill ', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
+    { type: 'MENU', name: 'New Purchase Bill', uniqueName: '/pages/proforma-invoice/invoice/purchase', hasTabs: false },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', hasTabs: false },
-    { type: 'MENU', name: 'Reports > Receipt', uniqueName: '/pages/reports/receipt', hasTabs: false },
-    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' }
+    { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt', hasTabs: false },
+    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' },
+    { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' }
 ];
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
 
