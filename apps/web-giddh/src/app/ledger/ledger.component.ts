@@ -938,7 +938,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
     }

@@ -109,7 +109,7 @@ export class AuthenticationService {
     }
 
     public ClearSession(): Observable<BaseResponse<string, string>> {
-        let userName = this._generalService.user.uniqueName;
+        let userName = (this._generalService.user) ? this._generalService.user.uniqueName : "";
         return this._http.delete(this.config.apiUrl + LOGIN_API.CLEAR_SESSION.replace(':userUniqueName', encodeURIComponent(userName))).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             return data;
@@ -154,7 +154,7 @@ export class AuthenticationService {
     }
 
     public SetSettings(model): Observable<BaseResponse<string, string>> {
-        let uniqueName = this._generalService.user.uniqueName;
+        let uniqueName = (this._generalService.user) ? this._generalService.user.uniqueName : "";
 
         return this._http.put(this.config.apiUrl + LOGIN_API.SET_SETTINGS
             .replace(':userUniqueName', encodeURIComponent(uniqueName)), model).pipe(map((res) => {
@@ -168,7 +168,7 @@ export class AuthenticationService {
 
     public FetchUserDetails(): Observable<BaseResponse<UserDetails, string>> {
 
-        let sessionId = this._generalService.user.uniqueName;
+        let sessionId = (this._generalService.user) ? this._generalService.user.uniqueName : "";
 
         return this._http.get(this.config.apiUrl + LOGIN_API.FETCH_DETAILS
             .replace(':sessionId', sessionId)).pipe(map((res) => {
@@ -181,7 +181,7 @@ export class AuthenticationService {
     }
 
     public AddBalance(model): Observable<BaseResponse<string, string>> {
-        let uniqueName = this._generalService.user.uniqueName;
+        let uniqueName = (this._generalService.user) ? this._generalService.user.uniqueName : "";
 
         return this._http.get(this.config.apiUrl + LOGIN_API.ADD_BALANCE
             .replace(':uniqueName', uniqueName)).pipe(map((res) => {
@@ -194,7 +194,7 @@ export class AuthenticationService {
     }
 
     public GetAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
-        let uniqueName = this._generalService.user.uniqueName;
+        let uniqueName = (this._generalService.user) ? this._generalService.user.uniqueName : "";
 
         return this._http.get(this.config.apiUrl + LOGIN_API.GET_AUTH_KEY
             .replace(':uniqueName', uniqueName)).pipe(map((res) => {
@@ -207,7 +207,7 @@ export class AuthenticationService {
     }
 
     public RegenerateAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
-        let userEmail = this._generalService.user.email;
+        let userEmail = (this._generalService.user) ? this._generalService.user.email : "";
 
         return this._http.put(this.config.apiUrl + LOGIN_API.REGENERATE_AUTH_KEY
             .replace(':userEmail', userEmail), {}).pipe(map((res) => {
@@ -220,9 +220,9 @@ export class AuthenticationService {
     }
 
     public ReportInvalidJSON(model): Observable<BaseResponse<AuthKeyResponse, string>> {
-        model.email = this._generalService.user.email;
+        model.email = (this._generalService.user) ? this._generalService.user.email : "";
         model.environment = this.config.apiUrl;
-        model.userUniqueName = this._generalService.user.uniqueName;
+        model.userUniqueName = (this._generalService.user) ? this._generalService.user.uniqueName : "";
         return this._http.post(this.config.apiUrl + 'exception/invalid-json', model).pipe(map((res) => {
             let data: BaseResponse<AuthKeyResponse, string> = res;
             data.request = '';
@@ -242,7 +242,7 @@ export class AuthenticationService {
 
     // Get User Sessions
     public GetUserSession() {
-        let userEmail = this._generalService.user.email;
+        let userEmail = (this._generalService.user) ? this._generalService.user.email : "";
         return this._http.get(this.config.apiUrl + LOGIN_API.GET_SESSION
             .replace(':userEmail', userEmail)).pipe(map(res => {
             let data = res;
@@ -258,7 +258,7 @@ export class AuthenticationService {
      * @memberof AuthenticationService
      */
     public DeleteSession(requestPayload: any): Observable<any> {
-        let userEmail = this._generalService.user.email;
+        let userEmail = (this._generalService.user) ? this._generalService.user.email : "";
         let id = {
             sessionId: requestPayload.sessionId
         };
@@ -271,7 +271,7 @@ export class AuthenticationService {
 
     // Delete All Sessions
     public DeleteAllSession() {
-        let userEmail = this._generalService.user.email;
+        let userEmail = (this._generalService.user) ? this._generalService.user.email : "";
         return this._http.delete(this.config.apiUrl + LOGIN_API.DELETE_ALL_SESSION.replace(':userEmail', userEmail)).pipe(map(res => {
             let data = res;
             return data;
@@ -280,7 +280,7 @@ export class AuthenticationService {
 
     // Delete All Sessions
     public UpdateSession() {
-        let userEmail = this._generalService.user.email;
+        let userEmail = (this._generalService.user) ? this._generalService.user.email : "";
         return this._http.put(this.config.apiUrl + LOGIN_API.UPDATE_SESSION
             .replace(':userEmail', userEmail), '').pipe(map(res => {
             let data = res;
@@ -323,7 +323,7 @@ export class AuthenticationService {
     }
 
     public renewSession(): Observable<BaseResponse<any, any>> {
-        let userName = this._generalService.user.uniqueName;
+        let userName = (this._generalService.user) ? this._generalService.user.uniqueName : "";
         return this._http.put(this.config.apiUrl + LOGIN_API.RENEW_SESSION.replace(':userUniqueName', encodeURIComponent(userName)), null).pipe(map((res) => {
             let data: BaseResponse<string, any> = res;
             return data;

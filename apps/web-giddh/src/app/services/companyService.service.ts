@@ -87,7 +87,9 @@ export class CompanyService {
 	 */
     public CompanyList(): Observable<BaseResponse<CompanyResponse[], string>> {
         this.user = this._generalService.user;
-        return this._http.get(this.config.apiUrl + COMPANY_API.COMPANY_LIST.replace(':uniqueName', this.user.uniqueName)).pipe(
+        let uniqueName = (this.user) ? this.user.uniqueName : "";
+
+        return this._http.get(this.config.apiUrl + COMPANY_API.COMPANY_LIST.replace(':uniqueName', uniqueName)).pipe(
             map((res) => {
                 let data: BaseResponse<CompanyResponse[], string> = res;
                 return data;
