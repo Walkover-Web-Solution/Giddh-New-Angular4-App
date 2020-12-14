@@ -1086,32 +1086,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    /**
-     * This will get the list of vouchers after preview page closed
-     *
-     * @param {boolean} isUniversalDateSelected
-     * @memberof InvoicePreviewComponent
-     */
-    public getVouchersList(isUniversalDateSelected: boolean): void {
-        let request;
-
-        if(this.lastListingFilters) {
-            request = this.lastListingFilters;
-        } else {
-            request = this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected);
-        }
-
-        if (!request.invoiceDate && !request.dueDate) {
-            request.from = this.invoiceSearchRequest.from;
-            request.to = this.invoiceSearchRequest.to;
-        }
-
-        this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
-        this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res => {
-            this.parseBalRes(res);
-        });
-    }
-
     public prepareModelForInvoiceReceiptApi(isUniversalDateSelected): InvoiceReceiptFilter {
         let model: any = {};
         let o = _.cloneDeep(this.invoiceSearchRequest);
