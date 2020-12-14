@@ -2097,7 +2097,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
     }
-  
+
+    /**
      * This will check and renew user session if close to expiry
      *
      * @memberof HeaderComponent
