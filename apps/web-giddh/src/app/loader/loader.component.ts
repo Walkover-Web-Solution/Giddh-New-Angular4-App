@@ -52,6 +52,9 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
                 this.navigationEnd$ = of(true);
                 this.cdref.detectChanges();
             }
+             if (a instanceof onanimationcancel) {
+                return this.navigationEnd$ = of(true);
+            }
         });
     }
 
