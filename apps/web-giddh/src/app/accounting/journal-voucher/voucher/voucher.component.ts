@@ -1215,7 +1215,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public loadQuickAccountComponent() {
-        this.quickAccountModal.config.backdrop = false;
+        if(this.quickAccountModal && this.quickAccountModal.config) {
+            this.quickAccountModal.config.backdrop = false;
+        }
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
         let viewContainerRef = this.quickAccountComponent.viewContainerRef;
         viewContainerRef.remove();

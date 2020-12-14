@@ -218,9 +218,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('shippingState', {static: true}) shippingState: ElementRef;
 
     /** Billing state instance */
-    @ViewChild('billingStateCompany') billingStateCompany: ElementRef;
+    @ViewChild('billingStateCompany', {static: false}) billingStateCompany: ElementRef;
     /** Shipping state instance */
-    @ViewChild('shippingStateCompany') shippingStateCompany: ElementRef;
+    @ViewChild('shippingStateCompany', {static: false}) shippingStateCompany: ElementRef;
 
     /**Adjust advance receipts */
     @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
@@ -2982,7 +2982,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     setTimeout(() => {
                         let description = this.description.toArray();
-                        if (description && description[this.activeIndx]) {
+                        if (description && description[this.activeIndx] && description[this.activeIndx].nativeElement) {
                             description[this.activeIndx].nativeElement.focus();
                         }
                     }, 200);
@@ -3005,7 +3005,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             setTimeout(() => {
                 let description = this.description.toArray();
-                if (description && description[this.activeIndx]) {
+                if (description && description[this.activeIndx] && description[this.activeIndx].nativeElement) {
                     description[this.activeIndx].nativeElement.focus();
                 }
             }, 200);
@@ -3072,7 +3072,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
             });
-        } else if (!entry.isOtherTaxApplicable && this.tcsTdsTaxesAccount.length) {
+        } else if (!entry.isOtherTaxApplicable && this.tcsTdsTaxesAccount && this.tcsTdsTaxesAccount.length) {
             entry.otherTaxModal.appliedOtherTax = this.tcsTdsTaxesAccount[this.tcsTdsTaxesAccount.length-1];
             entry.isOtherTaxApplicable = true;
         } else {
@@ -3144,7 +3144,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         setTimeout(() => {
             let description = this.description.toArray();
-            if (description && description[this.activeIndx]) {
+            if (description && description[this.activeIndx] && description[this.activeIndx].nativeElement) {
                 description[this.activeIndx].nativeElement.focus();
             }
         }, 200);
@@ -3244,7 +3244,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             this.invFormData.entries.push(entry);
             setTimeout(() => {
-                this.activeIndx = this.invFormData.entries.length ? this.invFormData.entries.length - 1 : 0;
+                this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
                 this.onBlurDueDate(this.activeIndx);
             }, 200);
         } else {
@@ -3256,7 +3256,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let entry: SalesEntryClass = new SalesEntryClass();
             this.invFormData.entries.push(entry);
             setTimeout(() => {
-                this.activeIndx = this.invFormData.entries.length ? this.invFormData.entries.length - 1 : 0;
+                this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
                 this.onBlurDueDate(this.activeIndx);
             }, 200);
         }
@@ -3268,7 +3268,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         this.invFormData.entries = cloneDeep(this.invFormData.entries.filter((entry, index) => entryIdx !== index));
         this.calculateAffectedThingsFromOtherTaxChanges();
-        if (this.invFormData.entries.length === 0) {
+        if (!this.invFormData.entries || this.invFormData.entries.length === 0) {
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
@@ -4111,7 +4111,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-            if (!modal.appliedOtherTax.name) {
+            if (!modal.appliedOtherTax.name && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
                 entry.otherTaxModal.appliedOtherTax.name = tax.name;
             }
             if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
@@ -5056,7 +5056,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public focusInCustomerName() {
         if (this.isCashInvoice) {
             setTimeout(() => {
-                if (this.inputCustomerName) {
+                if (this.inputCustomerName && this.inputCustomerName.nativeElement) {
                     this.inputCustomerName.nativeElement.focus();
                 }
             }, 200);
@@ -5140,7 +5140,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invFormData.entries[index].transactions[0] : '';
             if (transaction) {
                 transaction['requiredTax'] = (entry.taxes && entry.taxes.length === 0);
-                validEntries = !(entry.taxes.length === 0); // Entry is invalid if tax length is zero
+                validEntries = !(!entry.taxes || entry.taxes.length === 0); // Entry is invalid if tax length is zero
             }
         });
         return validEntries;
@@ -5279,7 +5279,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private isStockItemPresent(): boolean {
-        if (this.isMultiCurrencyModule()) {
+        if (this.isMultiCurrencyModule() && this.invFormData.entries) {
             const entries = this.invFormData.entries;
             for (let entry = 0; entry < entries.length; entry++) {
                 const transactions = entries[entry].transactions;

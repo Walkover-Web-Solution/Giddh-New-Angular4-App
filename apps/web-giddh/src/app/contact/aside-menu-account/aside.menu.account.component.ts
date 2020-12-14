@@ -115,7 +115,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.flattenGroups$.subscribe(flattenGroups => {
             if (flattenGroups) {
                 let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+                    return grps.groupUniqueName === this.activeGroupUniqueName || (grps && grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName));
                 }).map((m: any) => ({ value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups }));
                 this.flatGroupsOptions = items;
             }
@@ -196,7 +196,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 uniqueName: listItem.uniqueName
             });
             listItem = Object.assign({}, listItem, {parentGroups: []});
-            listItem.parentGroups = newParents;
+            if(listItem) {
+                listItem.parentGroups = newParents;
+            }
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(_.omit(listItem, 'groups'));

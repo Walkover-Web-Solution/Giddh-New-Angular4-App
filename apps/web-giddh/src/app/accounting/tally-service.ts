@@ -65,7 +65,13 @@ export class TallyModuleService {
                 }
                 if (this.selectedPageInfo.value.page === 'Purchase') {
                     if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+                        if(this.cashAccounts.value) {
+                            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+                        } else if(this.bankAccounts.value) {
+                            filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
+                        } else {
+                            filteredAccounts = _.cloneDeep(this.taxAccounts.value);
+                        }
                         this.filteredAccounts.next(filteredAccounts);
                     } else if (type === 'to') {
                         filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
@@ -86,7 +92,11 @@ export class TallyModuleService {
                         filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
                         this.filteredAccounts.next(filteredAccounts);
                     } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value));
+                        if(this.salesAccounts.value) {
+                            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value));
+                        } else {
+                            filteredAccounts = _.cloneDeep(this.bankAccounts.value);
+                        }
                         this.filteredAccounts.next(filteredAccounts);
                     }
                 }
@@ -101,7 +111,13 @@ export class TallyModuleService {
                         }
                         this.filteredAccounts.next(filteredAccounts);
                     } else if (type === 'to') {
-                        filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+                        if(this.salesAccounts.value) {
+                            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+                        } else if(this.bankAccounts.value) {
+                            filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
+                        } else {
+                            filteredAccounts = _.cloneDeep(this.taxAccounts.value);
+                        }
                         this.filteredAccounts.next(filteredAccounts);
                     }
                 }
@@ -116,7 +132,13 @@ export class TallyModuleService {
                 }
                 if (this.selectedPageInfo.value.page === 'Debit note') {
                     if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+                        if(this.cashAccounts.value) {
+                            filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+                        } else if(this.bankAccounts.value) {
+                            filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
+                        } else {
+                            filteredAccounts = _.cloneDeep(this.taxAccounts.value);
+                        }
                         this.filteredAccounts.next(filteredAccounts);
                     } else if (type === 'to') {
                         filteredAccounts = _.cloneDeep(this.expenseAccounts.value);
@@ -245,19 +267,53 @@ export class TallyModuleService {
                 case 'Journal':
                     // accounts = this.flattenAccounts.value;
                     // As discussed with Manish, Cash and Bank account should not come in Journal entry
-                    accounts = this.purchaseAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value).concat(this.salesAccounts.value);
+                    if(this.purchaseAccounts.value) {
+                        accounts = this.purchaseAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value).concat(this.salesAccounts.value);
+                    } else if(this.expenseAccounts.value) {
+                        accounts = this.expenseAccounts.value.concat(this.taxAccounts.value).concat(this.salesAccounts.value);
+                    } else if(this.taxAccounts.value) {
+                        accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
+                    } else {
+                        accounts = this.salesAccounts.value;
+                    }
                     break;
                 case 'Purchase':
-                    accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
+                    if(this.bankAccounts.value) {
+                        accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
+                    } else if(this.cashAccounts.value) {
+                        accounts = this.cashAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
+                    } else if(this.expenseAccounts.value) {
+                        accounts = this.expenseAccounts.value.concat(this.taxAccounts.value);
+                    } else {
+                        accounts = this.taxAccounts.value;
+                    }
                     break;
                 case 'Sales':
-                    accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
+                    if(this.bankAccounts.value) {
+                        accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
+                    } else if(this.cashAccounts.value) {
+                        accounts = this.cashAccounts.value.concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
+                    } else if(this.expenseAccounts.value) {
+                        accounts = this.expenseAccounts.value.concat(this.salesAccounts.value);
+                    } else {
+                        accounts = this.salesAccounts.value;
+                    }
                     break;
                 case 'Credit note':
-                    accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
+                    if(this.taxAccounts.value) {
+                        accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
+                    } else {
+                        accounts = this.salesAccounts.value;
+                    }
                     break;
                 case 'Debit note':
-                    accounts = this.purchaseAccounts.value.concat(this.taxAccounts.value).concat(this.expenseAccounts.value);
+                    if(this.purchaseAccounts.value) {
+                        accounts = this.purchaseAccounts.value.concat(this.taxAccounts.value).concat(this.expenseAccounts.value);
+                    } else if(this.taxAccounts.value) {
+                        accounts = this.taxAccounts.value.concat(this.expenseAccounts.value);   
+                    } else {
+                        accounts = this.expenseAccounts.value;
+                    }
                     break;
                 case 'Payment':
                     accounts = this.flattenAccounts.value;
