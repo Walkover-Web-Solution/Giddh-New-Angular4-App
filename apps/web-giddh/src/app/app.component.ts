@@ -141,7 +141,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public ngOnInit() {
         this.breakpointObserver.observe([
             '(max-width: 1023px)'
-        ]).pipe(takeUntil(this.destroyed$))..subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
         this.sideBarStateChange(true);
