@@ -225,7 +225,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**Adjust advance receipts */
     @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
     @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
-
+    /** Date change confirmation modal */
     @ViewChild('dateChangeConfirmationModel', {static: true}) public dateChangeConfirmationModel: ModalDirective;
     public showAdvanceReceiptAdjust: boolean = false;
 
