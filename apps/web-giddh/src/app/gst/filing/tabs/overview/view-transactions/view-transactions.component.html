@@ -193,11 +193,11 @@
                 <tbody>
                     <tr class="cursor-pointer" *ngFor="let item of (viewTransaction$ | async).results">
                         <td>{{item.voucherDate ? item.voucherDate : '-'}}</td>
-                        <td class="btn-link nowrap" *ngIf="item.voucherType !== 'purchase'" (click)="onSelectInvoice(item)">{{item.voucherNumber ? item.voucherNumber : '-'}}
+                        <td class="btn-link" *ngIf="item.voucherType !== 'purchase'" (click)="onSelectInvoice(item)">{{item.voucherNumber ? item.voucherNumber : '-'}}
                         </td>
                         <td *ngIf="item.voucherType === 'purchase'">
                             {{item.voucherNumber ? item.voucherNumber : '-'}}</td>
-                        <td class="nowrap">
+                        <td>
                             {{item.accountGstin ? item.accountGstin : '-'}}
                         </td>
                         <td>{{item.accountName ? item.accountName : '-'}}</td>
@@ -207,12 +207,12 @@
                             {{item.pos ? item.pos : '-'}}
                         </td>
                         <td>{{item.reverseCharge ? item.reverseCharge : '-'}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.taxableAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.igstAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.cgstAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.sgstAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.cessAmount | giddhCurrency}}</td>
-                        <td class="text-right nowrap"><i class="fa fa-inr"></i>{{item.totalAmount | giddhCurrency}}</td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item.taxableAmount | giddhCurrency}}</td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item.igstAmount | giddhCurrency}}</td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item.cgstAmount | giddhCurrency}}</td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item.sgstAmount | giddhCurrency}}</td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item.cessAmount | giddhCurrency}}</td>
+                        <td class="text-right"><i class="fa fa-inr"></i>{{item.totalAmount | giddhCurrency}}</td>
                     </tr>
                 </tbody>
             </table>

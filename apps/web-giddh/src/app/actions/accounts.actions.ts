@@ -18,6 +18,7 @@ import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eve
 import { Observable } from 'rxjs';
 import { ApplyDiscountRequest, AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import {IUpdateDbRequest} from "../models/interfaces/ulist.interface";
+import { CommonActions } from './common.actions';
 
 @Injectable()
 export class AccountsAction {
@@ -292,6 +293,7 @@ export class AccountsAction {
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value)),
             map(response => {
                 if (response.status === 'success') {
+                    this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                     const updateIndexDb: IUpdateDbRequest = {
                         newUniqueName: response.body.uniqueName,
@@ -678,7 +680,8 @@ export class AccountsAction {
         private store: Store<AppState>,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private _generalActions: GeneralActions,
-        private _generalServices: GeneralService) {
+        private _generalServices: GeneralService,
+        private commonActions: CommonActions) {
     }
 
     public createAccount(value: string, account: AccountRequest): CustomActions {

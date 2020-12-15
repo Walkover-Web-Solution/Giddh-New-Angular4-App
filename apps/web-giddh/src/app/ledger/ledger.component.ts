@@ -441,7 +441,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.newLedgerComponent.calculateTax();
                 this.newLedgerComponent.calculateTotal();
                 setTimeout(() => {
-                    this.newLedgerComponent.detectChanges();
+                    if(this.newLedgerComponent) {
+                        this.newLedgerComponent.detectChanges();
+                    }
                 }, 200);
                 this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
             }
@@ -938,7 +940,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
     }

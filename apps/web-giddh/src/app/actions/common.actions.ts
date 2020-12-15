@@ -27,6 +27,7 @@ export class CommonActions {
     public static GET_PARTY_TYPE = 'GetGET_PARTY_TYPE_REQUEST';
     public static GET_PARTY_TYPE_RESPONSE = "GET_PARTY_TYPEResponse";
     public static RESET_COUNTRY = 'ResetCountry';
+    public static ACCOUNT_UPDATED = 'AccountUpdated';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -159,5 +160,19 @@ export class CommonActions {
         return {
             type: CommonActions.RESET_COUNTRY
         };
+    }
+
+    /**
+     * This will store true/false in isAccountUpdated store
+     *
+     * @param {boolean} event
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public accountUpdated(event: boolean): CustomActions {
+        return {
+            type: CommonActions.ACCOUNT_UPDATED,
+            payload: event
+        }
     }
 }

@@ -36,9 +36,9 @@
                     border: 1px solid $gainsboro;
                 }
             }
-        } 
-    } 
-} 
+        }
+    }
+}
 list-header .btn-toolbar .btn-group {
     float: none;
 }
@@ -233,7 +233,7 @@ address {
 }
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
-    font-size: 13px;
+    font-size: 14px;
     border-bottom: 1px solid $gainsboro;
 }
 .tax-engine .table thead:first-child tr:first-child th {
@@ -338,7 +338,7 @@ address {
             display: inline-block;
         }
     }
-    } 
+    }
 }
 .tax-engine .sub-filter-nav-band ul > li > a {
     cursor: pointer;
@@ -519,13 +519,13 @@ svg.icon.icon-sm {
 
 
 .return-detail-col{
-    background-color: $extra-dark-alice-blue; 
+    background-color: $extra-dark-alice-blue;
     width: 50%;
 }
 
 .failed-transaction{
-    padding: 10px 25px; 
-    margin: 5px auto; 
+    padding: 10px 25px;
+    margin: 5px auto;
     border-left: 1px solid $light-grey;
 }
 

@@ -689,6 +689,7 @@
                                                     [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                     [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null"
                                                     [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                                                    (focus)="onFocusInvoiceDate()"
                                                     (blur)="onBlurInvoiceDate(0)"
                                                     (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" />
                                                 <p class="text-danger"
@@ -730,6 +731,7 @@
                                             name="voucherDate" class="form-control date-invoice" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                             [(ngModel)]="invFormData.voucherDetails.voucherDate"
+                                            (focus)="onFocusInvoiceDate()"
                                             (blur)="onBlurInvoiceDate(0)"
                                             (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)"
                                             [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null"
