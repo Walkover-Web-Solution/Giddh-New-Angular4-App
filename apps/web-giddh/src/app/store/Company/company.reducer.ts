@@ -232,7 +232,6 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     isGetAllIntegratedBankInProgress: false
                 });
             }
-
         default:
             return state;
     }

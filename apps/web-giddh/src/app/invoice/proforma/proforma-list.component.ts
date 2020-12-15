@@ -35,6 +35,7 @@ import { Router } from '@angular/router';
 import { createSelector } from "reselect";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
+import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 
 const VOUCHER_TYPES = ['proformas', 'estimates'];
@@ -62,6 +63,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public itemsListForDetails: InvoicePreviewDetailsVm[] = [];
     public invoiceSetting: InvoiceSetting;
     public appSideMenubarIsOpen: boolean;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
 
     public modalConfig: ModalOptions = {
         animated: true,
@@ -190,6 +195,13 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.baseCurrency = profile.baseCurrency;
+            }
+        });
+
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
             }
         });
 

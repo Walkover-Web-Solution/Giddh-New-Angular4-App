@@ -34,6 +34,8 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { KEYS } from '../../../accounting/journal-voucher/journal-voucher.component';
+import { OrganizationType } from '../../../models/user-login-state';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'invetory-stock-report',
@@ -63,6 +65,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
+    /** List of branches */
+    public branches: Array<any> = [];
 
     public today: Date = new Date();
     public activeStock$: string;
@@ -247,6 +251,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public branchTransferMode: string = '';
     /** Modal Reference */
     public modalRef: BsModalRef;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     /**
      * TypeScript public modifiers
@@ -258,7 +264,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private generalService: GeneralService
     ) {
         this.stockReport$ = this.store.pipe(select(stockReportStore => stockReportStore.inventory.stockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.stockReportRequest = new StockReportRequest();
@@ -268,6 +275,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             selectedTransactionType: ['all']
         });
         this.updateStockSuccess$ = this.store.pipe(select(s => s.inventory.UpdateStockSuccess), takeUntil(this.destroyed$));
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
     }
 
     public findStockNameFromId(grps: IGroupsWithStocksHierarchyMinItem[], stockUniqueName: string): string {
@@ -463,17 +471,19 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
                 if (entities.length) {
-                    if (this.selectedCmp && entities.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
+                    const branches = _.cloneDeep(entities);
+                    if (this.selectedCmp && branches.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
-                        entities.push(this.selectedCmp);
+                        branches.push(this.selectedCmp);
                     }
-                    entities.forEach(element => {
+                    branches.forEach(element => {
                         element['label'] = element.name;
                     });
-                    this.entities$ = observableOf(_.orderBy(entities, 'name'));
+                    this.entities$ = observableOf(_.orderBy(branches, 'name'));
                 } else if (entities.length === 0) {
                     this.entities$ = observableOf(null);
                 }
+                this.branches = entities;
             }
         })), takeUntil(this.destroyed$)).subscribe();
     }

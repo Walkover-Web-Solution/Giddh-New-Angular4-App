@@ -65,8 +65,7 @@ export class AllModulesComponent implements OnInit, OnDestroy {
                 // }
             }
         });
-        // commenting for later use
-        // this.getSharedAllModules();
+        this.getSharedAllModules();
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "All Modules";
         currentPageObj.url = "";
