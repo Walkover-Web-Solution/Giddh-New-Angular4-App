@@ -567,8 +567,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invoiceSelected: any;
     /** Stores the current index of entry whose TCS/TDS are entered */
     public tcsTdsIndex: number = 0;
-    /** this is showing pending sales page **/
-    public isPendingSales: boolean = false;
     /** This will hold if deliver address filled **/
     public isDeliverAddressFilled: boolean = false;
     /** This will hold onboarding api form request */
