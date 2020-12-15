@@ -89,8 +89,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public warehouseToUpdate: any;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
-    public showCreateEditOption: boolean;
 
 
     /** View container to carry out on boarding */
@@ -139,7 +137,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit(): void {
         this.imgPath = (isElectron ||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
-        this.showCreateEditOption = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.initSubscribers();
     }
 

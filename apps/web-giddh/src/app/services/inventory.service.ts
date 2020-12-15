@@ -979,6 +979,11 @@ export class InventoryService {
         }
 
         if (request.reportType === 'group' || request.reportType === 'stock') {
+            if (request.branchUniqueName === this._generalService.companyUniqueName) {
+                // Delete the branch unique name when company is selected in the dropdown
+                delete request.branchUniqueName;
+                delete requestObject.branchUniqueName;
+            }
             return this._http.post(url, requestObject).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error, '', {})));
         } else {
             if (request.branchUniqueName) {

@@ -75,7 +75,8 @@ export interface ImportExcelRequestData {
 	giddhHeaders?: string[];
 	mandatoryHeaders?: string[];
 	groupMandatoryHeaders: string[][];
-	isHeaderProvided?: boolean;
+    isHeaderProvided?: boolean;
+    branchUniqueName?: string;
 }
 
 export class ImportExcelProcessResponseData {
