@@ -38,11 +38,14 @@ export class ImportExcelService {
 
 	public processImport(entity: string, model: ImportExcelRequestData) {
 		const companyUniqueName = this._generalService.companyUniqueName;
-		const url = this.config.apiUrl + IMPORT_EXCEL_API.PROCESS_IMPORT
+		let url = this.config.apiUrl + IMPORT_EXCEL_API.PROCESS_IMPORT
 			.replace(':companyUniqueName', companyUniqueName)
 			.replace(':entity', entity)
 			.replace(':isHeaderProvided', model.isHeaderProvided.toString())
-			;
+            ;
+        if (model.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
+        }
 		return this._http.post(url, model).pipe(map((res) => {
 			let data: BaseResponse<ImportExcelProcessResponseData, ImportExcelRequestData> = res;
 			return data;
