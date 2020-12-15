@@ -446,26 +446,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.generateInvoice = false;
     }
 
-    /**
-     * To calculate discount
-     *
-     * @param {*} event
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public calculateDiscount(event: any): void {
-        this.currentTxn.discount = event.discountTotal;
-        this.accountOtherApplicableDiscount.forEach(item => {
-            if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                item.isActive = event.isActive.target.checked;
-            }
-        });
-        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts) {
-            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
-                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target.checked;
-                }
-            });
-        }
+    public calculateDiscount(total: number) {
+        this.currentTxn.discount = total;
         this.currentTxn.convertedDiscount = this.calculateConversionRate(this.currentTxn.discount);
         this.calculateTax();
     }
