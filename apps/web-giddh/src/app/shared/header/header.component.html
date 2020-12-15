@@ -334,7 +334,7 @@
                 </ul>
 
                 <!-- Main menu -->
-                <ul class="left-fixed-header mr-t4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                <ul class="left-fixed-header mr-t4" [ngClass]="{'open':sideMenu.isopen , 'pb-5': (currentCompanyBranches$ | async)?.length > 1}" *ngIf="(selectedCompany | async)">
                     <h6 class="mr-b1">MENU
                         <a (click)="navigateToAllModules()">
                             <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body">
