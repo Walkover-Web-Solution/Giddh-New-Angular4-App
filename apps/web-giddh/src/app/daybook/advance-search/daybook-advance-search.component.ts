@@ -202,9 +202,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 		this.closeModelEvent.emit({
 			cancle: true
 		});
-        if (this.modalRef) {
-            this.hideGiddhDatepicker();
-        }
 	}
 
     /**

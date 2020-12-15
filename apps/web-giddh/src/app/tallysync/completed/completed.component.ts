@@ -117,7 +117,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
         // set financial years based on company financial year
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.filterForm.get('filterCompany').patchValue(activeCompany.uniqueName);
             }
