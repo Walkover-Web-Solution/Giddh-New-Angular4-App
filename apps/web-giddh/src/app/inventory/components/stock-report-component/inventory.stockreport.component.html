@@ -90,17 +90,11 @@
                     <tr>
                         <th colspan="3" width="40%">
                             <div class="d-flex">
-                                <!-- <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" class="form-control stock-input" (applyDaterangepicker)="selectedDate($event)" /> -->
                                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                     <i><img src="assets/images/custom-calender.svg"></i>
                                     <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                                 </div>
                             </div>
-
-                            <!-- <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i><img src="assets/images/custom-calender.svg"></i>
-                                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
-                            </div> -->
                         </th>
                         <th colspan="4" width="40%" class="text-center bdrR bdrB">Transactions</th>
                         <th colspan="1" width="10%" class="bdrL text-center">Closing Stock</th>
@@ -469,10 +463,6 @@
                     <div class="row">
                         <div class="col-sm-4">Date Range</div>
                         <div class="col-sm-8">
-                            <!-- <div class="input-group">
-                                <input type="text" name="daterangeInput1" daterangepicker [options]="datePickerOptions" class="form-control" (applyDaterangepicker)="selectedDate($event, 'advance')" />
-                                <div class="input-group-addon"><span class="icon-calender bg-white"></span></div>
-                            </div> -->
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <i><img src="assets/images/custom-calender.svg"></i>
                                 <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
