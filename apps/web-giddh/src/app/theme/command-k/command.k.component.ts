@@ -490,4 +490,18 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
     }
+
+    /**
+     * This will return the last route name from the page route string
+     *
+     * @param {string} route
+     * @returns {string}
+     * @memberof CommandKComponent
+     */
+    public getPageUniqueName(route: string): string {
+        let string = route.replace(/\s+/g, '-');
+        string = string.replace(/\//g, '-');
+        string = string.replace(/^-|-$/g,'');
+        return string;
+    }
 }
