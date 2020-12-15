@@ -245,7 +245,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             .subscribe((res: GetAllLedgersForInvoiceResponse) => {
                 if (res && res.results) {
                     let response = _.cloneDeep(res);
-
                     response.results = _.orderBy(response.results, (item: ILedgersInvoiceResult) => {
                         return moment(item.entryDate, GIDDH_DATE_FORMAT);
                     }, 'desc');

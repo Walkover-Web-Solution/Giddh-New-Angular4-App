@@ -2998,7 +2998,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
             setTimeout(() => {
                 this.assignDueDate();
-            }, 200);    
+            }, 200);
         }
     }
 }

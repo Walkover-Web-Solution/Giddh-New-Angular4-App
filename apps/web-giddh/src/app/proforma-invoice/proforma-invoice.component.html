@@ -73,7 +73,7 @@
 
                         <div class="inner-container">
 
-                            <div class="show-on-small-screen"
+                            <div class="show-on-small-screen" [ngClass]="{'pending-sales-balance-due': isPendingSales}"
                                 *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice">
 
                                 <div class="text-right">

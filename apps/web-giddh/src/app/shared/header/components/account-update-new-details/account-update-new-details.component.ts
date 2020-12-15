@@ -1607,4 +1607,5 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public discountSelected(): void {
         this.isDiscountSaveDisable$ = of(false);
     }
+
 }

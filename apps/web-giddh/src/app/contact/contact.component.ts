@@ -44,11 +44,11 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import { CompanyService } from '../services/companyService.service';
 import { ContactService } from '../services/contact.service';
 import { GeneralService } from '../services/general.service';
+import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
-import { GroupService } from '../services/group.service';
 
 export interface PayNowRequest {
     accountUniqueName: string;
@@ -247,6 +247,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _groupWithAccountsAction: GroupWithAccountsAction,
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
+        private _router: Router,
         private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
         private settingsProfileActions: SettingsProfileActions,  private groupService: GroupService) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
@@ -373,7 +374,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order);
                 }
             });
-
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -493,7 +493,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             if(this.universalDate) {
                 this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
                 this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
                 this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
@@ -932,7 +931,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.advanceSearchRequestModal.creditTotal = request.amount;
             this.setAmountType(category, request.amountType);
         }
-
         switch (request.amountType) {
             case 'GreaterThan':
                 this.advanceSearchRequestModal[category + 'GreaterThan'] = true;

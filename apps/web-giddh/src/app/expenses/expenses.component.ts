@@ -263,7 +263,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
             this.getPettyCashRejectedReports(this.pettycashRequest);
-
             setTimeout(() => {
                 if(this.currentSelectedTab == "pending" && this.pendingListComponent && this.pendingListComponent.pettycashRequest && this.pendingTabSortOptions) {
                     this.pendingListComponent.pettycashRequest.sort = this.pendingTabSortOptions.sort;
@@ -355,7 +354,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
             this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
         }
-
         this.currentSelectedTab = tab;
 
         setTimeout(() => {
