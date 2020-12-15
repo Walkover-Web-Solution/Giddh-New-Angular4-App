@@ -379,6 +379,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             e.additional.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
             if (data && data.body) {
+                txn.showTaxationDiscountBox = false;
                 // Take taxes of parent group and stock's own taxes
                 const taxes = data.body.taxes || [];
                 if (data.body.stock) {
@@ -406,6 +407,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     nameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                     stock: data.body.stock,
                     uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
+                    accountApplicableDiscounts: data.body.applicableDiscounts
                 };
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
@@ -447,7 +449,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     txn.amount = rate;
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
+                this.needToReCalculate.next(true);
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+                this.newLedgerComponent.preparePreAppliedDiscounts();
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
                 this.newLedgerComponent.calculatePreAppliedTax();
@@ -1327,7 +1331,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.showNewLedgerPanel = false;
     }
 
-    public showUpdateLedgerModal(txn: ITransactionItem) {
+    public showUpdateLedgerModal(txn: ITransactionItem ) {
         let transactions: TransactionsResponse = null;
         this.store.pipe(select(t => t.ledger.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
         if (transactions) {

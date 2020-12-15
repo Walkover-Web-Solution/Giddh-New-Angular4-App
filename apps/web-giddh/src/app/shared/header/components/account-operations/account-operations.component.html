@@ -8,18 +8,15 @@
                 </li>
             </ol>
         </div>
-        <!--share group/account-->
-        <div>
-            <!--group-->
-            <div class="pull-right col-xs-4 pdR0 pdL0 text-right">
-                <button class="btn btn-share mrR1" *ngIf="(showEditGroup$ | async)" (click)="exportGroupLedger()">
-                    Export
-                </button>
-                <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
-                </button>
-                <div class="primary_clr text-right pull-right mrT1 clearfix" *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
-                    Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
-                </div>
+        <div class="pull-right col-sm-4 pr-0 pl-0 text-right" *ngIf="(showEditGroup$ | async)">
+            <button class="btn btn-share export-group-ledger" (click)="exportGroupLedger()">
+                Export
+            </button>
+            <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
+            </button>
+            <div class="primary_clr text-right pull-right mr-t1 clearfix"
+                *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
+                Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
             </div>
         </div>
         <!--account-->

@@ -443,6 +443,9 @@
                     <th *ngIf="showFieldFilter.comment" class="comment-field">Comment</th>
 
                     <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
+                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                        <th width="10%">{{item.key}}</th>
+                    </ng-container>
 
                     <ng-container *ngFor="let item of (companyCustomFields$ | async)">
                         <th width="10%">{{item.key}}</th>

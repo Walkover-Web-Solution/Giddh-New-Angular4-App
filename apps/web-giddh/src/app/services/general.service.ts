@@ -723,4 +723,43 @@ export class GeneralService {
         const expires = "expires=" + date.toUTCString();
         document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
     }
+
+    /**
+     * Handles the voucher date change modal configuration
+     *
+     * @param {boolean} isVoucherDateSelected
+     * @returns {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getDateChangeConfiguration(isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: 'Yes',
+            cssClass: 'btn btn-success'
+        },
+        {
+            text: 'No',
+            cssClass: 'btn btn-danger'
+        }];
+        const headerText: string = 'Date Change Confirmation';
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return (isVoucherDateSelected) ? {
+            headerText,
+            headerCssClass,
+            messageText: `Do you want to change the entry date as well?`,
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        } : {
+                headerText,
+                headerCssClass,
+                messageText: `Do you want to change the all entries date with this date`,
+                messageCssClass,
+                footerText: '',
+                footerCssClass,
+                buttons
+            };
+    }
 }

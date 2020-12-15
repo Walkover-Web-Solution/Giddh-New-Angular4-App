@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CompanyResponse, ICurrencyResponse, Organization, StateDetailsResponse } from '../models/api-models/Company';
-import { Action, Store } from '@ngrx/store';
+import { Action, Store, select } from '@ngrx/store';
 import {
     LinkedInRequestModel,
     SignupwithEmaillModel,
@@ -128,7 +128,7 @@ export class LoginActions {
                             type: 'EmptyAction'
                         };
                     } else {
-                        return this.LoginSuccess();
+                        return this.LoginSuccess(response);
                     }
                 } else {
                     return {
@@ -399,7 +399,7 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
-                return this.LoginSuccess();
+                return this.LoginSuccess(response);
             })));
 
 
@@ -421,7 +421,7 @@ export class LoginActions {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
-                return this.LoginSuccess();
+                return this.LoginSuccess(response);
             })));
 
 
@@ -770,7 +770,6 @@ export class LoginActions {
         private _companyService: CompanyService,
         private http: HttpClient,
         private _generalService: GeneralService,
-        private _accountService: AccountService,
         private activatedRoute: ActivatedRoute,
         private _generalAction: GeneralActions,
         private _dbService: DbService,
@@ -919,8 +918,10 @@ export class LoginActions {
         };
     }
 
-    public LoginSuccess(): CustomActions {
-
+    public LoginSuccess(response?: any): CustomActions {
+        if (response && response.body && response.body.session) {
+            this._generalService.setCookie("giddh_session_id", response.body.session.id, 30);
+        }
         return {
             type: LoginActions.LoginSuccess,
             payload: null
@@ -928,7 +929,6 @@ export class LoginActions {
     }
 
     public LoginSuccessByOtherUrl(): CustomActions {
-        console.log("LOGINS");
         return {
             type: LoginActions.LoginSuccessBYUrl,
             payload: null
@@ -1121,7 +1121,6 @@ export class LoginActions {
     }
 
     public userAutoLoginResponse(response): CustomActions {
-        console.log(response);
         return {
             type: LoginActions.AutoLoginWithPasswdResponse,
             payload: response
@@ -1167,6 +1166,10 @@ export class LoginActions {
     }
 
     private finalThingTodo(stateDetail: any, companies: any) {
+        this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
+            let request = { userUniqueName: response.user.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
+            this.store.dispatch(this.companyActions.getCompanyUser(request));
+        });
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
