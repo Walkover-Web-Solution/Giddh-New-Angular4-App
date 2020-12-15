@@ -8,8 +8,8 @@ class LoginPage {
         return cy.xpath('//a[contains(text(),\'email and password\')]');
     }
 
-    getSignUpButton(){
-        return cy.xpath('//a[@class=\'btn btn-secondary\']');
+    signUpButton(){
+        return cy.xpath('//a[normalize-space()=\'Signup\']');
     }
 
     enterEmailId(){

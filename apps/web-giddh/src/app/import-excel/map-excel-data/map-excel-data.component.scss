@@ -51,14 +51,54 @@ input.green-checkbox[type="checkbox"]:checked:after {
     }
 }
 
-@media (max-width: 1024px){
+@media (min-width: 576px) and (max-width: 1024px){
     .right-bar {
         width: 310px !important;
     }
 }
 
-@media (max-width: 767px){
+@media (min-width: 721px) and (max-width: 767px){
     .select-field-width{
         width: 70% !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 720px){
+    .select-field-width{
+        width: 50% !important;
+    }
+    .left-head{
+        width: 50%;
+    }
+}
+
+@media (min-width: 361px) and (max-width: 575px){
+    .select-field-width{
+        width: 70% !important;
+    }
+    .left-head{
+        width: 70%;
+    }
+    .right-bar {
+        width: 150px !important;
+        .right-head{
+        font-size: 14px;
+        }
+    }
+}
+
+@media (max-width: 360px){
+    .select-field-width{
+        width: 80% !important;
+    }
+    .left-head{
+        width: 80%;
+    }
+    .right-bar {
+        width: 100px !important;
+        padding: 5px;
+        .right-head{
+            font-size: 12px;
+        }
     }
 }
