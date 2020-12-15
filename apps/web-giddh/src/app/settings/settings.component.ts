@@ -104,6 +104,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 this.selectedChildTab = 0;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
+            } else {
+                this.integrationtab = params['referrer'];
             }
 
             this.tabChanged(this.activeTab);
@@ -178,8 +180,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
         switch (childTab) {
             case 'payment':
                 return 4;
+            case 'ecommerce':
+                return 3;    
+            case 'collection':
+                return 2;
             case 'email':
                 return 1;
+            case 'sms':
+                return 0;
             default:
                 return 0;
         }
@@ -224,7 +232,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public tabChanged(tab: string) {
-        if (tab === 'integration' && this.integrationtab) {
+        if ((tab === 'integration' || tab === 'profile') && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });

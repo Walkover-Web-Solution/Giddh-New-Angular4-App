@@ -77,6 +77,9 @@ export class CompanyActions {
 
     public static SET_ACTIVE_COMPANY_DATA = 'SET_ACTIVE_COMPANY_DATA';
 
+    public static GET_COMPANY_USER = 'GET_COMPANY_USER';
+    public static GET_COMPANY_USER_RESPONSE = 'GET_COMPANY_USER_RESPONSE';
+
     public createCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_COMPANY),
@@ -248,17 +251,11 @@ export class CompanyActions {
                         let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
                         if (companyIndex > -1) {
                             // if active company find no action needed
-                            if (response.body.length === totalCompany) {     // if company created success then only change to new created company otherwise refres Api call will return null action
+                            if (response.body.length === totalCompany) { // if company created success then only change to new created company otherwise refresh Api call will return null action
                                 return { type: 'EmptyAction' };
-
                             } else {
-                                return {
-                                    type: 'CHANGE_COMPANY',
-                                    payload: response.body[companyIndex].uniqueName
-                                };
+                                return { type: 'EmptyAction' };
                             }
-
-                            // return { type: 'EmptyAction' };
                         } else {
                             // if no active company active next company from companies list
                             return {
@@ -401,6 +398,24 @@ export class CompanyActions {
     public getAllIntegratedBankInCompanyResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                }
+                return { type: 'EmptyAction' };
+            })));
+
+    public getCompanyUser$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CompanyActions.GET_COMPANY_USER),
+            switchMap((action: CustomActions) => this._companyService.getCompanyUser(action.payload)),
+            map(response => {
+                return this.getCompanyUserResponse(response);
+            })));
+
+    public getCompanyUserResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CompanyActions.GET_COMPANY_USER_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -714,6 +729,34 @@ export class CompanyActions {
         return {
             type: CompanyActions.SET_ACTIVE_COMPANY_DATA,
             payload: data
+        };
+    }
+
+    /**
+     * This will initiate get company uer api
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getCompanyUser(data: any): CustomActions {
+        return {
+            type: CompanyActions.GET_COMPANY_USER,
+            payload: data
+        };
+    }
+
+    /**
+     * This will set the company uer data in store
+     *
+     * @param {BaseResponse<any, string>} value
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getCompanyUserResponse(value: BaseResponse<any, string>): CustomActions {
+        return {
+            type: CompanyActions.GET_COMPANY_USER_RESPONSE,
+            payload: value
         };
     }
 }

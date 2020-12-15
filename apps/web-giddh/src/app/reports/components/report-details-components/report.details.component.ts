@@ -177,7 +177,7 @@ export class ReportsDetailsComponent implements OnInit {
     public setCurrentFY() {
         let financialYearChosenInReportUniqueName = '';
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.company && state.company.activeCompany, (state: AppState) => state.session.financialYearChosenInReport], (activeCompany, financialYearChosenInReport) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.financialYearChosenInReport], (activeCompany, financialYearChosenInReport) => {
             financialYearChosenInReportUniqueName = financialYearChosenInReport;
             return activeCompany;
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {

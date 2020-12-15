@@ -152,9 +152,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** This will handle if we need to disable country selection */
     public disableCountrySelection: boolean = false;
     /** To check applied taxes modified  */
-    public isTaxesSaveDisable$: Observable<boolean> = of(true);
+    public isTaxesSaveDisable$: Observable<boolean> = observableOf(true);
     /** To check applied discounts modified  */
-    public isDiscountSaveDisable$: Observable<boolean> = of(true);
+    public isDiscountSaveDisable$: Observable<boolean> = observableOf(true);
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction, private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
         this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
@@ -174,7 +174,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.prepareTaxDropdown();
         this.getDiscountList();
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
@@ -386,7 +386,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         //     }
         // });
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -1595,7 +1595,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public taxesSelected(event: any): void {
         if (event) {
-            this.isTaxesSaveDisable$ = of(false);
+            this.isTaxesSaveDisable$ = observableOf(false);
         }
     }
 
@@ -1605,7 +1605,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public discountSelected(): void {
-        this.isDiscountSaveDisable$ = of(false);
+        this.isDiscountSaveDisable$ = observableOf(false);
     }
 
 }

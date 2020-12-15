@@ -140,7 +140,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.purchaseInvoiceRequestObject.entryUniqueName = [];
         this.purchaseInvoiceRequestObject.taxes = [];
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany && activeCompany.gstDetails && activeCompany.gstDetails[0]) {
                 this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
             }

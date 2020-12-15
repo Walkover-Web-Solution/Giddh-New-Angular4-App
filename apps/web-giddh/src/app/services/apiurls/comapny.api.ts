@@ -38,5 +38,6 @@ export const COMPANY_API = {
     BULK_PAYMENT_RESEND_OTP: 'company/:companyUniqueName/bank/resend-otp?urn=:urn&requestId=:requestId',
 
     CREATE_NEW_BRANCH: 'company/:companyUniqueName/branch',
-    GET_ALL_BRANCHES: 'company/:companyUniqueName/branch'
+    GET_ALL_BRANCHES: 'company/:companyUniqueName/branch',
+    GET_COMPANY_USER: '/users/:userUniqueName/company-uer?companyUniqueName=:companyUniqueName'
 };
