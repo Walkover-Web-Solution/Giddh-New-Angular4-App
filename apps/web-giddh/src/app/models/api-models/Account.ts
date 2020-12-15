@@ -237,6 +237,10 @@ export class AccountResponseV2 {
     public discounts?: IDiscountList[];
     public currencySymbol?: string;
     public currency?: string;
+    public applicableDiscounts?: any[];
+    public inheritedDiscounts: any[];
+    public customFields?: CustomFieldsData[];
+    public category?: string;
 }
 
 /*
