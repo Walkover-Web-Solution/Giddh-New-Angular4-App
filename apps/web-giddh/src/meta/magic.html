@@ -229,8 +229,8 @@
                                                 <th class="text-right col-3 bd-rl">Amount</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr class="ledger-row row mr-0 ml-0"
+                                        <tbody class="bd-rl">
+                                            <tr class="ledger-row row mr-0 ml-0 bd-rb"
                                                 v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                 <td class="col-3"></td>
                                                 <td class="col-6">By Balance B/F</td>
@@ -344,7 +344,7 @@
                                                     v-if="legderBalanceData.closingBalance && legderBalanceData.closingBalance.type === 'CREDIT'"
                                                     v-tooltip="'(-) Asset ( ohh no!)'">
                                                     <!-- | number: '1.2-2'  -->
-                                                    To Balance C/F: {{legderBalanceData.forwardedBalance ? legderBalanceData.forwardedBalance.type === 'CREDIT' ? 'Cr' : 'Dr' : ''}}
+                                                    To Balance C/F:
                                                     {{ legderBalanceData.closingBalance.amount | currency }}
                                                 </span>
                                             </td>
@@ -357,14 +357,14 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <table class="ledger-footer-1">
+                                <table class="ledger-footer-1 float-right">
                                     <tbody>
                                         <tr class="total-col row mr-0 ml-0">
                                             <td colspan="12" class="col-12 text-right h32 pd-r1">
                                                 <!-- tooltip="" [placement]="'top'" -->
                                                 <span
                                                     v-if="legderBalanceData.closingBalance && legderBalanceData.closingBalance.type === 'DEBIT'">
-                                                    By Balance C/F: {{legderBalanceData.forwardedBalance ? legderBalanceData.forwardedBalance.type === 'CREDIT' ? 'Cr' : 'Dr' : ''}}
+                                                    By Balance C/F:
                                                     <!-- | number: '1.2-2' -->
                                                     <span
                                                         class="primary-color">{{legderBalanceData.closingBalance.amount | currency }}

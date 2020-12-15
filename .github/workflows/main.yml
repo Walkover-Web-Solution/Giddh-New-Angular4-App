@@ -7,13 +7,11 @@ on:
   # Triggers the workflow on push or pull request events but only for the two branches
   push:
     branches:
-      - giddh-2.0
       - beta-stage
       - beta-branch
       - production
   pull_request:
     branches:
-      - giddh-2.0
       - beta-stage
       - beta-branch
       - production

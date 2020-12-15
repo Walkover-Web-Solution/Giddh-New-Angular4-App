@@ -39,6 +39,7 @@ import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/re
 import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
+import { BulkExportModal } from './models/bulk-export-modal/bulk-export.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
@@ -557,7 +558,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             };
                             this.fromDate = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                            this.selectedDateRange = { startDate: moment(this.fromDate), endDate: moment(this.toDate) };
+                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                             this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                             this.fromDate = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
@@ -576,7 +577,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         this.fromDate = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
                         this.toDate = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                        this.selectedDateRange = { startDate: moment(this.fromDate), endDate: moment(this.toDate) };
+                        this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                         // assign dates
 
                         this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
