@@ -34,6 +34,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { KEYS } from '../../../accounting/journal-voucher/journal-voucher.component';
+import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 
@@ -65,6 +66,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
+    /** List of branches */
+    public branches: Array<any> = [];
 
     public today: Date = new Date();
     public activeStock$: string;
@@ -249,6 +252,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public branchTransferMode: string = '';
     /** Modal Reference */
     public modalRef: BsModalRef;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -285,6 +290,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             selectedTransactionType: ['all']
         });
         this.updateStockSuccess$ = this.store.pipe(select(s => s.inventory.UpdateStockSuccess), takeUntil(this.destroyed$));
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
     }
 
     public findStockNameFromId(grps: IGroupsWithStocksHierarchyMinItem[], stockUniqueName: string): string {
@@ -485,17 +491,19 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
                 if (entities.length) {
-                    if (this.selectedCmp && entities.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
+                    const branches = _.cloneDeep(entities);
+                    if (this.selectedCmp && branches.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
-                        entities.push(this.selectedCmp);
+                        branches.push(this.selectedCmp);
                     }
-                    entities.forEach(element => {
+                    branches.forEach(element => {
                         element['label'] = element.name;
                     });
-                    this.entities$ = observableOf(_.orderBy(entities, 'name'));
+                    this.entities$ = observableOf(_.orderBy(branches, 'name'));
                 } else if (entities.length === 0) {
                     this.entities$ = observableOf(null);
                 }
+                this.branches = entities;
             }
         })), takeUntil(this.destroyed$)).subscribe();
     }

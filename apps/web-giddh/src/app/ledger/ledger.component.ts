@@ -44,13 +44,15 @@ import { WarehouseActions } from '../settings/warehouse/action/warehouse.action'
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { base64ToBlob, giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AppState } from '../store';
-import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { BorderConfiguration, IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../models/user-login-state';
 
 @Component({
     selector: 'ledger',
@@ -224,6 +226,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isDefaultLoad: boolean = true;
     /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
     public isMoreDetailsOpened: boolean = false;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: ''};
+    /** Stores the current company */
+    public activeCompany: any;
+    /** Border configuration for branch dropdown */
+    public branchDropdownBorderConfiguration: BorderConfiguration = { style: 'border-radius: 30px !important'};
+    /** True if current organization type is company */
+    public showBranchSwitcher: boolean;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private store: Store<AppState>,
@@ -243,7 +259,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _cdRf: ChangeDetectorRef,
         private breakPointObservar: BreakpointObserver,
         private modalService: BsModalService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private settingsBranchAction: SettingsBranchActions
     ) {
 
         this.lc = new LedgerVM();
@@ -564,6 +581,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.breakPointObservar.observe([
             '(max-width: 991px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -572,6 +590,66 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.arrangeLedgerTransactionsForMobile();
             }
         });
+
+        this.store.pipe(
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        if (this.generalService.currentOrganizationType === OrganizationType.Company) {
+            this.showBranchSwitcher = true;
+            this.currentCompanyBranches$.subscribe(response => {
+                if (response && response.length) {
+                    this.currentCompanyBranches = response.map(branch => ({
+                        label: branch.alias,
+                        value: branch.uniqueName,
+                        name: branch.name,
+                        parentBranch: branch.parentBranch
+                    }));
+                    this.currentCompanyBranches.unshift({
+                        label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                        name: this.activeCompany ? this.activeCompany.name : '',
+                        value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        isCompany: true
+                    });
+                    let currentBranchUniqueName;
+                    if (!this.currentBranch.uniqueName) {
+                        // Assign the current branch only when it is not selected. This check is necessary as
+                        // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                        // branches are loaded
+                        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                            currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                            this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        } else {
+                            currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                            this.currentBranch = {
+                                name: this.activeCompany ? this.activeCompany.name : '',
+                                alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                                uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            };
+                        }
+                    }
+                    this.trxRequest.branchUniqueName = this.currentBranch.uniqueName;
+                    this.advanceSearchRequest.branchUniqueName = this.currentBranch.uniqueName;
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch ||
+                        (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
+                        // Add the blank transaction only if it is branch mode or company with single branch
+                        this.lc.blankLedger.transactions = [
+                            this.lc.addNewTransaction('DEBIT'),
+                            this.lc.addNewTransaction('CREDIT')
+                        ]
+                    }
+                } else {
+                    if (this.generalService.companyUniqueName) {
+                        // Avoid API call if new user is onboarded
+                        this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                    }
+                }
+            });
+        } else {
+            this.showBranchSwitcher = false;
+        }
 
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
@@ -967,7 +1045,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
-                    this.lc.getReadyBankTransactionsForUI(res.body);
+                    this.lc.getReadyBankTransactionsForUI(res.body,
+                        (this.generalService.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches.length > 2));
                 }
             });
         }
@@ -1150,10 +1229,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public resetBlankTransaction() {
         this.lc.blankLedger = {
-            transactions: [
+            transactions:
+                (this.generalService.currentOrganizationType === OrganizationType.Branch ||
+                    (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
                 this.lc.addNewTransaction('DEBIT'),
                 this.lc.addNewTransaction('CREDIT')
-            ],
+            ] : [],
             voucherType: null,
             entryDate: this.selectedDateRange.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT),
             unconfirmedEntry: false,
@@ -1925,12 +2006,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.todaySelected) {
             this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
                 moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
-                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q));
+                this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
         } else {
             let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
             let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? moment(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
             this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
-                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count)
+                this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.advanceSearchRequest.branchUniqueName)
             );
         }
     }
@@ -1974,6 +2055,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
             transaction.amount = Number(transaction.amount);
             this.needToReCalculate.next(true);
         }
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof LedgerComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.trxRequest.branchUniqueName = selectedEntity.value;
+        this.advanceSearchRequest.branchUniqueName = selectedEntity.value;
+        this.getTransactionData();
     }
 
     /**
@@ -2098,6 +2191,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         event.exportRequest.from = moment(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(advanceSearch.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
         event.exportRequest.to = moment(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(advanceSearch.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+
         this.isShowLedgerColumnarReportTable = event.isShowColumnarTable;
         this.columnarReportExportRequest = event.exportRequest;
         this.hideExportLedgerModal();

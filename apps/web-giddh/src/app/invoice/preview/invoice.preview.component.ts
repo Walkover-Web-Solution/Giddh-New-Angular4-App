@@ -57,6 +57,7 @@ import { Location } from '@angular/common';
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
+import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -281,6 +282,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
     /** This will hold if updated is account in master to refresh the list of vouchers */
     public isAccountUpdated: boolean = false;
 
@@ -342,7 +347,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
-
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
+        });
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {

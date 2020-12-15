@@ -337,6 +337,9 @@ span.close-modal.cp.pull-right {
     left: auto !important;
     right: 8px !important;
 }
+.disabled-change-status {
+    opacity: 0.65;
+}
 
 .btn-group.change-status-dropdown.open.show {
     display: inline-block !important;

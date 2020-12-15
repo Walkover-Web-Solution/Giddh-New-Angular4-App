@@ -4,10 +4,10 @@
         <div class="clearfix">
             <div class="top-bar clearfix bd-rb">
                 <!-- <h1 class="section-title inline"><strong>Search</strong></h1> -->
-                <search-sidebar [pageChangeEvent]="pageChangeEvent" [filterEventQuery]="filterEventQuery">
+                <search-sidebar [pageChangeEvent]="pageChangeEvent" [filterEventQuery]="filterEventQuery" (currentBranchChanged)="handleCurrentBranchChange($event)">
                 </search-sidebar>
             </div>
-            <search-grid (pageChangeEvent)="paginationChanged($event)" (FilterByAPIEvent)="FilterByAPIEvent($event)">
+            <search-grid (pageChangeEvent)="paginationChanged($event)" (FilterByAPIEvent)="FilterByAPIEvent($event)" [currentBranchUniqueName]="currentBranchUniqueName">
             </search-grid>
         </div>
     </div>

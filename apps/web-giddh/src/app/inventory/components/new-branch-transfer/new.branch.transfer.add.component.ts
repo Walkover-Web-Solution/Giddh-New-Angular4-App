@@ -127,6 +127,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     /** True if current organization is branch */
     public isBranch: boolean;
+    /** Stores the source branch alias */
+    public sourceBranchAlias: string;
+    /** Stores the destination branch alias */
+    public destinationBranchAlias: string;
 
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -489,7 +493,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (branches) {
                 if (branches.results.length) {
                     this.branches = this.linkedStocksVM(branches.results).map(b => ({
-                        label: `${b.name} ${b.alias ? '(' + b.alias + ')' : ''}`,
+                        label: `${b.alias}`,
                         value: b.uniqueName,
                         additional: b
                     }));
@@ -890,7 +894,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.entity = response.body.entity;
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
                 this.branchTransfer.transporterDetails = response.body.transporterDetails;
-
+                if (this.branches) {
+                    const destinationBranch = this.branches.find(branch => branch.value === this.branchTransfer.destinations[0].uniqueName);
+                    this.destinationBranchAlias = destinationBranch && destinationBranch.additional ? destinationBranch.additional.alias : '';
+                    const sourceBranch = this.branches.find(branch => branch.value === this.branchTransfer.sources[0].uniqueName);
+                    this.sourceBranchAlias = sourceBranch && sourceBranch.additional ? sourceBranch.additional.alias : '';
+                }
                 if (!this.branchTransfer.transporterDetails) {
                     this.branchTransfer.transporterDetails = {
                         dispatchedDate: null,
@@ -934,14 +943,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (this.isBranch) {
             // Find the current branch details
             selectedBranch = branches.find(branch => branch.uniqueName === this._generalService.currentBranchUniqueName);
-            branchName = selectedBranch ? selectedBranch.name : '';
+            branchName = selectedBranch ? selectedBranch.alias : '';
         } else {
             // Company session find the HO branch
-            hoBranch = branches.find(branch => !branch.parentBranchUniqueName);
-            branchName = hoBranch ? hoBranch.name : '';
+            hoBranch = branches.find(branch => !branch.parentBranch);
+            branchName = hoBranch ? hoBranch.alias : '';
         }
         if (!this.editBranchTransferUniqueName) {
-            this.myCurrentCompany = this.isBranch ? branchName : hoBranch.name;
+            this.myCurrentCompany = this.isBranch ? branchName : hoBranch.alias;
             if (this.branchTransferMode === "deliverynote") {
                 this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch.uniqueName;
                 this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;

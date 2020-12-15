@@ -85,7 +85,7 @@ export interface SessionState {
     currentCompanySubscriptionPlan: CreateCompanyUsersPlan;
     totalNumberOfcompanies: number;
     currentCompanyCurrency: CompanyCountry;
-    financialYearChosenInReport: string;
+    registerReportFilters: any;
     currentOrganizationDetails: Organization;
     activeCompany: any;
     companyUser: any;
@@ -145,7 +145,7 @@ const sessionInitialState: SessionState = {
     currentCompanySubscriptionPlan: null,
     currentCompanyCurrency: null,
     totalNumberOfcompanies: 0,
-    financialYearChosenInReport: '',
+    registerReportFilters: null,
     currentOrganizationDetails: null,
     activeCompany: null,
     companyUser: null
@@ -776,9 +776,9 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CompanyActions.USER_REMOVE_COMPANY_CREATE_SESSION:
             return Object.assign({}, state, { createCompanyUserStoreRequestObj: null });
         case CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR:
-            return Object.assign({}, state, { financialYearChosenInReport: action.payload });
+            return Object.assign({}, state, { registerReportFilters: { financialYearChosenInReport: action.payload.financialYear, branchChosenInReport: action.payload.branchUniqueName, timeFilter: action.payload.timeFilter } });
         case CompanyActions.RESET_USER_CHOSEN_FINANCIAL_YEAR:
-            return Object.assign({}, state, { financialYearChosenInReport: '' });
+            return Object.assign({}, state, { registerReportFilters: null });
         case CompanyActions.SET_COMPANY_BRANCH:
             return Object.assign({}, state, {
                 currentOrganizationDetails: action.payload
@@ -797,7 +797,6 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 activeCompany: action.payload
             });
         }
-
         default:
             return state;
     }
