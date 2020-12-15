@@ -104,6 +104,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
             this.changeDetectorRef.detectChanges();
         });

@@ -99,7 +99,7 @@
 			</div>
 		</span>
 		<input class="search-element" #searchEle type="text" placeholder="Search" (focus)="handleFocus()"
-			(keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)" />
+			(keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)" (paste)="onPasteInSearch()" />
 	</div>
 	<i class="icon-cross close-navigation" (click)="close()"></i>
 </ng-template>
