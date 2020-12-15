@@ -1444,13 +1444,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
             return;
         }
-        this.updateBaseAccount.show();
-        //
+        if(this.updateBaseAccount) {
+            this.updateBaseAccount.show();
+        }
     }
 
     public hideBaseAccountModal() {
-        this.updateBaseAccount.hide();
-        //
+        if(this.updateBaseAccount) {
+            this.updateBaseAccount.hide();
+        }
     }
 
     /**
@@ -1542,7 +1544,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.forceClear$ = observableOf({ status: true });
                 }
                 let invoiceSelected;
-                const selectedInvoice = this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0];
+                const selectedInvoice = (this.vm.selectedLedger.invoiceLinkingRequest && this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices) ? this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0] : false;
                 if (selectedInvoice) {
                     selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                     invoiceSelected = {
@@ -2163,6 +2165,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 customerUniqueName.push(transaction.particular.uniqueName);
             }
         });
+        if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
+            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
+                if (!adjustment.balanceDue) {
+                    adjustment.balanceDue = cloneDeep(adjustment.adjustmentAmount);
+                } else if (!adjustment.adjustmentAmount) {
+                    adjustment.adjustmentAmount = cloneDeep(adjustment.balanceDue);
+                }
+            });
+        }
         customerUniqueName.push(this.baseAcc);
         customerUniqueName = _.union(customerUniqueName);
         this.adjustVoucherConfiguration = {

@@ -179,7 +179,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             case 'payment':
                 return 4;
             case 'ecommerce':
-                return 3;    
+                return 3;
             case 'collection':
                 return 2;
             case 'email':

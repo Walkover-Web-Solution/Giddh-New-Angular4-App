@@ -7,11 +7,13 @@ on:
   # Triggers the workflow on push or pull request events but only for the two branches
   push:
     branches:
-      - giddh-2.0
+      - beta-stage
+      - beta-branch
       - production
   pull_request:
     branches:
-      - giddh-2.0
+      - beta-stage
+      - beta-branch
       - production
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -25,7 +27,10 @@ jobs:
       # avoid warnings like "tput: No value for $TERM and no -T specified"
       TERM: xterm
     steps:
-      - uses: actions/checkout@v1
+      # Checkout pull request HEAD commit
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       # install NPM dependencies but SKIP Cypress binary installation
       # see https://on.cypress.io/installing-cypress#Environment-variables
       - uses: bahmutov/npm-install@v1

@@ -471,6 +471,10 @@ div.remove-capitalize {
 span.icon-export-icon {
     color: $gray;
 }
+.ladda-button:hover .icon-export-icon{
+    color: $white;
+}
+
 .giddh-table {
     tr {
         td {
@@ -686,6 +690,9 @@ span.icon-export-icon {
 }
 
 @media (max-width: 767px) {
+    .add-invoice .export-button-wrap{
+        display: none !important;
+    }
     .desktop-view-btn {
         display: none !important;
     }
