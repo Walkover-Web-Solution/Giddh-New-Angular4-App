@@ -601,6 +601,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.invoiceSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
                     this.isUniversalDateApplicable = true;
                 }
+                this.selectedRangeLabel = "";
+                if (dateObj && dateObj[2]) {
+                    this.selectedRangeLabel = dateObj[2];
+                }
                 this.getVoucher(true);
             }
         });

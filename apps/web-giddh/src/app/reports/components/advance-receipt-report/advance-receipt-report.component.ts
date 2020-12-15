@@ -222,6 +222,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.selectedDateRangeUi = moment(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedRangeLabel = "";
+                if (applicationDate && applicationDate[2]) {
+                    this.selectedRangeLabel = applicationDate[2];
+                }
             }
             this.fetchReceiptsData();
         });

@@ -187,6 +187,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedRangeLabel = "";
+                if (dateObj && dateObj[2]) {
+                    this.selectedRangeLabel = dateObj[2];
+                }
                 this.go();
             }
         });

@@ -624,6 +624,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     });
                     this.advanceSearchRequest.to = universalDate[1];
                     this.advanceSearchRequest.page = 0;
+                    this.selectedRangeLabel = "";
+                    if (dateObj && dateObj[2]) {
+                        this.selectedRangeLabel = dateObj[2];
+                    }
 
                     this.trxRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                     this.trxRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);

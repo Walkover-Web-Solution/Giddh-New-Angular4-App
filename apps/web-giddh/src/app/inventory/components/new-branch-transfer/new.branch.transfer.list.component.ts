@@ -146,6 +146,10 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedRangeLabel = "";
+                if (dateObj && dateObj[2]) {
+                    this.selectedRangeLabel = dateObj[2];
+                }
                 this.getBranchTransferList(false);
             }
         });

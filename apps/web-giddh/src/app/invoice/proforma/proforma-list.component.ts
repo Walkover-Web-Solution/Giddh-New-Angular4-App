@@ -409,6 +409,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                     this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
                     this.isUniversalDateApplicable = true;
                 }
+                this.selectedRangeLabel = "";
+                if (a && a[2]) {
+                    this.selectedRangeLabel = a[2];
+                }
                 this.getAll();
             }
         })), takeUntil(this.destroyed$)).subscribe();

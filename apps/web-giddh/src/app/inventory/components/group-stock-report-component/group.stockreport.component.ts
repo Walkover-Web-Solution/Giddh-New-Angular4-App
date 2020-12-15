@@ -324,6 +324,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
                 this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.selectedRangeLabel = "";
+                if (a && a[2]) {
+                    this.selectedRangeLabel = a[2];
+                }
                 this.getGroupReport(true);
             }
         });

@@ -321,7 +321,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 // assign date
                 // this.assignStartAndEndDateForDateRangePicker(dateObj[0], dateObj[1]);
-
+                this.selectedRangeLabel = "";
+                if (dateObj && dateObj[2]) {
+                    this.selectedRangeLabel = dateObj[2];
+                }
                 this.isUniversalDateApplicable = true;
                 this.getLedgersOfInvoice();
                 this.detectChanges();
