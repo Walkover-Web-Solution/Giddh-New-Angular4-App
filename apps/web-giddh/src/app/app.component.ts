@@ -77,7 +77,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
                 if (PRODUCTION_ENV && !(isElectron || this.isCordova)) {
-                    window.location.href = 'https://beta.giddh.com/login/';
+                    window.location.href = 'https://giddh.com/login/';
                 } else if (this.isCordova) {
                     this._generalService.invokeEvent.next('logoutCordova');
                     this.router.navigate(['login']);
