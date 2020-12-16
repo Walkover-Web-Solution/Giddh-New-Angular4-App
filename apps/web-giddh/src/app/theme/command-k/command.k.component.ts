@@ -504,4 +504,19 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         string = string.replace(/^-|-$/g,'');
         return string;
     }
+
+    /**
+     * This will search after paste
+     *
+     * @memberof CommandKComponent
+     */
+    public onPasteInSearch(): void {
+        setTimeout(() => {
+            if(this.searchEle && this.searchEle.nativeElement) {
+                let term = this.searchEle.nativeElement.value;
+                term = (term) ? term.trim() : "";
+                this.searchSubject.next(term);
+            }
+        }, 100);    
+    }
 }
