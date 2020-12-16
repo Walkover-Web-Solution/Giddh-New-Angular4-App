@@ -92,7 +92,7 @@
                             <div class="d-flex">
                                 <!-- <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" class="form-control stock-input" (applyDaterangepicker)="selectedDate($event)" /> -->
                                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                    <i><img src="assets/images/custom-calender.svg"></i>
+                                    <i class="icon-calender calendar-addon"></i>
                                     <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                                 </div>
                             </div>
@@ -475,7 +475,7 @@
                                 <div class="input-group-addon"><span class="icon-calender bg-white"></span></div>
                             </div> -->
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i><img src="assets/images/custom-calender.svg"></i>
+                                <i class="icon-calender calendar-addon"></i>
                                 <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                             </div>
                         </div>
