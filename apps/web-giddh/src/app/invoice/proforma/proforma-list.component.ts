@@ -28,7 +28,7 @@ import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { Router } from '@angular/router';
@@ -349,7 +349,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             };
                             let dateRange = { fromDate: '', toDate: '' };
                             dateRange = this.generalService.dateConversionToSetComponentDatePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
-                            this.selectedDateRange = { startDate: moment(dateRange.fromDate), endDate: moment(dateRange.toDate) };
+                            this.selectedDateRange = { startDate: moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
                             this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
                             this.fromDate = moment(dateRange.fromDate).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(dateRange.toDate).format(GIDDH_DATE_FORMAT);
@@ -365,6 +365,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                                 endDate: moment(a[1], GIDDH_DATE_FORMAT).toDate(),
                                 chosenLabel: a[2]
                             };
+                            this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
                             this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                             this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
                             this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
@@ -384,6 +385,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
                         // assign start and end date
                         // this.assignStartAndEndDateForDateRangePicker(a[0], a[1]);
+                        this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
                         this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
                         this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
