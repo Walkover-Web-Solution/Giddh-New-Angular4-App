@@ -8,13 +8,13 @@ describe('This is Global Search Test', function() {
     let testData = "";
     let entryUniqueName = "";
 
-    before(() => {
-        cy.fixture('example.json')
-            .then((data) => {
-                // "this" is still the test context object
-                testData = data
-            })
-    });
+    // before(() => {
+    //     cy.fixture('example.json')
+    //         .then((data) => {
+    //             // "this" is still the test context object
+    //             testData = data
+    //         })
+    // });
 
     // before(() => {
     //     cy.loginWithEmail(testData.Email, testData.Password);

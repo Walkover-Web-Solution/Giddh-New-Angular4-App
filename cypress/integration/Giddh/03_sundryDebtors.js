@@ -5,18 +5,17 @@ describe('This is Sundry Debtors Test', function() {
     let testData = "";
     let entryUniqueName = "";
 
-    before(function() {
-        cy.fixture('example.json')
-            .then((data) => {
-                // "this" is still the test context object
-                testData = data
-            })
-    });
+    // before(function() {
+    //     cy.fixture('example.json')
+    //         .then((data) => {
+    //             // "this" is still the test context object
+    //             testData = data
+    //         })
+    // });
 
 
     // afterEach("Get Ledger and delete Ledger entries", ()=>{
     //     cy.log('I run before after each test in spec file!!!!!!')
-    //     cy.wait(2000)
     //     cy.getAllLedger(testData.uitest).then((response) => {
     //         expect(response.status).to.eq(200)
     //         const respBody = response.body;
