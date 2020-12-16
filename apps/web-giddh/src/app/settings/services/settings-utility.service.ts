@@ -109,6 +109,7 @@ export class SettingsUtilityService {
      * @memberof SettingsUtilityService
      */
     public getUpdateBranchRequestObject(branchDetails: any): any {
+        branchDetails.addresses = branchDetails.addresses || [];
         return {
             name: branchDetails.name,
             alias: branchDetails.alias,

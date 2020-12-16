@@ -37,7 +37,6 @@ export const settingsPageTabs: PageTabs[] = [
         [0]: [
             { label: 'Branch Profile', link: '/pages/settings/profile', icon: '<i class="icon-company-profile"></i>' },
             { label: 'User Profile', link: '/pages/user-details/mobile-number', icon: '<i class="icon-user"></i>' },
-            { label: 'Manage User (Permission)', link: '/pages/settings/permission', icon: '<i class="icon-manage-user"></i>' }
         ],
         [1]: [
             { label: 'Taxes', link: '/pages/settings/taxes', icon: '<i class="icon-taxes"></i>' },
