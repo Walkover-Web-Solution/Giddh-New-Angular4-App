@@ -205,9 +205,7 @@
                         <th colspan="4" class="bdrR" width="30%" style="padding: 0 !important;" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
                             <!-- in case of all entity with group -->
                             <th colspan="2" class="bd-rr" width="17%" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">
-                                <!-- <div class="d-flex">
-                                    <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" class="form-control stock-input" (applyDaterangepicker)="selectedDate($event)" />
-                                </div> -->
+
                                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                     <i><img src="assets/images/custom-calender.svg"></i>
                                     <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
@@ -593,12 +591,8 @@
                     <div class="row">
                         <div class="col-sm-4">Date Range</div>
                         <div class="col-sm-8">
-                            <!-- <div class="input-group">
-                                <input type="text" name="daterangeInput1" daterangepicker [options]="datePickerOptions" class="form-control" (applyDaterangepicker)="selectedDate($event, 'advance')" />
-                                <div class="input-group-addon"><span class="icon-calender bg-white"></span></div>
-                            </div> -->
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i><img src="assets/images/custom-calender.svg"></i>
+                                <i></i>
                                 <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                             </div>
                         </div>
