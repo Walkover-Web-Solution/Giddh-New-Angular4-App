@@ -244,8 +244,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                             this.GroupStockReportRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
                             this.GroupStockReportRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
                         } else {
-                            this.GroupStockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
-                            this.GroupStockReportRequest.to = moment().format('DD-MM-YYYY');
+                            this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+                            this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
                         }
                     });
 
