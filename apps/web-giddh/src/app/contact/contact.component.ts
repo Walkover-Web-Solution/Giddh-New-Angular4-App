@@ -1291,13 +1291,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         * @memberof ContactComponent
         */
     public selectAllColumns(event: boolean): void {
-        this.showFieldFilter.parentGroup = event;
-        this.showFieldFilter.openingBalance = event;
-        this.showFieldFilter.mobile = event;
-        this.showFieldFilter.email = event;
-        this.showFieldFilter.state = event;
-        this.showFieldFilter.gstin = event;
-        this.showFieldFilter.comment = event;
+        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = event);
         this.setTableColspan();
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
@@ -1383,6 +1377,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.companyCustomFields$ = observableOf(response.body);
                 if (response.body) {
                     this.colspanLength = 11 + response.body.length;
+                    this.addNewFieldFilters(response.body);
                 }
             } else {
                 this._toaster.errorToast(response.message);
@@ -1390,6 +1385,20 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * To add new properties in showFieldFilter object
+     *
+     * @param {*} field
+     * @memberof ContactComponent
+     */
+    public addNewFieldFilters(field: any): void {
+        for (let key of field) {
+            if (key.uniqueName) {
+                this.showFieldFilter[key.uniqueName] = false;
+            }
+        }
+    }
+  
     /**
      * Branch change handler
      *

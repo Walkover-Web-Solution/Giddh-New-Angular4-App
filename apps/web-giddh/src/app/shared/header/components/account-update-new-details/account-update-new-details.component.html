@@ -93,7 +93,7 @@
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
         <ng-container>
-            <tab heading="Address" class="gstinAddress" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" (selectTab)="tabChanged('address')">
+            <tab heading="Address" class="gstinAddress" [active]="isDebtorCreditor || isBankAccount" [disabled]="!isDebtorCreditor && !isBankAccount" (selectTab)="tabChanged('address')">
                 <ng-container>
                     <div class="gstinForm" formArrayName="addresses">
                         <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -127,7 +127,7 @@
                                 <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
                                     <div class="form-group mb-05">
                                         <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}</label>
-                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states);" (blur)="checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
+                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);getStateCode(gst, states);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
                                         />
                                     </div>
                                 </div>
@@ -486,8 +486,8 @@
         </div>
 
     </div>
-    <!-- commenting/hiding due to API deployment process in going on for prod (use : isDebtorCreditor && isOtherSelectedTab) -->
-    <div class="form" *ngIf="false">
+
+    <div class="form" *ngIf="isDebtorCreditor && isOtherSelectedTab">
         <div class="mrB2 select-box">
             <div class="form-group ">
                 <label>Default Discount <span
