@@ -1980,7 +1980,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public navigateToPreviousRoute(): void {
-        this.location.back();
+        if (document.referrer) {
+            this.location.back();
+        }
     }
 
     /**
