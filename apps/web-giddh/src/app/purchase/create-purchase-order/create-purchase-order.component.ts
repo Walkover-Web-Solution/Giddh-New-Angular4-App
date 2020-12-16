@@ -2992,7 +2992,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @memberof CreatePurchaseOrderComponent
      */
-    public onBlurOrderDate(): void {
+    public onUpdateOrderDate(): void {
         this.isOrderDateChanged = true;
 
         if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
