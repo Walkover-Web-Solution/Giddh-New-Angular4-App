@@ -216,7 +216,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        
+
         this.voucherNumberInput.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),

@@ -38,6 +38,7 @@ export class StateDetailsRequest {
 export class StateDetailsResponse {
     public lastState: string;
     public companyUniqueName: string;
+    public branchUniqueName?: string;
 }
 
 export class AddressList {

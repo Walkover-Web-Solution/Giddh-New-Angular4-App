@@ -18,6 +18,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     public pageChangeEvent: any;
     public filterEventQuery: any;
 
+    /** Stores the current branch unique name */
+    public currentBranchUniqueName: string;
+
     constructor(private store: Store<AppState>, private _searchActions: SearchActions, private companyActions: CompanyActions) {
     }
 
@@ -52,4 +55,15 @@ export class SearchComponent implements OnInit, OnDestroy {
     public FilterByAPIEvent(ev) {
         this.filterEventQuery = ev; // this key is an input in search-sidebar component
     }
+
+    /**
+     * Stores the current branch switched
+     *
+     * @param {string} value Unique name of current branch
+     * @memberof SearchComponent
+     */
+    public handleCurrentBranchChange(value: string): void {
+        this.currentBranchUniqueName = value;
+    }
+
 }

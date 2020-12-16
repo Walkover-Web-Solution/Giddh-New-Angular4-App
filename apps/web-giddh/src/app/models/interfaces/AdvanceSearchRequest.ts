@@ -7,7 +7,8 @@ export class AdvanceSearchRequest {
 	public page: number = 0;
 	public count: number = 30;
 	public accountUniqueName: string = '';
-	public sort: string = 'asc';
+    public sort: string = 'asc';
+    public branchUniqueName: string = '';
 
 	// set from(value: string) {
 	//   if (this.dataToSend.bsRangeValue.length > 0) {
