@@ -405,6 +405,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
         this.GroupStockReportRequest.stockUniqueName = '';
         this.groupUniqueNameFromURL = null;
+        this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
+        this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.isCompany ? undefined : this.currentBranchAndWarehouse.branch;
         this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
     }
 
