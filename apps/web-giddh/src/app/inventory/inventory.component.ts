@@ -31,7 +31,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
