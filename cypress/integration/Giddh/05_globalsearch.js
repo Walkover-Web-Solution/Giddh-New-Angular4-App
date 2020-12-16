@@ -46,7 +46,7 @@ describe('This is Global Search Test', function() {
         cy.globalSearch('.hamburger-menu > #giddh-page-heading-link > span','Walkover', 'Walkover Technologies Private Limited A/c')
     });
 
-    xit('Verify Cash Account module using Global Search', () => {
+    it('Verify Cash Account module using Global Search', () => {
         cy.get('body').type('{ctrl}g', {force: true})
         if (globalSearchPage.getGlobalSearch(90000).should('be.visible')){
             globalSearchPage.typeGlobalSearch("Cash")
@@ -77,7 +77,7 @@ describe('This is Global Search Test', function() {
         // })
     })
 
-    xit('Verify Sales Account module using Global Search', () => {
+    it('Verify Sales Account module using Global Search', () => {
         cy.get('body').type('{ctrl}g', {force: true})
         if (globalSearchPage.getGlobalSearch(90000).should('be.visible')){
             globalSearchPage.typeGlobalSearch("sales")
