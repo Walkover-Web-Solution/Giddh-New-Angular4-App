@@ -31,6 +31,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -90,6 +91,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /** Holds the observable for universal date */
+    public universalDate$: Observable<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -201,6 +204,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.loadBranchWarehouse(this.generalService.currentBranchUniqueName);
         }
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        this.universalDate$ = this.store.pipe(select(appStore => appStore.session.applicationDate), takeUntil(this.destroyed$));
 
         this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;
 
@@ -234,8 +238,16 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.GroupStockReportRequest = new GroupStockReportRequest();
                 let firstElement = a[0];
                 if (firstElement) {
-                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-                    this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
+                    this.universalDate$.pipe(take(1)).subscribe(dateObj => {
+                        if (dateObj) {
+                            this.GroupStockReportRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.GroupStockReportRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                        } else {
+                            this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+                            this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
+                        }
+                    });
+
                     this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
                     this.activeView = 'group';
                     this.firstDefaultActiveGroup = firstElement.uniqueName;
@@ -244,7 +256,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                         // Selected tab is Inventory
                         this.loadBranchAndWarehouseDetails();
                         this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
-                        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
                     } else {
                         this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
                         this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
@@ -429,8 +440,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             if (!this.GroupStockReportRequest) {
                 this.GroupStockReportRequest = new GroupStockReportRequest();
             }
-            this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouseFilterValues.branch;
+            this.GroupStockReportRequest.branchUniqueName =
+                this.currentBranchAndWarehouseFilterValues.branch !== this.generalService.companyUniqueName ?
+                this.currentBranchAndWarehouseFilterValues.branch : null;
             this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
+            this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
         });
     }
 
