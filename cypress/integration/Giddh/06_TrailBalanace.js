@@ -5,13 +5,13 @@ describe('This is TrialBalance Search Test', () => {
     let testData = "";
     let entryUniqueName = "";
 
-    // before(() => {
-    //     cy.fixture('example.json')
-    //         .then((data) => {
-    //             // "this" is still the test context object
-    //             testData = data
-    //         })
-    // });
+    before(() => {
+        cy.fixture('example.json')
+            .then((data) => {
+                // "this" is still the test context object
+                testData = data
+            })
+    });
 
     // before(() => {
     //     cy.viewport(1366, 768)
