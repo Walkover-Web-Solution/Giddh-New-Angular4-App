@@ -17,6 +17,7 @@ import { IOption } from '../../theme/ng-select/ng-select';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'purchase-order',
@@ -126,6 +127,10 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public selectedPo: any[] = [];
     /* Observable for selected PO applied */
     public selectedPo$: Observable<any>;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -154,6 +159,13 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
+        });
+
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
         });
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {

@@ -31,6 +31,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public companyUniqueName: any;
     /* Taking input of purchase order unique name */
     @Input() public purchaseOrderUniqueName: any;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    @Input() public isCompany: boolean;
     /* Search element */
     @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
     /* Confirm box */

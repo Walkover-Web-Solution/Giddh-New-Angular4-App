@@ -29,6 +29,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the selected branch unique name for import entries */
+    private currentBranch: string;
 
     constructor(
         private store: Store<AppState>,
@@ -80,8 +82,9 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public onFileUpload(file: File) {
-        this.store.dispatch(this._importActions.uploadFileRequest(this.entity, file));
+    public onFileUpload(data: any) {
+        this.currentBranch = data.branchUniqueName;
+        this.store.dispatch(this._importActions.uploadFileRequest(this.entity, data));
     }
 
     public onContinueUpload(e) {
@@ -109,6 +112,9 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onSubmit(data: ImportExcelRequestData) {
+        if (this.currentBranch) {
+            data.branchUniqueName = this.currentBranch;
+        }
         this.store.dispatch(this._importActions.processImportRequest(this.entity, data));
     }
 

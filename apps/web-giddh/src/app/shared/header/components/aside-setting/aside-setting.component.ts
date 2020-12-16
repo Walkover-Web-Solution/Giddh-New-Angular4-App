@@ -53,7 +53,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                 if(organization) {
                     if (organization.type === OrganizationType.Branch) {
                         organizationIndex = 1;
-                    } else if (organization.type === OrganizationType.Company) {
+                    } else if (organization.type === OrganizationType.Company || !organization.type) {
                         organizationIndex = 0;
                     }
                 }

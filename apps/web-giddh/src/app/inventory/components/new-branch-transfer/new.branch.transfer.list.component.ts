@@ -25,6 +25,8 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { saveAs } from "file-saver";
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -79,6 +81,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         count: 50,
         sort: '',
         sortBy: '',
+        branchUniqueName: ''
     };
     public branchTransferPostRequestParams: NewBranchTransferListPostRequestParams = {
         amountOperator: null,
@@ -96,13 +99,30 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     };
     public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
 
-    constructor(private _generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>, private inventoryService: InventoryService, private _toasty: ToasterService) {
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+
+    constructor(
+        private _generalService: GeneralService,
+        private modalService: BsModalService,
+        private store: Store<AppState>,
+        private inventoryService: InventoryService,
+        private _toasty: ToasterService,
+        private settingsBranchAction: SettingsBranchActions
+    ) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
                 let companyInfo = _.cloneDeep(o);
                 this.activeCompany = companyInfo;
             }
         });
+        this.currentOrganizationType = this._generalService.currentOrganizationType;
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -124,6 +144,51 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
                 this.branchTransferGetRequestParams.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.branchTransferGetRequestParams.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            }
+        });
+        this.store.pipe(
+            select(appState => appState.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this._generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                }
+                this.branchTransferGetRequestParams.branchUniqueName = this.currentBranch.uniqueName;
+            } else {
+                if (this._generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
             }
         });
     }
@@ -335,6 +400,17 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                 this._toasty.errorToast(res.message);
             }
         });
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof NewBranchTransferListComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.branchTransferGetRequestParams.branchUniqueName = selectedEntity.value;
+        this.getBranchTransferList(true);
     }
 
     @HostListener('document:keyup', ['$event'])

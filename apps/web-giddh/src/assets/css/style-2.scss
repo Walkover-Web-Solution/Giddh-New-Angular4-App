@@ -9727,6 +9727,30 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+.linked-entities {
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            .item {
+                font-family:'opensans-semibold'
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: $rich-blue;
+            }
+            .icon-favorite-selected {
+                color: $rich-blue;
+            }
+        }
+    }
+}
 
 .settings-profile-tabs{
     .tab-container{
@@ -9766,6 +9790,28 @@ span#HW_badge_cont:nth-child(3) {
 }
 .giddh-calendar.show {
     margin-top: 0;
+}
+.table-amount[disabled]{
+   input{
+        background-color: $whisper-light !important;
+    }
+}
+
+
+#update-ledger-voucher-type-default.disabled-ledger, #update-ledger-assign-tag.disabled-ledger{
+    .sh-select-disabled{
+        background-color: $whisper-light !important;
+        input.selectedVal.form-control, input[disabled]{
+                background-color: $whisper-light !important;
+        }
+    }
+}
+.branch-ho-tooltip{
+    left: -7px !important;
+     .arrow{
+        left: auto !important;
+        right:  7px !important;
+    }
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {

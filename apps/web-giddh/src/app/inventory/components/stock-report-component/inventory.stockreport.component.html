@@ -77,7 +77,7 @@
                     </ul>
                 </div>
                 <button class="btn btn-sky-blue" (click)="editStock()"  >Edit Stock</button> -->
-                <button class="btn btn-sky-blue transfer-btn" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">New Transfer </button>
+                <button *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)" class="btn btn-sky-blue transfer-btn" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">New Transfer </button>
                 <button class="btn btn-sky-blue mr-0" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i">Create New</button>
             </div>
         </div>

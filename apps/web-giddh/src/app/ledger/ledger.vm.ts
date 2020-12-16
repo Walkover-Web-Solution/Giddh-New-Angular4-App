@@ -247,16 +247,26 @@ export class LedgerVM {
 
     /**
      * prepare bank transactions
-     * @param {IELedgerResponse[]} array
+     * @param {IELedgerResponse[]} data API response
+     * @param {boolean} isCompany True if company mode, to add transaction manually as we don't add
+     * default CREDIT & DEBIT transactions to ledger when in company mode so as to open the ledger in READ only mode
+     * but for ICICI banking ledger it requires the two default transaction to show the mapped transactions
+     * and therefore isCompany is used to add the two default transaction manually at runtime if found true
      * @returns {bankTransactionsData} array
      */
-    public getReadyBankTransactionsForUI(data: IELedgerResponse[]) {
+    public getReadyBankTransactionsForUI(data: IELedgerResponse[], isCompany?: boolean) {
         if (data.length > 0) {
             this.bankTransactionsData = [];
             this.showEledger = true;
             forEach(data, (txn: IELedgerResponse) => {
                 let item: BlankLedgerVM;
                 item = cloneDeep(this.blankLedger);
+                if (isCompany) {
+                    item.transactions = [
+                        this.addNewTransaction('DEBIT'),
+                        this.addNewTransaction('CREDIT')
+                    ];
+                }
                 item.entryDate = txn.date;
                 // item.entryDate = moment(txn.date).format('YYYY-MM-DD');
                 item.transactionId = txn.transactionId;

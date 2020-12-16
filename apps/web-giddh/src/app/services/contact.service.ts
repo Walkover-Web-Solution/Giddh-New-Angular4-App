@@ -41,16 +41,17 @@ export class ContactService {
      * @param {string} [query]
      * @param {string} [sortBy=''] Sort by item name
      * @param {string} [order='asc'] Sort type
+     * @param {string} [branchUniqueName] Current branch selected
      * @param {ContactAdvanceSearchModal} [postData] Request model object
      * @returns {Observable<BaseResponse<any, string>>}
      * @memberof ContactService
      */
     public GetContacts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber: number, refresh: string, count: number, query?: string, sortBy: string = '',
-        order: string = 'asc', postData?: ContactAdvanceSearchModal): Observable<BaseResponse<any, string>> {
+        order: string = 'asc', postData?: ContactAdvanceSearchModal, branchUniqueName?: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
             '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
-        query = (query) ? query : '';    
+        query = (query) ? query : '';
 
         url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
@@ -62,7 +63,10 @@ export class ContactService {
             .replace(':order', order)
             .replace(':fromDate', fromDate)
             .replace(':toDate', toDate);
-
+        if (branchUniqueName) {
+            branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
+            url = url.concat('&branchUniqueName=', branchUniqueName);
+        }
         if (postData && Object.keys(postData).length > 0) {
             return this._http.post(url, postData).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;

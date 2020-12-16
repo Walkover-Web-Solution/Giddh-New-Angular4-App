@@ -49,6 +49,8 @@ import { ToasterService } from '../services/toaster.service';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../models/user-login-state';
 
 export interface PayNowRequest {
     accountUniqueName: string;
@@ -233,6 +235,16 @@ export class ContactComponent implements OnInit, OnDestroy {
     public companyCustomFields$: Observable<any[]>;
     /** Column span length */
     public colspanLength: number = 11;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
+    /** Stores the current branch data */
+    public currentBranchData: any;
 
     constructor(
         private store: Store<AppState>,
@@ -249,7 +261,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
         private _router: Router,
         private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions,  private groupService: GroupService) {
+        private settingsProfileActions: SettingsProfileActions,  private groupService: GroupService,
+        private settingsBranchAction: SettingsBranchActions
+    ) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -311,7 +325,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.order = ord;
 
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'false', PAGINATION_LIMIT, this.searchStr, key, ord);
+            null, 'false', PAGINATION_LIMIT, this.searchStr, key, ord, this.currentBranch.uniqueName);
     }
 
     public ngOnInit() {
@@ -334,7 +348,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
             }
         });
 
@@ -342,7 +356,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (yes) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
                 }
             }
         });
@@ -369,9 +383,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             .subscribe((term: any) => {
                 this.searchStr = term;
                 if (this.activeTab === 'customer') {
-                    this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order);
+                    this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order, this.currentBranch.uniqueName);
                 } else {
-                    this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order);
+                    this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order, this.currentBranch.uniqueName);
                 }
             });
         this._breakPointObservar.observe([
@@ -414,6 +428,52 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.giddhDecimalPlaces = response.balanceDecimalPlaces;
             } else {
                 this.giddhDecimalPlaces = 2;
+            }
+        });
+        this.store.pipe(
+            select(appState => appState.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this._generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                    this.currentBranchData = _.cloneDeep(this.currentBranch);
+                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                }
+            } else {
+                if (this._generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
             }
         });
     }
@@ -481,7 +541,17 @@ export class ContactComponent implements OnInit, OnDestroy {
                 selectedPage: 1
             };
         }
-
+        if (this.activeCompany && this.currentBranchData) {
+            if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                this.currentBranch.name = this.currentBranchData.name;
+                this.currentBranch.uniqueName = this.currentBranchData.uniqueName;
+                this.currentBranch.alias = this.currentBranchData.alias;
+            } else {
+                this.currentBranch.name = this.activeCompany.name;
+                this.currentBranch.uniqueName = this.activeCompany.uniqueName;
+                this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : this.activeCompany.name;
+            }
+        }
         if (tabName !== this.activeTab) {
             this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
             this.commonRequest = new ContactAdvanceSearchCommonModal();
@@ -497,7 +567,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
 
-            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '');
+            if (this.fromDate && this.toDate) {
+                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '', null, null, this.currentBranch.uniqueName);
+            }
 
             this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
 
@@ -514,7 +586,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.searchStr = '';
         this.tabSelected(tabName);
         if (tabName === 'vendor') {
-            this.getAccounts(this.fromDate, this.toDate, type, null, 'true', PAGINATION_LIMIT, '');
+            this.getAccounts(this.fromDate, this.toDate, type, null, 'true', PAGINATION_LIMIT, '', null, null, this.currentBranch.uniqueName);
         }
         this.showFieldFilter = new CustomerVendorFiledFilter();
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
@@ -580,7 +652,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (grpName) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
                 }
             }
         }, 1000);
@@ -609,7 +681,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.checkboxInfo.selectedPage = event.page;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
-            this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+            this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
         }
     }
 
@@ -843,7 +915,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
             this.detectChanges();
         }
     }
@@ -907,7 +979,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'true', PAGINATION_LIMIT, '');
+            null, 'true', PAGINATION_LIMIT, '', '', null, this.currentBranch.uniqueName);
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -959,7 +1031,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         this.isAdvanceSearchApplied = true;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'true', PAGINATION_LIMIT, '', this.key, this.order);
+            null, 'true', PAGINATION_LIMIT, '', this.key, this.order, this.currentBranch.uniqueName);
     }
 
     public setAmountType(category: string, amountType: string) {
@@ -987,7 +1059,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 from: this.fromDate,
                 to: this.toDate,
                 groupUniqueName: this.groupUniqueName
-            }
+            },
+            branchUniqueName: this.currentBranch.uniqueName
         };
 
         this._companyServices.downloadCSV(request).subscribe((res) => {
@@ -1034,10 +1107,11 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {string} [query] Query string to be searched such as customer name
      * @param {string} [sortBy=''] Sorting entity by which we need to sort such as debitTotal, creditTotal or name
      * @param {string} [order='asc'] Order of sorting (asc or desc)
+     * @param {string} [branchUniqueName] Current branch selected
      * @memberof ContactComponent
      */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
-        sortBy: string = '', order: string = 'asc'): void {
+        sortBy: string = '', order: string = 'asc', branchUniqueName?: string): void {
         this.isGetAccountsInProcess = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
@@ -1045,7 +1119,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         toDate = (toDate) ? toDate : '';
         this.currentPage = pageNumber;
 
-        this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
+        this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).subscribe((res) => {
             if (res && res.body && res.status === 'success') {
                 this.totalDue = Number(Math.abs(res.body.debitTotal - res.body.creditTotal).toFixed(this.giddhDecimalPlaces)) || 0;
                 this.totalSales = (this.activeTab === 'customer' ? res.body.debitTotal : res.body.creditTotal) || 0;
@@ -1217,13 +1291,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         * @memberof ContactComponent
         */
     public selectAllColumns(event: boolean): void {
-        this.showFieldFilter.parentGroup = event;
-        this.showFieldFilter.openingBalance = event;
-        this.showFieldFilter.mobile = event;
-        this.showFieldFilter.email = event;
-        this.showFieldFilter.state = event;
-        this.showFieldFilter.gstin = event;
-        this.showFieldFilter.comment = event;
+        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = event);
         this.setTableColspan();
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer'], JSON.stringify(this.showFieldFilter));
@@ -1295,7 +1363,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.allSelectionModel = false;
         }
 
-        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
     }
 
      /**
@@ -1309,10 +1377,39 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.companyCustomFields$ = observableOf(response.body);
                 if (response.body) {
                     this.colspanLength = 11 + response.body.length;
+                    this.addNewFieldFilters(response.body);
                 }
             } else {
                 this._toaster.errorToast(response.message);
             }
         });
+    }
+
+    /**
+     * To add new properties in showFieldFilter object
+     *
+     * @param {*} field
+     * @memberof ContactComponent
+     */
+    public addNewFieldFilters(field: any): void {
+        for (let key of field) {
+            if (key.uniqueName) {
+                this.showFieldFilter[key.uniqueName] = false;
+            }
+        }
+    }
+  
+    /**
+     * Branch change handler
+     *
+     * @memberof ContactComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        if (this.activeTab === 'customer') {
+            this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+        } else {
+            this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+        }
     }
 }

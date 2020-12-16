@@ -57,7 +57,42 @@
                                             <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')" [(ngModel)]="showFieldFilter.comment" /> Comment
                                         </a>
                                     </li>
+                                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                                        <!-- <th width="10%">{{item.key | titlecase}}</th> -->
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" name="{{item.uniqueName}}" (ngModelChange)="columnFilter($event, item.uniqueName)" [(ngModel)]="showFieldFilter[item.uniqueName]" /> {{item.key | titlecase}}
+                                            </a>
+                                        </li>
+                                    </ng-container>
                                 </ul>
+                            </div>
+                        </div>
+                        <div class="form-group mr-15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+                            <div class="form-group">
+                                <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
+                                    [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                                    placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <ng-container>
+                                            <a href="javascript:void(0)" class="list-item d-flex">
+                                                <span class="entity-icon">
+                                                    <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch"
+                                                        tooltip="Branch"></i>
+                                                    <i class="icon-company-HO pull-right"
+                                                        *ngIf="!option.parentBranch && !option.isCompany" tooltip="HO Branch"></i>
+                                                    <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
+                                                </span>
+                                                <span class="entity-details">
+                                                    <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                    <div class="item-unq giddh-limit single-line-clamp">
+                                                        {{ option.name || '-' }}
+                                                    </div>
+                                                </span>
+                                            </a>
+                                        </ng-container>
+                                    </ng-template>
+                                </sh-select>
                             </div>
                         </div>
                         <div class="pull-left header-left">
@@ -329,7 +364,7 @@
                     <td *ngIf="showFieldFilter.state"></td>
                     <td *ngIf="showFieldFilter.comment"></td>
                     <ng-container *ngFor="let item of (companyCustomFields$ | async)">
-                        <td *ngIf="item.key"></td>
+                        <td *ngIf="item.key && showFieldFilter[item.uniqueName]"></td>
                     </ng-container>
                 </tr>
 
@@ -417,11 +452,7 @@
 
                     <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
                     <ng-container *ngFor="let item of (companyCustomFields$ | async)">
-                        <th width="10%">{{item.key}}</th>
-                    </ng-container>
-
-                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
-                        <th width="10%">{{item.key}}</th>
+                        <th width="10%" *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]">{{item.key | titlecase}}</th>
                     </ng-container>
                 </tr>
 
@@ -589,7 +620,7 @@
 
                         </td>
                         <ng-container *ngFor="let item of account?.customFields">
-                            <td class="word-wrap" [attr.data-title]="item.key">
+                            <td *ngIf="item.key && showFieldFilter[item.uniqueName]" class="word-wrap" [attr.data-title]="item.key">
                                 {{item.value || '-' }}</td>
                         </ng-container>
                     </tr>
@@ -762,6 +793,10 @@
                                 <textarea class='form-control' maxlength='100' [(ngModel)]='account.comment' (blur)='updateComment(account)'></textarea>
                             </ng-container>
                         </td>
+                        <ng-container *ngFor="let item of account?.customFields">
+                            <td *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]" class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value || '-' }}</td>
+                        </ng-container>
                         <td data-title="Action" *ngIf="isICICIIntegrated">
                             <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
@@ -769,10 +804,6 @@
                             <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
-                        <ng-container *ngFor="let item of account?.customFields">
-                            <td class="word-wrap" [attr.data-title]="item.key">
-                                {{item.value || '-' }}</td>
-                        </ng-container>
                     </tr>
                     <tr *ngIf="!(sundryCreditorsAccounts).length ">
                         <td [attr.colspan]="colspanLength" class="text-center empty-table">

@@ -44,6 +44,8 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
 
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
+    /** Stores the current branch unique name used for filtering */
+    @Input() public currentBranchUniqueName: string;
 
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -154,7 +156,7 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
         let aa = this.activeFinacialYr;
 
         if (from != null && to != null) {
-            this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], {queryParams: {from: from, to: to}});
+            this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], {queryParams: {from: from, to: to, branchUniqueName: this.currentBranchUniqueName}});
         }
     }
 }
