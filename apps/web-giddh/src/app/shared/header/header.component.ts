@@ -1991,6 +1991,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public navigateToPreviousRoute(): void {
         if (document.referrer) {
             this.location.back();
+        } else {
+            this.router.navigate(['/pages/home']);
         }
     }
 
