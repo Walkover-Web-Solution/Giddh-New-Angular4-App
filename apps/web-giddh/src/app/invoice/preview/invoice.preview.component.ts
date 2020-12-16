@@ -424,6 +424,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             .subscribe(res => {
                 if (res[0]) {
                     this.itemsListForDetails = [];
+                    let existingInvoices = [];
                     res[0].items = res[0].items.map((item: ReceiptItem) => {
                         let dueDate = item.dueDate ? moment(item.dueDate, GIDDH_DATE_FORMAT) : null;
 
@@ -443,10 +444,24 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         }
 
                         item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
+                        if(item.isSelected) {
+                            existingInvoices.push(item.uniqueName);
+                        }
 
                         this.itemsListForDetails.push(this.parseItemForVm(item));
                         return item;
                     });
+
+                    let selectedInvoices = [];
+                    if(this.selectedInvoices && this.selectedInvoices.length > 0) {
+                        this.selectedInvoices.forEach(invoice => {
+                            if(existingInvoices.indexOf(invoice) > -1) {
+                                selectedInvoices.push(invoice);
+                            }
+                        });
+
+                        this.selectedInvoices = selectedInvoices;
+                    }
 
                     let voucherData = _.cloneDeep(res[0]);
                     if (voucherData.items.length) {
@@ -466,9 +481,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.showExportButton = false;
                     }
 
-                    //this.selectedInvoicesList = []; // Commented Due to clearing after page changed
-                    if (this.selectedInvoicesList && this.selectedInvoicesList.length > 0) {
-                        res[0] = this.checkSelectedInvoice(voucherData);
+                    if (this.selectedInvoices && this.selectedInvoices.length > 0) {
+                        voucherData.items.forEach((v) => {
+                            v.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, v.uniqueName);
+                        });
+                        res[0] = voucherData;
                     }
                     this.selectedItems = [];
                 }
@@ -1368,7 +1385,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             return ele.account.uniqueName === this.exportInvoiceType;
         });
         this.selectedInvoicesList = this.selectedInvoicesList.filter(s => s.isSelected);
-        this.voucherData = this.checkSelectedInvoice(this.voucherData);
+        //this.voucherData = this.checkSelectedInvoice(this.voucherData);
     }
 
     public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
