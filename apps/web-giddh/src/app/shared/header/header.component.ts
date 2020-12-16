@@ -2042,25 +2042,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * To prepare menu list
-     *
-     * @memberof HeaderComponent
-     */
-    public prepareMenuListByAccessPermission(): void {
-        if (this.allModulesList.length) {
-            let sharedMenus = [];
-            let routerLinks = [];
-            this.allModulesList.forEach(item => {
-                sharedMenus.push(...item.items);
-            });
-            sharedMenus.forEach(element => {
-                routerLinks.push(element.routerLink);
-            });
-            this.menuItemsFromIndexDB = this.menuItemsFromIndexDB.filter(item => routerLinks.includes(item.uniqueName));
-        }
-    }
-
-    /**
      * This will check and renew user session if close to expiry
      *
      * @memberof HeaderComponent
