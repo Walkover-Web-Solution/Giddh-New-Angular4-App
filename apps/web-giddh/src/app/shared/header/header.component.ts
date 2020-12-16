@@ -458,7 +458,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.getCurrentCompanyData();
-        this.getAllMenusModules();
         this._breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -490,7 +489,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.accountItemsFromIndexDB = DEFAULT_AC;
                 }
             });
-            this.getAllMenusModules();
         });
 
         this.sideBarStateChange(true);
@@ -1068,7 +1066,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
             }
         }
-        this.prepareMenuListByAccessPermission();
     }
 
     public showManageGroupsModal() {
@@ -2035,38 +2032,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 } else {
                     this.lastSessionRenewalTime = moment();
                 }
-            }
-        });
-    }
-
-    /**
-     * To prepare menu list
-     *
-     * @memberof HeaderComponent
-     */
-    public prepareMenuListByAccessPermission(): void {
-        if (this.allModulesList.length) {
-            let sharedMenus = [];
-            let routerLinks = [];
-            this.allModulesList.forEach(item => {
-                sharedMenus.push(...item.items);
-            });
-            sharedMenus.forEach(element => {
-                routerLinks.push(element.routerLink);
-            });
-            this.menuItemsFromIndexDB = this.menuItemsFromIndexDB.filter(item => routerLinks.includes(item.uniqueName));
-        }
-    }
-
-    /**
-     * To get all shared modules list
-     *
-     * @memberof HeaderComponent
-     */
-    public getAllMenusModules() {
-        this.permissionService.getSharedAllModules().subscribe(response => {
-            if (response && response.status === 'success') {
-                this.allModulesList = response.body;
             }
         });
     }
