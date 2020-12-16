@@ -755,7 +755,7 @@ export class GeneralService {
         } : {
                 headerText,
                 headerCssClass,
-                messageText: `Do you want to change the all entries date with this date`,
+                messageText: `Do you want to change the all entries date with this date?`,
                 messageCssClass,
                 footerText: '',
                 footerCssClass,
