@@ -281,7 +281,7 @@ export class UpdateLedgerVm {
     public onTxnAmountChange(txn: ILedgerTransactionItem) {
 
         if (!txn.isUpdated) {
-            if (this.selectedLedger.taxes.length && !txn.isTax) {
+            if (this.selectedLedger && this.selectedLedger.taxes && this.selectedLedger.taxes.length && !txn.isTax) {
                 txn.isUpdated = true;
             }
         }

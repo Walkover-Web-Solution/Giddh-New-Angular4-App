@@ -107,7 +107,7 @@ export class SettingTaxesComponent implements OnInit {
         });
 
         this.store
-            .pipe(select(p => p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
+            .pipe(select(p => p.company && p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
             .subscribe(result => {
                 if (result && this.taxAsideMenuState === 'in') {
                     this.toggleTaxAsidePane();
