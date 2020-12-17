@@ -1440,7 +1440,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!branch.alias) {
                     return branch.name.toLowerCase().includes(branchName.toLowerCase());
                 } else {
-                    return branch.name.toLowerCase().includes(branchName.toLowerCase()) || branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                    return branch.alias.toLowerCase().includes(branchName.toLowerCase());
                 }
             });
         } else {
@@ -1980,7 +1980,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public navigateToPreviousRoute(): void {
-        this.location.back();
+        if (document.referrer) {
+            this.location.back();
+        } else {
+            this.router.navigate(['/pages/home']);
+        }
     }
 
     /**

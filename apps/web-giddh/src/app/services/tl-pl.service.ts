@@ -155,6 +155,9 @@ export class TlPlService {
     public DownloadBalanceSheetExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
         let filteredRequest = (Object.keys(request)
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
@@ -172,6 +175,9 @@ export class TlPlService {
     public DownloadProfitLossExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
+        if (request.branchUniqueName && request.branchUniqueName === this.companyUniqueName) {
+            delete request.branchUniqueName;
+        }
         let filteredRequest = (Object.keys(request)
             .filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
