@@ -29,7 +29,6 @@ import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { DownloadOrSendInvoiceOnMailComponent } from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -39,7 +38,6 @@ import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/re
 import { ActiveFinancialYear, CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
-import { BulkExportModal } from './models/bulk-export-modal/bulk-export.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
@@ -393,10 +391,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (!(a && a.voucherType)) {
                 return;
             }
-            if (a.voucherType === 'recurring') {
+            if (a && a.voucherType === 'recurring') {
                 return;
             }
-            this.selectedVoucher = a.voucherType;
+            this.selectedVoucher = (a) ? a.voucherType : "";
             if (this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') {
                 this.templateType = 'voucher';
             } else {
