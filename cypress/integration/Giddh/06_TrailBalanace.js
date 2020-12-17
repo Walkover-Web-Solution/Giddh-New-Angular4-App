@@ -4,7 +4,6 @@ describe('This is TrialBalance Search Test', () => {
 
     let testData = "";
     let entryUniqueName = "";
-
     before(() => {
         cy.fixture('example.json')
             .then((data) => {
@@ -13,14 +12,20 @@ describe('This is TrialBalance Search Test', () => {
             })
     });
 
-    // before(() => {
-    //     cy.viewport(1366, 768)
-    //     cy.loginWithEmail(testData.Email, testData.Password);
-    // })
-    //
-    // it('Verify Trial Balance using Global Search', () => {
-    //     cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
-    //
-    // });
+    before(() => {
+        cy.deleteAllLedgersAPI('uitest').then(()=>{
+            cy.viewport(1366, 768)
+            cy.loginWithEmail(testData.Email, testData.Password);
+        })
+    })
+
+    it('Verify Trial Balance Amount after Create Entry', () => {
+        cy.createLedgerAPI('uitest').then((response) => {
+            if (response.status === 201){
+                cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+            }
+            cy.searchOnTrialBalance('uitest', '199.99  Dr. ')
+        })
+    });
 
 })

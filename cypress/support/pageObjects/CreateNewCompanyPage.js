@@ -5,7 +5,7 @@ class CreateNewCompanyPage {
     }
 
     country(){
-        return cy.get('#country > .pos-rel > .header > div > .form-control');
+        return cy.xpath("//sh-select[@id='country']");
     }
 
     countryList(){
