@@ -80,6 +80,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Input() public newSelectedAccount: AccountResponse;
     /** Current date to show the balance till date */
     @Input() public currentDate: string;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    @Input() public isCompany: boolean;
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
@@ -308,7 +310,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.activeCompany = activeCompany;
                 this.currentCompanyUniqueName = activeCompany.uniqueName;

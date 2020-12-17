@@ -18,6 +18,7 @@ import {
     TaxResponse,
 } from '../models/api-models/Company';
 import { IRegistration } from '../models/interfaces/registration.interface';
+import { OrganizationType } from '../models/user-login-state';
 import { CompanyService } from '../services/companyService.service';
 import { ToasterService } from '../services/toaster.service';
 import { CustomActions } from '../store/customActions';
@@ -76,6 +77,9 @@ export class CompanyActions {
     public static SET_COMPANY_BRANCH = 'SET_COMPANY_BRANCH';
 
     public static SET_ACTIVE_COMPANY_DATA = 'SET_ACTIVE_COMPANY_DATA';
+
+    public static GET_COMPANY_USER = 'GET_COMPANY_USER';
+    public static GET_COMPANY_USER_RESPONSE = 'GET_COMPANY_USER_RESPONSE';
 
     public createCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -248,17 +252,11 @@ export class CompanyActions {
                         let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
                         if (companyIndex > -1) {
                             // if active company find no action needed
-                            if (response.body.length === totalCompany) {     // if company created success then only change to new created company otherwise refres Api call will return null action
+                            if (response.body.length === totalCompany) { // if company created success then only change to new created company otherwise refresh Api call will return null action
                                 return { type: 'EmptyAction' };
-
                             } else {
-                                return {
-                                    type: 'CHANGE_COMPANY',
-                                    payload: response.body[companyIndex].uniqueName
-                                };
+                                return { type: 'EmptyAction' };
                             }
-
-                            // return { type: 'EmptyAction' };
                         } else {
                             // if no active company active next company from companies list
                             return {
@@ -408,6 +406,24 @@ export class CompanyActions {
                 return { type: 'EmptyAction' };
             })));
 
+    public getCompanyUser$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CompanyActions.GET_COMPANY_USER),
+            switchMap((action: CustomActions) => this._companyService.getCompanyUser(action.payload)),
+            map(response => {
+                return this.getCompanyUserResponse(response);
+            })));
+
+    public getCompanyUserResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CompanyActions.GET_COMPANY_USER_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                }
+                return { type: 'EmptyAction' };
+            })));
+
     constructor(
         private action$: Actions,
         private _companyService: CompanyService,
@@ -496,6 +512,17 @@ export class CompanyActions {
     }
     public CreateNewCompanyResponse(value: BaseResponse<CompanyResponse, CompanyCreateRequest>): CustomActions {
         this.store.dispatch(this.ResetApplicationData());
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        const organization: Organization = {
+            type: OrganizationType.Company, // Mode to which user is switched to
+            uniqueName: '',
+            details
+        };
+        this.store.dispatch(this.setCompanyBranch(organization));
         return {
             type: CompanyActions.CREATE_NEW_COMPANY_RESPONSE,
             payload: value
@@ -643,12 +670,12 @@ export class CompanyActions {
     /**
      * Returns the action to set the financial year chosen in either sales or purchase register
      *
-     * @param {string} financialYearUniqueName Unique name of chosen financial year
+     * @param {string} filterValues Stores the filter values
      * @returns {CustomActions} Action to set the financial year
      * @memberof CompanyActions
      */
-    public setUserChosenFinancialYear(financialYearUniqueName: string): CustomActions {
-        return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: financialYearUniqueName };
+    public setUserChosenFinancialYear(filterValues: {financialYear: string, branchUniqueName: string, timeFilter: string}): CustomActions {
+        return { type: CompanyActions.SET_USER_CHOSEN_FINANCIAL_YEAR, payload: filterValues };
     }
 
     /**
@@ -714,6 +741,34 @@ export class CompanyActions {
         return {
             type: CompanyActions.SET_ACTIVE_COMPANY_DATA,
             payload: data
+        };
+    }
+
+    /**
+     * This will initiate get company uer api
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getCompanyUser(data: any): CustomActions {
+        return {
+            type: CompanyActions.GET_COMPANY_USER,
+            payload: data
+        };
+    }
+
+    /**
+     * This will set the company uer data in store
+     *
+     * @param {BaseResponse<any, string>} value
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public getCompanyUserResponse(value: BaseResponse<any, string>): CustomActions {
+        return {
+            type: CompanyActions.GET_COMPANY_USER_RESPONSE,
+            payload: value
         };
     }
 }

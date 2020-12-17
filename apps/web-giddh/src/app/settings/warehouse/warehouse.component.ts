@@ -21,6 +21,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
 import { OnBoardingType, PAGINATION_LIMIT } from '../../app.constant';
+import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';

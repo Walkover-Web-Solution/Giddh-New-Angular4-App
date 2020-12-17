@@ -74,6 +74,9 @@ export class GstReconcileService {
         if (model.category) {
             url = `${url}&category=${model.category}`;
         }
+        if (model.gstin) {
+            url = url.concat(`&gstin=${model.gstin}`);
+        }
 
         return this._http.get(url)
             .pipe(

@@ -39,7 +39,6 @@
     align-items: center;
     border-right: 1px solid $gainsboro;
     color: #999999;
-    left: 0;
     font-size: 18px;
 }
 .input-grp-dateRangePicker input.form-control {
@@ -70,6 +69,9 @@
         box-shadow: none;
         outline: none;
     }
+}
+.entity-dropdown {
+    width: 200px;
 }
 @media(max-width:1280px){
     .invoice-footer {

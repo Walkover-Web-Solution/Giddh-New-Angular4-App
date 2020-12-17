@@ -28,14 +28,19 @@ export class SearchService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         const request = reqPayload.request;
-        return this._http.post(this.config.apiUrl + SEARCH_API.SEARCH
+        let url = this.config.apiUrl + SEARCH_API.SEARCH
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':groupName', encodeURIComponent(request.groupName))
             .replace(':count', encodeURIComponent('15'))
             .replace(':from', encodeURIComponent(request.fromDate))
             .replace(':to', encodeURIComponent(request.toDate))
             .replace(':refresh', String(request.refresh))
-            .replace(':page', String(request.page)),
+            .replace(':page', String(request.page));
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
+        return this._http.post(url,
             reqPayload.searchReqBody)
             .pipe(map((res) => {
                 res.body.groupName = request.groupName;

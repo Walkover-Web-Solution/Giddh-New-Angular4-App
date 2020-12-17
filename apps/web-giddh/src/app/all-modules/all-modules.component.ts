@@ -54,7 +54,7 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @memberof AllModulesComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.company && state.company.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = activeCompany.name;
@@ -65,8 +65,7 @@ export class AllModulesComponent implements OnInit, OnDestroy {
                 // }
             }
         });
-        // commenting for later use
-        // this.getSharedAllModules();
+        this.getSharedAllModules();
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "All Modules";
         currentPageObj.url = "";

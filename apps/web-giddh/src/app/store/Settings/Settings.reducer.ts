@@ -230,6 +230,8 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profileRequest = true;
                 newState.getProfileInProgress = false;
                 return Object.assign({}, state, newState);
+            } else if (response.status === 'error' && response.code === 'UNAUTHORISED') {
+                return { ...state, updateProfileInProgress: false, getProfileInProgress: false };
             }
             return { ...state, updateProfileInProgress: true, getProfileInProgress: false };
         }
@@ -266,6 +268,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return {
                 ...state,
                 updateProfileSuccess: false,
+                updateProfileInProgress: false
             };
         }
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {

@@ -108,11 +108,6 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding: 2px 0;
 }
 
-
-/* .ledger-main .form-control {
-    height: 26px;
-} */
-
 .ledger-main .form-control {
     background: $white !important;
     height: 45px;
@@ -140,11 +135,6 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .custom-tabs {
     display: none !important;
 }
-
-
-/* .total-detail-table tbody tr td {
-  vertical-align: top;
-} */
 
 .total-detail-table {
     display: flex;
@@ -244,6 +234,7 @@ span.eligible-ITC {
     }
 }
 .advanced {
+    background: $alice-blue;
     table.xs-table-block {
         tbody tr {
             td.remove-invoice {
@@ -285,8 +276,35 @@ span.eligible-ITC {
 .left-col-new .row, .right-col-new .row , .ledger-head .row{
     margin: 0;
 }
+.dropdown-container[disabled], .table-amount[disabled] {
+    pointer-events: none;
+}
+#update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white{
+    background-color: $whisper-light !important;
+}
+#update-ledger-assign-tag.disabled-ledger::ng-deep input ,
+#update-ledger-select-warehouse.disabled-ledger::ng-deep input,
+#update-ledger-price-input.disabled-ledger,
+#update-ledger-invoice-voucher-number.disabled-ledger::ng-deep input,
+#update-ledger-invoice-number.disabled-ledger::ng-deep input  {
+     background-color: $whisper-light !important;
+}
+.tourist-scheme-wrapper{
+     input[type="checkbox"]{
+        opacity: 0;
+    }
+}
 .show-if-ledger-open{
-    height: 230px;
+    height: 300px;
+}
+p.edit-message{
+    background-color: $whisper-light;
+    text-align: center;
+    padding: 8px 0;
+    border-top: 1px solid $gainsboro;
+    font-size: 16px;
+    font-family: 'opensans-semibold';
+    margin-top: 15px;
 }
 /* responsive */
 
