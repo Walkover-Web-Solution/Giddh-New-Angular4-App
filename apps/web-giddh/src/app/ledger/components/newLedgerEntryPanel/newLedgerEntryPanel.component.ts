@@ -850,7 +850,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this._ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).subscribe((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
             if (data.status === 'success') {
-                if (data.body.length) {
+                if (data.body && data.body.length) {
                     forEach(data.body, (entry: ReconcileResponse) => {
                         forEach(entry.transactions, (txn: ILedgerTransactionItem) => {
                             if (txn.amount === this.currentTxn.amount) {
@@ -858,9 +858,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                             }
                         });
                     });
-                    if (this.matchingEntriesData.length === 1) {
+                    if (this.matchingEntriesData && this.matchingEntriesData.length === 1) {
                         this.confirmBankTransactionMap(this.matchingEntriesData[0]);
-                    } else if (this.matchingEntriesData.length > 1) {
+                    } else if (this.matchingEntriesData && this.matchingEntriesData.length > 1) {
                         this.showMatchingEntries = true;
                     } else {
                         this.showErrMsgOnUI();
@@ -1292,7 +1292,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 tdsAmount: null,
                 description: null
             };
-            if (!adjustments.length)  {
+            if (!adjustments || !adjustments.length)  {
                 // No adjustments done clear the adjustment checkbox
                 if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
                     this.isAdjustAdvanceReceiptSelected = false;
@@ -1371,7 +1371,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private validateTaxes(): boolean {
         const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
-        return taxes.length > 0;
+        return taxes && taxes.length > 0;
     }
 
 
