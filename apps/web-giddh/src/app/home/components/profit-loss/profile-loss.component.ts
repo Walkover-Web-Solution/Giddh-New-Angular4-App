@@ -77,7 +77,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
             }
         });
-        
+
         // listen for universal date
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {

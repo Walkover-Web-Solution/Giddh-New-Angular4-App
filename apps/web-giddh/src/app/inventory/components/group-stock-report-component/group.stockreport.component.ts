@@ -28,6 +28,7 @@ import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
@@ -61,6 +62,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
+    /** List of branches */
+    public branches: Array<any> = [];
 
     public today: Date = new Date();
     public activeGroup$: Observable<StockGroupResponse>;
@@ -213,6 +216,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public branchTransferMode: string = '';
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -264,6 +269,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 }
             }
         });
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         // tslint:disable-next-line:no-shadowed-variable
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
@@ -272,6 +278,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             } else {
                 this.branchAvailable = false;
             }
+            this.branches = branches;
         })), takeUntil(this.destroyed$)).subscribe();
 
     }
@@ -415,6 +422,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.GroupStockReportRequest.stockGroupUniqueName = this.groupUniqueName || '';
         this.GroupStockReportRequest.stockUniqueName = '';
         this.groupUniqueNameFromURL = null;
+        this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
+        this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.isCompany ? undefined : this.currentBranchAndWarehouse.branch;
         this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest)));
     }
 

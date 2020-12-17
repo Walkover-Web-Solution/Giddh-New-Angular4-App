@@ -250,6 +250,7 @@ export class TransactionsRequest {
     public sort: string = 'asc';
     public reversePage: boolean = false;
     public accountCurrency: boolean = false;
+    public branchUniqueName?: string;
 }
 
 export interface ReconcileRequest {
@@ -296,6 +297,7 @@ export class ReconcileResponse {
 export class MagicLinkRequest {
     public from: string = '';
     public to: string = '';
+    public branchUniqueName?: string = '';
 }
 
 export class MagicLinkResponse {
@@ -310,6 +312,7 @@ export class ExportLedgerRequest {
     public sort?: string = 'asc';
     public withInvoice?: boolean = false;
     public balanceTypeAsSign?: boolean = false;
+    public branchUniqueName?: string = '';
 }
 
 /**

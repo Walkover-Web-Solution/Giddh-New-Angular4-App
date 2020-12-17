@@ -14,6 +14,7 @@ import {BsDatepickerDirective} from 'ngx-bootstrap/datepicker';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'app-recurring',
@@ -72,6 +73,10 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public showResetFilterButton: boolean = false;
     /** This will hold checked invoices */
     public selectedInvoices: any[] = [];
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -110,6 +115,12 @@ export class RecurringComponent implements OnInit, OnDestroy {
             { label: 'Yearly', value: 'yearly' }
         ];
         this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
+        });
 
         this.invoiceNumberInput.valueChanges.pipe(
             debounceTime(700),

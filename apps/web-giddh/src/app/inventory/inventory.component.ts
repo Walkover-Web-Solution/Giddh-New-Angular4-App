@@ -29,6 +29,8 @@ import { SettingsUtilityService } from '../settings/services/settings-utility.se
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { OrganizationType } from '../models/user-login-state';
+import { GeneralService } from '../services/general.service';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -84,9 +86,13 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public warehouses: Array<any> = [];
     /** List of branches */
     public branches: Array<any> = [];
+    /** Stores the current organziation type */
+    public currentOrganizationType: OrganizationType;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /** Holds the observable for universal date */
+    public universalDate$: Observable<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -103,7 +109,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private sideBarAction: SidebarAction,
         private settingsUtilityService: SettingsUtilityService,
         private toastService: ToasterService,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService
     ) {
         this.breakPointObservar.observe([
             '(max-width:1024px)'
@@ -192,8 +199,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit() {
         this.isBranchVisible$ = this.store.pipe(select(s => s.inventory.showBranchScreen), takeUntil(this.destroyed$));
         document.querySelector('body').classList.add('inventory-page');
-
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+        if (this.currentOrganizationType === OrganizationType.Branch) {
+            this.loadBranchWarehouse(this.generalService.currentBranchUniqueName);
+        }
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        this.universalDate$ = this.store.pipe(select(appStore => appStore.session.applicationDate), takeUntil(this.destroyed$));
 
         this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;
 
@@ -228,8 +239,16 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.GroupStockReportRequest = new GroupStockReportRequest();
                 let firstElement = a[0];
                 if (firstElement) {
-                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-                    this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
+                    this.universalDate$.pipe(take(1)).subscribe(dateObj => {
+                        if (dateObj) {
+                            this.GroupStockReportRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.GroupStockReportRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                        } else {
+                            this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+                            this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
+                        }
+                    });
+
                     this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
                     this.activeView = 'group';
                     this.firstDefaultActiveGroup = firstElement.uniqueName;
@@ -238,7 +257,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                         // Selected tab is Inventory
                         this.loadBranchAndWarehouseDetails();
                         this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
-                        this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
                     } else {
                         this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
                         this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
@@ -425,8 +443,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             if (!this.GroupStockReportRequest) {
                 this.GroupStockReportRequest = new GroupStockReportRequest();
             }
-            this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouseFilterValues.branch;
+            this.GroupStockReportRequest.branchUniqueName =
+                this.currentBranchAndWarehouseFilterValues.branch !== this.generalService.companyUniqueName ?
+                this.currentBranchAndWarehouseFilterValues.branch : null;
             this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouseFilterValues.warehouse !== 'all-entities') ? this.currentBranchAndWarehouseFilterValues.warehouse : null;;
+            this.store.dispatch(this.stockReportActions.GetGroupStocksReport(_.cloneDeep(this.GroupStockReportRequest))); // open first default group
         });
     }
 
@@ -505,15 +526,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private loadBranchWithWarehouse(): void {
         if (this.branchesWithWarehouse && this.branchesWithWarehouse.length) {
-            let currentCompanyUniqueName;
-            this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(uniqueName => currentCompanyUniqueName = uniqueName);
-            const companyIndex = this.branchesWithWarehouse.findIndex(branch => branch.isCompany);
-            if (companyIndex > -1 && this.branchesWithWarehouse[companyIndex].uniqueName !== currentCompanyUniqueName) {
-                // Remove the head quarter if the current company is a branch as branches don't have access to view head quarter details
-                this.branchesWithWarehouse.splice(companyIndex, 1);
-            }
-            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.name} ${branch.alias ? '(' + branch.alias + ')' : ''}`, value: branch.uniqueName }));
-            this.loadBranchWarehouse(currentCompanyUniqueName);
+            let currentEntityUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : this.generalService.companyUniqueName;
+            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.alias || branch.name}`, value: branch.uniqueName }));
+            this.loadBranchWarehouse(currentEntityUniqueName);
         }
     }
 }

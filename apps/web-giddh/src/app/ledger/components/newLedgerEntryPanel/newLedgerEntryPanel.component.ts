@@ -122,6 +122,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public shouldShowItcSection: boolean = false;
     /** To check Tourist scheme applicable in ledger */
     @Input() public isTouristSchemeApplicable: boolean = false;
+    /** True, if new form should be opened in READ only mode */
+    @Input() public isReadOnly: boolean = false;
 
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;

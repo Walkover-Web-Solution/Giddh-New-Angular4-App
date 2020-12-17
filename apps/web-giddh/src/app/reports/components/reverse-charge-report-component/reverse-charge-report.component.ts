@@ -4,7 +4,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.c
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -13,8 +13,10 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { CurrentPage } from '../../../models/api-models/Common';
 import { Router } from '@angular/router';
 import { GeneralActions } from '../../../actions/general/general.actions';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GeneralService } from '../../../services/general.service';
+import { OrganizationType } from '../../../models/user-login-state';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'reverse-charge-report',
@@ -76,7 +78,24 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
 
-    constructor(private store: Store<AppState>, private toasty: ToasterService, private cdRef: ChangeDetectorRef, private reverseChargeService: ReverseChargeService, private router: Router, private generalActions: GeneralActions, private generalService: GeneralService, private modalService: BsModalService) {
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+
+    constructor(
+        private store: Store<AppState>,
+        private toasty: ToasterService,
+        private cdRef: ChangeDetectorRef,
+        private reverseChargeService: ReverseChargeService,
+        private router: Router,
+        private generalActions: GeneralActions,
+        private settingsBranchAction: SettingsBranchActions,
+        private generalService: GeneralService,
+        private modalService: BsModalService
+    ) {
         this.setCurrentPageTitle();
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -106,6 +125,53 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         })), takeUntil(this.destroyed$)).subscribe();
+
+        this.store.pipe(
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                    this.reverseChargeReportGetRequest.branchUniqueName = this.currentBranch.uniqueName;
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
+
     }
 
     /**
@@ -328,5 +394,16 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.reverseChargeReportGetRequest.to = this.toDate;
             this.getReverseChargeReport(true);
         }
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof ReverseChargeReport
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.reverseChargeReportGetRequest.branchUniqueName = selectedEntity.value;
+        this.getReverseChargeReport(true);
     }
 }

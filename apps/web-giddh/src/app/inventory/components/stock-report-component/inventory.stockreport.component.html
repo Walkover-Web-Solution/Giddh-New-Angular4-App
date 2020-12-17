@@ -80,7 +80,7 @@
                     </ul>
                 </div>
                 <button class="btn btn-sky-blue" (click)="editStock()"  >Edit Stock</button> -->
-                <button class="btn btn-sky-blue transfer-btn" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">New Transfer </button>
+                <button *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)" class="btn btn-sky-blue transfer-btn" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">New Transfer </button>
                 <button class="btn btn-sky-blue mr-0" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i">Create New</button>
             </div>
         </div>
@@ -94,7 +94,7 @@
                         <th colspan="3" width="40%">
                             <div class="d-flex">
                                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                    <i><img src="assets/images/custom-calender.svg"></i>
+                                    <i class="icon-calender calendar-addon"></i>
                                     <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                                 </div>
                             </div>
@@ -467,7 +467,7 @@
                         <div class="col-sm-4">Date Range</div>
                         <div class="col-sm-8">
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i><img src="assets/images/custom-calender.svg"></i>
+                                <i class="icon-calender calendar-addon"></i>
                                 <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                             </div>
                         </div>

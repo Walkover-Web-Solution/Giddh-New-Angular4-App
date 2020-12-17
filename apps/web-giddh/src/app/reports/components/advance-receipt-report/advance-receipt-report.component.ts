@@ -15,10 +15,12 @@ import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 
 import { GeneralActions } from '../../../actions/general/general.actions';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AdvanceReceiptSummaryRequest, GetAllAdvanceReceiptsRequest } from '../../../models/api-models/Reports';
+import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -149,6 +151,15 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public showInvoiceSearchBar: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
+
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
         adjustmentVoucherDetails: {
@@ -201,7 +212,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private generalAction: GeneralActions,
         private receiptService: ReceiptService,
         private store: Store<AppState>,
-        private toastService: ToasterService, private generalService: GeneralService, private modalService: BsModalService
+        private toastService: ToasterService,
+        private generalService: GeneralService,
+        private settingsBranchAction: SettingsBranchActions,
+        private modalService: BsModalService
     ) { }
 
     /** Subscribe to universal date and set header title */
@@ -224,6 +238,50 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
             this.fetchReceiptsData();
+        });
+        this.store.pipe(
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    let currentBranchUniqueName;
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
         });
     }
 
@@ -431,6 +489,16 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     }
 
     /**
+     * Branch change handler
+     *
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.fetchReceiptsData();
+    }
+
+    /**
      * Subscribes to input search filters for customer, receipt, payment and invoice number
      *
      * @private
@@ -482,8 +550,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             unUsedAmount: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
             unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
             sort: this.searchQueryParams.sort,
-            sortBy: this.searchQueryParams.sortBy
-        }
+            sortBy: this.searchQueryParams.sortBy,
+            branchUniqueName: this.currentBranch.uniqueName
+        };
 
         const optionalParams = cloneDeep(additionalRequestParameters);
         if (optionalParams) {
@@ -509,7 +578,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         const requestObject: AdvanceReceiptSummaryRequest = {
             companyUniqueName: this.activeCompanyUniqueName,
             from: this.fromDate,
-            to: this.toDate
+            to: this.toDate,
+            branchUniqueName: this.currentBranch.uniqueName
         };
         return this.receiptService.fetchSummary(requestObject);
     }

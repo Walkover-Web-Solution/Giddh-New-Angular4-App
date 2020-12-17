@@ -42,6 +42,7 @@ import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
@@ -199,6 +200,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
     /** This will hold if updated is account in master to refresh the list of vouchers */
     public isAccountUpdated: boolean = false;
 
@@ -238,6 +243,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
             this.accounts$ = observableOf(orderBy(accounts, 'label'));
+        });
+
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+            }
         });
 
         this.store.pipe(select(p => p.invoice.ledgers),

@@ -278,13 +278,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.store.pipe(select(state => state.session.isCompanyCreated), takeUntil(this.destroyed$)).subscribe(response => {
             if(response) {
-                if(this.activeCompany === undefined) {
-                    setTimeout(() => {
-                        if (this._router.url.includes("welcome")) {
-                            this._router.navigate(['/pages/onboarding']);
-                        }
-                    }, 2000);
-                }
+                setTimeout(() => {
+                    if (this._router.url.includes("welcome")) {
+                        this._router.navigate(['/pages/onboarding']);
+                    }
+                }, 2000);
             }
         });
     }
