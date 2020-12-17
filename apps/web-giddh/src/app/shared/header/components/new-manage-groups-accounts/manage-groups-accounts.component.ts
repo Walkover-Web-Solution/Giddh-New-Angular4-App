@@ -384,7 +384,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         if (event.value === 'BOOLEAN') {
             row.controls[index].get('valueLength').clearValidators();
         } else {
-            row.controls[index].get('valueLength').setValidators([Validators.required])
+            if (event.value === 'NUMERIC') {
+                row.controls[index].get('valueLength').setValidators([Validators.required, Validators.max(30)]);
+            } else if (event.value === 'STRING') {
+                row.controls[index].get('valueLength').setValidators([Validators.required, Validators.max(150)]);
+            }
         }
         row.controls[index].get('valueLength').setValue(null);
     }

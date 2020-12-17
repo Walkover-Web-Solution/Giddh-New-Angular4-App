@@ -12,7 +12,7 @@
 
 <div class="custom-tabs heightVH-100">
     <tabset>
-        <tab heading="Generated Bills" id="tab1">
+        <tab heading="Generated" id="tab1">
             <div class="clearfix">
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -25,10 +25,8 @@
                                             <div class="flex-fill">Date</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                    (click)="sortbyApi('invoiceDate', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                    (click)="sortbyApi('invoiceDate', 'desc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('invoiceDate', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('invoiceDate', 'desc')"></div>
                                             </div>
                                         </div>
                                     </th>
@@ -42,8 +40,7 @@
 
 
                                         <div class="input-container" [hidden]="!showSearchInvoiceNo">
-                                            <input type="text" placeholder="Search E-way" class="w100" #invoiceSearch
-                                                [formControl]="voucherNumberInput" />
+                                            <input type="text" placeholder="Search E-way" class="w100" #invoiceSearch [formControl]="voucherNumberInput" />
                                         </div>
                                     </th>
 
@@ -55,8 +52,7 @@
                                         </div>
 
                                         <div class="input-container" [hidden]="!showSearchCustomer">
-                                            <input type="text" placeholder="Search Particular" #customerSearch
-                                                class="w100" [formControl]="customerNameInput" />
+                                            <input type="text" placeholder="Search Particular" #customerSearch class="w100" [formControl]="customerNameInput" />
 
                                         </div>
 
@@ -74,10 +70,8 @@
                                             <div class="flex-fill">E-way Bill#</div>
                                             <div class="icon-pointer">
 
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                    (click)="sortbyApi('ewbNo', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                    (click)="sortbyApi('ewbNo', 'desc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('ewbNo', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('ewbNo', 'desc')"></div>
                                             </div>
                                         </div>
 
@@ -87,10 +81,8 @@
                                         <div class="d-flex">
                                             <div class="flex-fill">E-way Bill Date</div>
                                             <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                    (click)="sortbyApi('billingDate', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                    (click)="sortbyApi('billingDate', 'desc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('billingDate', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('billingDate', 'desc')"></div>
                                             </div>
                                         </div>
                                     </th>
@@ -100,10 +92,8 @@
                                         <div class="d-flex">
                                             <div class="flex-fill text-right">Total</div>
                                             <div class="icon-pointer">
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
-                                                    (click)="sortbyApi('totalValue', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
-                                                    (click)="sortbyApi('totalValue', 'desc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('totalValue', 'asc')"></div>
+                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('totalValue', 'desc')"></div>
                                             </div>
                                         </div>
                                     </th>
@@ -114,10 +104,8 @@
                                 <tr *ngFor="let item of EwaybillLists?.results let i = index">
                                     <td data-title="#">{{ i + 1 }}</td>
                                     <td data-title="Date" class="nowrap">{{item?.invoiceDate}}</td>
-                                    <td data-title="Invoice Number" class="nowrap download-arrow"><a href="javascript:;"
-                                            class="d-inline-block">{{item?.docNumber}}</a>
-                                        <a (click)="onSelectEwayDownload(item)" [tooltip]="'Download E-way Bill'"> <i
-                                                class="icon-download1 cursor-pointer pull-right"></i></a>
+                                    <td data-title="Invoice Number" class="nowrap download-arrow"><a href="javascript:;" class="d-inline-block">{{item?.docNumber}}</a>
+                                        <a (click)="onSelectEwayDownload(item)" [tooltip]="'Download E-way Bill'"> <i class="icon-download1 cursor-pointer pull-right"></i></a>
                                     </td>
                                     <td data-title="Customer Name">{{item?.customerName}}</td>
                                     <td data-title="Customer GSTIN">{{item?.customerGstin}}</td>
@@ -126,26 +114,19 @@
                                             <!-- <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectEwayDownload(item)">{{item?.ewbNo}}</a> -->
                                             {{item?.ewbNo}}
                                             <br>
-                                            <small *ngIf="item?.isManuallyGenerated"
-                                                class="cp btn-link text-green">MANUALLY GENERATED</small>
+                                            <small *ngIf="item?.isManuallyGenerated" class="cp btn-link text-green">MANUALLY GENERATED</small>
                                         </div>
                                     </td>
                                     <td data-title="E-way Bill Date" class="nowrap">{{item?.ewayBillDate}}</td>
-                                    <td data-title="Total" class="nowrap text-right pr-1"><i class="fa fa-inr"></i>
-                                        {{item?.totalValue | giddhCurrency}}</td>
+                                    <td data-title="Total" class="nowrap text-right pr-1"><i class="fa fa-inr"></i> {{item?.totalValue | giddhCurrency}}</td>
                                     <td data-title="Action" class="nowrap">
                                         <div class="btn-group pull-left" dropdown>
-                                            <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic"
-                                                dropdownToggle>Actions <i class="caret"></i></a>
-                                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-left"
-                                                role="menu" aria-labelledby="button-basic">
-                                                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
-                                                        (click)="openModal(item, template)">Add vehicle details</a></li>
-                                                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
-                                                        (click)="onSelectEwayDetailedDownload(item)">Download detailed
+                                            <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic" dropdownToggle>Actions <i class="caret"></i></a>
+                                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-left" role="menu" aria-labelledby="button-basic">
+                                                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="openModal(item, template)">Add vehicle details</a></li>
+                                                <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onSelectEwayDetailedDownload(item)">Download detailed
                                                         eway </a></li>
-                                                <li role="menuitem"><a class="dropdown-item"
-                                                        (click)="openModal(item, cancel)">Cancel</a></li>
+                                                <li role="menuitem"><a class="dropdown-item" (click)="openModal(item, cancel)">Cancel</a></li>
                                             </ul>
                                         </div>
                                     </td>
@@ -154,8 +135,7 @@
 
 
                         </table>
-                        <div class="no-data"
-                            *ngIf="EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
+                        <div class="no-data" *ngIf="EwaybillLists?.results?.length === 0 && !(isGetAllEwaybillRequestInProcess$ | async)">
                             <h1>No entries found within given criteria.</h1>
                             <h1>Do search with some other dates</h1>
                         </div>
@@ -310,23 +290,19 @@
 
                     <ul class="list-icon-group ">
                         <li>
-                            <input id="transMode1" type="radio" name="transMode"
-                                [(ngModel)]="updateEwayVehicleform.transMode" value="1">
+                            <input id="transMode1" type="radio" name="transMode" [(ngModel)]="updateEwayVehicleform.transMode" value="1">
                             <label for="transMode1"><img src="assets/icon/4.svg " /> Road</label>
                         </li>
                         <li>
-                            <input id="transMode2" type="radio" [(ngModel)]="updateEwayVehicleform.transMode"
-                                name="transMode" value="2">
+                            <input id="transMode2" type="radio" [(ngModel)]="updateEwayVehicleform.transMode" name="transMode" value="2">
                             <label for="transMode2"><img src="assets/icon/3.svg " /> Rail</label>
                         </li>
                         <li>
-                            <input id="transMode3" type="radio" [(ngModel)]="updateEwayVehicleform.transMode"
-                                name="transMode" value="3">
+                            <input id="transMode3" type="radio" [(ngModel)]="updateEwayVehicleform.transMode" name="transMode" value="3">
                             <label for="transMode3"><img src="assets/icon/1.svg " /> Air</label>
                         </li>
                         <li>
-                            <input id="transMode4" type="radio" [(ngModel)]="updateEwayVehicleform.transMode"
-                                name="transMode" value="4">
+                            <input id="transMode4" type="radio" [(ngModel)]="updateEwayVehicleform.transMode" name="transMode" value="4">
                             <label for="transMode4"><img src="assets/icon/2.svg " /> Ship</label>
                         </li>
 
@@ -371,9 +347,7 @@
 
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
 
-                        <input type="text" name="vehicleNo" required placeholder="Mention Number "
-                            [(ngModel)]="updateEwayVehicleform.vehicleNo" maxlength="15" minlength="7"
-                            class="form-control input " />
+                        <input type="text" name="vehicleNo" required placeholder="Mention Number " [(ngModel)]="updateEwayVehicleform.vehicleNo" maxlength="15" minlength="7" class="form-control input " />
 
                     </div>
                 </div>
@@ -394,13 +368,8 @@
                         <ng-template #rt let-r="result" let-t="term">
                             <span>{{ r }}</span>
                         </ng-template> -->
-                        <sh-select [options]="searchResults" name="fromPlace" required maxlength="50"
-                            [(ngModel)]="updateEwayVehicleform.fromPlace" autocomplete="off"
-                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                            [enableDynamicSearch]="true"
-                            placeholder="Enter city"
-                            [showClear]="false" [multiple]="false"
-                            [ItemHeight]="67">
+                        <sh-select [options]="searchResults" name="fromPlace" required maxlength="50" [(ngModel)]="updateEwayVehicleform.fromPlace" autocomplete="off" (dynamicSearchedQuery)="onSearchQueryChanged($event)" [enableDynamicSearch]="true" placeholder="Enter city"
+                            [showClear]="false" [multiple]="false" [ItemHeight]="67">
                         </sh-select>
                     </div>
                 </div>
@@ -410,9 +379,7 @@
                         <label class="pt-07">From State*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
-                        <sales-sh-select [placeholder]="'State'" [multiple]="false" [isFilterEnabled]="true"
-                            class="select-bdr-bottom" name="fromState" required
-                            [(ngModel)]="updateEwayVehicleform.fromState" [options]="statesSource$ | async">
+                        <sales-sh-select [placeholder]="'State'" [multiple]="false" [isFilterEnabled]="true" class="select-bdr-bottom" name="fromState" required [(ngModel)]="updateEwayVehicleform.fromState" [options]="statesSource$ | async">
                         </sales-sh-select>
                     </div>
                 </div>
@@ -423,9 +390,7 @@
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <!-- <sh-select class="input" [options]="ewayUpdateVehicleReason" required placeholder="select type" [multiple]="false" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode"></sh-select> -->
-                        <sh-select class=" input " [options]="ewayUpdateVehicleReasonList" required
-                            placeholder="select type" [isFilterEnabled]="true" name="reasonCode"
-                            [(ngModel)]="updateEwayVehicleform.reasonCode" [ItemHeight]="33"></sh-select>
+                        <sh-select class=" input " [options]="ewayUpdateVehicleReasonList" required placeholder="select type" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode" [ItemHeight]="33"></sh-select>
 
                     </div>
                 </div>
@@ -435,8 +400,7 @@
                         <label class="pt-07">Remark*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
-                        <textarea name="reasonRem" class="form-control" required
-                            [(ngModel)]="updateEwayVehicleform.reasonRem" placeholder="Enter the remarks"></textarea>
+                        <textarea name="reasonRem" class="form-control" required [(ngModel)]="updateEwayVehicleform.reasonRem" placeholder="Enter the remarks"></textarea>
 
                     </div>
                 </div>
@@ -446,8 +410,7 @@
                         <label class="pt-07">Transporter's Doc No.*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
-                        <input type="text" placeholder="Enter transporter's doc no." required name="transDocNo"
-                            [(ngModel)]="updateEwayVehicleform.transDocNo" class="form-control input" />
+                        <input type="text" placeholder="Enter transporter's doc no." required name="transDocNo" [(ngModel)]="updateEwayVehicleform.transDocNo" class="form-control input" />
                     </div>
                 </div>
 
@@ -456,10 +419,8 @@
                         <label class="pt-07">Transporter's Doc Date*</label>
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
-                        <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " placement="top"
-                            [bsConfig]="{dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true}"
-                            [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker
-                            style="padding-right: 27px !important; " />
+                        <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " placement="top" [bsConfig]="{dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true}" [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker style="padding-right: 27px !important; "
+                        />
                     </div>
                 </div>
 
@@ -468,9 +429,7 @@
 
                     </div>
                     <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
-                        <button type="submit" [disabled]="updateVehicleForm.invalid"
-                            [ladda]="updateEwayvehicleProcess$ | async" (click)="updateEwayTransport(updateVehicleForm)"
-                            class="btn btn-success mr-2">Save
+                        <button type="submit" [disabled]="updateVehicleForm.invalid" [ladda]="updateEwayvehicleProcess$ | async" (click)="updateEwayTransport(updateVehicleForm)" class="btn btn-success mr-2">Save
                         </button>
                         <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()">Cancel</button>
                     </div>
@@ -498,9 +457,7 @@
                     <label class="pt-07">Reason *</label>
                 </div>
                 <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
-                    <sh-select class=" input " [options]="ewayCancelReason" required placeholder="select type"
-                        [isFilterEnabled]="true" name="cancelRsnCode" [(ngModel)]="cancelEwayRequest.cancelRsnCode"
-                        [ItemHeight]="33"></sh-select>
+                    <sh-select class=" input " [options]="ewayCancelReason" required placeholder="select type" [isFilterEnabled]="true" name="cancelRsnCode" [(ngModel)]="cancelEwayRequest.cancelRsnCode" [ItemHeight]="33"></sh-select>
                 </div>
             </div>
             <div class="row">
@@ -508,8 +465,7 @@
                     <label class="pt-07">Remark</label>
                 </div>
                 <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
-                    <textarea name="cancelRmrk" class="form-control" [(ngModel)]="cancelEwayRequest.cancelRmrk"
-                        placeholder="Enter the remarks"></textarea>
+                    <textarea name="cancelRmrk" class="form-control" [(ngModel)]="cancelEwayRequest.cancelRmrk" placeholder="Enter the remarks"></textarea>
                 </div>
             </div>
 
@@ -518,8 +474,7 @@
 
                 </div>
                 <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
-                    <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" [disabled]="cancelEwayForm.invalid"
-                        [ladda]="cancelEwayInProcess$ | async" class="btn btn-success mr-2">Confirm
+                    <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" [disabled]="cancelEwayForm.invalid" [ladda]="cancelEwayInProcess$ | async" class="btn btn-success mr-2">Confirm
                     </button>
                     <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()">Cancel</button>
                 </div>
@@ -612,9 +567,9 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
-                                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
-                                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>
