@@ -758,7 +758,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
                     // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.selectedDateRangeUi = 'Today';
+                    this.selectedDateRangeUi = "Today";
                 } else {
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1655,6 +1655,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public addClassInBodyIfPageHasTabs(): void {
+        this.toggleSidebarPane(false, false);
+        this.toggleHelpSupportPane(false);
         setTimeout(() => {
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
                 this.sideBarStateChange(true);
@@ -1679,7 +1681,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, 500);
-    }
+
+        }
 
     /**
      * This will show the datepicker
@@ -1739,10 +1742,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
             this.isTodaysDateSelected = true;
             let today = cloneDeep([moment(), moment()]);
-            
+
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
             // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.selectedDateRangeUi = 'Today';
+            this.selectedDateRangeUi = "Today";
             let dates = {
                 fromDate: null,
                 toDate: null,

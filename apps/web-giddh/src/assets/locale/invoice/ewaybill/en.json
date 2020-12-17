@@ -91,5 +91,6 @@
         "delivery_challan" : "Delivery Challan"
     },
     "ewaybill_page_title" : "Invoice > E-way bill",
-    "remove_invoice" : "Are you sure want to remove invoice {{VOUCHER_NUMBER}} ?"
+    "remove_invoice" : "Are you sure want to remove invoice {{VOUCHER_NUMBER}} ?",
+    "tab_generated_bills" : "Generated Bills"
 }

@@ -1910,7 +1910,7 @@ input:-moz-placeholder {
     font-size: 14px;
 }
 
-.company-name .c-text .c-name {
+.company-name .company-text .c-name {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
@@ -1928,7 +1928,7 @@ input:-moz-placeholder {
     color: $white !important;
 }
 
-.company-name .c-text .fyear {
+.company-name .company-text .fyear {
     font-size: 12px;
 }
 
@@ -2423,7 +2423,7 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
 }
 
-/* #cmpWrp .c-text {
+/* #cmpWrp .company-name {
     margin: 5px 0 5px 0px;
     font-size: 9px;
     padding-right: 5px;
@@ -7231,8 +7231,7 @@ GST filing
 
 .tax-engine .btn-link,
 .tax-engine .btn-link:active,
-.tax-engine .btn-link:focus,
-.tax-engine .btn-link:hover {
+.tax-engine .btn-link:focus{
     border-color: transparent;
 }
 
@@ -7461,8 +7460,8 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
-    font-size: 13px;
-    border-bottom: 1px solid #ededed;
+    font-size: 14px;
+    border-bottom: 1px solid $whisper;
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
@@ -7924,8 +7923,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: #263035;
     background: $white;
     font-weight: 700;
-    font-size: 12px;
-    text-transform: uppercase;
+    font-size: 14px;
+    text-transform: capitalize;
     -webkit-font-smoothing: antialiased;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
@@ -9824,7 +9823,7 @@ input.mat-input-element{
 .master-custom-tabs.custom-tabs {
     .nav-tabs {
         border-bottom: 1px solid $gainsboro;
-        padding: 0 0 0 15px!important;
+        padding: 0 0 0 15px !important;
         background-color: $alice-blue-light;
         z-index: 9;
         position: relative!important;
@@ -10553,7 +10552,7 @@ input.mat-input-element{
     #cmpWrp {
         display: block;
     }
-    .c-text span.c-name {
+    .company-text span.c-name {
         color: $white !important;
     }
     .user-dropdown-header {

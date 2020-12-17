@@ -648,7 +648,7 @@ export class GeneralService {
             });
         }
 
-        if(!exists) {
+        if (!exists) {
             array.push(value);
         }
 
@@ -697,13 +697,13 @@ export class GeneralService {
             });
         }
 
-        if(index > -1) {
+        if (index > -1) {
             array.splice(index, 1);
         }
 
         return array;
     }
-  
+
     /**
      * This will set global cookie for main domain
      *
