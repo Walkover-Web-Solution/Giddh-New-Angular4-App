@@ -730,13 +730,17 @@ body {
     right:0 !important;
 }
 
+.ledger-footer-1.float-right tbody td{
+    border-right: 1px solid #d9d9d9;
+}
+
 .download-invoice-ledger {
     position: absolute;
 }
 
-#transaction_table table th[class*="col-"]:last-child {
+/*#transaction_table table th[class*="col-"]:last-child {
     border-right: 1px solid #d9d9d9 !important;
-}
+}*/
 
 #transaction_table table td[class*="col-"],
 table th[class*="col-"] {
@@ -1379,7 +1383,6 @@ footer .menu-item a {
 
 tbody td {
     border-left: 1px solid #d9d9d9;
-    border-right: 1px solid #d9d9d9;
 }
 thead tr:first-child th {
     border-left: 0 !important;

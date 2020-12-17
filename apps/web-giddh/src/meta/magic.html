@@ -226,15 +226,15 @@
                                             <tr class="light-gray-bg row mr-0 ml-0">
                                                 <th class="col-3">Date</th>
                                                 <th class="col-6 bd-rl">Particular</th>
-                                                <th class="text-right col-3 bd-rl">Amount</th>
+                                                <th class="text-right col-3 bd-rl bd-rr">Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody class="bd-rl">
                                             <tr class="ledger-row row mr-0 ml-0 bd-rb"
-                                                v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
-                                                <td class="col-3"></td>
-                                                <td class="col-6">By Balance B/F</td>
-                                                <td class="col-3 text-right">
+                                            v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
+                                                <td class="col-3 bd-rr"></td>
+                                                <td class="col-6 bd-rr">By Balance B/F</td>
+                                                <td class="col-3 text-right bd-rr">
                                                     <span v-if="legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                         <!-- | number: '1.2-2' -->
                                                         {{ legderBalanceData.forwardedBalance.amount | currency }}</span>
@@ -242,7 +242,7 @@
                                                         v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'">0</span>
                                                 </td>
                                             </tr>
-                                            <tr class="ledger-row bd-rb"
+                                            <tr class="ledger-row bd-rb" 
                                                 v-if="legderBalanceData.forwardedBalance.type !== 'CREDIT' || (legderBalanceData.forwardedBalance.amount == 0)">
                                                 <td class="bd-rr" colspan="3">&nbsp;</td>
                                             </tr>
