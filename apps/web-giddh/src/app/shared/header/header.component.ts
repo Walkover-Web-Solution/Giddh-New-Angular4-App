@@ -499,17 +499,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
-            this.companyService.getMenuItems().subscribe(response => {
-                if (response && response.body) {
-                    let branches = [];
-                    this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
-                        branches = data || [];
-                    });
-                    reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
-                    this.menuItemsFromIndexDB = DEFAULT_MENUS;
-                    this.accountItemsFromIndexDB = DEFAULT_AC;
-                }
-            });
+            if (this.generalService.companyUniqueName) {
+                this.companyService.getMenuItems().subscribe(response => {
+                    if (response && response.body) {
+                        let branches = [];
+                        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
+                            branches = data || [];
+                        });
+                        reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
+                        this.menuItemsFromIndexDB = DEFAULT_MENUS;
+                        this.accountItemsFromIndexDB = DEFAULT_AC;
+                    }
+                });
+            }
         });
 
         this.sideBarStateChange(true);
