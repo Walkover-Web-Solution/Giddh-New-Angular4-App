@@ -1137,6 +1137,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public changeCompany(selectedCompanyUniqueName: string, fetchLastState?: boolean) {
         this.companyDropdown.isOpen = false;
+        this.generalService.companyUniqueName = selectedCompanyUniqueName;
         const details = {
             branchDetails: {
                 uniqueName: ''

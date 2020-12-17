@@ -1127,8 +1127,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.totalDue = Number(Math.abs(res.body.debitTotal - res.body.creditTotal).toFixed(this.giddhDecimalPlaces)) || 0;
                 this.totalSales = (this.activeTab === 'customer' ? res.body.debitTotal : res.body.creditTotal) || 0;
                 this.totalReceipts = (this.activeTab === 'customer' ? res.body.creditTotal : res.body.debitTotal) || 0;
-                this.totalCustomers = 0;
-                this.totalVendors = 0;
 
                 if (groupUniqueName === 'sundrydebtors') {
                     this.sundryDebtorsAccountsBackup = cloneDeep(res.body);
