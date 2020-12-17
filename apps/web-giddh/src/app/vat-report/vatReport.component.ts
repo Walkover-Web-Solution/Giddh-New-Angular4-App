@@ -77,6 +77,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.loadTaxDetails();
+        this.saveLastState(this._generalService.companyUniqueName);
         this.currentPeriod = {
             from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
             to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
@@ -95,7 +96,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                this.saveLastState(activeCompany.uniqueName);
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
