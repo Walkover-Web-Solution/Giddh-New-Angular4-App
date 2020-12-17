@@ -1,0 +1,62 @@
+@import "../../assets/css/color.scss";
+
+.inventory-header {
+    padding-top: 20px;
+    justify-content: space-between;
+    i{
+        width: 36px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid $gainsboro;
+        color: $gray;
+        background-color: $white;
+        cursor: pointer;
+    }
+    .input-group{
+        width: 36px;
+        &.full-width-input-group{
+            width: 250px;
+        }
+    }
+    input{
+        min-width: 250px;
+        &.search-group{
+            min-width: 0;
+            width: 0;
+        }
+        &.search-group.full-width{
+            min-width: 250px;
+            width: 250px;
+            padding-left: 40px !important;
+        }
+    }
+}
+@media(max-width:991px){
+    .inventory-header{
+        flex-direction: column;
+        .inventory-right-btn{
+            margin-top: 15px;
+        }
+    }
+}
+.sticky-footer{
+    background: $white;
+    padding: 10px;
+    box-shadow: 0 0 6px rgba(0,0,0,.16);
+    text-align: right!important;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    .inner-content-footer{
+        padding-left: 0;
+        padding-right: 80px;
+        min-height: 60px;
+        font-size: 14px;
+        .label-value{
+            font-size: 18px;
+        }
+    }
+}
+

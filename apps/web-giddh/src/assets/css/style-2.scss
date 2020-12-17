@@ -9538,6 +9538,12 @@ span#HW_badge_cont:nth-child(3) {
 .giddh-calendar.show {
     margin-top: 0;
 }
+.inventory-footer, .create-group-footer{
+    left: 0;
+}
+.menu_open .inventory-footer, .menu_open .create-group-footer{
+    left: 215px;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;

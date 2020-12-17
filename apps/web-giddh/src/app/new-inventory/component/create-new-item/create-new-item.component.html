@@ -1,0 +1,104 @@
+<div class="aside-pane">
+    <div class="header-create-group">
+        <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+        <div class="form-header">
+            <div class="back-button mr-15 p-05" (click)="backToMainAside()"><i class="icon-back-arrow"></i></div>
+            <h3>Create Item</h3>
+        </div>
+    </div>
+    <div class="aside-body create-group-aside-body">
+        <div class="create-group-block">
+            <div class="create-group-page">
+                <div>
+                    <div class="create-group-top">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-column">
+                                <p class="font-14 mb-1">Select if its a physical good or a service.</p>
+                                <div class="select-type">
+                                    <span class="mr-15">
+                                        <input type="radio" class="radio-custom" name="product-type"  id="product-type"/> <label for="product-type" class="radio-custom-label">Product</label>
+                                     </span>
+                                    <span>
+                                        <input type="radio" class="radio-custom" name="service-type" id="service-type" /> <label for="service-type"
+                                            class="radio-custom-label">Service</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <img src="../../../../assets/images/add-image.svg">
+                        </div>
+                    </div>
+                    <div class="bg-white p-15">
+                        <div class="wrapper-contain">
+                            <form>
+                                <div class="row mb-15">
+                                    <div class="col-sm-4">
+                                        <label>Product Name <span class="red-text">*</span></label>
+                                        <input id="product-name" class="form-control" type="text" placeholder="Enter Product Name">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Unique Name <span class="red-text">*</span></label>
+                                        <input id="unique-name" class="form-control" type="text" placeholder="Enter Unique Name">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Product Unit <span class="red-text">*</span></label>
+                                        <input id="product-unit" class="form-control" type="text" placeholder="Nos.">
+                                    </div>
+                                </div>
+                                <div class="row mb-15">
+
+                                    <div class="col-sm-6">
+
+                                    </div>
+                                </div>
+                                <div class="row mb-15">
+                                    <div class="col-sm-6">
+                                        <label>HSN Code</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input id="hsn-code" class="form-control" type="text" placeholder="Enter Code">
+                                    </div>
+                                </div>
+                                <div class="row mb-15">
+                                    <div class="col-sm-6">
+                                        <label>SAC Code</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input id="sac-code" class="form-control" type="text" placeholder="Enter Code">
+                                        <div class="mt-15">
+                                            <input id="usb-group" type="checkbox">Is it Sub-group?
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-15">
+                                    <div class="col-sm-6">
+                                        <label>Parent Group</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" id="select-parent-group" placeholder="Select Group">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="other-group">
+                                <tabset class="custom-tabs">
+                                    <tab heading="Other">
+                                        <div class="other-tab-content">
+                                            <input type="checkbox" id="out-of-stock">
+                                            <span class="font-14">Continue selling when out of stock? (Will be
+                                                applicable on all
+                                                the subsequent
+                                                group/stock)</span>
+                                        </div>
+                                    </tab>
+                                </tabset>
+                            </div>
+                            <div class="button-group">
+                                <button class="btn btn-primary">Clear</button>
+                                <button class="btn btn-success">Create Group</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
