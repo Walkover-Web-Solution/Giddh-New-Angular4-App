@@ -33,7 +33,6 @@ import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
-import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'invetory-group-stock-report',  // <home></home>
