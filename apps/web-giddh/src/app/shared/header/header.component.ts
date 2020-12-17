@@ -1466,7 +1466,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!branch.alias) {
                     return branch.name.toLowerCase().includes(branchName.toLowerCase());
                 } else {
-                    return branch.name.toLowerCase().includes(branchName.toLowerCase()) || branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                    return branch.alias.toLowerCase().includes(branchName.toLowerCase());
                 }
             });
         } else {

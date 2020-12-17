@@ -115,7 +115,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let branch of branches$ | async">
-                <td data-title="Branch Name">{{branch.name}} ({{branch.alias}})</td>
+                <td data-title="Branch Name">{{branch.alias}}</td>
                 <td data-title="{{formFields['taxName'].label}}" *ngIf="formFields['taxName']">
                     {{branch?.addresses[0]?.taxNumber || '-'}}</td>
                 <td data-title="Parent">{{branch?.parentBranch?.name || '-'}}</td>
@@ -155,7 +155,6 @@
                                 <div>
                                     <h2>{{branch.alias}}</h2>
                                 </div>
-                                <div>{{branch.name}}</div>
                             </div>
                             <div class="pull-right right-card-section">
                                 <div class="btn-group align-items-center" dropdown [autoClose]="true">
