@@ -134,8 +134,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
 
-        this.integratedBankList$ = this.store.pipe(select(p => p.company.integratedBankList), takeUntil(this.destroyed$));
-        this.isGetAllIntegratedBankInProgress$ = this.store.pipe(select(storeBank => storeBank.company.isGetAllIntegratedBankInProgress), takeUntil(this.destroyed$));
+        this.integratedBankList$ = this.store.pipe(select(p => p.company && p.company.integratedBankList), takeUntil(this.destroyed$));
+        this.isGetAllIntegratedBankInProgress$ = this.store.pipe(select(storeBank => storeBank.company && storeBank.company.isGetAllIntegratedBankInProgress), takeUntil(this.destroyed$));
     }
 
     /**

@@ -243,7 +243,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private _toasty: ToasterService
     ) {
         this.discountAccountsList$ = this.store.pipe(select(p => p.settings.discount.discountList), takeUntil(this.destroyed$));
-        this.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+        this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
@@ -327,7 +327,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
         }
 
-        this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
             this.companyTaxesList.forEach((tax) => {
                 if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {

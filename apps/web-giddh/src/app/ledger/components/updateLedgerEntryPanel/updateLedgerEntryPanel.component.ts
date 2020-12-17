@@ -272,7 +272,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.selectedLedgerStream$ = this.store.pipe(select(p => p.ledger.transactionDetails), takeUntil(this.destroyed$));
         this.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));
         this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
-        this.vm.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+        this.vm.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isDeleteTrxEntrySuccess$ = this.store.pipe(select(p => p.ledger.isDeleteTrxEntrySuccessfull), takeUntil(this.destroyed$));

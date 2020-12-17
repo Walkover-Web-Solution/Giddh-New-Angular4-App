@@ -153,7 +153,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$));
         this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
         this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
-        this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
+        this.store.pipe(select(p => p.company && p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
             let gstr1DatePicker = _.cloneDeep(a);
             gstr1DatePicker.opens = 'right';
             delete gstr1DatePicker.ranges['This Month to Date'];
