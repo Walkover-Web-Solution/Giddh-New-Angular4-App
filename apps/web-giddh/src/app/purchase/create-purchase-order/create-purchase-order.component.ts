@@ -517,9 +517,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         // get tax list and assign values to local vars
-        this.store.pipe(select(state => state.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
+        this.store.pipe(select(state => state.company && state.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
             if (isGetTaxes) {
-                this.store.pipe(select(state => state.company.taxes), takeUntil(this.destroyed$)).subscribe((tax: TaxResponse[]) => {
+                this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe((tax: TaxResponse[]) => {
                     if (tax) {
                         this.companyTaxesList = tax;
                         this.theadArrReadOnly.forEach((item: IContentCommon) => {
