@@ -501,7 +501,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             if (element && element.accounts) {
                 if (element.uniqueName === uniqueName) {
                     this.isDebtorCreditorGroups = this.isDebtorCreditorGroup(uniqueName);
-                    if (element.category === 'income' || element.category === 'expenses' || this.isDebtorCreditorGroups) {
+                    if (element.category === 'income' || element.category === 'expenses') {
                         result = true;
                         return;
                     }
