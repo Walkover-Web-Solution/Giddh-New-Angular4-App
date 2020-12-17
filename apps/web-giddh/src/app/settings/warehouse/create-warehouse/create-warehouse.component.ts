@@ -453,10 +453,12 @@ export class CreateWarehouseComponent implements OnInit {
     /**
      * Unsubscribe from all listeners
      *
-     * @memberof CreateAddressComponent
+     * @memberof CreateWarehouseComponent
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('fixed');
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
 }

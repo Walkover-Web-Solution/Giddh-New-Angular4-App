@@ -193,7 +193,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public totalSales: number = 0;
     public totalDue: number = 0;
     public totalReceipts: number = 0;
-    public Totalcontacts = 0;
+    /** Total customers */
+    public totalCustomers = 0;
+    /** Total vendors */
+    public totalVendors = 0;
     public accInfo: IFlattenAccountsResultItem;
     public purchaseOrSales: 'sales' | 'purchase';
     public accountUniqueName: string;
@@ -1124,12 +1127,12 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.totalDue = Number(Math.abs(res.body.debitTotal - res.body.creditTotal).toFixed(this.giddhDecimalPlaces)) || 0;
                 this.totalSales = (this.activeTab === 'customer' ? res.body.debitTotal : res.body.creditTotal) || 0;
                 this.totalReceipts = (this.activeTab === 'customer' ? res.body.creditTotal : res.body.debitTotal) || 0;
-                this.Totalcontacts = 0;
-
+                this.totalCustomers = 0;
+                this.totalVendors = 0;
 
                 if (groupUniqueName === 'sundrydebtors') {
                     this.sundryDebtorsAccountsBackup = cloneDeep(res.body);
-                    this.Totalcontacts = res.body.totalItems;
+                    this.totalCustomers = res.body.totalItems;
                     lodashMap(res.body.results, (obj) => {
                         obj.closingBalanceAmount = obj.closingBalance.amount;
                         obj.openingBalanceAmount = obj.openingBalance.amount;
@@ -1149,7 +1152,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
 
                 } else {
-                    this.Totalcontacts = res.body.totalItems;
+                    this.totalVendors = res.body.totalItems;
                     this.sundryCreditorsAccountsBackup = cloneDeep(res.body);
                     lodashMap(res.body.results, (obj) => {
                         obj.closingBalanceAmount = obj.closingBalance.amount;
@@ -1398,7 +1401,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         }
     }
-  
+
     /**
      * Branch change handler
      *

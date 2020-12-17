@@ -41,8 +41,7 @@ export class ImportExcelService {
 		let url = this.config.apiUrl + IMPORT_EXCEL_API.PROCESS_IMPORT
 			.replace(':companyUniqueName', companyUniqueName)
 			.replace(':entity', entity)
-			.replace(':isHeaderProvided', model.isHeaderProvided.toString())
-            ;
+			.replace(':isHeaderProvided', model.isHeaderProvided.toString());
         if (model.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
         }
