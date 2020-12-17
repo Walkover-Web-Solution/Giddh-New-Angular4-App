@@ -659,9 +659,9 @@ body {
     position: absolute;
 }
 
-#transaction_table table th[class*="col-"]:last-child {
+/*#transaction_table table th[class*="col-"]:last-child {
     border-right: 1px solid #ddd !important;
-}
+}*/
 
 #transaction_table table td[class*="col-"],
 table th[class*="col-"] {
@@ -722,6 +722,10 @@ table th[class*="col-"] {
     width:50%;
     bottom:0;
     right: 0 !important;
+}
+
+.ledger-footer-1.float-right tbody td{
+    border-right: 1px solid #d9d9d9;
 }
 
 .ylwBg {
@@ -1316,7 +1320,6 @@ footer .menu-item a {
 
 tbody td {
     border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
 }
 thead tr:first-child th {
     border-left: 0 !important;
