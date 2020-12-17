@@ -219,7 +219,7 @@
         </div>
         <!-- pagination -->
         <div class="text-center" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
-            <pagination [maxSize]="5" [totalItems]="(viewTransaction$ | async)?.totalItems" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
+            <pagination [maxSize]="6" [totalItems]="(viewTransaction$ | async)?.totalItems" [itemsPerPage]="(viewTransaction$ | async)?.count" (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
             </pagination>
         </div>
         <!-- no records -->
