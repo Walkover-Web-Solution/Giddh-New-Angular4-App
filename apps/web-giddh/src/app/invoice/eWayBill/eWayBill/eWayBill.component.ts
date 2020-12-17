@@ -264,6 +264,10 @@ export class EWayBillComponent implements OnInit {
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedRangeLabel = "";
+                if (dateObj && dateObj[2]) {
+                    this.selectedRangeLabel = dateObj[2];
+                }
                 this.getAllFilteredInvoice();
             }
         });

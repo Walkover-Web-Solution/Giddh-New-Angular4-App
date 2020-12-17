@@ -1874,6 +1874,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             let dates = {
                 fromDate: this.fromDate,
                 toDate: this.toDate,
+                duration: '',
+                period: '',
+                chosenLabel: this.selectedRangeLabel
             };
             this.isTodaysDateSelected = false;
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
