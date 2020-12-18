@@ -1535,7 +1535,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public checkForGeneratedVoucher(event: any): void {
-        if (event && !this.vm.selectedLedger.voucherGenerated) {
+        if (event && this.vm.selectedLedger.voucher.shortCode !== 'pur' && !this.vm.selectedLedger.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
             this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, 'Giddh');
             event.preventDefault();
@@ -2193,7 +2193,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         let customerUniqueName = [];
         this.vm.selectedLedger.transactions.forEach(transaction => {
             if (transaction.particular && transaction.particular.uniqueName){
-                customerUniqueName.push(transaction.particular.uniqueName);
+                const uniqueName = transaction.particular.uniqueName.split('#')[0];
+                customerUniqueName.push(uniqueName);
             }
         });
         if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
