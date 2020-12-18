@@ -80,7 +80,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
         });
 
         this.store
-            .pipe(select(p => p.company.taxes), takeUntil(this.destroyed$))
+            .pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$))
             .subscribe(taxes => {
                 if (taxes && taxes.length) {
                     let arr: IOption[] = [];
@@ -92,10 +92,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
             });
 
         this.store
-            .pipe(select(p => p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))
+            .pipe(select(p => p.company && p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))
             .subscribe(result => this.isTaxCreateInProcess = result);
         this.store
-            .pipe(select(p => p.company.isTaxUpdatingInProcess), takeUntil(this.destroyed$))
+            .pipe(select(p => p.company && p.company.isTaxUpdatingInProcess), takeUntil(this.destroyed$))
             .subscribe(result => this.isUpdateTaxInProcess = result);
     }
 

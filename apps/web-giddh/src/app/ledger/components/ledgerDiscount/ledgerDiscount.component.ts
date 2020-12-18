@@ -97,7 +97,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	public prepareDiscountList() {
 		let discountAccountsList: IDiscountList[] = [];
 		this.discountAccountsList$.pipe(take(1)).subscribe(d => discountAccountsList = d);
-		if (discountAccountsList.length) {
+		if (discountAccountsList && discountAccountsList.length) {
 			discountAccountsList.forEach(acc => {
 				let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
 

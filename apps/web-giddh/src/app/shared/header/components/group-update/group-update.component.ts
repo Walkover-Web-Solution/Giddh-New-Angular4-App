@@ -181,7 +181,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         combineLatest([
             this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy)),
             this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroup)),
-            this.store.pipe(select((state: AppState) => state.company.taxes))
+            this.store.pipe(select((state: AppState) => state.company && state.company.taxes))
         ]).pipe(takeUntil(this.destroyed$)).subscribe((result) => {
             if (result[0] && result[1] && result[2]) {
                 const activeGroupTaxHierarchy = result[0];

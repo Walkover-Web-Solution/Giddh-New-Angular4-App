@@ -80,7 +80,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
         //
 
         // get tax list and assign values to local vars
-        this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+        this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
             if (o) {
                 this.taxes = o;
                 this.makeTaxList();

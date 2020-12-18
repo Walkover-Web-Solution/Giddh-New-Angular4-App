@@ -44,15 +44,17 @@ export class ExportLedgerComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this._permissionDataService.getData.forEach(f => {
-            if (f.name === 'LEDGER') {
-                let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
-                this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
-                this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
-                this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
-                this.emailTypeColumnar = 'columnar';
-            }
-        });
+        if(this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
+            this._permissionDataService.getData.forEach(f => {
+                if (f.name === 'LEDGER') {
+                    let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
+                    this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
+                    this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
+                    this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
+                    this.emailTypeColumnar = 'columnar';
+                }
+            });
+        }
     }
 
     public exportLedger() {
@@ -107,20 +109,21 @@ export class ExportLedgerComponent implements OnInit {
         data = data.replace(RegExp(' ', 'g'), '');
         const cdata = data.split(',');
 
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < cdata.length; i++) {
-            if (validateEmail(cdata[i])) {
-                sendData.recipients.push(cdata[i]);
-            } else {
-                // this._toaster.clearAllToaster();
-                this._toaster.warningToast('Enter valid Email ID', 'Warning');
-                data = '';
-                sendData.recipients = [];
-                break;
+        if(cdata && cdata.length > 0) {
+            for (let i = 0; i < cdata.length; i++) {
+                if (validateEmail(cdata[i])) {
+                    sendData.recipients.push(cdata[i]);
+                } else {
+                    // this._toaster.clearAllToaster();
+                    this._toaster.warningToast('Enter valid Email ID', 'Warning');
+                    data = '';
+                    sendData.recipients = [];
+                    break;
+                }
             }
         }
 
-        if (sendData.recipients.length > 0) {
+        if (sendData && sendData.recipients && sendData.recipients.length > 0) {
             const body = _.cloneDeep(this.advanceSearchRequest);
             if (!body.dataToSend.bsRangeValue) {
                 this.universalDate$.pipe(take(1)).subscribe(a => {

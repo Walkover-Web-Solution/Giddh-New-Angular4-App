@@ -224,7 +224,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 			}
 		});
 
-		this.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+		this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
 		this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
 		this.store.dispatch(this.invoiceActions.getInvoiceSetting());
 	}
