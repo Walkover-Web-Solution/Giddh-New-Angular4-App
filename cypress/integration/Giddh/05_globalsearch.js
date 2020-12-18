@@ -8,17 +8,17 @@ describe('This is Global Search Test', function() {
     let testData = "";
     let entryUniqueName = "";
 
-    before(() => {
-        cy.fixture('example.json')
-            .then((data) => {
-                // "this" is still the test context object
-                testData = data
-            })
-    });
+    // before(() => {
+    //     cy.fixture('example.json')
+    //         .then((data) => {
+    //             // "this" is still the test context object
+    //             testData = data
+    //         })
+    // });
 
-    before(() => {
-        cy.loginWithEmail(testData.Email, testData.Password);
-    })
+    // before(() => {
+    //     cy.loginWithEmail(testData.Email, testData.Password);
+    // })
 
     xit('Verify Trial Balance using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
