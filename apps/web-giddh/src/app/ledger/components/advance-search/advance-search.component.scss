@@ -21,6 +21,13 @@
     font-size: 30px;
     cursor: pointer;
 }
+.collapse-icons{
+    font-size: 10px;
+    border: 1px solid $chetwode-blue;
+    border-radius: 4px;
+    padding: 2px;
+    top: 0 !important;
+}
 @media (min-width: 1200px) {
     .container {
         width: 100%;
@@ -37,7 +44,7 @@
         margin-bottom: 20px;
     }
     .amount-total {
-        background: #efefef;
+        background: $whisper-light;
     }
     .page-count {
         width: 100%;
