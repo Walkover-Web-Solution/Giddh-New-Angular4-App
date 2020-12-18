@@ -326,7 +326,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.order = ord;
 
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'false', PAGINATION_LIMIT, this.searchStr, key, ord, this.currentBranch.uniqueName);
+            null, 'false', PAGINATION_LIMIT, this.searchStr, key, ord, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
     public ngOnInit() {
@@ -349,7 +349,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
 
@@ -357,7 +357,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (yes) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
             }
         });
@@ -384,9 +384,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             .subscribe((term: any) => {
                 this.searchStr = term;
                 if (this.activeTab === 'customer') {
-                    this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order, this.currentBranch.uniqueName);
+                    this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 } else {
-                    this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order, this.currentBranch.uniqueName);
+                    this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
             });
 
@@ -453,7 +453,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch || !this.currentBranch.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
@@ -469,7 +469,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                         };
                     }
                     this.currentBranchData = _.cloneDeep(this.currentBranch);
-                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                    this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : "") + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
                 }
             } else {
                 if (this._generalService.companyUniqueName) {
@@ -571,7 +571,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
 
             if (this.fromDate && this.toDate) {
-                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '', null, null, this.currentBranch.uniqueName);
+                this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '', null, null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
 
             this.store.dispatch(this._generalAction.setAppTitle(`/pages/contact/${tabName}`));
@@ -589,7 +589,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.searchStr = '';
         this.tabSelected(tabName);
         if (tabName === 'vendor') {
-            this.getAccounts(this.fromDate, this.toDate, type, null, 'true', PAGINATION_LIMIT, '', null, null, this.currentBranch.uniqueName);
+            this.getAccounts(this.fromDate, this.toDate, type, null, 'true', PAGINATION_LIMIT, '', null, null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         }
         this.showFieldFilter = new CustomerVendorFiledFilter();
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
@@ -655,7 +655,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (grpName) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
             }
         }, 1000);
@@ -684,12 +684,14 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.checkboxInfo.selectedPage = event.page;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
-            this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+            this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         }
     }
 
     public hideListItems() {
-        this.filterDropDownList.hide();
+        if(this.filterDropDownList) {
+            this.filterDropDownList.hide();
+        }
     }
 
     /**
@@ -862,7 +864,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                 });
         }
-        this.mailModal.hide();
+
+        if(this.mailModal) {
+            this.mailModal.hide();
+        }
     }
 
     /**
@@ -918,7 +923,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+            this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             this.detectChanges();
         }
     }
@@ -982,7 +987,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'true', PAGINATION_LIMIT, '', '', null, this.currentBranch.uniqueName);
+            null, 'true', PAGINATION_LIMIT, '', '', null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1035,7 +1040,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         this.isAdvanceSearchApplied = true;
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors',
-            null, 'true', PAGINATION_LIMIT, '', this.key, this.order, this.currentBranch.uniqueName);
+            null, 'true', PAGINATION_LIMIT, '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
     public setAmountType(category: string, amountType: string) {
@@ -1064,7 +1069,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 to: this.toDate,
                 groupUniqueName: this.groupUniqueName
             },
-            branchUniqueName: this.currentBranch.uniqueName
+            branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
         };
 
         this._companyServices.downloadCSV(request).subscribe((res) => {
@@ -1270,7 +1275,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
-        this.bulkPaymentModalRef.hide();
+
+        if(this.bulkPaymentModalRef) {
+            this.bulkPaymentModalRef.hide();
+        }
     }
 
     /**
@@ -1367,7 +1375,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.allSelectionModel = false;
         }
 
-        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
 
@@ -1412,9 +1420,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
         if (this.activeTab === 'customer') {
-            this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+            this.getAccounts(this.fromDate, this.toDate, 'sundrydebtors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         } else {
-            this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, this.currentBranch.uniqueName);
+            this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         }
     }
 }

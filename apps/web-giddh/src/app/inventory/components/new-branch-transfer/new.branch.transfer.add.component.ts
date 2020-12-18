@@ -444,23 +444,25 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.destinationWarehouses = [];
         this.allWarehouses = [];
 
-        data.forEach(d => {
-            if (d && !d.isCompany) {
-                branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias));
-                if (d.warehouses.length) {
-                    this.senderWarehouses[d.uniqueName] = [];
-                    this.destinationWarehouses[d.uniqueName] = [];
-                    this.allWarehouses[d.uniqueName] = [];
+        if(data && data.length > 0) {
+            data.forEach(d => {
+                if (d && !d.isCompany) {
+                    branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias));
+                    if (d.warehouses.length) {
+                        this.senderWarehouses[d.uniqueName] = [];
+                        this.destinationWarehouses[d.uniqueName] = [];
+                        this.allWarehouses[d.uniqueName] = [];
 
-                    d.warehouses.forEach(key => {
-                        this.allWarehouses[d.uniqueName].push(key);
+                        d.warehouses.forEach(key => {
+                            this.allWarehouses[d.uniqueName].push(key);
 
-                        this.senderWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
-                        this.destinationWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
-                    });
+                            this.senderWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                            this.destinationWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
         return branches;
     }
 
@@ -540,7 +542,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.calculateRowTotal(product);
 
             setTimeout(() => {
-                if (this.productDescription) {
+                if (this.productDescription && this.productDescription.nativeElement) {
                     this.productDescription.nativeElement.focus();
                 }
             }, 200);
@@ -574,25 +576,29 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
             let allowWarehouse = true;
 
-            this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
-                allowWarehouse = true;
+            if(this.allWarehouses[this.branchTransfer.destinations[index].uniqueName] && this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].length > 0) {
+                this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
+                    allowWarehouse = true;
 
-                if (key.uniqueName === this.branchTransfer.destinations[index].warehouse.uniqueName) {
-                    allowWarehouse = false;
-                }
+                    if (key.uniqueName === this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                        allowWarehouse = false;
+                    }
 
-                if (allowWarehouse) {
-                    this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
-                }
-            });
+                    if (allowWarehouse) {
+                        this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                    }
+                });
+            }
             if (this.branchTransfer.sources[index].uniqueName) {
                 // Update source warehouses
                 this.senderWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
-                this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
-                    if (key.uniqueName !== this.branchTransfer.destinations[index].warehouse.uniqueName) {
-                        this.senderWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
-                    }
-                });
+                if(this.allWarehouses[this.branchTransfer.sources[index].uniqueName] && this.allWarehouses[this.branchTransfer.sources[index].uniqueName].length > 0) {
+                    this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
+                        if (key.uniqueName !== this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                            this.senderWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                        }
+                    });
+                }
             }
         } else {
             if (this.allWarehouses && this.allWarehouses[this.branchTransfer.destinations[0].uniqueName]) {
@@ -837,7 +843,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.hsnNumber = ((this.inventorySettings.manageInventory && this.branchTransfer.products[this.activeRow].hsnNumber) || !this.branchTransfer.products[this.activeRow].sacNumber) ? this.branchTransfer.products[this.activeRow].hsnNumber : (this.branchTransfer.products[this.activeRow].sacNumber) ? this.branchTransfer.products[this.activeRow].sacNumber : "";
         this.hsnPopupShow = true;
         setTimeout(() => {
-            this.productHsnNumber.nativeElement.focus();
+            if(this.productHsnNumber && this.productHsnNumber.nativeElement) {
+                this.productHsnNumber.nativeElement.focus();
+            }
         }, 300);
     }
 
@@ -846,7 +854,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.skuNumber = (this.branchTransfer.products[this.activeRow].skuCode) ? this.branchTransfer.products[this.activeRow].skuCode : "";
         this.skuNumberPopupShow = true;
         setTimeout(() => {
-            this.productSkuCode.nativeElement.focus();
+            if(this.productSkuCode && this.productSkuCode.nativeElement) {
+                this.productSkuCode.nativeElement.focus();
+            }
         }, 300);
     }
 
@@ -1053,9 +1063,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.stockList = [];
                 let stockList = _.cloneDeep(o);
 
-                stockList.results.forEach(key => {
-                    this.stockList.push({ label: key.name, value: key.uniqueName, additional: key });
-                });
+                if(stockList && stockList.results) {
+                    stockList.results.forEach(key => {
+                        this.stockList.push({ label: key.name, value: key.uniqueName, additional: key });
+                    });
+                }
             }
         });
     }
@@ -1098,7 +1110,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusVehicleNumber(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
-                this.vehicleNumber.nativeElement.focus();
+                if(this.vehicleNumber && this.vehicleNumber.nativeElement) {
+                    this.vehicleNumber.nativeElement.focus();
+                }
             }, 100);
         }
     }
@@ -1132,7 +1146,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusSourceQuantity(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
-                this.sourceQuantity.nativeElement.focus();
+                if(this.sourceQuantity && this.sourceQuantity.nativeElement) {
+                    this.sourceQuantity.nativeElement.focus();
+                }
             }, 100);
         }
     }
@@ -1172,7 +1188,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusDestinationQuantity(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
-                this.destinationQuantity.nativeElement.focus();
+                if(this.destinationQuantity && this.destinationQuantity.nativeElement) {
+                    this.destinationQuantity.nativeElement.focus();
+                }
             }, 100);
         }
     }
