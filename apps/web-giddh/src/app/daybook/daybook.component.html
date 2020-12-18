@@ -7,7 +7,7 @@
 </div>
 
 <section class="container p-0"></section>
-<!-- <div class="top-bar col-xs-12 bdrB">
+<!-- <div class="top-bar col-xs-12 bd-rb">
   <h1 class="section-title">DayBook</h1>
 </div> -->
 <div class="container-fluid">
@@ -20,12 +20,7 @@
     <!-- ledger header -->
     <div class="col-md-12">
         <div>
-<<<<<<< HEAD
             <div class="form-group mr-15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
-=======
-
-            <div class="form-inline d-block flex-row flex-nowrap">
->>>>>>> 8b7bde5078... code designing fix
                 <div class="form-group">
                     <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                         [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"

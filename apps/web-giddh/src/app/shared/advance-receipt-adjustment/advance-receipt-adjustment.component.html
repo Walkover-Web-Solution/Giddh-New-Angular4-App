@@ -12,7 +12,7 @@
                 The adjusted amount of the linked invoice's is more than this receipt; update them first.
             </span>
             <div class="row mb-2">
-                <div class="col-md-8 mr-t">
+                <div class="col-md-8 mr-t05">
                     <div class="form-group">
                         <label>Customer Name </label>
                         <input type="text" class="form-control" name="customerName" [(ngModel)]="adjustPayment.customerName" readonly disabled>
@@ -98,15 +98,15 @@
                         </div>
 
                         <div class="col-md-8 col-sm-8 col-xs-7">
-                            <span class="pd0 mr-2 d-inline-block">
-                                <input class="radio-custom cp ml0" type="radio" id="deductedNo" name="isTaxDeducted"
+                            <span class="p-0 mr-2 d-inline-block">
+                                <input class="radio-custom cp ml-0" type="radio" id="deductedNo" name="isTaxDeducted"
                                        [value]="false" [(ngModel)]="isTaxDeducted"
                                        (ngModelChange)="isTdsSelected($event )" />
                                 <label for="deductedNo" class="radio-custom-label">No</label>
                             </span>
 
-                            <span class="pd0 mr-2 d-inline-block">
-                                <input class="radio-custom cp ml0" type="radio" name="isTaxDeducted" id="deductedYes"
+                            <span class="p-0 mr-2 d-inline-block">
+                                <input class="radio-custom cp ml-0" type="radio" name="isTaxDeducted" id="deductedYes"
                                        [value]="true" [(ngModel)]="isTaxDeducted"
                                        (ngModelChange)="isTdsSelected($event )" />
                                 <label for="deductedYes" class="radio-custom-label">Yes</label>
@@ -155,8 +155,8 @@
                             this.</p>
                     </div>
                     <div class="mt-2">
-                        <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Save</button>
-                        <button *ngIf="isUpdateMode" type="button" class="btn btn-success mrR1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Update</button>
+                        <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mr-r1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Save</button>
+                        <button *ngIf="isUpdateMode" type="button" class="btn btn-success mr-r1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Update</button>
                         <button type="button" class="btn btn-cancel" (click)="onClear()">Reset</button>
                     </div>
                 </div>

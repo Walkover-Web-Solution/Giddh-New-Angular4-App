@@ -42,7 +42,7 @@
                                                 <sh-select #stateEl formControlName="stateCode" class="splSales"
                                                     [options]="statesSource$ | async" [width]="139"></sh-select>
                                             </div>
-                                            <div class="mr-t2 pull-left width100">
+                                            <div class="mr-t2 pull-left width-100">
                                                 <div class="form-group col-xs-8">
                                                     <label>PAN</label>
                                                     <input type="text" class="form-control"
@@ -58,7 +58,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-4">
-                                    <div class="form-group width100">
+                                    <div class="form-group width-100">
                                         <label>Sender’s address</label>
                                         <textarea class="form-control" formControlName="address" rows="5"></textarea>
                                     </div>
@@ -440,7 +440,7 @@
 </td> -->
                             <!-- <td class="tax-list-dd-wrap dropdown-container"> -->
                             <!-- <sales-tax-list
-class="salesTax"
+class="sales-tax"
 [showTaxPopup]="false"
 [taxes]="companyTaxesList$ | async"
 [applicableTaxes]="transaction.applicableTaxes"
@@ -480,27 +480,43 @@ class="salesTax"
                                 <section class="tabl-sec">
                                     <div class="table-row">
                                         <div class="table-cell">Total Amount</div>
+<<<<<<< HEAD
                                         <div class="table-cell figureCell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value
+=======
+                                        <div class="table-cell figure-cell">{{CreateInvoiceForm.controls['uiCalculation'].get('subTotal').value
+>>>>>>> 8df7976608... code design
                     | number:'1.2-2'}}
                                         </div>
                                     </div>
                                     <div class="table-row">
                                         <div class="table-cell">Discount</div>
+<<<<<<< HEAD
                                         <div class="table-cell figureCell">
+=======
+                                        <div class="table-cell figure-cell">
+>>>>>>> 8df7976608... code design
                                             {{CreateInvoiceForm.controls['uiCalculation'].get('totalDiscount').value | number:'1.2-2'}}
                                         </div>
 
                                     </div>
                                     <div class="table-row">
                                         <div class="table-cell">Taxable Value</div>
+<<<<<<< HEAD
                                         <div class="table-cell figureCell">
+=======
+                                        <div class="table-cell figure-cell">
+>>>>>>> 8df7976608... code design
                                             {{CreateInvoiceForm.controls['uiCalculation'].get('totalTaxableValue').value | number:'1.2-2'}}
                                         </div>
 
                                     </div>
                                     <div class="table-row">
                                         <div class="table-cell">Tax</div>
+<<<<<<< HEAD
                                         <div class="table-cell figureCell">
+=======
+                                        <div class="table-cell figure-cell">
+>>>>>>> 8df7976608... code design
                                             {{CreateInvoiceForm.controls['uiCalculation'].get('gstTaxesTotal').value | number:'1.2-2'}}
                                         </div>
                                     </div>
@@ -508,14 +524,22 @@ class="salesTax"
                                         <div class="table-cell">
                                             <strong>Total</strong>
                                         </div>
+<<<<<<< HEAD
                                         <div class="table-cell figureCell">
+=======
+                                        <div class="table-cell figure-cell">
+>>>>>>> 8df7976608... code design
                                             <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('grandTotal').value |
                       number:'1.2-2'}}</strong>
                                         </div>
                                     </div>
                                     <div class="table-row">
                                         <div class="table-cell">Deposit</div>
+<<<<<<< HEAD
                                         <div class="table-cell figureCell">
+=======
+                                        <div class="table-cell figure-cell">
+>>>>>>> 8df7976608... code design
                                             <input type="number" placeholder="Amount" class="form-control"
                                                 formControlName="depositAmount" />
                                         </div>
@@ -524,7 +548,11 @@ class="salesTax"
                                         <div class="table-cell">
                                             <strong>Balance Due</strong>
                                         </div>
+<<<<<<< HEAD
                                         <div class="table-cell figureCell">
+=======
+                                        <div class="table-cell figure-cell">
+>>>>>>> 8df7976608... code design
                                             <strong>{{CreateInvoiceForm.controls['uiCalculation'].get('balanceDue').value |
                       number:'1.2-2'}}</strong>
                                         </div>

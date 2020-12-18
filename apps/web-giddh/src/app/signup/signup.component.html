@@ -57,7 +57,7 @@
 
 
                                     <!-- login with userName form -->
-                                    <form class="pos-rel" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
+                                    <form class="position-relative" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
                                         (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
                                         [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
@@ -141,7 +141,7 @@
 <div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
 
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
@@ -187,7 +187,7 @@
 <div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
@@ -231,7 +231,7 @@
 <div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal"

@@ -30,7 +30,7 @@
         <div class="mt-1">
             <!-- ================= saltedge accounts =================
       <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mrB4': accIdx != ebankAccounts.length-1 }">
-          <h3 class="subHead bdrB">
+          <h3 class="subHead bd-rb">
               <button class="no-btn fs20" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, acc.accounts[0])"><i class="icon-trash"></i></button> {{acc.siteName}}
               <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.accounts[accIdx])"><i class="fa fa-refresh"></i> Refresh</button>
           </h3>
@@ -38,7 +38,7 @@
               <aside [attachOutsideOnClick]="true" (clickOutside)="card.isDatePickerOpen = false" class="account-card" *ngFor="let card of acc.accounts; let i = index">
                   <aside class="title">{{card.name}}</aside>
                   <div class="reconnectDiv text-center" *ngIf="card.reconnect">
-                      <div class="vmiddle">
+                      <div class="vertical-align-middle ">
                           <button class="btn btn-sm btn-default" (click)="onReconnectAccount(card)">Reconnect</button>
                           <button class="btn btn-sm btn-danger" (click)="onDeleteAddedBank(acc.siteName, card)">Delete</button>
                       </div>
@@ -76,8 +76,8 @@
       </section>
       ================= saltedge accounts ================= -->
 
-            <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mrB4': accIdx != ebankAccounts.length-1 }">
-                <h3 class="subHead bdrB">
+            <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
+                <h3 class="subHead bd-rb">
                     {{acc.siteName}}
                     <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.yodleeAccounts[0], false)" *ngIf="acc.status !== 'FAILED'">
                         <i class="fa fa-refresh"></i> Refresh
@@ -127,7 +127,7 @@
                                 <!-- <button class="btn btn-danger mr-t1" (click)="onDeleteAddedBank(acc.siteName, card)">Delete Account</button> -->
                                 <!-- (click)="onDeleteAddedBank(acc.siteName, acc.yodleeAccounts[0])" -->
                             </div>
-                            <button class="no-btn fs20 pos-abs bank_delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
+                            <button class="no-btn font-20 pos-abs bank_delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
                                 <i class="icon-trash text-gray"  tooltip="Delete Bank" placement="top"></i>
                             </button>
                         </ng-container>
@@ -136,7 +136,7 @@
                             <div class="account-number">
                                 <b>Provider Id</b>: {{card?.providerAccount?.providerAccountId}}
                             </div>
-                            <p class="mr-t2">Status: <span class="text-danger fs14"><i
+                            <p class="mr-t2">Status: <span class="text-danger font-14"><i
                                         class="fa fa-exclamation-circle"></i>
                                     {{acc.status}}</span></p>
                             <p>Reason: {{acc.reason}}</p>
@@ -151,7 +151,7 @@
 
                                 <!-- <button class="btn btn-default" (click)="connectBank(acc.siteId,    card.providerAccount.providerAccountId)">Try Again</button> -->
                             </div>
-                            <button class="no-btn fs20 pos-abs bank_delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
+                            <button class="no-btn font-20 pos-abs bank_delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
                                 <i class="icon-trash" tooltip="Delete Bank" placement="top"></i>
                             </button>
                         </ng-container>
@@ -160,7 +160,7 @@
                             <div class="account-number">
                                 <b>Provider Id</b>: {{card?.providerAccount?.providerAccountId}}
                             </div>
-                            <p class="mr-t2">Status: <span class="text-danger fs14"><i
+                            <p class="mr-t2">Status: <span class="text-danger font-14"><i
                                         class="fa fa-exclamation-circle"></i>
                                     {{acc.status}}</span></p>
                             <p>Reason: {{acc.reason}}</p>

@@ -124,11 +124,7 @@
                                 <span class="pull-left mr-r1 totalContacts">
                                 <h5>
                                     <span *ngIf="!selectedCheckedContacts.length"
-<<<<<<< HEAD
                                         class="number-total">{{activeTab === 'customer' ? totalCustomers : totalVendors}}</span>
-=======
-                                        class="number-total">{{Totalcontacts}}</span>
->>>>>>> 8b7bde5078... code designing fix
                                 <span *ngIf="selectedCheckedContacts.length>0" class="number-total">{{selectedCheckedContacts.length}}</span> Contacts
                                 </h5>
                                 </span>
@@ -198,7 +194,6 @@
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
         </div>
         <div class="clearfix pagination-main">
             <div class=" mt-5 mb-100px">
@@ -207,40 +202,6 @@
                         <div class="text-right">
                             <h4 class="mb-1 pd-r2">Result Total</h4>
                         </div>
-=======
-            </div>
-            <div class="clearfix pagination-main">
-                <div class=" mt-5 mb-100px">
-                    <div class="">
-                        <div class="customer-right-wrap clearfix">
-                            <div class="text-right">
-                                <h4 class="mb-1 pd-r2">Result Total</h4>
-                            </div>
-
-                            <div class="bg-white clearfix">
-                                <div class="customer-right clearfix w-100" >
-                                    <table class="text-right">
-                                        <tr>
-                                            <td>
-                                                <p *ngIf="activeTab === 'vendor'">Purchase</p>
-                                                <p *ngIf="activeTab === 'customer'">Sales</p>
-                                                <h3>{{totalSales |giddhCurrency }}/-</h3>
-                                            </td>
-                                            <td>
-                                                <p *ngIf="activeTab === 'vendor'">Payment</p>
-                                                <p *ngIf="activeTab === 'customer'">Receipt</p>
-                                                <h3>{{totalReceipts | giddhCurrency}}/-</h3>
-                                            </td>
-                                            <td>
-                                                <p>Due</p>
-                                                <h3>{{totalDue | giddhCurrency}}/-</h3>
-                                            </td>
-
-                                        </tr>
-
-                                    </table>
-                                </div>
->>>>>>> 8b7bde5078... code designing fix
 
                         <div class="bg-white clearfix">
                             <div class="customer-right  clearfix w-100">
@@ -368,22 +329,14 @@
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-<<<<<<< HEAD
     <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state transform-inherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
-=======
-    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="accountAsideMenuState2  transform-inherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
->>>>>>> 8b7bde5078... code designing fix
         (getUpdateList)="getUpdatedList($event)">
     </aside-menu-account>
 </div>
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
 <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-<<<<<<< HEAD
     <payment-aside class="account-aside-menu-state transform-inherit" [selectedAccForPayment]="selectedAccForPayment">
-=======
-    <payment-aside class="accountAsideMenuState2 transform-inherit" [selectedAccForPayment]="selectedAccForPayment">
->>>>>>> 8b7bde5078... code designing fix
     </payment-aside>
 </div>
 
@@ -863,10 +816,14 @@
 
     <div colspan="100%" class="xs-pl-0 pagination-wrapper">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && totalCustomers>=paginationLimit">
 =======
         <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
 >>>>>>> 8b7bde5078... code designing fix
+=======
+        <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
+>>>>>>> 8df7976608... code design
             <div class="text-center">
                 <pagination [totalItems]="sundryDebtorsAccountsBackup.totalItems" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryDebtorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>
@@ -877,7 +834,10 @@
         <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && totalVendors>=paginationLimit">
 =======
         <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
+<<<<<<< HEAD
 >>>>>>> 8b7bde5078... code designing fix
+=======
+>>>>>>> 8df7976608... code design
             <div class="text-center">
                 <pagination [totalItems]="sundryCreditorsAccountsBackup.totalItems" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryCreditorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>
