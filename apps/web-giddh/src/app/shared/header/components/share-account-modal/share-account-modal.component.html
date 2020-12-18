@@ -30,7 +30,7 @@
                 <!--shared with array-->
                 <div class="col-xs-12 pd-t1" *ngIf="(activeAccountSharedWith$ | async)?.length">
                     <div class="row">
-                        <ul class="shared_list group-shared-list">
+                        <ul class="shared-list group-shared-list">
                             <li *ngFor="let val of (activeAccountSharedWith$ | async); let i = index">
                                 <div class="user-name-email">
                                     <i class="fa fa-user pdR1"></i>
@@ -39,14 +39,14 @@
                                         <small>{{ val.emailId }}</small>
                                     </span>
                                 </div>
-                                <div class="custom-select pos-rel">
+                                <div class="custom-select position-relative">
                                     <select name="selectedPermission_{{i}}" class="form-control cp" (change)="updatePermission(val, $event)">
                                         <option [selected]="val.roleUniqueName === permission.uniqueName"
                                             [value]="permission.uniqueName"
                                             *ngFor="let permission of allPermissions$ | async">{{permission.name}}
                                         </option>
                                     </select>
-                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                    <span class="select-drop"><i class="fa fa-caret-down"></i></span>
                                 </div>
                                 <span class="delete-icon pull-right">
 

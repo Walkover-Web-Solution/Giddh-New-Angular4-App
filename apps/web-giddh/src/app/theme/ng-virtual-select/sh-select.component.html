@@ -1,4 +1,4 @@
-<div #dd [style.width]="width" class="pos-rel">
+<div #dd [style.width]="width" class="position-relative">
     <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
         (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)"
         (keydown)="keydownUp($event)">
@@ -33,7 +33,7 @@
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
                     <input autocomplete="disabled" type="text" readonly value="{{selectedValues[0].label}}"
-                        class="form-control selectedVal cp" />
+                        class="form-control selected-val cp" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">

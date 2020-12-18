@@ -11,7 +11,7 @@ import { LedgerActions } from '../../../actions/ledger/ledger.actions';
     selector: 'base-account',
     templateUrl: './baseAccountModal.component.html',
     styles: [`
-    .bg_grey {
+    .bg-grey {
         background: #eaebed;
     }
     `]

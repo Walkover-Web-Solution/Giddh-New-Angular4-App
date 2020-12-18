@@ -6,7 +6,7 @@
             <!-- hide div for future use of design if shubhndra wants to change deisgn as per preious one -->
                 <div class="col-sm-5" *ngIf="hideAsDesignChanges">
                     <ul class="main-company-name">
-                        <li class="company-name pos-rel" dropdown #companyDetailsDropDownWeb="bs-dropdown"
+                        <li class="company-name position-relative" dropdown #companyDetailsDropDownWeb="bs-dropdown"
                             [autoClose]="false" [attachOutsideOnClick]="true"
                             (clickOutside)="companyDetailsDropDownWeb.hide()" [exclude]="'.company-name'">
                             <a id="cmpWrp" href="javascript:void(0)" class="clearfix z1" dropdownToggle>
@@ -15,11 +15,11 @@
                                         {{  (selectedCompany | async)?.nameAlias }} )</span>
                                 </ng-template>
                                 <div class="company-text">
-                                    <span class="c-name ellp pd-r1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
+                                    <span class="c-name text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                                     </span>
 
                                     <div class="company-name-finance-year" placement="bottom">
-                                        <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
+                                        <span class=" text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name)}}
                                         </span>
 
                                         <div class="unique-name-financial-year"> <span class="name-year"
@@ -43,7 +43,7 @@
                                 </li>
                                 <!-- #dropdown="bs-dropdown" -->
                                 <!--  -->
-                                <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false"
+                                <li dropdown class="position-relative" #subdropdown="bs-dropdown" [autoClose]="false"
                                     [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false"
                                     (onShown)="switchCompanyMenuShown()">
                                     <a href="javascript:void(0)" class="clearfix" dropdownToggle>
@@ -77,7 +77,7 @@
                                                         (keydown.enter)="changeCompany(cmp.uniqueName)"
                                                         (click)="changeCompany(cmp.uniqueName)">
 
-                                                        <a vr-item href="javascript:void(0);" class="ellp"
+                                                        <a vr-item href="javascript:void(0);" class="text-ellipsis"
                                                             (mouseenter)="mouseEnteredOnCompanyName(i)">
 
                                                             <ng-template #CompanyBranchname> {{ cmp.name }}
@@ -122,7 +122,7 @@
                                 <li class="mr-b1" *ngIf="!isMobileSite">
                                     <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
                                         (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })"
-                                        class="oh">
+                                        class="overflow-hidden">
                                         <span class="user-circle pull-left" *ngIf="!userAvatar">
                                             <span>{{userName | uppercase}}</span>
                                         </span>
@@ -130,7 +130,7 @@
                                             [style.background]="'transparent'">
                                             <img src="{{userAvatar}}" alt="" />
                                         </span>
-                                        <div class="pull-left user-name-wrap ellp">{{ userFullName }}
+                                        <div class="pull-left user-name-wrap text-ellipsis">{{ userFullName }}
                                             <small class="grey-clr">Profile</small>
                                         </div>
                                     </a>
@@ -190,7 +190,7 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="giddh-logo" (click)="forceOpenNavigation = true;">
-                        <li class="company-name pos-rel" (click)="toggleBodyScroll()" [autoClose]="false" dropdown
+                        <li class="company-name position-relative" (click)="toggleBodyScroll()" [autoClose]="false" dropdown
                             #dropdown="bs-dropdown" [attachOutsideOnClick]="true"
                             (clickOutside)="dropdown.isOpen = false; toggleBodyScroll();">
                             <a id="cmpWrp" href="javascript:void(0)" class="clearfix z1 " dropdownToggle>
@@ -201,7 +201,7 @@
                                 </ng-template>
                                 <div class="company-text no-padding">
 
-                                    <span class="c-name ellp pd-r1 pd-l1 alice">{{companyInitials}}</span>
+                                    <span class="c-name text-ellipsis pd-r1 pd-l1 alice">{{companyInitials}}</span>
 
                                     <img src="assets/images/giddh-white-logo.svg" class="giddh-logo">
                                 </div>
@@ -258,7 +258,7 @@
 
     <div class="menu-wrapper">
         <ul class="main-company-name">
-            <li *ngIf="isMobileSite" [autoClose]="false" class="company-name pos-rel hidden-lg hidden-md hidden-sm"
+            <li *ngIf="isMobileSite" [autoClose]="false" class="company-name position-relative hidden-lg hidden-md hidden-sm"
                 dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
 
                 <a href="javascript:void(0)" class="clearfix z1 d-block" dropdownToggle>
@@ -267,10 +267,10 @@
                     </ng-template>
                     <!-- <span class="icon-dots-three-vertical"></span> -->
                     <div class="company-text d-flex">
-                        <span class="c-name ellp pd-r1 alice">{{companyInitials}}</span>
+                        <span class="c-name text-ellipsis pd-r1 alice">{{companyInitials}}</span>
 
                         <div class="company-name-finance-year" placement="bottom">
-                            <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
+                            <span class=" text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name)}}
                             </span>
 
                             <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
@@ -324,7 +324,7 @@
                             </span>
                         </a>
                     </li>
-                    <li class="mr-t cp  show-more-opt" (click)="showNavigationModal()">
+                    <li class="mr-t05 cp  show-more-opt" (click)="showNavigationModal()">
                         <span container="body" tooltip="Search accounts" placement="bottom"> Show more...</span></li>
                 </ul>
 
@@ -380,13 +380,13 @@
                             <i class="icon-bar"></i>
                         </button>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">
+                        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="navigationEnd && !navigateToUser">
                             {{selectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span>
                             <span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span>
                         </h4>
 
-                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
+                        <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
                                 class="txt-lwc">c</span></h4>
                     </li> -->
@@ -410,15 +410,12 @@
                             <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i
                                     class="icon-back-arrow"></i></span>
                         </li>
-                        <li class="hamburger-menu cp pull-left"
-                            (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
-                                <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
-                                    class="txt-lwc">c</span></h4>
+                        <li class="hamburger-menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
+                                <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
-                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">
-                                {{oldSelectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span
-                                    *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
+                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="!navigationEnd && !navigateToUser">
+                                {{oldSelectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
                         </li>
                         <li class="pull-right">
@@ -499,7 +496,7 @@
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"
     class="modal fade full-screen-modal manage-account-popup add-manage-group-acc" role="dialog" (onShown)="onShown()">
-    <div class="modal-dialog modal-xl modal-liq-90 mr-0 width100 h-100">
+    <div class="modal-dialog modal-xl modal-liq-90 mr-0 width-100 h-100">
         <div class="modal-content full-screen-modal">
             <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
             </ng-template>
@@ -624,7 +621,7 @@
     <li>
         <div class="company-text head-nav">
             <div class="company-name-finance-year" placement="bottom">
-                <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
+                <span class=" text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name)}}
                 </span>
 
                 <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
@@ -640,7 +637,7 @@
     </li>
     <!-- #dropdown="bs-dropdown" -->
     <!--  -->
-    <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
+    <li dropdown class="position-relative" #subdropdown="bs-dropdown" [autoClose]="false" [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
         <a href="javascript:void(0)" class="clearfix" dropdownToggle>
             Switch company
             <span class="icon-arrow-down"></span>
@@ -669,7 +666,7 @@
                             [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                             (keydown.enter)="changeCompany(cmp.uniqueName)" (click)="changeCompany(cmp.uniqueName)">
 
-                            <a vr-item href="javascript:void(0);" class="ellp" (mouseenter)="mouseEnteredOnCompanyName(i)">
+                            <a vr-item href="javascript:void(0);" class="text-ellipsis" (mouseenter)="mouseEnteredOnCompanyName(i)">
 
                                 <ng-template #CompanyBranchname> {{ cmp.name }}
                                     <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
@@ -696,7 +693,7 @@
             </li>
 
             <li class="create-company-btn">
-                <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link btn pd0">Create
+                <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link btn p-0">Create
                     Company
                 </button>
             </li>
@@ -708,14 +705,14 @@
 
     <li class="mr-b1" *ngIf="!isMobileSite">
         <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
-            (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="oh">
+            (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="overflow-hidden">
             <span class="user-circle pull-left" *ngIf="!userAvatar">
                 <span>{{userName | uppercase}}</span>
             </span>
             <span class="user-circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'">
                 <img src="{{userAvatar}}" alt="" />
             </span>
-            <div class="pull-left user-name-wrap ellp">{{ userFullName }}
+            <div class="pull-left user-name-wrap text-ellipsis">{{ userFullName }}
                 <small class="grey-clr">Profile</small>
             </div>
         </a>

@@ -42,7 +42,7 @@
                         *ngIf="showLabelOnly">{{selectedValues[0]?.label}}</button>
                     <input autocomplete="disabled" type="text" *ngIf="!showLabelOnly" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
                         (input)="openListIfNotOpened($event)" (click)="selectText($event);" type="text"
-                        value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
+                        value="{{selectedValues[0].label}}" class="form-control selected-val cp" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">

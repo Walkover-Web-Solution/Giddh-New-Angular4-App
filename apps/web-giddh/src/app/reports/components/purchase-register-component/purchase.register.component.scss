@@ -5,7 +5,7 @@
 .width-170 {
     width: 170px;
 }
-.radio_theme:before {
+.radio-theme:before {
     content: " ";
     width: 14px;
     height: 14px;
@@ -13,12 +13,12 @@
     right: 0;
 }
 
-.radio_theme {
+.radio-theme {
     height: 14px;
     width: 14px;
 }
 
-.radio_theme:checked:after {
+.radio-theme:checked:after {
     content: " ";
     left: 4px;
     bottom: 4px;

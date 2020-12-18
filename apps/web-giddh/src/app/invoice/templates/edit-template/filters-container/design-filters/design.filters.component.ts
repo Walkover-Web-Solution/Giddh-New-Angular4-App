@@ -28,7 +28,7 @@ export class TemplateDesignUISectionVisibility {
 @Component({
     selector: 'design-filters',
     templateUrl: 'design.filters.component.html',
-    styleUrls: ['design.filters.component.css']
+    styleUrls: ['design.filters.component.scss']
 })
 
 export class DesignFiltersContainerComponent implements OnInit {

@@ -5,9 +5,9 @@
         <span aria-hidden="true" class="close" [style.line-height.px]="64" [style.height.px]="64" data-dismiss="modal" (click)="closePopupEvent()">×</span>
         <!-- <i class="icon-cross text-right close_modal" data-dismiss="modal" (click)="()" aria-label="Close" aria-hidden="true"></i> -->
         <span class="row mr-0 ml-0">
-            <h3 class="modal-title bg pdT">Manage Groups &amp; Accounts</h3>
+            <h3 class="modal-title bg pd-t05">Manage Groups &amp; Accounts</h3>
         </span>
-        <div class="pull-right mrR3 searchBarWrapper">
+        <div class="pull-right mr-r3 searchBarWrapper">
             <div class="form-inline">
                 <div class="form-group searchBar">
                     <input type="text" name="grpSrch" #grpSrch id="grpSrch" [(ngModel)]="searchString" (keyup)="searchGroups(grpSrch.value)" class="form-control" placeholder="Search accounts" trial-accordion="search" [style.width.px]="260" />
@@ -20,19 +20,19 @@
     </div>
     <!-- end header -->
 
-    <div class="modal-body pd0">
+    <div class="modal-body p-0">
         <tabset class="custom-tabs master-custom-tabs">
             <tab heading="Master" id="tab1">
                 <div class="clearfix">
-                    <div class="grp-col pd0 " style="max-width:58.333%;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}">
+                    <div class="grp-col p-0 " style="max-width:58.333%;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}">
                         <!-- <perfect-scrollbar> -->
                         <div class="search-loading" *ngIf="(searchLoad | async)">
-                            <div class="vcenter">
+                            <div class="vertical-center">
                                 <span class="spinner small"></span> Loading…
                             </div>
                         </div>
                         <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
-                            <div class="vcenter">
+                            <div class="vertical-center">
                                 <h1>No Result Found</h1>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                     </ng-container>
                 </div>
                 <div class="search-loading" *ngIf="isGetCustomInProgress">
-                    <div class="vcenter">
+                    <div class="vertical-center">
                         <span class="spinner small"></span> Loading…
                     </div>
                 </div>

@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between purchase-order-header">
         <div class="d-flex date-advance-search">
             <form #invoiceForm="ngForm" novalidate class="form-inline">
-                <div class="form-group mrR1 d-flex">
+                <div class="form-group mr-r1 d-flex">
                     <div class="input-group">
                         <span class="input-wrapper">
                             <input type="text" name="dateRange" (click)="showGiddhDatepicker($event)"
@@ -100,7 +100,7 @@
     </div>
     <div class="table-responsive">
         <table class="table basic mt-15 table-bordered giddh-table on-mobile-view">
-            <thead class="t-h-bg1" (mouseleave)="showSelectAllItemCheckbox = false">
+            <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false">
                 <tr (mouseenter)="showSelectAllItemCheckbox = true">
                     <th class="min-wid-check" width="3%">
                         <div class="mh18-img">
@@ -307,17 +307,17 @@
 <ng-template #sortTemplate let-column="column">
     <div class="icon-sort-asc" *ngIf="purchaseOrderGetRequest.sortBy !== column"
         (click)="sortPurchaseOrders('asc', column)"
-        [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
+        [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
     </div>
     <div class="icon-sort-asc"
         *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'"
         (click)="sortPurchaseOrders('desc', column)"
-        [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
+        [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
     </div>
     <div class="icon-sort-dsc"
         *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'"
         (click)="sortPurchaseOrders('asc', column)"
-        [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
+        [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
     </div>
 </ng-template>
 <div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">

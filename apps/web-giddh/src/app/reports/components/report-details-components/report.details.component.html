@@ -1,11 +1,21 @@
 <div class="relative">
     <hamburger-menu></hamburger-menu>
-        <div class="report-breadcrum">
-            <ul class="list-inline d-inline-block middle nav-report">
-                <li class="active"><a href="javascript:void(0)" (click)="goToDashboard()">Report</a> <span
-                        class="d-inline-block pl-1"> ></span></li>
-                <li><a href="javascript:void(0)">Sales Register</a></li>
-            </ul>
+    <div class="report-breadcrum">
+        <ul class="list-inline d-inline-block middle nav-report">
+            <li class="active" id="giddh-page-heading-link"><a href="javascript:void(0)" (click)="goToDashboard()">Report</a> <span
+                    class="d-inline-block pl-1"> ></span></li>
+            <li><a href="javascript:void(0)">Sales Register</a></li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="container-fluid font-14 pt-15">
+    <div class="select-financial-year">
+        <div class="xs-mb-1 inner-button">
+            <sh-select [options]="financialOptions" [isFilterEnabled]="true" [placeholder]="activeFinacialYr.uniqueName"
+                name="currentActiveFinacialYear" [(ngModel)]='currentActiveFinacialYear.value' [showClear]="false"
+                (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
         </div>
     <div class="container-fluid font-14 pt-15">
         <div class="select-financial-year">

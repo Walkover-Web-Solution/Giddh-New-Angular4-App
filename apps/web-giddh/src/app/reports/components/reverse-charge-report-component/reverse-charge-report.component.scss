@@ -19,7 +19,7 @@
 .branch-transfer-report .basic > thead > tr > th {
     border-top: 1px solid $gainsboro !important;
 }
-.icon-pointer.activeTextColor {
+.icon-pointer.active-text-color {
     color: #01a9f4;
 }
 .voucher-type-dropdown {
@@ -42,7 +42,7 @@
     left: 0;
     font-size: 18px;
 }
-.input-grp-dateRangePicker input.form-control {
+.input-grp-date-range-picker input.form-control {
     padding-left: 45px !important;
     width: 210px;
     &:focus {

@@ -8,7 +8,7 @@
                         <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" style="width:100%">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
-                                <div class="account-list-item fs12">{{option?.value}}</div>
+                                <div class="account-list-item font-12">{{option?.value}}</div>
                             </ng-template>
                         </ng-select>
                     </div>
@@ -149,7 +149,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Party Type<span class="red-text">*</span></label>
-                                            <div class="pos-rel">
+                                            <div class="position-relative">
                                                 <sh-select [options]="partyTypeSource" formControlName="partyType" [isFilterEnabled]="true"></sh-select>
                                             </div>
                                         </div>
@@ -235,7 +235,7 @@
                 </div> -->
             </div>
             <!-- <div class="row">
-                <div class="col-sm-12 mrT3">
+                <div class="col-sm-12 mr-t3">
                     <div class="button-group">
                         <button class="btn btn-cancel">Cancel</button>
                         <button class="btn btn-success">Save</button>
@@ -345,7 +345,7 @@
                             <input type="text " class="form-control " placeholder="Group Name ">
                         </div>
                     </div>
-                    <div class="col-sm-2 pdL0 ">
+                    <div class="col-sm-2 pl-0 ">
                         <label>&nbsp;</label>
                         <button class="btn btn-sky-blue ">Move</button>
                     </div>
@@ -357,7 +357,7 @@
                             <input type="text " class="form-control " placeholder="Select account ">
                         </div>
                     </div>
-                    <div class="col-sm-2 pdL0 ">
+                    <div class="col-sm-2 pl-0 ">
                         <label>&nbsp;</label>
                         <button class="btn btn-sky-blue ">Merge</button>
                     </div>
@@ -378,7 +378,7 @@
                                     <input *ngIf="item.dataType==='NUMERIC'" type="text" name="values{{index}}" formControlName="value" class="form-control" [maxLength]="item.valueLength" decimalDigitsDirective>
                                     <div *ngIf="item.dataType==='BOOLEAN'" class="clearfix">
                                         <span class="d-inline-block">
-                                            <input id="yes{{index}}" class="radio-custom cp ml0" type="radio"
+                                            <input id="yes{{index}}" class="radio-custom cp ml-0" type="radio"
                                                 [checked]="customFieldsItem.get('value').value==='true'"
                                                 (change)="selectedBooleanCustomField('true', index)"
                                                 name="booleanType{{index}}">
@@ -386,7 +386,7 @@
                                         </span>
 
                                         <span class="d-inline-block">
-                                            <input id="no{{index}}" class="radio-custom cp ml0" type="radio"
+                                            <input id="no{{index}}" class="radio-custom cp ml-0" type="radio"
                                                 [checked]="customFieldsItem.get('value').value==='false'"
                                                 (change)="selectedBooleanCustomField('false', index)"
                                                 name="booleanType{{index}}">

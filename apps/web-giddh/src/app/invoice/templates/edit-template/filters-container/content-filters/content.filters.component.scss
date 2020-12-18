@@ -1,13 +1,15 @@
-.templateEditor h3 i {
+@import "../../../../../../assets/css/color.scss";
+
+.template-editor h3 i {
     margin-right: 9px;
     font-size: 22px;
 }
 .upload-button {
-    background: #fff;
+    background: $white;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
-    border: 1px #969696;
+    border: 1px $nobel;
     cursor: pointer;
 }
 
@@ -20,7 +22,7 @@
     width: 100px;
     height: 100px;
     float: left;
-    background: #fff;
+    background: $white;
     object-fit: contain;
 }
 label.upload-button {

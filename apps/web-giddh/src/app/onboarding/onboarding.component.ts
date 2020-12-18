@@ -17,7 +17,7 @@ import { SUPPORT_TEAM_NUMBERS } from '../app.constant';
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
-    styleUrls: ['./onboarding.component.css']
+    styleUrls: ['./onboarding.component.scss']
 
 })
 
