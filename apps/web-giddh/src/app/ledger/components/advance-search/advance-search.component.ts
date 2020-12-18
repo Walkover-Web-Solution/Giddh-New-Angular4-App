@@ -333,9 +333,11 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      */
     public onDDElementSelect(type: string, data: any[]) {
         let values = [];
-        data.forEach(element => {
-            values.push(element.value);
-        });
+        if(data && data.length > 0) {
+            data.forEach(element => {
+                values.push(element.value);
+            });
+        }
         switch (type) {
             case 'particulars':
                 this.advanceSearchForm.get('particulars').patchValue(values);

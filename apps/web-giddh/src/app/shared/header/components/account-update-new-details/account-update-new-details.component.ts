@@ -500,7 +500,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.companyTaxDropDown$ = this.store.pipe(select(createSelector([
             (state: AppState) => state.groupwithaccounts.activeAccount,
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
-            (state: AppState) => state.company.taxes],
+            (state: AppState) => state.company && state.company.taxes],
             (activeAccount, activeAccountTaxHierarchy, taxes) => {
                 let arr: IOption[] = [];
                 if (taxes) {

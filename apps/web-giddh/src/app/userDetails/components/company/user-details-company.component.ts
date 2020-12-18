@@ -42,7 +42,7 @@ export class UserDetailsCompanyComponent implements OnInit {
 	constructor(private modalService: BsModalService, private store: Store<AppState>,
 		private componentFactoryResolver: ComponentFactoryResolver, private _companyActions: CompanyActions, private _generalService: GeneralService) {
 		this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
-		this.isGetAllRequestInProcess$ = this.store.pipe(select(p => p.company.isCompanyActionInProgress), takeUntil(this.destroyed$));
+		this.isGetAllRequestInProcess$ = this.store.pipe(select(p => p.company && p.company.isCompanyActionInProgress), takeUntil(this.destroyed$));
 	}
 
 	openModal(template: TemplateRef<any>, selectedCompany: CompanyResponse) {

@@ -272,7 +272,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.selectedLedgerStream$ = this.store.pipe(select(p => p.ledger.transactionDetails), takeUntil(this.destroyed$));
         this.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));
         this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
-        this.vm.companyTaxesList$ = this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$));
+        this.vm.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isDeleteTrxEntrySuccess$ = this.store.pipe(select(p => p.ledger.isDeleteTrxEntrySuccessfull), takeUntil(this.destroyed$));
@@ -638,7 +638,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     const initialAccounts: Array<IOption> = [];
                     this.vm.selectedLedger.transactions.map(t => {
-                        if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
+                        if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
                             let category = this.vm.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
                             if (this.vm.isValidCategory(category)) {
                                 /**
@@ -736,7 +736,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
 
                     this.vm.reInitilizeDiscount(resp[0]);
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch || this.branches.length === 1) {
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
                         this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
                         this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
                     }
@@ -997,7 +997,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch || this.branches.length === 1) {
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
             if (Number(txn.amount) === 0) {
                 txn.amount = undefined;
             }
@@ -1070,7 +1070,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             return;
         } else {
             if (!txn.isUpdated) {
-                if (this.vm.selectedLedger.taxes.length && !txn.isTax) {
+                if (this.vm.selectedLedger.taxes && this.vm.selectedLedger.taxes.length && !txn.isTax) {
                     txn.isUpdated = true;
                 }
             }
@@ -1330,7 +1330,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
         }
-        if ((this.isRcmEntry) && requestObj.taxes.length === 0) {
+        if (this.isRcmEntry && (!requestObj.taxes || requestObj.taxes.length === 0)) {
             if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
                 // Taxes are mandatory for RCM and Advance Receipt entries
                 this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
@@ -1535,7 +1535,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public checkForGeneratedVoucher(event: any): void {
-        if (event && !this.vm.selectedLedger.voucherGenerated) {
+        if (event && this.vm.selectedLedger.voucher.shortCode !== 'pur' && !this.vm.selectedLedger.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
             this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, 'Giddh');
             event.preventDefault();
@@ -1644,7 +1644,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public openHeaderDropDown() {
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch || this.branches.length === 1) {
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
             this.entryAccountUniqueName = "";
 
             if (!this.vm.selectedLedger.voucherGenerated || this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.sales) {
@@ -1726,7 +1726,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public toggleRcmCheckbox(event: any): void {
         event.preventDefault();
-        if (this.currentOrganizationType === 'COMPANY' && this.branches?.length > 1) {
+        if (this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
             return;
         }
         this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
@@ -1924,9 +1924,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private isStockItemPresent(): boolean {
-        for (let index = 0; index < this.vm.selectedLedger.transactions.length; index++) {
-            if (this.vm.selectedLedger.transactions[index].inventory) {
-                return true;
+        if(this.vm.selectedLedger.transactions) {
+            for (let index = 0; index < this.vm.selectedLedger.transactions.length; index++) {
+                if (this.vm.selectedLedger.transactions[index].inventory) {
+                    return true;
+                }
             }
         }
         return false;
@@ -2007,7 +2009,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public openAdjustInvoiceEditMode(): void {
-        if (this.generalService.currentOrganizationType === OrganizationType.Branch || this.branches.length === 1) {
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch || (this.branches && this.branches.length === 1)) {
             this.handleVoucherAdjustment(true);
         }
     }
@@ -2138,7 +2140,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     tdsAmount: null,
                     description: null
                 };
-                if (!adjustments.length) {
+                if (!adjustments || !adjustments.length) {
                     // No adjustments done clear the adjustment checkbox
                     this.isAdjustReceiptSelected = false;
                     this.isAdjustVoucherSelected = false;
@@ -2191,7 +2193,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         let customerUniqueName = [];
         this.vm.selectedLedger.transactions.forEach(transaction => {
             if (transaction.particular && transaction.particular.uniqueName){
-                customerUniqueName.push(transaction.particular.uniqueName);
+                const uniqueName = transaction.particular.uniqueName.split('#')[0];
+                customerUniqueName.push(uniqueName);
             }
         });
         if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {

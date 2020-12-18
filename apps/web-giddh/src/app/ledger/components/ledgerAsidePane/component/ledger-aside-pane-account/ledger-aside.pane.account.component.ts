@@ -56,11 +56,13 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
 			if (result.status === 'success') {
 				// this.groupsArrayStream$ = Observable.of(result.body.results);
 				let groupsListArray: IOption[] = [];
-				result.body.results = this.removeFixedGroupsFromArr(result.body.results);
-				result.body.results.forEach(a => {
-					let parentgroup = a.accountDetails.length > 0 ? a.accountDetails[0].parentGroups : [];
-					groupsListArray.push({ label: a.groupName, value: a.groupUniqueName, additional: parentgroup });
-				});
+                result.body.results = this.removeFixedGroupsFromArr(result.body.results);
+                if(result.body.results && result.body.results.length > 0) {
+                    result.body.results.forEach(a => {
+                        let parentgroup = a.accountDetails && a.accountDetails.length > 0 ? a.accountDetails[0].parentGroups : [];
+                        groupsListArray.push({ label: a.groupName, value: a.groupUniqueName, additional: parentgroup });
+                    });
+                }
 				this.flattenGroupsArray = groupsListArray;
 			}
 		});
@@ -76,7 +78,7 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
 
 	public checkSelectedGroup(options: IOption) {
 		this.groupsArrayStream$.subscribe(data => {
-			if (data.length) {
+			if (data && data.length) {
 				let accountCategory = this.flattenGroup(data, options.value, null);
 				this.isGstEnabledAcc = accountCategory === 'assets' || accountCategory === 'liabilities';
 				this.isHsnSacEnabledAcc = !this.isGstEnabledAcc;
@@ -87,7 +89,7 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
 		if (event) {
 			this.activeGroupUniqueName = event;
 			this.groupsArrayStream$.subscribe(data => {
-				if (data.length) {
+				if (data && data.length) {
 					let accountCategory = this.flattenGroup(data, event, null);
 					this.isGstEnabledAcc = accountCategory === 'assets' || accountCategory === 'liabilities';
 					this.isHsnSacEnabledAcc = !this.isGstEnabledAcc;
