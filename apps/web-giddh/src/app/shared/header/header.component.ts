@@ -1068,7 +1068,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         if (dbResult) {
 
-            this.menuItemsFromIndexDB = dbResult.aidata.menus;
+            this.menuItemsFromIndexDB = (dbResult && dbResult.aidata) ? dbResult.aidata.menus : [];
 
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {

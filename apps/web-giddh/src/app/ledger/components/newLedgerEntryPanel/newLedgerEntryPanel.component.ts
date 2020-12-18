@@ -329,11 +329,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
-            this.companyTaxesList.forEach((tax) => {
-                if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
-                    this.allowedSelectionOfAType.type.push(tax.taxType);
-                }
-            });
+            if(this.companyTaxesList && this.companyTaxesList.length > 0) {
+                this.companyTaxesList.forEach((tax) => {
+                    if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                        this.allowedSelectionOfAType.type.push(tax.taxType);
+                    }
+                });
+            }
             if (!res) {
                 this.allowedSelectionOfAType.type = [];
             }
@@ -390,25 +392,28 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
         let appliedTaxes: any[] = [];
         this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
-        this.taxListForStock.forEach(tl => {
-            let tax = companyTaxes.find(f => f.uniqueName === tl);
-            if (tax) {
-                switch (tax.taxType) {
-                    case 'tcsrc':
-                    case 'tcspay':
-                    case 'tdsrc':
-                    case 'tdspay':
-                        this.blankLedger.otherTaxModal.appliedOtherTax = {
-                            name: tax.name,
-                            uniqueName: tax.uniqueName
-                        };
-                        this.blankLedger.isOtherTaxesApplicable = true;
-                        break;
-                    default:
-                        appliedTaxes.push(tax.uniqueName);
+
+        if(this.taxListForStock && this.taxListForStock.length > 0) {
+            this.taxListForStock.forEach(tl => {
+                let tax = companyTaxes.find(f => f.uniqueName === tl);
+                if (tax) {
+                    switch (tax.taxType) {
+                        case 'tcsrc':
+                        case 'tcspay':
+                        case 'tdsrc':
+                        case 'tdspay':
+                            this.blankLedger.otherTaxModal.appliedOtherTax = {
+                                name: tax.name,
+                                uniqueName: tax.uniqueName
+                            };
+                            this.blankLedger.isOtherTaxesApplicable = true;
+                            break;
+                        default:
+                            appliedTaxes.push(tax.uniqueName);
+                    }
                 }
-            }
-        });
+            });
+        }
         this.taxListForStock = appliedTaxes;
     }
 
@@ -456,11 +461,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public calculateDiscount(event: any): void {
         this.currentTxn.discount = event.discountTotal;
-        this.accountOtherApplicableDiscount.forEach(item => {
-            if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                item.isActive = event.isActive.target.checked;
-            }
-        });
+        if(this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
+            this.accountOtherApplicableDiscount.forEach(item => {
+                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                    item.isActive = event.isActive.target.checked;
+                }
+            });
+        }
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts) {
             this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
                 if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
@@ -1176,11 +1183,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         // Swap the provided key value pairs
-        entryKeys.forEach((entry: any) => {
-            let value = this.currentTxn[entry[0]];
-            this.currentTxn[entry[0]] = this.currentTxn[entry[1]];
-            this.currentTxn[entry[1]] = value;
-        });
+        if(entryKeys && entryKeys.length > 0) {
+            entryKeys.forEach((entry: any) => {
+                let value = this.currentTxn[entry[0]];
+                this.currentTxn[entry[0]] = this.currentTxn[entry[1]];
+                this.currentTxn[entry[1]] = value;
+            });
+        }
         if (this.discountControl) {
             this.discountControl.discountTotal = this.currentTxn.discount;
         }
@@ -1281,10 +1290,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
-            adjustments.forEach(adjustment => {
-                adjustment.adjustmentAmount = adjustment.balanceDue;
-                // delete adjustment.balanceDue;
-            })
+            if(adjustments && adjustments.length > 0) {
+                adjustments.forEach(adjustment => {
+                    adjustment.adjustmentAmount = adjustment.balanceDue;
+                    // delete adjustment.balanceDue;
+                });
+            }
             this.currentTxn.voucherAdjustments = {
                 adjustments,
                 totalAdjustmentAmount: event.adjustPaymentData.totalAdjustedAmount,
@@ -1449,7 +1460,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
         if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
             let appTaxes = [];
-            accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+            if(accountDetails && accountDetails.applicableTaxes && accountDetails.applicableTaxes.length > 0) {
+                accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+            }
             this.currentAccountApplicableTaxes = appTaxes;
         }
         if (accountDetails.country && accountDetails.country.countryName) {

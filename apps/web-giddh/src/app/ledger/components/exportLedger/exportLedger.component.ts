@@ -44,15 +44,17 @@ export class ExportLedgerComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this._permissionDataService.getData.forEach(f => {
-            if (f.name === 'LEDGER') {
-                let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
-                this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
-                this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
-                this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
-                this.emailTypeColumnar = 'columnar';
-            }
-        });
+        if(this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
+            this._permissionDataService.getData.forEach(f => {
+                if (f.name === 'LEDGER') {
+                    let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
+                    this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
+                    this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
+                    this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
+                    this.emailTypeColumnar = 'columnar';
+                }
+            });
+        }
     }
 
     public exportLedger() {

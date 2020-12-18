@@ -1499,14 +1499,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
         let activeAccount: AccountResponse | AccountResponseV2;
-        let groupWithAccountsList: GroupsWithAccountsResponse[];
         this.lc.activeAccount$.pipe(take(1)).subscribe(a => activeAccount = a);
-        this.lc.groupsArray$.pipe(take(1)).subscribe(a => groupWithAccountsList = a);
 
         let showDiscountAndTaxPopup: boolean = false;
 
         // check url account category
-        if (activeAccount.category === 'income' || activeAccount.category === 'expenses' || activeAccount.category === 'assets') {
+        if (activeAccount && (activeAccount.category === 'income' || activeAccount.category === 'expenses' || activeAccount.category === 'assets')) {
             if (activeAccount.category === 'assets') {
                 showDiscountAndTaxPopup = activeAccount.parentGroups[0].uniqueName.includes('fixedassets');
             } else {
@@ -1521,7 +1519,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         // check selected account category
         if (txn.selectedAccount) {
-            const category = txn.selectedAccount.category;
+            const category = txn.selectedAccount ? txn.selectedAccount.category : "";
             if (category === 'income' || category === 'expenses' || category === 'assets') {
                 if (category === 'assets') {
                     showDiscountAndTaxPopup = txn.selectedAccount.uNameStr.includes('fixedassets');

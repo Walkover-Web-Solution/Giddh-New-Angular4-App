@@ -126,7 +126,7 @@ export class ReportsDetailsComponent implements OnInit {
                         value: this.activeCompany ? this.activeCompany.uniqueName : '',
                         isCompany: true
                     });
-                    if (!this.currentBranch.uniqueName) {
+                    if (!this.currentBranch || !this.currentBranch.uniqueName) {
                         let currentBranchUniqueName;
                         if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
@@ -263,13 +263,13 @@ export class ReportsDetailsComponent implements OnInit {
                     // User is navigating back from details page hence show the selected filter as pre-filled
                     uniqueNameToSearch = financialYearChosenInReportUniqueName;
                 } else {
-                    uniqueNameToSearch = activeCompany.activeFinancialYear.uniqueName;
+                    uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
                 }
                 selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
-                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch.uniqueName;
+                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
                 this.populateRecords(this.selectedType);
                 this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
@@ -302,7 +302,7 @@ export class ReportsDetailsComponent implements OnInit {
                 to: endDate,
                 from: startDate,
                 interval: interval,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
             }
             this.companyService.getSalesRegister(request).subscribe((res) => {
                 if (res.status === 'error') {
@@ -326,7 +326,7 @@ export class ReportsDetailsComponent implements OnInit {
                 to: moment(event[1]).format(GIDDH_DATE_FORMAT),
                 from: moment(event[0]).format(GIDDH_DATE_FORMAT),
                 interval: 'monthly',
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
             }
             this.companyService.getSalesRegister(request).subscribe((res) => {
                 if (res.status === 'error') {
@@ -391,7 +391,7 @@ export class ReportsDetailsComponent implements OnInit {
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: this.currentBranch.uniqueName, timeFilter: this.selectedType
+            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), timeFilter: this.selectedType
         }));
     }
 
