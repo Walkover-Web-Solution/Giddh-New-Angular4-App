@@ -233,15 +233,15 @@
                                             <tr class="bg-yl row mr-0 ml-0">
                                                 <th class="col-3">Date</th>
                                                 <th class="col-6 bdrL">Particular</th>
-                                                <th class="text-right col-3 bdrL">Amount</th>
+                                                <th class="text-right col-3 bdrL bdrR">Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr class="ledger-row row mr-0 ml-0 bdrB" 
                                                 v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
-                                                <td class="col-3"></td>
-                                                <td class="col-6">By Balance B/F</td>
-                                                <td class="col-3 text-right">
+                                                <td class="col-3 bdrR"></td>
+                                                <td class="col-6 bdrR">By Balance B/F</td>
+                                                <td class="col-3 text-right bdrR">
                                                     <span v-if="legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                         <!-- | number: '1.2-2' -->
                                                         {{ legderBalanceData.forwardedBalance.amount | currency }}</span>
