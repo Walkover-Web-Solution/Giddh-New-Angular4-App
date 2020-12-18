@@ -112,7 +112,7 @@
                                             <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
                                             <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
                                                 tooltip="HO Branch"></i>
-                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany"></i>
+                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
                                         </span>
                                         <span class="entity-details">
                                             <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
@@ -709,10 +709,10 @@
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
                             <td data-title="Particular" class="col-xs-5 col-md-6 col-lg-6">
-                                <span *ngIf="(lc.transactionData$ | async)?.page === 1">To Balance B/F </span>
+                                <span *ngIf="(lc.transactionData$ | async)?.page <= 1">To Balance B/F </span>
                             </td>
                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
-                                <ng-container *ngIf="(lc.transactionData$ | async)?.page === 1">
+                                <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'" class="">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount  | giddhCurrency }}
                                 </span><br>
@@ -976,10 +976,10 @@
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
                             <td data-title="B/F Balance" class="col-xs-5 col-md-6 col-lg-6">
-                                <span *ngIf="(lc.transactionData$ | async)?.page === 1"> By Balance B/F </span>
+                                <span *ngIf="(lc.transactionData$ | async)?.page <= 1"> By Balance B/F </span>
                             </td>
                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
-                                <ng-container *ngIf="(lc.transactionData$ | async)?.page === 1">
+                                <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
                                 </span><br>
