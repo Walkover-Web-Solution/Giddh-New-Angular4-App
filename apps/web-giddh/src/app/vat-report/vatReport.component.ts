@@ -237,7 +237,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.datepickerVisibility = visibility;
 
         setTimeout(() => {
-            if(this.datepickerVisibility === "hidden" && this.monthWise.isOpen === false) {
+            if(this.datepickerVisibility === "hidden" && this.monthWise && this.monthWise.isOpen === false) {
                 this.hidePeriodDropdown();
             }
         }, 500);
