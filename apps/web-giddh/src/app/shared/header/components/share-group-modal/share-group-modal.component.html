@@ -30,7 +30,7 @@
                 <!--shared with array-->
                 <div class="pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
                     <div>
-                        <ul class="shared_list group-shared-list">
+                        <ul class="shared-list group-shared-list">
                             <li *ngFor="let val of (activeGroupSharedWith$ | async); let i = index">
                                 <div class="user-name-email">
                                     <i class="icon-user1 pd-r1"></i>
@@ -40,14 +40,14 @@
                                     </span>
                                 </div>
 
-                                <div class="custom-select pos-rel">
+                                <div class="custom-select position-relative">
                                     <select name="selectedPermission_{{i}}" class="form-control cp" (change)="updatePermission(val, $event)">
                                         <option [selected]="val.roleUniqueName === permission.uniqueName"
                                             [value]="permission.uniqueName"
                                             *ngFor="let permission of allPermissions$ | async">{{permission.name}}
                                         </option>
                                     </select>
-                                <span class="select_drop d-none"><i class="fa fa-caret-down"></i></span>
+                                    <span class="select-drop"><i class="fa fa-caret-down"></i></span>
                                 </div>
                                 <span class="delete-icon pull-right cp">
                                         <i (click)="unShareGroup(val.uniqueName, val.entityUniqueName)"

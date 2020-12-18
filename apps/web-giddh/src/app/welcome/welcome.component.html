@@ -35,7 +35,7 @@
                     <div class="col-6 mr-b2 ">
                         <span>
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
-                            <div class="custom-select pos-rel">
+                            <div class="custom-select position-relative">
                                 <sh-select id="country" [options]="countrySource$ | async" required
                                     [isFilterEnabled]="true"
                                     [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-6 mr-b2 ">
                         <label for="">Currency<sup class="text-danger">*</sup></label>
-                        <div class="custom-select select-caret pos-rel">
+                        <div class="custom-select select-caret position-relative">
                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required
                                 [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null"
                                 [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
@@ -76,9 +76,9 @@
                     </div>
 
                     <div class="col-12 mr-b2 select-box" *ngIf="businessTypeList?.length && !isWarehouse">
-                        <div class="pos-rel">
+                        <div class="position-relative">
                             <label for="businessType">Select Business Type</label>
-                            <div class="custom-select pos-rel">
+                            <div class="custom-select position-relative">
                                 <sh-select placeholder="Select Business Type" name="businessType" id="businessType"
                                     (onClear)="onClearBusinessType()" autocomplete="false" [readonlyInput]="true"
                                     [disabled]="(companyProfileObj.businessType && isOnBoardingInProgress) ? 'disabled' : null"
@@ -90,9 +90,9 @@
                         </div>
                     </div>
                     <div class="col-12 mr-b2 select-box" *ngIf="!isWarehouse">
-                        <div class="pos-rel">
+                        <div class="position-relative">
                             <label for="businessNature">Select Business Nature</label>
-                            <div class="custom-select  pos-rel">
+                            <div class="custom-select  position-relative">
                                 <sh-select placeholder="Select Business Nature" name="businessNature"
                                     [readonlyInput]="true" (onClear)="onClearBusinessNature()" autocomplete="false"
                                     id="businessNature" [(ngModel)]="companyProfileObj.businessNature"
@@ -140,8 +140,8 @@
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>
                                     <button dropdownToggle type="button"
                                         class="form-control text-left btn-block dropdown-toggle"> Select Taxes <span
-                                            class="select_drop pull-right mr-t1"></span></button>
-                                    <ul class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                                            class="select-drop pull-right mr-t1"></span></button>
+                                    <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
                                         <li *ngIf="taxesList.length==0">No results found</li>
                                         <li *ngFor="let tax of taxesList">
                                             <input type="checkbox" (click)="selectApplicableTaxes(tax, $event)" [checked]="tax.isSelected" /> {{tax.label}}
@@ -152,7 +152,7 @@
                                     <ul class="list-inline custom-multi-select">
                                         <li *ngFor="let tax of selectedTaxes">
                                             <a style="color: gray">
-                                                {{currentTaxList[tax].name}} <span class="pdL"
+                                                {{currentTaxList[tax].name}} <span class="pd-l05"
                                                     (click)="removeTax(tax)">×</span>
                                             </a>
                                         </li>
@@ -185,8 +185,8 @@
                         </p><br />
                         <p class="taxation-not-supported" *ngIf="!formFields['taxName']">Create and apply taxes on all types of transactions! To get tax reports, contact <a href="mailto:sales@giddh.com">sales@giddh.com</a>!</p>
                     </div>
-                    <div class="col-12 d-flex mrT5">
-                        <button class="btn btn-primary" (click)="back(isBranch)">Back</button>
+                    <div class="col-12 d-flex mr-t5">
+                        <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
                         <button [ladda]="isApiInProgress" type="submit" class="btn btn-sky-blue" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
                             {{itemOnBoardingDetails?.isOnBoardingInProgress ? itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' +  itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType : 'Submit'
                             }}

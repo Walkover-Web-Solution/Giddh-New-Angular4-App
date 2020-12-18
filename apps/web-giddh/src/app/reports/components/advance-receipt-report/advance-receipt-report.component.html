@@ -2,9 +2,9 @@
 <div class="reverse-table-report">
     <div class="container-fluid">
 
-        <div class="mt-15 mb-15 input-grp-dateRangePicker d-flex">
+        <div class="mt-15 mb-15 input-grp-date-range-picker d-flex">
             <!-- Invoice filter section -->
-            <div class="mrR1 d-flex w-100">
+            <div class="mr-r1 d-flex w-100">
                 <div class="d-flex">
                     <div class="input-group linked-entities mr-15" *ngIf="currentCompanyBranches?.length > 2">
                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
@@ -56,10 +56,10 @@
 
         <div class="invoice-preview  table-responsive">
             <table class="table basic giddh-table on-mobile-view">
-                <thead class="t-h-bg1">
+                <thead class="thead-background1">
                     <tr>
                         <th>#</th>
-                        <th #receiptNumberParent width="13%" class="bdrR bdrB td-search-box">
+                        <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                             <div [hidden]="showReceiptSearchBar">
                                 <span>Receipt #</span>
                                 <i class="icon-search" (click)="searchBy(null, 'receipt', true)"></i>
@@ -102,7 +102,7 @@
                         </th>
 
 
-                        <th #customerNameParent width="13%" class="bdrR bdrB td-search-box">
+                        <th #customerNameParent width="13%" class="bd-rr bd-rb td-search-box">
                             <div [hidden]="showCustomerSearchBar">
                                 <span>Customer Name</span>
                                 <i class="icon-search" (click)="searchBy(null, 'customerName', true);"></i>
@@ -115,7 +115,7 @@
                             </div>
                         </th>
 
-                        <th #paymentModeParent width="13%" class="bdrR bdrB td-search-box">
+                        <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
                             <div [hidden]="showPaymentSearchBar">
                                 <span>Payment Mode</span>
                                 <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
@@ -128,7 +128,7 @@
                             </div>
                         </th>
 
-                        <th #invoiceNumberParent width="13%" class="bdrR bdrB td-search-box">
+                        <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                             <div [hidden]="showInvoiceSearchBar">
                                 <span>Invoice #</span>
                                 <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
@@ -257,13 +257,13 @@
 <!-- region sort icon template -->
 <ng-template #sortTemplate let-column="column">
     <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy !== column" (click)="handleSorting('asc', column)"
-        [ngClass]="{'activeTextColor': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
+        [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
     <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'"
         (click)="handleSorting('desc', column)"
-        [ngClass]="{'activeTextColor': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
+        [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
     <div class="icon-sort-dsc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
         (click)="handleSorting('asc', column)"
-        [ngClass]="{'activeTextColor': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}"></div>
+        [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}"></div>
 </ng-template>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">

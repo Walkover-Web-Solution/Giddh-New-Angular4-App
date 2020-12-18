@@ -2,7 +2,7 @@
     <div>
         <h3 class="">
             <span>Outward Note</span>
-            <span class="pull-right fs14">Multiple
+            <span class="pull-right font-14">Multiple
                 <a href="javascript:void(0)" [ngClass]="{'text-link': mode === 'receiver' }"
                     (click)="modeChanged('receiver')">Receivers</a>
                 /
@@ -14,8 +14,8 @@
     </div>
 </div>
 
-<div class="form_body witBg clearfix margin-child-label">
-    <div class="form_bg clearfix">
+<div class="form-body white-bg clearfix margin-child-label">
+    <div class="form-bg clearfix">
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-xs-6 form-group">
@@ -54,18 +54,18 @@
 
             <div class="row">
                 <div class="col-xs-4" *ngIf="mode === 'receiver'">
-                    <label class="fs14">Receiver <sup>*</sup></label>
+                    <label class="font-14">Receiver <sup>*</sup></label>
                 </div>
                 <div class="col-xs-4" *ngIf="mode === 'product'">
-                    <label class="fs14">Product Name <sup>*</sup></label>
+                    <label class="font-14">Product Name <sup>*</sup></label>
                 </div>
 
                 <div class="col-xs-4">
-                    <label class="fs14">Unit<sup>*</sup></label>
+                    <label class="font-14">Unit<sup>*</sup></label>
                 </div>
 
                 <div class="col-xs-4">
-                    <label class="fs14">Quantity <sup>*</sup></label>
+                    <label class="font-14">Quantity <sup>*</sup></label>
                 </div>
             </div>
 
@@ -105,10 +105,10 @@
                             </div>
 
 
-                            <div class="pull-right mr-t unit_add">
+                            <div class="pull-right mr-t05 unit-add">
                                 <button class="btn-link" (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last">
-                                    <i class="icon-plus add_row"></i>
+                                    <i class="icon-plus add-row"></i>
                                 </button>
                                 <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
                                     <i class="icon-cross dlet"></i>
@@ -123,7 +123,7 @@
   <span [hidden]="!item.controls['quantity'].errors?.required" class="text-danger">Please enter quantity.</span>
 </div> -->
                     </div>
-                    <!-- <div class="col-lg-2 form-group pdT2">
+                    <!-- <div class="col-lg-2 form-group pd-t2">
   <a (click)="addTransactionItem()">
     <i class="icon-plus" *ngIf="first || !last"></i>
   </a>
