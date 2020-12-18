@@ -167,6 +167,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public isOnBoardingInProgress: boolean;
     /** True, if item update is in progress */
     public isItemUpdateInProgress: boolean;
+    /** This will hold if api call is in process */
+    public isLoading: boolean = false;
 
     /** Event emitter to represent back button click */
     @Output() backButtonClicked: EventEmitter<any> = new EventEmitter();
@@ -280,6 +282,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             if(response) {
                 setTimeout(() => {
                     if (this._router.url.includes("welcome")) {
+                        this.isLoading = false;
                         this._router.navigate(['/pages/onboarding']);
                     }
                 }, 2000);
@@ -389,7 +392,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.createCompany();
                 }
             }, 100);
-            //this._router.navigate(['select-plan']);
         } else {
             this.isCreateCompanyInProgress = false;
             if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
@@ -996,6 +998,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public createCompany(): void {
+        this.isLoading = true;
         this.subscriptionRequestObj.licenceKey = "";
         this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
 
