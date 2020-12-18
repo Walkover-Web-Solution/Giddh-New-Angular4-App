@@ -2913,23 +2913,25 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getVendorPurchaseOrders(vendorName: any): void {
-        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 10, sort: '', sortBy: '' };
-        let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+        if(this.selectedCompany) {
+            let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 10, sort: '', sortBy: '' };
+            let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
 
-        if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
-            this.purchaseOrders = [];
+            if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
+                this.purchaseOrders = [];
 
-            this.purchaseOrderService.getAllPendingPo(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
-                if (res) {
-                    if (res.status === 'success') {
-                        if (res.body && res.body.length > 0) {
-                            this.purchaseOrders = res.body;
+                this.purchaseOrderService.getAllPendingPo(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
+                    if (res) {
+                        if (res.status === 'success') {
+                            if (res.body && res.body.length > 0) {
+                                this.purchaseOrders = res.body;
+                            }
+                        } else {
+                            this.toaster.errorToast(res.message);
                         }
-                    } else {
-                        this.toaster.errorToast(res.message);
                     }
-                }
-            });
+                });
+            }
         }
     }
 

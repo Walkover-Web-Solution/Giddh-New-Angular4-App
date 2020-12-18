@@ -456,9 +456,13 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
         setTimeout(() => {
             if (this.inlineSearch === 'senderReceiver') {
-                this.senderReceiverField.nativeElement.focus();
+                if(this.senderReceiverField && this.senderReceiverField.nativeElement) {
+                    this.senderReceiverField.nativeElement.focus();
+                }
             } else if (this.inlineSearch === 'warehouseName') {
-                this.warehouseNameField.nativeElement.focus();
+                if(this.warehouseNameField && this.warehouseNameField.nativeElement) {
+                    this.warehouseNameField.nativeElement.focus();
+                }
             }
         }, 200);
     }
