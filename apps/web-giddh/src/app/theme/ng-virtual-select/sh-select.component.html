@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-<div #dd [style.width]="width" class="pos-rel">
+
+<div #dd [style.width]="width" class="position-relative">
     <div [attr.style]="borderConfiguration?.style" class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
         (click)="showSearchSuggestion ? show($event) : ''" [class.open]="isOpen" tabindex="0" (focus)="showSearchSuggestion ? show($event) : ''" (blur)="hide($event)"
-=======
-<div #dd [style.width]="width" class="position-relative">
-    <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
-        (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)"
->>>>>>> 8df7976608... code design
         (keydown)="keydownUp($event)">
-
-
         <!--region multiple-->
         <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}"  class="bdr bg-white">
             <ng-container *ngIf="selectedValues?.length && !showCheckbox">
@@ -40,11 +33,7 @@
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
                     <input autocomplete="disabled" type="text" readonly value="{{selectedValues[0].label}}"
-<<<<<<< HEAD
-                        class="form-control selectedVal cp" [attr.style]="borderConfiguration?.style" />
-=======
-                        class="form-control selected-val cp" />
->>>>>>> 8df7976608... code design
+                        class="form-control selected-val cp" [attr.style]="borderConfiguration?.style" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">

@@ -126,11 +126,10 @@ i.close.icon.clear:hover::after {
     cursor: not-allowed;
 }
 
-<<<<<<< HEAD
 :host(.disabled-ledger) {
     .sh-select-disabled {
         background: $white !important;
-        .selectedVal,
+        .selected-val,
         .form-control,
         .form-control[readonly] {
             background: $white !important;
@@ -138,10 +137,7 @@ i.close.icon.clear:hover::after {
     }
 }
 
-.selectedVal {
-=======
 .selected-val {
->>>>>>> 8df7976608... code design
     border: 1px solid $gainsboro !important;
     padding-right: 22px !important;
     background: #fff !important;

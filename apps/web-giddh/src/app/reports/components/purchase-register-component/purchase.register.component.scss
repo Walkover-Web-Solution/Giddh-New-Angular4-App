@@ -44,11 +44,11 @@
     border-left: 6px solid transparent;
     border-top: 6px dashed;
 }
-.reportDropdown li {
+.report-dropdown li {
     float: left;
     width: 51px;
 }
-.reportDropdown {
+.report-dropdown {
     min-width: 210px;
 }
 ul#dropdown-nested {
@@ -58,7 +58,7 @@ ul#dropdown-nested li .caret {
     float: right;
     margin-top: 8px;
 }
-.reportDropdown {
+.report-dropdown {
     left: 100% !important;
 }
 #dropdown-nested li .caret {
