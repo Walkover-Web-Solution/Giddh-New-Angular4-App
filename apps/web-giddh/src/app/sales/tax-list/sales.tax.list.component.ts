@@ -44,7 +44,7 @@ import { each } from '../../lodash-optimized';
           -ms-user-select: none;
           user-select: none;
       }
-      .taxItem {
+      .tax-item {
       margin: 0;
       float: left;
       padding: 6px;

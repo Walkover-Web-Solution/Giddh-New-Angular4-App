@@ -10,13 +10,7 @@
 </div>
 
 
-<div class="container-fluid font-14 pt-15">
-    <div class="select-financial-year">
-        <div class="xs-mb-1 inner-button">
-            <sh-select [options]="financialOptions" [isFilterEnabled]="true" [placeholder]="activeFinacialYr.uniqueName"
-                name="currentActiveFinacialYear" [(ngModel)]='currentActiveFinacialYear.value' [showClear]="false"
-                (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
-        </div>
+
     <div class="container-fluid font-14 pt-15">
         <div class="select-financial-year">
             <div class="xs-mb-1 inner-button">
@@ -41,7 +35,7 @@
                         </li>
                         <li role="menuitem" dropdown placement="right" container="body">
                             <a dropdownToggle class="dropdown-item dropdown-toggle cursor-pointer" (click)="false">Weekly <span class="caret"></span></a>
-                            <ul class="dropdown-menu reportDropdown" role="menu">
+                            <ul class="dropdown-menu report-dropdown" role="menu">
                                 <li role="menuitem" *ngFor="let month of monthNames"><a (click)="populateRecords('weekly', month)"
                                         class="dropdown-item">{{month | slice:0:3}}</a></li>
                             </ul>
@@ -71,4 +65,3 @@
     </div> -->
 
     </div>
-</div>

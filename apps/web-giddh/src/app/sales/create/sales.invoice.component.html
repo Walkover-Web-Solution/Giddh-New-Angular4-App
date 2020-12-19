@@ -1,4 +1,4 @@
-<div class="pd-b1 upper-layer   clearfix">
+<div class="pd-b1 upper-layer clearfix">
     <div class="col-xs-12 clearfix">
         <div class="btn-group" dropdown>
             <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
@@ -40,7 +40,7 @@
         [ngClass]="{ ' customer-invoice-form ' : !invFormData.voucherDetails.customerName , 'customer-invoice-form-purchase': isPurchaseInvoice } ">
         <div class="clearfix sales-invoice-content ">
 
-            <div class="upper-layer " [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }">
+            <div class="upper-layer" [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }">
                 <div class="clearfix">
                     <div class="col-md-9 p-0">
                         <div class="customer-name" [hidden]="isPurchaseInvoice">
@@ -401,7 +401,7 @@
                                                         <div class="date-hsn-code">
                                                             <div class="row">
                                                                 <div class="col-xs-6" *ngIf="entry.entryDate">
-                                                                    <div class="entryDate">
+                                                                    <div class="entry-date">
                                                                         <label>Entry Date: </label>
                                                                         {{entry.entryDate | date: 'dd-MM-yyyy'}}
                                                                         <span class="edit-icon" *ngIf="!isUpdateMode">
@@ -462,7 +462,7 @@
                                                     </td>
                                                     <td class="text-right">{{entry.taxSum}}%</td>
                                                     <td class="text-right">
-                                                        <div style="display: flex;flex-direction: column;">
+                                                        <div class="d-flex flex-column">
                                                             <span>{{transaction.total | number:'1.2-2'}}</span>
                                                             <span *ngIf="entry.isOtherTaxApplicable">
                                                                 {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
@@ -470,7 +470,7 @@
                                                             </span>
                                                         </div>
                                                     </td>
-                                                    <td class="text-center" style="width:3%;">
+                                                    <td class="text-center" width="3%">
                                                         <span class="cp" (click)="removeTransaction(entryIdx)"
                                                             *ngIf="!isUpdateMode || (isUpdateMode && entry.isNewEntryInUpdateMode)">
                                                             <i class="icon-trash" aria-hidden="true"></i>
@@ -540,7 +540,7 @@
                                                             <div class="date-hsn-code">
                                                                 <div class="row">
                                                                     <div class="col-xs-6">
-                                                                        <div class="entryDate">
+                                                                        <div class="entry-date">
                                                                             <label>Entry Date: </label>
                                                                             <span *ngIf="!isUpdateMode">
                                                                                 <input type="text"
@@ -759,7 +759,7 @@
                                                                 </div>
                                                             <div class="ico-head">Other Details</div>
                                                             <div [collapse]="isOthrDtlCollapsed"
-                                                                class="clearfix max-600 pd-l3 mr0">
+                                                                class="clearfix max-600 pd-l3 m-0">
                                                                 <div class="row">
                                                                     <div class="form-group col-xs-4">
                                                                         <!-- <label>Ship Date</label> -->
@@ -967,20 +967,20 @@
                                                                                     (blur)="txnChangeOccurred()"
                                                                                     placeholder="Amount"
                                                                                     name="depositAmount"
-                                                                                    class="form-control amountField text-right pull-right max100"
+                                                                                    class="form-control amount-field text-right pull-right max100"
                                                                                     [(ngModel)]="depositAmount"
                                                                                     [readonly]='isCashInvoice'
-                                                                                    [ngClass]='{"amountFiledCash": isCashInvoice}' />
+                                                                                    [ngClass]='{"amount-filed-cash": isCashInvoice}' />
                                                                                 <span *ngIf="isCashInvoice"
-                                                                                    class="amountField pull-right max100"
-                                                                                    [ngClass]='{"amountFiledCash": isCashInvoice}'>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
+                                                                                    class="amount-field pull-right max100"
+                                                                                    [ngClass]='{"amount-filed-cash": isCashInvoice}'>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
 
                                                                                 <label class="pull-right">Amount</label>
                                                                             </li>
                                                                             <li *ngIf="toggleFieldForSales && !isCashInvoice"
                                                                                 class="clearfix mr-t1">
                                                                                 <strong
-                                                                                    class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
+                                                                                    class="pull-right balance-due-text">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                                                                                 <strong class="pull-right">Balance
                                                                                     Due</strong>
                                                                             </li>
@@ -1509,7 +1509,7 @@
 
             </table>
 
-            <table class="inner-table table customer-invoice-table bg-white" style="display: none;">
+            <table class="inner-table table customer-invoice-table bg-white d-none">
 
                 <tr>
                     <td>

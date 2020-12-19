@@ -13,8 +13,8 @@
     <section [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
         <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)" (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()">
         </search-filter>
-        <div class="table-responsive">
-            <table class="table table-bordered basic giddh-table on-mobile-view">
+        <div>
+            <table class="table table-bordered basic giddh-table on-mobile-view table-responsive">
                 <thead>
                     <tr>
                         <th [style.width.px]="25">
@@ -83,16 +83,16 @@
                         <td data-title="Name">{{item.name}}</td>
                         <td data-title="Unique Name">{{item.uniqueName}}</td>
                         <td data-title="Parent">{{item.parent}}</td>
-                        <td data-title="Opening Balance" class="alR">
+                        <td data-title="Opening Balance" class="text-right">
                             {{item.openingBalance | giddhCurrency }}
                             <span *ngIf="item.openingBalance > 0">
                                 <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">Dr</span>
                             <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">Cr</span>
                             </span>
                         </td>
-                        <td data-title="DR Total" class="alR">{{item.debitTotal | giddhCurrency }}</td>
-                        <td data-title="CR Total" class="alR">{{item.creditTotal | giddhCurrency}}</td>
-                        <td data-title="Closing Balance" class="alR">
+                        <td data-title="DR Total" class="text-right">{{item.debitTotal | giddhCurrency }}</td>
+                        <td data-title="CR Total" class="text-right">{{item.creditTotal | giddhCurrency}}</td>
+                        <td data-title="Closing Balance" class="text-right">
                             {{item.closingBalance | giddhCurrency }}
                             <span *ngIf="item.closingBalance > 0">
                                 <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">Dr</span>

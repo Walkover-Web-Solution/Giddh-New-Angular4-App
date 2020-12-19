@@ -11,7 +11,7 @@
                         [bsConfig]="bsConfig" container="body">
                 </div>
             </div>
-            <div class="clear-filter width-100 align-items-center d-flex justify-content-center"
+            <div class="clear-filter width-100 align-items-baseline d-flex justify-content-center"
                 *ngIf="checkIfFiltersApplied()">
                 <button class="btn btn-filter" (click)="resetFilters()"><span class="icon-cross"></span> Clear
                     Filter</button>
@@ -95,7 +95,7 @@
                 <tbody
                     *ngIf="reverseChargeReportResults && reverseChargeReportResults.items && reverseChargeReportResults.items.length > 0">
                     <tr *ngFor="let reverseCharge of reverseChargeReportResults.items; let i = index;">
-                        <td data-title="S. No" class="text-center">
+                        <td data-title="#" class="text-center">
                             {{ ((reverseChargeReportGetRequest.page - 1) * paginationLimit) + (i + 1) }} </td>
                         <td data-title="Entry Date">{{ reverseCharge.entryDate }}</td>
                         <td data-title="Supplier's Name">{{ reverseCharge.supplierName }}</td>
@@ -128,7 +128,7 @@
         </div>
     </div>
     <div class="mt-5 invoice-footer">
-        <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
+        <div class="col-lg-6 col-md-12 col-sm-12 col-12 d-flex total-due-sale-wrap">
             <div class="col-sm-6 total-due-sale">
                 <h3>Total Taxable Value: </h3>
                 <h1>{{activeCompany?.baseCurrencySymbol}}
