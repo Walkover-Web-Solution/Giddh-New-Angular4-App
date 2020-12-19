@@ -237,11 +237,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="ledger-row row mr-0 ml-0 bdrB"
+                                            <tr class="ledger-row row mr-0 ml-0 bd-rb"
                                             v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                 <td class="col-3"></td>
-                                                <td class="col-6 bdrL">By Balance B/F</td>
-                                                <td class="col-3 text-right bdrL bdrR">
+                                                <td class="col-6 bd-rl">By Balance B/F</td>
+                                                <td class="col-3 text-right bd-rl bd-rr">
                                                     <span v-if="legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                         <!-- | number: '1.2-2' -->
                                                         {{ legderBalanceData.forwardedBalance.amount | currency }}</span>

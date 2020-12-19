@@ -1,4 +1,4 @@
-<div class="pr" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
+<div class="position-relative" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
     <a id="tax" (click)="toggleTaxPopup(true)" class="clearfix">
         <div class="multi-select adjust">
             <input type="number" id="sales-tax-box" (blur)="taxInputBlur($event)" (focus)="toggleTaxPopup(true)" readonly name="sum"
@@ -12,7 +12,7 @@
             <p class="pd-1 text-center">No Taxes Found</p>
         </li>
         <li *ngFor="let tax of taxList;trackBy: trackByFn; let idx = index">
-            <label class="checkbox overflow-hidden width-100 bd-rb pdB taxItem" (click)="$event.stopPropagation()">
+            <label class="checkbox overflow-hidden width-100 bd-rb pd-b05 tax-item" (click)="$event.stopPropagation()">
                 <input (blur)="taxInputBlur($event)" class="pull-left" name="tax_{{idx}}" type="checkbox"
                     [(ngModel)]="tax.isChecked" (ngModelChange)="reCalculate()" (click)="$event.stopPropagation()" />
                 <span class="pull-left text-ellipsis">{{tax.name}}</span>
