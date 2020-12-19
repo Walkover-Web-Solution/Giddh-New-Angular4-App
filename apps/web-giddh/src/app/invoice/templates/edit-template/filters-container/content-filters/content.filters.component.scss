@@ -1,13 +1,15 @@
+@import "../../../../../../assets/css/color.scss";
+
 .templateEditor h3 i {
     margin-right: 9px;
     font-size: 22px;
 }
 .upload-button {
-    background: #fff;
+    background: $white;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
-    border: 1px #969696;
+    border: 1px $nobel;
     cursor: pointer;
 }
 
@@ -20,7 +22,7 @@
     width: 100px;
     height: 100px;
     float: left;
-    background: #fff;
+    background: $white;
     object-fit: contain;
 }
 label.upload-button {
@@ -39,4 +41,11 @@ label.upload-button {
 }
 .thanks-input-inline {
     margin: -6px 0px 7px 7px !important;
+}
+.collapse-icons{
+    font-size: 12px !important;
+    border: 1px solid $black;
+    border-radius: 4px;
+    padding: 2px;
+    top: 0 !important;
 }
