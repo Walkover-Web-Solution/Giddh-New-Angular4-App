@@ -379,6 +379,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let activeAccountTaxes = [];
         if (this.activeAccount && this.activeAccount.applicableTaxes) {
             activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
+            if(this.activeAccount.otherApplicableTaxes && this.activeAccount.otherApplicableTaxes.length && activeAccountTaxes && activeAccountTaxes.length) {
+                if(this.activeAccount.otherApplicableTaxes[0].uniqueName !== activeAccountTaxes[0] && activeAccountTaxes.includes(this.activeAccount.otherApplicableTaxes[0].uniqueName)) {
+                  activeAccountTaxes = activeAccountTaxes.reverse();
+                }
+            }
         }
         if (this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
@@ -1467,6 +1472,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             accountDetails.inheritedDiscounts.forEach(element => {
                 this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
             });
+        }
+        if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {
+            accountDetails.applicableTaxes.unshift(accountDetails.otherApplicableTaxes[0]);
         }
         this.accountOtherApplicableDiscount.map(item => item.isActive = true);
     }
