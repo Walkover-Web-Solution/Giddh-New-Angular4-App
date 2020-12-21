@@ -27,7 +27,7 @@
                         </div>
                         <div class="d-flex ml-15">
                             <button [disabled]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2" class="btn btn-danger" id="delete-ledger-mobile-view" (click)="performBulkAction('delete')" container="body"
-                                tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
+                                tooltip="Delete" [placement]="'top'"><i class="icon-trash"></i>
                             </button>
 
                             <button [disabled]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2" class="btn btn-warning" id="generate-invoice-mobile-view" (click)="performBulkAction('generate')" container="body"
@@ -83,7 +83,7 @@
                     <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 && !isMobileScreen">
 
                         <button [disabled]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2" class="btn btn-danger" id="delete-ledger" (click)="performBulkAction('delete')" container="body"
-                            tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
+                            tooltip="Delete" [placement]="'top'"><i class="icon-trash"></i>
                         </button>
 
                         <button [disabled]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2" class="btn btn-warning" id="generate-invoice" (click)="performBulkAction('generate')" container="body"
