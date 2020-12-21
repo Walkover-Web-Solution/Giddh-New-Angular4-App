@@ -161,7 +161,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.companyTaxDropDown = this.store.pipe(select(createSelector([
             (state: AppState) => state.groupwithaccounts.activeAccount,
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
-            (state: AppState) => state.company.taxes],
+            (state: AppState) => state.company && state.company.taxes],
             (activeAccount, activeAccountTaxHierarchy, taxes) => {
                 let arr: IOption[] = [];
                 if (taxes) {
@@ -210,7 +210,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.groupList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
         this.activeGroupTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
-        this.companyTaxes$ = this.store.pipe(select(state => state.company.taxes), takeUntil(this.destroyed$));
+        this.companyTaxes$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
         this.showAddAccountForm$ = this.store.pipe(select(state => state.groupwithaccounts.addAccountOpen), takeUntil(this.destroyed$));
         this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
         this.isGroupNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isGroupNameAvailable), takeUntil(this.destroyed$));

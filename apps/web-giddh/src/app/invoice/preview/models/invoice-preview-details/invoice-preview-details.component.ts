@@ -357,27 +357,29 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.isVoucherDownloadError = false;
 
         if ([VoucherTypeEnum.sales, VoucherTypeEnum.cash, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.voucherType)) {
-            let model: DownloadVoucherRequest = {
-                voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
-                voucherNumber: [this.selectedItem.voucherNumber]
-            };
-            let accountUniqueName: string = this.selectedItem.account.uniqueName;
-            this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
-                if (result) {
-                    this.selectedItem.blob = result;
-                    this.pdfViewer.pdfSrc = result;
-                    this.pdfViewer.showSpinner = true;
-                    this.pdfViewer.refresh();
-                    this.isVoucherDownloadError = false;
-                } else {
-                    this.isVoucherDownloadError = true;
-                    this._toasty.errorToast('Something went wrong please try again!');
-                }
-                this.isVoucherDownloading = false;
-                this.detectChanges();
-            }, (err) => {
-                this.handleDownloadError(err);
-            });
+            if(this.selectedItem) {
+                let model: DownloadVoucherRequest = {
+                    voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
+                    voucherNumber: [this.selectedItem.voucherNumber]
+                };
+                let accountUniqueName: string = this.selectedItem.account.uniqueName;
+                this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
+                    if (result) {
+                        this.selectedItem.blob = result;
+                        this.pdfViewer.pdfSrc = result;
+                        this.pdfViewer.showSpinner = true;
+                        this.pdfViewer.refresh();
+                        this.isVoucherDownloadError = false;
+                    } else {
+                        this.isVoucherDownloadError = true;
+                        this._toasty.errorToast('Something went wrong please try again!');
+                    }
+                    this.isVoucherDownloading = false;
+                    this.detectChanges();
+                }, (err) => {
+                    this.handleDownloadError(err);
+                });
+            }
         } else if (this.voucherType === VoucherTypeEnum.purchase) {
             const requestObject: any = {
                 accountUniqueName: this.selectedItem.account.uniqueName,
@@ -443,33 +445,35 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 }
             });
         } else {
-            let request: ProformaDownloadRequest = new ProformaDownloadRequest();
-            request.fileType = fileType;
-            request.accountUniqueName = this.selectedItem.account.uniqueName;
+            if(this.selectedItem) {
+                let request: ProformaDownloadRequest = new ProformaDownloadRequest();
+                request.fileType = fileType;
+                request.accountUniqueName = this.selectedItem.account.uniqueName;
 
-            if (this.selectedItem.voucherType === VoucherTypeEnum.generateProforma) {
-                request.proformaNumber = this.selectedItem.voucherNumber;
-            } else {
-                request.estimateNumber = this.selectedItem.voucherNumber;
-            }
-
-            this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
-                if (result && result.status === 'success') {
-                    let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
-                    this.pdfViewer.pdfSrc = blob;
-                    this.selectedItem.blob = blob;
-                    this.pdfViewer.showSpinner = true;
-                    this.pdfViewer.refresh();
-                    this.isVoucherDownloadError = false;
+                if (this.selectedItem.voucherType === VoucherTypeEnum.generateProforma) {
+                    request.proformaNumber = this.selectedItem.voucherNumber;
                 } else {
-                    this._toasty.errorToast(result.message, result.code);
-                    this.isVoucherDownloadError = true;
+                    request.estimateNumber = this.selectedItem.voucherNumber;
                 }
-                this.isVoucherDownloading = false;
-                this.detectChanges();
-            }, (err) => {
-                this.handleDownloadError(err);
-            });
+
+                this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
+                    if (result && result.status === 'success') {
+                        let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
+                        this.pdfViewer.pdfSrc = blob;
+                        this.selectedItem.blob = blob;
+                        this.pdfViewer.showSpinner = true;
+                        this.pdfViewer.refresh();
+                        this.isVoucherDownloadError = false;
+                    } else {
+                        this._toasty.errorToast(result.message, result.code);
+                        this.isVoucherDownloadError = true;
+                    }
+                    this.isVoucherDownloading = false;
+                    this.detectChanges();
+                }, (err) => {
+                    this.handleDownloadError(err);
+                });
+            }
         }
     }
 

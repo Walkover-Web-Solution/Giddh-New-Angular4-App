@@ -4,11 +4,10 @@
             <hamburger-menu></hamburger-menu>
             <div class="invoice-control w-100">
                 <div class="row mr-0 ml-0">
-
                     <div class="vat-report w-100" id="setting-tab">
                         <tabset #staticTabs>
                             <tab heading="VAT Report">
-                                <div *ngIf="currentCompanyBranches?.length > 2" class="row mb-3 mt-3 ml-3">
+                                <div *ngIf="currentCompanyBranches?.length > 2" class="row mb-3 mt-3">
                                     <div class="tax-heading col-md-3 col-sm-3 col-12">
                                         <label>Entity:</label>
                                     </div>
@@ -25,6 +24,7 @@
                                                                     tooltip="Branch"></i>
                                                                 <i class="icon-company-HO pull-right"
                                                                     *ngIf="!option.parentBranch && !option.isCompany" tooltip="HO Branch"></i>
+                                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
                                                             </span>
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>

@@ -458,7 +458,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.newLedgerComponent.calculateTax();
                 this.newLedgerComponent.calculateTotal();
                 setTimeout(() => {
-                    if (this.newLedgerComponent) {
+                    if(this.newLedgerComponent) {
                         this.newLedgerComponent.detectChanges();
                     }
                 }, 200);
@@ -806,7 +806,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     ...lt.creditTransactions.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
                 ]);
 
-                if (checkedEntriesName.length) {
+                if (checkedEntriesName && checkedEntriesName.length) {
                     checkedEntriesName.forEach(f => {
                         let duplicate = this.checkedTrxWhileHovering.some(s => s === f);
                         if (!duplicate) {
@@ -820,7 +820,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let failedEntries: string[] = [];
                 this.failedBulkEntries$.pipe(take(1)).subscribe(ent => failedEntries = ent);
 
-                if (failedEntries.length > 0) {
+                if (failedEntries && failedEntries.length > 0) {
                     this.store.dispatch(this._ledgerActions.SelectGivenEntries(failedEntries));
                 }
                 this.lc.currentPage = lt.page;
@@ -1018,7 +1018,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
     }
@@ -1046,7 +1046,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
                     this.lc.getReadyBankTransactionsForUI(res.body,
-                        (this.generalService.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches.length > 2));
+                        (this.generalService.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                 }
             });
         }
@@ -1121,14 +1121,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
-        if (blankTransactionObj.transactions.length > 0) {
+        if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
             this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
-            // let transactonId = blankTransactionObj.transactionId;
-            // this.isLedgerCreateSuccess$.subscribe(s => {
-            //   if (s && transactonId) {
-            //     this.deleteBankTxn(transactonId);
-            //   }
-            // });
         } else {
             this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
         }
@@ -1457,7 +1451,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
 
-        if (blankTransactionObj.transactions.length > 0) {
+        if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
             if (blankTransactionObj.otherTaxType === 'tds') {
                 delete blankTransactionObj['tcsCalculationMethod'];
             }
@@ -1505,14 +1499,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
         let activeAccount: AccountResponse | AccountResponseV2;
-        let groupWithAccountsList: GroupsWithAccountsResponse[];
         this.lc.activeAccount$.pipe(take(1)).subscribe(a => activeAccount = a);
-        this.lc.groupsArray$.pipe(take(1)).subscribe(a => groupWithAccountsList = a);
 
         let showDiscountAndTaxPopup: boolean = false;
 
         // check url account category
-        if (activeAccount.category === 'income' || activeAccount.category === 'expenses' || activeAccount.category === 'assets') {
+        if (activeAccount && (activeAccount.category === 'income' || activeAccount.category === 'expenses' || activeAccount.category === 'assets')) {
             if (activeAccount.category === 'assets') {
                 showDiscountAndTaxPopup = activeAccount.parentGroups[0].uniqueName.includes('fixedassets');
             } else {
@@ -1527,7 +1519,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         // check selected account category
         if (txn.selectedAccount) {
-            const category = txn.selectedAccount.category;
+            const category = txn.selectedAccount ? txn.selectedAccount.category : "";
             if (category === 'income' || category === 'expenses' || category === 'assets') {
                 if (category === 'assets') {
                     showDiscountAndTaxPopup = txn.selectedAccount.uNameStr.includes('fixedassets');
@@ -1739,7 +1731,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!event.isClose) {
             this.getAdvanceSearchTxn();
             if (event.advanceSearchData) {
-                if (event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
+                if (event.advanceSearchData['dataToSend']['bsRangeValue'] && event.advanceSearchData['dataToSend']['bsRangeValue'].length) {
                     this.selectedDateRange = { startDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[0]), endDate: moment(event.advanceSearchData.dataToSend.bsRangeValue[1]) };
                     this.selectedDateRangeUi = moment(event.advanceSearchData.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(event.advanceSearchData.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
@@ -1791,7 +1783,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
             ]);
         // }
-        if (!this.entryUniqueNamesForBulkAction.length) {
+        if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
             this._toaster.errorToast('Please select at least one entry.', 'Error');
             return;
         }
@@ -1849,7 +1841,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let itemIndx = this.checkedTrxWhileHovering.findIndex((item) => item === uniqueName);
             this.checkedTrxWhileHovering.splice(itemIndx, 1);
 
-            if (this.checkedTrxWhileHovering.length === 0) {
+            if (this.checkedTrxWhileHovering && this.checkedTrxWhileHovering.length === 0) {
                 this.creditSelectAll = false;
                 this.debitSelectAll = false;
                 this.selectedTrxWhileHovering = '';
@@ -1914,7 +1906,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public openSelectFilePopup(fileInput: any) {
-        if (!this.entryUniqueNamesForBulkAction.length) {
+        if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
             this._toaster.errorToast('Please select at least one entry.', 'Error');
             return;
         }

@@ -1015,33 +1015,37 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let defaultMenu = cloneDeep(DEFAULT_MENUS);
 
         // parse and push default menu to menulist for sidebar menu for initial usage
-        defaultMenu.forEach(item => {
-            let newItem: IUlist = {
-                name: item.name,
-                uniqueName: item.uniqueName,
-                additional: item.additional,
-                type: 'MENU',
-                time: +new Date(),
-                pIndex: item.pIndex,
-                isRemoved: item.isRemoved
-            };
-            menuList.push(newItem);
-        });
-        data.forEach((item: IUlist) => {
+        if(defaultMenu && defaultMenu.length > 0) {
+            defaultMenu.forEach(item => {
+                let newItem: IUlist = {
+                    name: item.name,
+                    uniqueName: item.uniqueName,
+                    additional: item.additional,
+                    type: 'MENU',
+                    time: +new Date(),
+                    pIndex: item.pIndex,
+                    isRemoved: item.isRemoved
+                };
+                menuList.push(newItem);
+            });
+        }
 
-            if (item.type === 'GROUP') {
-                if (defaultGrp.indexOf(item.uniqueName) !== -1) {
-                    item.time = +new Date();
-                    groupList.push(item);
+        if(data && data.length > 0) {
+            data.forEach((item: IUlist) => {
+                if (item.type === 'GROUP') {
+                    if (defaultGrp.indexOf(item.uniqueName) !== -1) {
+                        item.time = +new Date();
+                        groupList.push(item);
+                    }
+                } else {
+                    if (defaultAcc.indexOf(item.uniqueName) !== -1) {
+                        item.time = +new Date();
+                        acList.push(item);
+                    }
                 }
-            } else {
-                if (defaultAcc.indexOf(item.uniqueName) !== -1) {
-                    item.time = +new Date();
-                    acList.push(item);
-                }
-            }
+            });
+        }
 
-        });
         let combined = cloneDeep([...menuList, ...groupList, ...acList]);
         this.store.dispatch(this._generalActions.setSmartList(combined));
         this.activeCompanyForDb.aidata = {
@@ -1064,7 +1068,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         if (dbResult) {
 
-            this.menuItemsFromIndexDB = dbResult.aidata.menus;
+            this.menuItemsFromIndexDB = (dbResult && dbResult.aidata) ? dbResult.aidata.menus : [];
 
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {

@@ -113,7 +113,7 @@
                                             <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
                                             <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
                                                 tooltip="HO Branch"></i>
-                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany"></i>
+                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
                                         </span>
                                         <span class="entity-details">
                                             <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
@@ -197,7 +197,7 @@
 
                         <a href="javascript:void(0)" id="share" class="icomoon_ico d-flex align-items-center"
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
-                            <i class="fa icon-ledger-path" style="line-height: 0px"></i>
+                            <i class="icon-ledger-path" style="line-height: 0px"></i>
                         </a>
                         <a class="icomoon_ico d-flex align-items-center mr-0" id="export-ledger" href="javascript:void(0)" title=""
                             [tooltip]="'Export'" [placement]="'top'" (click)="showExportLedgerModal()">

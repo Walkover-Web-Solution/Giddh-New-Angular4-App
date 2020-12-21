@@ -72,7 +72,7 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                         this.activeTab = queryParams.tab;
                     }
                 } else {
-                    this.activeTab = params.voucherType;
+                    this.activeTab = (params) ? params.voucherType : "";
                 }
             });
     }

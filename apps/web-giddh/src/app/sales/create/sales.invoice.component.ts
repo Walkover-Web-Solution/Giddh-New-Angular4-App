@@ -441,7 +441,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         });
 
         // get tax list and assign values to local vars
-        this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+        this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
             if (o) {
                 this.companyTaxesList$ = observableOf(o);
                 _.map(this.theadArrReadOnly, (item: IContentCommon) => {
