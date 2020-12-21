@@ -166,7 +166,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     //preloadingStrategy: CustomPreloadingStrategy,
     onSameUrlNavigation: 'reload',
     preloadingStrategy: QuicklinkStrategy,
-    relativeLinkResolution: 'legacy'
+    relativeLinkResolution: 'corrected'
 }),
         QuicklinkModule,
         //StoreRouterConnectingModule,
