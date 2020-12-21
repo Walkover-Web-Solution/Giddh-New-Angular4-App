@@ -649,7 +649,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public selectCountry(event: IOption) {
-        if (event) {
+        if (event && event.value) {
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             this.getOnboardingForm(event.value);
