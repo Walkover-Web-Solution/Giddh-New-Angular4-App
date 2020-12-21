@@ -474,6 +474,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
+
+        this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
+                this.getCurrentCompanyData();
+            }
+        });
     }
 
     public ngOnInit() {
