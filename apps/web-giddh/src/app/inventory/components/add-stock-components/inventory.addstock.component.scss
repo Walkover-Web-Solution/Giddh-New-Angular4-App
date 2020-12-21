@@ -93,6 +93,15 @@ tr.fsstock td {
     position: relative;
     margin-top: 15px;
 }
+
+.collapse-icons{
+    font-size: 10px;
+    border: 1px solid $chetwode-blue;
+    border-radius: 4px;
+    padding: 2px;
+    top: 0 !important;
+}
+
 @media (max-width: 767px) {
     section.form-body table.no-hover td {
         width: 100%;
