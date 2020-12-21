@@ -51,6 +51,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers
 import { GroupService } from '../services/group.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
+import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 
 export interface PayNowRequest {
     accountUniqueName: string;
@@ -264,7 +265,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
         private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
         private settingsProfileActions: SettingsProfileActions,  private groupService: GroupService,
-        private settingsBranchAction: SettingsBranchActions) {
+        private settingsBranchAction: SettingsBranchActions,
+        public currencyPipe: GiddhCurrencyPipe) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -1424,5 +1426,18 @@ export class ContactComponent implements OnInit, OnDestroy {
         } else {
             this.getAccounts(this.fromDate, this.toDate, 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         }
+    }
+
+    /**
+     * This will format the amount in currency format
+     *
+     * @param {*} amount
+     * @returns {*}
+     * @memberof ContactComponent
+     */
+    public formatAmountInCurrency(amount: any): any {
+        let formattedAmount = this.currencyPipe.transform(amount);
+        formattedAmount = formattedAmount.replace(/,/g, "");
+        return formattedAmount;
     }
 }
