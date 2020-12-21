@@ -234,7 +234,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // get purchase accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['purchases'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['operatingcost', 'indirectexpenses'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -245,7 +245,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // get sales accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['sales'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['revenuefromoperations', 'otherincome'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let salesAccounts: IOption[] = [];
                 data.body.results.map(d => {
