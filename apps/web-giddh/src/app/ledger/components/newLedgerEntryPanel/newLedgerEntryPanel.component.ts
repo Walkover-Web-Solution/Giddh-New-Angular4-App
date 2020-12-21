@@ -289,11 +289,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.assignUpdateActiveAccount(acc);
             }
         });
-        this.store.pipe(select(stateAccount => stateAccount.groupwithaccounts.activeAccount),takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.assignUpdateActiveAccount(response);
-            }
-        });
+        // commented due to TCS TDS taxed key included in active acc response
+        // this.store.pipe(select(stateAccount => stateAccount.groupwithaccounts.activeAccount),takeUntil(this.destroyed$)).subscribe(response => {
+        //     if (response) {
+        //         this.assignUpdateActiveAccount(response);
+        //     }
+        // });
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
@@ -1476,9 +1477,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
             this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
         } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
-            accountDetails.inheritedDiscounts.forEach(element => {
-                this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
-            });
+            this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
         }
         if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {
             accountDetails.applicableTaxes.unshift(accountDetails.otherApplicableTaxes[0]);
