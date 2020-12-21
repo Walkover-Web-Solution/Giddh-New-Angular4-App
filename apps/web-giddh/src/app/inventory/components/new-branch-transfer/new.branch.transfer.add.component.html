@@ -578,7 +578,7 @@
                     <div class="col-xs-12">
                         <div class="pull-right pr">
                             <button type="button" class="btn btn-danger d-inline-block v-align-middle" [disabled]="isLoading" (click)="closeBranchTransferPopup()">Cancel</button>
-                            <button type="button" class="btn btn-success-text d-inline-block v-align-middle {{newBranchTransferForm.invalid}}-{{isValidSourceTaxNumber}}-{{isValidDestinationTaxNumber}}" [disabled]="newBranchTransferForm.invalid || !isValidSourceTaxNumber || !isValidDestinationTaxNumber || isLoading"
+                            <button *ngIf="isBranch || isCompanyWithSingleBranch" type="button" class="btn btn-success-text d-inline-block v-align-middle {{newBranchTransferForm.invalid}}-{{isValidSourceTaxNumber}}-{{isValidDestinationTaxNumber}}" [disabled]="newBranchTransferForm.invalid || !isValidSourceTaxNumber || !isValidDestinationTaxNumber || isLoading"
                                 (click)="submit()">{{editBranchTransferUniqueName ? 'Update' : 'Create'}}</button>
                         </div>
                     </div>
