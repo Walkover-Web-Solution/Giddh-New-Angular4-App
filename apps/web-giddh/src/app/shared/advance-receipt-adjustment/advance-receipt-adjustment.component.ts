@@ -698,9 +698,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     private formatAdjustmentData(adjustmentData: Array<Adjustment>): void {
         if (adjustmentData && adjustmentData.length) {
             adjustmentData.forEach(adjustment => {
-                if (adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
+                if (adjustment && adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
                     adjustment.balanceDue = adjustment.adjustmentAmount;
-                } else if (adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
+                } else if (adjustment && adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
                     adjustment.adjustmentAmount = adjustment.balanceDue;
                 }
             });
