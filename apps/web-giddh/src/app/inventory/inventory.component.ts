@@ -209,11 +209,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                let index = s.url.indexOf('jobwork') > -1 ? 1 : s.url.indexOf('manufacturing') > -1 ? 2 : s.url.indexOf('inventory/report') > -1 ? 3 : 0;
-                if (this.activeTabIndex !== index) {
-                    this.activeTabIndex = index;
-                    this.saveLastState();
-                }
+                this.saveLastState();
             }
         });
     }
@@ -417,11 +413,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private saveLastState() {
-        let companyUniqueName = null;
         let state = this.activeTabIndex === 0 ? 'inventory' : this.activeTabIndex === 1 ? 'inventory/jobwork' : this.activeTabIndex === 2 ? 'inventory/manufacturing' : 'inventory/report';
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.companyUniqueName = this.generalService.companyUniqueName;
         stateDetailsRequest.lastState = `/pages/${state}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
