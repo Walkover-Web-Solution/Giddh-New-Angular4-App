@@ -458,7 +458,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
 
         this.selectedValues = [];
-        this.onChange();
+        if(hide) {
+            this.onChange();
+        }
         this.clearFilter();
         if(hide) {
             this.hide();
