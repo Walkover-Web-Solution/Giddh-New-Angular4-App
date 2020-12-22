@@ -245,7 +245,7 @@ Cypress.Commands.add("deleteAllLedgersAPI", (accountUniqueName)=>{
 Cypress.Commands.add("searchOnTrialBalance", (accountUniqueName, expectedAmount)=>{
     trialBalancePage.refreshIcon().click({force:true})
     cy.wait(3000)
-    trialBalancePage.searchIcon().click({force:true}).then(()=>{
+    trialBalancePage.searchIcon(80000).click({force:true}).then(()=>{
         trialBalancePage.typeSearchValue(accountUniqueName)
     }).then(()=>{
         trialBalancePage.searchAccountName().then((elementText) => {

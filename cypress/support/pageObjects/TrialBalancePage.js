@@ -1,7 +1,7 @@
 class TrialBalancePage {
 
     searchIcon(timeOut){
-         return cy.get('#showSearch')
+         return cy.get('#showSearch', {timeout: timeOut})
     }
 
     typeSearchValue(searchValue){
