@@ -12,6 +12,17 @@
 @media (max-width:1024px){
     .virtual-group-list {
         display: table-cell;
+        max-height: 136px;
+    }
+    .users-last-list {
+        max-height: 136px;
+        height: 136px;
+        -ms-overflow-style: none;
+        overflow-y: visible;
+        scrollbar-width: none;
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
    .new-btn-ul{

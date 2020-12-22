@@ -16,6 +16,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
     selector: 'groups-account-sidebar',
@@ -61,10 +62,18 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     public isGroupMoved: boolean = false;
     /* This will hold if group is deleted */
     public isGroupDeleted: boolean = false;
+    /** True if tablet layout */
+    public isTablet: boolean;
 
     // tslint:disable-next-line:no-empty
     constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private accountsAction: AccountsAction, private _generalServices: GeneralService, private _cdRef: ChangeDetectorRef, private groupService: GroupService) {
+        private accountsAction: AccountsAction, private _generalServices: GeneralService, private _cdRef: ChangeDetectorRef, private groupService: GroupService,
+        private breakPointObserver: BreakpointObserver) {
+        this.breakPointObserver.observe([
+            Breakpoints.Tablet
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isTablet = result.matches;
+        });
         this.mc = new GroupAccountSidebarVM(this._cdRef, this.store);
         this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
@@ -216,6 +225,19 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
             let grps2 = grps.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
             let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
             this.mc.columns[0].Items = [...grps2, ...accs2] as IGroupOrAccount[];
+            const items = [...grps2, ...accs2] as IGroupOrAccount[];
+            let currentIndex = 0;
+            let itemSet = [];
+            items.forEach((item, index) => {
+                itemSet.push(item);
+                if (currentIndex >= 3 || index === (items.length - 1)) {
+                    this.mc.columns[0].newItems.push(itemSet);
+                    currentIndex = 0;
+                    itemSet = [];
+                } else {
+                    currentIndex++;
+                }
+            });
             this.mc.columns[0].SelectedItem = this.mc.columns[0].Items.find(p => p.isActive) || this.mc.columns[0].Items.find(p => p.isOpen);
             let col = this.polulateColms(this.mc.columns[0].groups);
             if (col) {
@@ -293,6 +315,20 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                 let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
                 let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
                 newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
+                const items = [...grps2, ...accs2] as IGroupOrAccount[];
+                let currentIndex = 0;
+                let itemSet = [];
+                items.forEach((item, index) => {
+                    itemSet.push(item);
+                    if (currentIndex >= 3 || index === (items.length - 1)) {
+                        newCOL.newItems.push(itemSet);
+                        currentIndex = 0;
+                        itemSet = [];
+                    } else {
+                        currentIndex++;
+                    }
+                });
+                console.log("newCOL.newItems: ", newCOL.newItems);
                 newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
                 let col = this.polulateColms(allGrps);
                 this.mc.columns.splice(1, 0, newCOL);
@@ -316,6 +352,19 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                         let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
                         let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
                         newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
+                        const items = [...grps2, ...accs2] as IGroupOrAccount[];
+                        let currentIndex = 0;
+                        let itemSet = [];
+                        items.forEach((item, index) => {
+                            itemSet.push(item);
+                            if (currentIndex >= 3 || index === (items.length - 1)) {
+                                newCOL.newItems.push(itemSet);
+                                currentIndex = 0;
+                                itemSet = [];
+                            } else {
+                                currentIndex++;
+                            }
+                        });
                         newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
                     }
                     this.mc.columns.splice(1, 0, newCOL);
@@ -340,6 +389,19 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                             let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
                             let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
                             newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
+                            const items = [...grps2, ...accs2] as IGroupOrAccount[];
+                            let currentIndex = 0;
+                            let itemSet = [];
+                            items.forEach((item, index) => {
+                                itemSet.push(item);
+                                if (currentIndex >= 3 || index === (items.length - 1)) {
+                                    newCOL.newItems.push(itemSet);
+                                    currentIndex = 0;
+                                    itemSet = [];
+                                } else {
+                                    currentIndex++;
+                                }
+                            });
                             newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
                             this.mc.columns.splice(1, 0, newCOL);
                             return newCOL;

@@ -246,6 +246,7 @@ export class ColumnGroupsAccountVM implements IGroupsWithAccounts {
     public groups: IGroupsWithAccounts[];
     public hLevel: number;
     public Items: IGroupOrAccount[];
+    public newItems: IGroupOrAccount[][];
     public SelectedItem: IGroupOrAccount;
     public IsCreateNewBtnShowable: boolean = false;
 
@@ -267,6 +268,20 @@ export class ColumnGroupsAccountVM implements IGroupsWithAccounts {
             let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
 
             this.Items = [...grps2, ...accs2] as IGroupOrAccount[];
+            this.newItems = [];
+            const items = [...grps2, ...accs2] as IGroupOrAccount[];
+            let currentIndex = 0;
+            let itemSet = [];
+            items.forEach((item, index) => {
+                itemSet.push(item);
+                if (currentIndex >= 3 || index === (items.length - 1)) {
+                    this.newItems.push(itemSet);
+                    currentIndex = 0;
+                    itemSet = [];
+                } else {
+                    currentIndex++;
+                }
+            });
         }
     }
 
