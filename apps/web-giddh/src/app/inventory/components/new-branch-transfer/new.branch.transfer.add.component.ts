@@ -563,7 +563,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer[type][index].warehouse.address = defaultAddress ? defaultAddress.address : '';
                         this.branchTransfer[type][index].warehouse.taxNumber = defaultAddress ? defaultAddress.taxNumber : '';
                     } else {
-                        this.branchTransfer[type][index].warehouse.address = res.body.address;
+                        this.branchTransfer[type][index].warehouse.address = '';
                         this.branchTransfer[type][index].warehouse.taxNumber = '';
                     }
                 }
@@ -599,7 +599,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     }
                 });
             }
-            if (this.branchTransfer.sources[index].uniqueName) {
+            if (this.branchTransfer.sources[index] && this.branchTransfer.sources[index].uniqueName) {
                 // Update source warehouses
                 this.senderWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
                 if(this.allWarehouses[this.branchTransfer.sources[index].uniqueName] && this.allWarehouses[this.branchTransfer.sources[index].uniqueName].length > 0) {
