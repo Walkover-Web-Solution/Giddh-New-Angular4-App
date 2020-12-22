@@ -393,7 +393,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
                 if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
                     taxes.unshift(data.body.applicableTaxes[0].uniqueName);
-                    taxes.filter((value, index) => taxes.indexOf(value) === index);
                 }
                 txn.selectedAccount = {
                     ...e.additional,
