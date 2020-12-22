@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module'
-import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 @Component({
     selector: 'aside-create-new-item',
     templateUrl: './create-new-item.component.html',
@@ -9,7 +9,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 })
 
 export class CreateNewItemComponent implements OnInit {
-
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     public ngOnInit() {
 
     }

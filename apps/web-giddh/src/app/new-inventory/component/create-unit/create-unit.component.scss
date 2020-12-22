@@ -60,79 +60,25 @@
     text-align: center;
     margin: 0 auto;
 }
-.header-create-group{
+.aside-body{
+    padding:15px;
+}
+
+.aside-pane-form {
+    background-color: $white;
+    box-shadow: 0 3px 6px $light-black-russian;
+    padding: 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+}
+.header-create-unit{
     .form-header{
         display: flex;
     }
 }
-.create-group-aside-body{
-    padding: 15px 15px 0;
-        label{
-            font-size: 14px;
-        }
-    .create-group-block{
 
-    .create-group-top{
-        padding-bottom: 15px;
-        img{
-            width: 80px;
-        }
-        .select-type{
-            display: flex;
-            align-items: center;
-        }
-    }
-    .bg-white{
-        height: 100vh;
-    }
-    .wrapper-contain{
-        .other-group {
-            margin-top: 20px;
-            margin-bottom: 70px;
-        }
-        }
-    }
-    .sales-purchase-details{
-        .select-puchase-info {
-            background-color: $whisper-color;
-            padding: 6px 10px;
-            font-family: 'opensans-semibold';
-        }
-        .icon-plus{
-            color: $primary;
-        }
-    }
-    .add-another-option{
-        color: $primary;
-    }
-    .icon-plus{
-        color: $primary;
-    }
-    p.product-made-by {
-        font-family: 'opensans-semibold';
-        position: relative;
-        margin-bottom: 15px;
-        padding-top: 5px;
-        &:after{
-            position: absolute;
-            content: "";
-            width: 80%;
-            height: 0;
-            border: 1px solid $gainsboro;
-            top: 17px;
-            left: 21%;
-
-        }
-    }
-}
-.custom-tabs::ng-deep .nav-tabs{
-    position: static !important;
-    padding-left: 0 !important;
-    background-color: transparent;
-    margin-left: -15px;
-    padding-left: 15px !important;
-    margin-bottom: 15px;
-}
 @media (max-width: 768px) {
     :host {
         max-width: 600px;

@@ -1,0 +1,37 @@
+@import "../../../../assets/css/color.scss";
+
+.sub-detail-sidebar{
+    min-height: 100vh;
+    background: $white;
+    min-height: 100vh;
+    width: 230px !important;
+    margin: -15px;
+    padding-top: 5px;
+    h4.product-name {
+        font-size: 16px;
+        font-family: 'opensans-semibold';
+        padding: 10px 15px;
+        background-color: $lavender;
+    }
+    ul{
+        list-style: none;
+        &.sub-group{
+                li{
+                    a{
+                        padding-left:12px;
+                        display: flex;
+                        width: 100%;
+                    }
+                }
+        }
+        li{
+            padding: 6px 15px;
+            font-size: 14px;
+            a{
+                color: $gray;
+            }
+
+        }
+
+    }
+}

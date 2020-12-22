@@ -44,6 +44,13 @@ export class NewInventoryComponent implements OnInit {
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
+    public createUnitToggleAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
 
     public ngOnInit() {
 

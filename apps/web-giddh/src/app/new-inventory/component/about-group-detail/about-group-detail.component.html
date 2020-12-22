@@ -1,0 +1,149 @@
+<div class="container-fluid">
+    <div class="about-group pt-15">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="group-detail d-flex w-100 align-items-center">
+                    <div class="group-thumbnail mr-15">
+                        <img src="../../../../assets/images/Login-Page-Image.png" alt="group-icon">
+                    </div>
+                    <div class="group-name">
+                        <h4>Group Dummy Name Furniture</h4>
+                        <p class="text-gray font-14">(Group Unique Name)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="more-add-button d-flex align-items-center justify-content-end w-100">
+                    <div class="btn-group" dropdown>
+                        <button id="more-btn-inventory" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                            aria-controls="more-inventory-dropdown">
+                            More <span class="caret"></span>
+                        </button>
+                        <ul id="more-inventory-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
+                            aria-labelledby="more-btn-inventory">
+                            <li role="menuitem"><a class="dropdown-item" href="#">Bulk Edit</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="#">Archive</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
+
+                        </ul>
+                    </div>
+                    <button class="btn btn-sky-blue">+ Add Inventory</button>
+                    <i class="icon-cross pd cursor-pointer"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <tabset class="custom-tabs">
+        <tab heading="About Group">
+            <div class="row">
+                <div class="col-sm-6">
+                    <p class="text-gray font-14 mb-15">Lorem Ipsum dummy text will come here about create stock.</p>
+                    <form>
+                        <div class="row mb-15">
+                            <div class="col-sm-6">
+                                <label>Group Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="group-name" class="form-control" type="text" placeholder="Enter Group Name">
+                            </div>
+                        </div>
+                        <div class="row mb-15">
+                            <div class="col-sm-6">
+                                <label>Unique Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="unique-name" class="form-control" type="text" placeholder="Unique Name">
+                            </div>
+                        </div>
+                        <div class="row mb-15">
+                            <div class="col-sm-6">
+                                <label>HSN Code</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="hsn-code" class="form-control" type="text" placeholder="Enter Code">
+                            </div>
+                        </div>
+                        <div class="row mb-15">
+                            <div class="col-sm-6">
+                                <label>SAC Code</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="sac-code" class="form-control" type="text" placeholder="Enter Code">
+                                <div class="mt-15 d-flex">
+                                    <input id="usb-group" type="checkbox">Is it Sub-group?
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="other-group mt-3">
+                <tabset class="custom-tabs">
+                    <tab heading="Other">
+                        <div class="other-tab-content d-flex">
+                            <input type="checkbox" id="out-of-stock">
+                            <span class="font-14">Continue selling when out of stock? (Will be applicable on all the subsequent
+                                group/stock)</span>
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </tab>
+        <tab heading="Sub-details">
+            <div class="d-flex">
+                <new-inventory-sidebar></new-inventory-sidebar>
+                <div class="right-side-content ml-2 w-100 d-flex flex-column">
+                    <p class="font-14 mb-15">Following is the list of items created in <strong>Group Dummy Name Furniture</strong>
+                    <i class="icon-info pd ml-1"></i></p>
+                    <table class="table giddh-table on-mobile-view">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th class="text-right">Pur Rate</th>
+                                <th class="text-right">Sale Rate</th>
+                                <th class="text-right">Closing Qty.</th>
+                            </tr>
+                        </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="image-thumbnail mr-2"><img src="../../../../assets/images/Login-Page-Image.png"></span>
+                                            <span>Product Name 1 Dummy</span>
+                                        </div>
+                                    </td>
+                                    <td>Product</td>
+                                    <td class="text-right">₹10,00,000.00</td>
+                                    <td class="text-right">₹17,48,242.86</td>
+                                    <td class="text-right">21,200 nos.</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="image-thumbnail mr-2"><img src="../../../../assets/images/add-image.svg"></span>
+                                            <span>Product Name 2 Dummy</span>
+                                        </div>
+                                    </td>
+                                    <td>Product</td>
+                                    <td class="text-right">₹10,00,000.00</td>
+                                    <td class="text-right">₹17,48,242.86</td>
+                                    <td class="text-right">21,200 nos.</td>
+                                </tr>
+                            </tbody>
+                    </table>
+                    <stock-group-list></stock-group-list>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+
+    <div class="sticky-footer create-group-footer">
+        <div class="footer-wrapper">
+            <div class="button-group">
+                <button class="btn btn-primary">Clear</button>
+                <button class="btn btn-success disable">Update Group</button>
+            </div>
+        </div>
+    </div>
+</div>

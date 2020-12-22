@@ -1,0 +1,28 @@
+@import "../../../../assets/css/color.scss";
+
+.stock-group-footer{
+    background-color: $white;
+    z-index: 3;
+    width: calc(100% - 215px);
+    padding-right: 15px;
+    line-height: 1.8;
+    box-shadow: 0 3px 6px $black-russian-light;
+    .stock-value{
+        padding-right: 80px;
+        .total-stock-value{
+            padding-left: 30px;
+        }
+    }
+}
+.giddh-table{
+    tr{
+        td{
+            white-space: nowrap !important;
+        }
+    }
+}
+@media(max-width:1019px){
+    .stock-group-footer{
+        width: 100% !important;
+    }
+}

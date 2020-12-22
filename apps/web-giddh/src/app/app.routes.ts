@@ -24,6 +24,7 @@ import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mo
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { InventoryCreateGroupComponent } from './new-inventory/component/create-group/create-group.component';
+
 export const ROUTES: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404', component: NotFoundComponent },

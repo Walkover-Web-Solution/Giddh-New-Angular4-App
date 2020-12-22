@@ -9,6 +9,12 @@ import { CreateNewInventoryComponent } from './component/create-new-inventory/cr
 import { InventoryCreateGroupComponent } from './component/create-group/create-group.component';
 import { CreateNewGroupComponent } from './component/create-new-group/create-new-group.component';
 import { CreateNewItemComponent } from './component/create-new-item/create-new-item.component';
+import { CreateNewUnitComponent } from './component/create-unit/create-unit.component';
+import { AboutGroupDetailComponent } from './component/about-group-detail/about-group-detail.component';
+import { NewInventorySidebar } from './component/new-inventory-sidebar/new-inventory-sidebar.component';
+import { StockGroupListComponent } from './component/stock-group-list/stock-group-list.component'
+import { ProductServiceListComponent } from './component/inventory-product-service-list/inventory-product-service-list.component';
+import { AboutProductServiceDetailComponent } from './component/about-product-service-detail/about-product-service-detail.component';
 @NgModule({
     declarations: [
         NewInventoryComponent,
@@ -16,12 +22,18 @@ import { CreateNewItemComponent } from './component/create-new-item/create-new-i
         CreateNewInventoryComponent,
         InventoryCreateGroupComponent,
         CreateNewGroupComponent,
-        CreateNewItemComponent
+        CreateNewItemComponent,
+        CreateNewUnitComponent,
+        AboutGroupDetailComponent,
+        NewInventorySidebar,
+        StockGroupListComponent,
+        ProductServiceListComponent,
+        AboutProductServiceDetailComponent
     ],
     imports:[
         NewInventoryRoutingModule,
         SharedModule,
-        TabsModule,
+        TabsModule.forRoot(),
         BsDropdownModule.forRoot()
     ],
     exports: [
@@ -30,7 +42,13 @@ import { CreateNewItemComponent } from './component/create-new-item/create-new-i
         CreateNewInventoryComponent,
         InventoryCreateGroupComponent,
         CreateNewGroupComponent,
-        CreateNewItemComponent
+        CreateNewItemComponent,
+        CreateNewUnitComponent,
+        AboutGroupDetailComponent,
+        NewInventorySidebar,
+        StockGroupListComponent,
+        ProductServiceListComponent,
+        AboutProductServiceDetailComponent
     ]
 })
 export class NewInventoryModule { }

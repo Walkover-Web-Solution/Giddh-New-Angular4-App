@@ -1346,7 +1346,7 @@ ul.sub-list {
     white-space: nowrap;
 }
 
-.text-orange {
+.text-purple {
     color: $chetwode-blue;
 }
 
@@ -9583,11 +9583,12 @@ span#HW_badge_cont:nth-child(3) {
         right:  7px !important;
     }
 }
-.inventory-footer, .create-group-footer{
+.inventory-footer, .create-group-footer, .stock-group-footer{
     left: 0;
 }
-.menu_open .inventory-footer, .menu_open .create-group-footer{
+.menu_open .inventory-footer, .menu_open .create-group-footer, .menu_open .stock-group-footer{
     left: 215px;
+    width: 100%;
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {
@@ -10089,6 +10090,12 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .new-inventory-page .custom-tabs .nav.nav-tabs{
+        white-space: nowrap;
+        overflow-y: hidden;
+        display: inline-block;
+        overflow-x: scroll;
+    }
     .invoice-control .nav.nav-tabs {
         margin-bottom: 15px;
         padding: 0 0px 0 15px !important;
