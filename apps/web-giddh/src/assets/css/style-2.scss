@@ -4404,7 +4404,7 @@ select.form-control {
     list-style: none;
 }
 
-.grp-list li a,
+.grp-list a,
 .new-btn-ul li a {
     padding: 4px 15px !important;
     display: block;
@@ -4563,7 +4563,7 @@ label {
     margin-left: 255px;
 }
 
-.col-wrapper:nth-child(1) li a {
+.col-wrapper:nth-child(1) a {
     text-transform: uppercase;
     padding: 8px 15px !important;
 }
@@ -4572,7 +4572,7 @@ label {
     background: #e1ebf0 !important;
 }
 
-.col-wrapper:last-child ul li a.isParent {
+.col-wrapper:last-child a.isParent {
     background: none;
 }
 
@@ -10930,7 +10930,7 @@ input.mat-input-element{
     .col-wrapper:first-child .grp-list {
         padding-top: 0;
     }
-    .col-wrapper:nth-child(1) li a {
+    .col-wrapper:nth-child(1) a {
         text-transform: uppercase;
         padding: 4px 15px !important;
     }
@@ -10976,11 +10976,11 @@ input.mat-input-element{
     .add-manage-group-acc {
         overflow-y: auto !important;
     }
-    .grp-list li a,
+    .grp-list a,
     .new-btn-ul li a {
         display: initial;
     }
-    ul.grp-list.users-last-list:first-child {
+    .grp-list.users-last-list:first-child {
         min-height: 150px;
     }
 }

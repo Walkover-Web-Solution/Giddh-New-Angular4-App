@@ -14,10 +14,10 @@
                 </li>
             </ul>
             <ng-container *ngIf="!isTablet && col.Items">
-                <ul class="grp-list users-last-list">
+                <div class="grp-list users-last-list">
                     <cdk-virtual-scroll-viewport class="virtual-group-list" [itemSize]="36">
                         <!-- <ng-container *cdkVirtualFor="let item of col.Items"> -->
-                            <li *cdkVirtualFor="let item of col.Items" class="list-item sidebarTooltip">
+                            <div *cdkVirtualFor="let item of col.Items" class="list-item sidebarTooltip">
                                 <ng-container *ngIf="item.isGroup">
                                     <a href="javascript:void(0);" id="subGrp_{{item.name}}" nav-vr-item class="list-item"
                                         (click)="onGroupClick(item,i)" [ngClass]="{
@@ -34,16 +34,16 @@
                                         {{ item.name }}
                                     </a>
                                 </ng-container>
-                            </li>
+                            </div>
                             <!-- </ng-container> -->
                     </cdk-virtual-scroll-viewport>
-                </ul>
+                </div>
             </ng-container>
             <ng-container *ngIf="isTablet && col.newItems">
-                <ul class="grp-list users-last-list">
+                <div class="grp-list users-last-list">
                     <cdk-virtual-scroll-viewport class="virtual-group-list" [itemSize]="36">
                         <!-- <ng-container *cdkVirtualFor="let item of col.Items"> -->
-                        <li *cdkVirtualFor="let itemSet of col.newItems" class="list-item sidebarTooltip">
+                        <div *cdkVirtualFor="let itemSet of col.newItems" class="list-item sidebarTooltip">
                             <ng-container *ngFor="let item of itemSet">
                                 <ng-container *ngIf="item.isGroup">
                                     <a href="javascript:void(0);" id="subGrp_{{item.name}}" nav-vr-item class="list-item"
@@ -62,10 +62,10 @@
                                     </a>
                                 </ng-container>
                             </ng-container>
-                        </li>
+                        </div>
                         <!-- </ng-container> -->
                     </cdk-virtual-scroll-viewport>
-                </ul>
+                </div>
             </ng-container>
         </div>
     </div>
