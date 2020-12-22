@@ -343,6 +343,7 @@ export class BlankLedgerVM {
     public isBankTransaction?: boolean;
     public transactionId?: string;
     public invoiceNumberAgainstVoucher: string;
+    public voucherNumber?: string;
     public invoicesToBePaid?: string[];
     public tagNames?: string[];
     public eledgerId?: number | string;
