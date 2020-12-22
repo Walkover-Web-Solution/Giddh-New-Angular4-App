@@ -110,15 +110,15 @@
                             <td class="text-center" data-title="Total Transactions" *ngIf="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
                                 -
                             </td>
-                            <td class="text-right" data-title="Taxable Amount"> <i class="fa fa-inr"></i>{{item?.taxableAmount |giddhCurrency}}
+                            <td class="text-right" data-title="Taxable Amount"> <i class="icon-rupees font-11"></i>{{item?.taxableAmount |giddhCurrency}}
                             </td>
-                            <td class="text-right" data-title="TIGST"> <i class="fa fa-inr"></i>{{item?.igstAmount |giddhCurrency}}
+                            <td class="text-right" data-title="TIGST"> <i class="icon-rupees font-11"></i>{{item?.igstAmount |giddhCurrency}}
                             </td>
-                            <td class="text-right" data-title="CGST"> <i class="fa fa-inr"></i>{{item?.cgstAmount |giddhCurrency}}
+                            <td class="text-right" data-title="CGST"> <i class="icon-rupees font-11"></i>{{item?.cgstAmount |giddhCurrency}}
                             </td>
-                            <td class="text-right" data-title="SGST"> <i class="fa fa-inr"></i>{{item?.sgstAmount |giddhCurrency}}
+                            <td class="text-right" data-title="SGST"> <i class="icon-rupees font-11"></i>{{item?.sgstAmount |giddhCurrency}}
                             </td>
-                            <td class="text-right" data-title="CESS"> <i class="fa fa-inr"></i>{{item?.cessAmount |giddhCurrency}}
+                            <td class="text-right" data-title="CESS"> <i class="icon-rupees font-11"></i>{{item?.cessAmount |giddhCurrency}}
                             </td>
                         </tr>
 
@@ -131,14 +131,14 @@
                                 <td class="text-center" data-title="Total Transactions"><a href="javascript:void(0)">
                                         {{item?.totalTransactions}} </a>
                                 </td>
-                                <td class="text-right" data-title="Taxable Amount"> <i class="fa fa-inr"></i>{{item?.taxableAmount |giddhCurrency}}</td>
-                                <td class="text-right" data-title="IGST"> <i class="fa fa-inr"></i>{{item?.igstAmount |giddhCurrency}}
+                                <td class="text-right" data-title="Taxable Amount"> <i class="icon-rupees font-11"></i>{{item?.taxableAmount |giddhCurrency}}</td>
+                                <td class="text-right" data-title="IGST"> <i class="icon-rupees font-11"></i>{{item?.igstAmount |giddhCurrency}}
                                 </td>
-                                <td class="text-right" data-title="CGST"> <i class="fa fa-inr"></i>{{item?.cgstAmount |giddhCurrency}}
+                                <td class="text-right" data-title="CGST"> <i class="icon-rupees font-11"></i>{{item?.cgstAmount |giddhCurrency}}
                                 </td>
-                                <td class="text-right" data-title="SGST"> <i class="fa fa-inr"></i>{{item?.sgstAmount |giddhCurrency}}
+                                <td class="text-right" data-title="SGST"> <i class="icon-rupees font-11"></i>{{item?.sgstAmount |giddhCurrency}}
                                 </td>
-                                <td class="text-right" data-title="CESS"> <i class="fa fa-inr"></i>{{item?.cessAmount |giddhCurrency}}
+                                <td class="text-right" data-title="CESS"> <i class="icon-rupees font-11"></i>{{item?.cessAmount |giddhCurrency}}
                                 </td>
                             </tr>
                         </ng-container>

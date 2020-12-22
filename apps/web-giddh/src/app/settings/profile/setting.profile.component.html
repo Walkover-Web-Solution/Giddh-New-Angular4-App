@@ -216,7 +216,7 @@
                                                     <input type="text" placeholder="{{formFields['taxName'].label}}" class="form-control" (keyup)="setChildState(gstNumberField, i);" #gstNumberField (blur)="setChildState(gstNumberField, i); checkGstNumValidation(gstNumberField);gstKeyDownSubject$.next($event)"
                                                         [(ngModel)]="gst.taxNumber" name="newgstNumber+{{i}}" />
                                                     <div class="input-group-addon">
-                                                        <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true" style="font-size:18px;" tooltip="Delete {{formFields['taxName'].label}}" placement="right"></i>
+                                                        <i class="icon-trash cp" (click)="removeGstEntry(i)" aria-hidden="true" style="font-size:18px;" tooltip="Delete {{formFields['taxName'].label}}" placement="right"></i>
                                                     </div>
                                                 </div>
                                             </div>

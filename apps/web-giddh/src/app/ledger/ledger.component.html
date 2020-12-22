@@ -28,7 +28,7 @@
                         </div>
                         <div class="d-flex ml-15">
                             <button class="btn btn-danger" id="delete-ledger-mobile-view" (click)="performBulkAction('delete')" container="body"
-                                tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
+                                tooltip="Delete" [placement]="'top'"><i class="icon-trash"></i>
                             </button>
 
                             <button class="btn btn-warning" id="generate-invoice-mobile-view" (click)="performBulkAction('generate')" container="body"
@@ -84,7 +84,7 @@
                     <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 && !isMobileScreen">
 
                         <button class="btn btn-danger" id="delete-ledger" (click)="performBulkAction('delete')" container="body"
-                            tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
+                            tooltip="Delete" [placement]="'top'"><i class="icon-trash"></i>
                         </button>
 
                         <button class="btn btn-warning" id="generate-invoice" (click)="performBulkAction('generate')" container="body"
@@ -145,7 +145,7 @@
 
                         <a href="javascript:void(0)" id="share" class="icomoon_ico d-flex align-items-center"
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
-                            <i class="fa icon-ledger-path" style="line-height: 0px"></i>
+                            <i class="icon-ledger-path" style="line-height: 0px"></i>
                         </a>
                         <a class="icomoon_ico d-flex align-items-center" id="export-ledger" href="javascript:void(0)" title=""
                             [tooltip]="'Export'" [placement]="'top'" (click)="showExportLedgerModal()">
