@@ -58,6 +58,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
     @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
+    /** Tabs instance */
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
 
     public forceClear$: Observable<IForceClear> = observableOf({status: false});
