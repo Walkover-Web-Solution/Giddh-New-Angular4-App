@@ -100,13 +100,13 @@
                                                 <span *ngIf="!isCompany">
                                                     <a  href="javascript:;" tooltip="Edit" placement="top"
                                                         [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrderUniqueName]"><i
-                                                            class="fa fa-pencil"></i></a>
+                                                            class="icon-edit-pencil"></i></a>
                                                 </span>
 
                                                 <span>
                                                     <a href="javascript:;" tooltip="Send Email" placement="top"
                                                         (click)="openSendMailModal(sendEmailModal)"><i
-                                                            class="fa fa-envelope-o"></i></a>
+                                                            class="icon-envelope font-12"></i></a>
                                                 </span>
 
                                                 <span>
@@ -116,12 +116,12 @@
 
                                                 <span>
                                                     <a href="javascript:;" tooltip="Download" placement="top"
-                                                        (click)="downloadFile()"><i class="fa fa-file-pdf-o"></i></a>
+                                                        (click)="downloadFile()"><i class="icon-file"></i></a>
                                                 </span>
 
                                                 <span *ngIf="!isCompany">
                                                     <a href="javascript:;" tooltip="Delete" placement="top"
-                                                        (click)="confirmDelete()"><i class="fa fa-trash"></i></a>
+                                                        (click)="confirmDelete()"><i class="icon-trash"></i></a>
                                                 </span>
                                             </div>
 

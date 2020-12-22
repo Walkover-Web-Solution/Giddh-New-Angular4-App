@@ -177,17 +177,19 @@ export class GeneralService {
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
+        if(byteCharacters && byteCharacters.length > 0) {
+            while (offset < byteCharacters.length) {
+                let slice = byteCharacters.slice(offset, offset + sliceSize);
+                let byteNumbers = new Array(slice.length);
+                let i = 0;
+                while (i < slice.length) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                    i++;
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+                offset += sliceSize;
             }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
         }
         return new Blob(byteArrays, { type: contentType });
     }
@@ -453,13 +455,15 @@ export class GeneralService {
         const name = `${cookieName}=`;
         const decodedCookie = decodeURIComponent(document.cookie);
         const availableCookies = decodedCookie.split(';');
-        for (let index = 0; index < availableCookies.length; index++) {
-            let cookie = availableCookies[index];
-            while (cookie.charAt(0) === ' ') {
-                cookie = cookie.substring(1);
-            }
-            if (cookie.indexOf(name) === 0) {
-                return cookie.substring(name.length, cookie.length);
+        if(availableCookies && availableCookies.length > 0) {
+            for (let index = 0; index < availableCookies.length; index++) {
+                let cookie = availableCookies[index];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
             }
         }
         return '';

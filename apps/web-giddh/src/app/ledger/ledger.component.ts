@@ -381,7 +381,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (data && data.body) {
                 txn.showTaxationDiscountBox = false;
                 // Take taxes of parent group and stock's own taxes
-                const taxes = data.body.taxes || [];
+                let taxes = data.body.taxes || [];
                 if (data.body.stock) {
                     taxes.push(...data.body.stock.taxes);
                 }
@@ -390,6 +390,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         tax.isChecked = false;
                         tax.isDisabled = false;
                     });
+                }
+                if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
+                    taxes.unshift(data.body.applicableTaxes[0].uniqueName);
+                    taxes.filter((value, index) => taxes.indexOf(value) === index);
                 }
                 txn.selectedAccount = {
                     ...e.additional,
@@ -407,7 +411,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     nameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                     stock: data.body.stock,
                     uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
-                    accountApplicableDiscounts: data.body.applicableDiscounts
+                    accountApplicableDiscounts: data.body.applicableDiscounts,
+                    parentGroups: data.body.parentGroups  // added due to parentGroups is getting null in search API
                 };
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
@@ -451,12 +456,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 this.needToReCalculate.next(true);
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-                this.newLedgerComponent.preparePreAppliedDiscounts();
+                if(this.newLedgerComponent) {
+                    this.newLedgerComponent.preparePreAppliedDiscounts();
+                }
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
-                this.newLedgerComponent.calculatePreAppliedTax();
-                this.newLedgerComponent.calculateTax();
-                this.newLedgerComponent.calculateTotal();
+                if(this.newLedgerComponent) {
+                    this.newLedgerComponent.calculatePreAppliedTax();
+                    this.newLedgerComponent.calculateTax();
+                    this.newLedgerComponent.calculateTotal();
+                }
                 setTimeout(() => {
                     if(this.newLedgerComponent) {
                         this.newLedgerComponent.detectChanges();
