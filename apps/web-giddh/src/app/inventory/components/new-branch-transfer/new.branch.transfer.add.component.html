@@ -372,7 +372,7 @@
                                         <div class="hsnCodeDropdown" *ngIf="hsnPopupShow && activeRow == i">
                                             <label>HSN/SAC Code</label>
                                             <input type="text" maxlength="8" placeholder="HSN/SAC Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
-                                            <div class="btngroup m-t-10">
+                                            <div class="btngroup m-t-10 d-block">
                                                 <button class="btn btn-sm btn-success" type="button" (click)="saveHsnNumberPopup(product)">Save</button>
                                                 <button class="btn btn-sm btn-primary" type="button" (click)="hideHsnNumberPopup()">Cancel</button>
                                             </div>
