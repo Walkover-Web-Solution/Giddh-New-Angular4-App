@@ -550,7 +550,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public getWarehouseDetails(type, index): void {
-        if (this.branchTransfer[type][index].warehouse.uniqueName !== null) {
+        if (this.branchTransfer[type][index].warehouse && this.branchTransfer[type][index].warehouse.uniqueName !== null) {
             this._warehouseService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
                 if (res && res.body) {
                     this.branchTransfer[type][index].warehouse.name = res.body.name;
@@ -572,7 +572,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public resetSourceWarehouses(index) {
-        if (this.branchTransfer.destinations && this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
+        if (this.branchTransfer.destinations && this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
             this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
             let allowWarehouse = true;
 
@@ -594,7 +594,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.senderWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
                 if(this.allWarehouses[this.branchTransfer.sources[index].uniqueName] && this.allWarehouses[this.branchTransfer.sources[index].uniqueName].length > 0) {
                     this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
-                        if (key.uniqueName !== this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                        if (this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse && key.uniqueName !== this.branchTransfer.destinations[index].warehouse.uniqueName) {
                             this.senderWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                         }
                     });
@@ -952,11 +952,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
         if (this.isBranch) {
             // Find the current branch details
-            selectedBranch = branches.find(branch => branch.uniqueName === this._generalService.currentBranchUniqueName);
+            selectedBranch = (branches) ? branches.find(branch => branch.uniqueName === this._generalService.currentBranchUniqueName) : null;
             branchName = selectedBranch ? selectedBranch.alias : '';
         } else {
             // Company session find the HO branch
-            hoBranch = branches.find(branch => !branch.parentBranch);
+            hoBranch = (branches) ? branches.find(branch => !branch.parentBranch) : null;
             branchName = hoBranch ? hoBranch.alias : '';
         }
         if (!this.editBranchTransferUniqueName) {
