@@ -388,9 +388,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
         if (this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
+            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes, []);
         } else if (this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
+            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes, this.currentTxn.selectedAccount.particularAccountTax);
         } else {
             this.taxListForStock = [];
         }
@@ -1401,7 +1401,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
     * @memberof NewLedgerEntryPanelComponent
     */
-    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
+    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>, particularAccountTax: Array<any>): Array<string> {
         const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
         if (secondAccountTaxes) {
             secondAccountTaxes.reverse().forEach((tax: string) => {
@@ -1410,6 +1410,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             });
 
+        }
+        if (particularAccountTax && particularAccountTax.length) {
+            mergedAccountTaxes.push(particularAccountTax[0].uniqueName)
         }
         return mergedAccountTaxes;
     }
