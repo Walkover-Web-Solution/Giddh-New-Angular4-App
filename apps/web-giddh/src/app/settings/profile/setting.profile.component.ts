@@ -939,6 +939,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                 }
                 this._toasty.successToast('Address created successfully');
+            } else {
+                this._toasty.errorToast(response.message);
             }
             this.isAddressChangeInProgress = false;
             this.changeDetectorRef.detectChanges();
@@ -976,6 +978,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.closeAddressSidePane = true;
                 this.loadAddresses('GET');
                 this._toasty.successToast('Address updated successfully');
+            } else {
+                this._toasty.errorToast(response.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {
