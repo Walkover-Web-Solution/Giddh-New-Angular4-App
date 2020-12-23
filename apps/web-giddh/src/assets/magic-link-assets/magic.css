@@ -228,16 +228,20 @@ body {
 }
 
 .pd-t1 {
-    padding-top: 10px;
+    padding-top: 10px !important;
 }
 
 .pd-t2,
+<<<<<<< HEAD
 .pdT3 {
+=======
+.pd-t3 {
+>>>>>>> 7a3b4faa36... changes done
     padding-top: 20px;
 }
 
 .pd-b1 {
-    padding-bottom: 10px;
+    padding-bottom: 10px !important;
 }
 
 .pd-l1 {
@@ -264,7 +268,7 @@ body {
     padding-right: 20px;
 }
 
-.pdB3 {
+.pd-b3 {
     padding-bottom: 30px;
 }
 
@@ -272,11 +276,11 @@ body {
     padding-left: 30px;
 }
 
-.pdR3 {
+.pd-r3 {
     padding-right: 30px !important;
 }
 
-.pdT4 {
+.pd-t4 {
     padding-top: 30px;
 }
 
@@ -288,19 +292,26 @@ body {
     padding-bottom: 40px;
 }
 
-.pdL4 {
+.pd-l4 {
     padding-left: 40px;
 }
 
-.pdR4 {
+.pd-r4 {
     padding-right: 40px;
 }
 
+<<<<<<< HEAD
+=======
+.pt-15{
+    padding-top: 15px;
+}
+
+>>>>>>> 7a3b4faa36... changes done
 .p-0 {
     padding: 0;
 }
 
-.mr0 {
+.m-0 {
     margin: 0;
 }
 
@@ -308,23 +319,23 @@ body {
     margin: 5px;
 }
 
-.mr1 {
-    margin: 10px;
+.m-10 {
+    margin: 10px !important;
 }
 
 .mr15 {
     margin: 15px;
 }
 
-.mr2 {
+.m-20 {
     margin: 20px;
 }
 
-.mr3 {
+.m-30 {
     margin: 30px;
 }
 
-.mr4 {
+.m-40 {
     margin: 40px;
 }
 
@@ -412,7 +423,7 @@ body {
     margin-bottom: 40px;
 }
 
-.mrL4 {
+.mr-l4 {
     margin-left: 40px;
 }
 
@@ -420,15 +431,24 @@ body {
     margin-right: 40px;
 }
 
-.bdr {
-    border: 1px solid #ccc;
+.mr-0{
+    margin-right: 0 !important;
+} 
+
+.ml-0{
+    margin-left: 0 !important;
 }
 
-.bdrN {
+.bdr {
+    border: 1px solid #d9d9d9;
+}
+
+.border-none {
     border: none;
 }
 
 .bd-rt {
+<<<<<<< HEAD
     border-top: 1px solid #ccc;
 }
 
@@ -442,6 +462,21 @@ body {
 
 .bd-rr {
     border-right: 1px solid #ccc !important;
+=======
+    border-top: 1px solid #d9d9d9;
+}
+
+.bd-rb {
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.bd-rl {
+    border-left: 1px solid #d9d9d9 !important;
+}
+
+.bd-rr {
+    border-right: 1px solid #d9d9d9 !important;
+>>>>>>> 7a3b4faa36... changes done
 }
 
 .bdrR0 {
@@ -460,7 +495,7 @@ body {
     position: fixed;
 }
 
-.witClr {
+.white-color {
     color: #fff;
 }
 
@@ -468,7 +503,7 @@ body {
     color: #777;
 }
 
-.greyBg {
+.grey-bg {
     background: #f5f5f5;
     /*min-width:320px;*/
 }
@@ -485,43 +520,43 @@ body {
     overflow: hidden;
 }
 
-.oyAuto {
+.overflow-y-auto {
     overflow-y: auto;
 }
 
-.oxAuto {
+.overflow-x-auto {
     overflow-x: auto;
 }
 
-.rn {
+.resize-none {
     resize: none;
 }
 
-.ln {
+.list-style-none {
     list-style: none;
 }
 
-.txtUpc {
+.text-uppercase {
     text-transform: uppercase;
 }
 
-.txt-lwc {
+.text-lowercase {
     text-transform: lowercase;
 }
 
-.txtCpc {
+.text-capitalize {
     text-transform: capitalize;
 }
 
-.td-undr {
+.text-underline {
     text-decoration: underline;
 }
 
-.alR {
+.text-right {
     text-align: right;
 }
 
-.alL {
+.text-left {
     text-align: left;
 }
 
@@ -529,6 +564,10 @@ body {
     text-align: center;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7a3b4faa36... changes done
 .text-ellipsis {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -547,9 +586,17 @@ body {
     font-size: 16px;
 }
 
-.scrItem {
+.scroll-item {
     overflow: auto;
     position: relative;
+}
+
+.w-100{
+    width:100% !important;
+}
+
+.position-relative{
+    position: relative !important;
 }
 
 .oyHid {
@@ -609,7 +656,7 @@ body {
     font-weight: regular;
 }
 
-.account_name {
+.account-name {
     font-weight: 300;
     font-size: 14px;
 }
@@ -627,32 +674,84 @@ body {
     color: #000;
 }
 
-.bg-f9 {
+.light-gray-bg {
     background: #f9f9f9;
 }
 
-.bg-gr {
-    background: #ccc;
+.gray-bg {
+    background: #d9d9d9;
 }
 
-.bg-wh {
+.white-bg {
     background: #fff;
-}
-
-.bg-yl {
-    background: #f9f9f9;
 }
 
 .wid-50 {
     width: 50%;
 }
 
-.bg-bl {
+.blue-bg {
     background: #1a237e;
 }
 
-.fs-18 {
+.font-12{
+    font-size: 12px;
+}
+
+.font-16{
+    font-size: 16px;
+}
+
+.font-18 {
     font-size: 18px;
+}
+
+.d-block {
+    display: block !important;
+}
+
+.float-right{
+    float:right;
+}
+
+.float-left{
+    float:left;
+}
+
+.text-color{
+    color:#262626;
+}
+
+.head-block{
+    height:77px;
+}
+
+.head-block .vertical-center{
+    font-size:26px;
+}
+
+.ledger-account-name{
+    font-size:25px;
+    color:#6d6e70;
+}
+
+.currency-width{
+    width: 150px !important;
+}
+
+.ledger-footer-1{
+    width: 50%;
+    bottom: 0;
+    left: 0;
+}
+
+.attachment-medium{
+    max-width: 100%; 
+    height: auto;
+}
+
+.ledger-footer-1:nth-child(2){
+    right:0 !important;
 }
 
 .download-invoice-ledger {
@@ -660,7 +759,7 @@ body {
 }
 
 /*#transaction_table table th[class*="col-"]:last-child {
-    border-right: 1px solid #ddd !important;
+    border-right: 1px solid #d9d9d9 !important;
 }*/
 
 #transaction_table table td[class*="col-"],
@@ -668,10 +767,10 @@ table th[class*="col-"] {
     padding: 10px;
 }
 
-.compoundEntry td,
-.compoundEntry td .form-control {
+.compound-entry td,
+.compound-entry td .form-control {
     background: #fddfa4 !important;
-    border-left: 1px solid #ccc;
+    border-left: 1px solid #d9d9d9;
 }
 
 .nav.nav-tabs {
@@ -698,7 +797,7 @@ table th[class*="col-"] {
  border:none;
 }
 
-.pd350 {
+.pt-350 {
     padding-bottom: 350px;
 }
 .table-bordered > thead > tr > td,
@@ -773,7 +872,7 @@ table th[class*="col-"] {
     /* font-family: 'Arvo', serif; */
 }
 
-.headerline {
+.header-line {
     font-size: 30px;
     /* font-family: 'Arvo', serif; */
     color: white;
@@ -920,10 +1019,10 @@ h4 {
     color: #d8d5d5;
 }
 
-.magicTable .download-invoice-ledger {
+.magic-table .download-invoice-ledger {
     padding: 0 5px;
 }
-.magicTable .pdR25imp {
+.magic-table .pr-25 {
     padding-right: 25px !important;
 }
 /*footer style end*/
@@ -1005,7 +1104,7 @@ body {
     color: #555;
     text-align: center;
     background-color: #eee;
-    border: 1px solid #ccc;
+    border: 1px solid #d9d9d9;
     border-radius: 4px;
 }
 
@@ -1076,7 +1175,7 @@ footer p {
     display: flex;
     flex-wrap: wrap;
 }
-.pre-ul,
+.list-style-ul,
 .btmfooter-social {
     margin: 0;
     padding: 0;
@@ -1098,7 +1197,7 @@ footer p {
 footer ul li,
 ul,
 li,
-.pre-ul {
+.list-style-ul {
     list-style: none;
 }
 #custom_html-2 ul,
@@ -1190,7 +1289,7 @@ footer .menu-item a {
     #contact p {
         line-height: 28px;
     }
-    :host ::ng-deep .headerline {
+    :host ::ng-deep .header-line {
         font-size: 18px;
     }
     #contact .form-control {
@@ -1244,7 +1343,11 @@ footer .menu-item a {
         position: absolute;
         width: 0;
         border-left: 1px solid #d9d9d9;
+<<<<<<< HEAD
         top: 42px;
+=======
+        top: 37px;
+>>>>>>> 7a3b4faa36... changes done
         bottom: 0;
         z-index: 9;
         margin: 0 auto;
@@ -1282,7 +1385,7 @@ footer .menu-item a {
     #contact p {
         font-size: 16 !important;
     }
-    /* .headerline {
+    /* .header-line {
         font-size: 22px !important;
     } */
 }
@@ -1331,7 +1434,7 @@ footer .menu-item a {
 }
 
 tbody td {
-    border-left: 1px solid #ddd;
+    border-left: 1px solid #d9d9d9;
 }
 thead tr:first-child th {
     border-left: 0 !important;

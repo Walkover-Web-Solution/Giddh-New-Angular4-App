@@ -1,4 +1,4 @@
-<div id="exportModal" class="">
+<div id="exportModal">
     <div class="modal-header">
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportGroupLedgerModal.emit('close')"
             aria-label="Close">×</span>
@@ -6,7 +6,7 @@
     </div>
     <div class="modal-body mr-b4" id="export-body">
         <form name="addShareEmailForm" novalidate class="" autocomplete="off">
-            <div class="pdB3 clearfix">
+            <div class="pd-b3 clearfix">
                 <div class="form-inline">
                     <div class="form-group">
                         <label class="w100 justify-content-start">Date range: </label>
@@ -67,7 +67,7 @@
                 </span>
 
             </div>
-            <button class="btn-success btn" style="min-width:100px;" (click)="exportLedger()">Export</button>
+            <button class="btn-success btn minwidth-100" (click)="exportLedger()">Export</button>
         </form>
     </div>
 </div>

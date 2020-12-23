@@ -7,7 +7,7 @@ import { SettingsBunchService } from '../../../../services/settings.bunch.servic
 @Component({
     selector: 'get-companies',
     templateUrl: './get-companies.component.html',
-    styleUrls: ['./get-companies.component.css']
+    styleUrls: ['./get-companies.component.scss']
 })
 
 export class GetBunchModalComponent implements OnChanges {

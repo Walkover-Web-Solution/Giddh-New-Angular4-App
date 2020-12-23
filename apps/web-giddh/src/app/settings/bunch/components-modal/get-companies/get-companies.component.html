@@ -1,18 +1,18 @@
-<div id="" class="">
+<div>
     <div class="modal-header">
         <h3 class="modal-title bg" id="modal-title"> List of {{ activeBunch.name }} group companies</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <ng-container *ngIf="selectedBunch.companies && selectedBunch.companies.length">
-            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
+            <perfect-scrollbar class="scroll-class" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
                 [scrollIndicators]="true">
-                <ul class="list-unstyled bunch_list">
+                <ul class="list-unstyled bunch-list">
                     <li *ngFor="let item of selectedBunch.companies; let i = index">
                         <div>
                             {{item.name}}
                         </div>
-                        <span class="company_action pos-abs">
+                        <span class="company-action pos-abs">
                             <button type="button" class="btn btn-xs" (click)="deleteCompany(item.uniqueName)"><i
                                     class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
                         </span>

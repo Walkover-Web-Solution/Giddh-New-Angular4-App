@@ -69,7 +69,7 @@
                 [isFilterEnabled]="true" class="pull-left move-group-form">
                 <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
                 <ng-template #optionTemplate let-option="option">
-                    <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
+                    <a href="javascript:void(0)" class="list-item">
                         <div class="item">{{ option.label }}</div>
                         <div class="item-unique">{{ option.value }}</div>
                     </a>
@@ -142,7 +142,7 @@
                         <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" (selected)="discountSelected()" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
                     </span>
                 <span class="pull-right">
-                        <button  class="btn btn-primary mrgeBtn"  [disabled]="(isDiscountSaveDisable$ | async)" (click)="applyDiscounts()">Apply</button>
+                        <button  class="btn btn-primary merge-btn"  [disabled]="(isDiscountSaveDisable$ | async)" (click)="applyDiscounts()">Apply</button>
                     </span>
             </div>
         </div>

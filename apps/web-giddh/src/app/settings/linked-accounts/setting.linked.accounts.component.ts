@@ -21,7 +21,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
     selector: 'setting-linked-accounts',
     templateUrl: './setting.linked.accounts.component.html',
     styles: [`
-    .bank_delete {
+    .bank-delete {
       right: 0;
       bottom: 0;
     }

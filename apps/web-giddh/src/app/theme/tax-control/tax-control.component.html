@@ -1,4 +1,4 @@
-<span class="pr tax-control-cmp" (clickOutside)="showTaxPopup = false"
+<span class="position-relative tax-control-cmp" (clickOutside)="showTaxPopup = false"
     (click)="$event.stopPropagation()">
     <label class="font-12" *ngIf="showHeading">{{ customHeading ? customHeading : 'Tax' }} <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label>
 
@@ -17,7 +17,7 @@
         </div>
     </a>
 
-    <div class="pr">
+    <div class="position-relative">
         <ul class="dropdown-menu pd"
             [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}" (click)="$event.stopPropagation()"
             [style.max-height.px]="102" [style.min-height.px]="70" style="left: unset;top: 0px;">

@@ -47,11 +47,7 @@
 
                 <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
                     <li *ngIf="idx > 0" class="custom-item cp">
-<<<<<<< HEAD
-                        <label class="checkbox overflow-hidden width-100 m0" (click)="$event.stopPropagation()">
-=======
                         <label class="checkbox overflow-hidden width-100 m-0" (click)="$event.stopPropagation()">
->>>>>>> 695a711bd8... code design
                             <input class="pull-left" id="{{'update-discount-checkbox-' + idx}}" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
                                 (change)="change()" (click)="$event.stopPropagation()" />
                             <span class="pull-left text-ellipsis cp">{{discount.name}}</span>

@@ -70,11 +70,7 @@ $greyClr: #6d6d6d;
 
 // common class for extend
 .white-bg {
-<<<<<<< HEAD
-    background-color: white;
-=======
     background-color: $white;
->>>>>>> 695a711bd8... code design
 }
 
 .cp {
@@ -703,11 +699,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 }
 
 .description textarea {
-<<<<<<< HEAD
-    border: 1px solid #ccc;
-=======
     border: 1px solid $gainsboro;
->>>>>>> 695a711bd8... code design
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -733,11 +725,7 @@ input[type="text"] {
 }
 
 a.copy-invoice {
-<<<<<<< HEAD
-    color: #3597ec;
-=======
     color: $primary;
->>>>>>> 695a711bd8... code design
     margin-left: 10px;
 }
 
@@ -889,11 +877,7 @@ span.edit-icon {
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-<<<<<<< HEAD
-    color: #c6c6c6;
-=======
     color: $very-light-gray;
->>>>>>> 695a711bd8... code design
 }
 
 .hsn-code-dropdown a {
@@ -911,13 +895,8 @@ span.edit-icon {
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success,
 .bulk-item-btn-group button.btn.btn-sm.btn-success {
-<<<<<<< HEAD
-    background-color: #28ab00;
-    color: #fff;
-=======
     background-color: $success-green;
     color: $white;
->>>>>>> 695a711bd8... code design
 }
 
 .template-footer {
@@ -928,11 +907,7 @@ span.edit-icon {
 }
 
 .update-text {
-<<<<<<< HEAD
-    color: #0c8fe6;
-=======
     color: $primary;
->>>>>>> 695a711bd8... code design
     padding: 0 5px;
 }
 

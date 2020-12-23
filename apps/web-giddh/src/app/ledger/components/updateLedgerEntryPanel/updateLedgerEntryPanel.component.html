@@ -102,7 +102,7 @@
                                     </td>
 
                                     <td data-title="Particular" id="{{'debit-id-' + i}}"
-                                        [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
+                                        [ngClass]="{ 'other-account-entry': txn.particular.uniqueName === 'others' }"
                                         class="col-5 position-relative select2-parent select2-ledger">
 
 
@@ -289,7 +289,7 @@
 
                                     <td data-title="Particular" id="{{'credit-id-' + i}}"
                                         class="position-relative col-5 select2-parent select2-ledger"
-                                        [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
+                                        [ngClass]="{ 'other-account-entry': txn.particular.uniqueName === 'others' }">
 
                                         <ng-template [ngIf]="!txn?.isDiscount">
                                             <div class="d-flex update-ledger-account">
