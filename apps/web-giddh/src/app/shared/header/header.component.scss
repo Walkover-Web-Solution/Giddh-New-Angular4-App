@@ -12,7 +12,7 @@
     top: 61px;
     bottom: 0;
     min-height: 100vh;
-    background: #fff;
+    background: $white;
     width: 215px;
     left: -215px;
     z-index: 991;
@@ -47,7 +47,7 @@
 
 .account-search .form-control:focus {
     border-color: $gainsboro !important;
-    color: #b7b7b7;
+    color: $pink-swan;
 }
 
 .account-search {
@@ -65,8 +65,8 @@
 }
 
 a[vr-item]:focus {
-    background-color: #2d9ee0;
-    color: #fff;
+    background-color: $vivid-blue;
+    color: $white;
     cursor: pointer;
 }
 
@@ -83,7 +83,7 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control:after {
-    background: red;
+    background: $red;
     content: "";
     width: 90px;
     height: 90px;
@@ -140,9 +140,9 @@ a[vr-item]:focus {
     }
 }
 
-.main-company-name > li > a:hover .company-text .c-name,
+.main-company-name > li > a:hover .company-text .company-name,
 .main-company-name > li > a:hover .icon-dots-three-vertical {
-    color: #fff;
+    color: $white;
 }
 
 .left-fixed-header > li {
@@ -182,7 +182,7 @@ a[vr-item]:focus {
 }
 .left-fixed-header > li > a:hover .label > span,
 .left-fixed-header > li > a:hover .label {
-    color: #01a9f4;
+    color: $deep-sky-blue;
 }
 
 .left-fixed-header > li a.active {
@@ -229,7 +229,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header .divider {
-    border-bottom: 1px solid #363a41;
+    border-bottom: 1px solid $night-rider;
     padding: 4px 0;
     height: 0;
     margin-bottom: 4px;
@@ -291,7 +291,7 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: #fff;
+    color: $white;
     margin-top: 1px;
     margin-right: 2px;
 }
@@ -306,13 +306,13 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: #999;
+    color: $nobel;
     margin-top: 1px;
 }
 
 .left-fixed-header > h6 > i:hover {
-    color: #fff;
-    background: #6b73c8;
+    color: $white;
+    background: $rich-blue;
 }
 
 .nav-tabs {
@@ -325,7 +325,7 @@ a[vr-item]:focus {
 
 .left-sub-menu ul > li > a {
     font-size: 14px;
-    color: dimgray;
+    color: $dim-gray;
     display: block;
     clear: both;
     padding: 6px 15px;
@@ -333,7 +333,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu ul > li > a:hover {
-    color: #01a9f4;
+    color: $deep-sky-blue;
 }
 
 .left-sub-menu ul {
@@ -344,7 +344,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu {
-    background: #fff;
+    background: $white;
     position: absolute;
     left: -12px;
     bottom: 0;
@@ -353,7 +353,7 @@ a[vr-item]:focus {
     display: block;
     clear: both;
     float: none;
-    box-shadow: 0 0 3px #00000036;
+    box-shadow: 0 0 3px $black-russian;
     border-radius: 2px;
     padding: 5px 0;
     visibility: hidden;
@@ -368,7 +368,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     text-align: right;
     position: relative;
-    color: #a0a0a0;
+    color: $dim-gray;
     top: 6px;
 }
 
@@ -379,7 +379,7 @@ a[vr-item]:focus {
 .sub-menu > li > a {
     display: block;
     padding: 8px 20px;
-    color: #b7b7b7;
+    color: $pink-swan;
 }
 
 .left-fixed-header > li > a > i {
@@ -417,10 +417,6 @@ a[vr-item]:focus {
     max-width: none !important;
 }
 
-.posrelative {
-    position: relative;
-}
-
 .d-inline-block {
     display: inline-block !important;
 }
@@ -444,7 +440,7 @@ a[vr-item]:focus {
         position: relative;
         left: 16px;
         padding: 0 20px;
-        color:$white;
+        color: $white;
         font-size: 20px;
 
     }
@@ -452,7 +448,7 @@ a[vr-item]:focus {
 
 .universal-date li input {
     padding-left: 20px !important;
-    color: #fff !important;
+    color: $white !important;
     padding-right: 0 !important;
     text-align: left;
 }
@@ -463,7 +459,7 @@ a[vr-item]:focus {
 .header-date {
     padding: 5px 11px;
     border-radius: 0px 2px 2px 0px;
-    color: #fff;
+    color: $white;
     padding-left: 0;
 }
 
@@ -471,7 +467,7 @@ a[vr-item]:focus {
     display: none;
 }
 
-.calender-addone {
+.calendar-addon {
     color: $white;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
@@ -484,13 +480,13 @@ a[vr-item]:focus {
 .not-today{
     padding:0px !important;
     border:0px !important;
-    .calender-addone {
+    .calendar-addon {
         position: absolute;
         left:4px;
         margin:auto;
     }
     .input-date{
-        border: 1px solid #ffffff;
+        border: 1px solid $white;
         border-radius: 20px !important;
         height: 34px;
         width: 220px;
@@ -520,7 +516,7 @@ a[vr-item]:focus {
 }
 span.icon-support.dropdown-toggle {
     background-color: $governor-bay;
-    color: #fff;
+    color: $white;
     padding: 6px 7px;
     font-size: 17px;
     border: 1px solid $governor-bay;
@@ -580,13 +576,13 @@ span.icon-support.dropdown-toggle {
     list-style-type: none;
 }
 
-.primary-header .company-name-finance-year {
+.primary-header .company-name-fyear {
     display: inline-block;
     padding-left: 15px;
     width: 90%;
 }
 
-.primary-header .company-name-finance-year span {
+.primary-header .company-name-fyear span {
     display: block;
     vertical-align: middle;
 }
@@ -624,7 +620,7 @@ ul.sub-list {
     word-break: break-all;
 }
 
-.nav-left-bar .company-name-finance-year {
+.nav-left-bar .company-name-fyear {
     display: inline;
     padding-left: 0;
     /*float: right;
@@ -639,7 +635,7 @@ ul.sub-list {
 
 .nav-left-bar .company-name .branch-unique-name {
     font-size: 12px;
-    color: #01a9f4 !important;
+    color: $deep-sky-blue !important;
     padding: 0 0 3px 0;
 }
 
@@ -677,7 +673,7 @@ ul.sub-list {
     transition: 2s linear;
 }
 .head-nav {
-    background: #f1f1f1;
+    background: $white-smoke;
     border-bottom: 1px solid $whisper-color;
     margin-bottom: 5px;
 }
@@ -707,7 +703,7 @@ ul.sub-list {
     padding: 10px 15px;
     margin-bottom: 10px;
     font-size: 16px;
-    box-shadow: 1px 1px 3px #00000029;
+    box-shadow: 1px 1px 3px $black-russian;
     margin-top: 10px;
     p {
         font-family: "opensans-semibold";
@@ -908,7 +904,7 @@ ul.sub-list {
     .mobile-menu-icon {
         position: absolute;
         top: 14px;
-        color: #fff;
+        color: $white;
         right: -35px;
         background-color: $midnight-blue;
         width: 35px;
@@ -925,10 +921,10 @@ ul.sub-list {
         display: flex;
     }
     .upper-layer-header .open .dropdown-menu {
-        background-color: #fff;
+        background-color: $white;
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
-        border: 1px solid #ccc;
+        border: 1px solid $gainsboro;
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 4px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -962,7 +958,7 @@ ul.sub-list {
             line-height: 1.8;
         }
     }
-    .calender-addone {
+    .calendar-addon {
         height: 30px;
         vertical-align: middle;
         align-items: center;
@@ -973,7 +969,7 @@ ul.sub-list {
         display: inline-flex !important;
         align-items: center;
     }
-    .nav-left-bar .company-name-finance-year {
+    .nav-left-bar .company-name-fyear {
         width: 200px;
         float: left;
     }
@@ -1004,7 +1000,7 @@ ul.sub-list {
     }
     .mobile-back-btn {
         display: none;
-        color: #fff;
+        color: $white;
         margin-right: 10px;
     }
     .not-today {

@@ -1,4 +1,4 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 
 .clear-filter-close {
     justify-content: flex-end;
@@ -20,6 +20,13 @@
     text-shadow: none;
     font-size: 30px;
     cursor: pointer;
+}
+.collapse-icons{
+    font-size: 10px;
+    border: 1px solid $chetwode-blue;
+    border-radius: 4px;
+    padding: 2px;
+    top: 0 !important;
 }
 @media (min-width: 1200px) {
     .container {

@@ -26,7 +26,7 @@ export const IsyncData = [
 @Component({
 	selector: 'setting-bunch',
 	templateUrl: './bunch.component.html',
-	styleUrls: ['./bunch.component.css'],
+	styleUrls: ['./bunch.component.scss'],
 	providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 

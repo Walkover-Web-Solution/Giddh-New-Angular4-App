@@ -97,3 +97,11 @@ input.focusBorder[type="checkbox"]:focus:after {
     border-radius: 0;
     display: block;
 }
+
+.collapse-icons{
+    font-size: 10px;
+    border: 1px solid $chetwode-blue;
+    border-radius: 4px;
+    padding: 2px;
+    top: 0;
+}

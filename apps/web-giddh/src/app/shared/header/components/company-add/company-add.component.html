@@ -1,21 +1,21 @@
-<div id="share-modal" class=" shareGrp ">
+<div id="share-modal" class="share-grp">
     <div class="modal-header">
         <h3>Create New Company</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
     </div>
     <div class="modal-body p-0" id="SharePop">
-        <div class="welcome_wrapper">
+        <div class="welcome-wrapper">
             <div class="giddh-logo-welcome">
                 <img src="{{imgPath}}assets/images/giddh-big-logo.svg">
             </div>
-            <div class="welcome_header">
+            <div class="welcome-header">
                 <h1>Welcome {{ this.logedInusers.name}},</h1>
             </div>
         </div>
 
-        <div class="form-group clearfix add-companyDetail pd-b5">
+        <div class="form-group clearfix add-company-detail pd-b5">
             <!--<h3 class="pd-b1">Share with</h3>-->
-            <div class="add_mailer">
+            <div class="add-mailer">
                 <!--create company from-->
                 <form name="form" #createCompanyForm="ngForm" class="clearfix" novalidate="" class=""
                     autocomplete="off">
@@ -81,8 +81,8 @@
                             <span>
                                 <label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
                                 <div class="d-flex welcome-select ">
-                                    <sh-select class="pull-left select-caret" required
-                                        style="width: 85px;margin-right: 28px;" name="phoneCode" [placeholder]="+91"
+                                    <sh-select class="pull-left select-caret phone-code-caret" required
+                                        name="phoneCode" [placeholder]="+91"
                                         [options]="countryPhoneCode" [(ngModel)]="company.phoneCode">
                                     </sh-select>
                                     <input type="text" pattern="[0-9]*" class="form-control pull-right mr-r1" required
@@ -125,7 +125,7 @@
             <h3>Create New Branch</h3>
             <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
         </div>
-        <div class="welcome_header">
+        <div class="welcome-header">
             <h1>WELCOME!</h1>
         </div>
         <div class="modal-body noPad">

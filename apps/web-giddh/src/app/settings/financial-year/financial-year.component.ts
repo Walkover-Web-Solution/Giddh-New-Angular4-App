@@ -102,8 +102,8 @@ export class FinancialYearComponent implements OnInit {
             if (o) {
                 this.financialYearObj = _.cloneDeep(o);
                 let yearOptions = _.cloneDeep(this.yearOptions);
-                o.financialYears.forEach((fYear) => {
-                    let year = moment(fYear.financialYearStarts, GIDDH_DATE_FORMAT).year();
+                o.financialYears.forEach((fyear) => {
+                    let year = moment(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
                     let yearIndx = yearOptions.findIndex((y: any) => y.value === year);
                     if (yearIndx !== -1) {
                         yearOptions.splice(yearIndx, 1);

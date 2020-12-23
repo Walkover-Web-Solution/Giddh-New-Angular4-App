@@ -47,9 +47,9 @@
                         </ul>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
-                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'}" *ngIf="activeCompany.subscription.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) !== 'Active'">{{calculateRemainingDays(activeCompany.subscription.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'"></span> {{calculateRemainingDays(activeCompany.subscription.expiry) === 'Active' ? 'Active' : ""}} </div>
-                        <div class="active font-14" *ngIf="activeCompany.subscription.status==='active'"><span class="green-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
-                        <div class="text-danger font-14" *ngIf="activeCompany.subscription.status==='expired'"><span class="red-dote"></span> {{activeCompany.subscription.status | titlecase}} </div>
+                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'}" *ngIf="activeCompany.subscription.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) !== 'Active'">{{calculateRemainingDays(activeCompany.subscription.expiry)}}</span> <span class="green-dot" *ngIf="calculateRemainingDays(activeCompany.subscription.expiry) === 'Active'"></span> {{calculateRemainingDays(activeCompany.subscription.expiry) === 'Active' ? 'Active' : ""}} </div>
+                        <div class="active font-14" *ngIf="activeCompany.subscription.status==='active'"><span class="green-dot"></span> {{activeCompany.subscription.status | titlecase}} </div>
+                        <div class="text-danger font-14" *ngIf="activeCompany.subscription.status==='expired'"><span class="red-dot"></span> {{activeCompany.subscription.status | titlecase}} </div>
                     </div>
                 </div>
             </div>
@@ -186,13 +186,13 @@
                                 <h2 class="section-head pb-0">Associated Companies</h2>
                                 <div class="clearfix">
                                     <div class="active d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'active' || calculateRemainingDays(activeCompany?.subscription?.expiry) === 'Active'">
-                                        <span class="green-dote"> </span> Active
+                                        <span class="green-dot"> </span> Active
                                     </div>
                                     <div class="text-warning font-14 d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'trial' && calculateRemainingDays(activeCompany?.subscription?.expiry) !== 'Active'">
-                                        <span class="orange-dote"> </span> Trial
+                                        <span class="orange-dot"> </span> Trial
                                     </div>
                                     <div class="text-danger d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'expired'">
-                                        <span class="red-dote"> </span> Expired
+                                        <span class="red-dot"> </span> Expired
                                     </div>
                                     <!-- <div class="btn-group d-inline-block custom-dropdown pt-05 ml-1 middle" dropdown
                                         placement="bottom right">
@@ -283,7 +283,7 @@
                 <div class="col-sm-7 transaction-list">
                     <div class="box clearfix mr-t2 no-padding">
                         <div class="table-responsive">
-                            <table class="table basic mr0 subscription-table">
+                            <table class="table basic m-0 subscription-table">
                                 <thead>
                                     <tr>
                                         <th>Date</th> <span class="text-light-2">(previous+current)</span>
@@ -351,9 +351,9 @@
                         </ul>
                     </div>
                     <div class="col-md-3 col-sm-3 col-xs-12 text-right trial-plan-state">
-                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === 'Active'}" *ngIf="item?.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(item?.expiry) !== 'Active'">{{calculateRemainingDays(item?.expiry)}}</span> <span class="green-dote" *ngIf="calculateRemainingDays(item?.expiry) === 'Active'"></span> {{calculateRemainingDays(item?.expiry) === 'Active' ? 'Active' : ""}} </div>
-                        <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dote"></span> {{item?.status | titlecase}} </div>
-                        <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dote"></span> {{item?.status | titlecase}} </div>
+                        <div class="font-14" [ngClass]="{'active': calculateRemainingDays(item?.expiry) === 'Active'}" *ngIf="item?.status==='trial'"><span class="font-26" *ngIf="calculateRemainingDays(item?.expiry) !== 'Active'">{{calculateRemainingDays(item?.expiry)}}</span> <span class="green-dot" *ngIf="calculateRemainingDays(item?.expiry) === 'Active'"></span> {{calculateRemainingDays(item?.expiry) === 'Active' ? 'Active' : ""}} </div>
+                        <div class="active font-14" *ngIf="item?.status==='active'"><span class="green-dot"></span> {{item?.status | titlecase}} </div>
+                        <div class="text-danger font-14" *ngIf="item?.status==='expired'"><span class="red-dot"></span> {{item?.status | titlecase}} </div>
                     </div>
                 </div>
             </div>
@@ -391,7 +391,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table basic mr0 ">
+            <table class="table basic m-0 ">
                 <thead>
                     <tr>
                         <th>Date</th>

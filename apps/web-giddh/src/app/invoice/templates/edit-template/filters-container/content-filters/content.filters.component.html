@@ -180,7 +180,7 @@
             </div>
             <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_h'">
                 <h3>
-                    <i class="fa cp" aria-hidden="true" (click)="showTransportField = !showTransportField" [ngClass]="{'fa-minus-square-o': showTransportField, 'fa-plus-square-o': !showTransportField}"></i> Transport Details</h3>
+                    <i class="cp collapse-icons" aria-hidden="true" (click)="showTransportField = !showTransportField" [ngClass]="{'icon-minus': showTransportField, 'icon-plus': !showTransportField}"></i> Transport Details</h3>
                 <div class="clearfix" [collapse]="!showTransportField">
                     <div class="form-group" *ngIf="fieldsAndVisibility.header.shippingDate">
                         <input type="checkbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display && customTemplate.sections['header'].data['shippingDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
@@ -210,7 +210,7 @@
             </div>
             <div class="clearfix custom-field mr-b2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d'">
                 <h3>
-                    <i class="fa cp" aria-hidden="true" (click)="showCustomField = !showCustomField" [ngClass]="{'fa-minus-square-o': showCustomField, 'fa-plus-square-o': !showCustomField}"></i> Custom Field
+                    <i class="cp collapse-icons" aria-hidden="true" (click)="showCustomField = !showCustomField" [ngClass]="{'icon-minus': showCustomField, 'icon-plus': !showCustomField}"></i> Custom Field
                 </h3>
                 <div class="clearfix" [collapse]="!showCustomField">
                     <div *ngIf="fieldsAndVisibility.header.customField1" class="form-group clearfix">

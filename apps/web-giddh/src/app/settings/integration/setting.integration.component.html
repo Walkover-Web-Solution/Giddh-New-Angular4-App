@@ -53,8 +53,8 @@
                             Gmail</a>
                     </ng-container>
 
-                    <h4 style="align-self: center" *ngIf="(isGmailIntegrated$ | async)" class="text-success">Gmail integrated successfully.</h4>
-                    <button style="margin-left: 20px" *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger" (click)="removegmailintegration.toggle()">Remove Account
+                    <h4 *ngIf="(isGmailIntegrated$ | async)" class="text-success align-self-center">Gmail integrated successfully.</h4>
+                    <button *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger mr-l2" (click)="removegmailintegration.toggle()">Remove Account
                     </button>
                 </div>
             </div>
@@ -890,17 +890,17 @@
                         </div>
                     </form>
                     <div *ngIf="(isPaymentAdditionSuccess$ | async)">
-                        <div style="display: inline-block" class="clearfix">
+                        <div class="clearfix d-inline-block">
                             <div>Congratulations!! A request has been sent to your account, go to <a class="btn-link" href="https://www.icicibank.com/" target="_blank">ICICI portal</a> and accept it.
                             </div>
                         </div>
                         <div class="clearfix">
-                            <div style="color: gray">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
+                            <div class="payment-text">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
                             </div>
                         </div>
                     </div>
                 </div>
-                <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" style=" margin-right: 5px" class="btn btn-sky-blue mr-r1" (click)="openNewRegistartionForm()">Add More ID</button>
+                <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" class="btn btn-sky-blue mr-r1" (click)="openNewRegistartionForm()">Add More ID</button>
             </div>
         </tab>
     </tabset>
