@@ -20,6 +20,10 @@ on:
 jobs:
   tests:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        # run 3 copies of the current job in parallel
+        containers: [1, 2]
     name: Giddh test cases
     env:
       # prevents extra Cypress installation progress messages
@@ -48,6 +52,7 @@ jobs:
         id: cache-cypress
         uses: actions/cache@v1
         with:
+          parallel: true
           path: ~/.cache/Cypress
           key: cypress-cache-v2-${{ runner.os }}-${{ hashFiles('**/package.json') }}
       # now let's install Cypress binary
