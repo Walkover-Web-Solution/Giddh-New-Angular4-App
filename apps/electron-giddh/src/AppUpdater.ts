@@ -41,20 +41,17 @@ export default class AppUpdaterV1 {
             }
         });
 
-        autoUpdater.on('update-downloaded', () => {
-            // setTimeout(() => {
-            //     this.isUpdateDownloaded = true;
-            // }, 60000);
-            dialog.showMessageBox({
-                title: 'Install Updates',
-                message: 'Updates downloaded, application will be quit for update...'
-            }).then(
-                () => {
-                    this.isUpdateDownloaded = true;
-                    setImmediate(() => autoUpdater.quitAndInstall())
-                }
-            );
-
+        autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+            const dialogOpts = {
+              type: 'info',
+              buttons: ['Restart', 'Later'],
+              title: 'Application Update',
+              message: process.platform === 'win32' ? releaseNotes : releaseName,
+              detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+            }
+            dialog.showMessageBox(dialogOpts).then((returnValue) => {
+              if (returnValue.response === 0) autoUpdater.quitAndInstall()
+            })
         });
         // autoUpdater.on('error', (error) => {
         //     dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())

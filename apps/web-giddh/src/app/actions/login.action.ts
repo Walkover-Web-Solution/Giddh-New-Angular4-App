@@ -1183,10 +1183,7 @@ export class LoginActions {
         } else {
             this._router.navigate([route], parameter);
         }
-        if (isElectron) {
-            window.location.reload();
-        }
-        if (isCordova) {
+        if (isCordova || isElectron) {
             setTimeout(() => {
                 window.location.reload();
             }, 200);
