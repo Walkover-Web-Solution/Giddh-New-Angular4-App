@@ -1,8 +1,7 @@
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { AppState } from './../../../../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
-
 import { OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { GeneralService } from './../../../../services/general.service';
 import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
@@ -20,7 +19,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
         private _generalService: GeneralService) {
         if (!this._generalService.isCurrencyPipeLoaded) {
             this._generalService.isCurrencyPipeLoaded = true;
-            this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$), distinctUntilKeyChanged('balanceDisplayFormat')).subscribe((o) => {
+            this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$), distinctUntilKeyChanged('balanceDisplayFormat')).subscribe((o) => {
                 if (o && o.name) {
                     this._currencyNumberType = o.balanceDisplayFormat ? o.balanceDisplayFormat : 'IND_COMMA_SEPARATED';
                     this.currencyDecimalType = o.balanceDecimalPlaces ? o.balanceDecimalPlaces : 0;

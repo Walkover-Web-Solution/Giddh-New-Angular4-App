@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { createSelector, Store } from '@ngrx/store';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import { createSelector, Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -12,7 +12,7 @@ import { ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 	templateUrl: './tb-synram.component.html',
 	styleUrls: ['./tb-synram.component.scss']
 })
-export class TbSynramComponent implements OnInit {
+export class TbSynramComponent implements OnInit, OnDestroy {
 
 	public showOpening: boolean = true;
 	public showTransactions: boolean = true;
@@ -26,11 +26,11 @@ export class TbSynramComponent implements OnInit {
 		private store: Store<AppState>,
 		private _toaster: ToasterService,
 		private cd: ChangeDetectorRef) {
-		//
-	}
+		
+    }
+    
 	public ngOnInit() {
-
-		this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
+		this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
 			let d = _.cloneDeep(p) as AccountDetails;
 			if (d) {
 				if (d.message) {
@@ -46,7 +46,7 @@ export class TbSynramComponent implements OnInit {
 				});
 			}
 			return d;
-		})).pipe(takeUntil(this.destroyed$));
+		})), takeUntil(this.destroyed$));
 		this.data$.subscribe(p => {
 			this.cd.markForCheck();
 		});
@@ -67,5 +67,15 @@ export class TbSynramComponent implements OnInit {
 				this.InitData(grp.childGroups);
 			}
 		});
-	}
+    }
+    
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof TbSynramComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

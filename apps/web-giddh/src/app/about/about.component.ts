@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { AppState } from '../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { CompanyActions } from '../actions/company.actions';
 
 @Component({
@@ -44,7 +44,7 @@ export class AboutComponent implements OnInit {
             });
 
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'about';

@@ -7,6 +7,7 @@ export class MfStockSearchRequestClass {
     public to: string;
     public count: number;
     public page: number;
+    public branchUniqueName: string;
 }
 
 export class LinkedStocks {

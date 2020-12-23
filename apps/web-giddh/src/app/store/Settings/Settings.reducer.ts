@@ -86,6 +86,7 @@ const taxesInitialState: Taxes = {
 export interface SettingsState {
     integration: IntegrationPage;
     profile: any;
+    currentBranch: any;
     inventory: any;
     updateProfileSuccess: boolean;
     updateProfileInProgress: boolean;
@@ -112,6 +113,7 @@ export interface SettingsState {
 export const initialState: SettingsState = {
     integration: new IntegrationPageClass(),
     profile: {},
+    currentBranch: {},
     inventory: {},
     profileRequest: false,
     updateProfileSuccess: false,
@@ -228,8 +230,18 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.profileRequest = true;
                 newState.getProfileInProgress = false;
                 return Object.assign({}, state, newState);
+            } else if (response.status === 'error' && response.code === 'UNAUTHORISED') {
+                return { ...state, updateProfileInProgress: false, getProfileInProgress: false };
             }
             return { ...state, updateProfileInProgress: true, getProfileInProgress: false };
+        }
+        case SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO_RESPONSE: {
+            let response: BaseResponse<any, any> = action.payload;
+            if (response && response.status === 'success') {
+                newState.currentBranch = response.body;
+                return Object.assign({}, state, newState);
+            }
+            return state;
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;
@@ -256,6 +268,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return {
                 ...state,
                 updateProfileSuccess: false,
+                updateProfileInProgress: false
             };
         }
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
@@ -290,6 +303,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 // newState.profile = _.cloneDeep(response.body);
                 newState.updateProfileSuccess = true;
                 newState.profileRequest = true;
+                newState.inventory = action.payload.request;
                 return Object.assign({}, state, newState);
             }
             return Object.assign({}, state, {
@@ -718,6 +732,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 });
             }
             return Object.assign({}, state, {});
+        }
+        case SETTINGS_BRANCH_ACTIONS.RESET_ALL_BRANCHES_RESPONSE: {
+            return Object.assign({}, state, {branches: null});
         }
 
         //  endregion discount reducer
