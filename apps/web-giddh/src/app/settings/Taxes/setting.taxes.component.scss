@@ -1,3 +1,13 @@
+.section-head{
+    line-height: 2;
+}
+
+.tax-datepicker{
+    position: absolute;
+    z-index:10; 
+    min-height:290px;
+}
+
 @media (max-width: 768px) {
     .custom-select {
         width: 120px;

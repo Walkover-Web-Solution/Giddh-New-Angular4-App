@@ -194,6 +194,7 @@
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
         </div>
         <div class="clearfix pagination-main">
             <div class=" mt-5 mb-100px">
@@ -202,6 +203,40 @@
                         <div class="text-right">
                             <h4 class="mb-1 pd-r2">Result Total</h4>
                         </div>
+=======
+            </div>
+            <div class="clearfix pagination-main">
+                <div class=" mt-5 mb-100px">
+                    <div class="">
+                        <div class="customer-right-wrap clearfix">
+                            <div class="text-right">
+                                <h4 class="mb-1 pd-r2">Result Total</h4>
+                            </div>
+
+                            <div class="bg-white clearfix">
+                                <div class="customer-right clearfix w-100" >
+                                    <table class="text-right">
+                                        <tr>
+                                            <td>
+                                                <p *ngIf="activeTab === 'vendor'">Purchase</p>
+                                                <p *ngIf="activeTab === 'customer'">Sales</p>
+                                                <h3>{{totalSales |giddhCurrency }}/-</h3>
+                                            </td>
+                                            <td>
+                                                <p *ngIf="activeTab === 'vendor'">Payment</p>
+                                                <p *ngIf="activeTab === 'customer'">Receipt</p>
+                                                <h3>{{totalReceipts | giddhCurrency}}/-</h3>
+                                            </td>
+                                            <td>
+                                                <p>Due</p>
+                                                <h3>{{totalDue | giddhCurrency}}/-</h3>
+                                            </td>
+
+                                        </tr>
+
+                                    </table>
+                                </div>
+>>>>>>> 7a3b4faa36... changes done
 
                         <div class="bg-white clearfix">
                             <div class="customer-right  clearfix w-100">
@@ -329,14 +364,22 @@
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc " *ngIf="accountAsideMenuState === 'in'">
+<<<<<<< HEAD
     <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state transform-inherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
+=======
+    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state2  transform-inherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
+>>>>>>> 7a3b4faa36... changes done
         (getUpdateList)="getUpdatedList($event)">
     </aside-menu-account>
 </div>
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
 <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
+<<<<<<< HEAD
     <payment-aside class="account-aside-menu-state transform-inherit" [selectedAccForPayment]="selectedAccForPayment">
+=======
+    <payment-aside class="account-aside-menu-state2 transform-inherit" [selectedAccForPayment]="selectedAccForPayment">
+>>>>>>> 7a3b4faa36... changes done
     </payment-aside>
 </div>
 
@@ -818,6 +861,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && totalCustomers>=paginationLimit">
 =======
         <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
@@ -828,6 +872,9 @@
 =======
         <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
 >>>>>>> 695a711bd8... code design
+=======
+        <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
+>>>>>>> 7a3b4faa36... changes done
             <div class="text-center">
                 <pagination [totalItems]="sundryDebtorsAccountsBackup.totalItems" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryDebtorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>
@@ -840,11 +887,14 @@
         <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 8b7bde5078... code designing fix
 =======
 >>>>>>> 8df7976608... code design
 =======
 >>>>>>> 695a711bd8... code design
+=======
+>>>>>>> 7a3b4faa36... changes done
             <div class="text-center">
                 <pagination [totalItems]="sundryCreditorsAccountsBackup.totalItems" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryCreditorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>

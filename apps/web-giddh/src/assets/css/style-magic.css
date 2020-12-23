@@ -183,7 +183,7 @@ a {
 
 /*typography*/
 
-/*.bold,.c-name,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .gTblHead, .gTblFoot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
+/*.bold,.company-name,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .head-block-head, .head-block-foot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
 font-family: Roboto-Bold;
 } */
 
@@ -288,12 +288,12 @@ aside-menu-account .container-fluid {
     color: #fff;
 }
 
-#cmpWrp {
+#company-wrap {
     padding-top: 0;
     padding-bottom: 0;
 }
 
-#cmpWrp i {
+#company-wrap i {
     float: left;
     margin: 15px 0;
 }
@@ -302,7 +302,7 @@ aside-menu-account .container-fluid {
   display: block;
 } */
 
-/* .c-name {
+/* .company-name {
     line-height: 20px;
     min-width: 130px;
     text-transform: uppercase;
@@ -524,7 +524,7 @@ aside-menu-account .container-fluid {
 }
 
 .pd-t2,
-.pdT3 {
+.pd-t3 {
     padding-top: 20px;
 }
 
@@ -556,7 +556,7 @@ aside-menu-account .container-fluid {
     padding-right: 20px;
 }
 
-.pdB3 {
+.pd-b3 {
     padding-bottom: 30px;
 }
 
@@ -564,11 +564,11 @@ aside-menu-account .container-fluid {
     padding-left: 30px;
 }
 
-.pdR3 {
+.pd-r3 {
     padding-right: 30px !important;
 }
 
-.pdT4 {
+.pd-t4 {
     padding-top: 30px;
 }
 
@@ -576,15 +576,15 @@ aside-menu-account .container-fluid {
     padding-top: 30px;
 }
 
-.pdB4 {
+.pd-b4 {
     padding-bottom: 40px;
 }
 
-.pdL4 {
+.pd-l4 {
     padding-left: 40px;
 }
 
-.pdR4 {
+.pd-r4 {
     padding-right: 40px;
 }
 
@@ -592,7 +592,7 @@ aside-menu-account .container-fluid {
     padding: 0;
 }
 
-.mr0 {
+.m-0 {
     margin: 0;
 }
 
@@ -600,7 +600,7 @@ aside-menu-account .container-fluid {
     margin: 5px;
 }
 
-.mr1 {
+.m-10 {
     margin: 10px;
 }
 
@@ -608,15 +608,15 @@ aside-menu-account .container-fluid {
     margin: 15px;
 }
 
-.mr2 {
+.m-20 {
     margin: 20px;
 }
 
-.mr3 {
+.m-30 {
     margin: 30px;
 }
 
-.mr4 {
+.m-40 {
     margin: 40px;
 }
 
@@ -704,7 +704,7 @@ aside-menu-account .container-fluid {
     margin-bottom: 40px;
 }
 
-.mrL4 {
+.mr-l4 {
     margin-left: 40px;
 }
 
@@ -716,7 +716,7 @@ aside-menu-account .container-fluid {
     border: 1px solid #ccc;
 }
 
-.bdrN {
+.border-none {
     border: none;
 }
 
@@ -752,7 +752,7 @@ aside-menu-account .container-fluid {
     position: fixed;
 }
 
-.witClr {
+.white-color {
     color: #fff;
 }
 
@@ -760,7 +760,7 @@ aside-menu-account .container-fluid {
     color: #777;
 }
 
-.greyBg {
+.grey-bg {
     background: #f5f5f5;
     /*min-width:320px;*/
 }
@@ -777,43 +777,43 @@ aside-menu-account .container-fluid {
     overflow: hidden;
 }
 
-.oyAuto {
+.overflow-y-auto {
     overflow-y: auto;
 }
 
-.oxAuto {
+.overflow-x-auto {
     overflow-x: auto;
 }
 
-.rn {
+.resize-none {
     resize: none;
 }
 
-.ln {
+.list-style-none {
     list-style: none;
 }
 
-.txtUpc {
+.text-uppercase {
     text-transform: uppercase;
 }
 
-.txt-lwc {
+.text-lowercase {
     text-transform: lowercase;
 }
 
-.txtCpc {
+.text-capitalize {
     text-transform: capitalize;
 }
 
-.td-undr {
+.text-underline {
     text-decoration: underline;
 }
 
-.alR {
+.text-right {
     text-align: right;
 }
 
-.alL {
+.text-left {
     text-align: left;
 }
 
@@ -839,12 +839,12 @@ aside-menu-account .container-fluid {
     font-size: 16px;
 }
 
-.scrClass {
+.scroll-class {
     /* overflow: hidden;
 position: relative; */
 }
 
-.scrItem {
+.scroll-item {
     overflow: auto;
     position: relative;
 }
@@ -925,7 +925,7 @@ position: relative; */
 
 /*manage company detail*/
 
-.greyBox {
+.grey-box {
     color: #444;
     background: #f3f3f3;
     border: solid 1px #ddd;
@@ -999,7 +999,7 @@ position: relative; */
     -webkit-overflow-scrolling: touch;
 }
 
-#getGroupModal.getGroupModal #middleBody {
+#getGroupModal.get-group-modal #middleBody {
     height: auto;
 }
 .scroll-btn {
@@ -1022,7 +1022,7 @@ position: relative; */
     padding: 9px 20px;
 }
 
-.fs13 {
+.font-13 {
     font-size: 13px;
 }
 
@@ -1272,26 +1272,26 @@ li:last-child .angular-ui-tree-handle {
 
 /*account list menus*/
 
-.acntAccordion {
+.account-accordion {
     font-size: 12px;
 }
 
-.acntAccordion a {
+.account-accordion a {
     color: #333;
 }
 
-.acntAccordion .title a {
+.account-accordion .title a {
     display: block;
     padding: 0 15px;
     cursor: pointer;
 }
 
-.acntAccordion > li > ul > li > ul > li {
+.account-accordion > li > ul > li > ul > li {
     line-height: 0;
     list-style: none;
 }
 
-.acntAccordion > li > ul > li > ul > li > a > div {
+.account-accordion > li > ul > li > ul > li > a > div {
     overflow: hidden;
 }
 
@@ -1423,8 +1423,8 @@ li:last-child .angular-ui-tree-handle {
     padding: 0 !important;
 }
 
-.greyBg td,
-.greyBg th {
+.grey-bg td,
+.grey-bg th {
     background-color: #f5f5f5;
 }
 
@@ -2215,7 +2215,7 @@ z-index: 9;
     display: none;
 }
 
-.profitLoss.table-container > div > section {
+.profit-loss.table-container > div > section {
     border-left: 1px solid #e0e0e0;
 }
 
@@ -2326,11 +2326,11 @@ table:focus {
 
 /*tbpl list*/
 
-.tbplList .list-inline {
+.tbpl-list .list-inline {
     line-height: normal;
 }
 
-.tbplList .circle {
+.tbpl-list .circle {
     vertical-align: sub;
 }
 
@@ -2748,42 +2748,42 @@ background: #f9f9f9;
 
 /*div table*/
 
-.gTbl {
+.head-block {
     display: table;
     width: 100%;
 }
 
-.gTblRow {
+.head-block-row {
     display: table-row;
 }
 
-.gTblHead {
+.head-block-head {
     display: table-header-group;
     background-color: #ddd;
 }
 
-.gTblCell,
-.gTblHead {
+.head-block-cell,
+.head-block-head {
     display: table-cell;
     padding: 8px;
     border: 1px solid #ddd;
 }
 
-.gTblHead {
+.head-block-head {
     display: table-header-group;
     background-color: #ddd;
 }
 
-.gTblFoot {
+.head-block-foot {
     display: table-footer-group;
     background-color: #ddd;
 }
 
-.gTblBody {
+.head-block-body {
     display: table-row-group;
 }
 
-.gTbl .gTblRow:nth-of-type(odd) {
+.head-block .head-block-row:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
 
@@ -2938,11 +2938,11 @@ table td.nopad {
     cursor: pointer;
 }
 
-.table-striped .selectedForInv {
+.table-striped .selected-for-inv {
     background-color: #cce7e7 !important;
 }
 
-.table-bordered > tbody > tr.selectedForInv > td {
+.table-bordered > tbody > tr.selected-for-inv > td {
     border-color: #b7cfcf;
 }
 
@@ -3242,13 +3242,13 @@ ul.pills li {
 .h32 {
     height: 32px;
 }
-.compoundEntry td,
-.compoundEntry td input{
+.compound-entry td,
+.compound-entry td input{
     background-color: transparent !important;
 }
 
-.compoundEntry td:hover,
-.compoundEntry td input:hover {
+.compound-entry td:hover,
+.compound-entry td input:hover {
     background: transparent !important;
 }
 
@@ -3806,7 +3806,7 @@ tr.db-bnk-account > td.reconnectDiv {
     z-index: 1000;
 }
 
-.dashboard-reconnectdiv {
+.dashboard-reconnect-block {
     background: rgba(255, 255, 255, 0.9);
     position: absolute;
     height: 100%;
@@ -3824,19 +3824,19 @@ tr.db-bnk-account > td.reconnectDiv {
     padding-top: 40px;
 }
 
-.longcode-details {
+.long-code-details {
     margin-top: 10px;
 }
 
-.longcode-details figure {
+.long-code-details figure {
     margin-left: 8px;
 }
 
-.longcode-details figure ul {
+.long-code-details figure ul {
     padding: 0 20px;
 }
 
-.longcode-details figure h1 {
+.long-code-details figure h1 {
     font-size: 18px;
 }
 
@@ -5240,7 +5240,7 @@ form#groupDetailForm {
 #getGroupModal #middleBody {
     height: 100%;
 }
-#getGroupModal.getGroupModal #middleBody {
+#getGroupModal.get-group-modal #middleBody {
     height: auto;
 }
 .select2-ledger .menu .item {

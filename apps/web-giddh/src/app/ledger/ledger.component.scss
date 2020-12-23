@@ -23,7 +23,7 @@ input {
  table.ledger-footer-1 td[class*="col-"]{
     justify-content: flex-end;
 }
-.ledg-head table td.pdR25imp {
+.ledg-head table td.pr-25 {
     padding-right: 25px !important;
 }
 
@@ -43,7 +43,7 @@ input {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.ledg-head.entry-popup table td.pdR25imp {
+.ledg-head.entry-popup table td.pr-25 {
     padding-right: 25px !important;
 }
 .transaction-mapped-table{
@@ -213,7 +213,7 @@ input {
 .upload-div label {
     padding: 6px;
 }
-.pdR25imp {
+.pr-25 {
     padding-right: 25px !important;
 }
 .thead-background1 th {

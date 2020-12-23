@@ -34,12 +34,12 @@ html, body{
 
 .basic > tbody > tr td:last-child,
 .basic > thead > tr th:last-child {
-    border-right: 1px solid #ddd !important;
+    border-right: 1px solid $gainsboro !important;
 }
 
 .basic > tbody > tr td:first-child,
 .basic > thead > tr th:first-child {
-    border-left: 1px solid #ddd !important;
+    border-left: 1px solid $gainsboro !important;
 }
 
 .basic > thead > tr > th {
@@ -160,6 +160,12 @@ html, body{
         padding: 5px 10px 5px 53% !important;
     }
 }
+.text-right{
+    text-align: right;
+}
+.table-cell{
+    display: table-cell;
+}
 body{
     font-family: "opensans-regular";
     font-display: block;
@@ -206,22 +212,6 @@ body{
     border: none !important;
 }
 
-.pt-0 {
-    padding-top: 0px !important;
-}
-
-.pb-0 {
-    padding-bottom: 0px !important;
-}
-
-.pr-0 {
-    padding-right: 0px !important;
-}
-
-.pl-0 {
-    padding-left: 0px !important;
-}
-
 .pd-1 {
     padding: 10px !important;
 }
@@ -236,86 +226,6 @@ body{
 
 .pd-4 {
     padding: 40px !important;
-}
-
-.pt-1 {
-    padding-top: 10px !important;
-}
-
-.pb-1 {
-    padding-bottom: 10px !important;
-}
-
-.pr-1 {
-    padding-right: 10px !important;
-}
-
-.pl-1 {
-    padding-left: 10px !important;
-}
-
-.pt-2 {
-    padding-top: 20px !important;
-}
-
-.pb-2 {
-    padding-bottom: 20px !important;
-}
-
-.pr-2 {
-    padding-right: 20px !important;
-}
-
-.pl-2 {
-    padding-left: 20px !important;
-}
-
-.pt-3 {
-    padding-top: 30px !important;
-}
-
-.pb-3 {
-    padding-bottom: 30px !important;
-}
-
-.pr-3 {
-    padding-right: 30px !important;
-}
-
-.pl-3 {
-    padding-left: 30px !important;
-}
-
-.pt-4 {
-    padding-top: 40px !important;
-}
-
-.pb-4 {
-    padding-bottom: 40px !important;
-}
-
-.pr-4 {
-    padding-right: 40px !important;
-}
-
-.pl-4 {
-    padding-left: 40px !important;
-}
-
-.pt-5 {
-    padding-top: 50px !important;
-}
-
-.pb-5 {
-    padding-bottom: 50px !important;
-}
-
-.pr-5 {
-    padding-right: 50px !important;
-}
-
-.pl-5 {
-    padding-left: 50px !important;
 }
 
 .pr-15 {
@@ -349,19 +259,19 @@ body{
 }
 
 .bt-1 {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid $gainsboro;
 }
 
 .br-1 {
-    border-right: 1px solid #ccc;
+    border-right: 1px solid $gainsboro;
 }
 
 .bb-1 {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .bl-1 {
-    border-left: 1px solid #ccc;
+    border-left: 1px solid $gainsboro;
 }
 
 .border-none {
@@ -454,7 +364,7 @@ input {
     color: $white;
     font-weight: bold;
     box-sizing: border-box;
-    background: #f1f1f1;
+    background: $white-smoke;
 }
 
 .toggle-inner:before {
@@ -508,7 +418,7 @@ input {
 
 .cube1,
 .cube2 {
-    background-color: #1a237e;
+    background-color: $midnight-blue;
     width: 15px;
     height: 15px;
     position: absolute;
@@ -584,7 +494,7 @@ input {
     position: absolute;
     right: 7px;
     top: 16px;
-    border-top: 5px solid #999999;
+    border-top: 5px solid $nobel;
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     border-bottom: 5px solid transparent;
@@ -630,7 +540,7 @@ input {
     margin-right: 35px !important;
     margin-left: 0 !important;
     font-size: 14px;
-    color: #262626 !important;
+    color: $nero !important;
     border-width: 0px 0 4px 0 !important;
     height:41px;
 }
@@ -642,12 +552,12 @@ input {
 
 
 .invoice-control .nav-tabs > li.active > a {
-    border-bottom: 4px solid #01a9f4 !important;
+    border-bottom: 4px solid $deep-sky-blue !important;
     color: $nero !important;
 }
 
-.otherAccountEntry .header {
-    border: 1px solid #c40000 !important;
+.other-account-entry .header {
+    border: 1px solid $red !important;
     display: block;
     overflow: hidden;
 }
@@ -661,7 +571,7 @@ input {
 }
 
 .approve-modal .modal-top {
-    background: #f7f8fa;
+    background: $alice-blue-light;
     padding: 15px 15px 0;
 }
 
@@ -684,7 +594,7 @@ input {
     position: absolute;
     top: -22px;
     z-index: 99;
-    background: black;
+    background: $black;
     font-size: 12px;
     color: $white !important;
     padding: 2px 5px;
@@ -742,10 +652,6 @@ input {
     margin-top: 15px;
 }
 
-.mrB0 {
-    margin-bottom: 0;
-}
-
 .mb-1 {
     margin-bottom: 10px !important;
 }
@@ -791,7 +697,7 @@ input {
 }
 
 .mr-3 {
-    margin-right: 30px;
+    margin-right: 30px !important;
 }
 
 .mr-4 {
@@ -800,22 +706,6 @@ input {
 
 .mr-5 {
     margin-right: 50px;
-}
-
-.ml-0 {
-    margin-left: 0px;
-}
-
-.mr-0 {
-    margin-right: 0 !important;
-}
-
-.mt-0 {
-    margin-top: 0px;
-}
-
-.mb-0 {
-    margin-bottom: 0px;
 }
 
 .ml-1 {
@@ -927,7 +817,7 @@ ul.sub-list {
     border-radius: 0px;
     border: 0px;
     font-size: 14px;
-    color: #333333;
+    color: $night-rider;
     border-left: 1px solid  $gainsboro !important;
     cursor: pointer;
     display: flex;
@@ -999,9 +889,9 @@ ul.sub-list {
 }
 .tab-integraton .nav-tabs > li.active a {
     background: $white !important;
-    box-shadow: 0 6px 7px #cacaca;
+    box-shadow: 0 6px 7px $very-light-gray;
     border: 1px solid $midnight-express !important;
-    color: #333333 !important;
+    color: $night-rider !important;
     border-radius: 3px;
     /* display: block; */
 }
@@ -1043,7 +933,7 @@ ul.sub-list {
 
 .customer-right table tr td {
     padding: 15px;
-    color: #707070;
+    color: $gray;
 }
 
 .customer-right table tr td h3 {
@@ -1063,7 +953,7 @@ ul.sub-list {
     background: none;
     border: 0;
     font-size: 14px;
-    color: #333 !important;
+    color: $night-rider !important;
     position: relative;
     padding-bottom: 7px;
     padding-left: 0;
@@ -1094,9 +984,9 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $whisper-light;
     padding:10px 0px 0 43px !important;
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     z-index: 9;
     position: relative;
 }
@@ -1117,7 +1007,7 @@ ul.sub-list {
 .btn-light-gray {
     background: $lavender;
     border-color: $lavender;
-    color: #1a237e;
+    color: $midnight-blue;
 }
 
 .btn-light-gray:hover {
@@ -1143,7 +1033,7 @@ ul.sub-list {
 }
 
 .sorting-box a {
-    color: #a9a9a9;
+    color: $dim-gray;
     display: block;
     line-height: 0;
 }
@@ -1155,7 +1045,7 @@ ul.sub-list {
 
 .aging-table-top td {
     border: 0px solid !important;
-    background: #f7f8fa !important;
+    background: $alice-blue-light !important;
 }
 
 .aging-table-top .top-aging-table-top {
@@ -1164,7 +1054,7 @@ ul.sub-list {
 
 .aging-table-top .top-aging-table-top strong,
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    color: #1c1c1c;
+    color: $nero;
 }
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
@@ -1198,7 +1088,7 @@ ul.sub-list {
     position: absolute;
     left: 0;
     right: 0;
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
     padding: 20px;
     box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
     top: 75px;
@@ -1230,10 +1120,10 @@ ul.sub-list {
 .top-aging-table-box input {
     width: 30px !important;
     height: 26px;
-    border: 1px solid #c6c6c6;
+    border: 1px solid $gainsboro;
     padding: 5px;
     text-align: center;
-    color: #707070;
+    color: $gray;
     /* font-size: 14px; */
 }
 
@@ -1251,7 +1141,7 @@ ul.sub-list {
 }
 
 .basic > thead > tr > th .fa-sort {
-    color: #a9a9a9;
+    color: $dim-gray;
     float: right;
     margin-top: 5px;
 }
@@ -1329,7 +1219,7 @@ ul.sub-list {
 }
 
 .advance-search p small {
-    color: #bdbaba;
+    color: $silver;
 }
 
 .advance-search p {
@@ -1362,7 +1252,7 @@ ul.sub-list {
     width: 0;
     height: 0;
     border: 5px solid transparent;
-    border-top-color: #acacac;
+    border-top-color: $gainsboro;
 }
 
 .select-style select {
@@ -1372,7 +1262,7 @@ ul.sub-list {
     -moz-appearance: none;
     appearance: none;
     padding: 7px 22px 7px 7px;
-    border: 1px solid #d6d6d6;
+    border: 1px solid $gainsboro;
     /* height: 32px; */
     border-radius: 2px;
     background: $white;
@@ -1407,30 +1297,17 @@ ul.sub-list {
     background: $deep-sky-blue-hover;
 }
 
-/* .advance-search .header:after {
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    top: 14px;
-    right: 10px;
-    border-top: 7px solid #464646;
-    border-bottom: 9px solid transparent;
-    border-right: 6px solid transparent;
-    border-left: 6px solid transparent;
-  } */
-
 .choose-size label {
     font-weight: bold;
     display: inline-block;
-    border: 1px solid #b2b2b2;
+    border: 1px solid $silver;
     border-radius: 50%;
     width: 30px !important;
     text-align: center;
     height: 30px !important;
     line-height: 30px !important;
     margin-right: 5px;
-    color: #b2b2b2;
+    color: $silver;
 }
 
 .choose-size input:checked + label {
@@ -1466,11 +1343,11 @@ ul.sub-list {
 }
 
 .text-orange {
-    color: #5b64c9;
+    color: $chetwode-blue;
 }
 
 .text-light {
-    color: #999 !important;
+    color: $nobel !important;
 }
 
 .list-middle li {
@@ -1493,7 +1370,7 @@ modal-container.modal {
         .modal-content {
             height: 100%;
             overflow: scroll;
-            background-color: #f7f8fa;
+            background-color: $alice-blue-light;
         }
     }
 }
@@ -1525,7 +1402,7 @@ modal-container.modal {
 
 .sales-invoice-modal .ps__rail-y {
     opacity: 1;
-    background: #ededed !important;
+    background: $whisper-light !important;
     padding: 10px;
 }
 
@@ -1533,7 +1410,7 @@ modal-container.modal {
     font-family: "opensans-regular" !important;
     /* background: red; */
     font-family: cursive;
-    border-right: 1px solid #c6c6c6;
+    border-right: 1px solid $gainsboro;
 }
 
 .modal-455 {
@@ -1616,11 +1493,11 @@ modal-container.modal {
 }
 
 .table-no-border tr th {
-    color: #9b9b9b;
+    color: $nobel;
 }
 
 .price-input {
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
     font-size: 14px;
     background: $white;
     padding: 1px 2px;
@@ -1632,8 +1509,8 @@ modal-container.modal {
 .input-search .input-group-addon {
     background: $white;
     border-right: 0px;
-    border-color: #c6c6c6;
-    color: #a9a9a9;
+    border-color: $gainsboro;
+    color: $dim-gray;
     font-size: 12px;
     padding-top: 10px;
     padding-right: 0px;
@@ -1649,11 +1526,11 @@ modal-container.modal {
 
 .btn-filter {
     background: $white;
-    border: 1px solid #cbcbcb;
+    border: 1px solid $gainsboro;
     font-size: 16px;
     padding: 4px 8px;
     line-height: initial !important;
-    color: #989898;
+    color: $nobel;
     border-radius: 2px;
 }
 
@@ -1893,18 +1770,18 @@ input:-moz-placeholder {
 }
 
 .sidebar {
-    background: #e7e7e6;
+    background: $whisper;
 }
 
-.acntAccordion a {
-    color: #616161;
+.account-accordion a {
+    color: $dark-gray;
 }
 
-.acntAccordion .title {
+.account-accordion .title {
     background-image: none;
 }
 
-.acntAccordion .title a {
+.account-accordion .title a {
     font-size: 14px;
 }
 
@@ -1913,14 +1790,14 @@ input:-moz-placeholder {
 }
 
 .company-name ul li > span {
-    color: #333 !important;
+    color: $night-rider !important;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     font-size: 14px;
 }
 
-.company-name .company-text .c-name {
+.company-name .company-text .company-name {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
@@ -1942,12 +1819,12 @@ input:-moz-placeholder {
     font-size: 12px;
 }
 
-.acntAccordion .title.active {
+.account-accordion .title.active {
     background-image: none;
 }
 
 header .navbar {
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     border-bottom: 1px solid $gainsboro;
     padding: 3px 0;
 }
@@ -1958,7 +1835,7 @@ header .navbar {
 
 .thead-background1 th {
     background: $white;
-    color: #4d4d4d;
+    color: $matterhorn;
     padding: 11px !important;
     font-weight: 400;
 }
@@ -1969,7 +1846,7 @@ header .navbar {
 }
 
 .icomoon-ico {
-    color: #424242;
+    color: $matterhorn;
 }
 
 .icomoon-ico:hover {
@@ -1983,7 +1860,7 @@ header .navbar {
 .export-ledger-options.left > .arrow,
 .export-ledger-options > .arrow {
     top: 0;
-    border-bottom-color: #d4d3d3;
+    border-bottom-color: $gainsboro;
 }
 
 .export-ledger-options > .arrow,
@@ -2007,24 +1884,18 @@ header .navbar {
     list-style: none;
     position: relative;
     float: left;
-    background: #000;
+    background: $black;
 }
 
 .export-ledger-options > ul > li {
     width: 100%;
-    border-bottom: 1px solid #d4d3d3;
-    color: #616161;
+    border-bottom: 1px solid $gainsboro;
+    color: $dark-gray;
 }
 
 .ledg-head {
     width: 100%;
 }
-
-/* .ledg-head input[type=search] {
-    min-width: 220px;
-} */
-
-/*btn*/
 
 .btn-pink {
     background: $deep-sky-blue;
@@ -2122,9 +1993,9 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 #actionPane .btn-default {
-    background: #e6e6e6;
-    color: #333;
-    border-color: #e6e6e6;
+    background: $gray-90;
+    color: $night-rider;
+    border-color: $gray-90;
 }
 
 /*btn end*/
@@ -2136,15 +2007,15 @@ fieldset[disabled] .btn-primary:hover {
 
 .ledger-header thead th {
     background: $white;
-    border-right: 1px solid #c4c6c7;
+    border-right: 1px solid $gainsboro;
 }
 
 .t-h-bg2 th {
     padding: 7px !important;
 }
 
-.compoundEntry td,
-.compoundEntry td .form-control {
+.compound-entry td,
+.compound-entry td .form-control {
     /* background: $white0bc !important; */
     border: 0;
 }
@@ -2154,29 +2025,9 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .ledger-container table tr.bg3 th {
-    border: 1px solid #c4c6c7;
+    border: 1px solid $gainsboro;
     border-left: 0;
 }
-
-.highlight_info {
-    color: #ff782d;
-    /* 95756E*/
-}
-
-.midlight_info {
-    color: #95756e;
-}
-
-/* .ledger-panel .form-control {
-    border: 1px solid #949494;
-    cursor: text;
-} */
-
-/*.ledger-panel .btn {
-  background: #eee;
-  border: 1px solid #949494;
-  .ledger-panel .btn:hover,
-}*/
 
 .tax-list {
     padding: 10px 0;
@@ -2192,7 +2043,7 @@ fieldset[disabled] .btn-primary:hover {
     background: transparent;
     color: $white;
     padding: 7px 35px 7px 10px !important;
-    border: 1px solid #5f6e7e;
+    border: 1px solid $gainsboro;
 }
 
 #accountSearch:focus {
@@ -2205,7 +2056,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .ledger_search .input-group-addon {
-    background: #333;
+    background: $night-rider;
     color: $white;
     border: 0;
     border-top: 0;
@@ -2216,16 +2067,16 @@ fieldset[disabled] .btn-primary:hover {
     transform: translateY(-50%);
 }
 
-.acntAccordion .accBox {
+.account-accordion .accBox {
     background: none;
 }
 
-.acntAccordion .title,
-.acntAccordion .title.active {
+.account-accordion .title,
+.account-accordion .title.active {
     position: relative;
 }
 
-.acntAccordion .mainLiAclist .title:before {
+.account-accordion .main-account-list .title:before {
     font-family: "icomoon" !important;
     content: "\f2333";
     position: absolute;
@@ -2253,16 +2104,16 @@ fieldset[disabled] .btn-primary:hover {
 .load-more {
     padding: 8px 10px;
     display: block;
-    background: #f5f5f5;
+    background: $gray-95;
     margin: 20px 0px;
 }
 
-#cmpWrp i {
-    color: #525252;
+#company-wrap i {
+    color: $davy-grey;
 }
 
 #ledger {
-    border-top: 1px solid #eee;
+    border-top: 1px solid $gainsboro;
 }
 
 .export-ledger-options .dropdown_theme {
@@ -2271,8 +2122,8 @@ fieldset[disabled] .btn-primary:hover {
 
 .dropdown_theme {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    color: #616161;
-    border: 1px solid #d4d3d3;
+    color: $dark-gray;
+    border: 1px solid $gainsboro;
 }
 
 .export-ledger-options .list-unstyled {
@@ -2302,7 +2153,7 @@ fieldset[disabled] .btn-primary:hover {
     font-size: 12px;
     height: 33px;
     border: 0px;
-    color: #333333;
+    color: $night-rider;
     padding: 3px !important;
     text-align: center;
 }
@@ -2317,7 +2168,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn-gray {
-    background: #666666;
+    background: $dark-gray;
     color: $white;
     /* font-size: 10px;
     padding: 7px 10px; */
@@ -2336,7 +2187,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .childTab > .nav.nav-tabs {
-    background: #f5f5f5;
+    background: $gray-95;
     text-align: center;
     width: 100%;
     padding: 0;
@@ -2360,7 +2211,7 @@ fieldset[disabled] .btn-primary:hover {
     line-height: inherit;
     border: 0;
     padding: 13px 18px;
-    color: #616161;
+    color: $dark-gray;
     background: none;
     border: 1px solid transparent;
 }
@@ -2372,40 +2223,6 @@ fieldset[disabled] .btn-primary:hover {
     cursor: pointer;
     background: none;
 }
-
-/*.childTab >.nav.nav-tabs {
-    text-align: center;
-    width: 100%;
-    padding: 7px 0 0 42px;
-    margin: 0;
-    text-align: center;
-    display: inline-block;
-    float: left;
-}
-.childTab >.nav-tabs li {
-    display: inline-block;
-    text-align: center;
-}
-.childTab >.nav-tabs>li>a {
-    margin-right: 0;
-    transition: none;
-    float: none !important;
-    display: inline-block;
-    line-height: inherit;
-    border: 0;
-    padding: 13px 18px;
-    color: #616161;
-    background: none;
-    border: 1px solid transparent;
-}
-
-.childTab .nav-tabs>li.active>a, .childTab .nav-tabs>li.active>a:focus, .childTab .nav-tabs>li.active>a:hover {
-    padding: 13px 18px;
-    background: white;
-
-    border: 1px solid #ddd;
-    border-bottom-color: transparent;
-}*/
 
 .childTab .tab-content {
     float: left;
@@ -2420,10 +2237,10 @@ fieldset[disabled] .btn-primary:hover {
     border-radius: 3px;
     outline: 0;
     box-shadow: none;
-    border: 1px solid #ca541e;
+    border: 1px solid $red;
 }
 
-#cmpWrp {
+#company-wrap {
     cursor: pointer;
     position: relative;
     padding-right: 25px;
@@ -2432,12 +2249,6 @@ fieldset[disabled] .btn-primary:hover {
     padding: 0px 5px 0 0 !important;
     color: $white;
 }
-
-/* #cmpWrp .company-name {
-    margin: 5px 0 5px 0px;
-    font-size: 9px;
-    padding-right: 5px;
-} */
 
 #companyList {
     background: $white;
@@ -2494,7 +2305,7 @@ p.table-email {
 }
 
 .professional-name {
-    color: #333333;
+    color: $night-rider;
 }
 
 .top-five-cr-dr-table .basic > tbody > tr td:last-child,
@@ -2560,7 +2371,7 @@ input[type="checkbox"]:after {
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid #cccccc;
+    border: 1px solid $gainsboro;
     width: 18px;
     height: 18px;
     background: $white;
@@ -2604,20 +2415,24 @@ input[type="checkbox"]:checked:after {
     line-height: 33px;
 }
 
+.lh-0{
+    line-height:0 !important;
+}
+
 .btn-success-outline {
-    border: 1px solid #0cb1af;
-    color: #0cb1af;
+    border: 1px solid $light-sea-green;
+    color: $light-sea-green;
 }
 
 .btn-success-outline:hover {
     color: $white;
-    background: #0cb1af;
+    background: $light-sea-green;
 }
 
 .btn-success {
-    background: #0cb1af;
+    background: $light-sea-green;
     color: $white;
-    border: 1px solid #0cb1af;
+    border: 1px solid $light-sea-green;
 }
 
 .btn-success:hover,
@@ -2627,9 +2442,9 @@ input[type="checkbox"]:checked:after {
 .btn-success:not(:disabled):not(.disabled):active,
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle{
-    background: #087e7d;
+    background: $teal;
     color: $white;
-    border: 1px solid #087e7d;
+    border: 1px solid $teal;
     box-shadow: none;
 }
 
@@ -2651,18 +2466,18 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-danger {
-    background: #e4e4e4;
-    color: #e51f0c;
-    border-color: #e4e4e4;
+    background: $whisper;
+    color: $red;
+    border-color: $whisper;
 }
 
 .btn-danger:hover,
 .btn-danger:active,
 .btn-danger:focus,
 .btn-danger:active:focus {
-    background: #d3d3d3;
-    color: #e51f0c;
-    border-color: #d3d3d3;
+    background: $gainsboro-light;
+    color: $red;
+    border-color: $gainsboro;
     outline: none;
     box-shadow: none;
 }
@@ -2672,34 +2487,34 @@ input[type="checkbox"]:checked:after {
 .btn-danger:active:focus,
 .btn-danger:active:hover,
 .btn-danger:focus {
-    background: #e4e4e4;
-    color: #e51f0c;
-    border-color: #e4e4e4;
+    background: $whisper;
+    color: $red;
+    border-color: $whisper;
     opacity: 0.5;
 }
 
 .btn-cancel {
-    background: #e4e4e4;
-    color: #666666;
-    border-color: #e4e4e4;
+    background: $whisper;
+    color: $dark-gray;
+    border-color: $whisper;
 }
 
 .btn-cancel:hover,
 .btn-cancel:active,
 .btn-cancel:focus,
 .btn-cancel:active:focus {
-    background: #d3d3d3;
-    color: #666;
-    border-color: #d3d3d3;
+    background: $pink-swan;
+    color: $dark-gray;
+    border-color: $pink-swan;
     outline: none;
     box-shadow: none;
 }
 
 .btn-cancel:disabled,
 .btn-cancel:disabled:hover {
-    background: #e4e4e4;
-    color: #666;
-    border-color: #e4e4e4;
+    background: $whisper;
+    color: $dark-gray;
+    border-color: $whisper;
     opacity: 0.5;
 }
 
@@ -2735,7 +2550,7 @@ input[type="checkbox"]:checked:after {
 
 .thumbnail .caption {
     padding: 20px 7px;
-    color: #333;
+    color: $night-rider;
     overflow: hidden;
     text-align: center;
 }
@@ -2754,11 +2569,11 @@ input[type="checkbox"]:checked:after {
     border: 0;
     border-radius: 48px;
     top: 0;
-    background: #f0f0f0;
+    background: $white-smoke;
 }
 
 .switch.checked {
-    background: #48d076;
+    background: $success-green;
     border: 0;
 }
 
@@ -2863,14 +2678,6 @@ input[type="checkbox"]:checked:after {
     padding-bottom: 10px;
 }
 
-.pdB0 {
-    padding-bottom: 0;
-}
-
-.pdT0 {
-    padding-top: 0 !important;
-}
-
 .templateInfo {
     position: relative;
     width: 100%;
@@ -2921,6 +2728,10 @@ input[type="checkbox"]:checked:after {
     font-size: 16px !important;
 }
 
+.font-18 {
+    font-size: 18px;
+}
+
 .font-20 {
     font-size: 20px;
 }
@@ -2947,11 +2758,11 @@ input[type="checkbox"]:checked:after {
 }
 
 .text-green {
-    color: #33bb0c;
+    color: $success-green;
 }
 
 .text-light {
-    color: #cccccc;
+    color: $very-light-gray;
 }
 
 .text-light-2 {
@@ -2971,8 +2782,8 @@ input[type="checkbox"]:checked:after {
     background: $whisper-color;
     padding: 11px 20px;
     font-size: 14px;
-    font-family: "" opensans-semibold "";
-    border: 1px solid #ddd;
+    font-family: 'opensans-semibold';
+    border: 1px solid $gainsboro;
 }
 
 .inner-box2 {
@@ -3001,11 +2812,11 @@ input[type="checkbox"]:checked:after {
 
 .campanien-list ul > li > a:hover {
     color: $chetwode-blue;
-    background: #eeeff9;
+    background: $lavender;
 }
 
 .campanien-list ul > li > a > span {
-    color: #ababab;
+    color: $dim-gray;
     float: right;
 }
 
@@ -3027,7 +2838,7 @@ li.no-click {
     display: inline-block;
     min-width: 150px;
     font-size: 18px;
-    font-family: "" opensans-semibold "";
+    font-family: " opensans-semibold ";
 }
 
 .modal-list ul > li {
@@ -3059,12 +2870,12 @@ li.no-click {
 .company-box h3 {
     font-weight: bold;
     margin-bottom: 7px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $gainsboro;
     padding-bottom: 15px;
 }
 
 .company-box {
-    background: #ebecee;
+    background: $solitude;
     padding: 20px;
     margin-bottom: 30px;
     min-height: 220px;
@@ -3098,7 +2909,7 @@ li.no-click {
     background: none;
     border: 0px;
     padding: 0px;
-    color: #787878;
+    color: $gray;
 }
 
 .align-item-center {
@@ -3139,7 +2950,7 @@ li.no-click {
 .mandatory-asterisk {
     font-size: 14px;
     top: 0;
-    color: red;
+    color: $red;
 }
 
 @media only screen and (max-width: 1400px) {
@@ -3172,7 +2983,7 @@ li.no-click {
 .proforma-list > .filters .separator {
     height: 30px;
     width: 1px;
-    border: 1px solid #ded3c0;
+    border: 1px solid $gainsboro;
     margin-right: 10px;
     vertical-align: bottom;
     float: left;
@@ -3187,12 +2998,6 @@ li.no-click {
 
 .proforma-list > .filters > div {
     margin-right: 0;
-}
-
-.reset-btn {
-    padding: 8px;
-    background: #f3f0e6;
-    border: 1px solid #f5834e;
 }
 
 .filter-btn {
@@ -3232,7 +3037,7 @@ li.no-click {
     height: 49px;
     border: 0;
     width: 200px;
-    background: #dddddd;
+    background: $gainsboro-light;
     left: 0;
     padding-left: 16px;
     font-size: 17px;
@@ -3275,7 +3080,7 @@ li.no-click {
 
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: #5864c9 !important;
+    background-color: $chetwode-blue !important;
     border-color: transparent;
     color: $white;
 }
@@ -3283,14 +3088,14 @@ li.no-click {
 .daterangepicker td.in-range {
     background-color: $lavender-light !important;
     border-color: transparent;
-    color: #000;
+    color: $black;
     border-radius: 0;
 }
 
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    color: #616161;
-    border: 1px solid #ccc;
+    color: $dark-gray;
+    border: 1px solid $gainsboro;
     z-index: 9999 !important;
 }
 
@@ -3301,7 +3106,7 @@ li.no-click {
 
 #user-dropdown {
     color: $white;
-    background: #333;
+    background: $night-rider;
     width: 50px;
     text-align: center;
     padding: 15px 0;
@@ -3316,11 +3121,11 @@ li.no-click {
     right: 11px;
     top: 22px;
     font-size: 8px;
-    color: #525252;
+    color: $davy-grey;
 }
 
 .ranges li {
-    color: #525252 !important;
+    color: $davy-grey !important;
 }
 
 .ranges li.active,
@@ -3413,13 +3218,13 @@ input[type="number"]::-webkit-inner-spin-button {
 .navbar-right .dropdown-menu,
 .pull-right > .dropdown-menu {
     top: 54px;
-    border-color: #dcdde0;
+    border-color: $gainsboro;
 }
 
 .datePickr .dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    color: #616161;
-    border: 1px solid #ccc;
+    color: $dark-gray;
+    border: 1px solid $gainsboro;
 }
 
 .datePickr .dropdown-menu table {
@@ -3503,10 +3308,9 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 footer {
-    background-color: #26263a;
     padding: 10px 20px;
     text-align: center;
-    color: #c5c5b8;
+    color: $gray;
     font-size: 17px;
     margin-top: 20px;
     width: 100%;
@@ -3519,7 +3323,7 @@ footer > div {
 
 footer > div > a {
     margin: 0 22px;
-    color: #c5c5b8;
+    color: $gray;
     padding: 0;
     font-size: 16px;
 }
@@ -3535,14 +3339,6 @@ footer > div > a:first-child {
 
 footer > div > a:last-child {
     margin-right: 0;
-}
-
-footer small {
-    color: #565b5b;
-}
-
-footer small a {
-    color: #565b5b;
 }
 
 .daterangepicker .daterangepicker_input {
@@ -3565,7 +3361,7 @@ footer small a {
 
 .top_row {
     padding: 9px 10px;
-    border-bottom: 1px solid #d6d6d6;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .search_box {
@@ -3578,7 +3374,7 @@ footer small a {
     transform: translateY(-50%);
     right: 10px;
     z-index: 99;
-    color: #525252;
+    color: $davy-grey;
 }
 
 .stock-grp-list li:first-child {
@@ -3594,9 +3390,9 @@ footer small a {
 }
 
 .form-theme {
-    background: #f4f5f8;
+    background: $solitude;
     padding: 20px;
-    border: 1px solid #f4f5f8;
+    border: 1px solid $gainsboro;
 }
 
 .form-theme .form-control {
@@ -3606,20 +3402,20 @@ footer small a {
 .form-theme .form-control[disabled],
 .form-theme .form-control[readonly],
 .form-theme fieldset[disabled] .form-control {
-    background-color: #eee !important;
+    background-color: $whisper-light !important;
 }
 
 .btn-default-focus {
     box-shadow: none !important;
 }
 
-.form_title {
+.form-title {
     padding: 12px 20px;
-    background: #525252;
+    background: $davy-grey;
     color: $white;
 }
 
-.form_title label {
+.form-title label {
     font-weight: 400;
 }
 
@@ -3636,11 +3432,11 @@ a.btn.btn-xs.btn-link.pull-right {
     top: -4px;
 }
 
-.mutliple_unit {
+.multiple-unit {
     position: relative;
 }
 
-.mutliple_unit button {
+.multiple-unit button {
     padding: 0;
     border: 0;
     background: 0 0;
@@ -3650,12 +3446,12 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
-.mutliple_unit button + button {
+.multiple-unit button + button {
     margin-left: 22px;
 }
 
 .add-row {
-    color: #36af47;
+    color: $success-green;
 }
 
 .dlet {
@@ -3663,12 +3459,12 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .table_theme {
-    border: 1px solid #dfe2e5;
+    border: 1px solid $gainsboro;
 }
 
 .table_theme > thead > tr,
 .table_theme > tbody > tr {
-    border-bottom: 1px solid #dfe2e5;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .table_theme > thead > tr > th {
@@ -3679,7 +3475,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .table_theme > tbody > tr > td,
 .table_theme > thead > tr > th {
     padding: 12px 20px;
-    color: #525252;
+    color: $davy-grey;
 }
 
 .stkRprtTbl > tfoot > tr > td,
@@ -3758,7 +3554,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #linkedStock .table_theme tbody tr td:nth-child(1):before {
     position: absolute;
     width: 22px;
-    background: #525252;
+    background: $davy-grey;
     height: 1px;
     content: " ";
     left: 0;
@@ -3775,7 +3571,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .list-inline label {
-    color: #616161;
+    color: $dark-gray;
 }
 
 .report-info {
@@ -3789,20 +3585,20 @@ a.btn.btn-xs.btn-link.pull-right {
     padding-left: 2px;
 }
 
-.fb__1-container {
+.fb-1-container {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.stock_info {
+.stock-info {
     position: absolute;
     top: 0;
     bottom: 0;
     right: 0;
 }
 
-.stock_wrap {
+.stock-wrap {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -3843,7 +3639,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .today.weekend.off.active.end-date.in-range.available {
     background: $white !important;
-    color: #999;
+    color: $nobel;
 }
 
 .dlt_btn {
@@ -3876,7 +3672,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .fileName {
-    color: #337ab7;
+    color: $primary;
     text-align: right;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -3895,7 +3691,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .blue {
-    color: #337ab7;
+    color: $primary;
 }
 
 .flowY_scroll {
@@ -3926,7 +3722,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .bd-rt {
-    border-color: #d7d7d7;
+    border-color: $gainsboro;
 }
 
 .popover.bottom > .arrow {
@@ -4000,7 +3796,7 @@ a.btn.btn-xs.btn-link.pull-right {
     content: " ";
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 5px dashed #000000;
+    border-top: 5px dashed $black;
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     top: 50%;
@@ -4046,9 +3842,9 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 #select_view {
-    background: #ccc !important;
-    border-color: #ccc !important;
-    color: #4d4d4d;
+    background: $gainsboro !important;
+    border-color: $gainsboro !important;
+    color: $matterhorn;
 }
 
 #share-modal .input-group .input-group-btn:last-child > .btn {
@@ -4060,15 +3856,15 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .light-gray {
-    color: #666;
+    color: $dark-gray;
 }
 
 .shared-list li {
-    list-style: none;
-    color: #666;
-    font-size: 16px;
-    padding: 5px 0 2px 0;
-    border-bottom: 1px solid #d6d6d6;
+    list-style: none !important;
+    color: $dark-gray;
+    font-size: 16px !important;
+    padding: 5px 0 2px 0 !important;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .shared-list select {
@@ -4076,7 +3872,7 @@ a.btn.btn-xs.btn-link.pull-right {
     border: 0;
     padding: 0 !important;
     height: auto !important;
-    color: #666 !important;
+    color: $dark-gray !important;
 }
 
 .shared-list select:focus {
@@ -4093,7 +3889,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .dashed {
     border-style: dashed;
-    border-color: #ccc;
+    border-color: $very-light-gray;
 }
 
 .input-group button {
@@ -4144,7 +3940,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .email-type label {
     font-weight: normal;
-    color: #808080;
+    color: $gray;
 }
 
 .email-type input {
@@ -4186,7 +3982,7 @@ input[type=radio]:checked:after {
     position: absolute;
     width: 6px;
     height: 6px;
-    background: #808080;
+    background: $gray;
     left: 3px;
     top: 4px;
     border-radius: 50%;
@@ -4208,14 +4004,14 @@ input[type=radio]:checked:after {
     position: absolute;
     right: 4px;
     font-size: 16px;
-    color: #4d4d4d;
+    color: $matterhorn;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
 }
 
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid #bababa;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .pop-panel .ui-select-toggle {
@@ -4229,25 +4025,6 @@ input[type=radio]:checked:after {
 .no-btn .rotate180 {
     top: 0;
 }
-
-/* .entrypanel .upload-div {
-    padding: 6px 8px;
-    float: left;
-    margin-right: 10px;
-    color: #4d4d4d;
-    border: 1px solid #949494;
-    cursor: pointer;
-    background: #f9f7f2;
-    height: 32px;
-}
-
-.entrypanel .upload-div i {
-    cursor: pointer;
-}
-
-.entrypanel .upload-div label {
-    color: #4d4d4d;
-} */
 
 #inventory-sidebar,
 #inventory-sidebar input {
@@ -4291,7 +4068,7 @@ select.form-control {
 }
 
 .isFsStock {
-    color: #929292;
+    color: $nobel;
 }
 
 .pdBth1015 {
@@ -4306,17 +4083,17 @@ select.form-control {
     background-color: $white !important;
 }
 
-.linkStockTbl {
-    border-top: 1px solid #dfe2e5;
-    border-left: 1px solid #dfe2e5;
+.link-stock-table {
+    border-top: 1px solid $gainsboro;
+    border-left: 1px solid $gainsboro;
 }
 
-.linkStockTbl > tbody > tr > td {
+.link-stock-table > tbody > tr > td {
     padding: 10px 15px;
     font-size: 14px;
 }
 
-.linkStockTbl > tbody > tr > td:first-child {
+.link-stock-table > tbody > tr > td:first-child {
     padding-left: 0;
     position: relative;
     text-transform: capitalize;
@@ -4326,7 +4103,7 @@ select.form-control {
     width: 10px;
     height: 2px;
     display: inline-block;
-    background-color: #dfe2e5;
+    background-color: $gainsboro;
     position: absolute;
     top: 50%;
     left: 0;
@@ -4385,7 +4162,7 @@ select.form-control {
     text-align: left;
     background-color: $white;
     background-clip: padding-box;
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -4420,7 +4197,7 @@ select.form-control {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: #808080;
+    color: $gray;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -4431,18 +4208,14 @@ select.form-control {
 }
 
 .grp-col {
-    /*max-width: 400px;*/
-    /*max-width: 690px;*/
     float: left;
-    /* min-height: 100%; */
-    /* height: 100%; */
     overflow-x: auto;
 }
 
 .col-wrapper {
     width: 255px;
     float: left;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid $gainsboro;
     min-height: 100%;
     height: 100%;
     position: relative;
@@ -4455,21 +4228,16 @@ select.form-control {
     font-size: 14px;
 }
 
-#getGroupModal.getGroupModal .modal-body {
+#getGroupModal.get-group-modal .modal-body {
     min-height: auto;
     height: auto;
 }
 
-.searchBar {
+.search-bar {
     position: relative;
 }
 
-/* .searchBar .form-control {
-    background: #6b6a6a !important;
-    color: $white;
-} */
-
-.searchBar .form-control {
+.search-bar .form-control {
     padding-right: 40px !important;
 }
 
@@ -4496,12 +4264,12 @@ label {
 
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-    border-color: #ccc;
+    border-color: $gainsboro;
 }
 
 #getGroupModal .detailed label {
     font-size: 14px;
-    color: #808080;
+    color: $gray;
 }
 
 .btn-add {
@@ -4514,7 +4282,7 @@ label {
 }
 
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid #bababa;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .pop-panel .ui-select-toggle {
@@ -4546,24 +4314,24 @@ label {
 
 #App_taxes .btn {
     padding: 4px;
-    background: #e0e0e0;
-    color: #6b6a6a;
+    background: $whisper-color;
+    color: $dark-gray;
     margin: 0 4px 5px 0;
 }
 
 #App_taxes .btn:hover {
-    background: #e0e0e0;
-    color: #6b6a6a;
+    background: $whisper-color;
+    color: $dark-gray;
     box-shadow: none;
 }
 
 #App_taxes .form-control {
-    background: #f4f5f5 !important;
+    background: $gray-95 !important;
     border: 1px solid $gainsboro;
 }
 
 .col-wrapper:nth-child(1) {
-    background: #f4f5f5;
+    background: $gray-95;
     position: fixed;
     height: calc(100% - 58px);
     min-height: 0;
@@ -4581,7 +4349,7 @@ label {
 }
 
 .col-wrapper:nth-child(1) .isParent {
-    background: #e1ebf0 !important;
+    background: $whisper-new !important;
 }
 
 .col-wrapper:last-child ul li a.isParent {
@@ -4598,15 +4366,15 @@ label {
 }
 
 .isAcc {
-    color: #1a1a1a !important;
+    color: $nero !important;
 }
 
 .isSelectedgrp {
-    background: #f0f0f0;
+    background: $white-smoke;
 }
 
 .isParent {
-    background: #f0f0f0;
+    background: $white-smoke;
 }
 
 .isActive {
@@ -4645,7 +4413,7 @@ label {
     width: calc(100% - 93px) !important;
 }
 
-.view_forms {
+.view-forms {
     float: left;
     width: 100%;
     overflow-y: scroll;
@@ -4664,27 +4432,27 @@ label {
 }
 
 .form-control::-webkit-input-placeholder {
-    color: #999999;
+    color: $nobel;
 }
 
 .form-control::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: #999999;
+    color: $nobel;
 }
 
 .form-control::-moz-placeholder {
     /* Firefox 19+ */
-    color: #999999;
+    color: $nobel;
 }
 
 .form-control:-ms-input-placeholder {
     /* IE 10+ */
-    color: #999999;
+    color: $nobel;
 }
 
 .form-control:-moz-placeholder {
     /* Firefox 18- */
-    color: #999999;
+    color: $nobel;
 }
 
 label {
@@ -4697,12 +4465,12 @@ label {
 
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-    border-color: #ccc;
+    border-color: $gainsboro;
 }
 
 #getGroupModal .detailed label {
     font-size: 14px;
-    color: #808080;
+    color: $gray;
 }
 
 .btn-add {
@@ -4715,7 +4483,7 @@ label {
 }
 
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid #bababa;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .pop-panel .ui-select-toggle {
@@ -4747,33 +4515,33 @@ label {
 
 #App_taxes .btn {
     padding: 4px;
-    background: #e0e0e0;
-    color: #6b6a6a;
+    background: $whisper-color;
+    color: $dark-gray;
     margin: 0 4px 5px 0;
 }
 
 #App_taxes .btn:hover {
-    background: #e0e0e0;
-    color: #6b6a6a;
+    background: $whisper-color;
+    color: $dark-gray;
     box-shadow: none;
 }
 
 #App_taxes .form-control {
-    background: #f4f5f5 !important;
+    background: $gray-95 !important;
     border: 1px solid $gainsboro;
 }
 
 .tax-bullet {
     display: inline-block;
     padding: 4px 8px;
-    color: #808080;
+    color: $gray;
     border-radius: 3px;
     background: $whisper-color;
     margin: 0px 0 4px 4px;
 }
 
 .tax_group small {
-    color: #afa9a9;
+    color: $dim-gray;
     font-size: 14px;
 }
 
@@ -4791,16 +4559,16 @@ label {
     bottom: -12px;
 }
 
-.shareGrp {
+.share-grp {
     overflow: hidden;
 }
 
-.inline-table.new_form {
+.inline-table.new-form {
     width: 100%;
     text-align: center;
 }
 
-.new_form .btn {
+.new-form .btn {
     padding: 16px !important;
     font-size: 18px;
     min-width: 170px;
@@ -4829,18 +4597,18 @@ label {
 
 .accmerge li a {
     padding: 4px 8px;
-    color: #808080;
+    color: $gray;
     background: $whisper-color;
     float: left;
     border-radius: 2px;
 }
 
 .accmerge li a.isActive {
-    color: #808080;
+    color: $gray;
 }
 
 .accmerge li > a > span {
-    color: #949494;
+    color: $nobel;
     padding-left: 20px;
     font-weight: 500;
     float: right;
@@ -4855,11 +4623,11 @@ label {
 }
 
 #getGroupModal hr {
-    border-color: #c7c7c7;
+    border-color: $gainsboro;
 }
 
 /*#getGroupModal small {
-    color: #ccc;
+    color: $very-light-gray;
 }*/
 
 .breadcrumb {
@@ -4873,7 +4641,7 @@ label {
     padding-left: 4px;
     content: ">";
     font-size: 13px;
-    color: #808080;
+    color: $gray;
 }
 
 .breadcrumb > .active > a {
@@ -4881,7 +4649,7 @@ label {
 }
 
 .breadcrumb a {
-    color: #808080;
+    color: $gray;
 }
 
 .load-bar-wrap {
@@ -4904,7 +4672,7 @@ label {
     margin-bottom: 30px;
 }
 
-#getGroupModal .searchBar .reset {
+#getGroupModal .search-bar .reset {
     position: absolute;
     right: 2px;
     z-index: 9;
@@ -4992,7 +4760,7 @@ label {
 
 #manufacture .form-theme tbody tr td {
     padding: 7px 0;
-    color: #525252;
+    color: $davy-grey;
 }
 
 #manufacture select showGiddhDatepicker {
@@ -5014,7 +4782,7 @@ label {
 }
 
 #manufacture .bd-rt {
-    border-color: #ddd;
+    border-color: $gainsboro;
 }
 
 #manufacture thead th {
@@ -5022,17 +4790,17 @@ label {
 }
 
 #manufacture .source thead {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro;
 }
 
 #manufacture .source .linkstock {
     height: auto;
-    color: #777;
+    color: $gray;
 }
 
 #manufacture .source .linkstock thead th,
 #manufacture .source .linkstock tfoot tr th {
-    color: #333;
+    color: $night-rider;
     font-weight: 100;
 }
 
@@ -5047,13 +4815,13 @@ label {
 }
 
 #manufacture .source table thead th,
-#manufacture .source .linkStockTbl > tbody > tr > td:first-child,
+#manufacture .source .link-stock-table > tbody > tr > td:first-child,
 #manufacture .source table tfoot th {
     padding: 10px 15px;
     font-size: 14px;
 }
 
-#manufacture .source .linkStockTbl {
+#manufacture .source .link-stock-table {
     border: 0;
 }
 
@@ -5061,7 +4829,7 @@ label {
     width: 10px;
     height: 2px;
     display: inline-block;
-    background-color: #dfe2e5;
+    background-color: $gainsboro;
     position: absolute;
     top: 50%;
     left: 0;
@@ -5077,7 +4845,7 @@ label {
     position: absolute;
     top: 20px;
     width: 2px;
-    background: #ddd;
+    background: $gainsboro-light;
     left: -2px;
 }
 
@@ -5122,7 +4890,7 @@ label {
 
 .companyGst .gst {
     padding-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .Default_box {
@@ -5133,8 +4901,8 @@ label {
     top: 50px;
 }
 
-.grey-color {
-    color: #6d6d6d;
+.grey-clr {
+    color: $dark-gray;
 }
 
 .grp-col::-webkit-scrollbar {
@@ -5144,7 +4912,7 @@ label {
 }
 
 .grp-col::-webkit-scrollbar-track {
-    background: #eee;
+    background: $whisper-light;
     margin-left: 255px;
 }
 
@@ -5166,7 +4934,7 @@ label {
 }
 
 #setupWizardModal .nav-justified > li > a {
-    color: grey;
+    color: $gray;
     text-decoration: none;
     text-transform: uppercase;
     font-weight: 700;
@@ -5175,7 +4943,7 @@ label {
 }
 
 .steps-indicator li.active a:before {
-    background-color: grey;
+    background-color: $gray;
 }
 
 .steps-indicator li a:before {
@@ -5190,7 +4958,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: #e6e6e6;
+    background-color: $whisper-new;
     content: "";
     top: -15px;
 }
@@ -5218,7 +4986,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: #e6e6e6;
+    background-color: $whisper-new;
     content: "";
 }
 
@@ -5234,7 +5002,7 @@ label {
 }
 
 .grp-col::-webkit-scrollbar-track {
-    background: #eee;
+    background: $whisper-light;
     margin-left: 255px;
 }
 
@@ -5279,7 +5047,7 @@ label {
 .custom-select{
         height: auto;
         padding: 0px;
-        border:0px solid $gainsboro;
+        border: none !important;
         select {
             -moz-appearance: none;
             -webkit-appearance: none;
@@ -5319,11 +5087,11 @@ label {
 .pagination > li > span:focus,
 .pagination > li > span:hover {
     background-color: $gainsboro !important;
-    border-color: #ddd;
+    border-color: $gainsboro;
 }
 
 #manufacture .section-title {
-    color: #616161;
+    color: $dark-gray;
     font-size: 20px;
     line-height: 34px;
     vertical-align: middle;
@@ -5333,7 +5101,7 @@ label {
     border-radius: 0px !important;
     padding: 6px !important;
     outline: 0;
-    color: #616161;
+    color: $dark-gray;
     font-size: 14px;
     box-shadow: none;
 }
@@ -5350,7 +5118,7 @@ label {
 
 .select2-container--default
     .select2-results__option--highlighted[aria-selected] {
-    background-color: #333 !important;
+    background-color: $night-rider !important;
 }
 
 .select2-results__option[aria-selected] {
@@ -5389,7 +5157,7 @@ label {
 }
 
 .add-new-role-modal .dropdown-menu li label {
-    color: #858585;
+    color: $gray;
     font-weight: normal;
 }
 
@@ -5399,14 +5167,14 @@ label {
 }
 
 #single-role .panel-heading {
-    background: #ccc;
+    background: $very-light-gray;
     color: $white;
     border-radius: 0;
 }
 
 #single-role tbody tr td:first-child,
 #single-role thead tr th:first-child {
-    border-right: 1px solid #c2cdd3;
+    border-right: 1px solid $gainsboro;
 }
 
 #single-role .lead {
@@ -5419,7 +5187,7 @@ label {
 }
 
 #single-role .panel-body {
-    background: #f1f1f2;
+    background: $white-smoke;
 }
 
 #single-role .panel-body tbody tr:nth-child(1) td {
@@ -5430,7 +5198,7 @@ label {
 #single-role .panel-body label {
     font-size: 14px;
     text-transform: capitalize;
-    color: #858585;
+    color: $gray;
 }
 
 #single-role table {
@@ -5440,13 +5208,13 @@ label {
 /*************************************************** Dashboard CSS  ****************************************************/
 
 #dashboard .panel-default {
-    color: #4d4d4d;
+    color: $matterhorn;
     border-color: $gainsboro;
 }
 
 #dashboard .panel-default > .panel-heading {
     background-color: transparent;
-    /* border-color: #d6d6d6; */
+    /* border-color: $light-gray; */
     border: 0;
 }
 
@@ -5479,7 +5247,7 @@ label {
     right: -2px; */
     top: 0;
     right: 0;
-    border: 1px solid #ccc;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
 }
 
@@ -5533,7 +5301,7 @@ label {
 }
 
 .ledger-row td .select2-results ul li a {
-    color: #333;
+    color: $night-rider;
 }
 
 .ledger-row td .select2-container .select2-selection {
@@ -5554,7 +5322,7 @@ label {
 
 .dropdown-container .dropdown-menu li label span {
     max-width: calc(100% - 22px);
-    color: #333;
+    color: $night-rider;
 }
 
 .dropdown-container .dropdown-menu {
@@ -5574,7 +5342,7 @@ label {
 }
 
 .sticky-footer {
-    background: #5d5d5d;
+    background: $matterhorn;
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -5600,7 +5368,7 @@ label {
 }
 
 #customInvoice {
-    background: #f4f5f8;
+    background: $solitude;
     height: calc(100vh - 70px);
 }
 
@@ -5765,18 +5533,18 @@ label {
     font-weight: bold;
     list-style: none;
     display: inline-block;
-    border: 1px solid #b2b2b2;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
     width: 30px;
     text-align: center;
     height: 30px;
     line-height: 30px;
-    color: #b2b2b2;
+    color: $silver;
 }
 
 .logo-tool ul li:hover {
-    border-color: #666666;
-    color: #666666;
+    border-color: $dark-gray;
+    color: $dark-gray;
 }
 
 .swatch-preview span {
@@ -5813,7 +5581,7 @@ label {
 }
 
 .scroll-auto::-webkit-scrollbar-track {
-    background: #ddd;
+    background: $gainsboro-light;
     /* margin-left: 255px; */
     border-radius: 8px;
 }
@@ -5834,7 +5602,7 @@ label {
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
-    background-color: #eee !important;
+    background-color: $whisper-light !important;
 }
 
 input[type="checkbox"][disabled] {
@@ -5865,8 +5633,8 @@ input[type="checkbox"][disabled] {
     font-size: 12px;
     line-height: 1.5;
     border-radius: 3px;
-    background: #eee;
-    border: 1px solid #d6d6d6;
+    background: $whisper-light;
+    border: 1px solid $light-gray;
 }
 
 .dashboard-filter label {
@@ -5880,14 +5648,14 @@ input[type="checkbox"][disabled] {
 }
 
 .input-group-btn .btn-default {
-    background: #eeeeee;
-    border: 1px solid #d6d6d6;
+    background: $whisper-light;
+    border: 1px solid $light-gray;
     color: $charcoal;
 }
 
 .input-group-btn .btn-default:hover {
-    background: #eeeeee;
-    border: 1px solid #d6d6d6;
+    background: $whisper-light;
+    border: 1px solid $light-gray;
     box-shadow: none;
     outline: 0;
 }
@@ -5898,7 +5666,7 @@ input[type="checkbox"][disabled] {
 
 .subHead {
     font-size: 105%;
-    color: #333333;
+    color: $night-rider;
     padding-bottom: 10px;
 }
 
@@ -5918,7 +5686,7 @@ input[type="checkbox"][disabled] {
     right: 0;
 }
 
-.company_gst textarea {
+.company-gst textarea {
     height: 105px;
 }
 
@@ -5995,7 +5763,7 @@ datepicker-inner .well table button.btn.btn-default.btn-sm {
     line-height: 1;
     background-color: transparent !important;
     font-size: 20px;
-    color: #333 !important;
+    color: $night-rider !important;
     box-shadow: none !important;
 }
 
@@ -6043,7 +5811,7 @@ datepicker-inner .well table tbody .btn-default.active {
 
 .calendar-dropdown {
     /* box-shadow: none; */
-    border-color: #ddd;
+    border-color: $gainsboro;
     margin-top: 1px;
     border-radius: 2px;
 }
@@ -6058,12 +5826,17 @@ datepicker-inner .well monthpicker table tbody tr:nth-child(1) td {
     padding-top: 10px;
 }
 
+.datepicker-account{
+    z-index:10;
+    min-height:290px;
+}
+
 input[type="checkbox"][disabled]:after {
     cursor: not-allowed;
 }
 
 .form-bg {
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 .toggle-btn i {
@@ -6090,7 +5863,7 @@ input[type="checkbox"][disabled]:after {
 .welcome-header h2 {
     font-size: 26px;
     font-family: "opensans-regular";
-    color: #535353;
+    color: $davy-grey;
 }
 
 .table-container section div:last-child {
@@ -6098,11 +5871,11 @@ input[type="checkbox"][disabled]:after {
 }
 
 .success {
-    color: #3fab63;
+    color: $success-green;
 }
 
 .danger {
-    color: #ef5350;
+    color: $red;
 }
 
 .table-container thead tr th:first-child {
@@ -6110,15 +5883,15 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container .account {
-    background: #f4f5f8;
-    /* background: #eee; */
+    background: $solitude;
+    /* background: $whisper-light; */
 }
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
     padding-left: 7px !important;
 }
 
-.table-container .profitLoss section div > div {
+.table-container .profit-loss section div > div {
     border-right: 0;
 }
 
@@ -6140,12 +5913,12 @@ input[type="checkbox"][disabled]:after {
     background: $white;
     top: -1px;
     right: -2px;
-    border: 1px solid #999;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
 }
 
 .input-group-addon input[type="radio"]:checked:before {
-    border-color: #5b64c9;
+    border-color: $chetwode-blue;
 }
 
 .input-group-addon input[type="radio"]:checked:after {
@@ -6153,7 +5926,7 @@ input[type="checkbox"][disabled]:after {
     position: absolute;
     width: 10px;
     height: 10px;
-    background: #5b64c9;
+    background: $chetwode-blue;
     left: 0;
     top: 3px;
     border-radius: 50%;
@@ -6161,7 +5934,7 @@ input[type="checkbox"][disabled]:after {
     text-align: center;
 }
 
-.searchBar a {
+.search-bar a {
     right: 7px;
     z-index: 9;
     top: 7px;
@@ -6191,7 +5964,7 @@ input[type="checkbox"][disabled]:after {
 
 #verifyMobile .phoneNum ng-select > div > div.single > div.toggle {
     line-height: 46px;
-    color: #4d4d4d;
+    color: $matterhorn;
     height: 44px;
 }
 
@@ -6332,23 +6105,23 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 /**new modal design**/
 
-.welcome_header {
+.welcome-header {
     background: $white url("../images/Welcome.png") no-repeat center center;
     text-align: center;
     padding: 0px 0 30px;
     position: relative;
 }
 
-.welcome_header h1 {
+.welcome-header h1 {
     font-size: 30px;
     font-family: "opensans-regular";
-    color: #1a237e;
+    color: $midnight-blue;
 }
 
-.welcome_header:after {
+.welcome-header:after {
     position: absolute !important;
     width: 98%;
-    background: #b3b3b3;
+    background: $silver;
     height: 1px;
     margin: 0 auto;
     padding: 0;
@@ -6411,7 +6184,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .welcome-header h2 {
     font-size: 26px;
     font-family: "opensans-regular";
-    color: #535353;
+    color: $davy-grey;
     position: relative;
 }
 
@@ -6442,7 +6215,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .form-group sup {
     font-size: 14px;
     top: 0;
-    color: red;
+    color: $red;
 }
 
 .btn-share,
@@ -6475,9 +6248,9 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: relative;
     transition: all 0.3s ease;
     width: 100%;
-    border: 1px solid #cccccc;
+    border: 1px solid $gainsboro;
     border-radius: 2px;
-    color: #666;
+    color: $dark-gray;
     padding: 0 7px;
     height: 34px;
 }
@@ -6497,7 +6270,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .square-switch input[type="checkbox"] ~ label::after {
     content: " ";
-    background: #ccc;
+    background: $very-light-gray;
     position: absolute;
     height: 34px;
     width: 28px;
@@ -6516,19 +6289,19 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     font-size: 14px;
 }
 
-.user_list {
+.user-list {
     padding: 15px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $whisper-light;
     overflow: hidden;
 }
 
-.permission_list .permission:last-child .form-group {
+.permission-list .permission:last-child .form-group {
     margin-bottom: 0 !important;
 }
 
 .option-box {
     background: $lavender;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro;
     margin-bottom: 10px;
 }
 
@@ -6549,37 +6322,37 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px !important;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
+    border-right: 1px solid $very-light-gray;
     font-size: 13px;
-    color: #4d4d4d;
+    color: $matterhorn;
     text-overflow: ellipsis;
     /* // overflow: hidden; */
     white-space: nowrap;
 }
 
 .ledger-row:hover {
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
 }
 
-.ledg-head table td.pdR25imp {
+.ledg-head table td.pr-25 {
     padding-right: 25px !important;
 }
 
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
+    border-right: 1px solid $very-light-gray;
     font-size: 13px;
-    color: #4d4d4d;
+    color: $matterhorn;
     text-overflow: ellipsis;
     /* overflow: hidden; */
     white-space: nowrap;
     position: relative;
 }
 
-.ledg-head.entry-popup table td.pdR25imp {
+.ledg-head.entry-popup table td.pr-25 {
     padding-right: 25px !important;
 }
 
@@ -6612,7 +6385,7 @@ table td[class*=col-]:last-child {
 .ledger-stat {
     padding: 50px 0;
     background: $white;
-    color: #808080;
+    color: $gray;
     font-size: 18px;
     margin: 100px 0;
 }
@@ -6672,21 +6445,21 @@ table td[class*=col-]:last-child {
     font-weight: 400;
 }
 
-.pdR25imp {
+.pr-25 {
     padding-right: 25px !important;
 }
 
 .thead-background1 th {
-    background: #eaebed;
-    color: #4d4d4d;
-    border-right: 1px solid #c4c6c7;
+    background: $whisper-color;
+    color: $matterhorn;
+    border-right: 1px solid $gainsboro;
     padding: 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid #c4c6c7;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .ledger-book {
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     clear: both;
     /* // overflow: hidden; */
     position: relative;
@@ -6725,7 +6498,7 @@ table td[class*=col-]:last-child {
 //     bottom: 0;
 //     width: 1px;
 //     height: 100%;
-//     background: #ccc;
+//     background: $very-light-gray;
 //     right: 1px;
 //     margin: 0 auto;
 // }
@@ -6784,11 +6557,11 @@ table td[class*=col-]:last-child {
 } */
 
 .universal-date .btn-link {
-    color: #f5f5f5 !important;
+    color: $gray-95 !important;
     padding-top: 3px;
     padding-left: 0px;
     padding-right: 0px;
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 1px solid $gray-95;
     padding-bottom: 0;
     border-radius: 0;
     margin-right: 0;
@@ -6864,7 +6637,7 @@ table td[class*=col-]:last-child {
 }
 
 .footer-navigate {
-    background: #f5f5f5;
+    background: $gray-95;
     border-radius: 0 0 3px 3px;
 }
 
@@ -6878,12 +6651,12 @@ table td[class*=col-]:last-child {
     list-style-type: none;
     padding: 8px 20px;
     font-size: 11px;
-    color: #666666;
+    color: $dark-gray;
 }
 
 .app-list > ul li a {
     padding: 3px 0;
-    color: #555;
+    color: $davy-grey;
     display: block;
     position: relative;
     font-size: 12px;
@@ -6894,7 +6667,7 @@ table td[class*=col-]:last-child {
 }
 
 .app-list > ul li a:hover {
-    color: #000;
+    color: $black;
     background: none;
 }
 
@@ -6918,27 +6691,27 @@ table td[class*=col-]:last-child {
     border-radius: 100%;
 }
 
-.longcode-details figure ul li {
+.long-code-details figure ul li {
     list-style: none;
     padding: 12px 0;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro;
 }
 
-.longcode-details figure ul li:last-child {
+.long-code-details figure ul li:last-child {
     border-bottom: 0;
 }
 
-.longcode-details figure ul {
-    background: #f4f5f8;
+.long-code-details figure ul {
+    background: $solitude;
     margin-bottom: 10px;
 }
 
-.longcode-details figure ul li h2 {
+.long-code-details figure ul li h2 {
     font-weight: 600;
     margin-bottom: 10px;
 }
 
-.longcode-details figure ul li .cases {
+.long-code-details figure ul li .cases {
     margin-left: 10px;
 }
 
@@ -7064,7 +6837,7 @@ table td[class*=col-]:last-child {
     position: absolute;
     top: 2px;
     right: -48px;
-    background: #eee;
+    background: $whisper-light;
     border-radius: 100%;
     padding: 7px 7px;
     text-transform: uppercase;
@@ -7097,7 +6870,7 @@ table td[class*=col-]:last-child {
 }
 
 .dropdown-option li a:hover {
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 .text-link,
@@ -7114,7 +6887,7 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
 }
 
 .tbpl-dropdown > li:last-child {
@@ -7122,12 +6895,12 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li:hover a {
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 .tbpl-dropdown .caret {
     transform: rotate(180deg);
-    border-top: 7px dashed #bbb;
+    border-top: 7px dashed $gainsboro;
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     position: absolute;
@@ -7135,7 +6908,7 @@ panel.sFthanks.fieldset {
     top: -8px;
 }
 
-.auto_save {
+.auto-save {
     float: right;
     position: absolute;
     top: 64px;
@@ -7143,12 +6916,12 @@ panel.sFthanks.fieldset {
     z-index: 9;
 }
 
-.auto_save i {
+.auto-save i {
     top: 2px;
     position: relative;
 }
 
-.auto_save i.rotate {
+.auto-save i.rotate {
     animation: rotate 1.5s infinite linear;
 }
 
@@ -7158,7 +6931,7 @@ panel.sFthanks.fieldset {
 
 .unit_action .btn {
     margin-right: 0;
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     opacity: 0.5;
 }
 
@@ -7187,7 +6960,7 @@ GST filing
 
 .tax-engine .column.list-column {
     display: block;
-    border-right: 1px solid #ededed;
+    border-right: 1px solid $gainsboro;
 }
 
 .tax-engine .column {
@@ -7210,7 +6983,7 @@ GST filing
 
 .tax-engine .list-filter {
     padding: 15px !important;
-    border-bottom: 1px solid #ddd !important;
+    border-bottom: 1px solid $gainsboro !important;
     height: 80px;
 }
 
@@ -7304,12 +7077,12 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .cmp:hover,
 .user-dropdown-header > li a:hover .user-name-wrap small {
-    color: #666;
+    color: $dark-gray;
 }
 
 .user-dropdown-header > li a:hover {
     color: $chetwode-blue;
-    background: #eeeff9;
+    background: $lavender;
 }
 
 .hamburger-menu button,
@@ -7382,7 +7155,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .dropdown-menu li .help-text,
 .tax-engine .modal-header .help-text,
 .tax-engine .text-muted {
-    color: #777;
+    color: $gray;
 }
 
 .space {
@@ -7402,7 +7175,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .nav-tabs > li a {
     font-size: 15px;
-    color: #555;
+    color: $davy-grey;
     margin-right: 0;
     height: 100%;
     padding: 14px 40px;
@@ -7432,7 +7205,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $whisper-light;
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary {
@@ -7453,7 +7226,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     .transactions-overview
     .gstr-transactions-summary
     .transactions-table {
-    border: 1px solid #ededed;
+    border: 1px solid $gainsboro;
 }
 
 .tax-engine .table.transactions-table,
@@ -7481,7 +7254,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
@@ -7491,7 +7264,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine .table caption + thead tr:first-child td,
@@ -7504,8 +7277,8 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .table thead > tr > th {
-    border-bottom: 1px solid #eee;
-    color: #777;
+    border-bottom: 1px solid $whisper-light;
+    color: $gray;
 }
 
 .tax-engine .table.transactions-table tbody > tr > td {
@@ -7517,7 +7290,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: #f9f9f9;
+    background-color: $gray-95;
 }
 
 .tax-engine .table tbody > tr > td,
@@ -7529,7 +7302,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $whisper-light;
 }
 
 .tax-engine
@@ -7538,7 +7311,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     > tr:not(.secondary-row)
     + tr.secondary-row
     > td {
-    border-top: 1px solid #ededed;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine
@@ -7552,7 +7325,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
     background-color: $white;
-    border-right: 1px solid #ededed;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
     padding: 13px;
 }
@@ -7599,7 +7372,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a,
 .tax-engine .sub-filter-nav-bandnew ul > li.active > a {
-    color: #222;
+    color: $night-rider;
     font-weight: 600;
 }
 
@@ -7659,7 +7432,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .transactions-list .filter-band {
-    background-color: #f5fafe;
+    background-color: $gray-95;
     padding: 20px;
     height: 66px;
 }
@@ -7707,8 +7480,8 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-list .filter-band .btn,
 .tax-engine .transactions-list .filter-band .btn:focus,
 .tax-engine .transactions-list .filter-band .btn:hover {
-    color: #2a85fb;
-    border-color: #2a85fb;
+    color: $primary;
+    border-color: $primary;
     background-color: transparent;
     box-shadow: none;
 }
@@ -7722,7 +7495,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-list .filter-band .btn .caret,
 .tax-engine .transactions-list .filter-band .btn:focus .caret,
 .tax-engine .transactions-list .filter-band .btn:hover .caret {
-    border-top-color: #2a85fb;
+    border-top-color: $primary;
 }
 
 .tax-engine .caret {
@@ -7731,7 +7504,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid #000;
+    border-top: 4px solid $black;
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -7762,8 +7535,8 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .transactions-overview .transaction-info:hover {
-    border: 1px solid #eee;
-    box-shadow: 0 0 20px 3px #f9f9f9;
+    border: 1px solid $whisper-light;
+    box-shadow: 0 0 20px 3px $gray-95;
 }
 
 .tax-engine .transactions-overview .transaction-info {
@@ -7805,15 +7578,15 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-style: italic;
     padding: 14px 25px;
     font-size: 13px;
-    color: #337ab7;
+    color: $primary;
 }
 
 .tax-engine .sub-filter-nav-band > ul > li .count {
-    color: #cb1119;
+    color: $red;
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a {
-    color: #222;
+    color: $night-rider;
     font-weight: 600;
     border: 0;
 }
@@ -7823,7 +7596,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .table.reconciliations-table {
-    border-bottom: 1px solid #ededed;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .tax-engine .table-fixed {
@@ -7831,7 +7604,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .zi-table {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $whisper-light;
     table-layout: fixed;
 }
 
@@ -7841,7 +7614,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $gainsboro;
 }
 
 .list-column.expanded-list-column .zi-table tr td:first-of-type,
@@ -7865,7 +7638,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .zi-table.table-hover tbody tr:hover td {
-    background-color: #fafafa;
+    background-color: $whisper-color;
     cursor: pointer;
 }
 
@@ -7878,7 +7651,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $whisper-light;
 }
 
 .tax-engine .details .details-info,
@@ -7896,7 +7669,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
-    border-right: 1px solid #ededed;
+    border-right: 1px solid $gainsboro;
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown {
@@ -7910,7 +7683,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     tbody
     > tr:hover
     .actions-dropdown-btn {
-    border: 1px solid #2a85fb;
+    border: 1px solid $primary;
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown-btn,
@@ -7919,11 +7692,11 @@ perfect-scrollbar > .ps > .ps-overlay {
     tbody
     > tr:hover
     .reconcile-row-action {
-    color: #2a85fb;
+    color: $primary;
 }
 
 .tax-engine .table.reconciliations-table .unrecognized-value {
-    color: #cb1119;
+    color: $red;
 }
 
 /*.tax-engine .table.reconciliations-table .recognized-value,
@@ -7942,8 +7715,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-size: 14px;
     text-transform: capitalize;
     -webkit-font-smoothing: antialiased;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+    border-top: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .subtabs-box1 {
@@ -7955,12 +7728,12 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
-    color: #222;
+    color: $night-rider;
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: #f9f9f9;
+    background-color: $gray-95;
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
@@ -7978,7 +7751,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .header-band {
     width: 100%;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid $whisper-light;
     padding: 5px 0;
     margin-bottom: 15px;
 }
@@ -7992,12 +7765,12 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .return-sel {
-    background-color: #f5f5f5;
+    background-color: $gray-95;
     border-radius: 18px;
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
-    border: 1px solid #ddd;
+    border: 1px solid $gainsboro;
 }
 
 .tax-engine svg.icon.filing-step-icon {
@@ -8017,7 +7790,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .gstr-transactions-summary .table > tbody > tr.row-hover:hover {
     cursor: pointer;
-    background-color: #fafafa;
+    background-color: $whisper-color;
 }
 
 .tax-engine
@@ -8050,11 +7823,11 @@ app-header {
 }
 
 .invalid-inp {
-    border: 2px solid red;
+    border: 2px solid $red;
 }
 
 .text-danger {
-    color: red;
+    color: $red;
 }
 
 #ngb-typeahead-1 {
@@ -8110,7 +7883,7 @@ app-header {
     background-color: transparent;
     border: none;
     display: block;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
     width: 100%;
     text-align: left;
     padding: 6px;
@@ -8144,12 +7917,12 @@ app-header {
 
 .sticky-footer-sale-amount .totalSale h3 {
     font-size: 20px;
-    color: #8f9091;
+    color: $gray;
     padding-right: 13px;
 }
 
 .sticky-footer-sale-amount h2 {
-    color: #333333;
+    color: $night-rider;
     font-size: 32px;
     margin-top: 3px;
 }
@@ -8166,7 +7939,7 @@ app-header {
 }
 
 #middleBody .horizontal-form,
-.view_forms .horizontal-form {
+.view-forms .horizontal-form {
     max-width: 660px;
     width: 100%;
 }
@@ -8200,7 +7973,7 @@ app-header {
 }
 
 .selection-none-header *::selection {
-    background: #ffece094;
+    background: $chablis;
 }
 
 .word-break {
@@ -8208,11 +7981,11 @@ app-header {
     white-space: initial;
 }
 
-footer#footer.absoulte-footer {
+footer#footer.absolute-footer {
     padding-left: 15px;
 }
 
-.menu_open footer#footer.absoulte-footer {
+.menu_open footer#footer.absolute-footer {
     padding-left: 230px;
 }
 
@@ -8220,7 +7993,7 @@ footer#footer.absoulte-footer {
     position: relative;
 }
 
-.inventory-page footer#footer.absoulte-footer {
+.inventory-page footer#footer.absolute-footer {
     bottom: -60px;
     background-color: transparent !important;
 }
@@ -8365,7 +8138,7 @@ ul#dropdown-nested li {
 }
 
 ul#dropdown-nested li a {
-    color: #333;
+    color: $night-rider;
 }
 
 ul#dropdown-nested li:hover .dropdown-menu {
@@ -8377,7 +8150,7 @@ ul#dropdown-nested li:hover .dropdown-menu {
 }
 
 ul#dropdown-nested .dropdown-menu li .dropdown-item {
-    color: #333;
+    color: $night-rider;
 }
 
 ul#dropdown-nested li:hover a,
@@ -8403,7 +8176,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     line-height: 1.5;
 }
 
-.company_gst:last-child {
+.company-gst:last-child {
     border-bottom: none;
 }
 
@@ -8417,7 +8190,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     width: 0px;
     height: 0px;
     display: block;
-    border-top: 5px solid #bfbfbf;
+    border-top: 5px solid $gainsboro;
     border-bottom: 5px solid transparent;
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
@@ -8427,7 +8200,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .welcome-header hr {
-    border-top-color: #b3b4b5;
+    border-top-color: $silver;
 }
 
 .btn-group-voucher-type label {
@@ -8442,7 +8215,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .welcome-container .select-box .custom-select input.form-control.selected-val.cp,
 .welcome-container .select-box input,
 .welcome-container .select-box textarea {
-    color: #333;
+    color: $night-rider;
 }
 
 .welcome-container input::placeholder {
@@ -8454,15 +8227,15 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .agingPage .icon-pointer .fa.fa-long-arrow-up {
-    color: #a9a9a9;
+    color: $dim-gray;
 }
 
 .icon-pointer .fa.fa-long-arrow-up {
-    color: #a9a9a9;
+    color: $dim-gray;
 }
 
 span.red-text {
-    color: red;
+    color: $red;
 }
 
 #invoice-setting .nav > li > a:focus,
@@ -8476,7 +8249,7 @@ span.red-text {
 }
 
 .welcome-header hr {
-    border-top-color: #b3b4b5;
+    border-top-color: $silver;
 }
 
 .no-select {
@@ -8495,8 +8268,8 @@ span.red-text {
 }
 
 .icon-btn .btn-xs {
-    border: 1px solid #d6d6d6;
-    background-color: #eee;
+    border: 1px solid $light-gray;
+    background-color: $whisper-light;
 }
 
 .modal.fade.open-popup.in.show {
@@ -8515,7 +8288,7 @@ span.red-text {
     height: 48px !important;
 }
 
-.add-companyDetail .add_mailer form {
+.add-company-detail .add-mailer form {
     padding-bottom: 60px;
 }
 
@@ -8618,8 +8391,8 @@ span.red-text {
 }
 
 .dashboard-container input[type="checkbox"]:checked:after {
-    background-color: #5b64c9;
-    border: 1px solid #5b64c9;
+    background-color: $chetwode-blue;
+    border: 1px solid $chetwode-blue;
 }
 
 .dashboard-container input[type="checkbox"]:checked:before {
@@ -8627,7 +8400,7 @@ span.red-text {
 }
 
 .dashboard-container input[type="checkbox"]:after {
-    border: 1px solid #999999;
+    border: 1px solid $nobel;
 }
 
 .table-custom-invoice ul.dropdown-menu {
@@ -8657,7 +8430,7 @@ ul.dropdown-menu p.lead.pd {
 
 .dropdown-menu>li>a:hover {
     color: $chetwode-blue !important;
-    background: #eeeff9 !important;
+    background: $lavender !important;
 }
 
 .debit-blank-row td .form-control,
@@ -8716,16 +8489,16 @@ ul.dropdown-menu p.lead.pd {
 .btn-lg.btn-primary {
     min-width: 155px;
     background: $white;
-    color: #5b64c9;
+    color: $chetwode-blue;
     box-shadow: none;
 }
 
 .btn-lg.btn-primary:hover {
-    background: #5b64c9;
+    background: $chetwode-blue;
     color: $white;
-    box-shadow: 0px 4px 4px -3px #afabab;
+    box-shadow: 0px 4px 4px -3px $wistful;
     border-radius: 0px;
-    border-color: #5b64c9;
+    border-color: $chetwode-blue;
 }
 
 .aside-panel-ledger button.btn.btn-lg.btn-primary {
@@ -8736,7 +8509,7 @@ ul.dropdown-menu p.lead.pd {
 .setting-page ul.nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
-    background-color: #f7f8fa;
+    background-color: $alice-blue-light;
     z-index: 9;
     position: relative;
     top: -2px;
@@ -8759,7 +8532,7 @@ ul.dropdown-menu p.lead.pd {
     margin-right: 25px;
     padding-bottom: 7px;
     font-size: 14px;
-    color: #333 !important;
+    color: $night-rider !important;
 }
 
 .setting-page .nav > li > a:hover {
@@ -8821,7 +8594,6 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     color: $nobel !important;
-    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -8845,11 +8617,11 @@ ul.dropdown-menu p.lead.pd {
 }
 
 table.basic td {
-    color: $nero;
+    color: $nobel;
 }
 
 .invoice-table td > a {
-    color: $nero;
+    color: $nobel;
 }
 
 button.btn.btn-filter {
@@ -8860,7 +8632,7 @@ button.btn.btn-filter {
     top: -3px !important;
 }
 
-.welcome_outer #content-wrapper {
+.welcome-outer #content-wrapper {
     padding-left: 0;
 }
 
@@ -8918,7 +8690,7 @@ button.btn.btn-filter {
 .form-group sup {
     font-size: 14px;
     top: 0;
-    color: red;
+    color: $red;
 }
 
 .aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs {
@@ -8980,8 +8752,8 @@ button.ladda-button .ladda-label {
     color: $white;
 }
 
-.ng-select-wrap.liq.selectGroup .below {
-    border: 1px solid #ddd;
+.ng-select-wrap.liq.select-group .below {
+    border: 1px solid $gainsboro;
     height: 36px;
     align-items: center;
     display: flex;
@@ -8989,7 +8761,7 @@ button.ladda-button .ladda-label {
 
 .ng-select-wrap.liq ng-select .below {
     width: 100% !important;
-    border: 1px solid #ddd;
+    border: 1px solid $gainsboro;
     height: 36px;
     display: flex;
     align-items: center;
@@ -9061,8 +8833,8 @@ p.remvBrnchName {
 }
 
 .aside-panel-ledger .btn-lg:hover {
-    background-color: #5b64c9 !important;
-    border-color: #5b64c9 !important;
+    background-color: $chetwode-blue !important;
+    border-color: $chetwode-blue !important;
     color: $white !important;
 }
 
@@ -9107,7 +8879,7 @@ p.remvBrnchName {
     margin-bottom: 10px;
 }
 
-.contactForm .mobileNumberWidth input {
+.contact-form .mobileNumberWidth input {
     padding-right: 0 !important;
 }
 
@@ -9145,13 +8917,13 @@ p.remvBrnchName {
     width: 100%;
 }
 
-.createAccForm li.highlighted.selected,
-.createAccForm li.highlighted {
-    background-color: #eeeff9 !important;
+.create-acc-form li.highlighted.selected,
+.create-acc-form li.highlighted {
+    background-color: $lavender !important;
 }
 
-.createAccForm li.highlighted.selected .account-list-item,
-.createAccForm li.highlighted .account-list-item {
+.create-acc-form li.highlighted.selected .account-list-item,
+.create-acc-form li.highlighted .account-list-item {
     color: $chetwode-blue !important;
 }
 
@@ -9620,7 +9392,7 @@ span#HW_badge_cont:nth-child(3) {
 .select-border-bottom {
     .form-control {
         border: none;
-        border-bottom: 1px solid #d9d9d9;
+        border-bottom: 1px solid $gainsboro;
         width: 100%;
     }
 }
@@ -9974,7 +9746,7 @@ input.mat-input-element{
         width: 90%;
         margin: 0 auto;
     }
-    .auto_save {
+    .auto-save {
         top: 96px;
     }
     #setting-tab .tab-container .nav.nav-tabs {
@@ -10088,7 +9860,7 @@ input.mat-input-element{
     }
     .grp-list {
         padding: 0px;
-        background: #f4f5f8;
+        background: $solitude;
         width: 100%;
         display: block;
     }
@@ -10123,7 +9895,7 @@ input.mat-input-element{
     }
     .stock-lists {
         position: absolute;
-        box-shadow: 0 3px 6px #ccc;
+        box-shadow: 0 3px 6px $very-light-gray;
         background: $white;
         min-width: 200px;
         display: inline-block;
@@ -10212,7 +9984,7 @@ input.mat-input-element{
     .basic > thead > tr th:first-child {
         border-left: none !important;
     }
-    .auto_save {
+    .auto-save {
         top: 124px;
     }
     .justify-content-sm-start {
@@ -10264,7 +10036,7 @@ input.mat-input-element{
         margin-bottom: 0;
     }
     #middleBody .horizontal-form,
-    .view_forms .horizontal-form {
+    .view-forms .horizontal-form {
         max-width: 100%;
         width: 100%;
     }
@@ -10643,7 +10415,7 @@ input.mat-input-element{
     }
     .tax-engine .list-filter {
         padding: 15px !important;
-        border-bottom: 1px solid #ddd !important;
+        border-bottom: 1px solid $gainsboro !important;
         height: auto;
     }
     .list-style ul.list-inline.list-middle.download-drop-down {
@@ -10653,10 +10425,10 @@ input.mat-input-element{
     .radio-custom-label {
         display: inline;
     }
-    #cmpWrp {
+    #company-wrap {
         display: block;
     }
-    .company-text span.c-name {
+    .company-text span.company-name {
         color: $white !important;
     }
     .user-dropdown-header {
@@ -10920,10 +10692,10 @@ input.mat-input-element{
         margin-top: 10px;
         margin-bottom: 5px;
     }
-    .welcome_header h1 {
+    .welcome-header h1 {
         font-size: 25px !important;
     }
-    .welcome_header:after {
+    .welcome-header:after {
         bottom: 0;
     }
     #setting-tab-wrapper .tab-integraton .nav-tabs {
@@ -11003,7 +10775,7 @@ input.mat-input-element{
     }
     .grp-list {
         padding: 10px 0px !important;
-        background: #f4f5f8;
+        background: $solitude;
         width: 100%;
         display: block;
     }
@@ -11038,7 +10810,7 @@ input.mat-input-element{
         background-color: $white;
     }
     .breadcrumbs {
-        border-top: 1px solid #ccc;
+        border-top: 1px solid $very-light-gray;
     }
     #getGroupModal #middleBody {
         height: 100%;
@@ -11059,10 +10831,10 @@ input.mat-input-element{
     .col-wrapper.left-account-operation:nth-child(3),
     .col-wrapper.left-account-operation:nth-child(2),
     .col-wrapper.left-account-operation:nth-child(4) {
-        border-top: 1px solid #ddd;
+        border-top: 1px solid $gainsboro;
     }
     .manage-account-popup.modal {
-        background-color: #f4f5f8;
+        background-color: $solitude;
         opacity: 1;
     }
     .manage-account-popup .modal-content.full-screen-modal {
@@ -11090,11 +10862,11 @@ input.mat-input-element{
         width: 180px !important;
     }
     /* manage group account*/
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-8,
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
+    .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-8,
+    .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-4 {
         width: 100%;
     }
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
+    .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-4 {
         margin-top: 5px;
     }
     .HW_frame_cont.HW_visible.HW_bottom{

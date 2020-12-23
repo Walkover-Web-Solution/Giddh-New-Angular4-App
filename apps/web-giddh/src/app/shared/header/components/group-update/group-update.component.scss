@@ -13,7 +13,7 @@
 .form-group .item-padding .my-dropdown-menu {
     width: 100% !important;
 }
-.marge-btn {
+.merge-btn {
     padding: 8px 16px;
 }
 .move-group-form{
@@ -21,6 +21,9 @@
 }
 .all-taxes{
   width: calc(100% - 95px);
+}
+.move-group-form .list-item{
+    border-bottom:1px solid $gainsboro;
 }
 .collapse-icons{
     font-size: 10px;

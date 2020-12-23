@@ -16,6 +16,16 @@ import { take, takeUntil } from 'rxjs/operators';
     .multi-select .caret {
       display: block !important;
     }
+    .fa-percent{
+        top: 9px;
+        right: 6px;
+        color: #acb0b9;
+    }
+    .discount-name-ul{
+        list-style: none;
+        overflow: auto;
+        max-height: 100px;
+    }
   `]
 })
 

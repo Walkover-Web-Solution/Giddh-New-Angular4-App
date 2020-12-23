@@ -1,4 +1,5 @@
-<div class="bd-rr row view_forms" id="middleBody" style="margin:0" [perfectScrollbar]="config" *ngIf="!(showNewForm$ | async)">
+<div class="bd-rr row view-forms m-0" id="middleBody" [perfectScrollbar]="config"
+    *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
     <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100" *ngIf="breadcrumbPath?.length > 0">
         <div class="col-sm-8">
@@ -105,7 +106,7 @@
                 [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
             </span>
                         <span class="pull-right">
-              <button type="submit" class="btn btn-primary marge-btn" (click)="mergeAccounts()">Merge</button>
+              <button type="submit" class="btn btn-primary merge-btn" (click)="mergeAccounts()">Merge</button>
             </span>
                     </div>
                     <small class="clearfix">This option is risky and can not be undone</small>
@@ -268,9 +269,9 @@
 <!-- modals -->
 
 <!--ng-busy   " -->
-<div class="">
+<div>
     <div class="ng-busy ng-trigger ng-trigger-flyInOut" *ngIf="activeGroupInProgress$ | async">
-        <div class="">
+        <div>
             <div class=" ng-busy-default-wrapper">
                 <div class="ng-busy-default-sign">
                     <div class="ng-busy-default-spinner">
@@ -314,7 +315,7 @@
 </div>
 
 <!--add new buttons-->
-<div class="inline-table new_form ng-scope" *ngIf="(showNewForm$ | async)">
+<div class="inline-table new-form ng-scope" *ngIf="(showNewForm$ | async)">
     <div class="vertical-center groups-buttons">
         <button class="btn isActive mr-b2" (click)="showAddGroupForm()">Create Group</button>
         <span class="clearfix"></span>

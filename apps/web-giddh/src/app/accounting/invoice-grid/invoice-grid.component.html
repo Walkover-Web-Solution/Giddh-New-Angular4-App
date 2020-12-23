@@ -32,6 +32,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     <input type="text" [ngModel]="moment(entryDate).format(giddhDateFormat)" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance-none max-height28" />
 =======
     <input type="text" [ngModel]="moment(entryDate).format('DD-MM-YYYY')" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance-none max-height28" />
@@ -42,6 +43,9 @@
 =======
     <input type="text" [ngModel]="moment(entryDate).format('DD-MM-YYYY')" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance-none max-height28" />
 >>>>>>> 695a711bd8... code design
+=======
+    <input type="text" [ngModel]="moment(entryDate).format('DD-MM-YYYY')" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance-none max-height28" />
+>>>>>>> 7a3b4faa36... changes done
     <div *ngIf="showInvoiceDate" style="position: absolute; z-index:10; min-height:290px;">
         <datepicker [(ngModel)]="entryDate" (selectionDone)="setInvoiceDate($event)" [showWeeks]="false"></datepicker>
     </div>

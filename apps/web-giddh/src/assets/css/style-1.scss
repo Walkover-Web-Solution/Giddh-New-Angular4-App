@@ -21,7 +21,7 @@ VERSION:  1
 html,
 body {
     height: 100%;
-    background: #f7f8fa;
+    background: $alice-blue-light;
     font-family: "opensans-regular";
     color: $nero;
     -webkit-font-smoothing: antialiased;
@@ -122,7 +122,7 @@ a {
 
 /*typography*/
 
-/*.bold,.c-name,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .gTblHead, .gTblFoot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
+/*.bold,.company-name,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .head-block-head, .head-block-foot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
 font-family: Roboto-Bold;
 } */
 
@@ -214,25 +214,25 @@ aside-menu-account .container-fluid {
 /*header nav links override*/
 
 .navbar-inverse .navbar-nav > li > a {
-    color: #363a41;
+    color: $night-rider;
     line-height: 24px;
 }
 
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-    color: #363a41 !important;
+    color: $night-rider !important;
 }
 
 .navbar-inverse .navbar-text {
     color: $white;
 }
 
-#cmpWrp {
+#company-wrap {
     padding-top: 0;
     padding-bottom: 0;
 }
 
-#cmpWrp i {
+#company-wrap i {
     float: left;
     margin: 15px 0;
 }
@@ -241,7 +241,7 @@ aside-menu-account .container-fluid {
   display: block;
 } */
 
-/* .c-name {
+/* .company-name {
     line-height: 20px;
     min-width: 130px;
     text-transform: uppercase;
@@ -294,7 +294,7 @@ aside-menu-account .container-fluid {
     color: $white;
     text-decoration: none;
     border-bottom: 1px solid rgba(256, 256, 256, 0.2);
-    color: #fff !important;
+    color: $white !important;
 }
 
 .dshUl > li:hover {
@@ -390,24 +390,12 @@ aside-menu-account .container-fluid {
     padding-right: 0;
 }
 
-.pr-0 {
-    padding-right: 0 !important;
-}
-
 .pdL25 {
     padding-left: 25px;
 }
 
 .pdR25 {
     padding-right: 25px;
-}
-
-.pdL-5 {
-    padding-left: 5px;
-}
-
-.pdR-5 {
-    padding-right: 5px;
 }
 
 .pd {
@@ -454,16 +442,12 @@ aside-menu-account .container-fluid {
     padding-right: 5px;
 }
 
-.pr-0 {
-    padding-right: 0;
-}
-
 .pd-t1 {
     padding-top: 10px;
 }
 
 .pd-t2,
-.pdT3 {
+.pd-t3 {
     padding-top: 20px;
 }
 
@@ -472,10 +456,6 @@ aside-menu-account .container-fluid {
 }
 
 .pd-l1 {
-    padding-left: 10px !important;
-}
-
-.pdl1imp {
     padding-left: 10px !important;
 }
 
@@ -495,19 +475,19 @@ aside-menu-account .container-fluid {
     padding-right: 20px !important;
 }
 
-.pdB3 {
+.pd-b3 {
     padding-bottom: 30px;
 }
 
 .pd-l3 {
-    padding-left: 30px;
+    padding-left: 30px !important;
 }
 
-.pdR3 {
+.pd-r3 {
     padding-right: 30px !important;
 }
 
-.pdT4 {
+.pd-t4 {
     padding-top: 30px;
 }
 
@@ -515,31 +495,23 @@ aside-menu-account .container-fluid {
     padding-top: 30px;
 }
 
-.pdB4 {
+.pd-b4 {
     padding-bottom: 40px;
 }
 
-.pdL4 {
+.pd-l4 {
     padding-left: 40px;
 }
 
-.pdR4 {
+.pd-r4 {
     padding-right: 40px;
-}
-
-.p-0 {
-    padding: 0;
-}
-
-.mr0 {
-    margin: 0;
 }
 
 .mr {
     margin: 5px;
 }
 
-.mr1 {
+.m-10 {
     margin: 10px;
 }
 
@@ -547,15 +519,15 @@ aside-menu-account .container-fluid {
     margin: 15px;
 }
 
-.mr2 {
+.m-20 {
     margin: 20px;
 }
 
-.mr3 {
+.m-30 {
     margin: 30px;
 }
 
-.mr4 {
+.m-40 {
     margin: 40px;
 }
 
@@ -568,7 +540,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-l05 {
-    margin-left: 5px;
+    margin-left: 5px !important;
 }
 
 .mr-r05 {
@@ -616,7 +588,7 @@ aside-menu-account .container-fluid {
 }
 
 .mr-t3 {
-    margin-top: 30px;
+    margin-top: 30px !important;
 }
 
 .mr-b3 {
@@ -643,7 +615,7 @@ aside-menu-account .container-fluid {
     margin-bottom: 40px;
 }
 
-.mrL4 {
+.mr-l4 {
     margin-left: 40px;
 }
 
@@ -655,10 +627,14 @@ aside-menu-account .container-fluid {
     border: 1px solid $gainsboro;
 }
 
-.bdrN {
+.border-none {
     border: none;
 }
 
+.bd-r-bottom-none{border-bottom:none;}
+.bd-r-top-none{border-top:none;}
+.bd-r-left-none{border-left:none;}
+.bd-r-right-none{border-right:none;}
 .bd-rt {
     border-top: 1px solid $gainsboro;
 }
@@ -695,16 +671,12 @@ aside-menu-account .container-fluid {
     position: fixed;
 }
 
-.witClr {
+.white-color {
     color: $white;
 }
 
-.gryClr {
-    color: #777;
-}
-
-.greyBg {
-    background: #f5f5f5;
+.grey-bg {
+    background: $gray-95;
     /*min-width:320px;*/
 }
 
@@ -724,49 +696,26 @@ aside-menu-account .container-fluid {
     overflow: hidden;
 }
 
-.oyAuto {
+.overflow-y-auto {
     overflow-y: auto;
 }
 
-.oxAuto {
+.overflow-x-auto {
     overflow-x: auto;
 }
 
-.rn {
+.resize-none {
     resize: none;
 }
 
-.ln {
+.list-style-none {
     list-style: none;
 }
 
-.txtUpc {
-    text-transform: uppercase;
-}
-
-.txt-lwc {
-    text-transform: lowercase;
-}
-
-.txtCpc {
-    text-transform: capitalize;
-}
-
-.td-undr {
+.text-underline {
     text-decoration: underline;
 }
 
-.alR {
-    text-align: right;
-}
-
-.alL {
-    text-align: left;
-}
-
-.text-center {
-    text-align: center;
-}
 
 .text-ellipsis {
     text-overflow: ellipsis;
@@ -786,44 +735,21 @@ aside-menu-account .container-fluid {
     font-size: 16px;
 }
 
-.scrClass {
+.scroll-class {
     /* overflow: hidden;
 position: relative; */
 }
 
-.scrItem {
+.scroll-item {
     overflow: auto;
     position: relative;
-}
-
-.oyHid {
-    overflow-y: hidden;
-}
-
-.oxHid {
-    overflow-x: hidden;
-}
-
-.pad0 {
-    padding: 0 !important;
-}
-
-/*structure style*/
-
-#right {
-}
-
-.middleBody {
-}
-
-#restMngCompRit {
 }
 
 /*companylist div style*/
 
 .companyList li {
     min-height: 49px;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid $gainsboro;
     position: relative;
     padding-top: 4px;
 }
@@ -833,11 +759,11 @@ position: relative; */
 }
 
 .companyList li.active {
-    background: #ddd;
+    background: $gainsboro-light;
 }
 
 .companyList > li > a {
-    color: #777;
+    color: $dark-gray;
     position: absolute;
     right: 40px;
     left: 10px;
@@ -845,7 +771,7 @@ position: relative; */
 
 .companyList li h3 {
     padding: 4px 0 2px;
-    color: #333;
+    color: $night-rider;
     font-size: 14px;
 }
 
@@ -872,10 +798,10 @@ position: relative; */
 
 /*manage company detail*/
 
-.greyBox {
-    color: #444;
-    background: #f3f3f3;
-    border: solid 1px #ddd;
+.grey-box {
+    color: $davy-grey;
+    background: $white-smoke;
+    border: solid 1px $gainsboro;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     padding: 15px;
 }
@@ -894,15 +820,15 @@ position: relative; */
 }
 
 .success.glyphicon {
-    color: green;
+    color: $green;
 }
 
 .warning.glyphicon {
-    color: orange;
+    color: $orange;
 }
 
 .error.glyphicon {
-    color: red;
+    color: $red;
 }
 
 /*overriding tabs style*/
@@ -946,7 +872,7 @@ position: relative; */
     -webkit-overflow-scrolling: touch;
 }
 
-#getGroupModal.getGroupModal #middleBody {
+#getGroupModal.get-group-modal #middleBody {
     height: auto;
 }
 .scroll-btn {
@@ -955,7 +881,7 @@ position: relative; */
     bottom: 20px;
     height: 25px;
     width: 25px;
-    background: rgb(185, 178, 178);
+    background: $pink-swan;
     border-radius: 50%;
     cursor: pointer;
 }
@@ -969,7 +895,7 @@ position: relative; */
     padding: 9px 20px;
 }
 
-.fs13 {
+.font-13 {
     font-size: 13px;
 }
 
@@ -1016,11 +942,11 @@ position: relative; */
 }
 
 li:last-child .angular-ui-tree-handle {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .angular-ui-tree-handle p {
-    color: #999;
+    color: $nobel;
     display: none;
 }
 
@@ -1100,7 +1026,7 @@ li:last-child .angular-ui-tree-handle {
 */
 
 .search-loading {
-    color: #8c8c8c;
+    color: $gray;
     display: block;
     text-align: center;
     padding: 20px 0;
@@ -1220,26 +1146,26 @@ li:last-child .angular-ui-tree-handle {
 
 /*account list menus*/
 
-.acntAccordion {
+.account-accordion {
     font-size: 12px;
 }
 
-.acntAccordion a {
-    color: #333;
+.account-accordion a {
+    color: $night-rider;
 }
 
-.acntAccordion .title a {
+.account-accordion .title a {
     display: block;
     padding: 0 15px;
     cursor: pointer;
 }
 
-.acntAccordion > li > ul > li > ul > li {
+.account-accordion > li > ul > li > ul > li {
     line-height: 0;
     list-style: none;
 }
 
-.acntAccordion > li > ul > li > ul > li > a > div {
+.account-accordion > li > ul > li > ul > li > a > div {
     overflow: hidden;
 }
 
@@ -1348,8 +1274,8 @@ li:last-child .angular-ui-tree-handle {
 
 #eledgerwrap .alert-danger {
     color: inherit;
-    border: 2px dashed #ebccd1;
-    background-color: white;
+    border: 2px dashed $pale-rose;
+    background-color: $white;
 }
 
 #eledgerwrap .alert .close {
@@ -1372,13 +1298,13 @@ li:last-child .angular-ui-tree-handle {
     padding: 0 !important;
 }
 
-.greyBg td,
-.greyBg th {
-    background-color: #f5f5f5;
+.grey-bg td,
+.grey-bg th {
+    background-color: $gray-95;
 }
 
 .splBg th {
-    background-color: #5c534d;
+    background-color: $davy-grey;
     color: $white;
 }
 
@@ -1418,7 +1344,7 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .ledger-table.table tfoot td {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .ledger-top-header-left span,
@@ -1578,11 +1504,11 @@ li:last-child .angular-ui-tree-handle {
 
 .tb-head th:nth-child(3) th {
     border: none;
-    border-top: 1px solid #3d3d3d;
+    border-top: 1px solid $night-rider;
 }
 
 .tb-head th:nth-child(3) th:first-child {
-    border-right: 1px solid #3d3d3d;
+    border-right: 1px solid $night-rider;
 }
 
 .fl-none {
@@ -1590,17 +1516,17 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .plBtTbl th {
-    color: #000;
+    color: $black;
     font-size: 16px;
     font-weight: 400 !important;
 }
 
 .plBtTbl thead {
-    background: #e0e0e0;
+    background: $whisper-color;
 }
 
 .plBtTbl tfoot {
-    background: #f7f7f7;
+    background: $gray-95;
 }
 
 .circle {
@@ -1871,7 +1797,7 @@ v-pane-header.show-pseudo {
     position: absolute;
     left: -165px;
     top: -35px;
-    background: #000;
+    background: $black;
     color: $white;
     border-radius: 5px;
     z-index: 9999;
@@ -1888,7 +1814,7 @@ v-pane-header.show-pseudo {
     left: inherit;
     right: -140px;
     top: -35px;
-    background: #000;
+    background: $black;
     color: $white;
     border-radius: 5px;
     z-index: 9999;
@@ -1908,7 +1834,7 @@ v-pane-header.show-pseudo {
     height: 0px;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
-    border-bottom: 10px solid black;
+    border-bottom: 10px solid $black;
     transform: rotate(-90deg);
 }
 
@@ -1920,7 +1846,7 @@ v-pane-header.show-pseudo {
     height: 0px;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
-    border-bottom: 10px solid black;
+    border-bottom: 10px solid $black;
     transform: rotate(90deg);
 }
 
@@ -2005,8 +1931,8 @@ v-pane-header.show-pseudo {
 
 .title-bar {
     height: 50px;
-    background: #f5f5f5;
-    border-bottom: 1px solid #e0e0e0;
+    background: $gray-95;
+    border-bottom: 1px solid $whisper-color;
     width: 100%;
     line-height: 50px;
     overflow: hidden;
@@ -2018,7 +1944,7 @@ v-pane-header.show-pseudo {
 
 .filter-bar {
     padding: 10px 10px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $whisper-color;
     width: 100%;
 }
 
@@ -2073,8 +1999,8 @@ table.borderless th {
 .table-r tbody tr {
     height: 36px;
     line-height: 18px;
-    border-bottom: 1px solid #e1e1e1;
-    background: #f5f5f5;
+    border-bottom: 1px solid $whisper-color;
+    background: $gray-95;
 }
 
 .table-l tbody tr td,
@@ -2155,20 +2081,20 @@ z-index: 9;
 }
 
 .table-container div.row {
-    border-bottom: 1px solid #e0e0e0;
-    /* border-right: 1px solid #e0e0e0; */
+    border-bottom: 1px solid $whisper-color;
+    /* border-right: 1px solid $whisper-color; */
 }
 
 .table-container .isHidden {
     display: none;
 }
 
-.profitLoss.table-container > div > section {
-    border-left: 1px solid #e0e0e0;
+.profit-loss.table-container > div > section {
+    border-left: 1px solid $whisper-color;
 }
 
 .trial-balance.table-container > div > section {
-    border-left: 7px solid #e0e0e0;
+    border-left: 7px solid $whisper-color;
 }
 
 .table-container > div > section.assets {
@@ -2191,7 +2117,7 @@ z-index: 9;
     text-align: center;
     margin-top: 150px;
     font-size: 36px;
-    color: #9e9a9a;
+    color: $nobel;
 }
 
 .no-data > img {
@@ -2200,7 +2126,7 @@ z-index: 9;
 
 .no-data p {
     font-size: 14px;
-    color: #444;
+    color: $davy-grey;
     margin-top: 20px;
 }
 
@@ -2274,11 +2200,11 @@ table:focus {
 
 /*tbpl list*/
 
-.tbplList .list-inline {
+.tbpl-list .list-inline {
     line-height: normal;
 }
 
-.tbplList .circle {
+.tbpl-list .circle {
     vertical-align: sub;
 }
 
@@ -2358,13 +2284,13 @@ padding: 0;
     float: left;
     display: inline-block;
     position: relative;
-    background: #f4f5f8;
+    background: $solitude;
     border-radius: 2px;
     box-sizing: border-box;
     margin: 7px;
     transition: all 0.5s ease-in-out;
     padding: 10px;
-    border: 1px solid #ebedf1;
+    border: 1px solid $gainsboro;
     word-break: break-all;
 }
 .account-card:first-child {
@@ -2380,7 +2306,7 @@ padding: 0;
     padding-bottom: 5px;
     padding-right: 45px;
     margin-bottom: 5px;
-    border-bottom: 1px solid #337ab7;
+    border-bottom: 1px solid $primary;
     text-overflow: ellipsis;
     max-width: 325px;
     white-space: nowrap;
@@ -2389,11 +2315,11 @@ padding: 0;
 
 .account-card > .balances > span.title {
     display: block;
-    color: #333;
+    color: $night-rider;
 }
 
 .account-card > .balance {
-    color: #333;
+    color: $night-rider;
     font-size: 18px;
     padding-bottom: 10px;
     line-height: normal;
@@ -2434,19 +2360,19 @@ padding: 0;
 .linked-accounts {
     width: 100%;
     padding: 10px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid $whisper-color;
     margin-bottom: 20px;
-    background: #fffffe;
+    background: $white;
     position: relative;
     word-break: break-all;
 }
 
 .linked-accounts:nth-child(odd) {
-    background: #f5f5f5;
+    background: $gray-95;
 }
 
 .linked-accounts:nth-child(odd) > .title {
-    border-bottom: 2px solid #337ab7;
+    border-bottom: 2px solid $primary;
 }
 
 .linked-accounts > .title {
@@ -2487,14 +2413,14 @@ padding: 0;
 
 .error-msg {
     font-size: 12px;
-    color: red;
+    color: $red;
     line-height: 18px;
 }
 
 .loading-bar {
     width: 100%;
     height: 20px;
-    border: 1px solid #2980b9;
+    border: 1px solid $primary;
     border-radius: 3px;
     background-image: repeating-linear-gradient(
         -45deg,
@@ -2520,7 +2446,7 @@ padding: 0;
     height: 42px;
     background: $white;
     line-height: 43px;
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 1px solid $gray-95;
 }
 
 .add-manage-grouplist .group span {
@@ -2565,7 +2491,7 @@ background: #f9f9f9;
     position: relative;
     margin: 0 10px 15px 0;
     padding: 10px;
-    color: #444;
+    color: $davy-grey;
     background: $white;
     border-radius: 2px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -2700,43 +2626,43 @@ background: #f9f9f9;
 
 /*div table*/
 
-.gTbl {
+.head-block {
     display: table;
     width: 100%;
 }
 
-.gTblRow {
+.head-block-row {
     display: table-row;
 }
 
-.gTblHead {
+.head-block-head {
     display: table-header-group;
-    background-color: #ddd;
+    background-color: $gainsboro-light;
 }
 
-.gTblCell,
-.gTblHead {
+.head-block-cell,
+.head-block-head {
     display: table-cell;
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid $gainsboro;
 }
 
-.gTblHead {
+.head-block-head {
     display: table-header-group;
-    background-color: #ddd;
+    background-color: $gainsboro-light;
 }
 
-.gTblFoot {
+.head-block-foot {
     display: table-footer-group;
-    background-color: #ddd;
+    background-color: $gainsboro-light;
 }
 
-.gTblBody {
+.head-block-body {
     display: table-row-group;
 }
 
-.gTbl .gTblRow:nth-of-type(odd) {
-    background-color: #f9f9f9;
+.head-block .head-block-row:nth-of-type(odd) {
+    background-color: $gray-95;
 }
 
 /* ng2 component styles */
@@ -2859,7 +2785,7 @@ table td.nopad {
 
 .inner-table thead tr,
 .inner-table tbody tr {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid $white-smoke;
     text-align: center;
 }
 
@@ -2869,7 +2795,7 @@ table td.nopad {
 
 .inner-table tbody td,
 .inner-table thead th {
-    border-right: 1px solid #f0f0f0;
+    border-right: 1px solid $white-smoke;
 }
 
 .inner-table tbody td:last-child,
@@ -2944,22 +2870,22 @@ ul.pills {
 ul.pills li {
     line-height: 16px;
     font-size: 12px;
-    background: #444;
+    background: $davy-grey;
     border-radius: 5px;
     overflow: hidden;
     margin-right: 5px;
     padding: 5px 10px;
     cursor: pointer;
-    background-color: rgb(244, 245, 248);
-    color: #333;
+    background-color: $solitude;
+    color: $night-rider;
     display: inline-block;
-    border: 1px solid #ddd;
+    border: 1px solid $gainsboro;
 }
 
 .load-more {
     margin-top: 10px;
     font-size: 12px;
-    color: #337ab7;
+    color: $primary;
 }
 
 .on-btn {
@@ -2967,7 +2893,7 @@ ul.pills li {
     width: 12px;
     margin: 4px 7px;
     border-radius: 50%;
-    background: green;
+    background: $green;
 }
 
 .borderless,
@@ -3119,19 +3045,19 @@ ul.pills li {
 }
 
 .thead-background1 th {
-    background: #5c534d;
+    background: $davy-grey;
     color: $white;
 }
 
 .t-h-bg2 th,
 .t-h-bg2 td {
-    background: #e6e6e6;
+    background: $gray-90;
 }
 
 .t-h-bg3 th,
 .t-h-bg3 td {
-    background: #f5f5f5;
-    color: #333;
+    background: $gray-95;
+    color: $night-rider;
 }
 
 .ledger-table-body {
@@ -3162,15 +3088,15 @@ ul.pills li {
 }
 
 .ledger-container table tr.bg3 th {
-    background: #f5f5f5;
+    background: $gray-95;
     height: 32px;
     padding: 5px 10px;
-    color: #333;
+    color: $night-rider;
 }
 
 /*.ledger-container-w table tr.bg3 th {*/
 
-/*background: #f5f5f5;*/
+/*background: $gray-95;*/
 
 /*height: 32px;*/
 
@@ -3196,10 +3122,10 @@ ul.pills li {
     height: 32px;
 }
 
-.compoundEntry td,
-.compoundEntry td input,
-.compoundEntry td:hover,
-.compoundEntry td input:hover {
+.compound-entry td,
+.compound-entry td input,
+.compound-entry td:hover,
+.compound-entry td input:hover {
     background: transparent !important;
 }
 
@@ -3215,12 +3141,12 @@ ul.pills li {
 
 .add-entry-row .ledger-row td,
 .add-entry-row .ledger-row td input {
-    background: #5c534d;
+    background: $davy-grey;
     color: $white;
 }
 
 .ledger-panel {
-    background: #f4f5f8;
+    background: $solitude;
     border-radius: 2px;
     position: relative;
     padding: 6px 14px;
@@ -3379,7 +3305,7 @@ ul.pills li {
 
 .sub_nav_menu ul li:not(.divider):hover {
     /* background: rgba(63, 63, 63, .9); */
-    background: #2d9ee0;
+    background: $vivid-blue;
 }
 
 .sub_nav_menu li i.glyphicon-trash {
@@ -3439,7 +3365,7 @@ ul.pills li {
 }
 
 .edit-tax-section p {
-    color: #666666;
+    color: $dark-gray;
 }
 
 .download-invoice-ledger {
@@ -3468,7 +3394,7 @@ ul.pills li {
 }
 
 .add-entry-row {
-    border-top: 2px solid #5c534d;
+    border-top: 2px solid $davy-grey;
 }
 
 .position-relative {
@@ -3487,7 +3413,7 @@ ul.pills li {
 .verified {
     right: 10px;
     top: 32px;
-    color: green;
+    color: $green;
 }
 
 .unverified {
@@ -3503,7 +3429,7 @@ ul.pills li {
     position: absolute;
     left: -95px;
     top: 0;
-    background: #000;
+    background: $black;
     color: $white;
     border-radius: 5px;
     z-index: 9999;
@@ -3520,7 +3446,7 @@ ul.pills li {
     left: inherit;
     right: -95px;
     top: -15px;
-    background: #000;
+    background: $black;
     color: $white;
     border-radius: 5px;
     z-index: 9999;
@@ -3540,7 +3466,7 @@ ul.pills li {
     height: 0px;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
-    border-bottom: 10px solid black;
+    border-bottom: 10px solid $black;
     transform: rotate(-90deg);
 }
 
@@ -3552,7 +3478,7 @@ ul.pills li {
     height: 0px;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
-    border-bottom: 10px solid black;
+    border-bottom: 10px solid $black;
     transform: rotate(90deg);
 }
 
@@ -3648,17 +3574,17 @@ ul.pills li {
 }
 
 .shadow {
-    box-shadow: black 0px 0px 14px -4px;
+    box-shadow: $black 0px 0px 14px -4px;
 }
 
 /*giddh loader*/
 
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
-    background: #221f1f none repeat scroll 0 0;
-    border: 7px solid #c63b13;
+    background: $nero none repeat scroll 0 0;
+    border: 7px solid $red;
     border-radius: 50%;
-    box-shadow: 0 -10px 0 14px #fff inset;
+    box-shadow: 0 -10px 0 14px $white inset;
     box-sizing: border-box;
     height: 60px;
     width: 60px;
@@ -3685,7 +3611,7 @@ ul.pills li {
 }
 
 .font-white {
-    color: white;
+    color: $white;
     padding: 10px;
 }
 
@@ -3759,7 +3685,7 @@ tr.db-bnk-account > td.reconnectDiv {
     z-index: 1000;
 }
 
-.dashboard-reconnectdiv {
+.dashboard-reconnect-block {
     background: rgba(255, 255, 255, 0.9);
     position: absolute;
     height: 100%;
@@ -3772,24 +3698,24 @@ tr.db-bnk-account > td.reconnectDiv {
 }
 
 .font-black {
-    color: #444;
+    color: $davy-grey;
     padding: 10px;
     padding-top: 40px;
 }
 
-.longcode-details {
+.long-code-details {
     margin-top: 10px;
 }
 
-.longcode-details figure {
+.long-code-details figure {
     margin-left: 8px;
 }
 
-.longcode-details figure ul {
+.long-code-details figure ul {
     padding: 0 20px;
 }
 
-.longcode-details figure h1 {
+.long-code-details figure h1 {
     font-size: 18px;
 }
 
@@ -3800,10 +3726,6 @@ tr.db-bnk-account > td.reconnectDiv {
 .padding-0 {
     padding-left: 0;
     padding-right: 0;
-}
-
-.pdL-0 {
-    padding-left: 0;
 }
 
 .custom-tabset {
@@ -3820,7 +3742,7 @@ tr.db-bnk-account > td.reconnectDiv {
 
 .custom-tabset ul li a {
     border: 0px !important;
-    border-bottom: 1px solid #ddd !important;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .y-scroll {
@@ -3847,10 +3769,10 @@ tr.db-bnk-account > td.reconnectDiv {
 .flying-div {
     right: 0px;
     height: 100%;
-    background: white;
+    background: $white;
     width: 100%;
     float: right;
-    border-left: lightgrey 1px solid;
+    border-left: $light-gray 1px solid;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -3877,13 +3799,13 @@ tr.db-bnk-account > td.reconnectDiv {
 }
 
 .required {
-    color: red;
+    color: $red;
 }
 
 .invoice-widget {
     width: 400px;
     height: 400px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid $whisper-color;
     margin: 0 5px;
     padding: 5px;
     position: relative;
@@ -3923,7 +3845,7 @@ tr.db-bnk-account > td.reconnectDiv {
 .gridster-item-heading {
     position: relative;
     min-height: 24px;
-    background-color: #ddd;
+    background-color: $gainsboro-light;
 }
 
 #remove-widget {
@@ -3963,7 +3885,7 @@ tr.db-bnk-account > td.reconnectDiv {
 .invoice-widget {
     height: 200px;
     width: 200px;
-    background: #fff !important;
+    background: $white !important;
     position: relative;
     padding: 5px;
 }
@@ -4102,7 +4024,7 @@ tr.db-bnk-account > td.reconnectDiv {
     position: absolute;
     bottom: 16px;
     right: 16px;
-    border: 1px solid black;
+    border: 1px solid $black;
     background-color: $white;
     padding: 0 4px;
     opacity: 0.7;
@@ -4114,7 +4036,7 @@ tr.db-bnk-account > td.reconnectDiv {
     right: 5px;
     left: 5px;
     top: 5px;
-    border: 1px solid black;
+    border: 1px solid $black;
     background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -4127,30 +4049,30 @@ tr.db-bnk-account > td.reconnectDiv {
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tl {
     top: 0;
     left: 0;
-    border-left: 1px solid black;
-    border-top: 1px solid black;
+    border-left: 1px solid $black;
+    border-top: 1px solid $black;
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tr {
     top: 0;
     right: 0;
-    border-right: 1px solid black;
-    border-top: 1px solid black;
+    border-right: 1px solid $black;
+    border-top: 1px solid $black;
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-bl {
     bottom: 0;
     left: 0;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+    border-left: 1px solid $black;
+    border-bottom: 1px solid $black;
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-br {
     bottom: 0;
     right: 0;
-    border: 1px solid black;
+    border: 1px solid $black;
     cursor: se-resize;
-    background-color: white;
+    background-color: $white;
 }
 
 /* copy the popover code from bootstrap so this will work even without it */
@@ -4254,10 +4176,9 @@ border-bottom-color: $white;
 }
 
 .mce-panel {
-    border: 0 solid #cacaca;
     border: 0 solid rgba(0, 0, 0, 0.2) !important;
     height: 100%;
-    background-color: #f0f0f0;
+    background-color: $white-smoke;
     overflow-y: auto;
 }
 
@@ -4276,7 +4197,7 @@ display:none;
 
 .proforma-list > .filters {
     padding: 5px 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $whisper-color;
     margin-bottom: 5px;
     position: relative;
 }
@@ -4358,7 +4279,7 @@ width:30px;
 }
 
 .invoice-wrapper-m.a4 .hasVar input.isEditable {
-    border: 1px solid #444;
+    border: 1px solid $davy-grey;
 }
 
 .proforma-particulars tr td {
@@ -4442,7 +4363,7 @@ left: 16px !important;
 /*.stock-bar{
 padding:10px;
 margin:0;
-border-bottom: 1px solid #e0e0e0;
+border-bottom: 1px solid $whisper-color;
 }*/
 
 .stock-bar ul {
@@ -4480,8 +4401,8 @@ border-bottom: 1px solid #e0e0e0;
 .sidebar {
     width: 320px;
     height: 100%;
-    border-right: 1px solid #e0e0e0;
-    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid $whisper-color;
+    border-left: 1px solid $whisper-color;
     padding: 10px;
 }
 
@@ -4491,23 +4412,23 @@ border-bottom: 1px solid #e0e0e0;
 
 .stock-grp-list > li > a {
     /* text-transform: uppercase; */
-    color: #616161;
+    color: $dark-gray;
 }
 
 .sub-grp > li > a {
     text-transform: uppercase;
-    color: #616161;
+    color: $dark-gray;
     font-weight: 400;
 }
 
 .stock-items > li > a {
     text-transform: capitalize;
-    color: #909090;
+    color: $nobel;
 }
 
 .stock-items > li > a:hover,
 .sub-grp > li > a:hover {
-    color: #616161;
+    color: $dark-gray;
 }
 
 .stock-grp.list {
@@ -4517,7 +4438,7 @@ border-bottom: 1px solid #e0e0e0;
 
 .stock-grp-list li > i {
     top: 3px;
-    color: #616161;
+    color: $dark-gray;
     float: right;
 }
 
@@ -4530,7 +4451,7 @@ border-bottom: 1px solid #e0e0e0;
 .stock-grp-list > li {
     /* padding: 7px 0; */
     padding: 6px 0 6px 15px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $whisper-color;
     /* background-color: rgb(220, 220, 220); */
 }
 
@@ -4563,7 +4484,7 @@ border-bottom: 1px solid #e0e0e0;
 
 .stock-twin-list ul li {
     padding: 5px;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid $whisper-color;
 }
 
 .stock-twin-list ul li:first-child {
@@ -4571,7 +4492,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .stock-twin-list ul li > a {
-    color: #444;
+    color: $davy-grey;
 }
 
 .uppercase {
@@ -4589,7 +4510,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .recurring-entry-grid .re-header {
-    background: #337ab7;
+    background: $primary;
     overflow: hidden;
 }
 
@@ -4602,7 +4523,7 @@ border-bottom: 1px solid #e0e0e0;
 .recurring-entry-grid .re-body .row {
     padding: 0;
     margin: 0;
-    border: 1px solid #e0e0e0;
+    border: 1px solid $whisper-color;
     border-top: none;
     max-height: 42px;
     transition: max-height 0.15s ease-out;
@@ -4655,7 +4576,7 @@ border-bottom: 1px solid #e0e0e0;
     padding: 10px;
     background: $white;
     overflow: hidden;
-    border-top: 1px solid #f5f5f5;
+    border-top: 1px solid $gray-95;
     position: relative;
 }
 
@@ -4665,16 +4586,16 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .recurring-entry-grid .re-body .row.animate input {
-    border: 1px solid #f0f0f0;
+    border: 1px solid $white-smoke;
 }
 
 .recurring-entry-grid .re-body .row.animate input:disabled {
-    background: #e0e0e0;
+    background: $whisper-color;
 }
 
 .recurring-entry-grid .filters {
     padding: 10px 0;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid $whisper-color;
 }
 
 .recurring-entry-grid .filters ul li input,
@@ -4696,7 +4617,7 @@ border-bottom: 1px solid #e0e0e0;
     font-size: 10px;
     right: calc(50% + 10px);
     top: 22px;
-    color: #9e9c9c;
+    color: $nobel;
 }
 
 .mtop-neg-54 {
@@ -4736,7 +4657,7 @@ border-bottom: 1px solid #e0e0e0;
     margin: 0;
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
     border-right: 1px solid $gainsboro;
-    background: #fdfdfd;
+    background: $white-smoke;
 }
 
 .tour-backdrop {
@@ -4862,7 +4783,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .modal-dialog.gray .modal-content {
-    background: #f4f5f8;
+    background: $solitude;
     border-radius: 0;
 }
 
@@ -4879,14 +4800,14 @@ border-bottom: 1px solid #e0e0e0;
 
 .modal-liquid.modal-dialog .modal-content .modal-header,
 .modal-liquid.modal-dialog .modal-content .modal-body {
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 /*box styles  on settings integration page*/
 
 .box {
     padding: 15px;
-    background-color: white;
+    background-color: $white;
     /* margin: 20px 0; */
 }
 
@@ -4903,7 +4824,7 @@ border-bottom: 1px solid #e0e0e0;
 .select2-parent .select2-container--default .select2-selection--single {
     border-radius: 0;
     background-color: $white;
-    border: 1px solid #cecece;
+    border: 1px solid $gainsboro;
 }
 
 .select2-parent .select2-container .select2-selection--single {
@@ -4915,7 +4836,7 @@ border-bottom: 1px solid #e0e0e0;
     .select2-selection--single
     .select2-selection__rendered {
     line-height: 32px;
-    color: #616161;
+    color: $dark-gray;
     font-size: 14px;
     padding-left: 0;
 }
@@ -4956,7 +4877,7 @@ border-bottom: 1px solid #e0e0e0;
 .dropdown-menu > .active > a > a,
 .dropdown-menu > .active > a > a:focus,
 .dropdown-menu > .active > a > a:hover {
-    color: white;
+    color: $white;
 }
 
 .dropdown-menu > li > a,
@@ -4965,8 +4886,8 @@ border-bottom: 1px solid #e0e0e0;
 .dropdown-menu > li > a > a,
 .dropdown-menu > li > a > a:focus,
 .dropdown-menu > li > a > a:hover {
-    color: black;
-    background-color: white;
+    color: $black;
+    background-color: $white;
 }
 
 #setting-tab .nav > li > a:focus,
@@ -4991,17 +4912,17 @@ strong {
 }
 
 .hamburger-menu a:hover {
-    color: #fff !important;
+    color: $white !important;
 }
 
 .hamburger-menu.open a {
     background: transparent !important;
-    color: #fff !important;
+    color: $white !important;
 }
 
 .navbar-inverse .btn-link:focus,
 .navbar-inverse .btn-link:hover {
-    color: #333;
+    color: $night-rider;
 }
 
 b,
@@ -5015,7 +4936,7 @@ strong {
     .select2-selection--single
     .select2-selection__arrow
     b {
-    border-color: #4d4d4d transparent transparent transparent !important;
+    border-color: $matterhorn transparent transparent transparent !important;
     border-width: 6px 5px 0 5px;
     margin-left: -8px;
     margin-top: -3px;
@@ -5067,7 +4988,7 @@ bs-datepicker-container {
 #sFSection-Jkvq .sFsubmit.btn-primary {
     font-size: 14px !important;
     background: #28ab00 !important;
-    color: #fff !important;
+    color: $white !important;
 }
 
 /* added by sarfaraz */
@@ -5102,11 +5023,11 @@ bs-datepicker-container {
 }
 
 .modal-dialog.universal_modal .shortcuts {
-    background: #f9f9f9;
+    background: $alice-blue;
     border-top: none;
     margin: 0;
     padding: 12px 16px 12px 20px;
-    color: #717274;
+    color: $gray;
     font-size: 12px;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -5126,12 +5047,12 @@ perfect-scrollbar.ps-show-active
 
 .sub-menu-nav li > a {
     padding: 5px 12px;
-    color: #333333;
+    color: $night-rider;
     display: block;
 }
 
 .sub-menu-nav li > a:hover {
-    background: #2d9ee0;
+    background: $vivid-blue;
 }
 
 .no-dbl-click-select {
@@ -5147,7 +5068,7 @@ perfect-scrollbar.ps-show-active
 
 .custom-item:hover , .discount-item:hover {
     background-color: $lavender !important;
-    color: #5b64c9 !important;
+    color: $chetwode-blue !important;
     &:hover {
         .pull-left.text-ellipsis {
             color: $chetwode-blue !important;
@@ -5157,7 +5078,7 @@ perfect-scrollbar.ps-show-active
 
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid #a2a2a2;
+    border-bottom: 1px solid $dim-gray;
     display: inline-block;
     width: 57px;
     margin-right: 13px;
@@ -5165,7 +5086,7 @@ perfect-scrollbar.ps-show-active
 
 .or-line::after {
     content: "";
-    border-bottom: 1px solid #a2a2a2;
+    border-bottom: 1px solid $dim-gray;
     display: inline-block;
     width: 57px;
     margin-left: 13px;
@@ -5174,7 +5095,7 @@ perfect-scrollbar.ps-show-active
 .or-line {
     display: flex;
     align-items: center;
-    color: #a2a2a2;
+    color: $dim-gray;
     margin-bottom: 10px;
 }
 
@@ -5185,7 +5106,7 @@ perfect-scrollbar.ps-show-active
 }
 
 .basic thead tr th {
-    background: #e5e5e5;
+    background: $gray-90;
     color: $nero;
     border: 0;
     font-family: "" opensans-semibold "";
@@ -5193,7 +5114,7 @@ perfect-scrollbar.ps-show-active
 }
 
 .basic tbody tr:hover td {
-    background: #f4f5f8;
+    background: $solitude;
 }
 
 body.fixed {
@@ -5216,7 +5137,7 @@ form#groupDetailForm {
 #getGroupModal #middleBody {
     height: 100%;
 }
-#getGroupModal.getGroupModal #middleBody {
+#getGroupModal.get-group-modal #middleBody {
     height: auto;
 }
 .select2-ledger .menu .item {
@@ -5305,7 +5226,7 @@ form#groupDetailForm {
     bs-datepicker-container {
         overflow-y: auto;
         height: auto;
-        box-shadow: 0 0 10px 0 #aaa;
+        box-shadow: 0 0 10px 0 $wistful;
         top: 50% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
