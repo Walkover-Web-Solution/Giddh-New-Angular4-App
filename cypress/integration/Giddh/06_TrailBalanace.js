@@ -4,28 +4,28 @@ describe('This is TrialBalance Search Test', () => {
 
     let testData = "";
     let entryUniqueName = "";
-    let allEntryUniqueName = [];
+    before(() => {
+        cy.fixture('example.json')
+            .then((data) => {
+                // "this" is still the test context object
+                testData = data
+            })
+    });
 
-    // before(() => {
-    //     cy.fixture('example.json')
-    //         .then((data) => {
-    //             // "this" is still the test context object
-    //             testData = data
-    //         })
-    // });
-    //
-    // before(() => {
-    //     cy.viewport(1366, 768)
-    //     cy.loginWithEmail(testData.Email, testData.Password);
-    // })
-    //
-    // it('Verify Trial Balance using Global Search', () => {
-    //     cy.createLedgerAPI('cash').then((response) => {
-    //         expect(response.status).to.eq(201)
-    //         const respBody = response.body;
-    //          allEntryUniqueName =  respBody.body.debitTransactions;
-    //     })
-    //
-    // });
+    before(() => {
+        cy.deleteAllLedgersAPI('uitest').then(()=>{
+            cy.viewport(1366, 768)
+            cy.loginWithEmail(testData.Email, testData.Password);
+        })
+    })
+
+    it('Verify Trial Balance Amount after Create Entry', () => {
+        cy.createLedgerAPI('uitest').then((response) => {
+            if (response.status === 201){
+                cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+            }
+            cy.searchOnTrialBalance('uitest', '199.99  Dr. ')
+        })
+    });
 
 })
