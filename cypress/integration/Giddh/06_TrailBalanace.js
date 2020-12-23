@@ -13,18 +13,29 @@ describe('This is TrialBalance Search Test', () => {
     });
 
     before(() => {
-        cy.deleteAllLedgersAPI('uitest').then(()=>{
-            cy.viewport(1366, 768)
-            cy.loginWithEmail(testData.Email, testData.Password);
+        let allAccountName = ['cash', 'uitest', "invoiceaccount"];
+        allAccountName.forEach((accName) => {
+            cy.deleteAllLedgersAPI(accName)
         })
+        cy.viewport(1366, 768)
+        cy.loginWithEmail(testData.Email, testData.Password);
     })
 
-    it('Verify Trial Balance Amount after Create Entry', () => {
+    xit('Verify Trial Balance Amount after Create Entry', () => {
         cy.createLedgerAPI('uitest').then((response) => {
             if (response.status === 201){
                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
             }
-            cy.searchOnTrialBalance('uitest', '199.99  Dr. ')
+            cy.searchOnTrialBalance('uitest', '199.99')
+        })
+    });
+
+    xit('Verify Balance Sheet Amount after Create Entry', () => {
+        cy.createLedgerAPI('uitest').then((response) => {
+            if (response.status === 201){
+                cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+            }
+            cy.searchOnTrialBalance('uitest', '199.99')
         })
     });
 
