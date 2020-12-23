@@ -19,7 +19,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     name: Giddh test cases
     env:
       # prevents extra Cypress installation progress messages
@@ -41,7 +41,7 @@ jobs:
       # confirm there is no Cypress installed
       - run: npx cypress cache path
       # should return empty list of installed versions
-      - run: npx cypress cache list
+      - run: npx cypress cache list 
       # restore / cache the binary ourselves on Linux
       # see https://github.com/actions/cache
       - name: Cache Cypress
