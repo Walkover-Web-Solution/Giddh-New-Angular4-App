@@ -127,6 +127,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     /** True if current organization is branch */
     public isBranch: boolean;
+    /** True if current organization is company with single branch */
+    public isCompanyWithSingleBranch: boolean;
     /** Stores the source branch alias */
     public sourceBranchAlias: string;
     /** Stores the destination branch alias */
@@ -166,6 +168,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.focusDefaultSource();
         }
         this.isBranch = this._generalService.currentOrganizationType === OrganizationType.Branch;
+        this.isCompanyWithSingleBranch = this._generalService.currentOrganizationType === OrganizationType.Company && this.branches && this.branches.length === 1;
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -500,13 +503,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         additional: b
                     }));
                     this.branches$ = observableOf(this.branches);
-
+                    this.isCompanyWithSingleBranch = this._generalService.currentOrganizationType === OrganizationType.Company && this.branches && this.branches.length === 1;
                     if (this.editBranchTransferUniqueName) {
                         this.getBranchTransfer();
                     }
                 } else {
+                    this.branches = [];
                     this.branches$ = observableOf(null);
-
+                    this.isCompanyWithSingleBranch = this._generalService.currentOrganizationType === OrganizationType.Company && this.branches && this.branches.length === 1;
                     if (this.editBranchTransferUniqueName) {
                         this.getBranchTransfer();
                     }
@@ -554,8 +558,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this._warehouseService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
                 if (res && res.body) {
                     this.branchTransfer[type][index].warehouse.name = res.body.name;
-                    this.branchTransfer[type][index].warehouse.taxNumber = res.body.taxNumber;
-                    this.branchTransfer[type][index].warehouse.address = res.body.address;
+                    if (res.body.addresses && res.body.addresses.length) {
+                        const defaultAddress = res.body.addresses.find(address => address.isDefault);
+                        this.branchTransfer[type][index].warehouse.address = defaultAddress ? defaultAddress.address : '';
+                        this.branchTransfer[type][index].warehouse.taxNumber = defaultAddress ? defaultAddress.taxNumber : '';
+                    } else {
+                        this.branchTransfer[type][index].warehouse.address = '';
+                        this.branchTransfer[type][index].warehouse.taxNumber = '';
+                    }
                 }
             });
         } else {
@@ -589,7 +599,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     }
                 });
             }
-            if (this.branchTransfer.sources[index].uniqueName) {
+            if (this.branchTransfer.sources[index] && this.branchTransfer.sources[index].uniqueName) {
                 // Update source warehouses
                 this.senderWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
                 if(this.allWarehouses[this.branchTransfer.sources[index].uniqueName] && this.allWarehouses[this.branchTransfer.sources[index].uniqueName].length > 0) {
