@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ToasterService } from '../../services/toaster.service';
 import { AgingDropDownoptions } from '../../models/api-models/Contact';
 import { AppState } from '../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 
@@ -39,17 +39,16 @@ export class AgingDropdownComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _toasty: ToasterService, public _toaster: ToasterService, private _agingReportActions: AgingReportActions) {
-        //
-        this.setDueRangeRequestInFlight$ = this.store.select(s => s.agingreport.setDueRangeRequestInFlight).pipe(takeUntil(this.destroyed$));
-
+        this.setDueRangeRequestInFlight$ = this.store.pipe(select(s => s.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        //
+        
     }
 
     public ngOnDestroy() {
-        // this.closeEvent.emit(this.options);
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public closeAgingDropDown() {

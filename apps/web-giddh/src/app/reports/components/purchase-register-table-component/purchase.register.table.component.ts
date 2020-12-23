@@ -19,6 +19,9 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
     @Input() public reportRespone: PurchaseReportsModel[];
     @Input() public activeFinacialYr: any;
     @Input() purchaseRegisterTotal: any;
+    /** Stores the current branch unique name used for filtering */
+    @Input() public currentBranchUniqueName: string;
+
     @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
     public messageBody = {
         header: {
@@ -156,7 +159,8 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
             this._router.navigate(['pages', 'reports', 'purchase-detailed-expand'], {
                 queryParams: {
                     from: from,
-                    to: to
+                    to: to,
+                    branchUniqueName: this.currentBranchUniqueName
                 }
             });
         }

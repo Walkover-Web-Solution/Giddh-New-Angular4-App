@@ -154,6 +154,12 @@ a[vr-item]:focus {
     padding: 0px !important;
 }
 
+.button-back-head{
+    position: absolute;
+    right: 0;
+    top: 110px;
+}
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     .left-fixed-header li {
         display: grid;
@@ -444,7 +450,7 @@ a[vr-item]:focus {
         position: relative;
         left: 16px;
         padding: 0 20px;
-        color:$white;
+        color: $white;
         font-size: 20px;
 
     }
@@ -471,7 +477,7 @@ a[vr-item]:focus {
     display: none;
 }
 
-.calender-addone {
+.calendar-addon {
     color: $white;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
@@ -484,7 +490,7 @@ a[vr-item]:focus {
 .not-today{
     padding:0px !important;
     border:0px !important;
-    .calender-addone {
+    .calendar-addon {
         position: absolute;
         left:4px;
         margin:auto;
@@ -513,6 +519,7 @@ a[vr-item]:focus {
     border: 1px solid $white;
     border-radius: 20px;
     margin-right: 15px;
+    display: inline-block !important;
     i {
         font-size: 12px;
         padding-right: 5px;
@@ -644,8 +651,8 @@ ul.sub-list {
 }
 
 .company-name .ellp {
-    font-size: 14px;
-    font-family: 'opensans-semibold';
+    font-size: 13px;
+    font-family: 'opensans-regular';
 }
 
 .overlay-cal {
@@ -741,8 +748,11 @@ ul.sub-list {
 .unique-name-financial-year{
     display: flex;
     align-items: center;
-    .fyear{
-        margin-left: 5px;
+    flex-wrap: wrap;
+    .branch-unique-name{
+        margin-right: 5px;
+        white-space: normal;
+        word-break: break-word;
     }
 }
 .desktop-header{
@@ -758,6 +768,11 @@ ul.sub-list {
     ul.dropdown-menu.user-dropdown-header{
         left: 0 !important;
         color: $night-rider;
+        .company-name-finance-year{
+            .ellp{
+                white-space: normal;
+            }
+        }
     }
 }
 .create-company-btn{
@@ -775,6 +790,107 @@ ul.sub-list {
     left: 15px;
     border: 1px solid $gainsboro;
 }
+.switch-branch-wrapper{
+    .btn-group{
+        display: flex;
+        a.dropdown-toggle{
+            font-size: 16px;
+            display: flex;
+            padding: 15px;
+            font-family: 'opensans-bold';
+            color: $nero;
+            border-bottom: 1px solid $gainsboro;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            word-break: break-word;
+            white-space: inherit;
+            span{
+                font-size: 9px;
+                float: right;
+                padding-top: 4px;
+                transform: rotate(270deg);
+                border: 2px solid $gray;;
+                padding: 3px;
+                border-radius: 50%;
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                color: $gray;
+            }
+        }
+        .dropdown-menu{
+            left: auto !important;
+            right: -270px !important;
+            top: 10px !important;
+            transform: translateY(0px);
+            bottom: auto;
+            border: 1px solid $gainsboro;
+            box-shadow: 0 6px 12px rgba(0,0,0,.175);
+            min-width: 270px;
+            max-width: 270px;
+            max-height: 315px;
+            overflow-y: auto;
+            padding-top: 0;
+            border-top: none;
+            overflow-x: hidden;
+            li{
+                a{
+                    padding: 6px 10px;
+                    white-space: normal;
+                    word-break: break-word;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    color: $nero !important;
+                    cursor: pointer;
+                    &.dropdown-item.active-branch {
+                        color: $chetwode-blue;
+                        font-weight: bold;
+
+                    }
+                    &:hover{
+                        color: $chetwode-blue !important;
+                    }
+                }
+                span{
+                    a{
+                        padding: 0;
+                    }
+                }
+                .branch-alias-name{
+                    width: 90%;
+                }
+                span{
+                    a{
+                        padding: 0;
+                    }
+                }
+                .branch-alias-name{
+                    width: 90%;
+                }
+            }
+            .go-to-company{
+                color: $deep-sky-blue;
+                &.company-label {
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                }
+            }
+            div{
+                input{
+                    padding-left: 30px;
+                    background-image: url(../../../assets/images/Search.svg);
+                }
+                .input-group-addon{
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+    }
+}
 .not-today{
     .today-date.input-date{
         width: 100px;
@@ -785,7 +901,9 @@ ul.sub-list {
         }
     }
 }
-
+.branch-icon-tooltip{
+    padding:  0 5px;
+}
 /* responsive */
 @media (max-height: 800px) {
     .nav-wrapper {
@@ -962,7 +1080,7 @@ ul.sub-list {
             line-height: 1.8;
         }
     }
-    .calender-addone {
+    .calendar-addon {
         height: 30px;
         vertical-align: middle;
         align-items: center;

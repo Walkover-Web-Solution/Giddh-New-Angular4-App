@@ -18,7 +18,7 @@ export class ImportExcelActions {
         .pipe(
             ofType(IMPORT_EXCEL.UPLOAD_FILE_REQUEST),
             switchMap((action: CustomActions) => {
-                return this._importExcelService.uploadFile(action.payload.entity, action.payload.file);
+                return this._importExcelService.uploadFile(action.payload.entity, action.payload);
             }), map((res) => {
                 if (res.status === 'error') {
                     this._toasty.errorToast(res.message);
@@ -53,10 +53,10 @@ export class ImportExcelActions {
         //
     }
 
-    public uploadFileRequest(entity: string, file: File): CustomActions {
+    public uploadFileRequest(entity: string, data: any): CustomActions {
         return {
             type: IMPORT_EXCEL.UPLOAD_FILE_REQUEST,
-            payload: { entity, file }
+            payload: { entity, data }
         };
     }
 

@@ -117,7 +117,8 @@ export interface IMfStockSearchRequest {
 	to?: string;
 	count?: number;
 	page?: number;
-	dateRange?: Date[];
+    dateRange?: Date[];
+    branchUniqueName?: string;
 }
 
 /*

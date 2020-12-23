@@ -1592,6 +1592,11 @@ span.eligible-ITC {
         padding-bottom: 0;
     }
 }
+.linking-dropdown {
+    .linking-item {
+        flex-direction: column;
+    }
+}
 .remove-invoice {
     display: inline-flex;
     align-items: center;
@@ -1688,6 +1693,11 @@ span.eligible-ITC {
 }
 
 @media (max-width: 1024px) {
+
+    .hsn-code-dropdown {
+        left: 0px;
+    }
+
     .pending-sales-balance-due{
         position: relative;
         right: 35px;

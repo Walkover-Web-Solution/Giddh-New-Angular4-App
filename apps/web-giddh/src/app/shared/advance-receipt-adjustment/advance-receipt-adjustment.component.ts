@@ -167,7 +167,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         if (this.isUpdateMode) {
             this.calculateBalanceDue();
         }
-        this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
+        this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
                 this.availableTdsTaxes = [];
                 obj.taxes.forEach(item => {
@@ -698,9 +698,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     private formatAdjustmentData(adjustmentData: Array<Adjustment>): void {
         if (adjustmentData && adjustmentData.length) {
             adjustmentData.forEach(adjustment => {
-                if (adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
+                if (adjustment && adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
                     adjustment.balanceDue = adjustment.adjustmentAmount;
-                } else if (adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
+                } else if (adjustment && adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
                     adjustment.adjustmentAmount = adjustment.balanceDue;
                 }
             });

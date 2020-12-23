@@ -27,7 +27,8 @@
 							<label>is</label>
 							<span class="pos-rel form-group">
 								<select class="form-control" formControlName="queryDiffer" required>
-									<option *ngFor="let queryDiffer of queryDiffers" value="{{queryDiffer}}" selected>
+                                    <option value="">Select Query</option>
+									<option *ngFor="let queryDiffer of queryDiffers" value="{{queryDiffer}}">
 										{{queryDiffer}}</option>
 								</select>
 							</span>

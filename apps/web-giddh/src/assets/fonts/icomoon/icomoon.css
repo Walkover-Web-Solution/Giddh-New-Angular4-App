@@ -33,6 +33,12 @@
 .icon-company-HO:before {
   content: "\e97f";
 }
+.icon-branch-alice:before {
+  content: "\e990";
+}
+.icon-no-selected:before {
+  content: "\e91a";
+}
 .icon-unlink:before {
   content: "\e98e";
 }
@@ -162,9 +168,6 @@
 }
 .icon-generate-invoice:before {
   content: "\e919";
-}
-.icon-no-selected:before {
-  content: "\e91a";
 }
 .icon-edit-pencil:before {
   content: "\e91b";
