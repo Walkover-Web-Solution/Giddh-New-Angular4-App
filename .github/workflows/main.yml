@@ -22,8 +22,9 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        # run 3 copies of the current job in parallel
-        containers: [1, 2]
+       node-version: [14.x]
+       ci_node_total: [2]
+       ci_node_index: [0,1]
     name: Giddh test cases
     env:
       # prevents extra Cypress installation progress messages
