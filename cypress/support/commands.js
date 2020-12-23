@@ -76,11 +76,12 @@ Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) =>
             // headerPage.clickGiddhLogoIcon().type('{ctrl}g')
             globalSearchPage.typeGlobalSearch(searchValue)
             globalSearchPage.selectFirstValueAfterSearch().then(($btn) => {
+                cy.wait(2000)
                 $btn.click();
-                cy.wait(5000)
+                cy.wait(2000)
                 cy.get(elementPath, {timeout: 50000}).should('be.visible')
                 cy.get(elementPath, {timeout: 50000}).then((elementText) => {
-                    cy.wait(5000).then(() =>{
+                    cy.wait(2000).then(() =>{
                         const text = elementText.text();
                         //  expect(text).to.eq(expectedText)
                     })
