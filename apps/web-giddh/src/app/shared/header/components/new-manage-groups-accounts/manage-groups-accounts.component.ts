@@ -403,7 +403,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public checkValidation(type: string, index: number): void {
         const row = this.customFieldForm.get('customField') as FormArray;
         if (type === 'name') {
-            if (row.controls[index].get('key').value.length > 50) {
+            if (row.controls[index] && row.controls[index].get('key') && row.controls[index].get('key').value && row.controls[index].get('key').value.length > 50) {
                 this.toasterService.errorToast('Name can not be greater than 50 characters');
             }
         } else {

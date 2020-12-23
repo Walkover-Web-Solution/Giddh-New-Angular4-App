@@ -509,6 +509,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
                         this.menuItemsFromIndexDB = DEFAULT_MENUS;
                         this.accountItemsFromIndexDB = DEFAULT_AC;
+                        this.changeDetection.detectChanges();
                     }
                 });
             }
@@ -1073,10 +1074,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
                 this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 10);
-                this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 7);
+                this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
             } else {
                 this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
-                this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 5);
+                this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
 
             // sortby name

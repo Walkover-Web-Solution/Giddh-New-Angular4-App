@@ -451,12 +451,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 this.needToReCalculate.next(true);
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-                this.newLedgerComponent.preparePreAppliedDiscounts();
+                if(this.newLedgerComponent) {
+                    this.newLedgerComponent.preparePreAppliedDiscounts();
+                }
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
-                this.newLedgerComponent.calculatePreAppliedTax();
-                this.newLedgerComponent.calculateTax();
-                this.newLedgerComponent.calculateTotal();
+                if(this.newLedgerComponent) {
+                    this.newLedgerComponent.calculatePreAppliedTax();
+                    this.newLedgerComponent.calculateTax();
+                    this.newLedgerComponent.calculateTotal();
+                }
                 setTimeout(() => {
                     if(this.newLedgerComponent) {
                         this.newLedgerComponent.detectChanges();

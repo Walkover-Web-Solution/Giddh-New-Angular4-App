@@ -69,7 +69,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let newState = _.cloneDeep(state);
             let res: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = action.payload;
             if (res.status === 'success') {
-                newState[res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
+                newState[res.request && res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
                 newState.isGetAllRequestSuccess = true;
             } else if (res.status === 'error' && res.code === 'UNAUTHORISED') {
                 newState['vouchers'].items = [];
