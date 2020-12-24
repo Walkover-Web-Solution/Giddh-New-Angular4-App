@@ -55,5 +55,10 @@
     "share_account" : "Share Account",
     "share_with" : "Share with",
     "select_permission" : "-Select permission-",
-    "share_group" : "Share Group"
+    "share_group" : "Share Group",
+    "name": "Name",
+    "type": "Type",
+    "length": "Length",
+    "add_new_row": "Add New Row",
+    "delete_custom_field_alert": "Deleting this field from here, will remove it from all the accounts"
 }
