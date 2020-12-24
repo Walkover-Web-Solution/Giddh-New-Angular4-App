@@ -71,7 +71,7 @@
                 "build": {
                     "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
-                        "baseHref": "http://localhost:3000",
+                        "baseHref": "https://beta.giddh.com",
                         "allowedCommonJsDependencies": [
                             "file-saver",
                             "angular2-text-mask",
@@ -156,7 +156,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "http://localhost:3000",
+                            "baseHref": "https://beta.giddh.com",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/index.html",
@@ -229,7 +229,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://app.giddh.com/",
+                            "baseHref": "https://beta.giddh.com/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/index.html",
