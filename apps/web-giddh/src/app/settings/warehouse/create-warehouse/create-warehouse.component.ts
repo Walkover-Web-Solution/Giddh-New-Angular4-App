@@ -68,7 +68,7 @@ export class CreateWarehouseComponent implements OnInit {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
 
-    public imgPath: string = ''
+    public imgPath: string = '';
 
     /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
