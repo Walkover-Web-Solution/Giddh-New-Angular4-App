@@ -68,6 +68,8 @@ export class CreateWarehouseComponent implements OnInit {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
 
+    public imgPath: string = ''
+
     /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -141,6 +143,8 @@ export class CreateWarehouseComponent implements OnInit {
                 }
             }
         });
+
+        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
     }
 
     /**
