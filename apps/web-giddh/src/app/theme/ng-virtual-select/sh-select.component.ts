@@ -223,7 +223,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 this.updateFilter(inputText);
             }
         } else {
-            this.clear();
+            this.clear(false);
         }
     }
 
@@ -433,7 +433,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
     }
 
-    public clear() {
+    public clear(hide: boolean = true) {
         if (this.disabled) {
             return;
         }
@@ -458,9 +458,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
 
         this.selectedValues = [];
-        this.onChange();
+        if(hide) {
+            this.onChange();
+        }
         this.clearFilter();
-        this.hide();
+        if(hide) {
+            this.hide();
+        }
     }
 
     public ngOnInit() {

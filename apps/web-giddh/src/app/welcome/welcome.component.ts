@@ -395,7 +395,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.createCompany();
                 }
             }, 100);
-            //this._router.navigate(['select-plan']);
         } else {
             this.isCreateCompanyInProgress = false;
             if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
