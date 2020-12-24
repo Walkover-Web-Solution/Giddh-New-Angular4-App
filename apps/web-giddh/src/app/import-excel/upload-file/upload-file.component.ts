@@ -52,7 +52,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
 
     public onFileChange(file: FileList) {
         let validExts = ['csv', 'xls', 'xlsx'];
-        let type = this.getExt(file.item(0).name);
+        let type = (file && file.item(0)) ? this.getExt(file.item(0).name) : 'null';
         let isValidFileType = validExts.some(s => type === s);
 
         if (!isValidFileType) {
