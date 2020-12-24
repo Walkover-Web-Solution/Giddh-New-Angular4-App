@@ -94,7 +94,7 @@
                                                                 <i class="icon-branch-icon pull-right"
                                                                     *ngIf="option.entity === 'BRANCH' && !option.isHeadQuarter"
                                                                     tooltip="Branch"></i>
-                                                                <i class="icon-company-HO pull-right"
+                                                                <i class="icon-branch-icon pull-right"
                                                                     *ngIf="option.entity === 'BRANCH' && option.isHeadQuarter"
                                                                     tooltip="HO Branch"></i>
                                                                 <i class="icon-warehouse-icon pull-right"
@@ -102,8 +102,8 @@
                                                                     tooltip="Warehouse"></i>
                                                             </span>
                                                             <span class="entity-details">
-                                                                <div class="item">{{ option.label || '-' }}</div>
-                                                                <div class="item-unique">
+                                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                                <div class="item-unique giddh-limit single-line-clamp">
                                                                     {{ option.name || '-' }}
                                                                 </div>
                                                             </span>

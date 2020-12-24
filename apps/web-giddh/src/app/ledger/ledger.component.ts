@@ -393,7 +393,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
                 if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
                     taxes.unshift(data.body.applicableTaxes[0].uniqueName);
-                    taxes.filter((value, index) => taxes.indexOf(value) === index);
                 }
                 txn.selectedAccount = {
                     ...e.additional,
@@ -412,8 +411,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     stock: data.body.stock,
                     uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                     accountApplicableDiscounts: data.body.applicableDiscounts,
-                    parentGroups: data.body.parentGroups  // added due to parentGroups is getting null in search API
+                    parentGroups: data.body.parentGroups,  // added due to parentGroups is getting null in search API
                 };
+                if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
+                    txn.selectedAccount.particularAccountTax = data.body.applicableTaxes;
+                }
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
                 let unitCode = '';

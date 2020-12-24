@@ -495,6 +495,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
                         this.menuItemsFromIndexDB = DEFAULT_MENUS;
                         this.accountItemsFromIndexDB = DEFAULT_AC;
+                        this.changeDetection.detectChanges();
                     }
                 });
             }

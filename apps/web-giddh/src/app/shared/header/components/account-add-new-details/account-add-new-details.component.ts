@@ -32,6 +32,7 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 @Component({
     selector: 'account-add-new-details',
@@ -57,6 +58,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
     @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
+    /** Tabs instance */
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
 
     public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public showOtherDetails: boolean = false;
@@ -675,6 +678,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             // if (parent[1]) {
             //     this.isParentDebtorCreditor(parent[1].uniqueName);
             // }
+            this.isParentDebtorCreditor(this.activeGroupUniqueName);
             this.isGroupSelected.emit(event.value);
             this.toggleStateRequired();
         }
@@ -687,7 +691,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
-
+            this.staticTabs.tabs[0].active = true;
             if (accountAddress.controls.length === 0) {
                 this.addBlankGstForm();
             }
@@ -705,6 +709,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
+            this.staticTabs.tabs[0].active = false;
         }
     }
 
