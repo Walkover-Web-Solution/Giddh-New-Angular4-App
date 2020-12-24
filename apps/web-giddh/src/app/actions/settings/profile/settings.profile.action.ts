@@ -252,4 +252,17 @@ export class SettingsProfileActions {
         }
     }
 
+    /**
+     * This will hold if free plan subscribed
+     *
+     * @param {boolean} response
+     * @returns {CustomActions}
+     * @memberof SettingsProfileActions
+     */
+    public handleFreePlanSubscribed(response: boolean): CustomActions {
+        return {
+            type: SETTINGS_PROFILE_ACTIONS.FREE_PLAN_SUBSCRIBED,
+            payload: response
+        }
+    }
 }
