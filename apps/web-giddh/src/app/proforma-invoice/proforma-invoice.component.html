@@ -167,7 +167,7 @@
                                                     *ngIf="!isPurchaseInvoice && !(isPendingVoucherType && isCashInvoice) && invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode">
                                                     <a href="javascript: void 0"
                                                         (click)="showLastEstimateModal = !showLastEstimateModal">
-                                                        <i class="fa fa-files-o"></i> Copy Previous
+                                                        <i class="icon-copy-file"></i> Copy Previous
                                                         {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
                                                     </a>
                                                     <ng-container
