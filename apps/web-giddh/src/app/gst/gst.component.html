@@ -1,10 +1,25 @@
 <!-- filter area-->
 <ng-container>
     <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
-    <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!activeCompanyGstNumber">
-        <i class="text-middle" style="padding: 0 2%;">Please add GSTIN in company setting to view report.</i>
+    <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
+        <i class="text-middle" style="padding: 0 2%;">Please add GSTIN to your default address in order to view report.</i>
     </div>
 
+    <div *ngIf="taxes?.length" class="row mb-3 mt-3 ml-3">
+        <div class="tax-heading col-md-3 col-sm-3 col-12">
+            <label>GSTIN:</label>
+        </div>
+        <div class="tax-dropdown col-md-9 col-sm-9 col-12">
+            <sh-select [options]="taxes"
+                [(ngModel)]="activeCompanyGstNumber"
+                (selected)="selectTax()"
+                [defaultValue]="activeCompanyGstNumber"
+                placeholder="Select GSTIN"
+                [showClear]="false" [multiple]="false"
+                [ItemHeight]="67">
+            </sh-select>
+        </div>
+    </div>
     <div class="tax-engine"
         [ngClass]="{'content-disabled': ((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async)) || !activeCompanyGstNumber}">
         <div class="header-band filings-header clearfix">
@@ -25,8 +40,8 @@
                                     {{ moment(selectedMonth).format('MMMM YYYY') }}
                                 </ng-container>
                                 <ng-container *ngIf="!isMonthSelected">
-                                    {{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
-                                    - {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}}
+                                    {{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
+                                    - {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}}
                                 </ng-container>
                                 <span class="caret"></span>
                             </button>
@@ -98,7 +113,7 @@
                     <!-- Rohit told me not remove this commented code  -->
                     <!-- <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false"
                  (clickOutside)="downloadReport.hide()" [attachOutsideOnClick]="true">
-                <button dropdownToggle type="button" class="btn dropdown-toggle grey-clr no-btn"> <i
+                <button dropdownToggle type="button" class="btn dropdown-toggle grey-color no-btn"> <i
                   class="icon-download"></i> Download</button>
                 <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                     aria-labelledby="button-triggers-manual" style="min-width: 350px;">
@@ -161,8 +176,8 @@
                                         ({{ moment(selectedMonth).format('MMMM YYYY') }})
                                     </ng-container>
                                     <ng-container *ngIf="!isMonthSelected">
-                                        ({{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
-                                        - {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                                        ({{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
+                                        - {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}})
                                     </ng-container>
 
                                 </b> &nbsp;&nbsp;
@@ -220,7 +235,7 @@
                                     </svg>
                                     <div class="font-large"><b>2. Push to GSTN</b></div>
                                 </div>
-                                <div class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
+                                <div *ngIf="isCompany" class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
                                     (click)="navigateToTab(2, 'gstr1')">
                                     <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                         class="icon filing-step-icon">t
@@ -269,11 +284,10 @@
                                         ({{ moment(selectedMonth).format('MMMM YYYY') }})
                                     </ng-container>
                                     <ng-container *ngIf="!isMonthSelected">
-                                        ({{moment(currentPeriod?.from, 'DD-MM-YYYY').format('DD MMM YYYY')}}
-                                        - {{moment(currentPeriod?.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                                        ({{moment(currentPeriod?.from, giddhDateFormat).format('DD MMM YYYY')}}
+                                        - {{moment(currentPeriod?.to, giddhDateFormat).format('DD MMM YYYY')}})
                                     </ng-container>
                                 </b>
-                                <!---->
                             </div>
                             <p class="text-muted"> Details of inward supplies of goods and services </p>
                         </div>
@@ -411,4 +425,4 @@
 </div>
 <!-- main data-->
 
-<filing-header [currentPeriod]="currentPeriod" [fileGstr3b]="returnGstr3B"></filing-header>
+<filing-header [isCompany]="isCompany" [currentPeriod]="currentPeriod" [fileGstr3b]="returnGstr3B"></filing-header>

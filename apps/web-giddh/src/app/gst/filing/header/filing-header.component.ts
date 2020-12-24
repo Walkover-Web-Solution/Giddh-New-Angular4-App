@@ -12,8 +12,8 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
-import { ActivatedRoute, Router } from '@angular/router';
-
+import { ActivatedRoute } from '@angular/router';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -47,6 +47,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isMonthSelected: boolean = false;
     @Input() public fileReturn: {} = { isAuthenticate: false };
     @Input() public fileGstr3b: {} = { via: null };
+    /** True if current organization is company */
+    @Input() public isCompany: boolean;
     @ViewChild('cancelConfirmationModel', {static: true}) public cancelConfirmationModel: ModalDirective;
 
     public gstAuthenticated$: Observable<boolean>;
@@ -62,10 +64,11 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public isVayanaAuthenticated: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
     constructor(
         private store: Store<AppState>,
-        private router: Router,
         private _toasty: ToasterService,
         private _reconcileAction: GstReconcileActions,
         private _invoicePurchaseActions: InvoicePurchaseActions,
@@ -113,21 +116,22 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         request.to = this.currentPeriod.to;
         request.refresh = true;
         request.action = GstReconcileActionsEnum.notfoundonportal;
+        request.gstin = this.activeCompanyGstNumber;
         this.store.dispatch(this._reconcileAction.GstReconcileInvoiceRequest(request));
         //  }
     }
 
     public ngOnChanges(s: SimpleChanges) {
-        if (s && s.selectedGst && s.selectedGst.currentValue === 'gstr2') {
+        //if (s && s.selectedGst && s.selectedGst.currentValue === 'gstr2') {
             // if (!this.gstAuthenticated && this.selectedGst === 'gstr2') {
             //   this.toggleSettingAsidePane(null, 'RECONCILE');
             // }
-        }
+        //}
 
         if (s && s.currentPeriod && s.currentPeriod.currentValue) {
             let date = {
-                startDate: moment(this.currentPeriod.from, 'DD-MM-YYYY').startOf('month').format('DD-MM-YYYY'),
-                endDate: moment(this.currentPeriod.to, 'DD-MM-YYYY').endOf('month').format('DD-MM-YYYY')
+                startDate: moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                endDate: moment(this.currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
             };
             this.isMonthSelected = date.startDate === this.currentPeriod.from && date.endDate === this.currentPeriod.to;
         }

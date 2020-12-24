@@ -6,3 +6,8 @@ export interface IOption {
     additional?: any;
     subVoucher?: string;
 }
+
+export interface BorderConfiguration {
+    style?: string;
+    radius?: string;
+}

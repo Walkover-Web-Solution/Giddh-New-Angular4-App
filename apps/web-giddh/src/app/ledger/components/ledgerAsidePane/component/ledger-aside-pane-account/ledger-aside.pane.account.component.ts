@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../../theme/ng-select/option.interface';
 import { AppState } from '../../../../../store';
@@ -41,15 +41,14 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private store: Store<AppState>,
-		private groupService: GroupService,
 		private accountsAction: AccountsAction,
 		private _groupService: GroupService
 	) {
-		this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+		this.groupsArrayStream$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
 		// account-add component's property
-		this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
-		this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
-		this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
+		this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
+		this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
+		this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {
@@ -57,11 +56,13 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
 			if (result.status === 'success') {
 				// this.groupsArrayStream$ = Observable.of(result.body.results);
 				let groupsListArray: IOption[] = [];
-				result.body.results = this.removeFixedGroupsFromArr(result.body.results);
-				result.body.results.forEach(a => {
-					let parentgroup = a.accountDetails.length > 0 ? a.accountDetails[0].parentGroups : [];
-					groupsListArray.push({ label: a.groupName, value: a.groupUniqueName, additional: parentgroup });
-				});
+                result.body.results = this.removeFixedGroupsFromArr(result.body.results);
+                if(result.body.results && result.body.results.length > 0) {
+                    result.body.results.forEach(a => {
+                        let parentgroup = a.accountDetails && a.accountDetails.length > 0 ? a.accountDetails[0].parentGroups : [];
+                        groupsListArray.push({ label: a.groupName, value: a.groupUniqueName, additional: parentgroup });
+                    });
+                }
 				this.flattenGroupsArray = groupsListArray;
 			}
 		});
@@ -77,7 +78,7 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
 
 	public checkSelectedGroup(options: IOption) {
 		this.groupsArrayStream$.subscribe(data => {
-			if (data.length) {
+			if (data && data.length) {
 				let accountCategory = this.flattenGroup(data, options.value, null);
 				this.isGstEnabledAcc = accountCategory === 'assets' || accountCategory === 'liabilities';
 				this.isHsnSacEnabledAcc = !this.isGstEnabledAcc;
@@ -88,7 +89,7 @@ export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
 		if (event) {
 			this.activeGroupUniqueName = event;
 			this.groupsArrayStream$.subscribe(data => {
-				if (data.length) {
+				if (data && data.length) {
 					let accountCategory = this.flattenGroup(data, event, null);
 					this.isGstEnabledAcc = accountCategory === 'assets' || accountCategory === 'liabilities';
 					this.isHsnSacEnabledAcc = !this.isGstEnabledAcc;

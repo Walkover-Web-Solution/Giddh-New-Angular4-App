@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -15,7 +15,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import * as _ from "../../../lodash-optimized";
 import { CompanyResponse } from "../../../models/api-models/Company";
 import { createSelector } from "reselect";
-import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 
 @Component({
 	selector: 'aside-branch-transfer-pane',
@@ -35,7 +34,7 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 	]
 })
 
-export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
+export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
 	public stockList$: Observable<IStocksItem[]>;
 	public stockUnits$: Observable<StockUnitRequest[]>;
 	public userList$: Observable<InventoryUser[]>;
@@ -44,7 +43,6 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
 	@Output() public transferType: EventEmitter<boolean> = new EventEmitter(true);
 	@Input() public selectedAsideView: string = 'mainview';
 	public isLoading: boolean;
-	public currentCompany: CompanyResponse;
 	public entrySuccess$: Observable<boolean>;
 	public transferEntrySuccess$: Observable<boolean>;
 	public isSaveClicked: boolean = false;
@@ -55,8 +53,7 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
 		private _inventoryEntryAction: InventoryEntryActions,
 		private _generalService: GeneralService,
 		private _inventoryUserAction: InventoryUsersActions,
-		private _customStockActions: CustomStockUnitAction,
-		private settingsBranchActions: SettingsBranchActions,
+		private _customStockActions: CustomStockUnitAction
 	) {
 		this._store.dispatch(this._inventoryAction.GetStock());
 		// dispatch stockunit request
@@ -65,24 +62,12 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
 		this.entrySuccess$ = this._store.select(s => s.inventoryInOutState.entrySuccess).pipe(takeUntil(this.destroyed$));
 	}
 
-	public ngOnChanges(changes: SimpleChanges): void {
-		//
-	}
-
 	public ngOnInit() {
-		this.stockList$ = this._store
-			.select(p => p.inventory.stocksList && p.inventory.stocksList.results);
-
-		this.stockUnits$ = this._store
-			.select(p => p.inventory.stockUnits);
-
-		this.userList$ = this._store
-			.select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName));
-
-		this._store
-			.select(p => p.inventoryInOutState.entryInProcess)
-			.subscribe(p => this.isLoading = p);
-
+		this.stockList$ = this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$));
+		this.stockUnits$ = this._store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
+		this.userList$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName)), takeUntil(this.destroyed$));
+        this._store.pipe(select(p => p.inventoryInOutState.entryInProcess), takeUntil(this.destroyed$)).subscribe(p => this.isLoading = p);
+        
 		this.entrySuccess$.subscribe(s => {
 			if (s && this.isSaveClicked) {
 				this.closeAsidePane(s);
@@ -91,36 +76,18 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
 		});
 
 		// tslint:disable-next-line:no-shadowed-variable
-		this._store.select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
-			if (branches && branches.results.length > 0) {
-				_.each(branches.results, (branch) => {
+		this._store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
+			if (branches && branches.length > 0) {
+				_.each(branches, (branch) => {
 					if (branch.addresses && branch.addresses.length) {
-						branch.addresses = [_.find(branch.addresses, (gst) => gst.isDefault)];
+						branch.addresses = [_.find(branch.addresses, (gst) => gst && gst.isDefault)];
 					}
 				});
-				this.branches$ = observableOf(_.orderBy(branches.results, 'name'));
-			} else if (branches && branches.results.length === 0) {
+				this.branches$ = observableOf(_.orderBy(branches, 'name'));
+			} else if (branches && branches.length === 0) {
 				this.branches$ = observableOf(null);
 			}
-		})).pipe(takeUntil(this.destroyed$)).subscribe();
-
-		// tslint:disable-next-line:no-shadowed-variable
-		this._store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-			if (!companies) {
-				return;
-			}
-			return companies.find(cmp => {
-				if (cmp && cmp.uniqueName) {
-					return cmp.uniqueName === uniqueName;
-				} else {
-					return false;
-				}
-			});
-		})), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-			if (selectedCmp) {
-				this.currentCompany = selectedCmp;
-			}
-		});
+		})), takeUntil(this.destroyed$)).subscribe();
 	}
 
 	public onCancel() {
@@ -142,5 +109,15 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
 
 	public openBranchTransferPopup(transferType) {
 		this.transferType.emit(transferType);
+    }
+    
+    /**
+     * This will destroy all the memory used by this component
+     *
+     * @memberof AsideBranchTransferPaneComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();       
 	}
 }

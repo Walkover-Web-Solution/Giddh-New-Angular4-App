@@ -2,7 +2,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as _ from '../../../../../lodash-optimized';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
@@ -95,17 +95,17 @@ export class DesignFiltersContainerComponent implements OnInit {
         let companies = null;
         let defaultTemplate = null;
 
-        this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
             companyUniqueName = ss.companyUniqueName;
             companies = ss.companies;
             this.companyUniqueName = ss.companyUniqueName;
         });
 
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
         });
 
-        this.store.select(s => s.invoiceTemplate.sampleTemplates).pipe(take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
+        this.store.pipe(select(s => s.invoiceTemplate.sampleTemplates), take(2)).subscribe((sampleTemplates: CustomTemplateResponse[]) => {
             this.sampleTemplates = _.cloneDeep(sampleTemplates);
         });
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
@@ -114,8 +114,8 @@ export class DesignFiltersContainerComponent implements OnInit {
         this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
         // this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
         this.humanizeBytes = humanizeBytes;
-        this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -131,7 +131,7 @@ export class DesignFiltersContainerComponent implements OnInit {
                 footer: {}
             };
 
-            this._activatedRoute.params.subscribe(a => {
+            this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
                 if (a.voucherType === 'credit note' || a.voucherType === 'debit note') {
                     this.templateType = 'voucher';
                 } else {
