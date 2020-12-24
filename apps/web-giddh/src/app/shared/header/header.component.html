@@ -226,7 +226,7 @@
         <!-- switch branch start -->
         <div *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="switch-branch-wrapper">
             <div class="btn-group" dropdown placement="bottom right" #subdropdown="bs-dropdown" [autoClose]="false" (onShown)="loadCompanyBranches()" (clickOutside)="subdropdown.isOpen = false">
-                <a id="button-basic" dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic">
+                <a id="button-basic" dropdownToggle class="dropdown-toggle cursor-pointer" aria-controls="dropdown-basic">
                     <ng-container *ngIf="currentBranch">{{currentBranch?.alias}}</ng-container>
                     <ng-container *ngIf="!currentBranch">Switch Branch</ng-container>
                     <span class="icon-arrow-down"></span>
