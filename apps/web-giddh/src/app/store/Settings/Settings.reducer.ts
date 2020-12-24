@@ -108,6 +108,7 @@ export interface SettingsState {
     taxes: Taxes;
     branchRemoved: boolean;
     financialYearLimits: any;
+    freePlanSubscribed: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -135,7 +136,8 @@ export const initialState: SettingsState = {
     branchRemoved: false,
     // Get profile API call in process
     getProfileInProgress: false,
-    financialYearLimits: null
+    financialYearLimits: null,
+    freePlanSubscribed: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -735,6 +737,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_BRANCH_ACTIONS.RESET_ALL_BRANCHES_RESPONSE: {
             return Object.assign({}, state, {branches: null});
+        }
+
+        case SETTINGS_PROFILE_ACTIONS.FREE_PLAN_SUBSCRIBED: {
+            return Object.assign({}, state, { freePlanSubscribed: action.payload });
         }
 
         //  endregion discount reducer

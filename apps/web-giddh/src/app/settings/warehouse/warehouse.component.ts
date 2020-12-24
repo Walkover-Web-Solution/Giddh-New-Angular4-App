@@ -90,6 +90,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
 
+    public imgPath2: string = '';
 
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer', {static: true}) public onBoardingContainer: ElementViewContainerRef;
@@ -138,6 +139,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.imgPath = (isElectron ||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
+
+        this.imgPath2 =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
