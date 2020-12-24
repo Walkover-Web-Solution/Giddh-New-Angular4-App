@@ -1,8 +1,5 @@
 import { delay, takeUntil } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../store';
-import { CompanyActions } from '../actions/company.actions';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -11,6 +8,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
     styleUrls: ['./tallysync.component.scss'],
     templateUrl: './tallysync.component.html'
 })
+
 export class TallysyncComponent implements OnInit, OnDestroy {
     public activeTab: string = 'inprogress';
     public showInvoiceNav: boolean = false;
@@ -18,11 +16,8 @@ export class TallysyncComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>,
-        private companyActions: CompanyActions,
-        private router: Router,
-        private _cd: ChangeDetectorRef, private _activatedRoute: ActivatedRoute) {
-        //
+    constructor(private _activatedRoute: ActivatedRoute) {
+        
     }
 
     public ngOnInit() {

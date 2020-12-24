@@ -734,14 +734,18 @@
                                 <div class="col-sm-12 col-md-9">
                                     <div class="form-group clearfix ">
                                         <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left estimationCheck hide-on-mobile" name="customInvoice" />
-                                        <div class=" d-inline-flex custom-estimation" *ngIf="invoiceSetting.useCustomInvoiceNumber">
+                                        <div class="d-inline-flex custom-estimation" *ngIf="invoiceSetting.useCustomInvoiceNumber">
                                             <div class="d-inline-flex pos-rel">
-                                                <label>Initial No.</label>
-                                                <input type="text" class="form-control text-right initialnumber" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">
+                                                <label>Branch Prefix</label>
+                                                <input type="text" class="form-control" name="branchPrefix" [(ngModel)]="invoiceSetting.branchInvoiceNumberPrefix">
                                             </div>
                                             <div class="d-inline-flex pos-rel">
-                                                <label style="right:0px;">Prefix</label>
-                                                <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">
+                                                <label>Sub Prefix</label>
+                                                <input type="text" class="form-control" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">
+                                            </div>
+                                            <div class="d-inline-flex pos-rel">
+                                                <label>Initial No.</label>
+                                                <input type="text" class="form-control" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">
                                             </div>
                                         </div>
                                     </div>

@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { SubscriptionRequest } from '../../../models/api-models/Company';
+import { SettingsProfileService } from '../../../services/settings.profile.service';
 
 @Component({
     selector: 'move-company',
@@ -26,7 +27,7 @@ export class MoveCompanyComponent implements OnInit {
         licenceKey: ''
     };
 
-    constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions) {
+    constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
 
     }
 
@@ -36,18 +37,8 @@ export class MoveCompanyComponent implements OnInit {
      * @memberof MoveCompanyComponent
      */
     public ngOnInit(): void {
-        if(this.subscriptions && this.subscriptions.length > 0) {
-            this.subscriptions.forEach(plan => {
-                if(plan.subscriptionId && plan.planDetails && plan.planDetails.companiesLimit > plan.totalCompanies && this.moveSelectedCompany && this.moveSelectedCompany.subscription && this.moveSelectedCompany.subscription.planDetails && this.moveSelectedCompany.subscription.planDetails.uniqueName !== plan.planDetails.uniqueName && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
-                    this.availablePlansOption.push({label: plan.planDetails.name, value: plan.planDetails.uniqueName});
-
-                    if(this.availablePlans[plan.planDetails.uniqueName] === undefined) {
-                        this.availablePlans[plan.planDetails.uniqueName] = [];
-                    }
-
-                    this.availablePlans[plan.planDetails.uniqueName] = plan;
-                }
-            });
+        if(this.moveSelectedCompany) {
+            this.getCompanyDetails();
         }
     }
 
@@ -84,5 +75,32 @@ export class MoveCompanyComponent implements OnInit {
      */
     public closePopup(): void {
         this.moveCompany.emit(false);
+    }
+
+    /**
+     * This will get the company details
+     *
+     * @memberof MoveCompanyComponent
+     */
+    public getCompanyDetails(): void {
+        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany.uniqueName).subscribe((response: any) => {
+            if (response && response.status === "success" && response.body) {
+                this.moveSelectedCompany = response.body;
+
+                if(this.subscriptions && this.subscriptions.length > 0) {
+                    this.subscriptions.forEach(plan => {
+                        if(plan.subscriptionId && plan.planDetails && plan.planDetails.companiesLimit > plan.totalCompanies && this.moveSelectedCompany && this.moveSelectedCompany.subscription && this.moveSelectedCompany.subscription.planDetails && this.moveSelectedCompany.subscription.planDetails.uniqueName !== plan.planDetails.uniqueName && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
+                            this.availablePlansOption.push({label: plan.planDetails.name, value: plan.planDetails.uniqueName});
+        
+                            if(this.availablePlans[plan.planDetails.uniqueName] === undefined) {
+                                this.availablePlans[plan.planDetails.uniqueName] = [];
+                            }
+        
+                            this.availablePlans[plan.planDetails.uniqueName] = plan;
+                        }
+                    });
+                }
+            }
+        });
     }
 }
