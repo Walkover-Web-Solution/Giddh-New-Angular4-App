@@ -21,7 +21,7 @@ describe('This is TrialBalance Search Test', () => {
         cy.loginWithEmail(testData.Email, testData.Password);
     })
 
-    xit('Verify Trial Balance Amount after Create Entry', () => {
+    it('Verify Trial Balance Amount after Create Entry', () => {
         cy.createLedgerAPI('uitest').then((response) => {
             if (response.status === 201){
                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
