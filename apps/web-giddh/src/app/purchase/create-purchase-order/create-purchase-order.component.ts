@@ -17,7 +17,6 @@ import { WarehouseDetails } from '../../ledger/ledger.vm';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest, CurrentPage } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
@@ -50,6 +49,8 @@ import { INameUniqueName } from '../../models/api-models/Inventory';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { OrganizationType } from '../../models/user-login-state';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 
 const THEAD_ARR_READONLY = [
     {
@@ -320,8 +321,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public transactionAmount: number = 0;
     /** Stores the current index of entry whose TCS/TDS are entered */
     public tcsTdsIndex: number = 0;
+    /** This will hold if order date is manually changed */
+    public isOrderDateChanged: boolean = false;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService, private settingsBranchAction: SettingsBranchActions) {
         this.getInvoiceSettings();
         this.store.dispatch(this.generalActions.getFlattenAccount());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -330,6 +333,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.store.dispatch(this.settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.companyActions.getTax());
+        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
 
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
         this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
@@ -377,22 +382,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => {
-            if (!state.session.companies) {
-                return;
-            }
-            state.session.companies.forEach(cmp => {
-                if (cmp.uniqueName === state.session.companyUniqueName) {
-                    this.selectedCompany = cmp;
-
-                    if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
-                        this.showLoaderUntilDataPrefilled = true;
-                        this.purchaseOrderUniqueName = this.urlParams['purchaseOrderUniqueName'];
-                        this.getPurchaseOrder();
-                    }
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
+                if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
+                    this.showLoaderUntilDataPrefilled = true;
+                    this.purchaseOrderUniqueName = this.urlParams['purchaseOrderUniqueName'];
+                    this.getPurchaseOrder();
                 }
-            });
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+            }
+        });
 
         this.createVendorList();
         this.initializeWarehouse();
@@ -518,9 +517,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         // get tax list and assign values to local vars
-        this.store.pipe(select(state => state.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
+        this.store.pipe(select(state => state.company && state.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
             if (isGetTaxes) {
-                this.store.pipe(select(state => state.company.taxes), takeUntil(this.destroyed$)).subscribe((tax: TaxResponse[]) => {
+                this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe((tax: TaxResponse[]) => {
                     if (tax) {
                         this.companyTaxesList = tax;
                         this.theadArrReadOnly.forEach((item: IContentCommon) => {
@@ -556,7 +555,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         // listen for newly added stock and assign value
-        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             let stock = resp[0];
             let acData = resp[1];
             if (stock && acData) {
@@ -575,11 +574,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public assignDates(): void {
-        let date = _.cloneDeep(this.universalDate);
-        this.purchaseOrder.voucherDetails.voucherDate = date;
+        if(!this.isOrderDateChanged) {
+            let date = _.cloneDeep(this.universalDate);
+            this.purchaseOrder.voucherDetails.voucherDate = date;
 
-        if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
-            this.assignDueDate();
+            if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
+                this.assignDueDate();
+            }
         }
     }
 
@@ -1007,6 +1008,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public onSelectWarehouse(warehouse: any): void {
+        this.autoFillCompanyShipping = false;
         this.autoFillWarehouseAddress(warehouse);
         this.autoFillCompanyShipping = false;
 
@@ -1023,19 +1025,41 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public autoFillWarehouseAddress(warehouse: any): void {
         if (warehouse) {
-            this.purchaseOrder.company.shippingDetails.address = [];
-            this.purchaseOrder.company.shippingDetails.address.push(warehouse.address);
-            this.purchaseOrder.company.shippingDetails.state.code = warehouse.stateCode;
-            this.purchaseOrder.company.shippingDetails.stateCode = warehouse.stateCode;
-            this.purchaseOrder.company.shippingDetails.state.name = warehouse.stateName;
-            this.purchaseOrder.company.shippingDetails.stateName = warehouse.stateName;
+            if (warehouse.addresses && warehouse.addresses.length) {
+                // Search the default linked address of warehouse
+                const defaultAddress = warehouse.addresses.find(address => address.isDefault);
+                if (defaultAddress) {
+                    this.purchaseOrder.company.shippingDetails.address = [];
+                    this.purchaseOrder.company.shippingDetails.address.push(defaultAddress.address);
+                    this.purchaseOrder.company.shippingDetails.state.code = defaultAddress.stateCode;
+                    this.purchaseOrder.company.shippingDetails.stateCode = defaultAddress.stateCode;
+                    this.purchaseOrder.company.shippingDetails.state.name = defaultAddress.stateName;
+                    this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
+                    this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
+                } else {
+                    this.resetShippingAddress();
+                }
+            } else {
+                this.resetShippingAddress();
+            }
         } else {
-            this.purchaseOrder.company.shippingDetails.address = [];
-            this.purchaseOrder.company.shippingDetails.state.code = "";
-            this.purchaseOrder.company.shippingDetails.stateCode = "";
-            this.purchaseOrder.company.shippingDetails.state.name = "";
-            this.purchaseOrder.company.shippingDetails.stateName = "";
+            this.resetShippingAddress();
         }
+    }
+
+    /**
+     * Resets the shipping address if no default linked address is
+     * found in a warehouse
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public resetShippingAddress(): void {
+        this.purchaseOrder.company.shippingDetails.address = [];
+        this.purchaseOrder.company.shippingDetails.state.code = "";
+        this.purchaseOrder.company.shippingDetails.stateCode = "";
+        this.purchaseOrder.company.shippingDetails.state.name = "";
+        this.purchaseOrder.company.shippingDetails.stateName = "";
+        this.purchaseOrder.company.shippingDetails.gstNumber = "";
     }
 
     /**
@@ -1117,10 +1141,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * get state code using Tax number to prefill state
      *
      * @param {string} type billingDetails || shipping
-     * @param {SalesShSelectComponent} statesEle state input box
      * @memberof CreatePurchaseOrderComponent
      */
-    public getStateCode(type: string, statesEle: SalesShSelectComponent, addressType: string): void {
+    public getStateCode(type: string, addressType: string): void {
         let gstVal;
         if (addressType === "vendor") {
             gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
@@ -1148,9 +1171,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
                 this.toaster.clearAllToaster();
             }
-            statesEle.disabled = true;
         } else {
-            statesEle.disabled = false;
             if (addressType === "vendor") {
                 this.purchaseOrder.account[type].stateCode = null;
                 this.purchaseOrder.account[type].state.code = null;
@@ -2413,20 +2434,29 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (this.purchaseOrderUniqueName && event === "fill") {
             return;
         }
-
-        if (this.companyAddresses) {
-            this.companyAddresses.forEach(address => {
-                if (address.isDefault === true) {
-                    this.purchaseOrder.company.billingDetails.address = [];
-                    this.purchaseOrder.company.billingDetails.address.push(address.address);
-                    this.purchaseOrder.company.billingDetails.state.code = address.stateCode;
-                    this.purchaseOrder.company.billingDetails.state.name = address.stateName;
-                    this.purchaseOrder.company.billingDetails.stateCode = address.stateCode;
-                    this.purchaseOrder.company.billingDetails.stateName = address.stateName;
-                    this.purchaseOrder.company.billingDetails.gstNumber = address.taxNumber;
-                    this.purchaseOrder.company.shippingDetails.gstNumber = address.taxNumber;
-                }
-            });
+        let branches = [];
+        let currentBranch;
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            if (response && response.length) {
+                branches = response;
+            }
+        });
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+            // Find the current checked out branch
+            currentBranch = branches.find(branch => branch.uniqueName === this.generalService.currentBranchUniqueName);
+        } else {
+            // Find the HO branch
+            currentBranch =  branches.find(branch => !branch.parentBranch);
+        }
+        if (currentBranch && currentBranch.addresses) {
+            const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
+            this.purchaseOrder.company.billingDetails.address = [];
+            this.purchaseOrder.company.billingDetails.address.push(defaultAddress ? defaultAddress.address : '');
+            this.purchaseOrder.company.billingDetails.state.code = defaultAddress ? defaultAddress.stateCode : '';
+            this.purchaseOrder.company.billingDetails.state.name = defaultAddress ? defaultAddress.stateName : '';
+            this.purchaseOrder.company.billingDetails.stateCode = defaultAddress ? defaultAddress.stateCode : '';
+            this.purchaseOrder.company.billingDetails.stateName = defaultAddress ? defaultAddress.stateName : '';
+            this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
         }
     }
 
@@ -2871,11 +2901,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public assignDueDate(): void {
-        if (!this.isUpdateMode) {
-            let duePeriod: number;
-            duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
-            this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment().add(duePeriod, 'days').toDate() : moment().toDate();
-        }
+        let duePeriod: number;
+        duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
+        this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment(this.purchaseOrder.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.purchaseOrder.voucherDetails.voucherDate).toDate();
     }
 
     /**
@@ -2885,23 +2913,25 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getVendorPurchaseOrders(vendorName: any): void {
-        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 10, sort: '', sortBy: '' };
-        let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+        if(this.selectedCompany) {
+            let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 10, sort: '', sortBy: '' };
+            let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
 
-        if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
-            this.purchaseOrders = [];
+            if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
+                this.purchaseOrders = [];
 
-            this.purchaseOrderService.getAllPendingPo(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
-                if (res) {
-                    if (res.status === 'success') {
-                        if (res.body && res.body.length > 0) {
-                            this.purchaseOrders = res.body;
+                this.purchaseOrderService.getAllPendingPo(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
+                    if (res) {
+                        if (res.status === 'success') {
+                            if (res.body && res.body.length > 0) {
+                                this.purchaseOrders = res.body;
+                            }
+                        } else {
+                            this.toaster.errorToast(res.message);
                         }
-                    } else {
-                        this.toaster.errorToast(res.message);
                     }
-                }
-            });
+                });
+            }
         }
     }
 
@@ -2957,5 +2987,20 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         }
         this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    /**
+     * Callback for on blur event of order date
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public onUpdateOrderDate(): void {
+        this.isOrderDateChanged = true;
+
+        if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
+            setTimeout(() => {
+                this.assignDueDate();
+            }, 200);
+        }
     }
 }

@@ -2,12 +2,13 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ReplaySubject } from 'rxjs';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType/recType.pipe';
 import { ChildGroup } from '../../../models/api-models/Search';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { saveAs } from 'file-saver';
 import { DataFormatter, IFormatable } from './data-formatter.class';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
+import { takeUntil } from 'rxjs/operators';
 
 export interface Total {
 	ob: number;
@@ -81,7 +82,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
 	private csvAW: any;
 
 	constructor(private store: Store<AppState>, private recType: RecTypePipe) {
-		this.store.select(p => p.tlPl.tb.exportData).subscribe(p => {
+		this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
 			this.exportData = p;
 			this.dataFormatter = new DataFormatter(p, this.selectedCompany, recType);
 		});
@@ -92,7 +93,8 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnDestroy() {
-		//
+		this.destroyed$.next(true);
+        this.destroyed$.complete();
 	}
 
 	public downloadCSV(value: string) {

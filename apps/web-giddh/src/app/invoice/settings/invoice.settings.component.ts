@@ -170,7 +170,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
                 if (this.invoiceSetting.lockDate) {
                     this.isLockDateSet = true;
-                    this.lockDate = moment(this.invoiceSetting.lockDate, 'DD-MM-YYYY').toDate();
+                    this.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT).toDate();
                 } else {
                     this.isLockDateSet = false;
                 }

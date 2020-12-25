@@ -41,6 +41,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public dateSelected: boolean = false;
     public userEmail: string = '';
     public selectedMMYYYY: string = '';
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
     private gstr3BOverviewDataFetchedSuccessfully$: Observable<boolean>;
     private gstr3BOverviewDataFetchedInProgress$: Observable<boolean>;
     private gstr3BOverviewData$: Observable<Gstr3bOverviewResult2>;
@@ -59,21 +61,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully, takeUntil(this.destroyed$)));
         this.gstr3BOverviewData$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
-        this.store.pipe(select(createSelector([((s: AppState) => s.session.companies), ((s: AppState) => s.session.companyUniqueName)],
-            (companies, uniqueName) => {
-                return companies.find(d => d.uniqueName === uniqueName);
-            }))
-        ).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (activeCompany.addresses && activeCompany.addresses.length) {
-                    let defaultGst = activeCompany.addresses.find(a => a.isDefault);
-                    if (defaultGst) {
-                        this.activeCompanyGstNumber = defaultGst.taxNumber;
-                    } else {
-                        this.activeCompanyGstNumber = activeCompany.addresses[0].taxNumber;
-                    }
-                    this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
-                }
+        this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.activeCompanyGstNumber !== response) {
+                this.activeCompanyGstNumber = response;
             }
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
@@ -86,7 +76,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 from: params['from'],
                 to: params['to']
             };
-            this.selectedMonth = moment(this.currentPeriod.from, 'DD-MM-YYYY').toISOString();
+            if (params['selectedGst']) {
+                this.activeCompanyGstNumber = params['selectedGst'];
+                this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+            }
+            this.isCompany = params['isCompany'] === 'true';
+            this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
             this.selectedMonth = moment(this.selectedMonth).format('MMMM YYYY');
             this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
@@ -94,7 +89,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
-            this.activeCompanyGstNumber = result;
+            if (result) {
+                this.activeCompanyGstNumber = result;
+            }
 
             let request: GstOverViewRequest = new GstOverViewRequest();
             request.from = this.currentPeriod.from;

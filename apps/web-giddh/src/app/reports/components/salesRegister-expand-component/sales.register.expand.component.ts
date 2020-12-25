@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -92,6 +92,7 @@ export class SalesRegisterExpandComponent implements OnInit {
                 this.to = params.to;
                 this.getDetailedsalesRequestFilter.from = this.from;
                 this.getDetailedsalesRequestFilter.to = this.to;
+                this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
             }
         });
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);

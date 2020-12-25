@@ -5,7 +5,7 @@ import { base64ToBlob } from 'apps/web-giddh/src/app/shared/helpers/helperFuncti
 import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
@@ -24,14 +24,14 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
 	public isAre: string = 'are';
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private store: Store<AppState>, private _importActions: ImportExcelActions, private _route: Router, private _activateRoute: ActivatedRoute) {
+	constructor(private store: Store<AppState>, private _importActions: ImportExcelActions, private _activateRoute: ActivatedRoute) {
 		//
 	}
 	public ngOnInit() {
 		if (this.UploadExceltableResponse) {
 			this.isAre = Number(this.UploadExceltableResponse.successCount) > 1 ? 'are' : 'is';
 		}
-		this._activateRoute.params.subscribe(res => {
+		this._activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res) {
 				if (res.type) {
 					if (res.type === 'trial-balance' || res.type === 'entries') {
@@ -64,8 +64,9 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
 		this.store.dispatch(this._importActions.resetImportExcelState());
 	}
 
-	ngOnDestroy(): void {
-		this.resetStoreData();
+	public ngOnDestroy(): void {
+        this.resetStoreData();
+        this.destroyed$.next(true);
+        this.destroyed$.complete();       
 	}
-
 }
