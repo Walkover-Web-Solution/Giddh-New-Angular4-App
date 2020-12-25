@@ -9,6 +9,7 @@ export default class AppUpdaterV1 {
         const log = require('electron-log');
         log.transports.file.level = 'debug';
         autoUpdater.logger = log;
+        autoUpdater.autoDownload = false;
         autoUpdater.on('update-available', () => {
             if (updater) {
                 dialog.showMessageBox({
