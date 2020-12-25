@@ -827,7 +827,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
-        if (this.stateList && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
+        if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
                 accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
