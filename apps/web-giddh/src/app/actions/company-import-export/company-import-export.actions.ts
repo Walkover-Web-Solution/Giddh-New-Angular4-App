@@ -43,7 +43,7 @@ export class CompanyImportExportActions {
                                 } else {
                                     let res = { body: response.body.file };
                                     let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
-                                    saveAs(blob, this._generalService.companyUniqueName + '.json');
+                                    saveAs(blob, `${action.payload.entityName}_Accounting_Entries_${action.payload.from}_${action.payload.to}_${this._generalService.companyUniqueName}` + '.json');
                                 }
                             } else {
                                 this._toasty.errorToast(response.message);
