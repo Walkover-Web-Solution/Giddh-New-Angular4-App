@@ -139,7 +139,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                         cg.isIncludedInSearch = true;
                         cg.isOpen = false;
                         cg.uniqueName = f;
-                        cg.groupName = f.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+                        cg.groupName = (f) ? f.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
                         // removed following line in favour of G0-908
                         // cg.category = f === 'closingInventory' ? 'expenses' : 'income';
                         cg.category = f === 'income';

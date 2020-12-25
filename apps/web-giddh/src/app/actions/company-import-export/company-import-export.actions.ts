@@ -37,10 +37,14 @@ export class CompanyImportExportActions {
                 } else {
                     return this._companyImportExportService.ExportLedgersRequest(action.payload.from, action.payload.to, action.payload.branchUniqueName).pipe(
                         map((response: BaseResponse<any, string>) => {
-                            if (response.status === 'success') {
-                                let res = { body: response.body };
-                                let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
-                                saveAs(blob, `${action.payload.entityName}_Accounting_Entries_${action.payload.from}_${action.payload.to}_${this._generalService.companyUniqueName}` + '.json');
+                            if (response.status === 'success' && response.body) {
+                                if(response.body.type === "message") {
+                                    this._toasty.successToast(response.body.file);
+                                } else {
+                                    let res = { body: response.body.file };
+                                    let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
+                                    saveAs(blob, `${action.payload.entityName}_Accounting_Entries_${action.payload.from}_${action.payload.to}_${this._generalService.companyUniqueName}` + '.json');
+                                }
                             } else {
                                 this._toasty.errorToast(response.message);
                             }

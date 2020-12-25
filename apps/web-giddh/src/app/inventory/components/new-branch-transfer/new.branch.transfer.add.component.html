@@ -80,8 +80,8 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <input *ngIf="isBranch && !isUpdateMode" name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required
-                                    [disabled]="isBranch">
+                                <input *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode" name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required
+                                    [disabled]="(isBranch || isCompanyWithSingleBranch)">
                                 <sh-select *ngIf="isUpdateMode" #defaultSource name="sourceName" [isFilterEnabled]="true"
                                     [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].uniqueName"
                                     [options]="branches$ | async" (selected)="selectCompany($event, 'sources', 0); focusSourceWarehouse()" required
@@ -261,8 +261,8 @@
                                     [forceClearReactive]="forceClear$ | async" [options]="branches$ | async"
                                     (selected)="selectCompany($event, 'destinations', 0); focusDestinationWarehouse();" required
                                     [disabled]="isUpdateMode"></sh-select>
-                                <input *ngIf="isBranch && !isUpdateMode" name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required
-                                    [disabled]="isBranch">
+                                <input *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode" name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required
+                                    [disabled]="(isBranch || isCompanyWithSingleBranch)">
                             </div>
                         </div>
                         <div class="row mr-b2">
@@ -372,7 +372,7 @@
                                         <div class="hsnCodeDropdown" *ngIf="hsnPopupShow && activeRow == i">
                                             <label>HSN/SAC Code</label>
                                             <input type="text" maxlength="8" placeholder="HSN/SAC Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
-                                            <div class="btngroup m-t-10">
+                                            <div class="btngroup m-t-10 d-block">
                                                 <button class="btn btn-sm btn-success" type="button" (click)="saveHsnNumberPopup(product)">Save</button>
                                                 <button class="btn btn-sm btn-primary" type="button" (click)="hideHsnNumberPopup()">Cancel</button>
                                             </div>
@@ -580,7 +580,7 @@
                     <div class="col-xs-12">
                         <div class="pull-right pr">
                             <button type="button" class="btn btn-danger d-inline-block v-align-middle" [disabled]="isLoading" (click)="closeBranchTransferPopup()">Cancel</button>
-                            <button type="button" class="btn btn-success-text d-inline-block v-align-middle {{newBranchTransferForm.invalid}}-{{isValidSourceTaxNumber}}-{{isValidDestinationTaxNumber}}" [disabled]="newBranchTransferForm.invalid || !isValidSourceTaxNumber || !isValidDestinationTaxNumber || isLoading"
+                            <button *ngIf="isBranch || isCompanyWithSingleBranch" type="button" class="btn btn-success-text d-inline-block v-align-middle {{newBranchTransferForm.invalid}}-{{isValidSourceTaxNumber}}-{{isValidDestinationTaxNumber}}" [disabled]="newBranchTransferForm.invalid || !isValidSourceTaxNumber || !isValidDestinationTaxNumber || isLoading"
                                 (click)="submit()">{{editBranchTransferUniqueName ? 'Update' : 'Create'}}</button>
                         </div>
                     </div>

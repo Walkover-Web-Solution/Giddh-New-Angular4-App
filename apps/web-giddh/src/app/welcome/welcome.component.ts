@@ -395,7 +395,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.createCompany();
                 }
             }, 100);
-            //this._router.navigate(['select-plan']);
         } else {
             this.isCreateCompanyInProgress = false;
             if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
@@ -403,7 +402,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     // Check for contact number validity only for update flow of warehouse as
                     // the create warehouse validation will be performed in on-boarding component
                     isWelcomeFormValid = this.isContactNumberValid();
-                    if (!isWelcomeFormValid && this.contactNumberField) {
+                    if (!isWelcomeFormValid && this.contactNumberField && this.contactNumberField.nativeElement) {
                         this.contactNumberField.nativeElement.focus();
                     }
                 }
@@ -824,7 +823,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handleNameChange(itemName: string = ''): void {
         if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
-            if (itemName.length > 100) {
+            if (itemName && itemName.length > 100) {
                 this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
             }
         }

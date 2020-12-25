@@ -320,7 +320,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.navigationEnd = true;
                 if (event instanceof NavigationEnd) {
-                    this.adjustNavigationBar();
                     let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                         return item.uniqueName.toLocaleLowerCase() === event.url.toLowerCase();
                     });
@@ -474,6 +473,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
+
+        this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
+                this.getCurrentCompanyData();
+            }
+        });
     }
 
     public ngOnInit() {
@@ -509,6 +515,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response.body);
                         this.menuItemsFromIndexDB = DEFAULT_MENUS;
                         this.accountItemsFromIndexDB = DEFAULT_AC;
+                        this.changeDetection.detectChanges();
                     }
                 });
             }
