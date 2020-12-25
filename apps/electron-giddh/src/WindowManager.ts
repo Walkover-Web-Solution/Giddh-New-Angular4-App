@@ -98,11 +98,11 @@ export default class WindowManager {
                 window.maximize();
             }
             setTimeout(() => {
-            window.loadURL(descriptor.url);
-            window.show();
-            this.registerWindowEventHandlers(window, descriptor);
-            this.windows.push(window);
-             }, 2* 1000);
+                window.loadURL(descriptor.url);
+                window.show();
+                this.registerWindowEventHandlers(window, descriptor);
+                this.windows.push(window);
+            }, 2 * 1000);
         }
 
         // tslint:disable-next-line:no-unused-expression
