@@ -1,5 +1,5 @@
 import {autoUpdater} from 'electron-updater';
-import {dialog} from 'electron'
+import {dialog} from 'electron';
 
 let updater;
 export default class AppUpdaterV1 {
@@ -51,8 +51,9 @@ export default class AppUpdaterV1 {
               detail: 'A new version has been downloaded. Restart the application to apply the updates.'
             }
             dialog.showMessageBox(dialogOpts).then((returnValue) => {
-              if (returnValue.response === 0) autoUpdater.quitAndInstall()
-            })
+                if (returnValue.response === 0) {
+                    autoUpdater.quitAndInstall();
+            }});
         });
         // autoUpdater.on('error', (error) => {
         //     dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
