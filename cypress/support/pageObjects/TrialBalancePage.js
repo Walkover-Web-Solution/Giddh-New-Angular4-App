@@ -19,7 +19,7 @@ class TrialBalancePage {
     }
 
     searchAccountAmount(){
-        return  cy.xpath('//span[@class=\'ui-select-highlight\']/parent::div/following::div[1]')
+        return cy.get('tr > :nth-child(3)')
     }
 
 
