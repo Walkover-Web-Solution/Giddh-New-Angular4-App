@@ -172,7 +172,7 @@ export class UpdateLedgerVm {
     public getCategoryNameFromAccount(accountName: string): string {
         let categoryName = '';
         let account = find(this.flatternAccountList, (fla) => fla.uniqueName === accountName);
-        if (account && account.parentGroups[0]) {
+        if (account && account.parentGroups && account.parentGroups.length > 0 && account.parentGroups[0]) {
             categoryName = this.accountCatgoryGetterFunc(account, accountName);
         } else {
             let flatterAccounts: IFlattenAccountsResultItem[] = this.flatternAccountList;
@@ -193,7 +193,7 @@ export class UpdateLedgerVm {
     }
 
     public accountCatgoryGetterFunc(account, accountName): string {
-        let parent = account.parentGroups ? account.parentGroups[0] : '';
+        let parent = account && account.parentGroups && account.parentGroups.length > 0 ? account.parentGroups[0] : '';
         if (parent) {
             if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
                 return 'liabilities';
