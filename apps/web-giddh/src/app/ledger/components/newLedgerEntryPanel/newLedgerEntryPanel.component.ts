@@ -388,7 +388,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes, []);
-        } else if (this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
+        } else if (this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes, this.currentTxn.selectedAccount.particularAccountTax);
         } else {
             this.taxListForStock = [];
@@ -1455,7 +1455,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public assignUpdateActiveAccount(accountDetails: AccountResponse | AccountResponseV2): void {
         this.accountOtherApplicableDiscount = [];
         this.activeAccount = accountDetails;
-        let parentAcc = accountDetails.parentGroups[0].uniqueName;
+        let parentAcc = (accountDetails && accountDetails.parentGroups && accountDetails.parentGroups.length > 0) ? accountDetails.parentGroups[0].uniqueName : "";
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
         let assetsAccArray = ['assets'];

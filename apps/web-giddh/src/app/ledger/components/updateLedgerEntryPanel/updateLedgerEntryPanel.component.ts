@@ -770,7 +770,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let accountsForBaseAccountArray: IOption[] = [];
                 let isStockableAccount: boolean = false;
                 // check if current account category is type 'income' or 'expenses'
-                let parentAcc = this.activeAccount.parentGroups[0].uniqueName;
+                let parentAcc = (this.activeAccount && this.activeAccount.parentGroups && this.activeAccount.parentGroups.length > 0) ? this.activeAccount.parentGroups[0].uniqueName : "";
                 let incomeAccArray = ['revenuefromoperations', 'otherincome'];
                 let expensesAccArray = ['operatingcost', 'indirectexpenses'];
                 let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
@@ -1951,7 +1951,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
                 const activeAccountDetails = {
                     uniqueName: this.baseAccountDetails.particular ? this.baseAccountDetails.particular.uniqueName : '',
-                    parentGroups: this.baseAccountDetails.parentGroups ? this.baseAccountDetails.parentGroups : []
+                    parentGroups: (this.baseAccountDetails && this.baseAccountDetails.parentGroups) ? this.baseAccountDetails.parentGroups : []
                 }
                 const isRcmEntry = this.generalService.shouldShowRcmSection(activeAccountDetails, selectedAccountDetails);
                 if (isRcmEntry) {

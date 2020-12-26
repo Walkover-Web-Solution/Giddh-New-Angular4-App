@@ -149,6 +149,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
 
+    public imgPath: string = '';
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -243,6 +245,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
         });
+
+        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     public getInitialProfileData() {
