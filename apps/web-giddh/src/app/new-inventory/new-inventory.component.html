@@ -28,10 +28,13 @@
 
                     </ul>
                 </div>
-                <button class="btn btn-sky-blue mr-0" (click)="createUnitToggleAsidePane()">+ Create New</button>
-                <!-- (click)="toggleAsidePane()" --- crate new function
-                                 (click)="createGroupToggleAsidePane()" --- create new group function
-                                 (click)="createItemToggleAsidePane() " --- create new item function
+                <button class="btn btn-sky-blue mr-0" (click)="toggleAsidePane()">+ Create New</button>
+                <!--
+                    (click)="toggleAsidePane()" --- crate new function
+                    (click)="createGroupToggleAsidePane()" --- create new group function
+                    (click)="createItemToggleAsidePane() " --- create new item function
+                    (click)="createUnitToggleAsidePane" --- create new Unit funcation
+                    (click)="createComboToggleAsidePane()" -- create new combo funcation
                             -->
             </div>
             <!-- New inventory button will be show if product/sercive tab on active mode -->
@@ -47,9 +50,15 @@
         <tab heading="Product/Service Wise">
             <inventory-product-service-list></inventory-product-service-list>
         </tab>
-        <tab heading="Combo"></tab>
-        <tab heading="Transactions"></tab>
-        <tab heading="Custom Fileds"></tab>
+        <tab heading="Combo">
+            <inventory-combo-list></inventory-combo-list>
+        </tab>
+        <tab heading="Transactions">
+            <inventory-transaction-list></inventory-transaction-list>
+        </tab>
+        <tab heading="Custom Fields">
+            <inventory-custom-field></inventory-custom-field>
+        </tab>
     </tabset>
 
 </div>
@@ -57,7 +66,7 @@
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
 
 <!-- create new aside pane  -->
-<!-- <aside-create-new-inventory *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-create-new-inventory> -->
+<aside-create-new-inventory *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-create-new-inventory>
 
 <!-- create new group aside pane -->
 <!-- <aside-create-new-group *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="createGroupToggleAsidePane()"></aside-create-new-group> -->
@@ -66,6 +75,7 @@
 <!-- <aside-create-new-item *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createItemToggleAsidePane()"></aside-create-new-item> -->
 
 <!-- create new unit aside pane -->
-<aside-create-new-unit *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createUnitToggleAsidePane()">
+<!-- <aside-create-new-unit *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createUnitToggleAsidePane()"></aside-create-new-unit> -->
 
-</aside-create-new-unit>
+<!-- create new combo asie pane -->
+<!-- <aside-create-combo *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createComboToggleAsidePane()"></aside-create-combo> -->

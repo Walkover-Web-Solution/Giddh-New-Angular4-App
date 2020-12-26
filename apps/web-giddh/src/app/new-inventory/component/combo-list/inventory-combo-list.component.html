@@ -1,0 +1,54 @@
+<div class="container-fluid product-list-container">
+    <div class="table-responsive">
+        <table class="table giddh-table on-mobile-view">
+            <thead>
+                <tr>
+                    <th>Stock Name</th>
+                    <th>Unit</th>
+                    <th>Qty</th>
+                    <th>Selling Price</th>
+                    <th>Purchase Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-title="Stock Name">
+                        <a href="javascript:void(0)"
+                            [routerLink]="['/pages/new-inventory/about-product-service-detail']">
+                            <div class="product-name-image d-flex">
+                                <div class="d-flex">
+                                    <input type="checkbox">
+                                    <div class="mx-2">
+                                        <img src="../../../../assets/images/Login-Page-Image.png">
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>Stock Name</p>
+                                    <p class="text-gray">(34 Items)</p>
+                                </div>
+                            </div>
+                        </a>
+                    </td>
+                    <td data-title="Unit">KG</td>
+                    <td data-title="Qty">500</td>
+                    <td data-title="Selling Price">23124</td>
+                    <td data-title="Purchase Price">12345</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="inventory-footer sticky-footer">
+    <div class="inner-content-footer">
+        <div class="d-flex">
+            <div class="mr-3">
+                <p class="text-gray">Group Count:</p>
+                <p class="text-left label-value">23</p>
+            </div>
+            <div class="mr-3">
+                <p class="text-gray">Items Count:</p>
+                <p class="text-left label-value">23</p>
+            </div>
+        </div>
+    </div>
+</div>

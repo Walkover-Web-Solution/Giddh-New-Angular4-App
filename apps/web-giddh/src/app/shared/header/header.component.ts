@@ -1820,6 +1820,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
+            else if (document.getElementsByClassName("inventory-about-page") && document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0){
+                document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-setting-page');
+                document.querySelector('body').classList.remove('on-user-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            }
             else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');

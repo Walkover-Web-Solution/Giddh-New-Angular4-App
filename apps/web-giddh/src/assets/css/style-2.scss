@@ -9594,6 +9594,9 @@ span#HW_badge_cont:nth-child(3) {
     left: 215px;
     width: 100%;
 }
+.bulk-create-table sh-select input{
+    border: none;padding: 0 11px !important;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;

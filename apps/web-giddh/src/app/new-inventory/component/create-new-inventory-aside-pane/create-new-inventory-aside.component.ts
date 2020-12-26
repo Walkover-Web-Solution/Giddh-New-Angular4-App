@@ -3,12 +3,12 @@ import { SharedModule } from '../../../shared/shared.module'
 import { TabsModule } from 'ngx-bootstrap/tabs';
 @Component({
     selector: 'aside-create-new-inventory',
-    templateUrl: './create-new-inventory.component.html',
-    styleUrls: ['./create-new-inventory.component.scss'],
+    templateUrl: './create-new-inventory-aside.component.html',
+    styleUrls: ['./create-new-inventory-aside.component.scss'],
 
 })
 
-export class CreateNewInventoryComponent implements OnInit {
+export class CreateNewInventoryAsideComponent implements OnInit {
     public hideCreateFieldData: boolean = true;
     public createGroupaside: boolean = true;
 

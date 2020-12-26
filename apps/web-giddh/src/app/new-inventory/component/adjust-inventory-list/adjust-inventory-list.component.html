@@ -1,0 +1,38 @@
+<div class="container-fluid mt-15 adjust-inventory-list-page">
+    <div class="d-flex justify-content-between adjust-inventory-header">
+        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+            <i class="icon-calender calendar-addon"></i>
+            <input type="text" name="selectedDateRange" value=""
+                class="giddh-datepicker date-range-picker" />
+        </div>
+        <button class="btn btn-sky-blue mr-0" (click)="adjustInventory()">+ Add Adjustment</button>
+    </div>
+    <div class="custom-field-list mt-15">
+        <div class="table-responsive">
+            <table class="table giddh-table on-mobile-view">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Reference No.</th>
+                        <th>Reason</th>
+                        <th>Type</th>
+                        <th>Adjusted</th>
+                        <th>Adjusted By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-title="Date">15/10/2020</td>
+                        <td data-title="Reference No.">234423</td>
+                        <td data-title="Reason">Stock on fire</td>
+                        <td data-title="Type">Quantity</td>
+                        <td data-title="Adjusted">Product Name</td>
+                        <td data-title="Adjusted By">Shubhendra Agarawal</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<aside-adjust-inventory *ngIf="asideMenuState === 'in'" (closeAsideEvent)="adjustInventory()"></aside-adjust-inventory>

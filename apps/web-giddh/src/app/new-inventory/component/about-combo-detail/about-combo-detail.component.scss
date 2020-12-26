@@ -24,6 +24,21 @@
     margin-bottom: 15px;
     width: 101%;
 }
+.combo-table{
+    max-width: 1000px;
+    width: 100%;
+}
+.combo-table tr, .combo-table th, .combo-table td, .combo-table tbody {
+    border: 1px solid $gainsboro;
+    border-collapse: collapse;
+    min-width: 160px;
+}
+.combo-table th{
+    border-bottom: 1px solid $gainsboro;
+}
+.combo-table th:first-child , .combo-table td:first-child{
+    min-width: auto !important;
+}
 .create-group-footer{
     background-color: $whisper-color;
     height: 60px;
