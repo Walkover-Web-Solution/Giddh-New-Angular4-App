@@ -8,22 +8,22 @@ describe('This is Global Search Test', function() {
     let testData = "";
     let entryUniqueName = "";
 
-    // before(() => {
-    //     cy.fixture('example.json')
-    //         .then((data) => {
-    //             // "this" is still the test context object
-    //             testData = data
-    //         })
-    // });
+    before(() => {
+        cy.fixture('example.json')
+            .then((data) => {
+                // "this" is still the test context object
+                testData = data
+            })
+    });
 
-    // before(() => {
-    //     cy.loginWithEmail(testData.Email, testData.Password);
-    // })
+    before(() => {
+        cy.loginWithEmail(testData.Email, testData.Password);
+    })
 
     it('Verify Trial Balance using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
 
-    // });
+     });
 
     it('Verify Invoice using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span', 'Invoice', 'Invoice ')
