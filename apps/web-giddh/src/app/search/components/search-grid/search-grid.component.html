@@ -100,7 +100,7 @@
                             </span>
                         </td>
                     </tr>
-                    <tr *ngIf="!(searchResponseFiltered$ | async).length">
+                    <tr *ngIf="!(searchResponseFiltered$ | async)?.length">
                         <td colspan="9" class="text-center empty-table">
                             <h1>No Record Found !!</h1>
                         </td>

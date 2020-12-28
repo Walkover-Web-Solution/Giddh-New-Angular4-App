@@ -417,7 +417,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     }
 
     public itemStateChanged(uniqueName: string) {
-        let index = this.selectedItems.findIndex(f => f === uniqueName);
+        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === uniqueName) : -1;
 
         if (index > -1) {
             this.selectedItems = this.selectedItems.filter(f => f !== uniqueName);

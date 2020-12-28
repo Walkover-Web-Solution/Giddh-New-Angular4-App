@@ -1365,8 +1365,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public itemStateChanged(item: any, allSelected: boolean = false) {
-        let index = this.selectedItems.findIndex(f => f === item.uniqueName);
-        let indexInv = this.selectedInvoicesList.findIndex(f => f.uniqueName === item.uniqueName);
+        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === item.uniqueName) : -1;
+        let indexInv = (this.selectedInvoicesList) ? this.selectedInvoicesList.findIndex(f => f.uniqueName === item.uniqueName) : -1;
 
         if (indexInv > -1 && !allSelected) {
             this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f.uniqueName !== item.uniqueName);
