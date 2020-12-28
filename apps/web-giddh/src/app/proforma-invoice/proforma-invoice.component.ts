@@ -1137,7 +1137,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             templateUniqueName: null,
                             number: ''
                         };
+                        
                         let tempObj;
+                        let voucherDate = this.invFormData.voucherDetails.voucherDate;
+                        let dueDate = this.invFormData.voucherDetails.dueDate;
 
                         //if last invoice is copied then create new Voucher and copy only needed things not all things
                         obj.accountDetails = this.invFormData.accountDetails;
@@ -1159,14 +1162,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
 
                         tempObj.entries.forEach((entry, index) => {
-                            tempObj.entries[index].entryDate = this.universalDate || new Date();
+                            tempObj.entries[index].entryDate = voucherDate || this.universalDate || new Date();
                         });
 
                         obj.entries = tempObj.entries;
 
                         let date = _.cloneDeep(this.universalDate);
-                        obj.voucherDetails.voucherDate = date;
-                        obj.voucherDetails.dueDate = date;
+                        obj.voucherDetails.voucherDate = voucherDate;
+                        obj.voucherDetails.dueDate = dueDate;
                     } else {
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
