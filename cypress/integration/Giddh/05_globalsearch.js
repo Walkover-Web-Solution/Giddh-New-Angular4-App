@@ -23,7 +23,7 @@ describe('This is Global Search Test', function() {
     it('Verify Trial Balance using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span', 'trial balance', 'Trial Balance')
 
-    // });
+    });
 
     it('Verify Invoice using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span','Invoice', 'Invoice ')
