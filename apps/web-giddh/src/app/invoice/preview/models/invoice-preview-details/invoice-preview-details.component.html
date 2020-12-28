@@ -218,7 +218,7 @@
                                                         (click)="printVoucher()"><i class="fa fa-print"></i></a>
                                                 </span>
 
-                                                <span *ngIf="selectedItem.voucherType === 'purchase' && pdfPreviewLoaded">
+                                                <span *ngIf="selectedItem?.voucherType === 'purchase' && pdfPreviewLoaded">
                                                     <a href="javascript:void 0" tooltip="Download PDF" placement="top"
                                                         (click)="downloadPurchaseBillPDF()"><i class="icon-file"></i></a>
                                                 </span>
@@ -231,7 +231,7 @@
                                                 </span>
 
                                                 <span
-                                                    *ngIf="selectedItem.voucherType === 'purchase' && attachedDocumentType?.type"
+                                                    *ngIf="selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type"
                                                     [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
                                                     <a href="javascript:void 0" tooltip="Download attachment" placement="top"
                                                         (click)="downloadFile()"><i class="icon-download"></i></a>
@@ -243,7 +243,7 @@
                                                             class="icon-trash"></i></a>
                                                 </span>
                                             </div>
-                                            <div class="history-btn" *ngIf="selectedItem.voucherType === 'purchase'">
+                                            <div class="history-btn" *ngIf="selectedItem?.voucherType === 'purchase'">
                                                 <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()">
                                                     <i class="icon-history-icon font-12 pr-1"></i>
                                                         History</button>
@@ -260,7 +260,7 @@
 
                             <div class="row">
 
-                                <div class="col-md-4 col-12" *ngIf="!isCompany && (selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
+                                <div class="col-md-4 col-12" *ngIf="!isCompany && (selectedItem?.voucherType !== 'credit note' && selectedItem?.voucherType !== 'debit note') &&
                                     (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
                                     <div class="single-payment-detail clearfix pr-4">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
@@ -280,7 +280,7 @@
                                             mark it as sent. </p>
                                         <a href="javascript: void 0"
                                            (click)="showEmailSendModal.show()">
-                                            {{(selectedItem.voucherType === 'credit note') || (selectedItem.voucherType === 'debit note') ? 'Send Note' : 'Send Invoice'}}
+                                            {{(selectedItem?.voucherType === 'credit note') || (selectedItem?.voucherType === 'debit note') ? 'Send Note' : 'Send Invoice'}}
                                         </a>
                                     </div>
                                 </div>
@@ -337,7 +337,7 @@
                             <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
                         </div>
 
-                            <div *ngIf="!shouldShowUploadAttachment && selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" class="img-expand-collapse" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
+                            <div *ngIf="!shouldShowUploadAttachment && selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" class="img-expand-collapse" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
                                 <img
                                     class="image-preview img-expand" [src]="imagePreviewSource"/>
                             </div>
@@ -373,7 +373,7 @@
                                                 [viewBookmark]="false" [download]="false">
                                 </ng2-pdfjs-viewer>
                             </div>
-                            <div class="expand-file" *ngIf="selectedItem.voucherType === 'purchase' && imagePreviewSource">
+                            <div class="expand-file" *ngIf="selectedItem?.voucherType === 'purchase' && imagePreviewSource">
                                 <a href="javascript:;" *ngIf="!isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = true;"><span><img src="assets/images/expand.svg"></span>Expand</a>
                                 <a href="javascript:;" *ngIf="isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = false;"><span><img src="assets/images/expand.svg" class="collapse-icon"></span>Collapse</a>
                             </div>
@@ -393,7 +393,7 @@
             <div class="invoice-edit-header">
 
                 <span>
-                    <p>Edit {{ selectedItem.voucherType | voucherTypeToNamePipe | titlecase }}</p>
+                    <p>Edit {{ selectedItem?.voucherType | voucherTypeToNamePipe | titlecase }}</p>
                 </span>
 
                 <span class="close-modal cp" (click)="toggleEditMode()">
@@ -432,12 +432,12 @@
         <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview"
             [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
             <ng2-pdfjs-viewer pagemode="none"
-                *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
+                *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
                 viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
                 [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false"
                 [viewBookmark]="false" [download]="false">
             </ng2-pdfjs-viewer>
-            <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
+            <img *ngIf="(selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
                 class="image-preview" [src]="imagePreviewSource" />
         </div>
     </div>
@@ -545,7 +545,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal
-                [body]="only4ProformaEstimates ? 'Do you want to delete the voucher(s)?' : selectedItem.voucherType === 'purchase' ? 'Do you want to delete the selected records?' : 'Do you want to delete the voucher/invoice?'"
+                [body]="only4ProformaEstimates ? 'Do you want to delete the voucher(s)?' : selectedItem?.voucherType === 'purchase' ? 'Do you want to delete the selected records?' : 'Do you want to delete the voucher/invoice?'"
                 (cancelCallBack)="deleteConfirmationModel.toggle()"
                 (successCallBack)="deleteVoucher.emit(selectedItem);deleteConfirmationModel.toggle()"></confirm-modal>
         </div>

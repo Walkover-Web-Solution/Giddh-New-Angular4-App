@@ -616,20 +616,22 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public insertItemsIntoArr() {
-        _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-            let idx = _.indexOf(this.selectedLedgerItems, item.uniqueName);
-            if (item.isSelected) {
-                if (idx === -1) {
-                    this.selectedLedgerItems.push(item.uniqueName);
-                    this.selectedCountOfAccounts.push(item.account.uniqueName);
+        if(this.ledgersData) {
+            _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+                let idx = _.indexOf(this.selectedLedgerItems, item.uniqueName);
+                if (item.isSelected) {
+                    if (idx === -1) {
+                        this.selectedLedgerItems.push(item.uniqueName);
+                        this.selectedCountOfAccounts.push(item.account.uniqueName);
+                    }
+                } else {
+                    if (idx !== -1) {
+                        this.selectedLedgerItems.splice(idx);
+                        this.selectedCountOfAccounts.splice(idx);
+                    }
                 }
-            } else {
-                if (idx !== -1) {
-                    this.selectedLedgerItems.splice(idx);
-                    this.selectedCountOfAccounts.splice(idx);
-                }
-            }
-        });
+            });
+        }
         // check if all selected entries are from same account
         if (this.selectedCountOfAccounts.length) {
             this.togglePrevGenBtn = this.selectedCountOfAccounts.every(v => v === this.selectedCountOfAccounts[0]);
