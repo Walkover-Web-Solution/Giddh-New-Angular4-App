@@ -2595,8 +2595,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     this.autoFillCompanyShipping = isEqual(this.purchaseOrder.company.billingDetails, this.purchaseOrder.company.shippingDetails);
 
-                    this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
-                    this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
+                    if(this.isUpdateMode) {
+                        this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
+                        this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
+                    } else {
+                        this.purchaseOrder.voucherDetails.voucherDate = this.universalDate || new Date();
+                        this.assignDueDate();
+                    }
 
                     this.purchaseOrder.number = this.purchaseOrderDetails.number;
                 } else {
