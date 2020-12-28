@@ -158,4 +158,15 @@ export class SettingsBranchActions {
         return successAction;
     }
 
+    /**
+     * This will reset the branches response
+     *
+     * @returns {CustomActions}
+     * @memberof SettingsBranchActions
+     */
+    public resetAllBranches(): CustomActions {
+        return {
+            type: SETTINGS_BRANCH_ACTIONS.RESET_ALL_BRANCHES_RESPONSE
+        };
+    }
 }

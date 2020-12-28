@@ -1,5 +1,5 @@
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -16,6 +16,8 @@ import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
     selector: 'tb-pl-bs-filter',  // <home></home>
@@ -23,7 +25,8 @@ import { GeneralService } from '../../../services/general.service';
     styleUrls: [`./tb-pl-bs-filter.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
+
+export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
     public selectedDateOption: string = '0';
     public filterForm: FormGroup;
@@ -52,6 +55,14 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     public dateOptions: IOption[] = [{label: 'Date Range', value: '1'}, {label: 'Financial Year', value: '0'}];
     public imgPath: string;
     public universalDateICurrent: boolean = false;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
 
     @Input() public showLoader: boolean = true;
 
@@ -89,12 +100,16 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     constructor(private fb: FormBuilder,
                 private cd: ChangeDetectorRef,
                 private store: Store<AppState>,
-                private _settingsTagActions: SettingsTagActions, private generalService: GeneralService, private modalService: BsModalService) {
+                private _settingsTagActions: SettingsTagActions,
+                private generalService: GeneralService,
+                private settingsBranchAction: SettingsBranchActions,
+                private modalService: BsModalService) {
         this.filterForm = this.fb.group({
             from: [''],
             to: [''],
             fy: [''],
             selectedDateOption: ['1'],
+            branchUniqueName: [],
             selectedFinancialYearOption: [''],
             refresh: [false],
             tagName: ['']
@@ -106,8 +121,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         this.store.dispatch(this._settingsTagActions.GetALLTags());
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
-
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     public get selectedCompany() {
@@ -134,28 +148,21 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        // if (changes['needToReCalculate']) {
-        //   this.calculateTotal();
-        // }
-    }
-
     public ngOnInit() {
 
         this.imgPath = (isElectron|| isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
-        //
         if (!this.showLabels) {
             this.filterForm.patchValue({selectedDateOption: '0'});
         }
         this.accountSearchControl.valueChanges.pipe(
-            debounceTime(700))
+            debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.search = newValue;
                 this.seachChange.emit(this.search);
                 this.cd.detectChanges();
             });
 
-        this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+        this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
             if (tags && tags.length) {
                 _.map(tags, (tag) => {
                     tag.value = tag.name;
@@ -163,7 +170,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 });
                 return _.orderBy(tags, 'name');
             }
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
 
         this.universalDate$.subscribe((a) => {
             if (a) {
@@ -177,8 +184,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                     // this.assignStartAndEndDateForDateRangePicker(date[0], date[1]);
 
                     this.filterForm.patchValue({
-                        from: moment(a[0]).format('DD-MM-YYYY'),
-                        to: moment(a[1]).format('DD-MM-YYYY')
+                        from: moment(a[0]).format(GIDDH_DATE_FORMAT),
+                        to: moment(a[1]).format(GIDDH_DATE_FORMAT)
                     });
                 }
 
@@ -201,26 +208,60 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 this.filterData();
             }
         });
-
+        this.store.pipe(
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                    this.filterForm.get('branchUniqueName').setValue(this.currentBranch.uniqueName);
+                    this.filterForm.updateValueAndValidity();
+                    this.cd.detectChanges();
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
     }
 
     public setCurrentFY() {
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp && this.universalDateICurrent) {
-                let activeFinancialYear = selectedCmp.activeFinancialYear;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany && this.universalDateICurrent) {
+                let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
                     // commented for later use
                     // this.datePickerOptions = {
@@ -229,10 +270,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                     // };
 
                     // assign dates
-                    // this.assignStartAndEndDateForDateRangePicker(activeFinancialYear.financialYearStarts, null);
                     this.filterForm.patchValue({
-                        from: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day').format('DD-MM-YYYY'),
-                        to: moment().format('DD-MM-YYYY')
+                        from: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day').format(GIDDH_DATE_FORMAT),
+                        to: moment().format(GIDDH_DATE_FORMAT)
                     });
                 }
             }
@@ -240,7 +280,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public selectDateOption(v: IOption) {
@@ -248,8 +289,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
-        this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format('DD-MM-YYYY'));
-        this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format('DD-MM-YYYY'));
+        this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format(GIDDH_DATE_FORMAT));
+        this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format(GIDDH_DATE_FORMAT));
         this.filterData();
     }
 
@@ -338,6 +379,20 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 });
             }
         }
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof TbPlBsFilterComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.expand = false;
+        setTimeout(() => {
+            this.expandAll.emit(this.expand);
+        }, 10);
+        this.onPropertyChanged.emit(this.filterForm.value);
     }
 
     /**

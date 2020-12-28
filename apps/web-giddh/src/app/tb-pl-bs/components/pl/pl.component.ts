@@ -95,7 +95,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     private _selectedCompany: CompanyResponse;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
-        this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).pipe(takeUntil(this.destroyed$));
+        this.showLoader = this.store.pipe(select(p => p.tlPl.pl.showLoader), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -139,7 +139,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
                         cg.isIncludedInSearch = true;
                         cg.isOpen = false;
                         cg.uniqueName = f;
-                        cg.groupName = f.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+                        cg.groupName = (f) ? f.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
                         // removed following line in favour of G0-908
                         // cg.category = f === 'closingInventory' ? 'expenses' : 'income';
                         cg.category = f === 'income';

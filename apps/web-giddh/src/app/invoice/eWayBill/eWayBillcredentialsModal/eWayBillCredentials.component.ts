@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { EwayBillLogin } from 'apps/web-giddh/src/app/models/api-models/Invoice';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -25,8 +25,8 @@ export class EWayBillCredentialsComponent implements OnInit {
     constructor(
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions) {
-        this.isUserAdeedInProcess$ = this.store.select(p => p.ewaybillstate.isEwaybillAddnewUserInProcess).pipe(takeUntil(this.destroyed$));
-        this.isEwaybillUserCreationSuccess$ = this.store.select(p => p.ewaybillstate.isEwaybillUserCreationSuccess).pipe(takeUntil(this.destroyed$));
+        this.isUserAdeedInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillAddnewUserInProcess), takeUntil(this.destroyed$));
+        this.isEwaybillUserCreationSuccess$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
 
     }
     public ngOnInit(): void {

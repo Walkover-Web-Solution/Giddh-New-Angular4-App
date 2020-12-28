@@ -171,15 +171,15 @@
                                 "input": "apps/web-giddh/src/index.local.html",
                                 "output": "index.html"
                             },
-                            "optimization": false,
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
                             "extractCss": true,
                             "namedChunks": false,
-                            "aot": false,
-                            "extractLicenses": false,
+                            "aot": true,
+                            "extractLicenses": true,
                             "vendorChunk": false,
-                            "buildOptimizer": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
