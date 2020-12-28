@@ -349,17 +349,21 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
+        if(byteCharacters) {
+            while (offset < byteCharacters.length) {
+                let slice = byteCharacters.slice(offset, offset + sliceSize);
+                let byteNumbers = new Array((slice ? slice.length : 0));
+                let i = 0;
+                if(slice) {
+                    while (i < slice.length) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                        i++;
+                    }
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+                offset += sliceSize;
             }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
         }
         return new Blob(byteArrays, { type: contentType });
     }
@@ -376,9 +380,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let end = el.selectionEnd;
         let text = el.value;
         let before = text.substring(0, start);
-        let after = text.substring(end, text.length);
+        let after = text.substring(end, (text ? text.length : 0));
         el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + newText.length;
+        el.selectionStart = el.selectionEnd = start + (newText ? newText.length : 0);
         el.focus();
         this.messageBody.msg = el.value;
     }

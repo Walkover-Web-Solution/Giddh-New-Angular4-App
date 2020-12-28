@@ -105,7 +105,9 @@ export class SalesRegisterExpandComponent implements OnInit {
                 });
                 if (this.voucherNumberInput.value) {
                     setTimeout(() => {
-                        this.invoiceSearch.nativeElement.focus();
+                        if(this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                            this.invoiceSearch.nativeElement.focus();
+                        }
                     }, 200);
                 }
             }
@@ -239,7 +241,9 @@ export class SalesRegisterExpandComponent implements OnInit {
             // this.showSearchCustomer = false;
 
             setTimeout(() => {
-                this.invoiceSearch.nativeElement.focus();
+                if(this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                    this.invoiceSearch.nativeElement.focus();
+                }
             }, 200);
         }
         // else if (fieldName === 'customerUniqueName') {

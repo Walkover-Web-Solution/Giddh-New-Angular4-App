@@ -24,7 +24,7 @@ export class DownloadVoucherComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.isProformaEstimatesInvoice = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.voucherType)
+        this.isProformaEstimatesInvoice = (this.selectedItem) ? [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.voucherType) : false;
     }
 
     invoiceTypeChanged(event) {
@@ -38,7 +38,7 @@ export class DownloadVoucherComponent implements OnInit {
 
     public onDownloadInvoiceEvent() {
         // as discussed with backend team voucherType will never be cash, It will be sales always for download vouchers
-        let voucherType = this.selectedItem.voucherType === 'cash' ? 'sales' : this.selectedItem.voucherType;
+        let voucherType = this.selectedItem && this.selectedItem.voucherType === 'cash' ? 'sales' : this.selectedItem.voucherType;
         let dataToSend = {
             voucherNumber: [this.selectedItem.voucherNumber],
             typeOfInvoice: this.invoiceType,
