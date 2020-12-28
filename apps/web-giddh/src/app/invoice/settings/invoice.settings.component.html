@@ -192,7 +192,7 @@
 
                                         <div class=" form-group">
                                             <div class="" [ngClass]="{'input-group': true}">
-                                                <input type="email" class="form-control" placeholder="Enter email id" name="invoiceEmail" [(ngModel)]='invoiceSetting.email' (ngModelChange)="onChangeEmail($event)" />
+                                                <input type="email" class="form-control" placeholder="Enter email id" name="invoiceEmail" [(ngModel)]='invoiceSetting.email' (ngModelChange)="onChangeEmail($event)" [disabled]="invoiceSetting.emailVerified" />
                                                 <span class="input-group-addon" *ngIf="!invoiceSetting.emailVerified"><i
                                                         class="fa fa-exclamation-circle"
                                                         tooltip="Unverified"></i></span>
@@ -205,9 +205,10 @@
 
                                     <div class="col-md-6 col-sm-12 row">
                                         <div class="btn-wrapper">
-                                            <button class="btn btn-success mr-1" (click)="verfiyEmail(invoiceSetting.email)" [disabled]="!isEmailChanged && (!invoiceSetting.email || invoiceSetting.email.length < 4 || invoiceSetting.emailVerified)">
+                                            <button class="btn btn-success mr-1" (click)="verfiyEmail(invoiceSetting.email)" [disabled]="!isEmailChanged && (!invoiceSetting.email || invoiceSetting.email.length < 4)" *ngIf="!invoiceSetting.emailVerified">
                                                 Verify
                                             </button>
+                                            <span *ngIf="invoiceSetting.emailVerified">Verified</span>
                                             <button class="btn btn-danger" (click)="deleteEmail(invoiceSetting.email)" [disabled]="!invoiceSetting.email || invoiceSetting.email.length < 4">Delete
                                             </button>
                                         </div>
