@@ -33,7 +33,7 @@
                         <ul class="shared-list group-shared-list">
                             <li *ngFor="let val of (activeAccountSharedWith$ | async); let i = index">
                                 <div class="user-name-email">
-                                    <i class="fa fa-user pd-r1"></i>
+                                    <i class="icon-user-black pd-r1"></i>
                                     <span class="user-email">
                                         <small *ngIf="val.emailId!==val.userName">{{val.userName}}</small>
                                         <small>{{ val.emailId }}</small>
