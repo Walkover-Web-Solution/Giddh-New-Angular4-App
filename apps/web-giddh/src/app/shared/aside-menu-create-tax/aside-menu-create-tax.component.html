@@ -94,7 +94,7 @@
                             <div class="input-group">
 
                                 <input name="lastInvoiceDate" placeholder="Daterangepicker" [(ngModel)]="newTaxObj.date"
-                                    type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY', showWeekNumbers: false}"
+                                    type="text" [bsConfig]="{dateInputFormat: giddhDateFormat, showWeekNumbers: false}"
                                     class="form-control" [outsideClick]="true" bsDatepicker required>
                             </div>
 

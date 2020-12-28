@@ -104,9 +104,9 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown | async" [multiple]="true">
+                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" (selected)="taxesSelected($event);" [options]="companyTaxDropDown" [multiple]="true">
                         </sh-select>
-                        <span class="input-group-btn pdL2"> <button [disabled]="!taxGroupForm?.get('taxes')?.value?.length" type="submit"
+                        <span class="input-group-btn pdL2"> <button type="submit" [disabled]="(isTaxesSaveDisable$ | async)"
                                 class="btn btn-success">Save</button></span>
                     </div>
                 </div>
@@ -131,25 +131,23 @@
     </ng-container>
     <!-- taxes container -->
 </div>
-
-<!-- hinding discount for isDebtorCreditorGroups due to API deployment in-process -->
-<div class="horizontal-form mr1" *ngIf="false">
-    <div class="mb-2 select-box">
+<!-- commented for later use isDebtorCreditorGroups -->
+<div class="horizontal-form" *ngIf="false">
+    <div class="mb-2 select-box container-fluid mt-1">
         <div class="form-group ">
             <label>Default Discounts <span
                         class="primary-color"></span></label>
             <div class="clearfix">
                 <span>
-                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" (selected)="discountSelected()" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
                     </span>
                 <span class="pull-right">
-                        <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
+                        <button  class="btn btn-primary mrgeBtn"  [disabled]="(isDiscountSaveDisable$ | async)" (click)="applyDiscounts()">Apply</button>
                     </span>
-
             </div>
         </div>
     </div>
-    <div class="edit-tax-section">
+    <div class="edit-tax-section container-fluid mt-1">
         <div class="form-group">
             <div class="tax-label">
                 <label>All Inherited Discounts</label>

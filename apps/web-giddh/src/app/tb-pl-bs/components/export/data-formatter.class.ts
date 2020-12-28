@@ -156,7 +156,7 @@ export class DataFormatter {
         formatable.setFooter(data);
     }
 
-    public calculateTotal = (group: ChildGroup, total: Total): Total => {
+    public calculateTotal = (group: ChildGroup, total: Total, decimalPlaces?: number): Total => {
         if (group.forwardedBalance.type === 'DEBIT') {
             total.ob = total.ob + group.forwardedBalance.amount;
         } else {
@@ -170,6 +170,12 @@ export class DataFormatter {
 
         total.cr += group.creditTotal;
         total.dr += group.debitTotal;
+        if (decimalPlaces) {
+            total.cr = giddhRoundOff(total.cr, decimalPlaces);
+            total.dr = giddhRoundOff(total.dr, decimalPlaces);
+            total.ob = giddhRoundOff(total.ob, decimalPlaces);
+            total.cb = giddhRoundOff(total.cb, decimalPlaces);
+        }
 
         return total;
     }

@@ -28,12 +28,12 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
     { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', hasTabs: true },
     // { type: 'MENU', name: 'Inventory > Jobwork', uniqueName: '/pages/inventory/jobwork' },
-    { type: 'MENU', name: 'Inventory > Manufacturing', uniqueName: '/pages/inventory/manufacturing', hasTabs: true  },
+    { type: 'MENU', name: 'Inventory > Manufacturing', uniqueName: '/pages/inventory/manufacturing', hasTabs: true },
     { type: 'MENU', name: 'Inventory > Report', uniqueName: '/pages/inventory/report', hasTabs: true },
 
     { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', hasTabs: false },
     { type: 'MENU', name: 'Search', uniqueName: '/pages/search', hasTabs: false },
-    { type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list', hasTabs: false},
+    { type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list', hasTabs: false },
 
     { type: 'MENU', name: 'Settings', uniqueName: '/pages/settings', hasTabs: true },
     { type: 'MENU', name: 'Settings > Taxes', uniqueName: '/pages/settings/taxes', additional: { tab: 'taxes', tabIndex: 0 }, hasTabs: true },
@@ -48,7 +48,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Settings > Discount', uniqueName: '/pages/settings/discount', additional: { tab: 'discount', tabIndex: 9 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, hasTabs: true },
     { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 }, hasTabs: true },
-
     // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
     // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
     { type: 'MENU', name: 'Import', uniqueName: '/pages/import', hasTabs: false },
@@ -95,11 +94,9 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Petty Cash Management > Pending', uniqueName: '/pages/expenses-manager', additional: { tab: 'pending', tabIndex: 0 }, hasTabs: true },
     { type: 'MENU', name: 'Petty Cash Management > Rejected', uniqueName: '/pages/expenses-manager', additional: { tab: 'rejected', tabIndex: 1 }, hasTabs: true },
 
-    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', hasTabs: false },
+    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', hasTabs: true },
     { type: 'MENU', name: 'Reports > Receipt', uniqueName: '/pages/reports/receipt', hasTabs: false },
 
-    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', hasTabs: true },
-    { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt', hasTabs: false },
     { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules', hasTabs: false },
     { type: 'MENU', name: 'Purchase Management > Purchase Order', uniqueName: '/pages/purchase-management/purchase/order', hasTabs: false },
     { type: 'MENU', name: 'Purchase Management > Purchase Bill', uniqueName: '/pages/purchase-management/purchase/bill', hasTabs: false },
@@ -140,9 +137,18 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
     {
         type: 'MENU', name: 'Sales Invoice', uniqueName: '/pages/proforma-invoice/invoice/sales', isRemoved: false, pIndex: 6, hasTabs: false
     },
-    {
-        type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 }, isRemoved: false, pIndex: 4
-    }
+    { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 }, isRemoved: false, pIndex: 4, hasTabs: false },
+    { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 }, isRemoved: false, pIndex: 11, hasTabs: true },
+    { type: 'MENU', name: 'Settings', uniqueName: '/pages/settings', isRemoved: false, pIndex: 12, hasTabs: true },
+    { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, isRemoved: false, pIndex: 13, hasTabs: true},
+    { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook', isRemoved: false, pIndex: 14, hasTabs: false },
+    { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', isRemoved: false, pIndex: 15, hasTabs: true },
+    { type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details/mobile-number', additional: { tab: 'profile', tabIndex: 1 }, isRemoved: false, pIndex: 16, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'pending', tabIndex: 2 }, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Templates', uniqueName: '/pages/invoice/preview/templates', additional: { tab: 'templates', tabIndex: 3 }, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Settings', uniqueName: '/pages/invoice/preview/settings', additional: { tab: 'settings', tabIndex: 4 }, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Estimate (Beta)', uniqueName: '/pages/invoice/preview/estimates', additional: { tab: 'estimates', tabIndex: 0 }, hasTabs: true },
+    { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 }, hasTabs: true },
 ];
 export let DEFAULT_AC_ORIGINAL = [
     { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash', hasTabs: false },
@@ -169,7 +175,7 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, hasTabs: true },
 
     { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 }, hasTabs: true },
-    { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 } },
+    { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 }, hasTabs: false },
     { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 }, hasTabs: true },
 
     { type: 'MENU', name: 'Invoice', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'sales', tabIndex: 0 }, hasTabs: true },
@@ -228,15 +234,15 @@ export let DEFAULT_AC_RESPONSIVE = [
 export let DEFAULT_GROUPS = [];
 export let DEFAULT_GROUPS_RESPONSIVE = [];
 
-export function reassignNavigationalArray(toAssign) {
+export function reassignNavigationalArray(toAssign, isCompany, menuItems: Array<any>) {
     if (toAssign) {
-        NAVIGATION_ITEM_LIST = NAVIGATION_ITEM_LIST_RESPONSIVE;
-        DEFAULT_MENUS = DEFAULT_MENUS_RESPONSIVE;
+        NAVIGATION_ITEM_LIST = menuItems.slice(0, 7);
+        DEFAULT_MENUS = menuItems.slice(0, 7);
         DEFAULT_AC = DEFAULT_AC_RESPONSIVE;
         DEFAULT_GROUPS = DEFAULT_GROUPS_RESPONSIVE;
     } else {
-        NAVIGATION_ITEM_LIST = NAVIGATION_ITEM_LIST_ORIGINAL;
-        DEFAULT_MENUS = DEFAULT_MENUS_ORIGINAL;
+        NAVIGATION_ITEM_LIST = menuItems;
+        DEFAULT_MENUS = menuItems.slice(0, 10);
         DEFAULT_AC = DEFAULT_AC_ORIGINAL;
         DEFAULT_GROUPS = DEFAULT_GROUPS_ORIGINAL;
     }

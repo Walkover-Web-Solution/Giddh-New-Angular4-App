@@ -75,7 +75,8 @@ export interface ImportExcelRequestData {
 	giddhHeaders?: string[];
 	mandatoryHeaders?: string[];
 	groupMandatoryHeaders: string[][];
-	isHeaderProvided?: boolean;
+    isHeaderProvided?: boolean;
+    branchUniqueName?: string;
 }
 
 export class ImportExcelProcessResponseData {
@@ -96,7 +97,8 @@ export class ImportExcelStatusResponse {
 	public totalRows: number;
 	public successRows: number;
 	public processDate: string;
-	public submittedBy: string;
+    public submittedBy: string;
+    public branch?: any;
 }
 
 export class ImportExcelStatusPaginatedResponse extends CommonPaginatedRequest {
