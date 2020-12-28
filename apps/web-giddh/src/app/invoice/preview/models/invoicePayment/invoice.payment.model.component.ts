@@ -87,7 +87,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             if (data) {
                 let paymentMode: IOption[] = [];
                 data.forEach((item) => {
-                    let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
+                    let findBankIndx = (item.parentGroups) ? item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash') : -1;
                     if (findBankIndx !== -1) {
                         paymentMode.push({ label: item.name, value: item.uniqueName, additional: { parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol: item.currencySymbol } });
                     }
@@ -293,7 +293,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
                 let paymentMode: IOption[] = [];
                 arr.forEach((item) => {
-                    let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
+                    let findBankIndx = (item.parentGroups) ? item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash') : -1;
                     if (findBankIndx !== -1) {
                         paymentMode.push({ label: item.name, value: item.uniqueName, additional: { parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol: item.currencySymbol } });
                     }
