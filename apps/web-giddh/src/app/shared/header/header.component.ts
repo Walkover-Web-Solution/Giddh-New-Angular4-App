@@ -474,6 +474,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
+
+        this.store.pipe(select(state => state.settings.freePlanSubscribed), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
+                this.getCurrentCompanyData();
+            }
+        });
     }
 
     public ngOnInit() {
@@ -1184,6 +1191,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (response && response.body) {
                 if (screen.width <= 767 || isCordova) {
                     window.location.href = '/pages/mobile-home';
+                } else if (isElectron) {
+                    this.router.navigate([response.body.lastState]);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 200);
                 } else {
                     window.location.href = response.body.lastState;
                 }
