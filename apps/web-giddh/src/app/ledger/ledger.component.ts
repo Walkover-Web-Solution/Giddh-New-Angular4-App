@@ -2321,4 +2321,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.noResultsFoundLabel = SearchResultText.NotFound;
         });
     }
+
+    /**
+     * This will save the other tax in ledger object
+     *
+     * @param {*} item
+     * @param {*} event
+     * @memberof LedgerComponent
+     */
+    public saveOtherTax(item: any, event: any): void {
+        item.otherTaxesSum = event.otherTaxesSum;
+        item.tdsTcsTaxesSum = event.tdsTcsTaxesSum;
+        item.isOtherTaxesApplicable = event.isOtherTaxesApplicable;
+        item.otherTaxModal = event.otherTaxModal;
+        item.otherTaxType = event.otherTaxType;
+    }
 }
