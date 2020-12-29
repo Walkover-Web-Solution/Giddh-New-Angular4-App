@@ -1,11 +1,8 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { from, Observable, ReplaySubject } from 'rxjs';
-import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import * as _ from '../../../../../../lodash-optimized';
-import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
-import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
@@ -14,8 +11,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 @Component({
 	selector: 'gst-template-b',
 	templateUrl: './gst-template-b.component.html',
-	styleUrls: ['./gst-template-b.component.css'],
-	// encapsulation: ViewEncapsulation.None
+	styleUrls: ['./gst-template-b.component.css']
 })
 
 export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
@@ -43,12 +39,10 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
 	constructor(
 		private store: Store<AppState>,
 		private settingsProfileActions: SettingsProfileActions) {
-		this.companySetting$ = this.store.select(s => s.settings.profile).pipe(takeUntil(this.destroyed$));
-		//
+		this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {
-
 		this.companySetting$.subscribe(a => {
 			if (a && a.address) {
 				this.companyAddress = _.cloneDeep(a.address);
@@ -56,7 +50,6 @@ export class GstTemplateBComponent implements OnInit, OnDestroy, OnChanges {
 				this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
 			}
 		});
-		//
 	}
 
 	public onClickSection(sectionName: string) {

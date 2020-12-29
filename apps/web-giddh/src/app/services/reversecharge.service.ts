@@ -23,6 +23,9 @@ export class ReverseChargeService {
         url = url.replace(':sortBy', requestGet.sortBy);
         url = url.replace(':page', requestGet.page);
         url = url.replace(':count', requestGet.count);
+        if (requestGet.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${requestGet.branchUniqueName !== companyUniqueName ? requestGet.branchUniqueName : ''}`);
+        }
         return this.http.post(url, requestPost).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

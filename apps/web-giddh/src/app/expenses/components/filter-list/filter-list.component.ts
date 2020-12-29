@@ -1,10 +1,7 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
-import { ExpenseService } from '../../../services/expences.service';
-import { ToasterService } from '../../../services/toaster.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { ExpenseResults, PettyCashReportResponse } from '../../../models/api-models/Expences';
 import { takeUntil } from 'rxjs/operators';
@@ -32,14 +29,9 @@ export class FilterListComponent implements OnInit, OnChanges {
 	public selectedItem: ExpenseResults;
 
 	constructor(private store: Store<AppState>,
-		private _expenceActions: ExpencesAction,
-		private expenseService: ExpenseService,
-		private _route: Router,
-		private route: ActivatedRoute,
-		private _toasty: ToasterService,
-		private _cdRf: ChangeDetectorRef) {
-		this.pettyCashReportsResponse$ = this.store.select(p => p.expense.pettycashReport).pipe(takeUntil(this.destroyed$));
-		this.getPettycashReportInprocess$ = this.store.select(p => p.expense.getPettycashReportInprocess).pipe(takeUntil(this.destroyed$));
+		private _expenceActions: ExpencesAction) {
+		this.pettyCashReportsResponse$ = this.store.pipe(select(p => p.expense.pettycashReport), takeUntil(this.destroyed$));
+		this.getPettycashReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashReportInprocess), takeUntil(this.destroyed$));
 	}
 
 	public ngOnInit() {

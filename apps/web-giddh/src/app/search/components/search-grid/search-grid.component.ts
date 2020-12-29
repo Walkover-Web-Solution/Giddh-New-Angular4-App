@@ -1,6 +1,6 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
@@ -9,16 +9,18 @@ import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { map, take } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'search-grid',  // <home></home>
+    selector: 'search-grid',
     templateUrl: './search-grid.component.html'
 })
 export class SearchGridComponent implements OnInit, OnDestroy {
 
     @Output() public pageChangeEvent: EventEmitter<any> = new EventEmitter(null);
     @Output() public FilterByAPIEvent: EventEmitter<any> = new EventEmitter(null);
+    /** Stores the current branch unique name */
+    @Input() public currentBranchUniqueName: string;
 
     public moment = moment;
     public companyUniqueName: string;
@@ -108,14 +110,14 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * TypeScript public modifiers
      */
     constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
-        this.searchResponse$ = this.store.select(p => p.search.value);
+        this.searchResponse$ = this.store.pipe(select(p => p.search.value), takeUntil(this.destroyed$));
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
-        this.searchLoader$ = this.store.select(p => p.search.searchLoader);
-        this.search$ = this.store.select(p => p.search.search);
-        this.searchRequest$ = this.store.select(p => p.search.searchRequest);
-        this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(p => this.companyUniqueName = p);
+        this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
+        this.search$ = this.store.pipe(select(p => p.search.search), takeUntil(this.destroyed$));
+        this.searchRequest$ = this.store.pipe(select(p => p.search.searchRequest), takeUntil(this.destroyed$));
+        this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(p => this.companyUniqueName = p);
 
-        this.store.select(p => p.search.searchPaginationInfo).subscribe((info) => {
+        this.store.pipe(select(p => p.search.searchPaginationInfo), takeUntil(this.destroyed$)).subscribe((info) => {
             this.page = info.page;
             this.totalPages = info.totalPages;
         });
@@ -298,7 +300,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                     from: p.fromDate,
                     to: p.toDate,
                     groupUniqueName: p.groupName
-                }
+                },
+                branchUniqueName: this.currentBranchUniqueName
             };
 
             request.data = Object.assign({}, request.data, formattedQuery);
@@ -346,17 +349,21 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
+        if(byteCharacters) {
+            while (offset < byteCharacters.length) {
+                let slice = byteCharacters.slice(offset, offset + sliceSize);
+                let byteNumbers = new Array((slice ? slice.length : 0));
+                let i = 0;
+                if(slice) {
+                    while (i < slice.length) {
+                        byteNumbers[i] = slice.charCodeAt(i);
+                        i++;
+                    }
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+                offset += sliceSize;
             }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
         }
         return new Blob(byteArrays, { type: contentType });
     }
@@ -373,9 +380,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         let end = el.selectionEnd;
         let text = el.value;
         let before = text.substring(0, start);
-        let after = text.substring(end, text.length);
+        let after = text.substring(end, (text ? text.length : 0));
         el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + newText.length;
+        el.selectionStart = el.selectionEnd = start + (newText ? newText.length : 0);
         el.focus();
         this.messageBody.msg = el.value;
     }
@@ -487,21 +494,21 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             openingBalance: null,
             openingBalanceGreaterThan: false,
             openingBalanceLessThan: false,
-            openingBalanceEqual: true,
+            openingBalanceEqual: false,
             openingBalanceType: 'DEBIT',
             closingBalance: null,
             closingBalanceGreaterThan: false,
             closingBalanceLessThan: false,
-            closingBalanceEqual: true,
+            closingBalanceEqual: false,
             closingBalanceType: 'DEBIT',
             creditTotal: null,
             creditTotalGreaterThan: false,
             creditTotalLessThan: false,
-            creditTotalEqual: true,
+            creditTotalEqual: false,
             debitTotal: null,
             debitTotalGreaterThan: false,
             debitTotalLessThan: false,
-            debitTotalEqual: true
+            debitTotalEqual: false
         };
     }
 

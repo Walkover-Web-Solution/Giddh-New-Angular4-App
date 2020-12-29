@@ -9,7 +9,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { GroupsWithAccountsResponse } from 'apps/web-giddh/src/app/models/api-models/GroupsWithAccounts';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AccountRequestV2, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 
 export class GroupAccountSidebarVM {
@@ -91,7 +91,7 @@ export class GroupAccountSidebarVM {
                         this.columns.push(new ColumnGroupsAccountVM(fCol as IGroupsWithAccounts));
                         let newCol = fCol.Items.find(j => j.uniqueName === resp.queryString.parentUniqueName);
                         let grpsBck: GroupsWithAccountsResponse[];
-                        this.store.select(s => s.general.groupswithaccounts).pipe(take(1)).subscribe(s => grpsBck = s);
+                        this.store.pipe(select(s => s.general.groupswithaccounts), take(1)).subscribe(s => grpsBck = s);
 
                         let listBckup = this.activeGroupFromGroupListBackup(grpsBck, resp.queryString.parentUniqueName, null);
                         if (listBckup) {
@@ -122,7 +122,7 @@ export class GroupAccountSidebarVM {
 
                 //     let newCol = fCol.Items.find(j => j.uniqueName === data.request.parentGroupUniqueName);
                 //     let grpsBck: GroupsWithAccountsResponse[];
-                //     this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
+                //     this.store.pipe(select(s => s.general.groupswithaccounts), take(1)).subscribe(s => grpsBck = s);
 
                 //     let listBckup = this.activeGroupFromGroupListBackup(grpsBck, data.request.parentGroupUniqueName, null);
                 //     if (listBckup) {
@@ -196,7 +196,7 @@ export class GroupAccountSidebarVM {
 
                 //     let newCol = fCol.Items.find(j => j.uniqueName === data.request.uniqueName);
                 //     let grpsBck: GroupsWithAccountsResponse[];
-                //     this.store.select(s => s.general.groupswithaccounts).take(1).subscribe(s => grpsBck = s);
+                //     this.store.pipe(select(s => s.general.groupswithaccounts), take(1)).subscribe(s => grpsBck = s);
 
                 //     let listBckup = this.activeGroupFromGroupListBackup(grpsBck, data.request.uniqueName, null);
                 //     if (listBckup) {
