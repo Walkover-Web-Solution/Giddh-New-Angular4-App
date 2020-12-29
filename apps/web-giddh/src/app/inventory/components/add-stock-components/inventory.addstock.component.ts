@@ -9,7 +9,6 @@ import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '.
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import * as  _ from '../../../lodash-optimized';
-import { AccountService } from '../../../services/account.service';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import { IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
