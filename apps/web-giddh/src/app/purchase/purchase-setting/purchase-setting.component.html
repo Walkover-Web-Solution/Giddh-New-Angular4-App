@@ -31,7 +31,7 @@
                                                 <button class="btn btn-success mr-15" (click)="verifyEmail(invoiceSettings.purchaseBillSettings.email)" [disabled]="!isEmailChanged && (!invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4 || invoiceSettings.purchaseBillSettings.emailVerified)">
                                                     Verify
                                                 </button>
-                                                <span class="delete-verified-icon" (click)="deleteEmail(invoiceSettings.purchaseBillSettings.email)" [disabled]="!invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4"><i class="icon-trash"></i></span>
+                                                <span class="delete-verified-icon" [ngClass]="{'delete-icon-opacity' : !invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4, 'cursor-pointer': !(!invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4)}" (click)="!(!invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4) ? deleteEmail(invoiceSettings.purchaseBillSettings.email) : ''"><i class="icon-trash"></i></span>
                                             </div>
                                         </div>
                                     </div>
