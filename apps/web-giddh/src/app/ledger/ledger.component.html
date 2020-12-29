@@ -415,7 +415,8 @@
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                         [invoiceList]="invoiceList"
                                                         (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
-                                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                                        (saveOtherTax)="saveOtherTax(item, $event)">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -541,7 +542,8 @@
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                         (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
-                                                        [invoiceList]="invoiceList">
+                                                        [invoiceList]="invoiceList"
+                                                        (saveOtherTax)="saveOtherTax(item, $event)">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -917,7 +919,7 @@
                                 <!--new ledge popup-->
                                 <div class="pos-abs entry-modal" (click)="shDebit?.hide()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
+                                    <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         (moreDetailOpen)="handleOpenMoreDetail($event)"
@@ -938,7 +940,8 @@
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                         [shouldShowItcSection]="shouldShowItcSection"
-                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                        (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -1197,7 +1200,7 @@
                                 <div class="pos-abs entry-modal" (click)="shCredit?.hide()"
                                     (keydown)="$event.stopPropagation()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
+                                    <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
@@ -1218,7 +1221,8 @@
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                         [shouldShowItcSection]="shouldShowItcSection"
-                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                        (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)">
                                     </new-ledger-entry-panel>
                                 </div>
 

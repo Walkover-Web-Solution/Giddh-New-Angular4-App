@@ -137,6 +137,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
     /** Emits when more detail is opened */
     @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
+    /** Emits when other taxes are saved */
+    @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
@@ -397,7 +399,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let companyTaxes: TaxResponse[] = [];
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
         let appliedTaxes: any[] = [];
-        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+
+        if(!this.blankLedger.otherTaxModal) {
+            this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+        }
 
         if(this.taxListForStock && this.taxListForStock.length > 0) {
             this.taxListForStock.forEach(tl => {
@@ -1550,5 +1555,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountControl.discountTotal = this.currentTxn.discount;
             }
         }
+    }
+
+    /**
+     * This will emit the other taxes
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public emitOtherTaxes(): void {
+        this.saveOtherTax.emit(this.blankLedger);
     }
 }
