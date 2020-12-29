@@ -87,7 +87,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     /** Submit modal event emitter */
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
 
-    constructor(private store: Store<AppState>, private salesService: SalesService, private toaster: ToasterService) {
+    constructor(
+        private store: Store<AppState>,
+        private salesService: SalesService,
+        private toaster: ToasterService) {
 
     }
 
@@ -153,6 +156,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                             }
                         });
                     } else {
+                        // Vouchers for new adjustment not found fill the suggestions with already adjusted vouchers
+                        if (this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length) {
+                            this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
+                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                            });
+                        }
                         if (this.isVoucherModule) {
                             this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                         } else {
