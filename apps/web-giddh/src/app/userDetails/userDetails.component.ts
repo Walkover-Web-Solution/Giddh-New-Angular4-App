@@ -219,6 +219,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.selectTab(val.tabIndex);
             }
         });
+        
+        if(document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
+            document.getElementsByClassName('nav-item')[3].addEventListener('click', (event) => {
+                this.onTabChanged("subscription");
+            });
+        }
     }
 
     public addNumber(no: string) {
@@ -472,9 +478,3 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 }
-
-
-
-
-
-

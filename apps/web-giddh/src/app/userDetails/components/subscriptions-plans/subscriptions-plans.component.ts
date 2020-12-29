@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../../services/authentication.service'
 import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { DEFAULT_SIGNUP_TRIAL_PLAN, DEFAULT_POPULAR_PLAN } from '../../../app.constant';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
@@ -69,11 +69,13 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
     /* This will contain the plan name of popular plan */
     public defaultPopularPlan: string = DEFAULT_POPULAR_PLAN;
+    /** This will hold if plans are showing */
+    public isShowPlans: boolean = false;
 
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
         private _route: Router, private companyActions: CompanyActions,
-        private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService) {
+        private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
 
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
@@ -145,6 +147,18 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                     this.backClicked();
                     this.selectNewPlan = false;
                 }
+            }
+        });
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            if(val && val.showPlans === "true") {
+                this.isShowPlans = true;
+            }
+
+            if((!val || val.showPlans !== "true") && this.isShowPlans) {
+                this.backClicked();
+                this.isShowPlans = false;
+                this.selectNewPlan = false;
             }
         });
     }
