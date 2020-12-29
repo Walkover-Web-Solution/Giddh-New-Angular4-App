@@ -87,6 +87,25 @@
         width: 260px;
     }
 }
+.delete-verified-icon{
+    padding:6px 10px;
+    border: 1px solid $gainsboro;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    i.icon-trash{
+        font-size: 18px;
+    }
+}
+.verify-tick-icon{
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $nobel;
+}
 @media (max-width: 991px) {
     .custom-estimation{
         margin-top: 10px;
