@@ -567,7 +567,7 @@
 <app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
     [otherTaxesModal]="blankLedger.otherTaxModal" [@slideInOut]="asideMenuStateForOtherTaxes" [taxes]="companyTaxesList"
     (closeModal)="toggleOtherTaxesAsidePane(true)"
-    (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true);">
+    (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true); emitOtherTaxes();">
 </app-aside-menu-sales-other-taxes>
 <!--</ng-template>-->
 
