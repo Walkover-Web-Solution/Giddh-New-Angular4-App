@@ -209,7 +209,7 @@
                                                 Verify
                                             </button>
                                             <span *ngIf="invoiceSetting.emailVerified" class="verified-text">Verified</span>
-                                            <span class="delete-varified-icon cursor-pointer" (click)="deleteEmail(invoiceSetting.email)" [disabled]="!invoiceSetting.email || invoiceSetting.email.length < 4"> <i class="icon-trash"></i>
+                                            <span class="delete-verified-icon cursor-pointer" (click)="deleteEmail(invoiceSetting.email)" [disabled]="!invoiceSetting.email || invoiceSetting.email.length < 4"> <i class="icon-trash"></i>
                                             </span>
                                         </div>
 
