@@ -1700,7 +1700,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public exchangeRateChanged() {
         this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger.exchangeRateForDisplay) || 0;
-        if (this.vm.stockTrxEntry && this.vm.selectedLedger && this.vm.selectedLedger.unitRates) {
+        if (this.vm.stockTrxEntry && this.vm.stockTrxEntry.inventory && this.vm.stockTrxEntry.inventory.unit && this.vm.selectedLedger && this.vm.selectedLedger.unitRates) {
             const stock = this.vm.stockTrxEntry.unitRate.find(rate => {
                 return rate.stockUnitCode === this.vm.stockTrxEntry.inventory.unit.code;
             });

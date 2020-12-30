@@ -1169,7 +1169,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public exchangeRateChanged() {
         this.blankLedger.exchangeRate = Number(this.blankLedger.exchangeRateForDisplay) || 0;
-        if (this.currentTxn.inventory && this.currentTxn.unitRate) {
+        if (this.currentTxn.inventory && this.currentTxn.inventory.unit && this.currentTxn.unitRate) {
             const stock = this.currentTxn.unitRate.find(rate => {
                 return rate.stockUnitCode === this.currentTxn.inventory.unit.code;
             });
