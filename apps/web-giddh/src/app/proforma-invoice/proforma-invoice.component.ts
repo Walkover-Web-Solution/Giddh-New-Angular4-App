@@ -2851,6 +2851,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.invFormData.voucherDetails.subTotal = count;
     }
 
+    /**
+     * Updates the value of stocks in entries according to the changed ER (Exchange Rate)
+     *
+     * @memberof ProformaInvoiceComponent
+     */
     public updateStockEntries(): void {
         if (this.invFormData.entries && this.invFormData.entries.length) {
             this.invFormData.entries.forEach(entry => {
