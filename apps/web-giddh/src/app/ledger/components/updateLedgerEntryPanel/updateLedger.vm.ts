@@ -226,7 +226,8 @@ export class UpdateLedgerVm {
 
     public isThereStockEntry(uniqueName: string): boolean {
         // check if entry with same stock added multiple times
-        let count: number = this.selectedLedger.transactions.filter(f => f.particular.uniqueName === uniqueName).length;
+        let isAvailable = this.selectedLedger.transactions.filter(f => f.particular.uniqueName === uniqueName);
+        let count: number = isAvailable && isAvailable.length;
 
         if (count > 1) {
             return true;
@@ -242,12 +243,13 @@ export class UpdateLedgerVm {
     }
 
     public isThereIncomeOrExpenseEntry(): number {
-        return filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
+        let isAvailable = filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
             if (trx.particular.uniqueName) {
                 let category = this.accountCatgoryGetterFunc(trx.particular, trx.particular.uniqueName);
                 return this.isValidCategory(category) || trx.inventory;
             }
-        }).length;
+        });
+        return isAvailable && isAvailable.length;
     }
 
     public checkDiscountTaxesAllowedOnOpenedLedger(acc: AccountResponse): boolean {

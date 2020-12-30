@@ -1202,7 +1202,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeAccount$.pipe(take(1)).subscribe(p => {
             activeAccount = p;
             if (!this.showBankDetail) {
-                if (p.parentGroups) {
+                if (p && p.parentGroups) {
                     p.parentGroups.forEach(grp => {
                         this.showBankDetail = grp.uniqueName === "sundrycreditors" ? true : false;
                         return;
