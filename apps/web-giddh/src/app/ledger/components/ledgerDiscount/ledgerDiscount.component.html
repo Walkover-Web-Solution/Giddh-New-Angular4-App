@@ -27,10 +27,10 @@
 					(input)="discountFromInput('FIX_AMOUNT', $event.target.value)">
 			</div>
 		</div>
-		<div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails.length > 1">
+		<div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails?.length > 1">
 			<span class="or-line">AND</span>
 		</div>
-		<div *ngIf="discountAccountsDetails.length > 1">
+		<div *ngIf="discountAccountsDetails?.length > 1">
 			<ul class="discount-list">
 
 				<ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">

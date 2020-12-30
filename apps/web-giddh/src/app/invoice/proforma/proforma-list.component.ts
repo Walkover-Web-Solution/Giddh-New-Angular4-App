@@ -573,7 +573,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public itemStateChanged(item: ProformaItem, allSelected: boolean = false) {
-        let index = this.selectedItems.findIndex(f => f === item.uniqueName);
+        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === item.uniqueName) : -1;
 
         if (index > -1 && !allSelected) {
             this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
