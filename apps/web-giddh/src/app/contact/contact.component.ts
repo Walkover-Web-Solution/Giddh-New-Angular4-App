@@ -372,7 +372,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 let bankAccounts: IOption[] = [];
                 forEach(data, (item) => {
                     accounts.push({ label: item.name, value: item.uniqueName });
-                    let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
+                    let findBankIndx = item.parentGroups.findIndex((grp) => grp && grp.uniqueName === 'bankaccounts');
                     if (findBankIndx !== -1) {
                         bankAccounts.push({ label: item.name, value: item.uniqueName });
                     }
