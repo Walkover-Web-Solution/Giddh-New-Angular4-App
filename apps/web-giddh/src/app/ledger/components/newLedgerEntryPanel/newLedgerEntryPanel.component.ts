@@ -519,12 +519,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.totalForTax = this.currentTxn.total;
+                    this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
                 } else {
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+                    const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
                     this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
                 }
-                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
             } else {
                 // Amount is zero, set other parameters to zero
                 if (this.isAdvanceReceipt) {
@@ -544,9 +546,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.currentTxn && this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
-                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.highPrecisionRate);
                     this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
-                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
+                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.highPrecisionRate);
                 }
             }
             if (this.discountControl) {
@@ -556,7 +558,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.taxControll) {
                 this.taxControll.change();
             }
-            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
         }
 
         if (this.shouldShowRcmTaxableAmount) {
@@ -573,12 +579,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public changePrice(val: string) {
         if (!this.isExchangeRateSwapped && !this.isInclusiveEntry) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.ratePrecision);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.highPrecisionRate);
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
 
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
 
             // calculate discount on change of price
             if (this.discountControl) {
@@ -594,7 +604,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public changeQuantity(val: string) {
         this.currentTxn.inventory.quantity = Number(val);
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.highPrecisionRate * this.currentTxn.inventory.quantity).toFixed(this.giddhBalanceDecimalPlaces));
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        if (this.currentTxn.inventory) {
+            this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+        } else {
+            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        }
 
         // calculate discount on change of price
         if (this.discountControl) {
@@ -654,7 +668,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
 
         if (this.discountControl) {
             this.discountControl.ledgerAmount = this.currentTxn.amount;
@@ -668,7 +686,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
-                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
+                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.highPrecisionRate);
                 this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
                 this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
             }
@@ -1153,8 +1171,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public exchangeRateChanged() {
         this.blankLedger.exchangeRate = Number(this.blankLedger.exchangeRateForDisplay) || 0;
-        this.amountChanged();
-        this.calculateTotal();
+        if (this.currentTxn.inventory && this.currentTxn.unitRate) {
+            const stock = this.currentTxn.unitRate.find(rate => {
+                return rate.stockUnitCode === this.currentTxn.inventory.unit.code;
+            });
+            const stockRate = stock ? stock.rate : 0;
+            this.currentTxn.inventory.rate = Number(this.blankLedger.exchangeRate > 1 ?
+                (stockRate / this.blankLedger.exchangeRate).toFixed(this.highPrecisionRate) : (stockRate * this.blankLedger.exchangeRate).toFixed(this.highPrecisionRate));
+            this.changePrice(this.currentTxn.inventory.rate);
+        } else {
+            this.amountChanged();
+            this.calculateTotal();
+        }
     }
 
     /**
