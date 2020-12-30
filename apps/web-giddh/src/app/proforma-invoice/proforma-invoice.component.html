@@ -859,7 +859,7 @@
                                 <img src="assets/images/edit-pencilicon.svg" class="edit-pencil" *ngIf="!autoSaveIcon"
                                     (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
                                 <img src=" assets/images/autosave.svg" class="edit-pencil"
-                                    (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; calculateGrandTotal()"
+                                    (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; updateStockEntries(); calculateGrandTotal()"
                                     *ngIf="autoSaveIcon">
                             </span>
 
@@ -998,7 +998,8 @@
                                         <div class="differ-currency"
                                             *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                             <span>{{baseCurrencySymbol}}</span>
-                                            <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                            <span *ngIf="!transaction.isStockTxn">{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                            <span *ngIf="transaction.isStockTxn">{{(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)) | giddhCurrency}}</span>
                                         </div>
                                     </td>
                                     <td class="item-discount">
@@ -1056,7 +1057,7 @@
                                             <div class="differ-currency"
                                                 *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                                <span>{{transaction.convertedTotal | giddhCurrency}}</span>
                                             </div>
                                         </div>
 
@@ -1260,14 +1261,15 @@
                                                     (input)="checkVoucherEntries()"
                                                     name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
-                                                    decimalDigitsDirective
+                                                    decimalDigitsDirective [customDecimalPlaces]="highPrecisionRate"
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                             </div>
                                             <div class="differ-currency"
                                                 *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                                <span *ngIf="!transaction.isStockTxn">{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                                <span *ngIf="transaction.isStockTxn">{{(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)) | giddhCurrency}}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -1379,7 +1381,7 @@
                                             <div class="differ-currency"
                                                 *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                 <span>{{baseCurrencySymbol}}</span>
-                                                <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                                <span>{{transaction.convertedTotal | giddhCurrency}}</span>
                                             </div>
 
 
@@ -1868,7 +1870,8 @@
 
                                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                     <span>{{baseCurrencySymbol}}</span>
-                                                    <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                                    <span *ngIf="!transaction.isStockTxn">{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                                    <span *ngIf="transaction.isStockTxn">{{(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)) | giddhCurrency}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1915,7 +1918,7 @@
                                                 </p>
                                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                     <span>{{baseCurrencySymbol}}</span>
-                                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                                    <span>{{transaction.convertedTotal}}</span>
 
                                                 </div>
                                             </div>
@@ -2156,12 +2159,14 @@
                                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                                         [(ngModel)]="transaction.amount" decimalDigitsDirective
+                                                        [customDecimalPlaces]="highPrecisionRate"
                                                         [prefix]="invFormData.accountDetails.currencySymbol"
                                                         [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                                 </div>
                                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                     <span>{{baseCurrencySymbol}}</span>
-                                                    <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                                    <span *ngIf="!transaction.isStockTxn">{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                                    <span *ngIf="transaction.isStockTxn">{{(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)) | giddhCurrency}}</span>
                                                 </div>
                                             </div>
 
@@ -2282,7 +2287,7 @@
                                                 </div>
                                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                     <span>{{baseCurrencySymbol}}</span>
-                                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                                    <span>{{transaction.convertedTotal | giddhCurrency}}</span>
                                                 </div>
 
                                                 <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
