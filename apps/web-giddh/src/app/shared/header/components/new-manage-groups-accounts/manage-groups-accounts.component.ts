@@ -78,6 +78,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public updateModeLength: number = 0;
     /** Index to delete row in custom field */
     public selectedRowIndex: number = null;
+    /* To check form value validation */
+    public isCustomFormValid: boolean = true;
 
 	// tslint:disable-next-line:no-empty
     constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,private breakPointObservar: BreakpointObserver,
@@ -402,17 +404,20 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     public checkValidation(type: string, index: number): void {
         const row = this.customFieldForm.get('customField') as FormArray;
+        this.isCustomFormValid = true;
         if (type === 'name') {
             if (row.controls[index] && row.controls[index].get('key') && row.controls[index].get('key').value && row.controls[index].get('key').value.length > 50) {
                 this.toasterService.errorToast('Name can not be greater than 50 characters');
+                this.isCustomFormValid = false;
             }
         } else {
             if (row.controls[index].get('dataType').value === 'NUMERIC' && row.controls[index].get('valueLength').value > 30) {
                 this.toasterService.warningToast('Length can not be greater than 30 for type number');
+                this.isCustomFormValid = false;
 
             } else if (row.controls[index].get('dataType').value === 'STRING' && row.controls[index].get('valueLength').value > 150) {
                 this.toasterService.warningToast('Length can not be greater than 150 for type string');
-
+                this.isCustomFormValid = false;
             }
         }
 
