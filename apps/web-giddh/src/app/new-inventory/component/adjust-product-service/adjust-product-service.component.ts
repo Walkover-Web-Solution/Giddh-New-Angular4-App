@@ -11,29 +11,14 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 
 export class AdjustProductServiceComponent implements OnInit {
 
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /* This will store modal reference */
     public modalRef: BsModalRef;
-
+    /* for sh-select dropdown */
     @ViewChildren('selectAccount') public selectAccount: ShSelectComponent;
 
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-
-    /*datepicker funcation*/
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
     constructor(
-        private generalService: GeneralService,
         private modalService: BsModalService
     ){ }
+
     openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template,
             Object.assign({}, { class: 'gray modal-xl' })

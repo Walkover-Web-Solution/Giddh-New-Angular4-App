@@ -1,7 +1,7 @@
-<div class="container-fluid">
+<div class="container-fluid static-tabs-on-page">
     <div class="about-group pt-15">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12 col-md-6">
                 <div class="group-detail d-flex w-100 align-items-center">
                     <div class="group-thumbnail mr-15">
                         <img src="../../../../assets/images/Login-Page-Image.png" alt="group-icon">
@@ -12,7 +12,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-12 col-md-6 group-detail-right-btn">
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
                     <div class="btn-group" dropdown>
                         <button id="more-btn-inventory" dropdownToggle type="button"
@@ -21,14 +21,14 @@
                         </button>
                         <ul id="more-inventory-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="more-btn-inventory">
-                            <li role="menuitem"><a class="dropdown-item" href="#">Bulk Edit</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="#">Archive</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" [routerLink]="['/pages/new-inventory/create-new-inventory']">Bulk Edit</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
 
                         </ul>
                     </div>
-                    <button class="btn btn-sky-blue">+ Add Inventory</button>
-                    <i class="icon-cross pd cursor-pointer"></i>
+                    <button class="btn btn-sky-blue" [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
+                    <i [routerLink]="['/pages/new-inventory']" class="icon-cross pd cursor-pointer"></i>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
     <tabset class="custom-tabs">
         <tab heading="About Group">
             <div class="row">
-                <div class="col-sm-8 col-lg-4">
+                <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                     <p class="text-gray font-14 mb-15">Lorem Ipsum dummy text will come here about create stock.</p>
                     <form>
                         <div class="row mb-15">

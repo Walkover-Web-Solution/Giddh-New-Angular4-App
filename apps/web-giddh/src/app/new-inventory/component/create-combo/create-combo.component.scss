@@ -125,6 +125,16 @@
             min-width: 80px;
         }
     }
+    .create-combo-aside-body{
+        .create-combo-block{
+            .create-combo-top{
+                padding-bottom: 15px;
+                img{
+                    width: 40px;
+                }
+            }
+        }
+    }
 }
 @media (max-width: 375px) {
     :host {

@@ -29,6 +29,7 @@ import { AdjustProductServiceComponent } from './component/adjust-product-servic
 import { InventoryAdjustmentReasonAside } from './component/inventory-adjustment-aside/inventory-adjustment-aside.component';
 import { InventoryAdjustmentBulkEntryComponent } from './component/inventory-adjust-bulk-entry/inventory-adjust-bulk-entry.component';
 import { CreateNewInventoryComponent } from './component/create-new-inventory-component/create-new-inventory.component';
+import { NewInventoryAdavanceSearch } from './component/new-inventory-advance-search/new-inventory-advance-search.component';
 @NgModule({
     declarations: [
         NewInventoryComponent,
@@ -55,7 +56,8 @@ import { CreateNewInventoryComponent } from './component/create-new-inventory-co
         AdjustProductServiceComponent,
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
-        CreateNewInventoryComponent
+        CreateNewInventoryComponent,
+        NewInventoryAdavanceSearch
     ],
     imports:[
         NewInventoryRoutingModule,
@@ -89,7 +91,8 @@ import { CreateNewInventoryComponent } from './component/create-new-inventory-co
         AdjustProductServiceComponent,
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
-        CreateNewInventoryComponent
+        CreateNewInventoryComponent,
+        NewInventoryAdavanceSearch
     ]
 })
 export class NewInventoryModule { }

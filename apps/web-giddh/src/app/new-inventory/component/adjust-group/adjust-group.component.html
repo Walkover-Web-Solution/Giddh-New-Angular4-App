@@ -1,6 +1,6 @@
 <div class="relative adjust-group-page">
     <hamburger-menu [pageHeading]="'Adjust group'"></hamburger-menu>
-    <i class="icon-cross pull-right pd"></i>
+    <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/new-inventory/adjust-inventory']"></i>
 
     <div class="adjust-field-wrapper mt-2 relative">
         <div>
@@ -31,10 +31,7 @@
                     <div class="row mb-15">
                         <div class="col-sm-4 col-lg-4"><label>Date <span class="red-text">*</span></label></div>
                         <div class="col-sm-8 col-lg-6">
-                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i class="icon-calender calendar-addon"></i>
-                                <input type="text" name="selectedDateRange" value="" class="giddh-datepicker date-range-picker" />
-                            </div>
+                             <giddh-datepicker name="adjustGroupDate"></giddh-datepicker>
                         </div>
                     </div>
                     <div class="row mb-15">
@@ -112,10 +109,14 @@
         </div>
     </div>
 </div>
+<!-- adjust inventory aside pane -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
 <inventory-adjustment-aside *ngIf="asideMenuState === 'in'" (closeAsideEvent)="addAdjustment()">
-
 </inventory-adjustment-aside>
+
+<!-- adjust bulk entry modal -->
 <ng-template #template>
     <inventory-adjust-bulk-entry></inventory-adjust-bulk-entry>
 </ng-template>
+
+

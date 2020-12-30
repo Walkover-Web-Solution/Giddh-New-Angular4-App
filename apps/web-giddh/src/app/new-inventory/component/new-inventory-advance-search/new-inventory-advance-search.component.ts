@@ -1,18 +1,24 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 
+
 @Component({
-    selector: 'stock-group-list',
-    templateUrl: './stock-group-list.component.html',
-    styleUrls: ['./stock-group-list.component.scss'],
+    selector: 'new-inventory-advance-search',
+    templateUrl: './new-inventory-advance-search.component.html',
+    styleUrls: ['./new-inventory-advance-search.component.scss'],
 
 })
 
-export class StockGroupListComponent implements OnInit {
+export class NewInventoryAdavanceSearch implements OnInit {
+    public isMobileScreen: boolean = false;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* Selected range label */
@@ -34,17 +40,7 @@ export class StockGroupListComponent implements OnInit {
     public dateFieldPosition: any = { x: 0, y: 0 };
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
 
-    constructor(
-        private generalService: GeneralService,
-        private modalService: BsModalService,) {
-
-    }
-    /**
-     * To show the datepicker
-     *
-     * @param {*} element
-     * @memberof DaybookComponent
-     */
+    /*datepicker funcation*/
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -54,7 +50,6 @@ export class StockGroupListComponent implements OnInit {
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
     }
-
     /**
      * This will hide the datepicker
      *
@@ -86,17 +81,17 @@ export class StockGroupListComponent implements OnInit {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            // if ((this.daybookQueryRequest.from !== this.fromDate) || (this.daybookQueryRequest.to !== this.toDate)) {
-            //     this.showLoader = true;
-            //     this.daybookQueryRequest.from = this.fromDate;
-            //     this.daybookQueryRequest.to = this.toDate;
-            //     this.daybookQueryRequest.page = 0;
-            //     this.go();
-            // }
         }
     }
+    constructor(private _breakPointObservar: BreakpointObserver,
+        private generalService: GeneralService, private modalService: BsModalService){
 
+    }
     public ngOnInit() {
-
+        this._breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 }

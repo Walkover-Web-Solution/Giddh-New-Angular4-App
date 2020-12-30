@@ -8,6 +8,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 
 export class CreateNewInventoryComponent implements OnInit {
+    /* add readonly if bulk edit is true */
+    public editBulk: boolean = false;
 
     public ngOnInit() {
 

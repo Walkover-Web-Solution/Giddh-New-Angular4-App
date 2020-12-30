@@ -9,13 +9,6 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 })
 
 export class CreateNewInventoryAsideComponent implements OnInit {
-    public hideCreateFieldData: boolean = true;
-    public createGroupaside: boolean = true;
-
-    /*back to create new aside pane*/
-    public backToMainAside(){
-        this.hideCreateFieldData = !this.hideCreateFieldData
-    }
 
     public ngOnInit() {
 

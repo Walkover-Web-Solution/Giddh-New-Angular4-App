@@ -6,8 +6,10 @@
         right: 10px;
         top: 3px;
         padding: 10px;
+        z-index: 10;
     }
     .custom-field-wrapper{
+        min-height: 73vh;
         .add-icon-delete{
             position: relative;
             i{
@@ -51,20 +53,23 @@
 
 @media(max-width:767px){
     .create-custom-field-page{
-        form{
-            p{
-                margin-right: 40px !important;
+         .custom-field-wrapper{
+              min-height: calc(100vh - 250px);
+            form{
+                p{
+                    margin-right: 40px !important;
+                }
             }
-        }
-        .icon-cross{
-            position: absolute;
-            right: -20px;
-            top: -10px;
-            padding: 10px;
+            .icon-cross{
+                position: absolute;
+                right: -20px;
+                top: -10px;
+                padding: 10px;
+            }
         }
     }
 }
-@media(max-width:767px){
+@media(max-width:575px){
    .create-custom-field-page{
         .custom-field-wrapper{
             .vector-image{

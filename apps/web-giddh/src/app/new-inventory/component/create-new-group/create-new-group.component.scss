@@ -106,6 +106,16 @@
     :host .aside-pane {
         max-width: 370px;
     }
+    .create-group-aside-body{
+        .create-group-block{
+            .create-group-top{
+                padding-bottom: 15px;
+                img{
+                    width: 50px;
+                }
+            }
+        }
+    }
 }
 @media (max-width: 375px) {
     :host {

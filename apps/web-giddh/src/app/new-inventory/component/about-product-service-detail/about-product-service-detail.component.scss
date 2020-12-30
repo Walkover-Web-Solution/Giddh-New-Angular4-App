@@ -16,6 +16,14 @@
             }
         }
     }
+    .more-add-button {
+        .btn-download{
+            border: 1px solid $gainsboro;
+            color: $gray;
+            background-color: $white;
+            width: 36px;
+        }
+    }
 }
 .select-product-type{
     display: flex;
@@ -75,8 +83,29 @@
         }
     }
 }
+.checkbox-custom-label, .radio-custom-label{
+    display: inline-block !important;
+}
 @media(max-width:767px){
     .right-img-div{
         display: none;
+    }
+    .more-add-button{
+        margin-top: 8px;
+    }
+    .select-product-type{
+        padding-bottom: 10px;
+    }
+    .group-detail-right-btn{
+        background-color: $solitude;
+        margin-top: 15px;
+        padding-bottom: 8px;
+        border-top: 1px solid $gainsboro;
+        border-bottom: 1px solid $gainsboro;
+    }
+    .custom-tabs::ng-deep .nav-tabs{
+        padding-left: 0 !important;
+        margin-left: 0;
+        margin-top:5px;
     }
 }

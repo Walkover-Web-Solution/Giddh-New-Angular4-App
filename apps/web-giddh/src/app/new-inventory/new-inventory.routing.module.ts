@@ -61,6 +61,7 @@ import { CreateNewInventoryComponent } from "./component/create-new-inventory-co
             }
 
         ])
-    ]
+    ],
+    exports: [RouterModule]
 })
 export class NewInventoryRoutingModule { }

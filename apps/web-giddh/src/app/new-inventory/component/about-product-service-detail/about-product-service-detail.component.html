@@ -1,19 +1,34 @@
-<div class="container-fluid inventory-about-page">
+<div class="container-fluid inventory-about-page static-tabs-on-page">
     <div class="about-group pt-15">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12 col-md-6">
                 <div class="group-detail d-flex w-100 align-items-center">
                     <div class="group-thumbnail mr-15">
                         <img src="../../../../assets/images/Login-Page-Image.png" alt="group-icon">
                     </div>
                     <div class="group-name">
+                        <a href="javascript:void(0);" [routerLink]="['pages/new-inventory/create-new-inventory']"></a>
                         <h4>Product Dummy Name Furniture</h4>
                         <p class="text-gray font-14">(Product Unique Name)</p>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-12 col-md-6 group-detail-right-btn">
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
+                    <div class="download-sheet">
+                        <div class="btn-group" dropdown>
+                            <button id="download-sheet" dropdownToggle type="button" class="btn btn-download dropdown-toggle"
+                                aria-controls="download-inventory-sheet">
+                                <i class="icon-download"></i>
+                            </button>
+                            <ul id="download-inventory-sheet" *dropdownMenu class="dropdown-menu" role="menu"
+                                aria-labelledby="download-sheet">
+                                <li role="menuitem"><a class="dropdown-item" href="#">CSV</a></li>
+                                <li role="menuitem"><a class="dropdown-item" href="#">XLS</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
                     <div class="btn-group" dropdown>
                         <button id="more-btn-inventory" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
                             aria-controls="more-inventory-dropdown">
@@ -21,14 +36,14 @@
                         </button>
                         <ul id="more-inventory-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="more-btn-inventory">
-                            <li role="menuitem"><a class="dropdown-item" href="#">Bulk Edit</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="#">Archive</a></li>
-                            <li role="menuitem"><a class="dropdown-item" href="#">Delete</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" [routerLink]="['/pages/new-inventory/adjust-inventory']">Adjust Product or service</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
 
                         </ul>
                     </div>
-                    <button class="btn btn-sky-blue">+ Add Inventory</button>
-                    <i class="icon-cross pd cursor-pointer"></i>
+                    <button class="btn btn-sky-blue" [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
+                    <i class="icon-cross pd cursor-pointer" [routerLink]="['/pages/new-inventory']"></i>
                 </div>
             </div>
         </div>
@@ -41,15 +56,15 @@
                     <div class="select-product-type mt-1">
                         <div class="radio-btn-wrapper mt-15">
                             <span class="mr-15">
-                                <input id="radio-1" class="radio-custom" name="" type="radio">
+                                <input id="radio-1" class="radio-custom" name="selectGoodType" type="radio">
                                 <label for="radio-1" class="radio-custom-label">Product</label>
                             </span>
                             <span class="mr-15">
-                                <input id="radio-2" class="radio-custom" name="" type="radio">
+                                <input id="radio-2" class="radio-custom" name="selectGoodType" type="radio">
                                 <label for="radio-2" class="radio-custom-label">Service</label>
                             </span>
                             <span class="mr-15">
-                                <input id="radio-3" class="radio-custom" name="" type="radio">
+                                <input id="radio-3" class="radio-custom" name="selectGoodType" type="radio">
                                 <label for="radio-3" class="radio-custom-label">Combo</label>
                             </span>
                         </div>
@@ -103,7 +118,7 @@
                             <tab heading="Account">
                                 <form>
                                     <div class="row">
-                                        <div class="col-sm-6">
+                                        <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row mb-15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Inventory Account <span class="red-text"></span> <i
@@ -114,7 +129,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row mb-15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Low stock alert <span class="red-text"></span> <i
@@ -125,7 +140,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row mb-15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Opening Qty <span class="red-text"></span></label>
@@ -135,7 +150,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row mb-15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Amount <span class="red-text"></span></label>
@@ -145,7 +160,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row mb-15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Rate <span class="red-text"></span></label>
@@ -227,7 +242,7 @@
                                     <div class="product-option-wrapper">
                                         <form>
                                             <div class="row">
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-12 col-md-6">
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label>Option 1</label>
@@ -241,7 +256,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-12 col-md-6">
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label class="d-block">&nbsp;</label>
@@ -264,46 +279,46 @@
                             <tab heading="Other">
                                 <form>
                                     <div class="row">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="row mb-15">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6 col-lg-4">
                                                     <label>Stock Display Name</label>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-6 col-lg-6">
                                                     <input type="text" class="form-control" id="stock-display-name" readonly>
                                                 </div>
                                             </div>
                                             <div class="row mb-15">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6 col-lg-4">
                                                     <label>HSN Code</label>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-6 col-lg-6">
                                                     <input id="hsn-code" class="form-control" type="text" readonly>
                                                 </div>
                                             </div>
                                             <div class="row mb-15">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6 col-lg-4">
                                                     <label>SAC Code</label>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-6 col-lg-6">
                                                     <input id="sac-code" class="form-control" type="text" readonly>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12 col-md-6">
                                             <div class="row mb-15">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6 col-lg-4">
                                                     <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-6 col-lg-6">
                                                     <input id="bar-code" class="form-control" type="text" readonly>
                                                 </div>
                                             </div>
                                             <div class="row mb-15">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6 col-lg-4">
                                                     <label>Custom Field</label>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-6 col-lg-6">
                                                     <input id="expiry-code" class="form-control" type="text" readonly>
                                                 </div>
                                             </div>
@@ -317,10 +332,10 @@
                 </div>
                 <!-- product content end -->
 
-                <!-- service content start -->
+                <!-- service content start , make hidden for now -->
                 <div class="service-detail-content" hidden>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12 col-md-8 col-lg-6">
                             <form>
                                 <div class="row mb-15">
                                     <div class="col-sm-6 col-lg-4">
@@ -363,7 +378,7 @@
                             <tab heading="Account">
                                 <form>
                                     <div class="row">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6">
                                             <div class="row mb-15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Inventory Account <span class="red-text"></span>
@@ -374,7 +389,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6">
                                             <div class="row mb-15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Low stock alert <span class="red-text"></span> <i
@@ -456,7 +471,7 @@
                                     <div class="product-option-wrapper">
                                         <form>
                                             <div class="row">
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-12 col-md-6">
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label>Option 1</label>
@@ -470,7 +485,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-12 col-md-6">
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label class="d-block">&nbsp;</label>
@@ -493,20 +508,20 @@
                             <tab heading="Other">
                                 <form>
                                     <div class="row">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-12 col-md-8 col-lg-6">
                                             <div class="row mb-15">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6 col-lg-4">
                                                     <label>SAC Code</label>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-6 col-lg-6">
                                                     <input id="service-sac-code" class="form-control" type="text" readonly>
                                                 </div>
                                             </div>
                                             <div class="row mb-15">
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-6 col-lg-4">
                                                     <label>Custom Field</label>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-6 col-lg-6">
                                                     <input id="custom-field-code" class="form-control" type="text" readonly>
                                                 </div>
                                             </div>

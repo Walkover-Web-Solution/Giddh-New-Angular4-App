@@ -6,7 +6,9 @@
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact shalinee..)
 */
-
+:focus {
+    outline: none !important;
+}
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,
 .basic > tfoot > tr > td,
@@ -9594,8 +9596,23 @@ span#HW_badge_cont:nth-child(3) {
     left: 215px;
     width: 100%;
 }
-.bulk-create-table sh-select input{
-    border: none;padding: 0 11px !important;
+.bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
+ .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
+    border: none !important;
+    padding: 0 11px !important;
+}
+.bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
+      padding: 0 !important;
+}
+.hide-sub-sidebar .right-side-content {
+    padding-left: 0 !important;
+}
+.hide-sub-sidebar .sidebar-handle{
+    left: 210px !important;
+}
+
+.sub-detail-sidebar.fixed-sidebar-top {
+    top: 70px;
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {
@@ -9616,6 +9633,10 @@ ul.dropdown-menu.action-dropdown {
     width: 100%;
     display: inline-block;
 
+}
+.mat-form-field-suffix{
+    right: 0;
+    position: absolute !important;
 }
 .mat-form-field-appearance-fill .mat-form-field-flex{
     height: 36px;
@@ -9801,6 +9822,12 @@ input.mat-input-element{
     }
 }
 
+@media(max-width:1019px){
+    .hide-sub-sidebar .sidebar-handle{
+        left: 0 !important;
+    }
+}
+
     @media (max-width: 991px) {
         .setting-tab-data li.nav-item {
             display: inline-block;
@@ -9937,6 +9964,15 @@ input.mat-input-element{
     }
 
   @media (max-width: 768px) {
+          .bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
+          .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
+                border: 1px solid $gainsboro !important;
+                padding: 0 11px !important;
+            }
+          .bulk-create-table .mat-form-field-wrapper input {
+                border: none !important;
+                padding: 0 !important;
+          }
         ul.dropdown-menu.action-dropdown {
             left: auto;
             right: 0 !important;
@@ -10097,6 +10133,9 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .sub-detail-sidebar.fixed-sidebar-top{
+        top: 100px;
+    }
     .new-inventory-page .custom-tabs .nav.nav-tabs{
         white-space: nowrap;
         overflow-y: hidden;
@@ -10482,7 +10521,7 @@ input.mat-input-element{
         }
 
         .padding-top-fixed-mobile {
-            padding-top: 95px;
+            padding-top: 90px;
         }
         ngx-daterangepicker-material {
             position: fixed;

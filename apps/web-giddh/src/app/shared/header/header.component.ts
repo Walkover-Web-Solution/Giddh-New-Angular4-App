@@ -1814,23 +1814,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.add('on-setting-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
-            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0) {
+            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0
+            ) {
                 document.querySelector('body').classList.add('on-user-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            } else if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0 && !this.router.url.includes("/vendor")) {
+            } else if (
+                document.getElementsByTagName("tabset") &&
+                document.getElementsByTagName("tabset").length > 0 &&
+                !this.router.url.includes("/vendor") && (!document.getElementsByClassName("static-tabs-on-page") || (document.getElementsByClassName("static-tabs-on-page") && document.getElementsByClassName("static-tabs-on-page").length === 0))) {
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-            else if (document.getElementsByClassName("inventory-about-page") && document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0){
-                document.querySelector('body').classList.remove('page-has-tabs');
-                document.querySelector('body').classList.remove('on-setting-page');
-                document.querySelector('body').classList.remove('on-user-page');
-                document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            }
+            // else if (document.getElementsByTagName("tabset") &&
+            //     document.getElementsByTagName("tabset").length > 0 && !document.getElementsByClassName("create-new-inventory-page") )
+            //     { document.querySelector('body').classList.add('inventory-tab-static');
+            //       document.querySelector('body').classList.remove('page-has-tabs');
+            //     }
+
             else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');

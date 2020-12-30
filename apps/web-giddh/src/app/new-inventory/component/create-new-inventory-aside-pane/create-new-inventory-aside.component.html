@@ -6,12 +6,12 @@
         </div>
     </div>
 
-    <div class="aside-body flexy-child-1">
+    <div class="aside-body">
         <div class="create-product-wrapper">
             <div class="create-one-item pb-15 pt-15 d-flex">
                 <div class="wrapper-create-item">
                     <div class="circle-icon"></div>
-                    <div class="create-item">
+                    <div class="create-item" (click)="createGroupToggleAsidePane()">
                         <h4>Create Product/Service</h4>
                         <p>(Product you sell or purchase and keep track of its quantities Service you provide to customer like Designing, Tax
                         preparation etc.. )</p>
@@ -50,7 +50,7 @@
             <div class="create-one-item pb-15 pt-15 d-flex">
                 <div class="wrapper-create-item">
                     <div class="circle-icon"></div>
-                    <div class="create-item">
+                    <div class="create-item" [routerLink]="['/pages/import/stock']">
                         <h4>Import Inventory</h4>
                         <p>(Dummy text Lorem Ipsum Dummy text Lorem Ipsum Dummy text Lorem Ipsum Dummy text Lorem Ipsum)</p>
                     </div>
@@ -58,4 +58,9 @@
             </div>
         </div>
     </div>
+
 </div>
+
+
+
+

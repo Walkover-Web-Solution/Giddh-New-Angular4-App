@@ -148,6 +148,43 @@
     :host .aside-pane {
         max-width: 370px;
     }
+    .create-group-aside-body{
+        .create-group-block{
+             .bg-white{
+                height: auto;
+                .sales-purchase-details{
+                    margin-top: 0 !important;
+                    .select-puchase-info{
+                        font-size: 14px;
+                    }
+                }
+             }
+            .create-group-top{
+                img{
+                    width: 40px;
+                }
+            }
+            .unit-rate-fields{
+                flex-direction: column;
+                justify-content: flex-start;
+                text-align: left;
+                align-items: flex-start !important;
+                .unit, .rate{
+                    margin-right: 0 !important;
+                    width: 100%;
+                }
+                label.d-block{
+                    display: none !important;
+                }
+            }
+        }
+    }
+    .custom-tabs::ng-deep .nav-tabs{
+        display: inline-block;
+        white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
 }
 @media (max-width: 375px) {
     :host {
