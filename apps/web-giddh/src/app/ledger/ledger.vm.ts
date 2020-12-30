@@ -193,7 +193,7 @@ export class LedgerVM {
             /** Voucher type in case of advance receipt should be 'rcpt' but to differentiate the drop down values 'advance-receipt' is used */
             requestObj.voucherType = 'rcpt';
         }
-        if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid.length) {
+        if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid && requestObj.invoicesToBePaid.length) {
             requestObj.invoicesToBePaid = [];
         } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
             requestObj.invoiceNumberAgainstVoucher = '';
@@ -255,7 +255,7 @@ export class LedgerVM {
      * @returns {bankTransactionsData} array
      */
     public getReadyBankTransactionsForUI(data: IELedgerResponse[], isCompany?: boolean) {
-        if (data.length > 0) {
+        if (data && data.length > 0) {
             this.bankTransactionsData = [];
             this.showEledger = true;
             forEach(data, (txn: IELedgerResponse) => {
