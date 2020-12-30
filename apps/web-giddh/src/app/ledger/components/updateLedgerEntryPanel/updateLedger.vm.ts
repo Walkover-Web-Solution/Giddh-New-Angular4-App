@@ -13,7 +13,7 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { RATE_FIELD_PRECISION, SubVoucher } from '../../../app.constant';
+import { HIGH_RATE_FIELD_PRECISION, SubVoucher } from '../../../app.constant';
 
 export class UpdateLedgerVm {
     public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -76,7 +76,7 @@ export class UpdateLedgerVm {
     /** To track compund total change for update ledger advance adjustment */
     public compoundTotalObserver = new BehaviorSubject(null);
     /** Rate should have precision up to 4 digits for better calculation */
-    public ratePrecision = RATE_FIELD_PRECISION;
+    public ratePrecision = HIGH_RATE_FIELD_PRECISION;
 
     constructor() {
         this.voucherTypeList = [{
