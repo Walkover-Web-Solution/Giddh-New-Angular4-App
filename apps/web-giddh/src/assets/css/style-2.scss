@@ -4349,7 +4349,7 @@ label {
 }
 
 .col-wrapper:nth-child(1) .isParent {
-    background: $whisper-new !important;
+    background: $whisper !important;
 }
 
 .col-wrapper:last-child ul li a.isParent {
@@ -4901,7 +4901,7 @@ label {
     top: 50px;
 }
 
-.grey-clr {
+.grey-color {
     color: $dark-gray;
 }
 
@@ -4958,7 +4958,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: $whisper;
     content: "";
     top: -15px;
 }
@@ -4986,7 +4986,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: $whisper;
     content: "";
 }
 
@@ -8640,6 +8640,8 @@ button.btn.btn-filter {
     transform: translateY(0) !important;
     margin: 0 auto;
     padding:0 !important;
+    width:100% !important;
+    max-width: 100% !important;
 }
 
 .manage-account-popup.full-screen-modal.modal.fade .width-100{

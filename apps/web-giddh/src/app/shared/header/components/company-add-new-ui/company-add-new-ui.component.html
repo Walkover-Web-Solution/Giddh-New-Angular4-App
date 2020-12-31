@@ -37,7 +37,7 @@
 							<!-- /btn-account -->
 						</div>
 
-						<div class="col-xs-6 col-sm-6 mr-b3">
+						<div class="col-xs-6 col-sm-6 mr-b3 ">
 							<span>
 								<label for="country" class="d-block">Country<sup>*</sup></label>
 								<sh-select [disabled]="createBranch ? 'disabled' : null"  id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
@@ -47,7 +47,7 @@
 								</sh-select>
 							</span>
 						</div>
-						<div class="col-xs-6 col-sm-6 mr-b3">
+						<div class="col-xs-6 col-sm-6 mr-b3 ">
 							<label for="">Currency <sup>*</sup></label>
 							<div class="custom-select select-caret position-relative">
 								<sh-select [disabled]="createBranch ? 'disabled' : null" name="baseCurrency" [options]="currencySource$ | async" required

@@ -115,7 +115,7 @@
                                     [(ngModel)]="companyProfileObj.taxNumber"
                                     placeholder="Enter {{formFields['taxName'].label}}" />
 
-                                <span class="same-as-head" *ngIf="isbranch || isOnBoardingInProgress"> <input
+                                <span class="same-as-head" *ngIf="isBranch || isOnBoardingInProgress"> <input
                                         type="checkbox" name="isTaxNumberSameAsHeadQuarter"
                                         [(ngModel)]="isTaxNumberSameAsHeadQuarter" value="1"
                                         (change)="sameAsHeadQuarter(gstNumberField, states);"> Same as
@@ -186,7 +186,7 @@
                         <p class="taxation-not-supported" *ngIf="!formFields['taxName']">Create and apply taxes on all types of transactions! To get tax reports, contact <a href="mailto:sales@giddh.com">sales@giddh.com</a>!</p>
                     </div>
                     <div class="col-12 d-flex mr-t5">
-                        <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
+                        <button class="btn btn-primary" (click)="back(isBranch)">Back</button>
                         <button [ladda]="isApiInProgress" type="submit" class="btn btn-sky-blue" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
                             {{itemOnBoardingDetails?.isOnBoardingInProgress ? itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' +  itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType : 'Submit'
                             }}

@@ -56,7 +56,8 @@
     font-size: 14px;
 }
 .branch-card {
-    background-color: $white;
+    background-color: $whisper-light;
+    min-height: 365px;
     margin-bottom: 15px;
     font-size: 14px;
     border: 1px solid $gainsboro;
@@ -94,7 +95,11 @@
     margin-bottom: 0;
 }
 .card-basic-details {
-    padding: 15px;
+    padding: 20px;
+    border-bottom: 1px solid $gainsboro;
+}
+.branch-sales-details {
+    padding: 20px;
 }
 .branch-sales-details {
     border-top: 1px solid $gainsboro;
@@ -290,8 +295,8 @@
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
     color: $extra-dark-gray;
-    background-color: $lavender-dark;
-    border-color: $lavender-dark;
+    background-color: $lavender;
+    border-color: $lavender;
     box-shadow: none !important;
 }
 

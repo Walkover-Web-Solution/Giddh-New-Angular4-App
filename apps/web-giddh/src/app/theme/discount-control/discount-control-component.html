@@ -18,14 +18,8 @@
                 <label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
 
                 <div class="position-relative">
-<<<<<<< HEAD
-                    <input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer" decimalDigitsDirective [(ngModel)]="discountPercentageModal" (blur)="discountInputBlur($event)" (input)="discountFromInput('PERCENTAGE', $event)" [mask]="inputMaskFormat"
-                        style="width: 100px;padding-right: 20px !important;">
-                    <i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
-=======
                     <input type="text" class="form-control text-right cursor-pointer pd-r2 w-100" [disabled]="!discountFromPer" decimalDigitsDirective [(ngModel)]="discountPercentageModal" (blur)="discountInputBlur($event)" (input)="discountFromInput('PERCENTAGE', $event)" [mask]="inputMaskFormat">
                     <i class="fa fa-percent position-absolute"></i>
->>>>>>> 7a3b4faa36... changes done
                 </div>
 
             </div>
@@ -48,7 +42,7 @@
                     <li *ngIf="discount && discount.discountUniqueName && discount.name" class="custom-item pd mr-b05">
                         <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
                             <input class="pull-left" id="{{'discount-control-' + idx}}" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
-                                (change)="change()" (click)="$event.stopPropagation()" (click)="$event.stopPropagation()" />
+                                (change)="change(discount, $event)" (click)="$event.stopPropagation()" />
                             <span class="pull-left text-ellipsis">{{discount.name}}</span>
                         </label>
                     </li>

@@ -8,8 +8,7 @@
         <div class="clearfix mr-t2">
             <small><i class="fa fa-lock"></i> At giddh, the privacy and security of your information are top priorites.
             </small>
-            <img src="https://ssl.comodo.com/images/trusted-site-seal.png" alt="Comodo Trusted Site Seal" width="113"
-                height="59" class="border-none" />
+            <img src="https://ssl.comodo.com/images/trusted-site-seal.png" alt="Comodo Trusted Site Seal" width="113" height="59" class="border-none" />
         </div>
     </div>
     <div [hidden]="true">
@@ -30,7 +29,7 @@
         <h1 class="section-head pt-0">Added Accounts</h1>
         <div class="mt-1">
             <!-- ================= saltedge accounts =================
-      <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mrB4': accIdx != ebankAccounts.length-1 }">
+      <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
           <h3 class="subHead bd-rb">
               <button class="no-btn font-20" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, acc.accounts[0])"><i class="icon-trash"></i></button> {{acc.siteName}}
               <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.accounts[accIdx])"><i class="fa fa-refresh"></i> Refresh</button>
@@ -77,8 +76,7 @@
       </section>
       ================= saltedge accounts ================= -->
 
-            <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account"
-                [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
+            <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
                 <h3 class="subHead bd-rb">
                     {{acc.siteName}}
                     <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.yodleeAccounts[0], false)" *ngIf="acc.status !== 'FAILED'">
@@ -103,9 +101,7 @@
                                     <input [(ngModel)]="card.transactionDate" name="transactionDate_{{accIdx}}_{{i}}" id="date_{{accIdx}}_{{i}}" />
                                 </a>
                                 <div class="position-absolute datepicker-account">
-                                    <datepicker *ngIf="card.isDatePickerOpen" name="fromDate"
-                                        [(ngModel)]="card.transactionDate" (selectionDone)="onUpdateDate($event, card)"
-                                        [showWeeks]="true">
+                                    <datepicker *ngIf="card.isDatePickerOpen" name="fromDate" [(ngModel)]="card.transactionDate" (selectionDone)="onUpdateDate($event, card)" [showWeeks]="true">
                                     </datepicker>
                                 </div>
                             </div>
@@ -131,7 +127,7 @@
                                 <!-- <button class="btn btn-danger mr-t1" (click)="onDeleteAddedBank(acc.siteName, card)">Delete Account</button> -->
                                 <!-- (click)="onDeleteAddedBank(acc.siteName, acc.yodleeAccounts[0])" -->
                             </div>
-                            <button class="no-btn font-20 pos-abs bank_delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
+                            <button class="no-btn font-20 pos-abs bank-delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
                                 <i class="icon-trash text-gray"  tooltip="Delete Bank" placement="top"></i>
                             </button>
                         </ng-container>

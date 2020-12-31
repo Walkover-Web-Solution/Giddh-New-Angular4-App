@@ -112,7 +112,7 @@
                         Add
                     </button>
                     <div *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length > 0">
-                        <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mr-t1 company_gst" [ngClass]="{'mr-t2': i != gst.length-1, 'bd-rb': i != gst.length-1}">
+                        <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mr-t1 company-gst" [ngClass]="{'mr-t2': i != gst.length-1, 'bd-rb': i != gst.length-1}">
                             <div class="row">
                                 <div class="col-lg-4 col-md-12 col-sm-12">
                                     <div class="row">

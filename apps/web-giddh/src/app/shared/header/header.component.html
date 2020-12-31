@@ -59,7 +59,7 @@
                                             <perfect-scrollbar class="" [scrollIndicators]="true">
                                                 <ul class="sub-list" *ngIf="companyListForFilter && companyListForFilter.length">
 
-                                                    <li class="cmp posrelative header-tooltip" *ngFor="let cmp of companyListForFilter; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName, true)" (click)="changeCompany(cmp.uniqueName, true)">
+                                                    <li class="cmp position-relative header-tooltip" *ngFor="let cmp of companyListForFilter; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName, true)" (click)="changeCompany(cmp.uniqueName, true)">
 
                                                         <a vr-item href="javascript:void(0);" class="text-ellipsis" (mouseenter)="mouseEnteredOnCompanyName(i)">
 
@@ -86,7 +86,7 @@
                                         </li>
 
                                         <li class="create-company-btn">
-                                            <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link pd-0 btn">Create
+                                            <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link p-0 btn">Create
                                                 Company
                                             </button>
                                         </li>
@@ -331,7 +331,7 @@
                             <span class="icon-dashboard"></span>
                             <span class="label">{{acc.name}}
                                 <span class="text-uppercase">A/</span>
-                                <span class="text-lowercase">c</span>
+                            <span class="text-lowercase">c</span>
                             </span>
                         </a>
                     </li>
@@ -667,7 +667,7 @@
 
                         <ul class="sub-list" *ngIf="companyListForFilter && companyListForFilter.length">
 
-                            <li class="cmp posrelative header-tooltip" *ngFor="let cmp of companyListForFilter; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName, true)" (click)="changeCompany(cmp.uniqueName, true)">
+                            <li class="cmp position-relative header-tooltip" *ngFor="let cmp of companyListForFilter; let i = index" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (keydown.enter)="changeCompany(cmp.uniqueName, true)" (click)="changeCompany(cmp.uniqueName, true)">
 
                                 <a vr-item href="javascript:void(0);" class="text-ellipsis" (mouseenter)="mouseEnteredOnCompanyName(i)">
 
