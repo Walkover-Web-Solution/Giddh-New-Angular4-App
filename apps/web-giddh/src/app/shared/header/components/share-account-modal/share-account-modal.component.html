@@ -28,12 +28,12 @@
                 </form>
 
                 <!--shared with array-->
-                <div class="col-xs-12 pd-t1" *ngIf="(activeAccountSharedWith$ | async)?.length">
-                    <div class="row">
+                <div class="pd-t1" *ngIf="(activeAccountSharedWith$ | async)?.length">
+                    <div>
                         <ul class="shared-list group-shared-list">
                             <li *ngFor="let val of (activeAccountSharedWith$ | async); let i = index">
                                 <div class="user-name-email">
-                                    <i class="icon-user-black pdR1"></i>
+                                    <i class="icon-user-black pd-r1"></i>
                                     <span class="user-email">
                                         <small *ngIf="val.emailId!==val.userName">{{val.userName}}</small>
                                         <small>{{ val.emailId }}</small>

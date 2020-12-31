@@ -93,14 +93,7 @@ i.close.icon.clear:hover::after {
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-<<<<<<< HEAD
-    background-color: #f4f5f8;
-    margin: 8px 0 5px 8px;
-=======
     background-color: $solitude;
-    margin: 0px 0 4px 4px;
->>>>>>> 7a3b4faa36... changes done
-    /* color: white; */
 }
 
 .chip-close-btn {
@@ -131,7 +124,6 @@ i.close.icon.clear:hover::after {
     cursor: not-allowed;
 }
 
-<<<<<<< HEAD
 :host(.disabled-ledger) {
     .sh-select-disabled {
         background: $white !important;
@@ -143,8 +135,6 @@ i.close.icon.clear:hover::after {
     }
 }
 
-=======
->>>>>>> 7a3b4faa36... changes done
 .selected-val {
     border: 1px solid $gainsboro !important;
     padding-right: 22px !important;

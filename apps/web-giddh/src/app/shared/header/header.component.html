@@ -14,7 +14,7 @@
                                         {{  (selectedCompany | async)?.nameAlias }} )</span>
                                 </ng-template>
                                 <div class="company-text">
-                                    <span class="c-name text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
+                                    <span class="company-name text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                                     </span>
 
                                     <div class="company-name-finance-year" placement="bottom">
@@ -91,7 +91,7 @@
                                         </li>
 
                                         <li class="create-company-btn">
-                                            <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link pd-0 btn">Create
+                                            <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link p-0 btn">Create
                                                 Company
                                             </button>
                                         </li>
@@ -112,7 +112,7 @@
                                             <img src="{{userAvatar}}" alt="" />
                                         </span>
                                         <div class="pull-left user-name-wrap text-ellipsis">{{ userFullName }}
-                                            <small class="grey-clr">Profile</small>
+                                            <small class="grey-color">Profile</small>
                                         </div>
                                     </a>
                                 </li>
@@ -720,7 +720,7 @@
                 <img src="{{userAvatar}}" alt="" />
             </span>
             <div class="pull-left user-name-wrap text-ellipsis">{{ userFullName }}
-                <small class="grey-clr">Profile</small>
+                <small class="grey-color">Profile</small>
             </div>
         </a>
     </li>

@@ -1,8 +1,14 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <div #dd [style.width]="width" class="position-relative">
     <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
         (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)"
+=======
+<div #dd [style.width]="width" class="position-relative">
+    <div [attr.style]="borderConfiguration?.style" class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
+        (click)="showSearchSuggestion ? show($event) : ''" [class.open]="isOpen" tabindex="0" (focus)="showSearchSuggestion ? show($event) : ''" (blur)="hide($event)"
+>>>>>>> 6098b894bc... code improvement done
         (keydown)="keydownUp($event)">
 
 >>>>>>> 7a3b4faa36... changes done
@@ -41,11 +47,7 @@
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
                     <input autocomplete="disabled" type="text" readonly value="{{selectedValues[0].label}}"
-<<<<<<< HEAD
                         class="form-control selected-val cp" [attr.style]="borderConfiguration?.style" />
-=======
-                        class="form-control selected-val cp" />
->>>>>>> 7a3b4faa36... changes done
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">

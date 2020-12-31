@@ -232,11 +232,7 @@ body {
 }
 
 .pd-t2,
-<<<<<<< HEAD
-.pdT3 {
-=======
 .pd-t3 {
->>>>>>> 7a3b4faa36... changes done
     padding-top: 20px;
 }
 
@@ -300,13 +296,10 @@ body {
     padding-right: 40px;
 }
 
-<<<<<<< HEAD
-=======
 .pt-15{
     padding-top: 15px;
 }
 
->>>>>>> 7a3b4faa36... changes done
 .p-0 {
     padding: 0;
 }
@@ -448,21 +441,6 @@ body {
 }
 
 .bd-rt {
-<<<<<<< HEAD
-    border-top: 1px solid #ccc;
-}
-
-.bd-rb {
-    border-bottom: 1px solid #ccc;
-}
-
-.bd-rl {
-    border-left: 1px solid #ccc !important;
-}
-
-.bd-rr {
-    border-right: 1px solid #ccc !important;
-=======
     border-top: 1px solid #d9d9d9;
 }
 
@@ -476,7 +454,6 @@ body {
 
 .bd-rr {
     border-right: 1px solid #d9d9d9 !important;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .bdrR0 {
@@ -564,10 +541,6 @@ body {
     text-align: center;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 7a3b4faa36... changes done
 .text-ellipsis {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -1343,11 +1316,7 @@ footer .menu-item a {
         position: absolute;
         width: 0;
         border-left: 1px solid #d9d9d9;
-<<<<<<< HEAD
         top: 42px;
-=======
-        top: 37px;
->>>>>>> 7a3b4faa36... changes done
         bottom: 0;
         z-index: 9;
         margin: 0 auto;

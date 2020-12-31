@@ -1219,11 +1219,7 @@ ul.sub-list {
 }
 
 .advance-search p small {
-<<<<<<< HEAD
-    color: #bdbaba;
-=======
     color: $silver;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .advance-search p {
@@ -1301,22 +1297,6 @@ ul.sub-list {
     background: $deep-sky-blue-hover;
 }
 
-<<<<<<< HEAD
-/* .advance-search .header:after {
-    content: '';
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    top: 14px;
-    right: 10px;
-    border-top: 7px solid #464646;
-    border-bottom: 9px solid transparent;
-    border-right: 6px solid transparent;
-    border-left: 6px solid transparent;
-  } */
-
-=======
->>>>>>> 7a3b4faa36... changes done
 .choose-size label {
     font-weight: bold;
     display: inline-block;
@@ -1866,11 +1846,7 @@ header .navbar {
 }
 
 .icomoon-ico {
-<<<<<<< HEAD
-    color: #424242;
-=======
     color: $matterhorn;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .icomoon-ico:hover {
@@ -2133,11 +2109,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 #company-wrap i {
-<<<<<<< HEAD
-    color: #525252;
-=======
     color: $davy-grey;
->>>>>>> 7a3b4faa36... changes done
 }
 
 #ledger {
@@ -2278,15 +2250,6 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
 }
 
-<<<<<<< HEAD
-/* #company-wrap .company-name {
-    margin: 5px 0 5px 0px;
-    font-size: 9px;
-    padding-right: 5px;
-} */
-
-=======
->>>>>>> 7a3b4faa36... changes done
 #companyList {
     background: $white;
     padding-bottom: 0;
@@ -3488,11 +3451,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .add-row {
-<<<<<<< HEAD
-    color: #36af47;
-=======
     color: $success-green;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .dlet {
@@ -3763,11 +3722,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .bd-rt {
-<<<<<<< HEAD
-    border-color: #d7d7d7;
-=======
     border-color: $gainsboro;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .popover.bottom > .arrow {
@@ -3901,18 +3856,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .light-gray {
-<<<<<<< HEAD
     color: #666;
-}
-
-.shared-list li {
-    list-style: none;
-    color: #666;
-    font-size: 16px;
-    padding: 5px 0 2px 0;
-    border-bottom: 1px solid #d6d6d6;
-=======
-    color: $dark-gray;
 }
 
 .shared-list li {
@@ -3921,7 +3865,6 @@ a.btn.btn-xs.btn-link.pull-right {
     font-size: 16px !important;
     padding: 5px 0 2px 0 !important;
     border-bottom: 1px solid $gainsboro !important;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .shared-list select {
@@ -4068,11 +4011,7 @@ input[type=radio]:checked:after {
 }
 
 .ledger-panel .bd-rb {
-<<<<<<< HEAD
-    border-bottom: 1px solid #bababa;
-=======
     border-bottom: 1px solid $gainsboro;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .pop-panel .ui-select-toggle {
@@ -4087,28 +4026,6 @@ input[type=radio]:checked:after {
     top: 0;
 }
 
-<<<<<<< HEAD
-/* .entrypanel .upload-div {
-    padding: 6px 8px;
-    float: left;
-    margin-right: 10px;
-    color: #4d4d4d;
-    border: 1px solid #949494;
-    cursor: pointer;
-    background: #f9f7f2;
-    height: 32px;
-}
-
-.entrypanel .upload-div i {
-    cursor: pointer;
-}
-
-.entrypanel .upload-div label {
-    color: #4d4d4d;
-} */
-
-=======
->>>>>>> 7a3b4faa36... changes done
 #inventory-sidebar,
 #inventory-sidebar input {
     font-size: 14px;
@@ -4347,11 +4264,7 @@ label {
 
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-<<<<<<< HEAD
-    border-color: #ccc;
-=======
     border-color: $gainsboro;
->>>>>>> 7a3b4faa36... changes done
 }
 
 #getGroupModal .detailed label {
@@ -4369,11 +4282,7 @@ label {
 }
 
 .ledger-panel .bd-rb {
-<<<<<<< HEAD
-    border-bottom: 1px solid #bababa;
-=======
     border-bottom: 1px solid $gainsboro;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .pop-panel .ui-select-toggle {
@@ -4556,11 +4465,7 @@ label {
 
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-<<<<<<< HEAD
-    border-color: #ccc;
-=======
     border-color: $gainsboro;
->>>>>>> 7a3b4faa36... changes done
 }
 
 #getGroupModal .detailed label {
@@ -4578,11 +4483,7 @@ label {
 }
 
 .ledger-panel .bd-rb {
-<<<<<<< HEAD
-    border-bottom: 1px solid #bababa;
-=======
     border-bottom: 1px solid $gainsboro;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .pop-panel .ui-select-toggle {
@@ -4881,11 +4782,7 @@ label {
 }
 
 #manufacture .bd-rt {
-<<<<<<< HEAD
-    border-color: #ddd;
-=======
     border-color: $gainsboro;
->>>>>>> 7a3b4faa36... changes done
 }
 
 #manufacture thead th {
@@ -5004,13 +4901,8 @@ label {
     top: 50px;
 }
 
-<<<<<<< HEAD
 .grey-color {
-    color: #6d6d6d;
-=======
-.grey-clr {
     color: $dark-gray;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .grp-col::-webkit-scrollbar {
@@ -5651,13 +5543,8 @@ label {
 }
 
 .logo-tool ul li:hover {
-<<<<<<< HEAD
-    border-color: #666666;
-    color: #666666;
-=======
     border-color: $dark-gray;
     color: $dark-gray;
->>>>>>> 7a3b4faa36... changes done
 }
 
 .swatch-preview span {
@@ -5694,11 +5581,7 @@ label {
 }
 
 .scroll-auto::-webkit-scrollbar-track {
-<<<<<<< HEAD
-    background: #ddd;
-=======
     background: $gainsboro-light;
->>>>>>> 7a3b4faa36... changes done
     /* margin-left: 255px; */
     border-radius: 8px;
 }
@@ -6567,15 +6450,8 @@ table td[class*=col-]:last-child {
 }
 
 .thead-background1 th {
-<<<<<<< HEAD
-    background: #eaebed;
-    color: #4d4d4d;
-    border-right: 1px solid #c4c6c7;
-=======
     background: $whisper-color;
     color: $matterhorn;
-    border-right: 1px solid $gainsboro;
->>>>>>> 7a3b4faa36... changes done
     padding: 11px !important;
     font-weight: 400;
     border-bottom: 1px solid $gainsboro;
@@ -8077,11 +7953,7 @@ app-header {
     border-radius: 0;
 }
 
-<<<<<<< HEAD
 .account-aside-menu-state #close {
-=======
-.account-aside-menu-state2 #close {
->>>>>>> 7a3b4faa36... changes done
     display: block;
     position: fixed;
     right: 472px;
@@ -8212,11 +8084,7 @@ div#getGroupModal {
     animation-fill-mode: both;
 }
 
-<<<<<<< HEAD
 .account-aside-menu-state .horizontal-form {
-=======
-.account-aside-menu-state2 .horizontal-form {
->>>>>>> 7a3b4faa36... changes done
     padding-bottom: 110px;
 }
 
@@ -8725,10 +8593,7 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     color: $nobel !important;
-<<<<<<< HEAD
     cursor: pointer;
-=======
->>>>>>> 7a3b4faa36... changes done
 }
 
 .date-advance-search .input-group input.form-control {
@@ -8774,7 +8639,9 @@ button.btn.btn-filter {
 .manage-account-popup.full-screen-modal.modal.fade .modal-dialog {
     transform: translateY(0) !important;
     margin: 0 auto;
-    padding:0 !important
+    padding:0 !important;
+    width:100% !important;
+    max-width: 100% !important;
 }
 
 .manage-account-popup.full-screen-modal.modal.fade .width-100{
@@ -8875,11 +8742,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-<<<<<<< HEAD
 .account-aside-menu-state #close {
-=======
-.account-aside-menu-state2 #close {
->>>>>>> 7a3b4faa36... changes done
     display: block;
     position: absolute;
     right: 10px;
@@ -8972,13 +8835,8 @@ p.remvBrnchName {
 }
 
 .aside-panel-ledger .btn-lg:hover {
-<<<<<<< HEAD
-    background-color: #5b64c9 !important;
-    border-color: #5b64c9 !important;
-=======
     background-color: $chetwode-blue !important;
     border-color: $chetwode-blue !important;
->>>>>>> 7a3b4faa36... changes done
     color: $white !important;
 }
 
