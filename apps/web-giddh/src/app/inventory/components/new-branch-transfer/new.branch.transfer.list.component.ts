@@ -109,7 +109,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         date: null,
         voucherNo: null,
         senderReceiver: null,
-        warehouseName: null
+        warehouseName: null,
+        sender: null,
+        receiver: null
     };
     public branchTransferTempPostRequestParams: any = {
         amountOperator: null,
@@ -374,6 +376,10 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.branchTransferPostRequestParams.voucherType = null;
         this.branchTransferPostRequestParams.amountOperator = null;
         this.branchTransferPostRequestParams.amount = null;
+        this.branchTransferPostRequestParams.sender = null;
+        this.branchTransferPostRequestParams.receiver = null;
+        this.branchTransferPostRequestParams.fromWarehouse = null;
+        this.branchTransferPostRequestParams.toWarehouse = null;
         this.branchTransferTempPostRequestParams.voucherType = null;
         this.branchTransferTempPostRequestParams.amountOperator = null;
         this.branchTransferTempPostRequestParams.amount = null;

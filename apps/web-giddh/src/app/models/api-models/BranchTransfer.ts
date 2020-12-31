@@ -158,7 +158,11 @@ export class NewBranchTransferListPostRequestParams {
 	public date: string;
 	public voucherNo: string;
 	public senderReceiver: string;
-	public warehouseName: string;
+    public warehouseName: string;
+    public sender?: string;
+    public receiver?: string;
+    public fromWarehouse?: string;
+    public toWarehouse?: string;
 }
 
 export class NewBranchTransferListItems {
@@ -169,6 +173,10 @@ export class NewBranchTransferListItems {
 	public warehouseName: string;
 	public totalAmount: any;
 	public uniqueName: string;
+    public sender?: string;
+    public receiver?: string;
+    public fromWarehouse?: string;
+    public toWarehouse?: string;
 }
 
 export class NewBranchTransferListResponse {
