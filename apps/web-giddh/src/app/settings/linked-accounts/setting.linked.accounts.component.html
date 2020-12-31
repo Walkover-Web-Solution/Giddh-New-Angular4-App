@@ -77,8 +77,7 @@
       </section>
       ================= saltedge accounts ================= -->
 
-            <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account"
-                [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
+            <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
                 <h3 class="subHead bd-rb">
                     {{acc.siteName}}
                     <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.yodleeAccounts[0], false)" *ngIf="acc.status !== 'FAILED'">
