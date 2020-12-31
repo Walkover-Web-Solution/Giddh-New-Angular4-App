@@ -1,11 +1,11 @@
 class CreateNewCompanyPage {
 
     companyName(companyName){
-        return cy.get('#name').clear().type(companyName);
+        return cy.get('#name', {timeout: 80000}).clear().type(companyName);
     }
 
     country(){
-        return cy.get('#country > .position-relative > .header > div > .form-control');
+        return cy.xpath("//sh-select[@id='country']");
     }
 
     countryList(){

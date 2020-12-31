@@ -3,7 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import * as jsPDF from 'jspdf';
 import { DataFormatter, IFormatable } from './data-formatter.class';
 import { AppState } from '../../../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType/recType.pipe';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { ChildGroup } from '../../../models/api-models/Search';
@@ -11,6 +11,7 @@ import { Total } from './tb-export-csv.component';
 import 'jspdf-autotable';
 import { JsPDFAutoTable } from '../../../../customTypes/jsPDF/index';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
+import { takeUntil } from 'rxjs/operators';
 
 interface GroupViewModel {
     credit: number;
@@ -41,7 +42,7 @@ class FormatPdf implements IFormatable {
                 .forEach(p => this.pdf.text(10, this.colY += 5, p));
         }
 
-        this.pdf.text(10, this.colY += 5, selectedCompany.city + '-' + selectedCompany.pincode);
+        this.pdf.text(10, this.colY += 5, (selectedCompany.city || '') + (selectedCompany.pincode ? ('-' + selectedCompany.pincode) : ''));
         this.pdf.text(10, this.colY += 5, `Trial Balance: ${this.request.from} to ${this.request.to}`);
         this.pdf.line(10, this.colY += 5, 200, this.colY);
 
@@ -111,14 +112,23 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     public enableDownload: boolean = true;
     public showPdf: boolean;
     public imgPath: string = '';
+    /** Giddh decimal places set by user */
+    public giddhDecimalPlaces = 2;
     private exportData: ChildGroup[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private dataFormatter: DataFormatter;
 
     constructor(private store: Store<AppState>, private recType: RecTypePipe) {
-        this.store.select(p => p.tlPl.tb.exportData).subscribe(p => {
+        this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
             this.exportData = p;
             this.dataFormatter = new DataFormatter(p, this.selectedCompany, recType);
+        });
+        this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.balanceDecimalPlaces) {
+                this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+            } else {
+                this.giddhDecimalPlaces = 2;
+            }
         });
     }
 
@@ -142,7 +152,8 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     private downloadPdfGroupWise() {
@@ -178,7 +189,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         };
         let rows: GroupViewModel[] = this.exportData
             .map(p => {
-                total = this.dataFormatter.calculateTotal(p, total);
+                total = this.dataFormatter.calculateTotal(p, total, this.giddhDecimalPlaces);
                 return {
                     closingBalance: `${p.closingBalance.amount} ${this.recType.transform(p.closingBalance)}`,
                     openingBalance: `${p.forwardedBalance.amount} ${this.recType.transform(p.forwardedBalance)}`,
@@ -208,7 +219,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
                     this.selectedCompany.address.split('\n')
                         .forEach(p => pdf.text(40, colY += 15, p));
                 }
-                pdf.text(40, colY += 15, this.selectedCompany.city + '-' + this.selectedCompany.pincode);
+                pdf.text(40, colY += 15, (this.selectedCompany.city || '') + (this.selectedCompany.pincode ? ('-' + this.selectedCompany.pincode) : ''));
                 pdf.text(40, colY += 15, `Trial Balance: ${this.trialBalanceRequest.from} to ${this.trialBalanceRequest.to}`);
             }
         });
@@ -219,9 +230,9 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         pdf.line(40, lastY, pageWidth, lastY);
         pdf.text(footerX, lastY + 20, 'Total');
         pdf.text(footerX + 210, lastY + 20, total.ob.toString());
-        pdf.text(footerX + 302, lastY + 20, total.dr.toString());
-        pdf.text(footerX + 365, lastY + 20, total.cr.toFixed(2));
-        pdf.text(footerX + 430, lastY + 20, total.cb.toFixed(2));
+        pdf.text(footerX + 280, lastY + 20, total.dr.toString());
+        pdf.text(footerX + 360, lastY + 20, total.cr.toFixed(2));
+        pdf.text(footerX + 450, lastY + 20, total.cb.toFixed(2));
         // Save the PDF
         pdf.save('PdfGroupWise.pdf');
     }

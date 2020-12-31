@@ -33,7 +33,9 @@ export class RecurringVoucherService {
 				}), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)));
 		}
 		return this._http.get(this.config.apiUrl + RECURRING_VOUCHER_API.GET
-			.replace('{{companyname}}', companyUniqueName)
+            .replace('{{companyname}}', companyUniqueName)
+            .replace(':sort', "")
+            .replace(':sortBy', "")
 			.replace(':page', page.toString())
 			.replace(':count', count.toString())).pipe(map((res) => {
 				let data: BaseResponse<RecurringInvoice[], string> = res;

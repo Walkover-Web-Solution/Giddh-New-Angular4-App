@@ -44,12 +44,12 @@
                                     <th class="text-right" width="33.33%">As Of
                                         <span
                                             *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'">
-                                            {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
+                                            {{ moment(bsData?.dates?.to, giddhDateFormat).toString() | date:'dd MMMM yyyy' }}</span>
                                     </th>
                                     <th class="text-right" width="33.33%">As Of
                                         <span
                                             *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'">
-                                            {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').add(-1, 'days').toString() | date:'dd MMMM yyyy' }}</span>
+                                            {{ moment(bsData?.dates?.from, giddhDateFormat).add(-1, 'days').toString() | date:'dd MMMM yyyy' }}</span>
                                     </th>
                                 </tr>
                             </thead>

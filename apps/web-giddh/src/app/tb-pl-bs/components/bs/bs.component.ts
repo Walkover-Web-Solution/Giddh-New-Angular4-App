@@ -54,7 +54,7 @@ import { ToasterService } from '../../../services/toaster.service';
   `,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
+export class BsComponent implements AfterViewInit, OnDestroy {
 
     public get selectedCompany(): CompanyResponse {
         return this._selectedCompany;
@@ -72,7 +72,6 @@ export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
                 from: value.activeFinancialYear.financialYearStarts,
                 to: value.activeFinancialYear.financialYearEnds
             };
-            // this.filterData(this.request);
         }
     }
 
@@ -91,7 +90,7 @@ export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
     private _selectedCompany: CompanyResponse;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef, private _toaster: ToasterService) {
-        this.showLoader = this.store.select(p => p.tlPl.bs.showLoader).pipe(takeUntil(this.destroyed$));
+        this.showLoader = this.store.pipe(select(p => p.tlPl.bs.showLoader), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.tlPl.bs.data), takeUntil(this.destroyed$)).subscribe((p) => {
             if (p) {
                 let data = _.cloneDeep(p) as BalanceSheetData;
@@ -142,12 +141,6 @@ export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
 
     public ngAfterViewInit() {
         this.cd.detectChanges();
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
-        //   this.cd.detectChanges();
-        // }
     }
 
     public filterData(request: ProfitLossRequest) {

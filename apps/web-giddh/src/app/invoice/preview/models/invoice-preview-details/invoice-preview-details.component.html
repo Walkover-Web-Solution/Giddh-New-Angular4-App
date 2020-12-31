@@ -12,7 +12,7 @@
                     <div class="invoice-search-box">
                         <input type="text" placeholder="search" #searchElement>
 
-                        <div class="btn-group" dropdown *ngIf="voucherType === 'sales'"
+                        <div class="btn-group" dropdown *ngIf="!isCompany && voucherType === 'sales'"
                              [autoClose]="true">
                             <button id="button-basic2" dropdownToggle type="button"
                                 class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0" aria-controls="dropdown-basic3">
@@ -31,7 +31,7 @@
                             </ul>
                         </div>
 
-                        <button class="btn btn-sky-blue mr-0" *ngIf="voucherType !== 'sales'"
+                        <button class="btn btn-sky-blue mr-0" *ngIf="!isCompany && voucherType !== 'sales'"
                                 (click)="goToInvoice()">+ New
                             {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
@@ -99,8 +99,8 @@
                                             <img src="assets/images/multiply.svg"></span>
 
                                         <!-- region for proforma and estimates -->
-                                        <div class="btn-group change-status-dropdown pull-right" dropdown
-                                             *ngIf="only4ProformaEstimates">
+                                        <div [class.disabled-change-status]="isCompany" class="btn-group change-status-dropdown pull-right" dropdown
+                                             *ngIf="!isCompany && only4ProformaEstimates">
 
                                             <button id="button-basic" dropdownToggle type="button"
                                                     class="btn btn-sky-blue dropdown-toggle" aria-controls="dropdown-basic">
@@ -139,8 +139,8 @@
                                         <!-- endregion -->
 
                                         <!-- region for invoice -->
-                                        <div class="btn-group change-status-dropdown pull-right" dropdown
-                                             *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
+                                        <div [class.disabled-change-status]="isCompany" class="btn-group change-status-dropdown pull-right" dropdown
+                                             *ngIf="!isCompany && !only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
                                             <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
                                                 {{ selectedItem.voucherStatus }}
                                             </label>
@@ -178,8 +178,8 @@
                                         <!-- endregion -->
 
                                         <!-- region for purchase -->
-                                        <div class="btn-group change-status-dropdown pull-right" dropdown
-                                             *ngIf="selectedItem?.voucherType === 'purchase'">
+                                        <div [class.disabled-change-status]="isCompany" class="btn-group change-status-dropdown pull-right" dropdown
+                                             *ngIf="!isCompany && selectedItem?.voucherType === 'purchase'">
 
                                             <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2">Change Status <span class="caret"></span></button>
 
@@ -195,9 +195,9 @@
                                         <!-- endregion -->
                                         <div class="wrap-edit-history-btn">
                                             <div class="edit-action-btn-groups pull-right">
-                                                <span>
+                                                <span *ngIf="!isCompany">
                                                     <a href="javascript:void 0" tooltip="Edit" placement="top"
-                                                        (click)="toggleEditMode()"><i class="icon-edit-pencil"></i></a>
+                                                        (click)="isCompany ? '' : toggleEditMode()"><i class="icon-edit-pencil"></i></a>
                                                 </span>
 
                                                 <span *ngIf="selectedItem?.voucherType !== 'purchase'">
@@ -218,7 +218,7 @@
                                                         (click)="printVoucher()"><i class="fa fa-print"></i></a>
                                                 </span>
 
-                                                <span *ngIf="selectedItem.voucherType === 'purchase' && pdfPreviewLoaded">
+                                                <span *ngIf="selectedItem?.voucherType === 'purchase' && pdfPreviewLoaded">
                                                     <a href="javascript:void 0" tooltip="Download PDF" placement="top"
                                                         (click)="downloadPurchaseBillPDF()"><i class="icon-file"></i></a>
                                                 </span>
@@ -231,19 +231,19 @@
                                                 </span>
 
                                                 <span
-                                                    *ngIf="selectedItem.voucherType === 'purchase' && attachedDocumentType?.type"
+                                                    *ngIf="selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type"
                                                     [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
                                                     <a href="javascript:void 0" tooltip="Download attachment" placement="top"
                                                         (click)="downloadFile()"><i class="icon-download"></i></a>
                                                 </span>
 
-                                                <span>
+                                                <span *ngIf="!isCompany">
                                                     <a href="javascript:void 0" tooltip="Delete" placement="top"
                                                         (click)="deleteConfirmationModel.toggle()"><i
                                                             class="icon-trash"></i></a>
                                                 </span>
                                             </div>
-                                            <div class="history-btn" *ngIf="selectedItem.voucherType === 'purchase'">
+                                            <div class="history-btn" *ngIf="selectedItem?.voucherType === 'purchase'">
                                                 <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()">
                                                     <i class="icon-history-icon font-12 pr-1"></i>
                                                         History</button>
@@ -260,7 +260,7 @@
 
                             <div class="row">
 
-                                <div class="col-md-4 col-12" *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
+                                <div class="col-md-4 col-12" *ngIf="!isCompany && (selectedItem?.voucherType !== 'credit note' && selectedItem?.voucherType !== 'debit note') &&
                                     (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
                                     <div class="single-payment-detail clearfix pr-4">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
@@ -280,7 +280,7 @@
                                             mark it as sent. </p>
                                         <a href="javascript: void 0"
                                            (click)="showEmailSendModal.show()">
-                                            {{(selectedItem.voucherType === 'credit note') || (selectedItem.voucherType === 'debit note') ? 'Send Note' : 'Send Invoice'}}
+                                            {{(selectedItem?.voucherType === 'credit note') || (selectedItem?.voucherType === 'debit note') ? 'Send Note' : 'Send Invoice'}}
                                         </a>
                                     </div>
                                 </div>
@@ -337,11 +337,11 @@
                             <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
                         </div>
 
-                            <div *ngIf="!shouldShowUploadAttachment && selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" class="img-expand-collapse" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
+                            <div *ngIf="!shouldShowUploadAttachment && selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" class="img-expand-collapse" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
                                 <img
                                     class="image-preview img-expand" [src]="imagePreviewSource"/>
                             </div>
-                            <div *ngIf="shouldShowUploadAttachment"
+                            <div *ngIf="shouldShowUploadAttachment && !isCompany"
                                 class="upload-excel max-width-500 center-block box dashed-border">
                                 <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
                                     droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
@@ -373,7 +373,7 @@
                                                 [viewBookmark]="false" [download]="false">
                                 </ng2-pdfjs-viewer>
                             </div>
-                            <div class="expand-file" *ngIf="selectedItem.voucherType === 'purchase' && imagePreviewSource">
+                            <div class="expand-file" *ngIf="selectedItem?.voucherType === 'purchase' && imagePreviewSource">
                                 <a href="javascript:;" *ngIf="!isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = true;"><span><img src="assets/images/expand.svg"></span>Expand</a>
                                 <a href="javascript:;" *ngIf="isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = false;"><span><img src="assets/images/expand.svg" class="collapse-icon"></span>Collapse</a>
                             </div>
@@ -393,7 +393,7 @@
             <div class="invoice-edit-header">
 
                 <span>
-                    <p>Edit {{ selectedItem.voucherType | voucherTypeToNamePipe | titlecase }}</p>
+                    <p>Edit {{ selectedItem?.voucherType | voucherTypeToNamePipe | titlecase }}</p>
                 </span>
 
                 <span class="close-modal cp" (click)="toggleEditMode()">
@@ -432,12 +432,12 @@
         <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview"
             [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
             <ng2-pdfjs-viewer pagemode="none"
-                *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
+                *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
                 viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
                 [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false"
                 [viewBookmark]="false" [download]="false">
             </ng2-pdfjs-viewer>
-            <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
+            <img *ngIf="(selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
                 class="image-preview" [src]="imagePreviewSource" />
         </div>
     </div>
@@ -545,7 +545,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal
-                [body]="only4ProformaEstimates ? 'Do you want to delete the voucher(s)?' : selectedItem.voucherType === 'purchase' ? 'Do you want to delete the selected records?' : 'Do you want to delete the voucher/invoice?'"
+                [body]="only4ProformaEstimates ? 'Do you want to delete the voucher(s)?' : selectedItem?.voucherType === 'purchase' ? 'Do you want to delete the selected records?' : 'Do you want to delete the voucher/invoice?'"
                 (cancelCallBack)="deleteConfirmationModel.toggle()"
                 (successCallBack)="deleteVoucher.emit(selectedItem);deleteConfirmationModel.toggle()"></confirm-modal>
         </div>

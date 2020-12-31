@@ -42,7 +42,7 @@
                     <li *ngIf="discount && discount.discountUniqueName && discount.name" class="custom-item pd mr-b05">
                         <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
                             <input class="pull-left" id="{{'discount-control-' + idx}}" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
-                                (change)="change()" (click)="$event.stopPropagation()" />
+                                (change)="change(discount, $event)" (click)="$event.stopPropagation()" />
                             <span class="pull-left text-ellipsis">{{discount.name}}</span>
                         </label>
                     </li>

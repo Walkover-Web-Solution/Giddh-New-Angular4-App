@@ -1,7 +1,7 @@
 export const COMPANY_API = {
     GET_STATE_DETAILS: 'state-details?companyUniqueName=:companyUniqueName',
     SET_STATE_DETAILS: 'state-details',
-    COMPANY_LIST: 'users/:uniqueName/companies',
+    COMPANY_LIST: 'users/:uniqueName/v2/companies',
     CREATE_COMPANY: 'company',
     // SEND_EMAIL: 'company/:companyUniqueName/accounts/bulk-email/?from=:from&to=:to',
     SEND_EMAIL: 'v2/company/:companyUniqueName/groups/:groupUniqueName/email-account-closing-balance?from=:from&to=:to',
@@ -37,4 +37,8 @@ export const COMPANY_API = {
     BULK_PAYMENT_CONFIRM: 'company/:companyUniqueName/bank/payments/confirm?urn=:urn',
     BULK_PAYMENT_RESEND_OTP: 'company/:companyUniqueName/bank/resend-otp?urn=:urn&requestId=:requestId',
 
+    CREATE_NEW_BRANCH: 'company/:companyUniqueName/branch',
+    GET_ALL_BRANCHES: 'company/:companyUniqueName/branch',
+    GET_SIDE_BAR_ITEM: 'company/:companyUniqueName/ui_side_bar_items',
+    GET_COMPANY_USER: '/users/:userUniqueName/company-uer?companyUniqueName=:companyUniqueName'
 };

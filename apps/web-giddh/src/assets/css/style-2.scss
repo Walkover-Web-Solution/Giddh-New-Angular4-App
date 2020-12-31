@@ -1646,25 +1646,35 @@ modal-container.modal {
 
 .custom-datepicker {
     position: relative;
+        .border-radius-2{
+        border-radius: 2px;
+    }
 }
 
 .custom-datepicker i {
     position: absolute;
-    left: 12px;
-    top: 4px;
+    left: 0;
+    top: 0;
     z-index: 9;
     font-size: 17px;
+    color: $gray;
+    height: 36px;
+    width: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid $gainsboro;
+
 }
 
 .custom-datepicker input {
     background: $white !important;
     font-size: 14px;
-    border-radius: 90px;
     position: relative;
     width: 230px !important;
     max-width: 230px;
     display: block;
-    padding-left: 25px !important;
+    padding-left: 30px !important;
     border: 1px solid $gainsboro;
     height: 36px;
 }
@@ -4238,8 +4248,10 @@ select.form-control {
 form label {
     color: $nero;
     font-weight: normal;
-    padding-bottom: 5px;
+    padding-bottom: 0;
     font-size: 14px;
+    line-height: 2.3;
+    margin-bottom: 0 !important;
 }
 
 label {
@@ -4337,7 +4349,7 @@ label {
 }
 
 .col-wrapper:nth-child(1) .isParent {
-    background: $whisper-new !important;
+    background: $whisper !important;
 }
 
 .col-wrapper:last-child ul li a.isParent {
@@ -4889,7 +4901,7 @@ label {
     top: 50px;
 }
 
-.grey-clr {
+.grey-color {
     color: $dark-gray;
 }
 
@@ -4946,7 +4958,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: $whisper;
     content: "";
     top: -15px;
 }
@@ -4974,7 +4986,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: $whisper;
     content: "";
 }
 
@@ -6528,7 +6540,7 @@ table td[class*=col-]:last-child {
 
 .form-header h3 {
     font-size: 18px;
-    font-family: "opensans-bold";
+    font-family: "opensans-semibold";
 }
 
 .form-body {
@@ -7942,7 +7954,7 @@ app-header {
     border-radius: 0;
 }
 
-.account-aside-menu-state2 #close {
+.account-aside-menu-state #close {
     display: block;
     position: fixed;
     right: 472px;
@@ -8073,7 +8085,7 @@ div#getGroupModal {
     animation-fill-mode: both;
 }
 
-.account-aside-menu-state2 .horizontal-form {
+.account-aside-menu-state .horizontal-form {
     padding-bottom: 110px;
 }
 
@@ -8582,6 +8594,7 @@ ul.dropdown-menu p.lead.pd {
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     color: $nobel !important;
+    cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
@@ -8627,7 +8640,9 @@ button.btn.btn-filter {
 .manage-account-popup.full-screen-modal.modal.fade .modal-dialog {
     transform: translateY(0) !important;
     margin: 0 auto;
-    padding:0 !important
+    padding:0 !important;
+    width:100% !important;
+    max-width: 100% !important;
 }
 
 .manage-account-popup.full-screen-modal.modal.fade .width-100{
@@ -8728,7 +8743,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.account-aside-menu-state2 #close {
+.account-aside-menu-state #close {
     display: block;
     position: absolute;
     right: 10px;
@@ -9121,7 +9136,6 @@ input.checkbox-custom[type="checkbox"] {
     padding-top: 15px;
 }
 /*datepicker common css*/
-
 .giddh-datepicker-modal .modal-content {
     background: none !important;
 }
@@ -9465,10 +9479,19 @@ span#HW_badge_cont:nth-child(3) {
 .daterangepicker{
     z-index: 9992 !important;
 }
+.sub-branch-option .bs-tooltip-top{
+    left: -25px !important;
+}
+.switch-branch-wrapper .branch-icon-tooltip .bs-tooltip-top{
+    left: 8px !important;
+    right: 8px !important;
+}
+.sub-branch-option .bs-tooltip-top .arrow::before{
+    right: -22px;
+}
 #rcw-p91-widget-button{
     z-index: 992;
 }
-
 .linked-add{
     .popover{
         width:268px;
@@ -9485,10 +9508,34 @@ span#HW_badge_cont:nth-child(3) {
             font-size: 14px;
             background-color: transparent;
             border-bottom: none;
-            font-weight: bold;
+            font-family: 'opensans-semibold';
         }
         .popover-body {
             padding: 0 15px 15px 15px;
+        }
+    }
+}
+.linked-entities {
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            .item {
+                font-family:'opensans-semibold'
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: $rich-blue;
+            }
+            .icon-favorite-selected {
+                color: $rich-blue;
+            }
         }
     }
 }
@@ -9527,6 +9574,31 @@ span#HW_badge_cont:nth-child(3) {
      }
     .mobile-view-padding{
         padding-left: 10px;
+    }
+}
+.giddh-calendar.show {
+    margin-top: 0;
+}
+.table-amount[disabled]{
+   input{
+        background-color: $whisper-light !important;
+    }
+}
+
+
+#update-ledger-voucher-type-default.disabled-ledger, #update-ledger-assign-tag.disabled-ledger{
+    .sh-select-disabled{
+        background-color: $whisper-light !important;
+        input.selectedVal.form-control, input[disabled]{
+                background-color: $whisper-light !important;
+        }
+    }
+}
+.branch-ho-tooltip{
+    left: -7px !important;
+     .arrow{
+        left: auto !important;
+        right:  7px !important;
     }
 }
 /* responsive */
@@ -9597,6 +9669,14 @@ input.mat-input-element{
     background-color: $midnight-blue;
 }
 /*material datepicker css end*/
+.giddh-limit {
+    &.single-line-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
 .master-custom-tabs.custom-tabs {
     .nav-tabs {
         border-bottom: 1px solid $gainsboro;
@@ -9616,7 +9696,6 @@ input.mat-input-element{
     z-index: 9992; /*for delete custom zIndex modal*/
 }
 /* responsive */
-
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
@@ -10008,6 +10087,11 @@ input.mat-input-element{
 }
 
 @media (max-width: 1280px) {
+    .linked-add{
+        .popover{
+            width: 150px;
+        }
+    }
     .multi-select input.form-control {
         padding-right: 18px !important;
     }
@@ -10032,7 +10116,6 @@ input.mat-input-element{
     .invoice-control .nav.nav-tabs {
         margin-bottom: 15px;
         padding: 0 0px 0 15px !important;
-        background-color: $white;
     }
     #setting-tab .tab-integraton .nav-tabs > li {
         margin-top: 0 !important;

@@ -2,6 +2,7 @@
 <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideSettingMenuState === 'in'">
     <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)"></aside-setting>
 </div>
+
 <div class="container-fluid settings-bg setting-data" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
     (onShortcutPress)="selectTabByShortcut($event)">
     <div class="row">
@@ -28,7 +29,7 @@
                         </div>
                     </div>
                     <div *ngIf="activeTab === 'profile'">
-                        <hamburger-menu [pageHeading]="'Settings > Profile'"></hamburger-menu>
+                        <hamburger-menu></hamburger-menu>
                         <div class="setting-container">
                             <setting-profile #profileComponent></setting-profile>
                             <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto-save float-right">
@@ -86,3 +87,4 @@
         </div>
     </div>
 </div>
+

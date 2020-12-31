@@ -1,14 +1,11 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CompanyActions } from '../../actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -55,6 +52,7 @@ const taxDuration = [
     templateUrl: './setting.trigger.component.html',
     styleUrls: [`./setting.trigger.component.scss`]
 })
+
 export class SettingTriggerComponent implements OnInit {
 
     @ViewChild('triggerConfirmationModel', {static: true}) public triggerConfirmationModel: ModalDirective;
@@ -74,7 +72,6 @@ export class SettingTriggerComponent implements OnInit {
     public accounts: IOption[];
     public groups: IOption[];
     public triggerToEdit = []; // It is for edit toogle
-    public companies: IOption[];
     public entityList: IOption[] = entityType;
     public filterList: IOption[] = filterType;
     public actionList: IOption[] = actionType;
@@ -86,9 +83,7 @@ export class SettingTriggerComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private router: Router,
         private store: Store<AppState>,
-        private _companyActions: CompanyActions,
         private _accountService: AccountService,
         private _settingsTriggersActions: SettingsTriggersActions,
         private _toaster: ToasterService
@@ -105,7 +100,7 @@ export class SettingTriggerComponent implements OnInit {
         // default value assinged bcz currently there is only single option
         this.newTriggerObj.action = 'webhook';
         this.newTriggerObj.scope = 'closing balance';
-        this.store.select(p => p.settings.triggers).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p.settings.triggers), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o) {
                 this.forceClear$ = observableOf({ status: true });
                 this.availableTriggers = _.cloneDeep(o);
@@ -114,29 +109,19 @@ export class SettingTriggerComponent implements OnInit {
 
         this.getFlattenAccounts('');
 
-        this.store.select((state: AppState) => state.general.addAndManageClosed).subscribe((bool) => {
+        this.store.pipe(select((state: AppState) => state.general.addAndManageClosed), takeUntil(this.destroyed$)).subscribe((bool) => {
             if (bool) {
                 this.getFlattenAccounts('');
             }
         });
 
-        this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$)).subscribe((groups) => {
+        this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$)).subscribe((groups) => {
             if (groups) {
                 let groupsRes: IOption[] = [];
                 groups.map(d => {
                     groupsRes.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
                 });
                 this.groups = _.cloneDeep(groupsRes);
-            }
-        });
-
-        this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$)).subscribe((companies) => {
-            if (companies) {
-                let companiesRes: IOption[] = [];
-                companies.map(d => {
-                    companiesRes.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
-                });
-                this.companies = _.cloneDeep(companiesRes);
             }
         });
     }

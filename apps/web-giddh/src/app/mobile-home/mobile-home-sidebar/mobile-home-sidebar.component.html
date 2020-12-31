@@ -6,8 +6,8 @@
             <p class="company-name">{{selectedCompany.name}}</p>
             <p>
                 <small>
-                    <span *ngIf="selectedCompany && selectedCompany?.nameAlias">
-                        ({{selectedCompany?.nameAlias}})
+                    <span *ngIf="selectedCompany && selectedCompany?.alias">
+                        ({{selectedCompany?.alias}})
                     </span> {{selectedCompany.activeFinancialYear?.uniqueName}}
                 </small>
             </p>
@@ -24,6 +24,9 @@
             </li>
             <li>
                 <a href="javascript:;" [routerLink]="['/pages/mobile-search-company']">Switch Company</a>
+            </li>
+            <li>
+                <a href="javascript:;" [routerLink]="['/pages/mobile-search-branch']">Switch Branch</a>
             </li>
             <li>
                 <a href="javascript:;" hidden>User Profile</a>

@@ -736,12 +736,16 @@
                                         <input type="checkbox" [(ngModel)]="invoiceSetting.useCustomInvoiceNumber" class="pull-left estimation-check hide-on-mobile" name="customInvoice" />
                                         <div class="d-inline-flex custom-estimation" *ngIf="invoiceSetting.useCustomInvoiceNumber">
                                             <div class="d-inline-flex position-relative">
-                                                <label>Initial No.</label>
-                                                <input type="text" class="form-control text-right initial-number" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">
+                                                <label>Branch Prefix</label>
+                                                <input type="text" class="form-control" name="branchPrefix" [(ngModel)]="invoiceSetting.branchInvoiceNumberPrefix">
                                             </div>
                                             <div class="d-inline-flex position-relative">
-                                                <label class="prefix-label">Prefix</label>
-                                                <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">
+                                                <label>Sub Prefix</label>
+                                                <input type="text" class="form-control" name="prefixNumber" [(ngModel)]="invoiceSetting.invoiceNumberPrefix">
+                                            </div>
+                                            <div class="d-inline-flex position-relative">
+                                                <label>Initial No.</label>
+                                                <input type="text" class="form-control" name="initialNumber" [(ngModel)]="invoiceSetting.initialInvoiceNumber">
                                             </div>
                                         </div>
                                     </div>

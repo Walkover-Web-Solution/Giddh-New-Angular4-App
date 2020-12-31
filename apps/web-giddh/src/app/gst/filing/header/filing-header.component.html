@@ -17,11 +17,11 @@
                 <div class="text-middle head"> GSTR-1
 
                     <ng-container *ngIf="isMonthSelected">
-                        ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('MMMM YYYY')}})
+                        ({{moment(currentPeriod.from, giddhDateFormat).format('MMMM YYYY')}})
                     </ng-container>
                     <ng-container *ngIf="!isMonthSelected">
-                        ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} -
-                        {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                        ({{moment(currentPeriod.from, giddhDateFormat).format('DD MMM YYYY')}} -
+                        {{moment(currentPeriod.to, giddhDateFormat).format('DD MMM YYYY')}})
                     </ng-container>
                 </div>
                 <div class="font-xs text-muted text-middle font-normal">Details of outward supplies of
@@ -35,7 +35,7 @@
         <div class="col-lg-6 col-md-12 col-xs-12">
             <ul class="list-inline list-middle download-drop-down">
                 <!-- <li>
-            <a href="javscript:void(0)" [routerLink]="['error-sheet']" class="btn grey-clr"><img src="assets/images/gst/error-link.svg" alt=""> Error Sheet</a>
+            <a href="javscript:void(0)" [routerLink]="['error-sheet']" class="btn grey-color"><img src="assets/images/gst/error-link.svg" alt=""> Error Sheet</a>
         </li> -->
                 <li>
                     <div class="btn-group" dropdown #dropdown="bs-dropdown">
@@ -54,7 +54,7 @@
 
                 <li>
 
-                    <div *ngIf="showTaxPro">
+                    <div *ngIf="showTaxPro && isCompany">
 
                         <button class="btn btn-primary authenticate-btn pull-right"
                             [ngClass]="{'btn-success': gstAuthenticated }"
@@ -83,11 +83,11 @@
             <div class="text-middle"> GSTR-2
 
                 <ng-container *ngIf="isMonthSelected">
-                    ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('MMMM YYYY')}})
+                    ({{moment(currentPeriod.from, giddhDateFormat).format('MMMM YYYY')}})
                 </ng-container>
                 <ng-container *ngIf="!isMonthSelected">
-                    ({{moment(currentPeriod.from, 'DD-MM-YYYY').format('DD MMM YYYY')}} -
-                    {{moment(currentPeriod.to, 'DD-MM-YYYY').format('DD MMM YYYY')}})
+                    ({{moment(currentPeriod.from, giddhDateFormat).format('DD MMM YYYY')}} -
+                    {{moment(currentPeriod.to, giddhDateFormat).format('DD MMM YYYY')}})
                 </ng-container>
 
             </div>
@@ -116,7 +116,7 @@
 
 
             <button class="btn btn-primary pull-right" [ngClass]="{'btn-success': gstAuthenticated }"
-                (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro">
+                (click)="toggleSettingAsidePane($event, 'VAYANA')" *ngIf="showTaxPro && isCompany">
                 {{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
             </button>
 

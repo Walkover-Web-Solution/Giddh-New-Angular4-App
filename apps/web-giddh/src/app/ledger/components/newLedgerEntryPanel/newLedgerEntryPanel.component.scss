@@ -105,6 +105,12 @@ span.eligible-ITC {
     width: 78px;
 }
 
+.disabled-item {
+    pointer-events: none;
+}
+.custom-component[disabled] {
+    pointer-events: none;
+}
 .collapse-icons{
     font-size: 10px;
     border: 1px solid $black;

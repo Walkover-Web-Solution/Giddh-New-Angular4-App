@@ -27,7 +27,8 @@
 							<label>is</label>
 							<span class="position-relative form-group">
 								<select class="form-control" formControlName="queryDiffer" required>
-									<option *ngFor="let queryDiffer of queryDiffers" value="{{queryDiffer}}" selected>
+                                    <option value="">Select Query</option>
+									<option *ngFor="let queryDiffer of queryDiffers" value="{{queryDiffer}}">
 										{{queryDiffer}}</option>
 								</select>
 							</span>
@@ -54,7 +55,7 @@
 									</option>
 								</select>
 							</span>
-							<label *ngIf="searchDataSet.controls.length > 1 && !l" class="condition_tag">and</label>
+							<label *ngIf="searchDataSet?.controls?.length > 1 && !l" class="condition_tag">and</label>
 							<!-- <label *ngIf="i === 1 && searchDataSet.controls.length > 2" class="condition_tag">and</label>
               <label *ngIf="i === 2 && searchDataSet.controls.length > 3" class="condition_tag">and</label> -->
 						</div>
@@ -65,10 +66,10 @@
 						<button [disabled]="searchQueryForm.invalid" class="btn btn-success pull-right"
 							(click)="filterData();filterDropdown.hide()">Search
 						</button>
-						<button [disabled]="searchDataSet.controls.length > 3 || searchQueryForm.invalid"
+						<button [disabled]="searchDataSet?.controls?.length > 3 || searchQueryForm.invalid"
 							class="btn btn-default" (click)="addSearchRow()">Add New Query
 						</button>
-						<button *ngIf="searchDataSet.controls.length > 1" class="btn btn-default mr-r1"
+						<button *ngIf="searchDataSet?.controls?.length > 1" class="btn btn-default mr-r1"
 							(click)="removeSearchRow()">
 							Delete
 							Row

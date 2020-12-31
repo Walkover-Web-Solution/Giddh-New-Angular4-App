@@ -1,5 +1,5 @@
 {
-    "gst_unavailable_message" : "Please add GSTIN in company setting to view report.",
+    "gst_unavailable_message" : "Please add GSTIN to your default address in order to view report.",
     "gst_summary_for" : "GST Summary for",
     "month_report_download_note_gstr3b" : "Select month Wise Date to download GSTR3B report.",
     "gstr3b_summary" : "GSTR 3B SUMMARY",

@@ -8,6 +8,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
 import { find } from '../lodash-optimized';
+import { OrganizationType } from '../models/user-login-state';
 
 @Injectable()
 export class GeneralService {
@@ -16,6 +17,10 @@ export class GeneralService {
     // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Stores the branch unique name */
+    public currentBranchUniqueName: string;
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -172,17 +177,19 @@ export class GeneralService {
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
+        if(byteCharacters && byteCharacters.length > 0) {
+            while (offset < byteCharacters.length) {
+                let slice = byteCharacters.slice(offset, offset + sliceSize);
+                let byteNumbers = new Array(slice.length);
+                let i = 0;
+                while (i < slice.length) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                    i++;
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+                offset += sliceSize;
             }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
         }
         return new Blob(byteArrays, { type: contentType });
     }
@@ -448,13 +455,15 @@ export class GeneralService {
         const name = `${cookieName}=`;
         const decodedCookie = decodeURIComponent(document.cookie);
         const availableCookies = decodedCookie.split(';');
-        for (let index = 0; index < availableCookies.length; index++) {
-            let cookie = availableCookies[index];
-            while (cookie.charAt(0) === ' ') {
-                cookie = cookie.substring(1);
-            }
-            if (cookie.indexOf(name) === 0) {
-                return cookie.substring(name.length, cookie.length);
+        if(availableCookies && availableCookies.length > 0) {
+            for (let index = 0; index < availableCookies.length; index++) {
+                let cookie = availableCookies[index];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
             }
         }
         return '';
@@ -717,5 +726,44 @@ export class GeneralService {
         date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
         const expires = "expires=" + date.toUTCString();
         document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
+    }
+
+    /**
+     * Handles the voucher date change modal configuration
+     *
+     * @param {boolean} isVoucherDateSelected
+     * @returns {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getDateChangeConfiguration(isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: 'Yes',
+            cssClass: 'btn btn-success'
+        },
+        {
+            text: 'No',
+            cssClass: 'btn btn-danger'
+        }];
+        const headerText: string = 'Date Change Confirmation';
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return (isVoucherDateSelected) ? {
+            headerText,
+            headerCssClass,
+            messageText: `Do you want to change the entry date as well?`,
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        } : {
+                headerText,
+                headerCssClass,
+                messageText: `Do you want to change the all entries date with this date?`,
+                messageCssClass,
+                footerText: '',
+                footerCssClass,
+                buttons
+            };
     }
 }

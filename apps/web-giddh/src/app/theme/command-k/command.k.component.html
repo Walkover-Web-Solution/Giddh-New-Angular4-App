@@ -52,8 +52,8 @@
                                                 </ng-container>
 											</div>
 											<ng-container *ngIf="r.type === 'ACCOUNT'">
-													<span class="command-hover-text">{{r.uniqueName}}</span>
-												</ng-container>
+												<span class="command-hover-text">{{r.uniqueName}}</span>
+											</ng-container>
 										</div>
 									</div>
 								</a>
@@ -99,7 +99,7 @@
 			</div>
 		</span>
 		<input class="search-element" #searchEle type="text" placeholder="Search" (focus)="handleFocus()"
-			(keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)" />
+			(keydown)="handleKeydown($event)" (keyup)="initSearch($event, $event.target.value)" (paste)="onPasteInSearch()" />
 	</div>
 	<i class="icon-cross close-navigation" (click)="close()"></i>
 </ng-template>

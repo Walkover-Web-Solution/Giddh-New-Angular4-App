@@ -1,5 +1,4 @@
 @import "../../../../../assets/css/color.scss";
-
 .form-header {
     padding: 20px 15px;
     background: $midnight-blue;
@@ -112,10 +111,12 @@ form.gstin-form {
     flex-direction: row-reverse;
     justify-content: flex-end;
 }
+
 .mobile-number-sh-select {
     width: 90px;
     margin-right: 10px;
 }
+
 a.btn-remove {
     padding: 3px 10px;
     background-color: $white;

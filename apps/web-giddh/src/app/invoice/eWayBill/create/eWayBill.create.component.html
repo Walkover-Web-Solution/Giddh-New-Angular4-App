@@ -219,7 +219,7 @@
 
                         <div style="position: relative " class="input ">
                             <input name="transDocDate" placeholder="dd/mm/yyyy " type="text "
-                                [bsConfig]="{dateInputFormat: 'DD-MM-YYYY'} "
+                                [bsConfig]="{dateInputFormat: giddhDateFormat} "
                                 [(ngModel)]="generateEwayBillform.transDocDate" class="form-control " bsDatepicker
                                 style="padding-right: 27px !important; " />
                             <img class="text-light-2 " src="assets/icon/date.svg "
@@ -287,7 +287,7 @@
 
 
 
-<div class="right-modal account-aside-menu-state2">
+<div class="right-modal account-aside-menu-state">
     <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
     <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
         <button type="button" class="btn btn-sm btn-primary" id="close" (click)="OpenTransporterModel()"><i

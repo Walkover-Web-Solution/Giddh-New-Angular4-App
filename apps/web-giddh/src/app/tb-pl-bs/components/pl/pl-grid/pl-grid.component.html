@@ -40,12 +40,12 @@
                                         As Of
                                         <span
                                             *ngIf="plData && plData.dates && plData.dates.to && plData.dates.to!=='Invalid date'">
-                                            {{ moment(plData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
+                                            {{ moment(plData?.dates?.to, giddhDateFormat).toString() | date:'dd MMMM yyyy' }}</span>
                                     </th>
                                     <!-- commented due to new response
                 <th class="col-2 text-right">
                     As Of
-                    <span *ngIf="plData && plData.dates && plData.dates.from && plData.dates.from!=='Invalid date'"> {{ moment(plData?.dates?.from, 'DD-MM-YYYY').add(-1,'days').toString() | date:'dd MMMM yyyy' }}</span>
+                    <span *ngIf="plData && plData.dates && plData.dates.from && plData.dates.from!=='Invalid date'"> {{ moment(plData?.dates?.from, giddhDateFormat).add(-1,'days').toString() | date:'dd MMMM yyyy' }}</span>
                 </th> -->
                                 </tr>
                             </thead>

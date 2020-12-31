@@ -1,7 +1,7 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AppState } from '../../../../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IFlattenGroupsAccountItem, IFlattenGroupsAccountsDetail, IFlattenGroupsAccountsDetailItem } from '../../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { FlyAccountsActions } from '../../../../actions/fly-accounts.actions';
@@ -32,9 +32,9 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(private store: Store<AppState>, private _flyAccountActions: FlyAccountsActions, private cd: ChangeDetectorRef) {
-		this.store.select(state => {
+		this.store.pipe(select(state => {
 			return state.flyAccounts.flattenGroupsAccounts;
-		}).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+		}), takeUntil(this.destroyed$)).subscribe(p => {
 			this.flatAccountWGroupsList = _.cloneDeep(p);
 			this.Items = _.flatten(_.map(this.flatAccountWGroupsList, (g: IFlattenGroupsAccountsDetail): IFlattenGroupsAccountItem[] => {
 				let r: IFlattenGroupsAccountItem[] = [{
@@ -92,19 +92,16 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
 			// this.toggleAccounts(this._noGroups);
 			// this._noGroups = true;
 		});
-		this.isFlyAccountInProcess$ = this.store.select(s => s.flyAccounts.isFlyAccountInProcess).pipe(takeUntil(this.destroyed$));
+		this.isFlyAccountInProcess$ = this.store.pipe(select(s => s.flyAccounts.isFlyAccountInProcess), takeUntil(this.destroyed$));
 
-		this.companyList$ = this.store.select(state => {
+		this.companyList$ = this.store.pipe(select(state => {
 			return state.session.companies;
-		}).pipe(takeUntil(this.destroyed$));
+		}), takeUntil(this.destroyed$));
 	}
 
 	public ngOnChanges(s: SimpleChanges) {
 		if (s.noGroups && !s.noGroups.firstChange && s.noGroups.currentValue !== s.noGroups.previousValue) {
 			this.toggleNoGroups(s.noGroups.currentValue);
-		}
-		if (s.search && !s.search.firstChange && s.search.currentValue !== s.search.previousValue) {
-			// this.searchAccount(s.search.currentValue);
 		}
 		if (s.isGroupToggle) {
 			this.toggleNoGroups(s.noGroups.currentValue);
@@ -112,7 +109,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
 	}
 
 	public ngOnInit() {
-		this.store.select(p => p.session.companyUniqueName).pipe(take(1)).subscribe(a => {
+		this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
 			if (a && a !== '') {
 				this.store.dispatch(this._flyAccountActions.GetflatAccountWGroups());
 			}
