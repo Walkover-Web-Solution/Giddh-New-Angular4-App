@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
@@ -1130,6 +1130,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 stock: data.body.stock,
                                 uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                             };
+                            if (txn.selectedAccount && txn.selectedAccount.stock) {
+                                txn.selectedAccount.stock.rate = Number(this.vm.selectedLedger.exchangeRate > 1 ?
+                                    (txn.selectedAccount.stock.rate / this.vm.selectedLedger.exchangeRate).toFixed(HIGH_RATE_FIELD_PRECISION) : (txn.selectedAccount.stock.rate * this.vm.selectedLedger.exchangeRate).toFixed(HIGH_RATE_FIELD_PRECISION));
+                            }
                             let rate = 0;
                             let unitCode = '';
                             let unitName = '';
@@ -1170,9 +1174,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                     this.shouldShowWarehouse = true;
                                 }
                             }
-                            if (rate > 0 && txn.amount === 0) {
+                            if (rate > 0) {
                                 txn.amount = rate;
                             }
+                            // check if need to showEntryPanel
+                            // first check with opened lager
+                            if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
+                                this.vm.showNewEntryPanel = true;
+                            } else {
+                                // now check if we transactions array have any income/expense/fixed assets entry
+                                let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+                                this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+                            }
+                            this.vm.onTxnAmountChange(txn);
                         }
                     });
                 }
@@ -1199,55 +1213,26 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             stocks: [],
                             uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
+                        delete txn.inventory;
+                        // Non stock item got selected, search if there is any stock item along with non-stock item
+                        const isStockItemPresent = this.isStockItemPresent();
+                        if (!isStockItemPresent) {
+                            // None of the item were stock item, hide the warehouse section which is applicable only for stocks
+                            this.shouldShowWarehouse = false;
+                        }
+                        // check if need to showEntryPanel
+                        // first check with opened lager
+                        if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
+                            this.vm.showNewEntryPanel = true;
+                        } else {
+                            // now check if we transactions array have any income/expense/fixed assets entry
+                            let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+                            this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+                        }
+                        this.vm.onTxnAmountChange(txn);
                     }
                 });
-                delete txn.inventory;
-                // Non stock item got selected, search if there is any stock item along with non-stock item
-                const isStockItemPresent = this.isStockItemPresent();
-                if (!isStockItemPresent) {
-                    // None of the item were stock item, hide the warehouse section which is applicable only for stocks
-                    this.shouldShowWarehouse = false;
-                }
             }
-
-            // check if need to showEntryPanel
-            // first check with opened lager
-            if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
-                this.vm.showNewEntryPanel = true;
-            } else {
-                // now check if we transactions array have any income/expense/fixed assets entry
-                let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-                this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
-            }
-
-            // commented for now after discussion with @shubhendra and @aditya soni
-
-            // if multi-currency is not available then check if selected account allows multi-currency
-            // if (!this.vm.isMultiCurrencyAvailable) {
-            //   this.vm.isMultiCurrencyAvailable = e.additional.currency && e.additional.currency !== this.profileObj.baseCurrency;
-            //
-            //   this.vm.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
-            //
-            //   if (this.vm.isMultiCurrencyAvailable) {
-            //     let currencies: ICurrencyResponse[] = [];
-            //     let multiCurrencyAccCurrency: ICurrencyResponse;
-            //
-            //     this.vm.currencyList$.pipe(take(1)).subscribe(res => currencies = res);
-            //     multiCurrencyAccCurrency = currencies.find(f => f.code === e.additional.currency);
-            //     this.vm.baseCurrencyDetails = {code: multiCurrencyAccCurrency.code, symbol: multiCurrencyAccCurrency.symbol};
-            //
-            //     let rate = await this.getCurrencyRate();
-            //     this.vm.selectedLedger = {...this.vm.selectedLedger, exchangeRate: rate ? rate.body : 1};
-            //
-            //   } else {
-            //     this.vm.baseCurrencyDetails = this.vm.foreignCurrencyDetails;
-            //   }
-            //   this.vm.selectedCurrency = 0;
-            //   this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrency;
-            //   this.assignPrefixAndSuffixForCurrency();
-            // }
-
-            this.vm.onTxnAmountChange(txn);
         }
     }
 
@@ -1715,7 +1700,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public exchangeRateChanged() {
         this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger.exchangeRateForDisplay) || 0;
-        this.vm.inventoryAmountChanged();
+        if (this.vm.stockTrxEntry && this.vm.stockTrxEntry.inventory && this.vm.stockTrxEntry.inventory.unit && this.vm.selectedLedger && this.vm.selectedLedger.unitRates) {
+            const stock = this.vm.stockTrxEntry.unitRate.find(rate => {
+                return rate.stockUnitCode === this.vm.stockTrxEntry.inventory.unit.code;
+            });
+            const stockRate = stock ? stock.rate : 0;
+            this.vm.stockTrxEntry.inventory.rate = Number(this.vm.selectedLedger.exchangeRate > 1 ?
+                (stockRate / this.vm.selectedLedger.exchangeRate).toFixed(this.ratePrecision) : (stockRate * this.vm.selectedLedger.exchangeRate).toFixed(this.ratePrecision));
+            this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
+        } else {
+            this.vm.inventoryAmountChanged();
+        }
     }
 
     /**

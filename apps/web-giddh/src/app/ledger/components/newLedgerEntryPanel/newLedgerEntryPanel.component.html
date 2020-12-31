@@ -57,7 +57,7 @@
                             <input [disabled]="isReadOnly" type="text" id="ledger-price" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
-                                [mask]="inputMaskFormat" [customDecimalPlaces]="ratePrecision"
+                                [mask]="inputMaskFormat" [customDecimalPlaces]="highPrecisionRate"
                                 (ngModelChange)="changePrice($event)" name="unitPrice"
                                 (keyup)="isInclusiveEntry = false" class="form-control text-right" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
