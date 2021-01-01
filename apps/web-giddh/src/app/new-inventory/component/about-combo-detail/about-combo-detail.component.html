@@ -1,7 +1,7 @@
 <div class="container-fluid static-tabs-on-page">
     <div class="about-group pt-15">
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-10 col-md-6">
                 <div class="group-detail d-flex w-100 align-items-center">
                     <div class="group-thumbnail mr-15">
                         <img src="../../../../assets/images/Login-Page-Image.png" alt="group-icon">
@@ -12,22 +12,25 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-6 group-detail-right-btn">
+            <div class="col-2 col-md-6 group-detail-right-btn">
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
                     <div class="btn-group" dropdown>
-                        <button id="more-btn-inventory" dropdownToggle type="button"
-                            class="btn btn-primary dropdown-toggle" aria-controls="more-inventory-dropdown">
+                        <button id="more-btn-inventory" *ngIf="!isMobileScreen" dropdownToggle type="button"
+                            class="btn btn-primary dropdown-toggle bdr-radius-50" aria-controls="more-inventory-dropdown">
                             More <span class="caret"></span>
                         </button>
+                        <i class="icon-dots-three-vertical pd" *ngIf="isMobileScreen" dropdownToggle></i>
                         <ul id="more-inventory-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="more-btn-inventory">
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" [routerLink]="['/pages/new-inventory/create-new-inventory']">Bulk Edit</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-
+                            <li class="divider dropdown-divider" *ngIf="isMobileScreen"></li>
+                            <li role="menuitem"><a class="dropdown-item text-primary" *ngIf="isMobileScreen" href="javascript:void(0);">+ Add
+                                    Inventory</a></li>
                         </ul>
                     </div>
-                    <button class="btn btn-sky-blue" [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
+                    <button id="combo-create-inventory" class="btn btn-sky-blue bdr-radius-50" [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
                     <i [routerLink]="['/pages/new-inventory']" class="icon-cross pd cursor-pointer"></i>
                 </div>
             </div>
@@ -99,8 +102,8 @@
     <div class="sticky-footer create-group-footer">
         <div class="footer-wrapper">
             <div class="button-group">
-                <button class="btn btn-primary">Clear</button>
-                <button class="btn btn-success disable">Update Group</button>
+                <button id="about-clear-btn" class="btn btn-primary bdr-radius-50 minwidth-100">Clear</button>
+                <button id="about-update-group" class="btn btn-success disable bdr-radius-50">Update Group</button>
             </div>
         </div>
     </div>

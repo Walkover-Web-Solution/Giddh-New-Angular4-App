@@ -1,7 +1,7 @@
 <div class="add-bulk-item-modal">
     <div class="modal-header">
         <h4 class="modal-title pull-left">Add bulk items</h4>
-        <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+        <button type="button" id="close-btn" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -11,7 +11,7 @@
             <div class="col-md-6 col-sm-6">
                 <div class="left-content">
                     <div class="search-box">
-                        <input type="text" placeholder="Search stock" class="pr-1 pl-1 form-control">
+                        <input type="text" id="search-input" placeholder="Search stock" class="pr-1 pl-1 form-control">
                     </div>
                     <div class="product-list">
                         <div class="single-product-wrapper cp">
@@ -47,16 +47,16 @@
                                     <div class="input-group add-item-btn">
 
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default btn-number minus-btn">
+                                            <button id="minus-btn" type="button" class="btn btn-default btn-number minus-btn">
                                                 <span class="fa fa-minus"></span>
                                             </button>
                                         </span>
 
-                                        <input type="number" name="quantity" class="form-control input-number" value="1"
+                                        <input type="number" id="input-number" name="quantity" class="form-control input-number" value="1"
                                             min="1">
 
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default btn-number">
+                                            <button id="plus-btn" type="button" class="btn btn-default btn-number">
                                                 <span class="fa fa-plus"></span>
                                             </button>
                                         </span>
@@ -77,10 +77,10 @@
                         <hr>
 
                         <div class="btn-group bulk-item-btn-group">
-                            <button class="btn btn-sm btn-success" type="button">
+                            <button id="add-btn" class="btn btn-sm btn-success bdr-radius-50 minwidth-100" type="button">
                                 Add
                             </button>
-                            <button class="btn btn-sm btn-primary" (click)="modalRef.hide()" type="button">Cancel
+                            <button id="cancel-btn" class="btn btn-sm btn-primary bdr-radius-50 minwidth-100" (click)="modalRef.hide()" type="button">Cancel
                             </button>
                         </div>
 

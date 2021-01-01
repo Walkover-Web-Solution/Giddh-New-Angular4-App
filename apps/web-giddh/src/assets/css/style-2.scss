@@ -55,7 +55,11 @@
 .basic {
     background: $white;
 }
+
 @media (max-width: 768px) {
+    .text-left-sm{
+        text-align: left !important;
+    }
     .on-mobile-view tbody tr {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
         background: $white;
@@ -1663,7 +1667,7 @@ modal-container.modal {
     font-size: 17px;
     color: $gray;
     height: 36px;
-    width: 32px;
+    width: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -9614,6 +9618,17 @@ span#HW_badge_cont:nth-child(3) {
 .sub-detail-sidebar.fixed-sidebar-top {
     top: 70px;
 }
+button#more-btn-inventory, #more-btn-inventory-mobile{
+    min-width: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 50px !important;
+
+}
+.menu_open .inventory-sidebar{
+ left: 0 !important;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -9693,6 +9708,14 @@ input.mat-input-element{
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+}
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button{
+    width: 36px !important;
+    height: 36px !important;
+    margin-right: 0;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
 }
 /*material datepicker css end*/
     .master-custom-tabs.custom-tabs {
@@ -10133,6 +10156,7 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+
     .sub-detail-sidebar.fixed-sidebar-top{
         top: 100px;
     }
@@ -10774,6 +10798,9 @@ input.mat-input-element{
     }
 
     @media (max-width: 1024px) {
+        .dropdown-menu > li > a{
+            padding: 7px 10px;
+        }
         .sm-d-block {
             display: block;
         }

@@ -5,10 +5,10 @@
                 <tr>
                     <th colspan="3">
                         <div class="custom-datepicker">
-                            <div class="form-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i class="icon-calender calendar-addon"></i>
-                                <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker border-radius-2" placeholder="Enter Date" />
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <i class="icon-calender calendar-addon bdr-radius-50"></i>
+                                <input type="text" id="select-date" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker bdr-radius-50" placeholder="Enter Date" />
                             </div>
                         </div>
                     </th>

@@ -19,11 +19,13 @@
     .custom-field-page{
        .custom-field-header{
            flex-direction: column;
+           justify-content: flex-start !important;
+           align-items: flex-start !important;
            h4{
                margin-bottom: 10px;
            }
            .btn{
-            width: 150px;
+            width: 100%;
            }
        }
     }

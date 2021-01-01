@@ -70,9 +70,10 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-4 col-lg-4 col-xl-6 col-12 pl-5">
+                        <div class="col-md-4 col-lg-4 col-xl-6 col-12">
                             <div class="add-image">
                                 <img src="../../../../assets/images/add-image.svg">
+                                <i class="icon-add-image"></i>
                             </div>
                         </div>
                 </div>
@@ -600,7 +601,7 @@
                                             <label>Input Stock Details</label>
                                         </div>
                                         <div class="col-lg-6 col-sm-6 col-xl-4">
-                                            <input type="text" class="form-control" placeholder="Stock Name">
+                                            <input type="text" id="input-stock-detail" class="form-control" placeholder="Stock Name">
                                         </div>
                                         <div class="col-lg-6 col-sm-6 col-xl-4 show-on-mobile">
                                             <label>&nbsp;</label>
@@ -929,9 +930,9 @@
                                 <td width="3%">
                                     <img src="../../../../assets/images/add-image.svg" width="60" height="60">
                                 </td>
-                                <td width="20%"><input type="text" class="form-control" placeholder="Product Name/Service"></td>
-                                <td width="20%"><input type="text" class="form-control" placeholder="Unit"></td>
-                                <td width="16%"><input type="text" class="form-control" value="2"></td>
+                                <td width="20%"><input id="select-product" type="text" class="form-control" placeholder="Product Name/Service"></td>
+                                <td width="20%"><input id="unit-field" type="text" class="form-control" placeholder="Unit"></td>
+                                <td width="16%"><input id="value-field" type="text" class="form-control" value="2"></td>
                                 <td width="20%">0.00</td>
                                 <td width="20%" class="relative">0.00
                                     <div class="delete-row cursor-pointer">
@@ -1170,7 +1171,7 @@
                 </div>
                 <div class="add-new-rows my-3">
                     <i class="icon-plus text-primary pd cursor-pointer mr-1"></i>
-                    <span class="d-flex align-items-center"><input class="form-control mr-1" placeholder="0">
+                    <span class="d-flex align-items-center"><input class="form-control mr-1" id="fill-number" placeholder="0">
                         <span class="font-14">More rows at bottom</span>
                     </span>
                 </div>
@@ -1183,8 +1184,8 @@
     <div class="inner-content-footer">
         <div class="d-flex">
             <div class="button-group">
-                <button class="btn btn-primary"> Clear </button>
-                <button class="btn btn-success" disabled> Create New </button>
+                <button id="clear-btn" class="btn btn-primary minwidth-100 bdr-radius-50"> Clear </button>
+                <button id="create-new-btn" class="btn btn-success minwidth-100 bdr-radius-50" disabled> Create New </button>
             </div>
         </div>
     </div>

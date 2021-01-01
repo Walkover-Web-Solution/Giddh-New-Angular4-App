@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../services/general.service';
@@ -16,7 +16,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/d
 })
 
 export class NewInventoryComponent implements OnInit {
-
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideInventorySidebarMenuState: string = 'in';
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     /* More button dropdown */
@@ -47,6 +48,7 @@ export class NewInventoryComponent implements OnInit {
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     /*datepicker funcation*/
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -154,6 +156,21 @@ export class NewInventoryComponent implements OnInit {
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
+
+    /**
+    * This will toggle the settings popup
+    *
+    * @param {*} [event]
+    * @memberof SettingsComponent
+    */
+    public toggleSettingPane(event?): void {
+        this.toggleBodyClass();
+
+        if (this.isMobileScreen && event && this.asideInventorySidebarMenuState === 'in') {
+            this.asideInventorySidebarMenuState = "out";
+        }
+    }
+
     constructor(
         private generalService: GeneralService,
         private modalService: BsModalService,

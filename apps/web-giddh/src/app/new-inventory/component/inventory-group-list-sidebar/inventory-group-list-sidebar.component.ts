@@ -1,13 +1,13 @@
 import { Component, OnInit, HostListener} from '@angular/core';
 
 @Component({
-    selector: 'new-inventory-sidebar',
-    templateUrl: './new-inventory-sidebar.component.html',
-    styleUrls: ['./new-inventory-sidebar.component.scss'],
+    selector: 'inventory-group-list-sidebar',
+    templateUrl: './inventory-group-list-sidebar.component.html',
+    styleUrls: ['./inventory-group-list-sidebar.component.scss'],
 
 })
 
-export class NewInventorySidebar implements OnInit {
+export class InventoryGroupListSidebar  implements OnInit {
     /*sub sidebar open*/
     public subSidebarOpen: boolean = true;
 

@@ -13,7 +13,7 @@ import { CreateNewItemComponent } from './component/create-new-item/create-new-i
 import { CreateNewUnitComponent } from './component/create-unit/create-unit.component';
 import { CreateComboComponent } from './component/create-combo/create-combo.component';
 import { AboutGroupDetailComponent } from './component/about-group-detail/about-group-detail.component';
-import { NewInventorySidebar } from './component/new-inventory-sidebar/new-inventory-sidebar.component';
+import { InventoryGroupListSidebar } from './component/inventory-group-list-sidebar/inventory-group-list-sidebar.component';
 import { StockGroupListComponent } from './component/stock-group-list/stock-group-list.component'
 import { ProductServiceListComponent } from './component/inventory-product-service-list/inventory-product-service-list.component';
 import { AboutProductServiceDetailComponent } from './component/about-product-service-detail/about-product-service-detail.component';
@@ -30,6 +30,7 @@ import { InventoryAdjustmentReasonAside } from './component/inventory-adjustment
 import { InventoryAdjustmentBulkEntryComponent } from './component/inventory-adjust-bulk-entry/inventory-adjust-bulk-entry.component';
 import { CreateNewInventoryComponent } from './component/create-new-inventory-component/create-new-inventory.component';
 import { NewInventoryAdavanceSearch } from './component/new-inventory-advance-search/new-inventory-advance-search.component';
+import { InventorySidebarComponent } from './component/inventory-sidebar/inventory-sidebar.component';
 @NgModule({
     declarations: [
         NewInventoryComponent,
@@ -40,7 +41,7 @@ import { NewInventoryAdavanceSearch } from './component/new-inventory-advance-se
         CreateNewItemComponent,
         CreateNewUnitComponent,
         AboutGroupDetailComponent,
-        NewInventorySidebar,
+        InventoryGroupListSidebar,
         StockGroupListComponent,
         ProductServiceListComponent,
         AboutProductServiceDetailComponent,
@@ -57,7 +58,8 @@ import { NewInventoryAdavanceSearch } from './component/new-inventory-advance-se
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
-        NewInventoryAdavanceSearch
+        NewInventoryAdavanceSearch,
+        InventorySidebarComponent
     ],
     imports:[
         NewInventoryRoutingModule,
@@ -75,7 +77,7 @@ import { NewInventoryAdavanceSearch } from './component/new-inventory-advance-se
         CreateNewItemComponent,
         CreateNewUnitComponent,
         AboutGroupDetailComponent,
-        NewInventorySidebar,
+        InventoryGroupListSidebar,
         StockGroupListComponent,
         ProductServiceListComponent,
         AboutProductServiceDetailComponent,
@@ -92,7 +94,8 @@ import { NewInventoryAdavanceSearch } from './component/new-inventory-advance-se
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
-        NewInventoryAdavanceSearch
+        NewInventoryAdavanceSearch,
+        InventorySidebarComponent
     ]
 })
 export class NewInventoryModule { }

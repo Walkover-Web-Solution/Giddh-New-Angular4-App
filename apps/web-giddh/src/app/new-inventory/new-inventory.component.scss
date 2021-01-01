@@ -35,7 +35,7 @@
             }
     }
 
-    input{
+    input, sh-select{
         min-width: 228px;
         text-align: left;
         &.search-group, &.giddh-datepicker{
@@ -54,9 +54,8 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 36px;
+                width: 38px;
                 height: 36px;
-                background-color: $white;
                 padding: 0;
                 margin: 0;
                 border: none;
@@ -67,6 +66,19 @@
                 }
             }
         }
+}
+input, sh-select::ng-deep input{
+    border-radius: 50px !important;
+}
+button{
+    border-radius: 50px !important;
+}
+button#more-btn-inventory{
+    min-width: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 50px !important;
 }
 @media(max-width:1270px) and (min-width:768px){
     .inventory-header{
@@ -91,6 +103,9 @@
     .advance-search-btn{
         position: absolute;
         top: 72px;
-        left: 90px;
+        left: 15px;
+    }
+    button#more-btn-inventory-mobile{
+        margin-left: 45px;
     }
 }

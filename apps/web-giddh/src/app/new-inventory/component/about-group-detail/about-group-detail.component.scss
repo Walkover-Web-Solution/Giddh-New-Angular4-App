@@ -70,6 +70,12 @@
             }
         }
     }
+    .custom-datepicker{
+        input{
+            text-align: left;
+            padding-left: 40px !important;
+        }
+    }
 }
 @media(max-width:1019px){
   .stock-group-footer{
@@ -88,17 +94,32 @@
     .right-side-content{
         padding-left: 0;
     }
-    .group-detail-right-btn{
-        background-color: $solitude;
-        margin-top: 15px;
-        padding-top: 8px;
-        padding-bottom: 8px;
-        border-top: 1px solid $gainsboro;
-        border-bottom: 1px solid $gainsboro;
+    .inventory-about-page{
+    .about-group{
+        .group-detail{
+            align-items: flex-start !important;
+            .group-thumbnail{
+                width: 40px;
+                height: 40px;
+                img{
+                    object-fit: contain;
+                }
+            }
+            .group-name{
+                h4{
+                    font-size: 14px;
+                }
+            }
+        }
     }
+}
     .custom-tabs::ng-deep .nav-tabs{
         padding-left: 0 !important;
         margin-left: 0;
         margin-top:5px;
+    }
+    ul#more-inventory-dropdown{
+        right: 0 !important;
+        left: auto !important;
     }
 }

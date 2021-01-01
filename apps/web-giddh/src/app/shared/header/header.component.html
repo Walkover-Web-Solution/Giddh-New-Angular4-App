@@ -737,6 +737,9 @@
         <aside-setting [ngClass]="{'setting-sidebar': isMobileSidebar}" (closeAsideEvent)="toggleSidebarPane(false, false)"></aside-setting>
     </perfect-scrollbar>
 </div>
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'" (clickOutside)="closeSettingPaneOnOutsideClick()">
+    <inventory-sidebar class="inventory-sidebar" [ngClass]="{'inventory-sidebar': isMobileSidebar}" (closeAsideEvent)="toggleSidebarPane(false, false)"></inventory-sidebar>
+</div>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">

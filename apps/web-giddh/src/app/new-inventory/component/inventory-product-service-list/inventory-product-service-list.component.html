@@ -3,6 +3,7 @@
         <table class="table giddh-table on-mobile-view">
             <thead>
                 <tr>
+                    <th>&nbsp;</th>
                     <th>Name</th>
                     <th>Type</th>
                     <th>Group</th>
@@ -16,21 +17,23 @@
             </thead>
             <tbody>
                 <tr>
+                    <td data-title="Select">
+                        <div class="d-block text-center text-left-sm">
+                            <input type="checkbox" id="select-group">
+                        </div>
+                    </td>
                     <td data-title="Name">
-                        <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-product-service-detail']">
                         <div class="product-name-image d-flex">
-                            <div class="d-flex">
-                                <input type="checkbox">
-                                <div class="mx-2">
-                                    <img src="../../../../assets/images/Login-Page-Image.png">
-                                </div>
-                            </div>
                             <div>
-                                <p>Product Name</p>
-                                <p class="text-gray">(34 Items)</p>
+                                <img src="../../../../assets/images/add-image.svg">
+                            </div>
+                            <div class="cursor-pointer mx-2">
+                                <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-product-service-detail']">
+                                    <p>Product Name</p>
+                                    <p class="text-gray">(34 Items)</p>
+                                </a>
                             </div>
                         </div>
-                        </a>
                     </td>
                     <td data-title="Type">Product</td>
                     <td data-title="Group">Group 1</td>

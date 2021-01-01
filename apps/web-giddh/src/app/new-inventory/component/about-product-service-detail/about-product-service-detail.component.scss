@@ -96,16 +96,13 @@
     .select-product-type{
         padding-bottom: 10px;
     }
-    .group-detail-right-btn{
-        background-color: $solitude;
-        margin-top: 15px;
-        padding-bottom: 8px;
-        border-top: 1px solid $gainsboro;
-        border-bottom: 1px solid $gainsboro;
-    }
     .custom-tabs::ng-deep .nav-tabs{
         padding-left: 0 !important;
         margin-left: 0;
         margin-top:5px;
+    }
+    ul#more-inventory-dropdown{
+        right: 0 !important;
+        left: auto !important;
     }
 }

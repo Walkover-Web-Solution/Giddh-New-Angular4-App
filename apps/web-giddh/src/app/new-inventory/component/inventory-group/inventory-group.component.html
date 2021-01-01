@@ -3,6 +3,7 @@
         <table class="table giddh-table on-mobile-view">
             <thead>
                 <tr>
+                    <th>&nbsp;</th>
                     <th>Group</th>
                     <th>Parent Group</th>
                     <th>Top Sold Item</th>
@@ -13,15 +14,17 @@
             </thead>
             <tbody>
                 <tr>
+                    <td data-title="Select">
+                        <div class="d-block text-center text-left-sm">
+                            <input type="checkbox" id="select-group">
+                        </div>
+                    </td>
                     <td data-title="Group">
                         <div class="product-name-image d-flex">
-                            <div class="d-flex">
-                                <input type="checkbox">
-                                <div class="mx-2">
-                                    <img src="../../../../assets/images/Login-Page-Image.png">
-                                </div>
+                            <div>
+                                <img src="../../../../assets/images/add-image.svg">
                             </div>
-                            <div class="cursor-pointer" >
+                            <div class="cursor-pointer mx-2">
                                 <a  href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']">
                                     <p>Product Name</p>
                                     <p class="text-gray">(34 Items)</p>
@@ -36,15 +39,19 @@
                     <td data-title="Negative Stock">Dummy Product Name</td>
                 </tr>
                 <tr>
+                    <td data-title="Select">
+                        <div class="d-block text-center text-left-sm">
+                            <input type="checkbox" id="select-product-checkbox">
+                        </div>
+                    </td>
                     <td data-title="Group">
                         <div class="product-name-image d-flex">
                             <div class="d-flex">
-                                <input type="checkbox">
-                                <div class="mx-2">
+                                <div>
                                     <img src="../../../../assets/images/add-image.svg">
                                 </div>
                             </div>
-                            <div>
+                            <div class="cursor-pointer mx-2">
                                 <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']">
                                     <p>Product Name</p>
                                     <p class="text-gray">(34 Items)</p>

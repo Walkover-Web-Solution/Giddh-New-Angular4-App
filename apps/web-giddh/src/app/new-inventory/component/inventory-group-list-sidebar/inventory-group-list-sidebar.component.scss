@@ -63,8 +63,11 @@
 }
 @media(max-width:767px){
     .sub-detail-sidebar{
-        z-index: 3;
+        z-index: 10;
         height: 100vh;
         box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    }
+    .sidebar-handle{
+        z-index: 10;
     }
 }

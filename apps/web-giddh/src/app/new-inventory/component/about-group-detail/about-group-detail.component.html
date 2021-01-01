@@ -1,7 +1,7 @@
 <div class="container-fluid inventory-about-page static-tabs-on-page">
     <div class="about-group pt-15">
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-10 col-md-6">
                 <div class="group-detail d-flex w-100 align-items-center">
                     <div class="group-thumbnail mr-15">
                         <img src="../../../../assets/images/Login-Page-Image.png" alt="group-icon">
@@ -12,22 +12,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-6 group-detail-right-btn">
+            <div class="col-2 col-md-6 group-detail-right-btn">
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
                     <div class="btn-group" dropdown>
-                        <button id="more-btn-inventory" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                        <button id="more-btn-inventory" *ngIf="!isMobileScreen" dropdownToggle type="button" class="btn btn-primary dropdown-toggle bdr-radius-50"
                             aria-controls="more-inventory-dropdown">
                             More <span class="caret"></span>
                         </button>
+                        <i class="icon-dots-three-vertical pd" *ngIf="isMobileScreen" dropdownToggle></i>
                         <ul id="more-inventory-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="more-btn-inventory">
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" [routerLink]="['/pages/new-inventory/adjust-inventory']">Adjust Group</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
-
+                            <li class="divider dropdown-divider" *ngIf="isMobileScreen" ></li>
+                            <li role="menuitem"><a class="dropdown-item text-primary" *ngIf="isMobileScreen" href="javascript:void(0);">+ Add Inventory</a></li>
                         </ul>
                     </div>
-                    <button class="btn btn-sky-blue" [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
+                    <button class="btn btn-sky-blue bdr-radius-50" *ngIf="!isMobileScreen" [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
                     <i class="icon-cross pd cursor-pointer" [routerLink]="['/pages/new-inventory']"></i>
                 </div>
             </div>
@@ -91,10 +93,18 @@
         </tab>
         <tab heading="Sub-details">
             <div class="d-flex">
-                <new-inventory-sidebar></new-inventory-sidebar>
+                <inventory-group-list-sidebar></inventory-group-list-sidebar>
                 <div class="right-side-content w-100 d-flex flex-column">
                     <p class="font-14 mb-15">Following is the list of items created in <strong>Group Dummy Name Furniture</strong>
-                    <i class="icon-info pd ml-1"></i></p>
+                        <i class="icon-info pd ml-1"></i>
+                    </p>
+                    <div class="d-flex mb-15">
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon bdr-radius-50"></i>
+                            <input type="text" id="select-date-group" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker bdr-radius-50" placeholder="Enter Date" />
+                        </div>
+                    </div>
                     <!-- table for sub detail content of about group -->
                     <table class="table giddh-table on-mobile-view">
                         <thead>
@@ -147,8 +157,8 @@
 <div class="sticky-footer create-group-footer">
     <div class="footer-wrapper">
         <div class="button-group">
-            <button class="btn btn-primary">Clear</button>
-            <button class="btn btn-success disable">Update Group</button>
+            <button id="about-group-clear-btn" class="btn btn-primary bdr-radius-50 minwidth-100">Clear</button>
+            <button id="about-under-btn" class="btn btn-success disable bdr-radius-50">Update Group</button>
         </div>
     </div>
 </div>

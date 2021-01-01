@@ -66,6 +66,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideHelpSupportMenuState: string = 'out';
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
+
+    public asideInventorySidebarMenuState: string = 'out';
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
 
@@ -850,6 +852,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toggleHelpSupportPane(show: boolean): void {
         setTimeout(() => {
             this.asideSettingMenuState = 'out';
+            this.asideInventorySidebarMenuState = 'out'
             document.querySelector('body').classList.remove('mobile-setting-sidebar');
             this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
             this.toggleBodyClass();
@@ -868,14 +871,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isMobileSidebar = isMobileSidebar;
             this.asideHelpSupportMenuState = 'out';
             this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
+            this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out')? 'in' : 'out';
             this.toggleBodyClass();
 
-            if (this.asideSettingMenuState === "in") {
+            if (this.asideSettingMenuState === "in" && this.asideInventorySidebarMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
             } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-        }, (this.asideSettingMenuState === 'out') ? 100 : 0);
+        }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
+
     }
 
     /**
@@ -885,8 +890,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public closeSettingPaneOnOutsideClick(): void {
         setTimeout(() => {
-            if (this.asideSettingMenuState === "in") {
+            if (this.asideSettingMenuState === "in" && this.asideInventorySidebarMenuState === "in") {
                 this.asideSettingMenuState = 'out';
+                this.asideInventorySidebarMenuState = 'out';
             }
         }, 50);
     }
@@ -1829,11 +1835,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-            // else if (document.getElementsByTagName("tabset") &&
-            //     document.getElementsByTagName("tabset").length > 0 && !document.getElementsByClassName("create-new-inventory-page") )
-            //     { document.querySelector('body').classList.add('inventory-tab-static');
-            //       document.querySelector('body').classList.remove('page-has-tabs');
-            //     }
+            /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
+            else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0 ){
+                this.sideBarStateChange(true);
+                document.querySelector('body').classList.add('inventory-sidebar');
+                document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-user-page');
+            }
 
             else {
                 document.querySelector('body').classList.remove('page-has-tabs');

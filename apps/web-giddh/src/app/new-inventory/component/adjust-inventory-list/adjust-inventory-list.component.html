@@ -5,11 +5,11 @@
 <div class="container-fluid mt-15 adjust-inventory-list-page">
     <div class="d-flex justify-content-between adjust-inventory-header">
         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-            <i class="icon-calender calendar-addon"></i>
-            <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                class="giddh-datepicker date-range-picker border-radius-2" placeholder="Enter Date" />
+            <i class="icon-calender calendar-addon bdr-radius-50"></i>
+            <input type="text" id="select-date" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                class="giddh-datepicker date-range-picker bdr-radius-50" placeholder="Enter Date" />
         </div>
-        <button class="btn btn-sky-blue mr-0" (click)="adjustInventory()">+ Add Adjustment</button>
+        <button id="add-adjustment-btn" class="btn btn-sky-blue mr-0 bdr-radius-50" (click)="adjustInventory()">+ Add Adjustment</button>
     </div>
     <div class="custom-field-list mt-15">
         <div class="table-responsive">

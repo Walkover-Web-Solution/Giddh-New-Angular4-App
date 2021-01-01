@@ -54,6 +54,12 @@
             border: 1px solid $gainsboro;
             vertical-align: top !important;
         }
+        .add-line-bulk-item{
+            color: $gray;
+            a{
+                color: $deep-sky-blue;
+            }
+        }
     }
 }
 .inventory-footer{

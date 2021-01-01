@@ -1,7 +1,7 @@
 <div class="container-fluid inventory-about-page static-tabs-on-page">
     <div class="about-group pt-15">
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-10 col-md-6">
                 <div class="group-detail d-flex w-100 align-items-center">
                     <div class="group-thumbnail mr-15">
                         <img src="../../../../assets/images/Login-Page-Image.png" alt="group-icon">
@@ -13,9 +13,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-6 group-detail-right-btn">
+            <div class="col-2 col-md-6 group-detail-right-btn">
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
-                    <div class="download-sheet">
+                    <div class="download-sheet" *ngIf="!isMobileScreen">
                         <div class="btn-group" dropdown>
                             <button id="download-sheet" dropdownToggle type="button" class="btn btn-download dropdown-toggle"
                                 aria-controls="download-inventory-sheet">
@@ -27,22 +27,28 @@
                                 <li role="menuitem"><a class="dropdown-item" href="#">XLS</a></li>
                             </ul>
                         </div>
-
                     </div>
                     <div class="btn-group" dropdown>
-                        <button id="more-btn-inventory" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                        <button id="more-btn-inventory" *ngIf="!isMobileScreen" dropdownToggle type="button" class="btn btn-primary dropdown-toggle bdr-radius-50"
                             aria-controls="more-inventory-dropdown">
                             More <span class="caret"></span>
                         </button>
+                        <i class="icon-dots-three-vertical pd" *ngIf="isMobileScreen" dropdownToggle></i>
                         <ul id="more-inventory-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="more-btn-inventory">
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" [routerLink]="['/pages/new-inventory/adjust-inventory']">Adjust Product or service</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                            <li class="divider dropdown-divider" *ngIf="isMobileScreen"></li>
+                            <li role="menuitem"><a class="dropdown-item" *ngIf="isMobileScreen" href="#"> Download CSV</a></li>
+                            <li role="menuitem"><a class="dropdown-item" *ngIf="isMobileScreen" href="#"> Download XLS</a></li>
+                            <li class="divider dropdown-divider" *ngIf="isMobileScreen"></li>
+                            <li role="menuitem"><a class="dropdown-item text-primary" *ngIf="isMobileScreen" href="javascript:void(0);">+ Add
+                                    Inventory</a></li>
 
                         </ul>
                     </div>
-                    <button class="btn btn-sky-blue" [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
+                    <button id="create-inventory-btn" class="btn btn-sky-blue bdr-radius-50" *ngIf="!isMobileScreen" [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
                     <i class="icon-cross pd cursor-pointer" [routerLink]="['/pages/new-inventory']"></i>
                 </div>
             </div>

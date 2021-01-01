@@ -1,3 +1,9 @@
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+    <inventory-sidebar class="inventory-sidebar"></inventory-sidebar>
+</div>
+
+<!-- *ngIf="asideSettingMenuState === 'in'" -->
+
 <div class="relative new-inventory-page absolute-tab">
     <hamburger-menu></hamburger-menu>
     <tabset class="custom-tabs">
@@ -6,7 +12,7 @@
                 <div class="mr-15">
                     <div class="button-group relative" dropdown placement="top left">
                         <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle" aria-controls="dropdown-basic" tooltip="Customised Columns">
-                            <i class="icon-options"></i>
+                            <i class="icon-options bdr-radius-50"></i>
                         </button>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu"
                             aria-labelledby="button-basic">
@@ -134,14 +140,13 @@
                     </div>
                 </div>
                 <div class="mr-15">
-
                     <span class="input-group" [ngClass]="{'full-width-input-group': !dateRangFullWidth}">
                         <div class="custom-datepicker">
-                            <i class="icon-calender calendar-addon" (click)="expandDateRang()"></i>
+                            <i class="icon-calender calendar-addon bdr-radius-50" (click)="expandDateRang()"></i>
                             <div (click)="showGiddhDatepicker($event)">
-                                <input type="text" name="selectedDateRange" [ngClass]="{'full-width': !dateRangFullWidth}"
+                                <input type="text" name="selectedDateRange" id="select-date" [ngClass]="{'full-width': !dateRangFullWidth}"
                                     [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker border-radius-2" />
+                                    class="giddh-datepicker date-range-picker bdr-radius-50" />
                             </div>
                         </div>
 
@@ -150,12 +155,15 @@
                 <div class="mr-15" *ngIf="!isMobileScreen">
                     <span class="input-group" [ngClass]="{'full-width-search-group': !inputFullWidth}">
                         <input *ngIf="!inputFullWidth" [ngClass]="{'full-width': !inputFullWidth}"
-                            type="text" class="form-control search-group" placeholder="Group">
-                            <i class="icon-search1 pos-abs" (click)="searhcGroup()"></i>
+                            type="text" id="select-date-mobile-view" class="form-control search-group bdr-radius-50" placeholder="Group">
+                            <i class="icon-search1 pos-abs bdr-radius-50" (click)="searhcGroup()"></i>
                     </span>
                 </div>
-                <div class="mr-15" *ngIf="!isMobileScreen"><input type="text" class="form-control" placeholder="Search here"> </div>
-                <div class="mr-15 advance-search-btn"> <i class="icon-advance-filter" (click)="openModal(inventoryAdvanceSearch)" tooltip="Advance Filter"></i> </div>
+                <div class="mr-15" *ngIf="!isMobileScreen">
+                    <sh-select placeholder="Search Branch Alice" id="select-branch-alice"></sh-select>
+                 </div>
+
+                <div class="mr-15 advance-search-btn"> <i class="icon-advance-filter bdr-radius-50" (click)="openModal(inventoryAdvanceSearch)" tooltip="Advance Search"></i> </div>
 
             </div>
             <div class="d-flex inventory-right-btn">
@@ -172,7 +180,7 @@
 
                     </ul>
                 </div>
-                <button class="btn btn-sky-blue mr-0" (click)="toggleAsidePane()"  *ngIf="!isMobileScreen">+ Create New</button>
+                <button id="create-new" class="btn btn-sky-blue mr-0" (click)="createGroupToggleAsidePane()"  *ngIf="!isMobileScreen">+ Create New</button>
                 <!--
                     (click)="toggleAsidePane()" --- crate new function
                     (click)="createGroupToggleAsidePane()" --- create new group function
@@ -184,12 +192,12 @@
 
             <!-- New inventory button will be show if product/sercive tab on active mode -->
             <div class="d-flex inventory-right-btn" hidden>
-                <button class="btn btn-sky-blue">+ New Inventory</button>
+                <button id="create-new-inventory" class="btn btn-sky-blue">+ New Inventory</button>
             </div>
         </div>
         <div class="mx-3 mb-15 d-flex justify-content-between" *ngIf="isMobileScreen">
             <div class="btn-group" dropdown>
-                <button id="more-btn-inventory-mobile" dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                <button id="more-btn-inventory-mobile" dropdownToggle type="button" class="btn btn-primary dropdown-toggle minwidth-100"
                     aria-controls="more-inventory-dropdown-mobile">
                     More <span class="caret"></span>
                 </button>
@@ -202,13 +210,11 @@
 
                 </ul>
             </div>
-            <button class="btn btn-sky-blue mr-0 d-flex justify-content-center" (click)="toggleAsidePane()">+ Create New</button>
+            <button id="create-new-mobile-view" class="btn btn-sky-blue mr-0 d-flex justify-content-center" (click)="toggleAsidePane()">+ Create New</button>
         </div>
 
         <tab heading="Group Wise">
-
             <inventory-group></inventory-group>
-
         </tab>
         <tab heading="Product/Service Wise">
             <inventory-product-service-list></inventory-product-service-list>
@@ -229,10 +235,10 @@
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
 
 <!-- create new aside pane  -->
-<aside-create-new-inventory *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-create-new-inventory>
+<!-- <aside-create-new-inventory *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-create-new-inventory> -->
 
 <!-- create new group aside pane -->
-<!-- <aside-create-new-group *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="createGroupToggleAsidePane()"></aside-create-new-group> -->
+<aside-create-new-group *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="createGroupToggleAsidePane()"></aside-create-new-group>
 
 <!-- create new item(product/service) aside pane -->
 <!-- <aside-create-new-item *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createItemToggleAsidePane()"></aside-create-new-item> -->

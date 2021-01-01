@@ -14,7 +14,7 @@
                 <div class="col-lg-8">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
-                        <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                        <input type="text" id="select-date" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker border-radius-2" placeholder="Enter Date"/>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                             <sh-select id="select-value-type" placeholder="Select Value Type"></sh-select>
                         </div>
                         <div class="col-lg-6 col-sm-6 col-12 mb-15">
-                            <input type="text" class="form-control" placeholder="Amount">
+                            <input id="amount-value" type="text" class="form-control" placeholder="Amount">
                         </div>
                     </div>
                 </div>
@@ -59,17 +59,17 @@
             </div>
             <div class="row mb-15" *ngIf="isMobileScreen">
                 <div class="col-lg-4">
-                    <label>Search Branch</label>
+                    <label>Select Branch</label>
                 </div>
                 <div class="col-lg-8">
-                    <input type="text" class="form-control" id="search-branch-alias" placeholder="Amount">
+                    <sh-select placeholder="Search Branch Alice" id="Select Branch"></sh-select>
                 </div>
             </div>
             <div class="row mb-15">
                 <div class="col-sm-12">
                     <div class="button-group d-flex justify-content-end">
-                        <button class="btn btn-success">Search</button>
-                        <button class="btn btn-danger mr-0">Clear</button>
+                        <button id="search-btn" class="btn btn-success">Search</button>
+                        <button id="clear-btn" class="btn btn-danger mr-0">Clear</button>
                     </div>
                 </div>
             </div>

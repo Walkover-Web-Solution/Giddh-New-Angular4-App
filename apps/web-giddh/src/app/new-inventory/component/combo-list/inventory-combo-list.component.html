@@ -3,6 +3,7 @@
         <table class="table giddh-table on-mobile-view">
             <thead>
                 <tr>
+                    <th width="3%">&nbsp;</th>
                     <th>Stock Name</th>
                     <th>Unit</th>
                     <th>Qty</th>
@@ -12,22 +13,23 @@
             </thead>
             <tbody>
                 <tr>
+                    <td width="3%" data-title="Select">
+                        <div class="d-block text-center text-left-sm">
+                            <input type="checkbox" id="select-group">
+                        </div>
+                    </td>
                     <td data-title="Stock Name">
-                        <a href="javascript:void(0)"
-                            [routerLink]="['/pages/new-inventory/about-combo-detail']">
-                            <div class="product-name-image d-flex">
-                                <div class="d-flex">
-                                    <input type="checkbox">
-                                    <div class="mx-2">
-                                        <img src="../../../../assets/images/Login-Page-Image.png">
-                                    </div>
-                                </div>
-                                <div>
-                                    <p>Stock Name</p>
-                                    <p class="text-gray">(34 Items)</p>
-                                </div>
+                        <div class="product-name-image d-flex">
+                            <div>
+                                <img src="../../../../assets/images/add-image.svg">
                             </div>
-                        </a>
+                            <div class="cursor-pointer mx-2">
+                                <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']">
+                                    <p>Product Name</p>
+                                    <p class="text-gray">(34 Items)</p>
+                                </a>
+                            </div>
+                        </div>
                     </td>
                     <td data-title="Unit">KG</td>
                     <td data-title="Qty">500</td>
