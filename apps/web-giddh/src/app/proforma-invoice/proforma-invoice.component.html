@@ -485,7 +485,7 @@
                             </div>
                             <!-- end warehouse field -->
 
-                            <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
+                            <div class="row mt-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Deliver To<span class="red-text">*</span></label>
                                 </div>
@@ -809,7 +809,7 @@
                                 </div>
 
                                 <!-- endregion -->
-                                <div class="row mt-1 "
+                                <div class="row mt-1"
                                     *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable ">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                         <label>Passport Number</label>
@@ -2958,12 +2958,12 @@
                     </div>
                     <div class="col-md-8 col-sm-8 col-xs-7">
                         <span class="pd0 mr-2 d-inline-block">
-                            <input name="options" class="radio-custom cp ml0" id="deductedNo" [(ngModel)]="options"
+                            <input name="options" class="radio-custom cp ml-0" id="deductedNo" [(ngModel)]="options"
                                 type="radio" [value]="true" [checked]="options" />
                             <label for="deductedNo" class="radio-custom-label">No</label>
                         </span>
                         <span class="pd0 mr-2 d-inline-block">
-                            <input name="options" class="radio-custom cp ml0" [(ngModel)]="options" id="deductedYes"
+                            <input name="options" class="radio-custom cp ml-0" [(ngModel)]="options" id="deductedYes"
                                 type="radio" [value]="false" [checked]="!options" />
                             <label for="deductedYes" class="radio-custom-label">Yes</label>
                         </span>

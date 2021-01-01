@@ -19,8 +19,8 @@
 
 				<label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
 
-				<div class="pos-rel">
-					<input type="text" id="ledger-discount-percent" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
+				<div class="position-relative">
+					<input type="text" id="ledger-discount-percent" class="form-control text-right cursor-pointer ledger-percent-wrapper" [disabled]="!discountFromPer"
 						decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="discountPercentageModal"
 						(input)="discountFromInput('PERCENTAGE', $event.target.value)"
 						style="width: 100px;padding-right: 20px !important;">
@@ -30,10 +30,12 @@
 			</div>
 
 			<div class="d-flex mb-1">
-				<label class="mr-1 align-items-center d-flex" style="width: 50px">Value</label>
-				<input type="text" id="ledger-discount-value"  class="form-control text-right cursor-pointer" [disabled]="!discountFromVal"
+				<label class="mr-1 align-items-center d-flex value-label">Value</label>
+				<div class="position-relative">
+				<input type="text" id="ledger-discount-value"  class="form-control text-right cursor-pointer ledger-discount-wrapper" [disabled]="!discountFromVal"
 					decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="discountFixedValueModal"
-					(input)="discountFromInput('FIX_AMOUNT', $event.target.value)" style="width: 100px">
+					(input)="discountFromInput('FIX_AMOUNT', $event.target.value)">
+				</div>
 			</div>
 
 		</div>

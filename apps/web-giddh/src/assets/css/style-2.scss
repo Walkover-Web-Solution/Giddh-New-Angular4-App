@@ -867,7 +867,7 @@ input {
     font-size: 13px;
     color: $chetwode-blue !important;
     display: block;
-    padding: 7px 10px;
+    padding: 7px 10px !important;
     display: block;
     width: 100%;
     text-align: left;
@@ -1021,7 +1021,7 @@ ul.sub-list {
     margin-right: 25px;
 }
 
-.customer-footer-box .numbertotal {
+.customer-footer-box .number-total {
     font-size: 26px;
     color: $chetwode-blue;
 }
@@ -8845,11 +8845,11 @@ ul.dropdown-menu p.lead.pd {
 }
 
 table.basic td {
-    color: #1c1c1c;
+    color: $nero;
 }
 
 .invoice-table td > a {
-    color: #1c1c1c;
+    color: $nero;
 }
 
 button.btn.btn-filter {
@@ -8867,7 +8867,7 @@ button.btn.btn-filter {
 .manage-account-popup.full-screen-modal.modal.fade .modal-dialog {
     transform: translateY(0) !important;
     margin: 0 auto;
-    padding:0 !important
+    padding:0 !important;
 }
 
 .manage-account-popup.full-screen-modal.modal.fade .width100{
