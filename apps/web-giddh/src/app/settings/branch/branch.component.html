@@ -47,7 +47,7 @@
                             [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
                     </div>
                 </div>
-                <div class="content-view mr-l2">
+                <div class="content-view  mr-l2">
                     <div class="branch-views">
                         <span (click)="changeBranchViewType('table');" class="mr-r1">
                             <input id="radio-table" name="signatureType" class="radio-custom" name="radio-view"
@@ -190,27 +190,6 @@
                         </div>
 
                         <div class="clearfix">
-                            <span class="mr-r1 pull-left">Contact:</span>
-                            <span class="pull-left">{{branch.contactNo}}</span>
-                        </div>
-                        <div class="clearfix" *ngIf="formFields['taxName']">
-                            <span class="mr-r1 pull-left">{{formFields['taxName'].label}}:</span>
-                            <span class="pull-left">{{branch?.addresses[0]?.taxNumber}}</span>
-                        </div>
-                        <div class="clearfix">
-                            <span class="mr-r1 pull-left">Address:</span>
-                            <span class="pull-left">{{branch?.addresses[0]?.address}}</span>
-                        </div>
-                    </div>
-                    <div class="branch-sales-details">
-                        <div class="clearfix">
-                            <span class="pull-left">
-                                <label>Total Sales</label>
-                            </span>
-                            <span class="pull-right"
-                                *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span>
-                            <span class="pull-right"
-                                *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
                             <div *ngIf="branch?.parentBranch?.alias" class="pull-left">
                                 <span class="parent-branch">Parent Entity:</span> {{branch?.parentBranch?.alias}}
                             </div>
@@ -320,8 +299,8 @@
         <div class="col-12 text-center">
             <div class="illustration-box">
                 <img src="assets/images/new/branch-Illus.png" />
-                <div *ngIf="!parentCompanyName">
-                    <h3 class="lead mr-t2 mr-b2 font-18">Add branch under <strong
+                <div class="" *ngIf="!parentCompanyName">
+                    <h3 class="lead mr-t2 mr-b2 fs18">Add branch under <strong
                             class="primary-color text-capitalize">{{ currentBranch }} <span *ngIf="currentBranchNameAlias">(
                                 {{currentBranchNameAlias}} )</span></strong> headquarter.
                     </h3>
@@ -375,37 +354,6 @@
                                 </li>
                             </ul>
 
-<!-- add branch modal -->
-<div bsModal #branchModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1" class="modal fade"
-    role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header clearfix">
-                <h3>Create New Branch</h3>
-                <span aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">×</span>
-            </div>
-            <div class="modal-body">
-                <div>
-                    <label class="select-companies">Select companies who are your branch</label>
-                    <div class="btn-group btn-block" dropdown>
-                        <button dropdownToggle (click)="getAllBranches()" type="button"
-                            class="form-control text-left btn-block dropdown-toggle">
-                            <span *ngIf="!selectedCompaniesUniquename.length"> Select Branch </span><span
-                                *ngIf="selectedCompaniesUniquename.length">{{selectedCompaniesUniquename.length}}
-                                selected</span><span class="select-drop pull-right mr-t1"><i
-                                    class="fa fa-caret-down"></i></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu width-100" role="menu">
-                            <li>
-                                <input type="checkbox" (click)="selectAllCompanies($event)"
-                                    [checked]="isAllSelected$ | async" /> Select
-                                all
-                            </li>
-                            <li *ngFor="let cmp of companies$ | async">
-                                <input type="checkbox"
-                                    [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1"
-                                    (click)="checkUncheckMe(cmp, $event)" /> {{cmp.name}} <span *ngIf="cmp.nameAlias">
-                                    ({{cmp.nameAlias}})</span>
 
                         </div>
                     </div>
@@ -421,15 +369,6 @@
                         </ul>
 
                     </div>
-                </div>
-                <div class="mr-t05">
-                    <ul class="list-inline custom-multi-select">
-                        <li *ngFor="let cmp of selectedCompaniesName">
-                            <a>
-                                {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span class="pd-l05"
-                                    (click)="checkUncheckMe(cmp,$event)">×</span>
-                            </a>
-                        </li>
                     <div>
                         <br>
                         <span>Or</span>
@@ -453,7 +392,7 @@
 
 
     <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
-        class="modal fade open-popup" role="dialog">
+        class="modal fade open-popup" role="dialog" (onHidden)="onHide()">
         <div class="modal-dialog modal-xl modal-width">
             <div class="modal-content">
                 <ng-template element-view-container-ref #companyadd=elementviewcontainerref>

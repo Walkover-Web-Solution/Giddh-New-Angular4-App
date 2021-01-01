@@ -50,7 +50,7 @@
     margin-bottom: 20px;
 }
 .warehouse-card {
-    background-color: $whisper-color;
+    background-color: $white;
     padding: 15px;
     margin-bottom: 15px;
     border: 1px solid $gainsboro;
@@ -87,7 +87,6 @@
 .warehouse-card .d-flex {
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid $gainsboro;
     padding-bottom: 10px;
 }
 
