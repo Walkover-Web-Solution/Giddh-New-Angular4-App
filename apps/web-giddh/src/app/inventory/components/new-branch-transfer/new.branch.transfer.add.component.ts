@@ -470,16 +470,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if(data && data.length > 0) {
             data.forEach(d => {
                 if (d && !d.isCompany) {
-                    branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias, d.warehouses));
                     d.warehouses.forEach(warehouse => {
-                        if (warehouse.name.includes('New')) {
-                            warehouse.taxNumber = '22AABCS1429B1Z4';
-                        } else if (warehouse.name.includes('deepakindia153900203532200wwcu warehouse')){
-                            warehouse.taxNumber = '';
-                        } else {
-                            warehouse.taxNumber = '06AABCS1429B1ZY';
-                        }
+                        warehouse.taxNumber = warehouse.taxNumber || '';
                     });
+                    branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias, d.warehouses));
                     if (d.warehouses.length) {
                         this.senderWarehouses[d.uniqueName] = [];
                         this.destinationWarehouses[d.uniqueName] = [];
@@ -526,19 +520,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.store.pipe(select(s => s.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
             if (branches) {
                 if (branches.results.length) {
-                    branches.results.forEach(branch => {
-                        if (branch.warehouses) {
-                            branch.warehouses.forEach(warehouse => {
-                                if (warehouse.name.includes('New')) {
-                                    warehouse.taxNumber = '22AABCS1429B1Z4';
-                                } else if (warehouse.name.includes('deepakindia153900203532200wwcu warehouse')){
-                                    warehouse.taxNumber = '';
-                                } else {
-                                    warehouse.taxNumber = '06AABCS1429B1ZY';
-                                }
-                            });
-                        }
-                    });
                     this.branches = this.linkedStocksVM(branches.results).map(b => ({
                         label: `${b.alias}`,
                         value: b.uniqueName,
@@ -649,23 +630,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         const defaultAddress = res.body.addresses.find(address => address.isDefault);
                         this.branchTransfer[type][index].warehouse.address = defaultAddress ? defaultAddress.address : '';
                         this.branchTransfer[type][index].warehouse.taxNumber = defaultAddress ? defaultAddress.taxNumber : '';
-                        if (res.body.name.includes('New')) {
-                            this.branchTransfer[type][index].warehouse.taxNumber = '22AABCS1429B1Z4';
-                        } else if (res.body.name.includes('deepakindia153900203532200wwcu warehouse')){
-                            this.branchTransfer[type][index].warehouse.taxNumber = '';
-                        } else {
-                            this.branchTransfer[type][index].warehouse.taxNumber = '06AABCS1429B1ZY';
-                        }
                     } else {
                         this.branchTransfer[type][index].warehouse.address = '';
                         this.branchTransfer[type][index].warehouse.taxNumber = '';
-                        if (res.body.name.includes('New')) {
-                            this.branchTransfer[type][index].warehouse.taxNumber = '22AABCS1429B1Z4';
-                        } else if (res.body.name.includes('deepakindia153900203532200wwcu warehouse')){
-                            this.branchTransfer[type][index].warehouse.taxNumber = '';
-                        } else {
-                            this.branchTransfer[type][index].warehouse.taxNumber = '06AABCS1429B1ZY';
-                        }
                     }
                     let branchesWithSameTax = [];
                     if (!this.editBranchTransferUniqueName) {
@@ -713,6 +680,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
+    /**
+     * Resets the source warehouse in sender and destination dropdowns
+     *
+     * @param {*} index Index of the warehouse
+     * @param {boolean} [reInitializeWarehouses] True, if the warehouse dropdown needs to be reset (is true only when either sender/receiver
+     * warehouses are reset and the left sender/receiver warehouse needs to be reset)
+     * @memberof NewBranchTransferAddComponent
+     */
     public resetSourceWarehouses(index, reInitializeWarehouses?: boolean) {
         if (this.branchTransfer.destinations && this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
             this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
@@ -778,6 +753,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.detectChanges();
     }
 
+    /**
+     * Resets the destination warehouse in sender and destination dropdowns
+     *
+     * @param {*} index Index of the warehouse
+     * @param {boolean} [reInitializeWarehouses] True, if the warehouse dropdown needs to be reset (is true only when either sender/receiver
+     * warehouses are reset and the left sender/receiver warehouse needs to be reset)
+     * @memberof NewBranchTransferAddComponent
+     */
     public resetDestinationWarehouses(index, reInitializeWarehouses?: boolean) {
         if (this.branchTransfer.sources && this.branchTransfer.sources[index] && this.branchTransfer.sources[index].warehouse.uniqueName !== null) {
             this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
