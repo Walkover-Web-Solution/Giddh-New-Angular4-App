@@ -470,6 +470,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if(data && data.length > 0) {
             data.forEach(d => {
                 if (d && !d.isCompany) {
+                    d.warehouses.forEach(warehouse => {
+                        warehouse.taxNumber = warehouse.taxNumber || '';
+                    });
                     branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias, d.warehouses));
                     if (d.warehouses.length) {
                         this.senderWarehouses[d.uniqueName] = [];
