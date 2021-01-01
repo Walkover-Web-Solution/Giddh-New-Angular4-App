@@ -71,7 +71,8 @@ export class LinkedStocksVM implements INameUniqueName {
         public name: string,
         public uniqueName: string,
         public isWareHouse: boolean = false,
-        public alias: string = '') {
+        public alias: string = '',
+        public warehouses: Array<any> = []) {
 	}
 }
 
