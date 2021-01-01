@@ -9008,6 +9008,16 @@ highcharts-chart .highcharts-container{
     flex-shrink: 1 !important;
 }
 
+highcharts-chart{
+    .highcharts-container{
+        .highcharts-title{
+                width: 62px !important;
+                white-space: normal !important;
+                text-align: center;
+            }
+    }
+}
+
 #incomeChart #highcharts-ufrwew1-29 {
     display: block;
     width: 100%;
