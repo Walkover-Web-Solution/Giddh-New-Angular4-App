@@ -55,7 +55,7 @@
                         </th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
-                        <ng-container *ngIf="(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)">
+                        <ng-container *ngIf="currentOrganizationType !== 'BRANCH'">
                             <th width="17%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="inlineSearch == 'sender'">
                                     <span class="pl-0">Sender</span>
@@ -79,7 +79,7 @@
                                 </div>
                             </th>
                         </ng-container>
-                        <ng-container *ngIf="(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length === 2) || currentOrganizationType === 'BRANCH'">
+                        <ng-container *ngIf="currentOrganizationType === 'BRANCH'">
                             <th width="17%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="inlineSearch == 'senderReceiver'">
                                     <span class="pl-0">Sender/Receiver</span>
@@ -130,9 +130,9 @@
                                 *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
                         <td data-title="Voucher Number"><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a>
                         </td>
-                        <td *ngIf="(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length === 2) || currentOrganizationType === 'BRANCH'" data-title="Sender/Receiver">{{ item.senderReceiver }}</td>
-                        <td *ngIf="(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)" data-title="Sender">{{ item.sender }}</td>
-                        <td *ngIf="(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)" data-title="Receiver">{{ item.receiver }}</td>
+                        <td *ngIf="currentOrganizationType === 'BRANCH'" data-title="Sender/Receiver">{{ item.senderReceiver }}</td>
+                        <td *ngIf="currentOrganizationType !== 'BRANCH'" data-title="Sender">{{ item.sender }}</td>
+                        <td *ngIf="currentOrganizationType !== 'BRANCH'" data-title="Receiver">{{ item.receiver }}</td>
                         <td data-title="From Warehouse">{{ item.fromWarehouse }}</td>
                         <td data-title="To Warehouse">{{ item.toWarehouse }}</td>
                         <td data-title="Total Amount" class="text-right">{{activeCompany.baseCurrencySymbol}}
@@ -170,7 +170,7 @@
                 </tbody>
                 <tbody class="on-mobile-view no-records" *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
-                        <td *ngIf="!isLoading" colspan="8" align="center">No records found.</td>
+                        <td *ngIf="!isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11" align="center">No records found.</td>
                         <td *ngIf="isLoading" colspan="8">
 
                         </td>
