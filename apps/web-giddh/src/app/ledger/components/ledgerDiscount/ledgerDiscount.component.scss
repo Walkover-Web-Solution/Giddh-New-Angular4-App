@@ -29,11 +29,14 @@
 .ledger-percent-wrapper{
     width: 100px;
     padding-right: 20px !important;
-    .fa-percent{
-        top: 9px;
-        right: 6px;
-        color: $gray;
-    }
+}
+.ledger-discount-wrapper{
+    width: 100px;
+}
+.fa-percent.pos-abs{
+    top: 9px;
+    right: 6px;
+    color: $gray;
 }
 .discount-list{
     list-style: none;
