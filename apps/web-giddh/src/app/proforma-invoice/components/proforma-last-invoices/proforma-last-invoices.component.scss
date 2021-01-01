@@ -3,7 +3,8 @@
         background-color: #fff;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         padding: 5px;
-        height: 210px;
+        height: auto;
+        max-height: calc(210px);
         overflow-y: auto;
 
         li {
