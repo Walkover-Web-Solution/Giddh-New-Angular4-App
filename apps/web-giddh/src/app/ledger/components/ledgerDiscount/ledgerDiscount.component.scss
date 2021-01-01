@@ -18,3 +18,15 @@
     color: #a2a2a2;
     margin-bottom: 10px;
 }
+.ledger-percent-wrapper{
+    width: 100px;
+    padding-right: 20px !important;
+}
+.ledger-discount-wrapper{
+    width: 100px;
+}
+.fa-percent.pos-abs{
+    top: 9px;
+    right: 6px;
+    color: $gray;
+}
