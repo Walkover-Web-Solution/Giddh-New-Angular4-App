@@ -33,7 +33,7 @@
                     <label>
                         Branch Name <span class="red-text">*</span>
                     </label>
-                    <input [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
+                    <input maxlength="50" [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
                         type="text" class="form-control" formControlName="alias" placeholder="Enter Name">
                     <span class="danger pl-1"
                         *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength">
