@@ -717,6 +717,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.senderWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                         }
                     });
+                    if (this.branchTransfer.sources[index].warehouse && this.branchTransfer.sources[index].warehouse.uniqueName) {
+                        setTimeout(() => {
+                            this.sourceWarehouse.writeValue(this.branchTransfer.sources[index].warehouse.uniqueName);
+                        }, 100);
+                    }
                 }
             }
         } else {
@@ -747,6 +752,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                             this.senderWarehouses[this.branchTransfer.sources[0].uniqueName].push({ label: key.name, value: key.uniqueName });
                         }
                     });
+                    if (this.branchTransfer.sources[index].warehouse && this.branchTransfer.sources[index].warehouse.uniqueName) {
+                        setTimeout(() => {
+                            this.sourceWarehouse.writeValue(this.branchTransfer.sources[index].warehouse.uniqueName);
+                        }, 100);
+                    }
                 }
             }
         }
@@ -787,6 +797,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                     }
                 });
+                if (this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                    setTimeout(() => {
+                        this.destinationWarehouse.writeValue(this.branchTransfer.destinations[index].warehouse.uniqueName);
+                    }, 100);
+                }
             }
         } else {
             if (this.allWarehouses && this.branchTransfer.sources[0] && this.allWarehouses[this.branchTransfer.sources[0].uniqueName]) {
@@ -815,6 +830,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.destinationWarehouses[this.branchTransfer.destinations[0].uniqueName].push({ label: key.name, value: key.uniqueName });
                     }
                 });
+                if (this.branchTransfer.destinations[0].warehouse && this.branchTransfer.destinations[0].warehouse.uniqueName) {
+                    setTimeout(() => {
+                        this.destinationWarehouse.writeValue(this.branchTransfer.destinations[0].warehouse.uniqueName);
+                    }, 100);
+                }
             }
         }
         this.detectChanges();
