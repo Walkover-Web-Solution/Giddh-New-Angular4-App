@@ -391,7 +391,15 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public checkIfFiltersApplied(): boolean {
-        if (this.branchTransferPostRequestParams.senderReceiver || this.branchTransferPostRequestParams.warehouseName || this.branchTransferPostRequestParams.voucherType || this.branchTransferPostRequestParams.amountOperator || this.branchTransferPostRequestParams.amount) {
+        if (
+            this.branchTransferPostRequestParams.senderReceiver ||
+            this.branchTransferPostRequestParams.fromWarehouse ||
+            this.branchTransferPostRequestParams.toWarehouse ||
+            this.branchTransferPostRequestParams.sender ||
+            this.branchTransferPostRequestParams.receiver ||
+            this.branchTransferPostRequestParams.voucherType ||
+            this.branchTransferPostRequestParams.amountOperator ||
+            this.branchTransferPostRequestParams.amount) {
             return true;
         } else {
             return false;
