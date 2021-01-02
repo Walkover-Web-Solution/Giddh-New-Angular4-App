@@ -37,7 +37,7 @@
                         Warehouse Name <span class="red-text">*</span>
                     </label>
                     <input [class.error-box]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid"
-                        type="text" required formControlName="name" class="form-control">
+                        type="text" maxlength="100" required formControlName="name" class="form-control">
                     <span class="danger pl-1"
                         *ngIf="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.errors?.maxlength">
                         Max. 100 characters allowed
