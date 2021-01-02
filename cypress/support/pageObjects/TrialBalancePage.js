@@ -1,7 +1,7 @@
 class TrialBalancePage {
 
     searchIcon(timeOut){
-         return cy.get('#showSearch', {timeout: timeOut})
+        return cy.xpath('//i[@class=\'icon-search2\']', {timeout: 20000})
     }
 
     typeSearchValue(searchValue){
@@ -19,7 +19,7 @@ class TrialBalancePage {
     }
 
     searchAccountAmount(){
-        return  cy.xpath('//span[@class=\'ui-select-highlight\']/parent::div/following::div[1]')
+        return cy.get('tr > :nth-child(3)')
     }
 
 

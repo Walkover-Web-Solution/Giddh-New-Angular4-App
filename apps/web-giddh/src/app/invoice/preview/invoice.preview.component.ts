@@ -847,9 +847,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (actionToPerform === 'paid') {
                 this.performActionOnInvoiceModel.show();
                 setTimeout(() => {
-                    this.invoicePaymentModelComponent.loadPaymentModes();
+                    if(this.invoicePaymentModelComponent) {
+                        this.invoicePaymentModelComponent.loadPaymentModes();
+                    }
                     this.selectedInvoice = objItem;
-                    this.invoicePaymentModelComponent.focusAmountField();
+                    if(this.invoicePaymentModelComponent) {
+                        this.invoicePaymentModelComponent.focusAmountField();
+                    }
                 }, 500);
             } else {
                 this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem.uniqueName, {
@@ -1343,8 +1347,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public itemStateChanged(item: any, allSelected: boolean = false) {
-        let index = this.selectedItems.findIndex(f => f === item.uniqueName);
-        let indexInv = this.selectedInvoicesList.findIndex(f => f.uniqueName === item.uniqueName);
+        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === item.uniqueName) : -1;
+        let indexInv = (this.selectedInvoicesList) ? this.selectedInvoicesList.findIndex(f => f.uniqueName === item.uniqueName) : -1;
 
         if (indexInv > -1 && !allSelected) {
             this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f.uniqueName !== item.uniqueName);

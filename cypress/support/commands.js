@@ -30,6 +30,7 @@ import HeaderPage from "./pageObjects/HeaderPage";
 import DashboardPage from "./pageObjects/DashboardPage";
 import GlobalSearchPage from "./pageObjects/GlobalSearchPage";
 import TrialBalancePage from "./pageObjects/TrialBalancePage";
+import PLAndBSPage from "./pageObjects/PLAndBSPage";
 import LedgerPage from "./pageObjects/LedgerPage";
 import SignUpPage from "./pageObjects/SignUpPage";
 import CreateNewCompanyPage from "./pageObjects/CreateNewCompanyPage";
@@ -39,6 +40,7 @@ const headerPage = new HeaderPage()
 const ledgerPage = new LedgerPage()
 const globalSearchPage = new GlobalSearchPage()
 const trialBalancePage = new TrialBalancePage()
+const plAndBSPage = new PLAndBSPage();
 const createNewCompanyPage = new CreateNewCompanyPage();
 
 
@@ -106,7 +108,7 @@ Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>
     cy.get('body').type('{pageup}')
     cy.scrollTo(10, 10);
     cy.scrollTo('top')
-   // cy.get('.ledger-section')
+    // cy.get('.ledger-section')
     cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView( { easing: 'linear' }).should('be.visible').then(()=>{
         cy.wait(1000)
         cy.get(accountElementPath).click({force : true})
@@ -179,7 +181,7 @@ Cypress.Commands.add("createLedgerAPI", (accountUniqueName) => {
     cy.request({
         method: 'POST',
         url: Cypress.env('apiBaseURI')+ "/accounts/"+ accountUniqueName + "/ledgers-v2",
-        body : '{"transactions":[{"amount":169.49,"particular":"sales","taxes":["18"],"taxesVm":[{"name":"18","uniqueName":"18","type":"gst","amount":18,"isChecked":true,"isDisabled":false}],"tax":30.51,"convertedTax":30.51,"total":200,"convertedTotal":200,"discount":0,"convertedDiscount":0,"isStock":false,"convertedRate":0,"convertedAmount":169.49,"isChecked":false,"showTaxationDiscountBox":true,"itcAvailable":"","advanceReceiptAmount":0,"type":"DEBIT","discounts":[],"selectedAccount":{"currency":"INR","currencySymbol":"\u20b9","mobileNo":null,"stocks":null,"isFixed":true,"uniqueName":"sales","email":null,"parentGroups":[{"uniqueName":"revenuefromoperations","name":"Revenue From Operations"},{"uniqueName":"sales","name":"Sales"}],"mergedAccounts":"","applicableTaxes":[],"name":"Sales","nameStr":"Revenue From Operations, Sales","uNameStr":"revenuefromoperations, sales"},"isInclusiveTax":false,"shouldShowRcmEntry":false}],"voucherType":null,"entryDate":"19-08-2020","unconfirmedEntry":false,"attachedFile":"","attachedFileName":"","tag":null,"description":"","generateInvoice":false,"chequeNumber":"","chequeClearanceDate":"","invoiceNumberAgainstVoucher":"","compoundTotal":200,"convertedCompoundTotal":200,"invoicesToBePaid":[],"otherTaxModal":{"tcsCalculationMethod":"OnTaxableAmount"},"otherTaxesSum":0,"tdsTcsTaxesSum":0,"otherTaxType":"tcs","exchangeRate":1,"exchangeRateForDisplay":1,"valuesInAccountCurrency":true,"selectedCurrencyToDisplay":0,"baseCurrencyToDisplay":{"code":"INR","symbol":"\u20b9"},"foreignCurrencyToDisplay":{"code":"INR","symbol":"\u20b9"},"isOtherTaxesApplicable":false}',
+        body : '{"transactions":[{"amount":169.49,"particular":"sales","taxes":["18"],"taxesVm":[{"name":"18","uniqueName":"18","type":"gst","amount":18,"isChecked":true,"isDisabled":false}],"tax":30.51,"convertedTax":30.51,"total":200,"convertedTotal":200,"discount":0,"convertedDiscount":0,"isStock":false,"convertedRate":0,"convertedAmount":169.49,"isChecked":false,"showTaxationDiscountBox":true,"itcAvailable":"","advanceReceiptAmount":0,"type":"DEBIT","discounts":[],"selectedAccount":{"currency":"INR","currencySymbol":"\u20b9","mobileNo":null,"stocks":null,"isFixed":true,"uniqueName":"sales","email":null,"parentGroups":[{"uniqueName":"revenuefromoperations","name":"Revenue From Operations"},{"uniqueName":"sales","name":"Sales"}],"mergedAccounts":"","applicableTaxes":[],"name":"Sales","nameStr":"Revenue From Operations, Sales","uNameStr":"revenuefromoperations, sales"},"isInclusiveTax":false,"shouldShowRcmEntry":false}],"voucherType":null,"unconfirmedEntry":false,"attachedFile":"","attachedFileName":"","tag":null,"description":"","generateInvoice":false,"chequeNumber":"","chequeClearanceDate":"","invoiceNumberAgainstVoucher":"","compoundTotal":200,"convertedCompoundTotal":200,"invoicesToBePaid":[],"otherTaxModal":{"tcsCalculationMethod":"OnTaxableAmount"},"otherTaxesSum":0,"tdsTcsTaxesSum":0,"otherTaxType":"tcs","exchangeRate":1,"exchangeRateForDisplay":1,"valuesInAccountCurrency":true,"selectedCurrencyToDisplay":0,"baseCurrencyToDisplay":{"code":"INR","symbol":"\u20b9"},"foreignCurrencyToDisplay":{"code":"INR","symbol":"\u20b9"},"isOtherTaxesApplicable":false}',
         headers: {
             'Auth-Key': Cypress.env('authKey'),
             'content-type': 'application/json'
@@ -249,12 +251,54 @@ Cypress.Commands.add("searchOnTrialBalance", (accountUniqueName, expectedAmount)
     trialBalancePage.searchIcon(80000).click({force:true}).then(()=>{
         trialBalancePage.typeSearchValue(accountUniqueName)
     }).then(()=>{
-        trialBalancePage.searchAccountName().then((elementText) => {
+        trialBalancePage.searchAccountName().first().then((elementText) => {
             cy.wait(5000).then(() =>{
                 const text = elementText.text();
                 expect(text).to.eq(accountUniqueName)
             })
             trialBalancePage.searchAccountAmount().then((elementText) => {
+                cy.wait(5000).then(() =>{
+                    const text = elementText.text();
+                    expect(text).to.eq(expectedAmount)
+                })
+            })
+
+        })
+    })
+})
+
+Cypress.Commands.add("searchOnBalanceSheet", (accountUniqueName, expectedAmount)=>{
+    trialBalancePage.refreshIcon().click({force:true})
+    cy.wait(3000)
+
+})
+
+Cypress.Commands.add("navigateToTrialBalanceOptions", (optionName)=>{
+    // trialBalancePage.refreshIcon().click({force:true})
+    headerPage.trialBalanceOptions().each(($el, index, $list)=>{
+        const text = $el.text();
+        cy.log(text)
+        if (text.toLowerCase() === optionName.toLowerCase()){
+            cy.log("In If ")
+            $el.click()
+        }
+    })
+    cy.wait(3000)
+
+})
+
+Cypress.Commands.add("searchOnPLAndBS", (xpath, accountUniqueName, expectedAmount)=>{
+    trialBalancePage.refreshIcon().click({force:true})
+    cy.wait(3000)
+    trialBalancePage.searchIcon(80000).click({force:true}).then(()=>{
+        trialBalancePage.typeSearchValue(accountUniqueName)
+    }).then(()=>{
+        trialBalancePage.searchAccountName().first().then((elementText) => {
+            cy.wait(5000).then(() =>{
+                const text = elementText.text();
+                expect(text).to.eq(accountUniqueName)
+            })
+            plAndBSPage.searchAccountAmount(xpath).then((elementText) => {
                 cy.wait(5000).then(() =>{
                     const text = elementText.text();
                     expect(text).to.eq(expectedAmount)

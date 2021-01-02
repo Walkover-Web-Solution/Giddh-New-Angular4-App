@@ -132,7 +132,7 @@ export class DesignFiltersContainerComponent implements OnInit {
             };
 
             this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-                if (a.voucherType === 'credit note' || a.voucherType === 'debit note') {
+                if (a && (a.voucherType === 'credit note' || a.voucherType === 'debit note')) {
                     this.templateType = 'voucher';
                 } else {
                     this.templateType = 'invoice';

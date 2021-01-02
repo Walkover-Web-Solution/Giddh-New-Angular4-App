@@ -770,7 +770,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let accountsForBaseAccountArray: IOption[] = [];
                 let isStockableAccount: boolean = false;
                 // check if current account category is type 'income' or 'expenses'
-                let parentAcc = this.activeAccount.parentGroups[0].uniqueName;
+                let parentAcc = (this.activeAccount && this.activeAccount.parentGroups && this.activeAccount.parentGroups.length > 0) ? this.activeAccount.parentGroups[0].uniqueName : "";
                 let incomeAccArray = ['revenuefromoperations', 'otherincome'];
                 let expensesAccArray = ['operatingcost', 'indirectexpenses'];
                 let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
@@ -1535,7 +1535,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public checkForGeneratedVoucher(event: any): void {
-        if (event && !this.vm.selectedLedger.voucherGenerated) {
+        if (event && this.vm.selectedLedger.voucher.shortCode !== 'pur' && !this.vm.selectedLedger.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
             this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, 'Giddh');
             event.preventDefault();
@@ -1951,7 +1951,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
                 const activeAccountDetails = {
                     uniqueName: this.baseAccountDetails.particular ? this.baseAccountDetails.particular.uniqueName : '',
-                    parentGroups: this.baseAccountDetails.parentGroups ? this.baseAccountDetails.parentGroups : []
+                    parentGroups: (this.baseAccountDetails && this.baseAccountDetails.parentGroups) ? this.baseAccountDetails.parentGroups : []
                 }
                 const isRcmEntry = this.generalService.shouldShowRcmSection(activeAccountDetails, selectedAccountDetails);
                 if (isRcmEntry) {
@@ -2193,7 +2193,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         let customerUniqueName = [];
         this.vm.selectedLedger.transactions.forEach(transaction => {
             if (transaction.particular && transaction.particular.uniqueName){
-                customerUniqueName.push(transaction.particular.uniqueName);
+                const uniqueName = transaction.particular.uniqueName.split('#')[0];
+                customerUniqueName.push(uniqueName);
             }
         });
         if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {

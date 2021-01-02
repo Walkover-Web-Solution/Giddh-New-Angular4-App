@@ -415,7 +415,8 @@
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                         [invoiceList]="invoiceList"
                                                         (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
-                                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                                        (saveOtherTax)="saveOtherTax(item, $event)">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -541,7 +542,8 @@
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                         (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
-                                                        [invoiceList]="invoiceList">
+                                                        [invoiceList]="invoiceList"
+                                                        (saveOtherTax)="saveOtherTax(item, $event)">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -713,10 +715,10 @@
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
                             <td data-title="Particular" class="col-xs-5 col-md-6 col-lg-6">
-                                <span *ngIf="(lc.transactionData$ | async)?.page === 1">To Balance B/F </span>
+                                <span *ngIf="(lc.transactionData$ | async)?.page <= 1">To Balance B/F </span>
                             </td>
                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
-                                <ng-container *ngIf="(lc.transactionData$ | async)?.page === 1">
+                                <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'" class="">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount  | giddhCurrency }}
                                 </span><br>
@@ -917,7 +919,7 @@
                                 <!--new ledge popup-->
                                 <div class="pos-abs entry-modal" (click)="shDebit?.hide()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
+                                    <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         (moreDetailOpen)="handleOpenMoreDetail($event)"
@@ -938,7 +940,8 @@
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                         [shouldShowItcSection]="shouldShowItcSection"
-                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                        (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -986,10 +989,10 @@
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
                             <td data-title="B/F Balance" class="col-xs-5 col-md-6 col-lg-6">
-                                <span *ngIf="(lc.transactionData$ | async)?.page === 1"> By Balance B/F </span>
+                                <span *ngIf="(lc.transactionData$ | async)?.page <= 1"> By Balance B/F </span>
                             </td>
                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
-                                <ng-container *ngIf="(lc.transactionData$ | async)?.page === 1">
+                                <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
                                 </span><br>
@@ -1197,7 +1200,7 @@
                                 <div class="pos-abs entry-modal" (click)="shCredit?.hide()"
                                     (keydown)="$event.stopPropagation()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
+                                    <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
@@ -1218,7 +1221,8 @@
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                         [shouldShowItcSection]="shouldShowItcSection"
-                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                        (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)">
                                     </new-ledger-entry-panel>
                                 </div>
 

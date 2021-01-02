@@ -11,7 +11,6 @@ import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '.
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../../../actions/inventory/inventory.actions';
 import * as  _ from '../../../../../lodash-optimized';
-import { AccountService } from '../../../../../services/account.service';
 import { CustomStockUnitAction } from '../../../../../actions/inventory/customStockUnit.actions';
 import { IUnitRateItem } from '../../../../../models/interfaces/stocksItem.interface';
 import { uniqueNameInvalidStringReplace } from '../../../../../shared/helpers/helperFunctions';
@@ -26,6 +25,7 @@ import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../../../../inventory/inv.view.service';
 import { GeneralActions } from '../../../../../actions/general/general.actions';
 import { INVALID_STOCK_ERROR_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
+import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 
 @Component({
     selector: 'sales-create-stock',
@@ -103,10 +103,20 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public customField2: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private sideBarAction: SidebarAction,
-        private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
-        private customStockActions: CustomStockUnitAction, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions,
-        private invViewService: InvViewService, private cdr: ChangeDetectorRef, private _generalActions: GeneralActions) {
+    constructor(
+        private store: Store<AppState>,
+        private sideBarAction: SidebarAction,
+        private _fb: FormBuilder,
+        private inventoryAction: InventoryAction,
+        private salesService: SalesService,
+        private customStockActions: CustomStockUnitAction,
+        private _toasty: ToasterService,
+        private _inventoryService: InventoryService,
+        private companyActions: CompanyActions,
+        private invViewService: InvViewService,
+        private cdr: ChangeDetectorRef,
+        private _generalActions: GeneralActions
+    ) {
         this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
         this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(s => s.inventory.activeGroup), takeUntil(this.destroyed$));
@@ -246,7 +256,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
 
         // get purchase accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['purchases'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -257,7 +267,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
 
         // get sales accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['sales'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let salesAccounts: IOption[] = [];
                 data.body.results.map(d => {

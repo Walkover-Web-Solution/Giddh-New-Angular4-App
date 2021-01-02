@@ -13,9 +13,18 @@ describe('This is TrialBalance Search Test', () => {
     });
 
     before(() => {
-        cy.deleteAllLedgersAPI('uitest').then(()=>{
-            cy.viewport(1366, 768)
-            cy.loginWithEmail(testData.Email, testData.Password);
+        let allAccountName = ['cash', 'uitest', "invoiceaccount"];
+        allAccountName.forEach((accName) => {
+            cy.deleteAllLedgersAPI(accName)
+        })
+        cy.viewport(1366, 768)
+        cy.loginWithEmail(testData.Email, testData.Password);
+    })
+
+    afterEach(()=>{
+        let allAccountName = ['cash', 'uitest', "invoiceaccount"];
+        allAccountName.forEach((accName) => {
+            cy.deleteAllLedgersAPI(accName)
         })
     })
 
@@ -24,7 +33,32 @@ describe('This is TrialBalance Search Test', () => {
             if (response.status === 201){
                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
             }
-            cy.searchOnTrialBalance('uitest', '199.99  Dr. ')
+            cy.searchOnTrialBalance('uitest', '199.99')
+        })
+    });
+
+    it('Verify Profit & Loss Amount after Create Entry', () => {
+        cy.createLedgerAPI('uitest').then((response) => {
+            if (response.status === 201){
+                cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+
+            }
+            cy.wait(2000)
+            cy.navigateToTrialBalanceOptions('Profit & Loss');
+            cy.searchOnPLAndBS('.profitLoss > .clearfix > .col-4 > strong', 'Sales', '169')
+        })
+    });
+
+
+    it('Verify Balance Sheet Amount after Create Entry', () => {
+        cy.createLedgerAPI('uitest').then((response) => {
+            if (response.status === 201){
+                cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+
+            }
+            cy.wait(2000)
+            cy.navigateToTrialBalanceOptions('Balance Sheet');
+            cy.searchOnPLAndBS(':nth-child(3) > :nth-child(2) > strong', 'uitest', '199')
         })
     });
 
