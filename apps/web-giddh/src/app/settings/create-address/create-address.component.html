@@ -25,7 +25,7 @@
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control"
                                             placeholder="Enter name">
@@ -131,7 +131,7 @@
                                     <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
                                     <div hidden class="form-group col-12">
                                         <label>Branch Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control" placeholder="Enter">
                                         <span class="danger"
@@ -206,7 +206,7 @@
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control"
                                             placeholder="Enter name" required>
