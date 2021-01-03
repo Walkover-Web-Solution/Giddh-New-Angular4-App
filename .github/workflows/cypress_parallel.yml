@@ -64,7 +64,7 @@ jobs:
                   # make sure every Cypress install prints minimal information
                   CI: 1
               run: |
-                  npm ci
+                  npm i
                   npx cypress cache path
                   npx cypress cache list
                   npx cypress verify
