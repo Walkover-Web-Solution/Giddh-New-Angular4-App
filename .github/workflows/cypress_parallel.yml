@@ -109,13 +109,11 @@ jobs:
                   npx cypress cache list
             # Starts local server, then runs Cypress tests and records results on the dashboard
             - name: Cypress tests
-              run: |
-                  npm start &
-                  npx cypress run --record --parallel --group "Parallel 2x"
+              run: npm run cy:run
               env:
                   # place your secret record key at
                   # https://github.com/cypress-io/cypress-example-kitchensink/settings/secrets
-                  CYPRESS_RECORD_KEY: ${{ secrets.dashboardRecordKey }}
+                 # CYPRESS_RECORD_KEY: ${{ secrets.dashboardRecordKey }}
                   TERM: xterm
 
                   # Save videos and screenshots as test artifacts
@@ -172,13 +170,11 @@ jobs:
                   npx cypress cache list
             # Starts local server, then runs Cypress tests and records results on the dashboard
             - name: Cypress tests
-              run: |
-                  npm start &
-                  npx cypress run --record --parallel --group "Parallel 2x"
+              run: npm run cy:run
               env:
                   # place your secret record key at
                   # https://github.com/cypress-io/cypress-example-kitchensink/settings/secrets
-                  CYPRESS_RECORD_KEY: ${{ secrets.dashboardRecordKey }}
+                 # CYPRESS_RECORD_KEY: ${{ secrets.dashboardRecordKey }}
                   TERM: xterm
 
                     # Save videos and screenshots as test artifacts
