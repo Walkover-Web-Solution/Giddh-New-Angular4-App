@@ -17,7 +17,7 @@
 
 			<div class="d-flex mb-1">
 
-				<label class="mr-1 align-items-center d-flex percent-label">Percent</label>
+				<label class="mr-1 ml-1 align-items-center d-flex percent-label">Percent</label>
 
 				<div class="position-relative percent-wrapper">
 					<input type="text" id="update-ledger-discount-percent" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
@@ -29,7 +29,7 @@
 			</div>
 
 			<div class="d-flex mb-1">
-				<label class="mr-1 align-items-center d-flex value-label">Value</label>
+				<label class="mr-1 ml-1 align-items-center d-flex value-label">Value</label>
 				<input type="text" id="update-ledger-discount-value" class="form-control text-right cursor-pointer w-100" [disabled]="!discountFromVal"
 					decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="discountFixedValueModal"
 					(input)="discountFromInput('FIX_AMOUNT', $event.target.value)">
