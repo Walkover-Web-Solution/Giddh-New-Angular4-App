@@ -371,7 +371,7 @@
                     <tr *ngFor="let item of voucherData.items; let i = index"
                         (mouseover)="hoveredItemForAction = item.uniqueName">
 
-                        <td width="4%" class="check-image"
+                        <td width="4%" class="mh18_img"
                             *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
                             <div class="mh18_img d-flex justify-content-start">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
