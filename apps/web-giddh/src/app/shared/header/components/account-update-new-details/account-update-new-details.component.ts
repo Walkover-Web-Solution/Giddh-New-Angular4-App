@@ -1584,7 +1584,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @param {string} [groupName]
      * @memberof AccountUpdateNewDetailsComponent
      */
-    get disableCurrency(): boolean {
+    public get disableCurrency(): boolean {
         return this.disableCurrencyIfSundryCreditor();
     }
 
