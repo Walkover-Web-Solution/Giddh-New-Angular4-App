@@ -105,7 +105,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         if (this.advanceReceiptAdjustmentUpdatedData) {
             this.formatAdjustmentData(this.advanceReceiptAdjustmentUpdatedData.adjustments);
             this.advanceReceiptAdjustmentPreUpdatedData = cloneDeep(this.advanceReceiptAdjustmentUpdatedData);
-            this.adjustVoucherForm = (this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length) ? cloneDeep(this.advanceReceiptAdjustmentUpdatedData) : this.adjustVoucherForm;
+            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData.adjustments.length ? cloneDeep(this.advanceReceiptAdjustmentUpdatedData) : this.adjustVoucherForm;
             if (this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
                 this.isTaxDeducted = true;
             } else {
