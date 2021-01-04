@@ -446,9 +446,11 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             if (response && response.status === "success" && response.body) {
                 let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                 this.attachedDocumentBlob = blob;
-                this.pdfViewer.pdfSrc = blob;
-                this.pdfViewer.showSpinner = true;
-                this.pdfViewer.refresh();
+                if(this.pdfViewer) {
+                    this.pdfViewer.pdfSrc = blob;
+                    this.pdfViewer.showSpinner = true;
+                    this.pdfViewer.refresh();
+                }
                 this.pdfPreviewLoaded = true;
             } else {
                 this.pdfPreviewHasError = true;

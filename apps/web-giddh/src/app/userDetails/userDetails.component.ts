@@ -373,7 +373,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public selectTab(id: number) {
-        if(this.staticTabs) {
+        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
             this.staticTabs.tabs[id].active = true;
         }
     }
