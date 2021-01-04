@@ -106,7 +106,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
                     this.base64Data = this.base64StringForModel;
                     const blob = b64toBlob(e.srcElement.result.split(',')[1], 'application/pdf');
-                    if (this.isElectron) {
+                    if (this.isElectron && this.pdfViewer) {
                         this.pdfViewer.pdfSrc = blob; // pdfSrc can be Blob or Uint8Array
                         this.pdfViewer.refresh();
                     }
