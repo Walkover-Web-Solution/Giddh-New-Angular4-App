@@ -4885,7 +4885,7 @@ label {
 }
 
 .grey-color {
-    color: #6d6d6d;
+    color: $gray;
 }
 
 .grp-col::-webkit-scrollbar {
@@ -6088,7 +6088,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .welcome-header {
     background: $white url("../images/Welcome.png") no-repeat center center;
     text-align: center;
-    padding: 0px 0 30px;
     position: relative;
 }
 
@@ -8763,6 +8762,16 @@ highcharts-chart .highcharts-container{
     flex: 1 1 0 !important;
     flex-shrink: 1 !important;
 }
+
+highcharts-chart{
+    .highcharts-container{
+        .highcharts-title{
+                width: 62px !important;
+                white-space: normal !important;
+                text-align: center;
+            }
+    }
+} 
 
 #incomeChart #highcharts-ufrwew1-29 {
     display: block;
