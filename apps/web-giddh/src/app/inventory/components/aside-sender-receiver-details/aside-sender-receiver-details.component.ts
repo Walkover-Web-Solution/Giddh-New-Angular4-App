@@ -85,7 +85,9 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     }
 
     selectTab(tabId: number) {
-        this.staticTabs.tabs[tabId].active = true;
+        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[tabId]) {
+            this.staticTabs.tabs[tabId].active = true;
+        }
     }
 
     closeAsidePane(event) {
