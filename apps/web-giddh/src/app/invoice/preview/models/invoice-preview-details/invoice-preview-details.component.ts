@@ -366,9 +366,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
                     if (result) {
                         this.selectedItem.blob = result;
-                        this.pdfViewer.pdfSrc = result;
-                        this.pdfViewer.showSpinner = true;
-                        this.pdfViewer.refresh();
+                        if(this.pdfViewer) {
+                            this.pdfViewer.pdfSrc = result;
+                            this.pdfViewer.showSpinner = true;
+                            this.pdfViewer.refresh();
+                        }
                         this.isVoucherDownloadError = false;
                     } else {
                         this.isVoucherDownloadError = true;
@@ -403,9 +405,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.attachedAttachmentBlob = base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
                             setTimeout(() => {
                                 this.selectedItem.blob = this.attachedAttachmentBlob;
-                                this.pdfViewer.pdfSrc = this.attachedAttachmentBlob;
-                                this.pdfViewer.showSpinner = true;
-                                this.pdfViewer.refresh();
+                                if(this.pdfViewer) {
+                                    this.pdfViewer.pdfSrc = this.attachedAttachmentBlob;
+                                    this.pdfViewer.showSpinner = true;
+                                    this.pdfViewer.refresh();
+                                }
                                 this.detectChanges();
                             }, 250);
                             this.isVoucherDownloadError = false;
@@ -435,9 +439,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 if (response && response.status === "success" && response.body) {
                     let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                     this.attachedDocumentBlob = blob;
-                    this.pdfViewer.pdfSrc = blob;
-                    this.pdfViewer.showSpinner = true;
-                    this.pdfViewer.refresh();
+                    if(this.pdfViewer) {
+                        this.pdfViewer.pdfSrc = blob;
+                        this.pdfViewer.showSpinner = true;
+                        this.pdfViewer.refresh();
+                    }
                     this.pdfPreviewLoaded = true;
                     this.detectChanges();
                 } else {
@@ -459,10 +465,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
                     if (result && result.status === 'success') {
                         let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
-                        this.pdfViewer.pdfSrc = blob;
                         this.selectedItem.blob = blob;
-                        this.pdfViewer.showSpinner = true;
-                        this.pdfViewer.refresh();
+
+                        if(this.pdfViewer) {
+                            this.pdfViewer.pdfSrc = blob;    
+                            this.pdfViewer.showSpinner = true;
+                            this.pdfViewer.refresh();
+                        }
                         this.isVoucherDownloadError = false;
                     } else {
                         this._toasty.errorToast(result.message, result.code);

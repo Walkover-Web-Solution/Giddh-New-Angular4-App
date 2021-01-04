@@ -1973,7 +1973,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public checkGstNumValidation(value, fieldName: string = '') {
         this.isValidGstinNumber = false;
         if (value) {
-            if (this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(value)) {
