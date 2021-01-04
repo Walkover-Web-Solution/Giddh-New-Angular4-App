@@ -2038,9 +2038,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public calculateInclusiveTaxesForAdvanceReceiptsInvoices(): void {
-        this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
-            item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
-        });
+        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
+            this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
+                item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
+            });
+        }
     }
 
     /**
@@ -2067,10 +2069,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public calculateInclusiveTaxesForAdvanceReceipts(): void {
         let totalAmount: number = 0;
-        this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
-            item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
-            totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
-        });
+        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
+            this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
+                item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
+                totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
+            });
+        }
         this.totalAdjustedAmount = totalAmount;
     }
 
