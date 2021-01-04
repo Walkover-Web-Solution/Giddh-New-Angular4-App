@@ -229,10 +229,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     public toggleExpand() {
         this.isAllExpanded = !this.isAllExpanded;
-        this.daybookData$ = this.daybookData$.pipe(map(sc => {
-            sc.entries.map(e => e.isExpanded = this.isAllExpanded);
-            return sc;
-        }));
+        if(this.daybookData$) {
+            this.daybookData$ = this.daybookData$.pipe(map(sc => {
+                sc.entries.map(e => e.isExpanded = this.isAllExpanded);
+                return sc;
+            }));
+        }
         this.checkIsStockEntryAvailable();
     }
 

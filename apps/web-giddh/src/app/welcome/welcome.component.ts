@@ -391,7 +391,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }, 100);
         } else {
             this.isCreateCompanyInProgress = false;
-            if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+            if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
                 if (this.isItemUpdateInProgress) {
                     // Check for contact number validity only for update flow of warehouse as
                     // the create warehouse validation will be performed in on-boarding component
@@ -587,7 +587,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.getStates();
             } else {
                 let countryRequest = new CountryRequest();
-                if (this.isOnBoardingInProgress) {
+                if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
                     countryRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
                 } else {
                     countryRequest.formName = 'onboarding';
@@ -658,7 +658,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.reFillTax();
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
-                if (this.isOnBoardingInProgress) {
+                if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
                     onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
                 } else {
                     onboardingFormRequest.formName = 'onboarding';
@@ -788,20 +788,26 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public isContactNumberValid(): boolean {
-        const contactNumberElement = this.contactNumberField.nativeElement;
+        const contactNumberElement = (this.contactNumberField && this.contactNumberField.nativeElement) ? this.contactNumberField.nativeElement : undefined;
         try {
             let parsedNumber = parsePhoneNumberFromString('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement.value, this.company.country as CountryCode);
             if (parsedNumber.isValid()) {
-                contactNumberElement.classList.remove('error-box');
+                if(contactNumberElement) {
+                    contactNumberElement.classList.remove('error-box');
+                }
                 return true;
             } else {
                 this._toasty.errorToast('Invalid Contact number');
-                contactNumberElement.classList.add('error-box');
+                if(contactNumberElement) {
+                    contactNumberElement.classList.add('error-box');
+                }
                 return false;
             }
         } catch (error) {
             this._toasty.errorToast('Invalid Contact number');
-            contactNumberElement.classList.add('error-box');
+            if(contactNumberElement) {
+                contactNumberElement.classList.add('error-box');
+            }
             return false;
         }
     }
@@ -813,7 +819,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public handleNameChange(itemName: string = ''): void {
-        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+        if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
             if (itemName && itemName.length > 100) {
                 this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
             }
@@ -827,7 +833,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public validateName(itemName: string = ''): void {
-        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+        if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
             setTimeout(() => {
                 if (itemName) {
                     itemName = itemName.trim();
@@ -850,7 +856,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private fillOnBoardingDetails(entity: string): void {
-        if (this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
+        if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.onBoardingType === OnBoardingType.Warehouse) {
             /*  For warehouse, if the warehouse item has detais then fill the form
                 with those details else search the default warehouse and fill with
                 default warehouse details. At last, if the details are not found
