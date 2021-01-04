@@ -280,7 +280,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.loggedInUser = this._generalService.user;
-        this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
+        this.subscriptionRequestObj.userUniqueName = (this.loggedInUser) ? this.loggedInUser.uniqueName : "";
 
         this.store.pipe(select(state => state.session.isCompanyCreated), takeUntil(this.destroyed$)).subscribe(response => {
             if(response) {
