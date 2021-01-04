@@ -1061,7 +1061,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @param {string} [groupName]
      * @memberof AccountAddNewDetailsComponent
      */
-    get disableCurrency(): boolean {
+    public get disableCurrency(): boolean {
         return this.disableCurrencyIfSundryCreditor();
     }
 
