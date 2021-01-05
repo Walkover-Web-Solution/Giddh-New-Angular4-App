@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
@@ -1131,8 +1131,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                             };
                             if (txn.selectedAccount && txn.selectedAccount.stock) {
-                                txn.selectedAccount.stock.rate = Number(this.vm.selectedLedger.exchangeRate > 1 ?
-                                    (txn.selectedAccount.stock.rate / this.vm.selectedLedger.exchangeRate).toFixed(HIGH_RATE_FIELD_PRECISION) : (txn.selectedAccount.stock.rate * this.vm.selectedLedger.exchangeRate).toFixed(HIGH_RATE_FIELD_PRECISION));
+                                txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.vm.selectedLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                             }
                             let rate = 0;
                             let unitCode = '';
@@ -1705,8 +1704,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 return rate.stockUnitCode === this.vm.stockTrxEntry.inventory.unit.code;
             });
             const stockRate = stock ? stock.rate : 0;
-            this.vm.stockTrxEntry.inventory.rate = Number(this.vm.selectedLedger.exchangeRate > 1 ?
-                (stockRate / this.vm.selectedLedger.exchangeRate).toFixed(this.ratePrecision) : (stockRate * this.vm.selectedLedger.exchangeRate).toFixed(this.ratePrecision));
+            this.vm.stockTrxEntry.inventory.rate = Number((stockRate / this.vm.selectedLedger.exchangeRate).toFixed(this.ratePrecision));
             this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
         } else {
             this.vm.inventoryAmountChanged();
