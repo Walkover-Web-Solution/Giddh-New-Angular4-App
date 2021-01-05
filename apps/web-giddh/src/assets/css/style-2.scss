@@ -11102,7 +11102,7 @@ input.mat-input-element{
     /*media query for height resolution*/
     @media(max-height:999px){
         .contact-main {
-            min-height: calc(100vh - 460px);
+            min-height: calc(100vh - 440px);
         }
     }
     @media(min-height:300px) and (max-height:730px){
