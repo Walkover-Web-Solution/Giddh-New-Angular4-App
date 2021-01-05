@@ -11332,7 +11332,7 @@ body.prevent-body-scroll {
 /*media query for height resolution*/
 @media(max-height:999px){
     .contact-main {
-        min-height: calc(100vh - 440px);
+        min-height: calc(100vh - 420px);
     }
 }
 @media(min-height:300px) and (max-height:730px){
