@@ -684,7 +684,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
-            this.staticTabs.tabs[0].active = true;
+
+            if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                this.staticTabs.tabs[0].active = true;
+            }
+
             if (accountAddress.controls.length === 0) {
                 this.addBlankGstForm();
             }
@@ -696,7 +700,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
-            this.staticTabs.tabs[0].active = false;
+
+            if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                this.staticTabs.tabs[0].active = false;
+            }
         }
     }
 

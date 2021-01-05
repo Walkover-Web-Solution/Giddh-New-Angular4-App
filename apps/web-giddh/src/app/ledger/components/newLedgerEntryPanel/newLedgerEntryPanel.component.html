@@ -134,7 +134,7 @@
                                 [isMandatory]="isRcmEntry" [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency"
-                                [applicableTaxes]="taxListForStock.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : []"
+                                [applicableTaxes]="taxListForStock?.length ? taxListForStock : currentTxn.selectedAccount?.applicableTaxes ? currentTxn.selectedAccount?.applicableTaxes : currentAccountApplicableTaxes?.length ? currentAccountApplicableTaxes : []"
                                 (taxAmountSumEvent)="calculateTax()" (hideOtherPopups)="hideDiscount()"
                                 (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
                                 [isAdvanceReceipt]="isAdvanceReceipt"
@@ -512,7 +512,7 @@
                         <label for="invoiceFile" class="cp fs16">
                             <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i> Attach file</label>
                     </label>
-                    <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">
+                    <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger?.attachedFile?.length > 0">
                         <span>{{ blankLedger.attachedFileName }}</span>
                         <label class="remove cp text-danger pl-1"
                             (click)="showDeleteAttachedFileModal()">(remove)</label>

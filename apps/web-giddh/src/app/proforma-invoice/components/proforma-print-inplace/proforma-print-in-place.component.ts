@@ -45,10 +45,13 @@ export class ProformaPrintInPlaceComponent implements OnInit {
             //
             this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
                 if (result) {
-                    this.pdfViewer.pdfSrc = result;
                     this.selectedItem.blob = result;
-                    this.pdfViewer.showSpinner = true;
-                    this.pdfViewer.refresh();
+
+                    if(this.pdfViewer) {
+                        this.pdfViewer.pdfSrc = result;   
+                        this.pdfViewer.showSpinner = true;
+                        this.pdfViewer.refresh();
+                    }
                     this.printVoucher();
                     this.isVoucherDownloadError = false;
                 } else {
