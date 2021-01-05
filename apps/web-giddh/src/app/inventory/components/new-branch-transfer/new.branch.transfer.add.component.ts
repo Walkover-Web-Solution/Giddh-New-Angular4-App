@@ -844,9 +844,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         }
                     });
                 }
-                if (this.branchTransfer.destinations[0].warehouse && this.branchTransfer.destinations[0].warehouse.uniqueName) {
+                if (this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse.uniqueName) {
                     setTimeout(() => {
-                        this.destinationWarehouse.writeValue(this.branchTransfer.destinations[0].warehouse.uniqueName);
+                        this.destinationWarehouse.writeValue(this.branchTransfer.destinations[index].warehouse.uniqueName);
                     }, 100);
                 }
             }
