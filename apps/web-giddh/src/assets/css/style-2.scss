@@ -9602,6 +9602,16 @@ span#HW_badge_cont:nth-child(3) {
 .select-linked-accounts sh-select-menu .menu {
     max-height: 250px;
 }
+.ratio-chart-block .highcharts-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    white-space: normal !important;
+    word-break: break-all;
+    font-size: 24px;
+    top:55px !important;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
