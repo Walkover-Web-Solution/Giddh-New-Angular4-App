@@ -95,7 +95,7 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <sh-select #defaultSource name="sourceWarehouse" [options]="senderWarehouses[branchTransfer.sources[0].uniqueName]" [isFilterEnabled]="true" [forceClearReactive]="senderWarehouseClear$ | async" [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName" (selected)="getWarehouseDetails('sources', 0); focusDestinationName();"
+                                <sh-select #sourceWarehouse name="sourceWarehouse" [options]="senderWarehouses[branchTransfer.sources[0].uniqueName]" [isFilterEnabled]="true" [forceClearReactive]="senderWarehouseClear$ | async" [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName" (selected)="getWarehouseDetails('sources', 0); focusDestinationName();"
                                     required (onClear)="resetWarehouse('sources', 0)">
                                 </sh-select>
                             </div>

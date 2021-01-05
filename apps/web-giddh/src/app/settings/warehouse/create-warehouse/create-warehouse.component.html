@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-lg-2 col-sm-2">
                     <div class="warehouse-image ">
-                        <img class="warehouse-image m-15" src="../../../assets/images/warehouse-image.svg"
+                        <img class="warehouse-image m-15" src="{{ imgPath }}"
                             alt="Warehouse image">
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                         Warehouse Name <span class="red-text">*</span>
                     </label>
                     <input [class.error-box]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid"
-                        type="text" required formControlName="name" class="form-control">
+                        type="text" maxlength="100" required formControlName="name" class="form-control">
                     <span class="danger pl-1"
                         *ngIf="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.errors?.maxlength">
                         Max. 100 characters allowed

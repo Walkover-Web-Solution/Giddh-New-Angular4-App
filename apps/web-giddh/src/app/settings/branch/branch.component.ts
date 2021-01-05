@@ -107,6 +107,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** True, if loader is to be displayed */
     public showLoader: boolean;
 
+    public imgPath: string = '';
+
     /** Stores the selected branch details */
     private branchDetails: any;
 
@@ -214,6 +216,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isMobileScreen = result.matches;
             this.changeBranchViewType('card')
         });
+
+        this.imgPath =  (isElectron|| isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**

@@ -180,6 +180,32 @@ span.viasocket a {
 .prefix-label{
     right:0px;
 }
+.verify-tick-icon{
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $nobel;
+}
+.verified-text{
+    color: $light-sea-green;
+    padding: 6px 10px;
+    margin-right: 10px;
+    margin-left: 0;
+}
+.delete-verified-icon{
+    padding:6px 10px;
+    border: 1px solid $gainsboro;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    i.icon-trash{
+        font-size: 18px;
+    }
+}
+
 @media(max-width:991px){
 #invoice-setting .show-on-mobile {
         display: inline-block;

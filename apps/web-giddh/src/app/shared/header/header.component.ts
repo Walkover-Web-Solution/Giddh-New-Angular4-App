@@ -81,6 +81,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('navigationModal', {static: true}) public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('dateRangePickerCmp', {static: true}) public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown', {static: true}) public companyDropdown: BsDropdownDirective;
+    /** Switch branch dropdown */
+    @ViewChild('subBranchDropdown', {static: false}) public subBranchDropdown: BsDropdownDirective;
     @ViewChild('supportTab', {static: true}) public supportTab: TabsetComponent;
     @ViewChild('searchCmpTextBox', {static: true}) public searchCmpTextBox: ElementRef;
     @ViewChild('expiredPlan', {static: true}) public expiredPlan: ModalDirective;
@@ -921,6 +923,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             e.stopPropagation();
         }
         this.companyDropdown.isOpen = false;
+        if (this.subBranchDropdown) {
+            this.subBranchDropdown.hide();
+        }
         this.forceOpenNavigation = false;
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
@@ -983,6 +988,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         e.preventDefault();
         e.stopPropagation();
+        if (this.subBranchDropdown) {
+            this.subBranchDropdown.hide();
+        }
         this.onItemSelected(acc);
     }
 
@@ -1165,6 +1173,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (response && response.body) {
                 if (screen.width <= 767 || isCordova) {
                     window.location.href = '/pages/mobile-home';
+                } else if (isElectron) {
+                    this.router.navigate([response.body.lastState]);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 200);
                 } else {
                     window.location.href = response.body.lastState;
                 }

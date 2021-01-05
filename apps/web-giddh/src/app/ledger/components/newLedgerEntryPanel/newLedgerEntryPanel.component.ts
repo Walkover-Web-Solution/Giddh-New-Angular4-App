@@ -137,6 +137,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
     /** Emits when more detail is opened */
     @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
+    /** Emits when other taxes are saved */
+    @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
@@ -386,17 +388,20 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             }
         }
-        if (this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
-        } else if (this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
+        if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
+            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes, []);
+        } else if (this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
+            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes, this.currentTxn.selectedAccount.particularAccountTax);
         } else {
             this.taxListForStock = [];
         }
         let companyTaxes: TaxResponse[] = [];
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
         let appliedTaxes: any[] = [];
-        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+
+        if(!this.blankLedger.otherTaxModal) {
+            this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+        }
 
         if(this.taxListForStock && this.taxListForStock.length > 0) {
             this.taxListForStock.forEach(tl => {
@@ -512,12 +517,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.totalForTax = this.currentTxn.total;
+                    this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
                 } else {
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+                    const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
                     this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
                 }
-                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
             } else {
                 // Amount is zero, set other parameters to zero
                 if (this.isAdvanceReceipt) {
@@ -549,7 +556,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.taxControll) {
                 this.taxControll.change();
             }
-            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
         }
 
         if (this.shouldShowRcmTaxableAmount) {
@@ -571,7 +582,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
 
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
 
             // calculate discount on change of price
             if (this.discountControl) {
@@ -587,7 +602,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public changeQuantity(val: string) {
         this.currentTxn.inventory.quantity = Number(val);
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.highPrecisionRate * this.currentTxn.inventory.quantity).toFixed(this.giddhBalanceDecimalPlaces));
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        if (this.currentTxn.inventory) {
+            this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+        } else {
+            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        }
 
         // calculate discount on change of price
         if (this.discountControl) {
@@ -647,7 +666,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
 
         if (this.discountControl) {
             this.discountControl.ledgerAmount = this.currentTxn.amount;
@@ -1045,6 +1068,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.removeSelectedInvoice();
             this.getInvoiceListsForCreditNote.emit(event.value);
             this.blankLedger.generateInvoice = true;
+            this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
@@ -1146,8 +1170,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public exchangeRateChanged() {
         this.blankLedger.exchangeRate = Number(this.blankLedger.exchangeRateForDisplay) || 0;
-        this.amountChanged();
-        this.calculateTotal();
+        if (this.currentTxn.inventory && this.currentTxn.inventory.unit && this.currentTxn.unitRate) {
+            const stock = this.currentTxn.unitRate.find(rate => {
+                return rate.stockUnitCode === this.currentTxn.inventory.unit.code;
+            });
+            const stockRate = stock ? stock.rate : 0;
+            this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger.exchangeRate).toFixed(this.ratePrecision));
+            this.changePrice(this.currentTxn.inventory.rate);
+        } else {
+            this.amountChanged();
+            this.calculateTotal();
+        }
     }
 
     /**
@@ -1237,7 +1270,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public handleAdvanceReceiptChange(): void {
-        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? SubVoucher.AdvanceReceipt : '';
+        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? SubVoucher.AdvanceReceipt : this.isRcmEntry ? SubVoucher.ReverseCharge : '';
         this.blankLedger.generateInvoice = this.isAdvanceReceipt;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.calculateTax();
@@ -1394,7 +1427,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
     * @memberof NewLedgerEntryPanelComponent
     */
-    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
+    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>, particularAccountTax: Array<any>): Array<string> {
         const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
         if (secondAccountTaxes) {
             secondAccountTaxes.reverse().forEach((tax: string) => {
@@ -1403,6 +1436,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             });
 
+        }
+        if (particularAccountTax && particularAccountTax.length) {
+            mergedAccountTaxes.push(particularAccountTax[0].uniqueName)
         }
         return mergedAccountTaxes;
     }
@@ -1452,7 +1488,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public assignUpdateActiveAccount(accountDetails: AccountResponse | AccountResponseV2): void {
         this.accountOtherApplicableDiscount = [];
         this.activeAccount = accountDetails;
-        let parentAcc = accountDetails.parentGroups[0].uniqueName;
+        let parentAcc = (accountDetails && accountDetails.parentGroups && accountDetails.parentGroups.length > 0) ? accountDetails.parentGroups[0].uniqueName : "";
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
         let assetsAccArray = ['assets'];
@@ -1469,7 +1505,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
             this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
-        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
+        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount.length)) {
             this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
         }
         if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {
@@ -1540,5 +1576,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountControl.discountTotal = this.currentTxn.discount;
             }
         }
+    }
+
+    /**
+     * This will emit the other taxes
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public emitOtherTaxes(): void {
+        this.saveOtherTax.emit(this.blankLedger);
     }
 }

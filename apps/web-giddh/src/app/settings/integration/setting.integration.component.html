@@ -310,7 +310,7 @@
                 <span class="icon-ecomm"></span> E-Comm
             </ng-template>
 
-            <div class="box clearfix">
+            <div class="box clearfix" *ngIf="false">
                 <h3 class="font-20 bold mb-2">Amazon Seller</h3>
                 <form #formDiv name="amazonSellerForm" [formGroup]="amazonSellerForm" novalidate="" autocomplete="off">
                     <ng-container formArrayName="sellers">

@@ -134,19 +134,19 @@
                                         <h6>Downloads</h6>
                                         <li>
                                             <a href="https://play.google.com/store/apps/details?id=com.giddh.app" target="_blank" title="android app">
-                                                <i class="fa fa-android"></i> Android</a>
+                                                <i class="icon-android"></i> Android</a>
                                         </li>
                                         <li>
                                             <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app">
-                                                <i class="fa fa-apple"></i> IOS</a>
+                                                <i class="icon-mac"></i> IOS</a>
                                         </li>
                                         <li>
                                             <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{macAppVersion}}.dmg" target="_blank" title="macOS app">
-                                                <i class="fa fa-apple"></i> MacOS</a>
+                                                <i class="icon-mac"></i> MacOS</a>
                                         </li>
                                         <li>
                                             <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe" target="_blank" title="windows app">
-                                                <i class="fa fa-windows"></i> Windows</a>
+                                                <i class="icon-windows"></i> Windows</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -224,9 +224,9 @@
 
     <div class="menu-wrapper">
         <!-- switch branch start -->
-        <div *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="switch-branch-wrapper">
-            <div class="btn-group" dropdown placement="bottom right" #subdropdown="bs-dropdown" [autoClose]="false" (onShown)="loadCompanyBranches()" (clickOutside)="subdropdown.isOpen = false">
-                <a id="button-basic" dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic">
+        <div *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="switch-branch-wrapper" [exclude]="'.switch-branch-section'" [attachOutsideOnClick]="true" (clickOutside)="subBranchDropdown.hide()">
+            <div class="btn-group" dropdown placement="bottom right" #subBranchDropdown="bs-dropdown" [autoClose]="false" (onShown)="loadCompanyBranches()">
+                <a id="button-basic" dropdownToggle class="dropdown-toggle cursor-pointer switch-branch-section" aria-controls="dropdown-basic">
                     <ng-container *ngIf="currentBranch">{{currentBranch?.alias}}</ng-container>
                     <ng-container *ngIf="!currentBranch">Switch Branch</ng-container>
                     <span class="icon-arrow-down"></span>
@@ -260,7 +260,7 @@
                             <p class="font-10 grey-color">({{selectedCompanyDetails.name}})</p>
                         </a>
                     </li>
-                    <li *ngIf="!currentBranch" (click)="subdropdown.isOpen = false" [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a class="dropdown-item go-to-company"
+                    <li *ngIf="!currentBranch" (click)="subBranchDropdown.hide()" [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a class="dropdown-item go-to-company company-create"
                             href="javascript:void(0);">Create Branch</a>
                     </li>
                 </ul>

@@ -99,7 +99,9 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
         this.showClearSearch = true;
 
         setTimeout(() => {
-            this.searchInputEl.nativeElement.focus();
+            if(this.searchInputEl && this.searchInputEl.nativeElement) {
+                this.searchInputEl.nativeElement.focus();
+            }
         }, 200);
     }
 

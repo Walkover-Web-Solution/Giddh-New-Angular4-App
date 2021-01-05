@@ -24,14 +24,14 @@
                 <div class="col-sm-4">
                     <div class="form-group" formGroupName="country">
                         <label>Country <sup class="text-danger">*</sup> </label>
-                        <sh-select [options]="countrySource" defaultValue="{{selectedCountry}}" required [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true" [disabled]="disableCountrySelection">
+                        <sh-select [options]="countrySource" defaultValue="{{selectedCountry}}" required [isFilterEnabled]="true" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true">
                         </sh-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label>Currency (account) </label>
-                        <sh-select [options]="currencySource$ | async" formControlName="currency" [isFilterEnabled]="true"></sh-select>
+                        <sh-select [options]="currencySource$ | async" formControlName="currency" [isFilterEnabled]="true" [disabled]="disableCurrency"></sh-select>
                     </div>
                 </div>
 

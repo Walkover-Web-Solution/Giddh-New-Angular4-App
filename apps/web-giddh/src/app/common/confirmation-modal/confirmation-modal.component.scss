@@ -19,3 +19,15 @@
         color: #000;
     }
 }
+@media(max-width:1366px){
+    .custom-confirmation-modal {
+        max-width: 500px;
+        width: 100%;
+    }
+}
+@media(max-width:1280px){
+    .custom-confirmation-modal {
+        max-width: 400px;
+        width: 100%;
+    }
+}

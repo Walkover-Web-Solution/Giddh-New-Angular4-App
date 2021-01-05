@@ -116,5 +116,7 @@ export interface BulkEmailRequestData {
 export interface BulkEmailRequestParams {
 	from: string;
 	to: string;
-	groupUniqueName: string;
+    groupUniqueName: string;
+    sortBy?: string;
+    sort?: string;
 }

@@ -13,8 +13,8 @@
     <section [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
         <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)" (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()">
         </search-filter>
-        <div>
-            <table class="table table-bordered basic giddh-table on-mobile-view table-responsive">
+        <div class="table-responsive">
+            <table class="table table-bordered basic giddh-table on-mobile-view">
                 <thead>
                     <tr>
                         <th [style.width.px]="25">
@@ -100,7 +100,7 @@
                             </span>
                         </td>
                     </tr>
-                    <tr *ngIf="!(searchResponseFiltered$ | async).length">
+                    <tr *ngIf="!(searchResponseFiltered$ | async)?.length">
                         <td colspan="9" class="text-center empty-table">
                             <h1>No Record Found !!</h1>
                         </td>

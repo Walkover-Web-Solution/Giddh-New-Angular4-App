@@ -81,10 +81,6 @@
                                 <div>
                                     <div *ngFor="let address of warehouse?.addresses" class="linked-add">
                                         <ng-container *ngIf="address">
-                                            <i (click)="setDefault(address, warehouse)" *ngIf="!address?.isDefault"
-                                                class="cursor-pointer icon-no-selected mr-05"></i>
-                                            <i (click)="setDefault(address, warehouse)" *ngIf="address?.isDefault"
-                                                class="cursor-pointer icon-favorite-selected mr-05"></i>
                                             <label class="cursor-pointer"
                                                 [popover]="popTemplate"
                                                 popoverTitle="{{address?.name}}" placement="right"
@@ -134,7 +130,7 @@
     <br>
     <br>
     <div class="branch-vector">
-        <img src="../../../assets/images/warehouse-vector.svg" alt="branch-image">
+        <img src="{{ imgPath2 }}" alt="branch-image">
     </div>
 </ng-container>
 
