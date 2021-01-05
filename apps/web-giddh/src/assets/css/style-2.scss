@@ -11329,11 +11329,18 @@ body.prevent-body-scroll {
         display: none!important;
     }
 }
-@media(max-height:800px){
+/*media query for height resolution*/
+@media(max-height:999px){
     .contact-main {
         min-height: 340px;
     }
 }
+@media(min-height:300px) and (max-height:730px){
+   .linked-address sh-select-menu .total-padding {
+        height: 257px !important;
+    }
+}
+
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
