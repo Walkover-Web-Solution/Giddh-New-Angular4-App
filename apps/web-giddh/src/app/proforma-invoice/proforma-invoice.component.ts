@@ -2752,6 +2752,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (transaction.isStockTxn) {
             transaction.rate = Number((transaction.amount / transaction.quantity).toFixed(this.highPrecisionRate));
         }
+        transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
@@ -3138,7 +3139,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 transaction.stockList = this.prepareUnitArr(o.stock.unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
                 // transaction.rate = transaction.stockList[0].rate;
-                transaction.rate = Number(this.exchangeRate > 1 ? (transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate) : (transaction.stockList[0].rate * this.exchangeRate).toFixed(this.highPrecisionRate));
+                transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
                 transaction.stockList.push(obj);
                 transaction.stockUnit = o.stock.stockUnit.code;
