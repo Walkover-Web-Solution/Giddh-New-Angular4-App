@@ -11089,32 +11089,35 @@ input.mat-input-element{
         }
     }
 
-    @media(max-height:800px){
+    /*media query for height resolution*/
+    @media(max-height:999px){
         .contact-main {
             min-height: 340px;
         }
     }
+    @media(min-height:300px) and (max-height:730px){
+    .linked-address sh-select-menu .total-padding {
+            height: 257px !important;
+        }
+    }
+    /*media query for height resolution end*/
+
     .modal.fade.giddh-calendar.show {
         z-index: 999999;
     }
-
     *::-webkit-scrollbar {
         width: 10px;
         height: 5px;
     }
-
-
     *::-webkit-scrollbar-track {
         background: $white-smoke;
     }
-
-
     *::-webkit-scrollbar-thumb {
         background: $nobel;
         border-radius: 5px;
         min-height: 60px;
     }
 
-.delete-icon-opacity {
-    opacity: 0.5;
-}
+    .delete-icon-opacity {
+        opacity: 0.5;
+    }

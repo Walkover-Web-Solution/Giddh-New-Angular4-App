@@ -13,7 +13,7 @@
                 <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
                 <div class="aside-body">
-                    <div class="aside-pane-form">
+                    <div class="aside-pane-form" [ngClass]="{'edit-branch-mode': addressConfiguration.type === 'editBranch'}">
                         <section
                             *ngIf="addressConfiguration.type !== 'editBranch' && addressConfiguration.type !== 'editWarehouse'"
                             class="clearfix margin-child-label">
@@ -159,7 +159,7 @@
                                     <div class="form-group col-12 linked-entities linked-add create">
                                         <label>Linked Address/es</label>
                                         <div class="form-group">
-                                            <sh-select [options]="addressConfiguration?.linkedEntities"
+                                            <sh-select class="linked-address" [options]="addressConfiguration?.linkedEntities"
                                                 name="linkedEntities" formControlName="linkedEntity"
                                                 (clearSingleItem)="handleFinalSelection($event)" [ItemHeight]="200"
                                                 [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity">
