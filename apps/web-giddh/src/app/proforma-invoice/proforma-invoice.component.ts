@@ -2862,7 +2862,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.entries.forEach(entry => {
                 const transaction = entry.transactions[0];
                 if (transaction.isStockTxn) {
-                    transaction.rate = Number(this.exchangeRate > 1 ? (transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate) : (transaction.stockList[0].rate * this.exchangeRate).toFixed(this.highPrecisionRate));
+                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     this.calculateStockEntryAmount(transaction);
                     this.calculateWhenTrxAltered(entry, transaction)
                 }
