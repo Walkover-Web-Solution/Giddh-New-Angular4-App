@@ -153,7 +153,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      * @memberof LedgerColumnarReportTableComponent
      */
     public getTotalNoOfColumn(): number {
-        return this.columnarTableColumn.length + 16;
+        return (this.columnarTableColumn ? this.columnarTableColumn.length : 0) + 16;
     }
 
     /**
