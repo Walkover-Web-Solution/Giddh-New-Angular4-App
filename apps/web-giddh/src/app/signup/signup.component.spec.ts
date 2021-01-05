@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoginActions } from '../actions/login.action';
@@ -127,7 +127,7 @@ describe('Signup Component', () => {
     let mockToast: ToasterService;
     let authService: AuthService;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [SignupComponent],
             imports: [
