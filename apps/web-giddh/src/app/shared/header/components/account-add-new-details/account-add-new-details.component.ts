@@ -1074,10 +1074,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public disableCurrencyIfSundryCreditor(): boolean {
         let groupName = (this.addAccountForm && this.addAccountForm.get('activeGroupUniqueName')) ? this.addAccountForm.get('activeGroupUniqueName').value : "";
-        let companyCountry = (this.activeCompany && this.activeCompany.countryV2) ? this.activeCompany.countryV2.alpha2CountryCode : "";
-        let accountCountry = (this.addAccountForm && this.addAccountForm.get('country') && this.addAccountForm.get('country').get('countryCode')) ? this.addAccountForm.get('country').get('countryCode').value : "";
-
-        if((groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") && companyCountry !== accountCountry) {
+        if(groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") {
             this.addAccountForm.get('currency').setValue(this.companyCurrency);
             return true;
         } else {
