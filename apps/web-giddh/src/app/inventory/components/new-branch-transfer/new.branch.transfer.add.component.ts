@@ -737,14 +737,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     }
                 });
             }
-            if (this.branchTransfer.sources[0] && this.branchTransfer.sources[0].uniqueName) {
+            // If multiple senders case for receipt note
+            const sourceIndex = this.transferType !== 'products' ? index : 0;
+            const destinationIndex = this.transferType !== 'products' ? 0 : index;
+            if (this.branchTransfer.sources[sourceIndex] && this.branchTransfer.sources[sourceIndex].uniqueName) {
                 // Update source warehouses
-                this.senderWarehouses[this.branchTransfer.sources[0].uniqueName] = [];
-                if(this.allWarehouses[this.branchTransfer.sources[0].uniqueName] && this.allWarehouses[this.branchTransfer.sources[0].uniqueName].length > 0) {
-                    this.allWarehouses[this.branchTransfer.sources[0].uniqueName].forEach(key => {
-                        if (this.branchTransfer.destinations[0] && this.branchTransfer.destinations[0].warehouse && key.uniqueName !== this.branchTransfer.destinations[0].warehouse.uniqueName &&
-                            (reInitializeWarehouses || key.taxNumber === (this.branchTransfer.destinations[0].warehouse.taxNumber || ''))) {
-                            this.senderWarehouses[this.branchTransfer.sources[0].uniqueName].push({ label: key.name, value: key.uniqueName });
+                this.senderWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName] = [];
+                if(this.allWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName] && this.allWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName].length > 0) {
+                    this.allWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName].forEach(key => {
+                        if (this.branchTransfer.destinations[destinationIndex] && this.branchTransfer.destinations[destinationIndex].warehouse && key.uniqueName !== this.branchTransfer.destinations[destinationIndex].warehouse.uniqueName &&
+                            (reInitializeWarehouses || key.taxNumber === (this.branchTransfer.destinations[destinationIndex].warehouse.taxNumber || ''))) {
+                            this.senderWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName].push({ label: key.name, value: key.uniqueName });
                         }
                     });
                 }
@@ -806,15 +809,20 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     }
                 });
             }
-            if (this.branchTransfer.destinations[0] && this.branchTransfer.destinations[0].uniqueName) {
+            // If multiple destinations case for delivery challan
+            const destinationIndex = this.transferType !== 'products' ? index : 0;
+            const sourceIndex = this.transferType !== 'products' ? 0 : index;
+            if (this.branchTransfer.destinations[destinationIndex] && this.branchTransfer.destinations[destinationIndex].uniqueName) {
                 // Update Destination warehouses
-                this.destinationWarehouses[this.branchTransfer.destinations[0].uniqueName] = [];
-                this.allWarehouses[this.branchTransfer.destinations[0].uniqueName].forEach(key => {
-                    if (key.uniqueName !== this.branchTransfer.sources[0].warehouse.uniqueName &&
-                        (reInitializeWarehouses || key.taxNumber === (this.branchTransfer.sources[0].warehouse.taxNumber || ''))) {
-                        this.destinationWarehouses[this.branchTransfer.destinations[0].uniqueName].push({ label: key.name, value: key.uniqueName });
-                    }
-                });
+                this.destinationWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName] = [];
+                if (this.allWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName] && this.allWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName].length > 0) {
+                    this.allWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName].forEach(key => {
+                        if (this.branchTransfer.sources[sourceIndex] && this.branchTransfer.sources[sourceIndex].warehouse && key.uniqueName !== this.branchTransfer.sources[sourceIndex].warehouse.uniqueName &&
+                            (reInitializeWarehouses || key.taxNumber === (this.branchTransfer.sources[sourceIndex].warehouse.taxNumber || ''))) {
+                            this.destinationWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName].push({ label: key.name, value: key.uniqueName });
+                        }
+                    });
+                }
             }
         }
         this.detectChanges();
@@ -1227,8 +1235,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
     }
 
-    public focusSelectDropdown(index: number): void {
-        if (this.allowAutoFocusInField) {
+    public focusSelectDropdown(index: number, event?: any): void {
+        if (this.allowAutoFocusInField && (!event || event.value)) {
             setTimeout(() => {
                 this.setActiveRow(index);
                 setTimeout(() => {

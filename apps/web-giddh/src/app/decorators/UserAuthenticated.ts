@@ -28,7 +28,11 @@ export class UserAuthenticated implements CanActivate {
                         });
                         this._router.navigate([p.lastState.replace(tempParams, '')], { queryParams });
                     } else {
-                        this._router.navigate([p.lastState]);
+                        if (p.lastState) {
+                            this._router.navigate([p.lastState]);
+                        } else {
+                            this._router.navigate(['home']);
+                        }
                     }
                 } else {
                     this._router.navigate(['home']);
