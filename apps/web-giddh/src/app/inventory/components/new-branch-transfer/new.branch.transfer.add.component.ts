@@ -1009,7 +1009,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.isLoading = false;
                 if (res) {
                     if (res.status === 'success') {
-                        this.initFormFields();
                         this.tempDateParams.dateOfSupply = new Date();
                         this.tempDateParams.dispatchedDate = "";
 
