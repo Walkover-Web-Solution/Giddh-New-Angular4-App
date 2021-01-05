@@ -583,7 +583,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
      * @param {number} index Index of warehouse
      * @memberof NewBranchTransferAddComponent
      */
-    resetWarehouse(type: string, index: number): void {
+    public resetWarehouse(type: string, index: number): void {
         if (type === "sources") {
             if (this.branchTransfer.sources[index] && this.branchTransfer.sources[index].warehouse) {
                 this.branchTransfer.sources[index].warehouse.name = null;
