@@ -1,6 +1,6 @@
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -24,7 +24,7 @@ import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
     templateUrl: './subscriptions.component.html'
 })
 
-export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('addCompanyNewModal', {static: true}) public addCompanyNewModal: ModalDirective;
     @ViewChild('companynewadd', {static: true}) public companynewadd: ElementViewContainerRef;
 
@@ -105,7 +105,18 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if(activeCompany) {
                         this.sortAssociatedCompanies();
-                        this.showCurrentCompanyPlan();
+
+                        this.seletedUserPlans = this.activeCompany.subscription;
+                        if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
+                            this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
+                        }
+
+                        if (this.seletedUserPlans.startedAt) {
+                            this.subscriptionDates.startedAt = moment(this.seletedUserPlans.startedAt.split("-").reverse().join("-"));
+                        }
+                        if (this.seletedUserPlans.expiry) {
+                            this.subscriptionDates.expiry = moment(this.seletedUserPlans.expiry.split("-").reverse().join("-"));
+                        }
                     }
                 });
             }
@@ -138,7 +149,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 });
                 this.isLoading = false;
             }
-            this.showCurrentCompanyPlan();
         });
 
         this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
@@ -146,10 +156,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
                 this.isPlanShow = true;
             }
         });
-    }
-
-    public ngAfterViewInit() {
-        this.showCurrentCompanyPlan();
     }
 
     /**
@@ -184,42 +190,6 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * This function will set the current company plan
-     *
-     * @memberof SubscriptionsComponent
-     */
-    public showCurrentCompanyPlan() {
-        if (this.activeCompany && this.subscriptions) {
-            let planMatched = false;
-            this.subscriptions.forEach(key => {
-                if (this.activeCompany.subscription && key.subscriptionId === this.activeCompany.subscription.subscriptionId) {
-                    planMatched = true;
-                    this.seletedUserPlans = key;
-                    if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
-                        this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
-                    }
-                }
-            });
-
-            if (!planMatched) {
-                this.seletedUserPlans = this.subscriptions[0];
-                if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
-                    this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
-                }
-            }
-        }
-
-        if (this.seletedUserPlans) {
-            if (this.seletedUserPlans.startedAt) {
-                this.subscriptionDates.startedAt = moment(this.seletedUserPlans.startedAt.split("-").reverse().join("-"));
-            }
-            if (this.seletedUserPlans.expiry) {
-                this.subscriptionDates.expiry = moment(this.seletedUserPlans.expiry.split("-").reverse().join("-"));
-            }
-        }
     }
 
     /**
