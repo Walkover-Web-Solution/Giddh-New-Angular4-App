@@ -1,7 +1,6 @@
 class MainPage {
 
-    getLoginButton()
-    {
+    getLoginButton() {
         return cy.xpath('//a[@class=\'btn btn-login\']')
     }
 
