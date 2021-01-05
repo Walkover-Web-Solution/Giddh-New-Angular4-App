@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Eve
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
@@ -414,8 +414,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     parentGroups: data.body.parentGroups,  // added due to parentGroups is getting null in search API
                 };
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
-                    txn.selectedAccount.stock.rate = Number(this.lc.blankLedger.exchangeRate > 1 ?
-                        (txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(HIGH_RATE_FIELD_PRECISION) : (txn.selectedAccount.stock.rate * this.lc.blankLedger.exchangeRate).toFixed(HIGH_RATE_FIELD_PRECISION));
+                    txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
                 if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
                     txn.selectedAccount.particularAccountTax = data.body.applicableTaxes;

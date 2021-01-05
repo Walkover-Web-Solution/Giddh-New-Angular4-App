@@ -546,9 +546,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.currentTxn && this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
                 if (this.currentTxn.inventory.quantity) {
-                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.highPrecisionRate);
+                    this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
                     this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
-                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.highPrecisionRate);
+                    this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
                 }
             }
             if (this.discountControl) {
@@ -579,7 +579,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public changePrice(val: string) {
         if (!this.isExchangeRateSwapped && !this.isInclusiveEntry) {
-            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.highPrecisionRate);
+            this.currentTxn.inventory.unit.rate = giddhRoundOff(Number(val), this.ratePrecision);
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
 
@@ -686,7 +686,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (this.currentTxn.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
-                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.highPrecisionRate);
+                this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
                 this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
                 this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
             }
@@ -1176,8 +1176,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 return rate.stockUnitCode === this.currentTxn.inventory.unit.code;
             });
             const stockRate = stock ? stock.rate : 0;
-            this.currentTxn.inventory.rate = Number(this.blankLedger.exchangeRate > 1 ?
-                (stockRate / this.blankLedger.exchangeRate).toFixed(this.highPrecisionRate) : (stockRate * this.blankLedger.exchangeRate).toFixed(this.highPrecisionRate));
+            this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger.exchangeRate).toFixed(this.ratePrecision));
             this.changePrice(this.currentTxn.inventory.rate);
         } else {
             this.amountChanged();
