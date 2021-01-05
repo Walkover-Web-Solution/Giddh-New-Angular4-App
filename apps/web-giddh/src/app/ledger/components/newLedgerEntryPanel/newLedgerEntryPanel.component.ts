@@ -137,6 +137,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
     /** Emits when more detail is opened */
     @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
+    /** Emits when other taxes are saved */
+    @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
@@ -289,11 +291,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.assignUpdateActiveAccount(acc);
             }
         });
-        this.store.pipe(select(stateAccount => stateAccount.groupwithaccounts.activeAccount),takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.assignUpdateActiveAccount(response);
-            }
-        });
+        // commented due to TCS TDS taxed key included in active acc response
+        // this.store.pipe(select(stateAccount => stateAccount.groupwithaccounts.activeAccount),takeUntil(this.destroyed$)).subscribe(response => {
+        //     if (response) {
+        //         this.assignUpdateActiveAccount(response);
+        //     }
+        // });
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
@@ -380,18 +383,26 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let activeAccountTaxes = [];
         if (this.activeAccount && this.activeAccount.applicableTaxes) {
             activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
+            if(this.activeAccount.otherApplicableTaxes && this.activeAccount.otherApplicableTaxes.length && activeAccountTaxes && activeAccountTaxes.length) {
+                if(this.activeAccount.otherApplicableTaxes[0].uniqueName !== activeAccountTaxes[0] && activeAccountTaxes.includes(this.activeAccount.otherApplicableTaxes[0].uniqueName)) {
+                  activeAccountTaxes = activeAccountTaxes.reverse();
+                }
+            }
         }
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
+            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes, []);
         } else if (this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
+            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes, this.currentTxn.selectedAccount.particularAccountTax);
         } else {
             this.taxListForStock = [];
         }
         let companyTaxes: TaxResponse[] = [];
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
         let appliedTaxes: any[] = [];
-        this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+
+        if(!this.blankLedger.otherTaxModal) {
+            this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+        }
 
         if(this.taxListForStock && this.taxListForStock.length > 0) {
             this.taxListForStock.forEach(tl => {
@@ -1064,6 +1075,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.removeSelectedInvoice();
             this.getInvoiceListsForCreditNote.emit(event.value);
             this.blankLedger.generateInvoice = true;
+            this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
@@ -1265,7 +1277,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public handleAdvanceReceiptChange(): void {
-        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? SubVoucher.AdvanceReceipt : '';
+        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? SubVoucher.AdvanceReceipt : this.isRcmEntry ? SubVoucher.ReverseCharge : '';
         this.blankLedger.generateInvoice = this.isAdvanceReceipt;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.calculateTax();
@@ -1422,7 +1434,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
     * @memberof NewLedgerEntryPanelComponent
     */
-    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
+    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>, particularAccountTax: Array<any>): Array<string> {
         const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
         if (secondAccountTaxes) {
             secondAccountTaxes.reverse().forEach((tax: string) => {
@@ -1431,6 +1443,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             });
 
+        }
+        if (particularAccountTax && particularAccountTax.length) {
+            mergedAccountTaxes.push(particularAccountTax[0].uniqueName)
         }
         return mergedAccountTaxes;
     }
@@ -1497,10 +1512,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
             this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
-        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
-            accountDetails.inheritedDiscounts.forEach(element => {
-                this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
-            });
+        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount.length)) {
+            this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
+        }
+        if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {
+            accountDetails.applicableTaxes.unshift(accountDetails.otherApplicableTaxes[0]);
         }
         this.accountOtherApplicableDiscount.map(item => item.isActive = true);
     }
@@ -1514,14 +1530,27 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts && this.currentTxn.selectedAccount.accountApplicableDiscounts.length) {
             this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
             this.currentTxn.discounts.map(item => { item.isActive = false });
-            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
-                this.currentTxn.discounts.map(item => {
-                    if (element.uniqueName === item.discountUniqueName) {
-                        item.isActive = true;
-                    }
-                    return item;
+            if(this.currentTxn.discounts && this.currentTxn.discounts.length === 1) {
+                setTimeout(() => {
+                    this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                        this.currentTxn.discounts.map(item => {
+                            if (element.uniqueName === item.discountUniqueName) {
+                                item.isActive = true;
+                            }
+                            return item;
+                        });
+                    });
+                }, 300);
+            } else {
+                this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                    this.currentTxn.discounts.map(item => {
+                        if (element.uniqueName === item.discountUniqueName) {
+                            item.isActive = true;
+                        }
+                        return item;
+                    });
                 });
-            });
+            }
         } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
             this.currentTxn.discounts.map(item => { item.isActive = false });
             this.accountOtherApplicableDiscount.forEach(element => {
@@ -1554,5 +1583,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountControl.discountTotal = this.currentTxn.discount;
             }
         }
+    }
+
+    /**
+     * This will emit the other taxes
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public emitOtherTaxes(): void {
+        this.saveOtherTax.emit(this.blankLedger);
     }
 }

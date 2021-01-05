@@ -24,13 +24,13 @@
                 <div class="col-sm-4">
                     <div class="form-group" formGroupName="country">
                         <label>Country <sup class="text-danger">*</sup> </label>
-                        <sh-select [options]="countrySource" [isFilterEnabled]="true" (viewInitEvent)="onViewReady($event)" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true" [disabled]="disableCountrySelection"></sh-select>
+                        <sh-select [options]="countrySource" [isFilterEnabled]="true" (viewInitEvent)="onViewReady($event)" formControlName="countryCode" (selected)="selectCountry($event)" [useInBuiltFilterForIOptionTypeItems]="true"></sh-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label>Currency (account) </label>
-                        <sh-select [options]="currencySource$ | async" defaultValue="{{selectedCurrency}}" formControlName="currency" [isFilterEnabled]="true"></sh-select>
+                        <sh-select [options]="currencySource$ | async" defaultValue="{{selectedCurrency}}" formControlName="currency" [isFilterEnabled]="true" [disabled]="disableCurrency"></sh-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -488,7 +488,7 @@
     </div>
 
     <!-- commented for later use isDebtorCreditor && isOtherSelectedTab -->
-    <div class="form" *ngIf="false">
+    <div class="form" *ngIf="isDebtorCreditor && isOtherSelectedTab">
         <div class="mrB2 select-box">
             <div class="form-group ">
                 <label>Default Discount <span

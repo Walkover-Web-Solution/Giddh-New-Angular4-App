@@ -21,8 +21,8 @@
             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 search-ledger-wrapper">
                 <div class="d-flex search-ledger-field">
                     <!-- please remove hidden attribute after functionality works -->
-                    <div class="select-all-icons" *ngIf="checkedTrxWhileHovering.length > 0 && isMobileScreen">
-                        <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering.length > 0">
+                    <div class="select-all-icons" *ngIf="checkedTrxWhileHovering?.length > 0 && isMobileScreen">
+                        <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering?.length > 0">
                             <input id="select-all-entries" type="checkbox" [(ngModel)]="debitCreditSelectAll"
                                 (click)="selectAllEntries($event, visibleTransactionTypeMobile)"> Select All
                         </div>
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <!-- [ngClass]="{'class-1':condition1==condition2, 'class-2': condition3==condition4}" -->
-                    <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
+                    <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering?.length === 0">
                         <span
                             [ngClass]="{'default-width-input': (searchText || isAdvanceSearchImplemented) && isMobileScreen,
                                          'full-width-input': (searchText || !isAdvanceSearchImplemented) && isMobileScreen }">
@@ -74,14 +74,14 @@
                     </span>
                     <span id="advance-filter" (click)="onOpenAdvanceSearch()" class="advance-icon d-flex advance-search-filter pointer"
                         [tooltip]="'Advance Search'" [placement]="'top'"
-                        [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
+                        [ngStyle]="{'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px': '0px'}">
                         <span class="icon-advance-filter"></span>
                     </span>
                     <a class="cp mr-l1 clear-filter-btn" id="clear-filter" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
                         href="javascript:;" (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
                         <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
                     </a>
-                    <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 && !isMobileScreen">
+                    <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen">
 
                         <button [disabled]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2" class="btn btn-danger" id="delete-ledger" (click)="performBulkAction('delete')" container="body"
                             tooltip="Delete" [placement]="'top'"><i class="icon-trash"></i>
@@ -415,7 +415,8 @@
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                         [invoiceList]="invoiceList"
                                                         (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
-                                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                                        (saveOtherTax)="saveOtherTax(item, $event)">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -541,7 +542,8 @@
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                         (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
-                                                        [invoiceList]="invoiceList">
+                                                        [invoiceList]="invoiceList"
+                                                        (saveOtherTax)="saveOtherTax(item, $event)">
                                                     </new-ledger-entry-panel>
                                                 </div>
                                                 <!-- end  -->
@@ -619,7 +621,7 @@
                                     (mouseout)="selectedTrxWhileHovering = ''">
                                     <span class="pull-left account-holder-checkbox">
                                         <input type="checkbox" id="{{'mobile-view-select-entry-cr-' + i}}"
-                                            [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering.length === 0)}"
+                                            [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering?.length === 0)}"
                                             class="d-none" [(ngModel)]="transactions.isChecked"
                                             (click)="entrySelected($event, transactions.entryUniqueName)">
                                     </span>
@@ -680,7 +682,7 @@
             <div [ngClass]="Shown ? 'active' : ''" hr-item
                 (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
                 class="left-col-new"
-                [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
+                [ngClass]="{'bdrR': (lc.transactionData$ | async)?.debitTransactions?.length >= (lc.transactionData$ | async)?.creditTransactions?.length}">
 
                 <!-- region debit transaction header-->
                 <table class="width100 h-table table-head hidden-xs">
@@ -709,7 +711,7 @@
 
                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
                                 <input type="checkbox" id="select-entries-date-cr" [(ngModel)]="debitSelectAll"
-                                    *ngIf="checkedTrxWhileHovering.length > 0"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
                             <td data-title="Particular" class="col-xs-5 col-md-6 col-lg-6">
@@ -740,7 +742,7 @@
 
                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Select All">
                                 <input type="checkbox" [(ngModel)]="debitSelectAll" id="select-entries-all-cr"
-                                    *ngIf="checkedTrxWhileHovering.length > 0"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
                             <td class="col-xs-5 col-md-6 col-lg-6"></td>
@@ -765,7 +767,7 @@
                                 <div class="d-flex align-items-center">
                                     <span style="float: left">
                                         <input type="checkbox" id="{{ 'select-entry-dr-' + i}}"
-                                            [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
+                                            [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering?.length === 0)}"
                                             class="d-none" [(ngModel)]="txn.isChecked"
                                             (click)="entrySelected($event, txn.entryUniqueName)" />
                                     </span>
@@ -917,7 +919,7 @@
                                 <!--new ledge popup-->
                                 <div class="pos-abs entry-modal" (click)="shDebit?.hide()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
+                                    <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         (moreDetailOpen)="handleOpenMoreDetail($event)"
@@ -938,7 +940,8 @@
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                         [shouldShowItcSection]="shouldShowItcSection"
-                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                        (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -954,7 +957,7 @@
             <!-- region credit transaction-->
             <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
                 (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
-                [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
+                [ngClass]="{'bdrL': (lc.transactionData$ | async)?.debitTransactions?.length < (lc.transactionData$ | async)?.creditTransactions?.length}">
                 <!-- region credit transaction header-->
                 <table class="width100 h-table hidden-xs">
                     <thead>
@@ -982,7 +985,7 @@
 
                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
                                 <input type="checkbox" id="select-all-entries-dr" [(ngModel)]="creditSelectAll"
-                                    *ngIf="checkedTrxWhileHovering.length > 0"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0"
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
                             <td data-title="B/F Balance" class="col-xs-5 col-md-6 col-lg-6">
@@ -1012,7 +1015,7 @@
 
                             <td class="col-xs-3 col-md-3 col-lg-3">
                                 <input type="checkbox"  id="select-all-entries-credit" [(ngModel)]="creditSelectAll"
-                                    *ngIf="checkedTrxWhileHovering.length > 0"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0"
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
                             <td class="col-xs-5 col-md-6 col-lg-6"></td>
@@ -1039,7 +1042,7 @@
                                     <span class="ledger-checkbox" style="float: left">
 
                                         <input type="checkbox" id="{{'select-entry-cr-' + i }}"
-                                            [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
+                                            [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering?.length === 0)}"
                                             class="d-none" [(ngModel)]="txn.isChecked"
                                             (click)="entrySelected($event, txn.entryUniqueName)" />
 
@@ -1197,7 +1200,7 @@
                                 <div class="pos-abs entry-modal" (click)="shCredit?.hide()"
                                     (keydown)="$event.stopPropagation()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger"
+                                    <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                                         [tcsOrTds]="tcsOrTds" [baseCurrencyDetails]="baseCurrencyDetails"
                                         [foreignCurrencyDetails]="foreignCurrencyDetails"
@@ -1218,7 +1221,8 @@
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                         [shouldShowItcSection]="shouldShowItcSection"
-                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable">
+                                        [isTouristSchemeApplicable]="isTouristSchemeApplicable"
+                                        (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)">
                                     </new-ledger-entry-panel>
                                 </div>
 

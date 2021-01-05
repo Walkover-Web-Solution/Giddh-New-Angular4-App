@@ -102,13 +102,13 @@
                                     <a href="javascript:void(0)" (click)="addNewCustomFieldRow()" class="btn btn-link pl-0">+ Add New Row</a>
                                 </div>
                                 <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="updateModeLength">
-                                    <label *ngIf="first || isMobileScreen" class="d-block">&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid" [ladda]="isSaveCustomInProgress" (click)="submitCustomFields(customFieldForm.value, 'update')">
+                                    <label *ngIf="isMobileScreen" class="d-block">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid || !isCustomFormValid" [ladda]="isSaveCustomInProgress" (click)="submitCustomFields(customFieldForm.value, 'update')">
                                         Update
                                     </button>
                                 </div>
                                 <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="!updateModeLength">
-                                    <label *ngIf="first || isMobileScreen" class="d-block">&nbsp;</label>
+                                    <label *ngIf="isMobileScreen" class="d-block">&nbsp;</label>
                                     <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid" [ladda]="isSaveCustomInProgress" (click)="submitCustomFields(customFieldForm.value, 'create')">
                                         Save
                                     </button>
