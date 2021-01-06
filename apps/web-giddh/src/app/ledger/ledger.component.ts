@@ -2079,7 +2079,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         const currentLedgerAccountDetails = {
             uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
-            parentGroups: this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
+            parentGroups: this.lc.activeAccount && this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
         };
         const selectedAccountDetails = {
             uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
