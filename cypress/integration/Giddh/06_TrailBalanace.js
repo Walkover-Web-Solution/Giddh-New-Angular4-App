@@ -28,6 +28,13 @@ describe('This is TrialBalance Search Test', () => {
         })
     })
 
+    beforeEach(()=>{
+        let allAccountName = ['cash', 'uitest', "invoiceaccount"];
+        allAccountName.forEach((accName) => {
+            cy.deleteAllLedgersAPI(accName)
+        })
+    })
+
     it('Verify Trial Balance Amount after Create Entry', () => {
         cy.createLedgerAPI('uitest').then((response) => {
             if (response.status === 201){
