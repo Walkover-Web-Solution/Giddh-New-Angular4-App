@@ -2073,13 +2073,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     private handleRcmVisibility(transaction: TransactionVM): void {
+        let formattedCurrentLedgerAccountParentGroups = [];
+        if (transaction.selectedAccount) {
+            formattedCurrentLedgerAccountParentGroups = transaction.selectedAccount.parentGroups.map(parent => ({uniqueName: parent}));
+        }
         const currentLedgerAccountDetails = {
-            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
-            parentGroups: transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
-        };
-        const selectedAccountDetails = {
             uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
             parentGroups: this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
+        };
+        const selectedAccountDetails = {
+            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
+            parentGroups: formattedCurrentLedgerAccountParentGroups.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
         };
         const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
         if (this.lc && this.lc.currentBlankTxn) {
