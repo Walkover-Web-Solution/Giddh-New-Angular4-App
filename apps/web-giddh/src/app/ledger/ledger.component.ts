@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Eve
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
@@ -337,11 +337,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
-            if (data && data.yodleeAdded) {
-                this.getBankTransactions();
-            } else {
-                this.hideEledgerWrap();
-            }
+            this.getBankTransactions();
         });
     }
 
@@ -409,6 +405,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                     accountApplicableDiscounts: data.body.applicableDiscounts
                 };
+                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                    txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                }
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
                 let unitCode = '';
@@ -444,8 +443,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             rate
                         }
                     };
+                } else {
+                    delete txn.inventory;
                 }
-                if (rate > 0 && txn.amount === 0) {
+                if (rate > 0) {
                     txn.amount = rate;
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
@@ -865,11 +866,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // After the success of the entrance call for bank transactions
                 this.lc.activeAccount$.subscribe((data: AccountResponse) => {
                     this._loaderService.show();
-                    if (data && data.yodleeAdded) {
-                        this.getBankTransactions();
-                    } else {
-                        this.hideEledgerWrap();
-                    }
+                    this.getBankTransactions();
                 });
             }
         });
@@ -901,11 +898,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.advanceSearchComp.resetAdvanceSearchModal();
                 }
 
-                if (accountDetails.yodleeAdded) {
-                    this.getBankTransactions();
-                } else {
-                    this.hideEledgerWrap();
-                }
+                this.getBankTransactions();
 
                 this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
                 if (accountDetails.currency && profile.baseCurrency) {

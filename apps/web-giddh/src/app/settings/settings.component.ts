@@ -167,13 +167,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
         const selectedId = this.staticTabs.tabs.findIndex(p => p.active);
         if (key === 'alt+right' && selectedId < this.staticTabs.tabs.length) {
             this.staticTabs.tabs[selectedId + 1].active = true;
-        } else if (selectedId > 0) {
+        } else if (selectedId > 0 && this.staticTabs.tabs.length) {
             this.staticTabs.tabs[selectedId - 1].active = true;
         }
     }
 
     public selectTab(id: number) {
-        this.staticTabs.tabs[id].active = true;
+        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
+            this.staticTabs.tabs[id].active = true;
+        }
     }
 
     public assignChildtabForIntegration(childTab: string): number {

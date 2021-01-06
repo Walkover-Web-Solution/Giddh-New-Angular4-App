@@ -635,42 +635,48 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
             let allowWarehouse = true;
 
-            this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
-                allowWarehouse = true;
+            if(this.allWarehouses[this.branchTransfer.sources[index].uniqueName] && this.allWarehouses[this.branchTransfer.sources[index].uniqueName].length > 0) {
+                this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
+                    allowWarehouse = true;
 
-                if (key.uniqueName === this.branchTransfer.sources[index].warehouse.uniqueName) {
-                    allowWarehouse = false;
-                }
+                    if (key.uniqueName === this.branchTransfer.sources[index].warehouse.uniqueName) {
+                        allowWarehouse = false;
+                    }
 
-                if (allowWarehouse) {
-                    this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
-                }
-            });
-            if (this.branchTransfer.destinations[index].uniqueName) {
-                // Update Destination warehouses
-                this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
-                this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
-                    if (key.uniqueName !== this.branchTransfer.sources[index].warehouse.uniqueName) {
-                        this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                    if (allowWarehouse) {
+                        this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                     }
                 });
+            }
+            if (this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].uniqueName) {
+                // Update Destination warehouses
+                this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
+                if(this.allWarehouses[this.branchTransfer.destinations[index].uniqueName] && this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].length > 0) {
+                    this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
+                        if (key.uniqueName !== this.branchTransfer.sources[index].warehouse.uniqueName) {
+                            this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                        }
+                    });
+                }
             }
         } else {
             if (this.allWarehouses && this.allWarehouses[this.branchTransfer.sources[0].uniqueName]) {
                 this.destinationWarehouses[this.branchTransfer.sources[0].uniqueName] = [];
                 let allowWarehouse = true;
 
-                this.allWarehouses[this.branchTransfer.sources[0].uniqueName].forEach(key => {
-                    allowWarehouse = true;
-
-                    if (key.uniqueName === this.branchTransfer.sources[0].warehouse.uniqueName) {
-                        allowWarehouse = false;
-                    }
-
-                    if (allowWarehouse) {
-                        this.destinationWarehouses[this.branchTransfer.sources[0].uniqueName].push({ label: key.name, value: key.uniqueName });
-                    }
-                });
+                if(this.allWarehouses[this.branchTransfer.sources[0].uniqueName] && this.allWarehouses[this.branchTransfer.sources[0].uniqueName].length > 0) {
+                    this.allWarehouses[this.branchTransfer.sources[0].uniqueName].forEach(key => {
+                        allowWarehouse = true;
+    
+                        if (key.uniqueName === this.branchTransfer.sources[0].warehouse.uniqueName) {
+                            allowWarehouse = false;
+                        }
+    
+                        if (allowWarehouse) {
+                            this.destinationWarehouses[this.branchTransfer.sources[0].uniqueName].push({ label: key.name, value: key.uniqueName });
+                        }
+                    });
+                }
             }
         }
     }
