@@ -28,7 +28,12 @@ export class ExceptionLogService implements ErrorHandler {
      */
     public handleError(error: any): void {
         if (error.stack) {
-            this.addUiException({ component: '', exception: error.stack }).subscribe(() => { }, () => { });
+            this.addUiException({ component: '', exception: error.stack }).subscribe(() => {
+                const chunkFailedMessage = /Loading chunk [\d]+ failed/;
+                if (chunkFailedMessage.test(error.stack)) {
+                    window.location.reload();
+                }
+            }, () => { });
         }
         throw error;
     }
