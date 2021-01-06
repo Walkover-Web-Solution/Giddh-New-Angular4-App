@@ -92,8 +92,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public companyCustomFields: any[] = [];
     /** Observable for selected active group  */
     private activeGroup$: Observable<any>;
-    /** This will handle if we need to disable country selection */
-    public disableCountrySelection: boolean = false;
+    /** This will handle if we need to disable currency selection */
+    public disableCurrencySelection: boolean = false;
+    /** This will hold active parent group */
+    public activeParentGroup: string = "";
 
     constructor(
         private _fb: FormBuilder,
@@ -127,8 +129,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }
-
-        this.disableCountryIfSundryCreditor();
 
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
@@ -645,8 +645,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
-            let currencyCode = this.countryCurrency[event.value];
-            this.addAccountForm.get('currency').setValue(currencyCode);
+            if(!this.disableCurrencyIfSundryCreditor()) {
+                let currencyCode = this.countryCurrency[event.value];
+                this.addAccountForm.get('currency').setValue(currencyCode);
+            }
             this.getStates(event.value);
             this.toggleStateRequired();
             this.resetGstStateForm();
@@ -678,8 +680,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public isParentDebtorCreditor(activeParentgroup: string) {
-        this.disableCountryIfSundryCreditor(activeParentgroup);
-
+        this.activeParentGroup = activeParentgroup;
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -743,8 +744,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({label: res[key].code, value: res[key].code});
-
                 });
+
                 this.currencySource$ = observableOf(this.currencies);
                 setTimeout(() => {
                     // Timeout is used as value were not updated in form
@@ -1055,16 +1056,28 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * This will disable country field if selected group or parent group is sundry creditor
+     * This will disable currency field if selected group or parent group is sundry creditor
      *
      * @param {string} [groupName]
      * @memberof AccountAddNewDetailsComponent
      */
-    public disableCountryIfSundryCreditor(groupName?: string): void {
-        if((groupName && groupName === "sundrycreditors") || this.activeGroupUniqueName === "sundrycreditors") {
-            this.disableCountrySelection = true;
+    public get disableCurrency(): boolean {
+        return this.disableCurrencyIfSundryCreditor();
+    }
+
+    /**
+     * This will disable currency field if selected group or parent group is sundry creditor
+     *
+     * @returns {boolean}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public disableCurrencyIfSundryCreditor(): boolean {
+        let groupName = (this.addAccountForm && this.addAccountForm.get('activeGroupUniqueName')) ? this.addAccountForm.get('activeGroupUniqueName').value : "";
+        if(groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") {
+            this.addAccountForm.get('currency').setValue(this.companyCurrency);
+            return true;
         } else {
-            this.disableCountrySelection = false;
+            return false;
         }
     }
 }
