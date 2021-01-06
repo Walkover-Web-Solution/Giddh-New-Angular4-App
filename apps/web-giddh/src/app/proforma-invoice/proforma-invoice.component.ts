@@ -1368,13 +1368,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
 
+                        this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
+                            this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
+                        });
+
                         this.showGstAndTrnUsingCountryName(this.customerCountryName);
                         if (this.isMulticurrencyAccount) {
-                            this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency,
-                                moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
-                            this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
-                                this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
-                            });
+                            this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
                             this.companyCurrencyName = tempSelectedAcc.currency;
                         } else {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -6223,7 +6223,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
 
                     this.activeIndx = lastIndex;
-                    this.invFormData.entries[lastIndex].entryDate = this.universalDate;
+                    this.invFormData.entries[lastIndex].entryDate = this.invFormData.voucherDetails.voucherDate || this.universalDate;
                     this.invFormData.entries[lastIndex].transactions[transactionLoop].accountUniqueName = item.uniqueName;
                     this.invFormData.entries[lastIndex].transactions[transactionLoop].fakeAccForSelect2 = item.uniqueName;
                     this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
