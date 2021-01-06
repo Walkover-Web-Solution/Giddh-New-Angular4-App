@@ -35,7 +35,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
     public allSubscriptions: SubscriptionsUser[] = [];
     public subscriptions$: Observable<SubscriptionsUser[]>;
     public seletedUserPlans: SubscriptionsUser;
-    public selectedPlanCompanies: CompaniesWithTransaction[];
+    //public selectedPlanCompanies: CompaniesWithTransaction[];
     public isPlanShow: boolean = false;
     public searchString = '';
     public transactions: any;
@@ -107,9 +107,9 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
                         this.sortAssociatedCompanies();
 
                         this.seletedUserPlans = this.activeCompany.subscription;
-                        if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
-                            this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
-                        }
+                        // if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
+                        //     this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
+                        // }
 
                         if (this.seletedUserPlans.startedAt) {
                             this.subscriptionDates.startedAt = moment(this.seletedUserPlans.startedAt.split("-").reverse().join("-"));
@@ -175,9 +175,9 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
     public selectedSubscriptionPlan(subscription: SubscriptionsUser) {
         if (subscription) {
             this.seletedUserPlans = subscription;
-            if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
-                this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
-            }
+            // if (this.seletedUserPlans && this.seletedUserPlans.companiesWithTransactions) {
+            //     this.selectedPlanCompanies = this.seletedUserPlans.companiesWithTransactions;
+            // }
         }
     }
 

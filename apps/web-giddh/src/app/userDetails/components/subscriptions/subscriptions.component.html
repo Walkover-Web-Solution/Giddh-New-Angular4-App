@@ -185,7 +185,7 @@
                             <div class="d-flex justify-content-between pl-2 pr-2 associated-company-heading">
                                 <h2 class="section-head pb-0">Associated Companies</h2>
                                 <div class="clearfix">
-                                    <div class="active d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'active' || calculateRemainingDays(activeCompany?.subscription?.expiry) === 'Active'">
+                                    <div class="active d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'active' && calculateRemainingDays(activeCompany?.subscription?.expiry) === 'Active'">
                                         <span class="green-dote"> </span> Active
                                     </div>
                                     <div class="text-warning font-14 d-inline-block middle" *ngIf="activeCompany?.subscription?.status === 'trial' && calculateRemainingDays(activeCompany?.subscription?.expiry) !== 'Active'">
