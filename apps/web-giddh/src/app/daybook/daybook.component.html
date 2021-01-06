@@ -158,26 +158,21 @@
                         </tr>
                     </ng-container>
                 </tbody>
-
             </table>
-
-
-
-            <div>
-            </div>
         </div>
 
         <div class="mr-t2 text-center">
-            <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems  |giddhCurrency}}
+            <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}}
                 Transactions
-                | {{(daybookData$ | async)?.totalPages  |giddhCurrency}} Pages
+                | {{(daybookData$ | async)?.totalPages}} Pages
             </small>
             <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0 Transactions | 0 Pages</small>
         </div>
 
         <!-- pagination -->
         <div class="mt-1">
-            <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
+            <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count" [rotate]="false" (pageChanged)="pageChanged($event)">
+            </pagination>
         </div>
         <!-- pagination -->
 
