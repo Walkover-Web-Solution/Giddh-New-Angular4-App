@@ -3,7 +3,7 @@
         <p class="company-name-alice">{{companyInitials}}</p>
         <div class="close-btn cursor-pointer" (click)="closeMobileSidebar.emit(true)"><i class="icon-cross"></i></div>
         <div class="company-details" *ngIf="selectedCompany">
-            <p class="company-name">{{selectedCompany.name}}</p>
+            <p class="company-name">{{selectedCompany?.name}}</p>
             <p>
                 <small>
                     <span *ngIf="selectedCompany && selectedCompany?.alias">
