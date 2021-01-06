@@ -135,7 +135,7 @@
                         <td *ngIf="currentOrganizationType !== 'BRANCH'" data-title="Receiver">{{ item.receiver }}</td>
                         <td data-title="From Warehouse">{{ item.fromWarehouse }}</td>
                         <td data-title="To Warehouse">{{ item.toWarehouse }}</td>
-                        <td data-title="Total Amount" class="text-right">{{activeCompany.baseCurrencySymbol}}
+                        <td data-title="Total Amount" class="text-right">{{activeCompany?.baseCurrencySymbol}}
                             {{ item.totalAmount | giddhCurrency }}</td>
                         <td data-title="Action">
                             <div class="btn-group" container="body" dropdown [autoClose]="true">
