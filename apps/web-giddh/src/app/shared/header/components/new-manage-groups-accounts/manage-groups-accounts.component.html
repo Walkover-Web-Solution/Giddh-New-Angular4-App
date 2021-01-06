@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="updateModeLength">
                                     <label *ngIf="isMobileScreen" class="d-block">&nbsp;</label>
-                                    <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid" [ladda]="isSaveCustomInProgress" (click)="submitCustomFields(customFieldForm.value, 'update')">
+                                    <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid || !isCustomFormValid" [ladda]="isSaveCustomInProgress" (click)="submitCustomFields(customFieldForm.value, 'update')">
                                         Update
                                     </button>
                                 </div>

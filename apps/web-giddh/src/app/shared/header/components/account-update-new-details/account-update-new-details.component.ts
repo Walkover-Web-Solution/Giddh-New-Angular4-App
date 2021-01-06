@@ -488,7 +488,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         for (const el of groupList) {
             if (el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
+                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses' || this.isDebtorCreditor)) {
                     result = true;
                     break;
                 }

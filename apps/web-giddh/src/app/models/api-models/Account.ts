@@ -54,6 +54,7 @@ export class AccountResponse implements IAccountCreate {
     public inheritedDiscounts: any[];
     public applicableDiscounts?: any[];
     public category?: string;
+    public otherApplicableTaxes?: any[];
 }
 
 /**
@@ -240,7 +241,7 @@ export class AccountResponseV2 {
     public inheritedDiscounts: any[];
     public customFields?: CustomFieldsData[];
     public category?: string;
-
+    public otherApplicableTaxes?: any[];
 }
 
 /*
