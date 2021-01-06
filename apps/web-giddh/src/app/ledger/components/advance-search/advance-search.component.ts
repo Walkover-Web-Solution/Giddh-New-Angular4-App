@@ -403,7 +403,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('includeAmount').patchValue(false);
                 this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
                 this.advanceSearchForm.get('amountLessThan').patchValue(false);
-                this.advanceSearchForm.get('amountEqualTo').patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo').patchValue(true);
                 break;
             case 'inventoryQty-greaterThan':
                 this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
