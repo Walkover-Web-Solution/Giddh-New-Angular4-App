@@ -118,10 +118,12 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         });
         if (branchName) {
             this.currentCompanyBranches = branches.filter(branch => {
-                if (!branch.alias) {
-                    return branch.name.toLowerCase().includes(branchName.toLowerCase());
-                } else {
-                    return branch.name.toLowerCase().includes(branchName.toLowerCase()) || branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                if(branch) {
+                    if (!branch.alias) {
+                        return branch.name.toLowerCase().includes(branchName.toLowerCase());
+                    } else {
+                        return branch.name.toLowerCase().includes(branchName.toLowerCase()) || branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                    }
                 }
             });
         } else {
