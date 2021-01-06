@@ -2939,7 +2939,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .contact-main {
-    min-height: 650px;
+    min-height: 560px;
 }
 
 .hide-header .nav.nav-tabs {
@@ -9836,6 +9836,12 @@ span#HW_badge_cont:nth-child(3) {
         right:  7px !important;
     }
 }
+.mobile-setting-sidebar {
+    overflow-y: hidden;
+}
+.select-linked-accounts sh-select-menu .menu {
+    max-height: 250px;
+}
 .ratio-chart-block .highcharts-title{
     display: flex;
     justify-content: center;
@@ -10024,24 +10030,24 @@ input.mat-input-element{
         .right-bar {
         width: 100% !important;
     }
-}
-@media(max-width:1191px) and (min-width:1024px){
-    .recurring-form-wrapper{
-        .recurring-form{
-            sh-select{
-                div{
-                    width: 100%;
-                    input{
-                        min-width: 100%;
-                        max-width: 100%;
+    @media(max-width:1191px) and (min-width:1024px){
+        .recurring-form-wrapper{
+            .recurring-form{
+                sh-select{
+                    div{
+                        width: 100%;
+                        input{
+                            min-width: 100%;
+                            max-width: 100%;
+                        }
                     }
                 }
-            }
-            giddh-datepicker{
-                width: 100%;
-                .mat-form-field{
-                    max-width: 100%;
-                    min-width: 100%;
+                giddh-datepicker{
+                    width: 100%;
+                    .mat-form-field{
+                        max-width: 100%;
+                        min-width: 100%;
+                    }
                 }
             }
         }
@@ -11311,6 +11317,10 @@ input.mat-input-element{
     margin: 0 !important;
 }
 
+.modal.fade.giddh-calendar.show {
+    z-index: 999999;
+}
+
 body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
@@ -11339,10 +11349,6 @@ body.prevent-body-scroll {
    .linked-address sh-select-menu .total-padding {
         height: 257px !important;
     }
-}
-
-.modal.fade.giddh-calendar.show {
-    z-index: 999999;
 }
 *::-webkit-scrollbar {
   width: 10px;
