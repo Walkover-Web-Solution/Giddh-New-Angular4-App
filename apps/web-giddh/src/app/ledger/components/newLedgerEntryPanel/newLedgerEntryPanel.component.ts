@@ -1445,7 +1445,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         }
         if (particularAccountTax && particularAccountTax.length) {
-            mergedAccountTaxes.push(particularAccountTax[0].uniqueName)
+            mergedAccountTaxes.push(particularAccountTax[0].uniqueName);
         }
         return mergedAccountTaxes;
     }
