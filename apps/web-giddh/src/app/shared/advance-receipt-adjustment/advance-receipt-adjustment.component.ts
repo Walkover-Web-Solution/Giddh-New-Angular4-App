@@ -625,12 +625,20 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
 
         if (entryData && this.newAdjustVoucherOptions && this.newAdjustVoucherOptions.length) {
             selectedVoucherOptions = this.newAdjustVoucherOptions.find(item => {
-                return item.label === entryData.voucherNumber;
+                if (item.label !== '-') {
+                    return item.label === entryData.voucherNumber;
+                } else {
+                    return item.value === entryData.uniqueName;
+                }
             });
         }
         if (entryData && this.advanceReceiptAdjustmentPreUpdatedData && this.advanceReceiptAdjustmentPreUpdatedData.adjustments && this.advanceReceiptAdjustmentPreUpdatedData.adjustments.length) {
             selectedVoucherPreAdjusted = this.advanceReceiptAdjustmentPreUpdatedData.adjustments.find(item => {
-                return item.voucherNumber === entryData.voucherNumber;
+                if (item.voucherNumber !== '-') {
+                    return item.voucherNumber === entryData.voucherNumber;
+                } else {
+                    return item.uniqueName === entryData.uniqueName;
+                }
             });
         }
         if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.balanceDue && selectedVoucherPreAdjusted.balanceDue) {
