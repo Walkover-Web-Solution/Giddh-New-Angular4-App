@@ -1,10 +1,9 @@
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
-import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
@@ -12,7 +11,6 @@ import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { DaybookAdvanceSearchModelComponent } from './advance-search/daybook-advance-search.component';
@@ -24,17 +22,9 @@ import { OrganizationType } from '../models/user-login-state';
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
-    styleUrls: [`./daybook.component.scss`],
-    styles: [`
-    .table-container section div > div {
-      padding: 8px 8px;
-    }
-
-    .trial-balance.table-container > div > section {
-      border-left: 0;
-    }
-  `]
+    styleUrls: [`./daybook.component.scss`]
 })
+
 export class DaybookComponent implements OnInit, OnDestroy {
     public companyName: string;
     /** True, If loader is working */
@@ -50,7 +40,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
     @ViewChild('exportDaybookModal', {static: true}) public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
-    @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
     /** Daybook advance search component reference */
     @ViewChild('daybookAdvanceSearch', {static: true}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     /** True, if entry expanded (at least one entry) */
@@ -87,11 +76,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
+    /** This will hold the daybook api response */
+    public daybookData: any = {};
+    /** This will hold if today is selected in universal */
+    public todaySelected: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private _companyActions: CompanyActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private _daybookActions: DaybookActions,
         private store: Store<AppState>,
         private generalService: GeneralService,
@@ -125,7 +117,18 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 data.entries.map(item => {
                     item.isExpanded = this.isAllExpanded;
                 });
-                this.loadPaginationComponent(data);
+
+                if(this.todaySelected) {
+                    this.daybookQueryRequest.from = moment(data.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.daybookQueryRequest.to = moment(data.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+
+                    this.selectedDateRange = { startDate: moment(data.fromDate, GIDDH_DATE_FORMAT), endDate: moment(data.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = moment(data.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(data.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = moment(data.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = moment(data.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                }
+
+                this.daybookData = data;
                 this.daybookData$ = observableOf(data);
                 this.checkIsStockEntryAvailable();
             }
@@ -207,8 +210,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
             if (this.dateRangePickerCmp) {
                 this.dateRangePickerCmp.render();
             }
-            this.daybookQueryRequest.from = obj.fromDate;
-            this.daybookQueryRequest.to = obj.toDate;
+            this.daybookQueryRequest.from = (obj.fromDate) ? obj.fromDate : this.todaySelected ? '' : this.daybookQueryRequest.from;
+            this.daybookQueryRequest.to = (obj.toDate) ? obj.toDate : this.todaySelected ? '' : this.daybookQueryRequest.to;
             this.daybookQueryRequest.page = 0;
             if (obj.action === 'search') {
                 this.advanceSearchModel.hide();
@@ -242,13 +245,24 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.go();
+
+                this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                    this.todaySelected = response;
+                    if(!response) {
+                        this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                        this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+
+                        this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    } else {
+                        this.daybookQueryRequest.from = "";
+                        this.daybookQueryRequest.to = "";
+                    }
+                    this.daybookQueryRequest.page = 0;
+                    this.go();
+                });
             }
         });
         this.showAdvanceSearchIcon = false;
@@ -262,34 +276,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         this.daybookQueryRequest.page = event.page;
         this.go(this.searchFilterData);
-    }
-
-    /**
-     * Loads the pagination component based on data received from the service
-     *
-     * @param {*} data Data received from the service
-     * @memberof DaybookComponent
-     */
-    public loadPaginationComponent(data: any): void {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-        if (this.paginationChild && this.paginationChild.viewContainerRef) {
-            let viewContainerRef = this.paginationChild.viewContainerRef;
-            viewContainerRef.remove();
-            if (data && data.totalItems > 20) { // Show pagination only if total number of items are more than 20
-                let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-                viewContainerRef.insert(componentInstanceView.hostView);
-
-                let componentInstance = componentInstanceView.instance as PaginationComponent;
-                componentInstance.totalItems = data.count * data.totalPages;
-                componentInstance.itemsPerPage = data.count;
-                componentInstance.maxSize = 5;
-                componentInstance.writeValue(data.page);
-                componentInstance.boundaryLinks = true;
-                componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
-                    this.pageChanged(e);
-                });
-            }
-        }
     }
 
     public exportDaybook() {
@@ -405,6 +391,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
+        this.todaySelected = false;
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };

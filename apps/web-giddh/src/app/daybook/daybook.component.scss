@@ -119,3 +119,10 @@
 .daybook-table-tbody > tr {
     cursor: pointer;
 }
+.table-container section div > div {
+    padding: 8px 8px;
+}
+
+.trial-balance.table-container > div > section {
+    border-left: 0;
+}
