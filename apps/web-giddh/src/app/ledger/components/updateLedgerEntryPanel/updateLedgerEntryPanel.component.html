@@ -646,7 +646,7 @@
 
                                 <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="pl-1">
                                     <label>Other Tax <a href="javascript: void(0)" class="text-gray"
-                                            (click)="currentOrganizationType === 'BRANCH' ? toggleOtherTaxesAsideMenu.emit(vm) : ''">
+                                            (click)="(currentOrganizationType === 'COMPANY' && branches?.length === 1) || (currentOrganizationType === 'BRANCH') ? toggleOtherTaxesAsideMenu.emit(vm) : ''">
                                             <i class="icon-edit11 font-12 ml-05"></i>
                                         </a>
                                     </label>
