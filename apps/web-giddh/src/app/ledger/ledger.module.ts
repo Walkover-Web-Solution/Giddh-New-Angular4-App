@@ -49,6 +49,7 @@ import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
+import { UploadBankStatementComponent } from './components/upload-bank-statement/upload-bank-statement.component';
 
 // import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
 @NgModule({
@@ -66,7 +67,8 @@ import { LedgerRoutingModule } from './ledger.routing.module';
         LedgerAsidePaneComponent,
         LedgerAsidePaneAccountComponent,
         BaseAccountComponent,
-        LedgerColumnarReportTableComponent
+        LedgerColumnarReportTableComponent,
+        UploadBankStatementComponent
     ],
     exports: [
         LedgerComponent, UpdateLedgerEntryPanelComponent
