@@ -158,7 +158,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch || !this.currentBranch.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
@@ -174,7 +174,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         };
                     }
                 }
-                this.daybookQueryRequest.branchUniqueName = this.currentBranch.uniqueName;
+                this.daybookQueryRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch.uniqueName : "";
                 this.initialRequest();
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -244,6 +244,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public initialRequest() {
+        this.showAdvanceSearchIcon = false;
+        if (this.daybookAdvanceSearchModelComponent) {
+            this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
+            this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
+            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
+        }
+
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
@@ -267,12 +274,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.showAdvanceSearchIcon = false;
-        if (this.daybookAdvanceSearchModelComponent) {
-            this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
-            this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
-            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
-        }
     }
 
     public pageChanged(event: any): void {
@@ -405,7 +406,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.daybookQueryRequest.from = this.fromDate;
                 this.daybookQueryRequest.to = this.toDate;
                 this.daybookQueryRequest.page = 0;
-                this.go();
+                this.go(this.searchFilterData);
             }
         }
     }
@@ -421,4 +422,3 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.go();
     }
 }
-
