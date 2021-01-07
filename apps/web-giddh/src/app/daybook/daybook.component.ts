@@ -78,8 +78,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     private searchFilterData: any = null;
     /** This will hold the daybook api response */
     public daybookData: any = {};
+    /** This will hold if today is selected in universal */
     public todaySelected: boolean = false;
-    public todaySelected$: Observable<boolean> = observableOf(false);
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -101,7 +101,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         // });
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-        this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -246,17 +245,22 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                this.todaySelected$.subscribe(response => {
+                this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
                     if(!response) {
+                        this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                        this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+
                         this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                         this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    } else {
+                        this.daybookQueryRequest.from = "";
+                        this.daybookQueryRequest.to = "";
                     }
+                    this.daybookQueryRequest.page = 0;
                     this.go();
                 });
             }
@@ -387,7 +391,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
-        this.todaySelected = true;
+        this.todaySelected = false;
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
