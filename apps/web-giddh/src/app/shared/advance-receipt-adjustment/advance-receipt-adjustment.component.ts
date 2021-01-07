@@ -363,7 +363,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 return item.value;
             } else {
                 return item.value && item.label.trim();
-            }return item.value && item.label.trim();
+            }
         });
         if (this.adjustVoucherForm.adjustments.length > 1) {
             this.adjustVoucherForm.adjustments.splice(index, 1);
