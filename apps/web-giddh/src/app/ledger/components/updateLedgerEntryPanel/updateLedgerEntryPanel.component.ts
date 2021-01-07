@@ -2128,7 +2128,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (adjustments) {
                 adjustments.forEach(adjustment => {
                     adjustment.adjustmentAmount = adjustment.balanceDue;
-                    // delete adjustment.balanceDue;
+                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
 
                 this.vm.selectedLedger.voucherAdjustments = {

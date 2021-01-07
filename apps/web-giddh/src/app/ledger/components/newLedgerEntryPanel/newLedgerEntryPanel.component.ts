@@ -1325,7 +1325,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if(adjustments && adjustments.length > 0) {
                 adjustments.forEach(adjustment => {
                     adjustment.adjustmentAmount = adjustment.balanceDue;
-                    // delete adjustment.balanceDue;
+                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
             }
             this.currentTxn.voucherAdjustments = {
