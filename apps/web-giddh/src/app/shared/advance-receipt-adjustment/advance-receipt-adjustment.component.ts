@@ -157,7 +157,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                         });
                     } else {
                         // Vouchers for new adjustment not found fill the suggestions with already adjusted vouchers
-                        if (this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length) {
+                        if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
                             this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
                                 this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                 this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
