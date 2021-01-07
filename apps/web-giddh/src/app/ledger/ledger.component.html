@@ -194,7 +194,10 @@
                     </div>
 
                     <div class="d-flex">
-
+                        <a href="javascript:void(0)" id="upload" class="icomoon-ico d-flex align-items-center"
+                            [tooltip]="'Upload Bank Statement Pdf'" [placement]="'top'" (click)="showUploadBankStatementModal()">
+                            <i class="icon-cloud-upload lh-0"></i>
+                        </a>
                         <a href="javascript:void(0)" id="share" class="icomoon-ico d-flex align-items-center"
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
                             <i class="icon-ledger-path lh-0"></i>
@@ -327,6 +330,7 @@
                                                                             type="text" [(ngModel)]="item.entryDate"
                                                                             bsDatepicker
                                                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                            (ngModelChange)="onChangeEntryDate(item)"
                                                                             [outsideClick]="true"></span>
                                                                 </div>
                                                             </td>
@@ -450,8 +454,8 @@
                                                                             type="text" #cbs='bsDatepicker'
                                                                             [(ngModel)]="item.entryDate" bsDatepicker
                                                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                            (ngModelChange)="onChangeEntryDate(item)"
                                                                             [outsideClick]="true">
-
                                                                     </span>
                                                                 </div>
                                                             </td>
@@ -1650,3 +1654,12 @@
         </div>
     </div>
 </ng-template>
+
+<!-- share ladger popup -->
+<div bsModal #uploadBankStatementModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <upload-bank-statement [accountUniqueName]="lc.accountUnq" (closeModal)="hideUploadBankStatementModal()"></upload-bank-statement>
+        </div>
+    </div>
+</div>

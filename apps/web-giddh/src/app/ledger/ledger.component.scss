@@ -1118,10 +1118,6 @@ sh-select:focus {
         }
     }
 }
-
-@media (min-width:992px){
-    .download-invoice-ledger {
-        position: unset;
-        align-items: center;
-    }
+.icon-cloud-upload:before {
+    content: "\e9c3";
 }

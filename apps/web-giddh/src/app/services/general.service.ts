@@ -766,4 +766,15 @@ export class GeneralService {
                 buttons
             };
     }
+
+    /**
+     * This will return the file extension
+     *
+     * @param {string} path
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getFileExtension(path: string): string {
+        return (path && path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop() : 'null';
+    }
 }
