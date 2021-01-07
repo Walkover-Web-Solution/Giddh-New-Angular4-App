@@ -545,6 +545,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[0];
+                    this.formatAdjustments();
                     if (this.vm.selectedLedger && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
                         this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
                         this.getInvoiceListsForCreditNote();
@@ -2281,5 +2282,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.searchResults = [...this.defaultSuggestions];
             this.noResultsFoundLabel = SearchResultText.NotFound;
         });
+    }
+
+    /**
+     * Formats the adjustments to add '-' to voucher number if it is not found
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private formatAdjustments(): void {
+        if (this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
+            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
+                if (!adjustment.voucherNumber) {
+                    adjustment.voucherNumber = '-';
+                }
+            });
+        }
     }
 }
