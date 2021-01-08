@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 .file-upload-label {
     vertical-align: top;
 }
@@ -7,7 +9,7 @@
 }
 .file-upload-label sup {
     font-size: 14px;
-    color: #ff0000;
+    color: $red;
     top: 0px;
 }
 #uploadBankStatementModal label.radio-inline.p-0 {
