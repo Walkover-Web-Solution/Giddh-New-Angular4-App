@@ -397,9 +397,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public changeTdsAmount(event): void {
         if (!Number(event) && this.adjustVoucherForm && this.adjustVoucherForm.tdsTaxUniqueName) {
-            this.tdsAmountBox.nativeElement.classList.add('error-box');
+            if(this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
+                this.tdsAmountBox.nativeElement.classList.add('error-box');
+            }
         } else {
-            this.tdsAmountBox.nativeElement.classList.remove('error-box');
+            if(this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
+                this.tdsAmountBox.nativeElement.classList.remove('error-box');
+            }
         }
     }
 
