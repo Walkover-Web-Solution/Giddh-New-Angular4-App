@@ -39,7 +39,9 @@ export class UploadBankStatementComponent {
         let isValidFileType = validExtensions.some(extension => type === extension);
 
         if (!isValidFileType) {
-            this.toaster.errorToast('Only PDF files are supported for Import');
+            if(file && file.length > 0) {
+                this.toaster.errorToast('Only PDF files are supported for Import');
+            }
             this.selectedFile = null;
             this.postRequest.File = null;
             return;
@@ -65,5 +67,16 @@ export class UploadBankStatementComponent {
                 this.toaster.errorToast(response.message, response.code);
             }
         });
+    }
+
+    /**
+     * This will init the form
+     *
+     * @memberof UploadBankStatementComponent
+     */
+    public initForm(): void {
+        this.selectedFile = "";
+        this.postRequest.File = null;
+        this.postRequest.Password = "";
     }
 }
