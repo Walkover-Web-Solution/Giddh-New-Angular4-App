@@ -178,7 +178,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public get shouldShowPrintDocument(): boolean {
-        return this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
+        return (this.selectedItem) && this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
             (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.pdfPreviewLoaded) ||
             (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.attachedDocumentType &&
                 (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image'));
@@ -206,7 +206,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             }
         }));
         this.isUpdateVoucherActionSuccess$.subscribe(res => {
-            if (res) {
+            if (res && this.proformaListComponent) {
                 // get all data again because we are updating action in list page so we have to update data i.e we have to fire this
                 this.proformaListComponent.getAll();
             }
