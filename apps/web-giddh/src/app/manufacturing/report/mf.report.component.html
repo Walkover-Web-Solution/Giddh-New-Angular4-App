@@ -1,50 +1,50 @@
 <section id="manufacture" class="clearfix">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
-    <div class="col-sm-12 mt-15 clearfix">
-        <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
-        Manufacture</button>
+    <div class="mt-15 d-flex justify-content-between pr-3">
+        <div *ngIf="currentCompanyBranches?.length > 2" class="form-group col-lg-2 col-md-6 linked-entities">
+            <label class="d-block pb-1">Entity</label>
+            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
+                name="entityDropdown" [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
+                [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                <ng-template #optionTemplate let-option="option">
+                    <ng-container>
+                        <a href="javascript:void(0)" class="list-item d-flex">
+                            <span class="entity-icon">
+                                <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
+                                <i class="icon-branch-icon pull-right" *ngIf="!option.parentBranch && !option.isCompany"
+                                    tooltip="HO Branch"></i>
+                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
+                            </span>
+                            <span class="entity-details">
+                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                <div class="item-unique giddh-limit single-line-clamp">
+                                    {{ option.name || '-' }}
+                                </div>
+                            </span>
+                        </a>
+                    </ng-container>
+                </ng-template>
+            </sh-select>
+        </div>
+        <div>
+            <labe class="d-block">&nbsp;</labe>
+            <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
+            Manufacture</button>
+        </div>
     </div>
     <!-- form -->
-    <div class="col-xs-12 col-sm-12">
+    <div class="col-12 col-sm-12">
         <div class="mfStockSearchRequestForm clearfix">
-            <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-15 mb-05 manufacturing-form" (submit)="getReports()"
+            <form #mfStockSearchRequestForm="ngForm" class="mt-0 col-12 pl-0 pr-0 mt-15 mb-05 manufacturing-form" (submit)="getReports()"
                 autocomplete="off">
                 <div class="row">
-                    <div *ngIf="currentCompanyBranches?.length > 2" class="form-group col-lg-2 col-md-6 linked-entities">
-                        <label class="d-block">Entity</label>
-                        <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
-                            name="entityDropdown" [showClear]="false" [ItemHeight]="33" width="100%"
-                            (selected)="handleBranchChange($event)" [isFilterEnabled]="true" placeholder="Select Entity"
-                            [fixedValue]="currentBranch?.alias">
-                            <ng-template #optionTemplate let-option="option">
-                                <ng-container>
-                                    <a href="javascript:void(0)" class="list-item d-flex">
-                                        <span class="entity-icon">
-                                            <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
-                                            <i class="icon-branch-icon pull-right" *ngIf="!option.parentBranch && !option.isCompany"
-                                                tooltip="HO Branch"></i>
-                                            <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
-                                        </span>
-                                        <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                            <div class="item-unique giddh-limit single-line-clamp">
-                                                {{ option.name || '-' }}
-                                            </div>
-                                        </span>
-                                    </a>
-                                </ng-container>
-                            </ng-template>
-                        </sh-select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-lg-2 col-md-6">
+                    <div class="form-group col-xl-2 col-lg-2 col-md-6">
                         <label class="d-block">Final Product</label>
                         <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required
                             [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown"
                             [ItemHeight]="33" (selected)="setActiveStockGroup($event)"></sh-select>
                     </div>
-                    <div class="form-group col-lg-3 col-md-6 col-xs-12">
+                    <div class="form-group col-xl-2 col-lg-3 col-md-6 col-12 datepicker-flex">
                         <label class="d-block">From - To</label>
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon"></i>
@@ -52,24 +52,24 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-lg-2 col-md-6 col-xs-6">
+                    <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                             <label class="d-block">Search By</label>
                             <sh-select placeholder="--Select--" name="searchBy"
                                 [(ngModel)]="mfStockSearchRequest.searchBy" [options]="filtersForSearchBy"
                                 [ItemHeight]="33"></sh-select>
                     </div>
-                    <div class="form-group col-lg-2 col-md-6 col-xs-6">
+                    <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Operation</label>
                         <sh-select placeholder="--Select--" name="searchOperation"
                             [(ngModel)]="mfStockSearchRequest.searchOperation" [options]="filtersForSearchOperation"
                             [ItemHeight]="33"></sh-select>
                     </div>
-                    <div class="form-group col-lg-2 col-md-6 col-xs-6">
+                    <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Value</label>
                         <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control"
                             placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                     </div>
-                    <div class="form-group col-lg-1 col-md-6">
+                    <div class="form-group col-xl-1 col-lg-1 col-md-6">
                         <label class="d-block d-none-xs">&nbsp;</label>
                         <!-- [disabled]="mfStockSearchRequestForm.invalid" -->
                         <button class="btn btn-success" type="submit">Go</button>
@@ -82,14 +82,14 @@
     <section *ngIf="(isReportLoading$ | async)" class="clearfix mt-100 col-md-12">
         <p class="lead text-center mr-t4">Loading...</p>
     </section>
-    <div class="no-data mt-100 col-xs-12 col-sm-12"
+    <div class="no-data mt-100 col-12 col-sm-12"
         *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
     <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length > 0">
         <div class="" id="mfReportTbl">
-            <div class="col-xs-12 col-sm-12">
+            <div class="col-12 col-sm-12">
                 <table class="table basic table-bordered giddh-table on-mobile-view manufacture-table">
                     <thead>
                         <tr>
