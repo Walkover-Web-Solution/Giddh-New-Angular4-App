@@ -297,9 +297,13 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         setTimeout(() => {
             if (activeTabIndex) {
-                this.inventoryStaticTabs.tabs[activeTabIndex].active = true;
+                if(this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[activeTabIndex]) {
+                    this.inventoryStaticTabs.tabs[activeTabIndex].active = true;
+                }
             } else {
-                this.inventoryStaticTabs.tabs[this.activeTabIndex].active = true;
+                if(this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[this.activeTabIndex]) {
+                    this.inventoryStaticTabs.tabs[this.activeTabIndex].active = true;
+                }
             }
         });
     }

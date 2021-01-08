@@ -1261,7 +1261,7 @@
                                                     (input)="checkVoucherEntries()"
                                                     name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
-                                                    decimalDigitsDirective [customDecimalPlaces]="highPrecisionRate"
+                                                    decimalDigitsDirective
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                             </div>
@@ -2159,7 +2159,6 @@
                                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                                         [(ngModel)]="transaction.amount" decimalDigitsDirective
-                                                        [customDecimalPlaces]="highPrecisionRate"
                                                         [prefix]="invFormData.accountDetails.currencySymbol"
                                                         [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                                 </div>

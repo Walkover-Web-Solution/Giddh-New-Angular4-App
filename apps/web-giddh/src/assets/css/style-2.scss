@@ -2743,7 +2743,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .contact-main {
-    min-height: 650px;
+    min-height: 560px;
 }
 
 .hide-header .nav.nav-tabs {
@@ -4891,7 +4891,7 @@ label {
 }
 
 .grey-color {
-    color: #6d6d6d;
+    color: $gray;
 }
 
 .grp-col::-webkit-scrollbar {
@@ -6094,7 +6094,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .welcome-header {
     background: $white url("../images/Welcome.png") no-repeat center center;
     text-align: center;
-    padding: 0px 0 30px;
     position: relative;
 }
 
@@ -8770,6 +8769,16 @@ highcharts-chart .highcharts-container{
     flex-shrink: 1 !important;
 }
 
+highcharts-chart{
+    .highcharts-container{
+        .highcharts-title{
+                width: 62px !important;
+                white-space: normal !important;
+                text-align: center;
+            }
+    }
+}
+
 #incomeChart #highcharts-ufrwew1-29 {
     display: block;
     width: 100%;
@@ -9629,6 +9638,22 @@ button#more-btn-inventory, #more-btn-inventory-mobile{
 .menu_open .inventory-sidebar{
  left: 0 !important;
 }
+.mobile-setting-sidebar {
+    overflow-y: hidden;
+}
+.select-linked-accounts sh-select-menu .menu {
+    max-height: 250px;
+}
+.ratio-chart-block .highcharts-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    white-space: normal !important;
+    word-break: break-all;
+    font-size: 24px;
+    top:56px !important;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -9822,28 +9847,28 @@ input.mat-input-element{
             width: 100% !important;
         }
     }
-@media(max-width:1191px) and (min-width:1024px){
-    .recurring-form-wrapper{
-        .recurring-form{
-            sh-select{
-                div{
-                    width: 100%;
-                    input{
-                        min-width: 100%;
-                        max-width: 100%;
+    @media(max-width:1191px) and (min-width:1024px){
+        .recurring-form-wrapper{
+            .recurring-form{
+                sh-select{
+                    div{
+                        width: 100%;
+                        input{
+                            min-width: 100%;
+                            max-width: 100%;
+                        }
                     }
                 }
-            }
-            giddh-datepicker{
-                width: 100%;
-                .mat-form-field{
-                    max-width: 100%;
-                    min-width: 100%;
+                giddh-datepicker{
+                    width: 100%;
+                    .mat-form-field{
+                        max-width: 100%;
+                        min-width: 100%;
+                    }
                 }
             }
         }
     }
-}
 
 @media(max-width:1019px){
     .hide-sub-sidebar .sidebar-handle{
@@ -10390,7 +10415,7 @@ input.mat-input-element{
     > .nav.nav-tabs , .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
             position: fixed !important;
             width: 100%;
-            top: 98px !important;
+            top: 91px !important;
         }
         #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
             top: 88px;
@@ -11156,21 +11181,29 @@ input.mat-input-element{
         }
     }
 
+    /*media query for height resolution*/
+    @media(max-height:999px){
+        .contact-main {
+            min-height: calc(100vh - 420px);
+        }
+    }
+    @media(min-height:300px) and (max-height:730px){
+    .linked-address sh-select-menu .total-padding {
+            height: 257px !important;
+        }
+    }
+    /*media query for height resolution end*/
+
     .modal.fade.giddh-calendar.show {
         z-index: 999999;
     }
-
     *::-webkit-scrollbar {
         width: 10px;
         height: 5px;
     }
-
-
     *::-webkit-scrollbar-track {
         background: $white-smoke;
     }
-
-
     *::-webkit-scrollbar-thumb {
         background: $nobel;
         border-radius: 5px;

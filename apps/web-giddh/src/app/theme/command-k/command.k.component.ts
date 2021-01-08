@@ -40,7 +40,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public placement: string;
     @Input() public setParentWidth: boolean = false;
     @Input() public parentEle: any;
-    @Input() public ItemHeight: number = 50;
+    @Input() public ItemHeight: number = 52;
     @Input() public ItemWidth: number = 300;
     @Input() public visibleItems: number = 10;
 

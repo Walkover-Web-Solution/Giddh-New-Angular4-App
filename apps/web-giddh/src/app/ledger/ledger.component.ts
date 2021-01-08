@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Eve
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
@@ -53,6 +53,7 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
+import { UploadBankStatementComponent } from './components/upload-bank-statement/upload-bank-statement.component';
 
 @Component({
     selector: 'ledger',
@@ -99,6 +100,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
     @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
+    /** upload bank statement modal instance */
+    @ViewChild('importStatementModal', {static: true}) public importStatementModal: ModalDirective;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
@@ -240,6 +243,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** This will hold if import statement modal is visible */
+    public isImportStatementVisible: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -337,11 +342,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
-            if (data && data.yodleeAdded) {
-                this.getBankTransactions();
-            } else {
-                this.hideEledgerWrap();
-            }
+            this.getBankTransactions();
         });
     }
 
@@ -414,8 +415,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     parentGroups: data.body.parentGroups,  // added due to parentGroups is getting null in search API
                 };
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
-                    txn.selectedAccount.stock.rate = Number(this.lc.blankLedger.exchangeRate > 1 ?
-                        (txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(HIGH_RATE_FIELD_PRECISION) : (txn.selectedAccount.stock.rate * this.lc.blankLedger.exchangeRate).toFixed(HIGH_RATE_FIELD_PRECISION));
+                    txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
                 if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
                     txn.selectedAccount.particularAccountTax = data.body.applicableTaxes;
@@ -878,11 +878,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // After the success of the entrance call for bank transactions
                 this.lc.activeAccount$.subscribe((data: AccountResponse) => {
                     this._loaderService.show();
-                    if (data && data.yodleeAdded) {
-                        this.getBankTransactions();
-                    } else {
-                        this.hideEledgerWrap();
-                    }
+                    this.getBankTransactions();
                 });
             }
         });
@@ -914,11 +910,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.advanceSearchComp.resetAdvanceSearchModal();
                 }
 
-                if (accountDetails.yodleeAdded) {
-                    this.getBankTransactions();
-                } else {
-                    this.hideEledgerWrap();
-                }
+                this.getBankTransactions();
 
                 this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
                 if (accountDetails.currency && profile.baseCurrency) {
@@ -2086,13 +2078,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     private handleRcmVisibility(transaction: TransactionVM): void {
+        let formattedCurrentLedgerAccountParentGroups = [];
+        if (transaction.selectedAccount) {
+            formattedCurrentLedgerAccountParentGroups = transaction.selectedAccount.parentGroups.map(parent => ({uniqueName: parent}));
+        }
         const currentLedgerAccountDetails = {
-            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
-            parentGroups: transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
+            uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
+            parentGroups: this.lc.activeAccount && this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
         };
         const selectedAccountDetails = {
-            uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
-            parentGroups: this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
+            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
+            parentGroups: formattedCurrentLedgerAccountParentGroups.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
         };
         const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
         if (this.lc && this.lc.currentBlankTxn) {
@@ -2348,5 +2344,42 @@ export class LedgerComponent implements OnInit, OnDestroy {
         item.isOtherTaxesApplicable = event.isOtherTaxesApplicable;
         item.otherTaxModal = event.otherTaxModal;
         item.otherTaxType = event.otherTaxType;
+    }
+
+    /**
+     * This will show the bank statement upload modal
+     *
+     * @memberof LedgerComponent
+     */
+    public showUploadBankStatementModal(): void {
+        if(this.importStatementModal) {
+            this.isImportStatementVisible = true;
+            this.importStatementModal.show();
+        }
+    }
+
+    /**
+     * This will hide the bank statement upload modal
+     *
+     * @memberof LedgerComponent
+     */
+    public hideUploadBankStatementModal(): void {
+        if(this.importStatementModal) {
+            this.importStatementModal.hide();
+        }
+    }
+
+    /**
+     * Callback for date change
+     *
+     * @param {*} item
+     * @memberof LedgerComponent
+     */
+    public onChangeEntryDate(item: any): void {
+        if (item && item.entryDate) {
+            if (typeof item.entryDate !== 'string') {
+                item.entryDate = moment(item.entryDate).format(GIDDH_DATE_FORMAT);
+            }
+        }
     }
 }

@@ -192,7 +192,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     ];
     public selectedItems: string[] = [];
     public totalSales: number = 0;
-    public totalDue: number = 0;
     public totalReceipts: number = 0;
     /** Total customers */
     public totalCustomers = 0;
@@ -249,6 +248,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** Stores the current branch data */
     public currentBranchData: any;
+    /** This will hold opening balance object */
+    public openingBalance: any;
+    /** This will hold closing balance amount */
+    public closingBalance: number = 0;
 
     constructor(
         private store: Store<AppState>,
@@ -371,7 +374,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 let bankAccounts: IOption[] = [];
                 forEach(data, (item) => {
                     accounts.push({ label: item.name, value: item.uniqueName });
-                    let findBankIndx = item.parentGroups.findIndex((grp) => grp && grp.uniqueName === 'bankaccounts');
+                    let findBankIndx = (item.parentGroups) ? item.parentGroups.findIndex((grp) => grp && grp.uniqueName === 'bankaccounts') : -1;
                     if (findBankIndx !== -1) {
                         bankAccounts.push({ label: item.name, value: item.uniqueName });
                     }
@@ -836,7 +839,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             params: {
                 from: this.fromDate,
                 to: this.toDate,
-                groupUniqueName: groupsUniqueName
+                groupUniqueName: groupsUniqueName,
+                sortBy: this.key,
+                sort: this.order
             }
         };
         // uncomment it
@@ -1069,7 +1074,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             params: {
                 from: this.fromDate,
                 to: this.toDate,
-                groupUniqueName: this.groupUniqueName
+                groupUniqueName: this.groupUniqueName,
+                sortBy: this.key,
+                sort: this.order
             },
             branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
         };
@@ -1132,7 +1139,30 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).subscribe((res) => {
             if (res && res.body && res.status === 'success') {
-                this.totalDue = Number(Math.abs(res.body.debitTotal - res.body.creditTotal).toFixed(this.giddhDecimalPlaces)) || 0;
+                this.openingBalance = res.body.openingBalance;
+
+                if(this.activeTab === "customer" && this.openingBalance) {
+                    if(this.openingBalance.type === "CREDIT") {
+                        this.closingBalance = Number("-"+this.openingBalance.amount) || 0;
+                    } else if(this.openingBalance.type === "DEBIT") {
+                        this.closingBalance = Number(this.openingBalance.amount) || 0;
+                    }
+                }
+
+                if(this.activeTab === "vendor" && this.openingBalance) {
+                    if(this.openingBalance.type === "CREDIT") {
+                        this.closingBalance = Number(this.openingBalance.amount) || 0;
+                    } else if(this.openingBalance.type === "DEBIT") {
+                        this.closingBalance = Number("-"+this.openingBalance.amount) || 0;
+                    }
+                }
+
+                if(this.activeTab === "customer") {
+                    this.closingBalance = Number((this.closingBalance + (res.body.debitTotal - res.body.creditTotal)).toFixed(this.giddhDecimalPlaces)) || 0;
+                } else {
+                    this.closingBalance = Number((this.closingBalance + (res.body.creditTotal - res.body.debitTotal)).toFixed(this.giddhDecimalPlaces)) || 0;
+                }
+
                 this.totalSales = (this.activeTab === 'customer' ? res.body.debitTotal : res.body.creditTotal) || 0;
                 this.totalReceipts = (this.activeTab === 'customer' ? res.body.creditTotal : res.body.debitTotal) || 0;
 

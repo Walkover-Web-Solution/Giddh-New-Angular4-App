@@ -346,7 +346,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public removeSelectedAccount(item: any): void {
-        if (item) {
+        if (item && this.selectedAccForBulkPayment) {
             let itemIndx = this.selectedAccForBulkPayment.findIndex((element) => element === item);
             this.selectedAccForBulkPayment.splice(itemIndx, 1);
         }
