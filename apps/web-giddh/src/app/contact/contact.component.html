@@ -3,7 +3,7 @@
 <hamburger-menu [pageHeading]="'Vendor'" *ngIf="activeTab === 'vendor'"></hamburger-menu>
 <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <!-- region Customer/Vendor -->
-    <tab heading="Customer" [id]="(activeTab !== 'aging-report')?'giddh-page-heading': ''" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
+    <tab heading="Customer" [id]="(activeTab !== 'aging-report') ? 'giddh-page-heading': ''" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
         <div class="container-fluid">
 
             <div class="top-bar customer-top-bar clearfix">
@@ -57,7 +57,42 @@
                                             <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')" [(ngModel)]="showFieldFilter.comment" /> Comment
                                         </a>
                                     </li>
+                                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                                        <!-- <th width="10%">{{item.key | titlecase}}</th> -->
+                                        <li role="menuitem">
+                                            <a class="dropdown-item">
+                                                <input type="checkbox" name="{{item.uniqueName}}" (ngModelChange)="columnFilter($event, item.uniqueName)" [(ngModel)]="showFieldFilter[item.uniqueName]" /> {{item.key | titlecase}}
+                                            </a>
+                                        </li>
+                                    </ng-container>
                                 </ul>
+                            </div>
+                        </div>
+                        <div class="form-group mr-15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+                            <div class="form-group">
+                                <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
+                                    [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
+                                    placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <ng-container>
+                                            <a href="javascript:void(0)" class="list-item d-flex">
+                                                <span class="entity-icon">
+                                                    <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch"
+                                                        tooltip="Branch"></i>
+                                                    <i class="icon-branch-icon pull-right"
+                                                        *ngIf="!option.parentBranch && !option.isCompany" tooltip="HO Branch"></i>
+                                                    <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
+                                                </span>
+                                                <span class="entity-details">
+                                                    <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                    <div class="item-unq giddh-limit single-line-clamp">
+                                                        {{ option.name || '-' }}
+                                                    </div>
+                                                </span>
+                                            </a>
+                                        </ng-container>
+                                    </ng-template>
+                                </sh-select>
                             </div>
                         </div>
                         <div class="pull-left header-left">
@@ -67,7 +102,7 @@
                                 <i class="icon-search"></i>
                             </span>
 
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <!-- Invoice filter section ends -->
@@ -89,7 +124,7 @@
                                 <span class="pull-left mrR1 totalContacts">
                                 <h5>
                                     <span *ngIf="!selectedCheckedContacts.length"
-                                        class="numbertotal">{{Totalcontacts}}</span>
+                                        class="numbertotal">{{activeTab === 'customer' ? totalCustomers : totalVendors}}</span>
                                 <span *ngIf="selectedCheckedContacts.length>0" class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
                                 </h5>
                                 </span>
@@ -159,52 +194,50 @@
                     </div>
                 </div>
             </div>
-            </div>
-            <div class="clearfix pagination-main">
-                <div class=" mt-5 mb-100px">
-                    <div class="">
-                        <div class="customer-right-wrap clearfix">
-                            <div class="text-right">
-                                <h4 class="mb-1 pdR2">Result Total</h4>
-                            </div>
-
-                            <div class="bg-white clearfix">
-                                <div class="customer-right  clearfix" style="width: 100%;">
-                                    <table class="text-right">
-                                        <tr>
-                                            <td>
-                                                <p *ngIf="activeTab === 'vendor'">Purchase</p>
-                                                <p *ngIf="activeTab === 'customer'">Sales</p>
-                                                <h3>{{totalSales |giddhCurrency }}/-</h3>
-                                            </td>
-                                            <td>
-                                                <p *ngIf="activeTab === 'vendor'">Payment</p>
-                                                <p *ngIf="activeTab === 'customer'">Receipt</p>
-                                                <h3>{{totalReceipts | giddhCurrency}}/-</h3>
-                                            </td>
-                                            <td>
-                                                <p>Due</p>
-                                                <h3>{{totalDue | giddhCurrency}}/-</h3>
-                                            </td>
-
-                                        </tr>
-
-                                    </table>
-                                </div>
-
-                            </div>
+        </div>
+        <div class="clearfix pagination-main">
+            <div class=" mt-5 mb-100px">
+                <div class="">
+                    <div class="customer-right-wrap clearfix">
+                        <div class="text-right">
+                            <h4 class="mb-1 pdR2">Result Total</h4>
                         </div>
 
+                        <div class="bg-white clearfix">
+                            <div class="customer-right  clearfix" style="width: 100%;">
+                                <table class="text-right">
+                                    <tr>
+                                        <td *ngIf="showFieldFilter.openingBalance">
+                                            <p>Opening</p>
+                                            <h3><span *ngIf="activeTab === 'customer' && openingBalance?.type === 'CREDIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span><span *ngIf="activeTab === 'vendor' && openingBalance?.type === 'DEBIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span> {{openingBalance?.amount | giddhCurrency}}/-</h3>
+                                        </td>
+                                        <td>
+                                            <p *ngIf="activeTab === 'vendor'">Purchase</p>
+                                            <p *ngIf="activeTab === 'customer'">Sales</p>
+                                            <h3>{{totalSales |giddhCurrency }}/-</h3>
+                                        </td>
+                                        <td>
+                                            <p *ngIf="activeTab === 'vendor'">Payment</p>
+                                            <p *ngIf="activeTab === 'customer'">Receipt</p>
+                                            <h3>{{totalReceipts | giddhCurrency}}/-</h3>
+                                        </td>
+                                        <td>
+                                            <p>Closing</p>
+                                            <h3>{{closingBalance | giddhCurrency}}/-</h3>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-
-
                 </div>
             </div>
+        </div>
     </tab>
     <!-- endregion -->
 
     <!-- region Aging Report -->
-    <tab heading="Aging Report" [id]="(activeTab === 'aging-report')?'giddh-page-heading': ''" (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
+    <tab heading="Aging Report" [id]="(activeTab === 'aging-report') ? 'giddh-page-heading': ''" (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
         <!--    <div *ngIf="activeTab === 'aging'">-->
         <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
         <!--    </div>-->
@@ -296,14 +329,14 @@
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
+    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
         (getUpdateList)="getUpdatedList($event)">
     </aside-menu-account>
 </div>
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
 <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-    <payment-aside class="accountAsideMenuState2 transinherit" [selectedAccForPayment]="selectedAccForPayment">
+    <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment">
     </payment-aside>
 </div>
 
@@ -329,7 +362,7 @@
                     <td *ngIf="showFieldFilter.state"></td>
                     <td *ngIf="showFieldFilter.comment"></td>
                     <ng-container *ngFor="let item of (companyCustomFields$ | async)">
-                        <td *ngIf="item.key"></td>
+                        <td *ngIf="item.key && showFieldFilter[item.uniqueName]"></td>
                     </ng-container>
                 </tr>
 
@@ -417,9 +450,8 @@
 
                     <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
                     <ng-container *ngFor="let item of (companyCustomFields$ | async)">
-                        <th width="10%">{{item.key}}</th>
+                        <th width="10%" *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]">{{item.key | titlecase}}</th>
                     </ng-container>
-
                 </tr>
 
             </thead>
@@ -556,15 +588,15 @@
                         </td>
                         <td class="word-wrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
                             {{account.groupUniqueName}}</td>
-                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'CREDIT' && account.openingBalance?.amount}" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
-                            <span *ngIf="account.openingBalance?.type === 'CREDIT' && account.openingBalance?.amount">-</span>{{account.openingBalance?.amount |giddhCurrency}}
+                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+                            <span *ngIf="account.openingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>{{account.openingBalance?.amount |giddhCurrency}}
                         </td>
                         <td class="word-wrap text-right" data-title=" Receipts">
                             {{account.debitTotal |giddhCurrency}}</td>
                         <td class="word-wrap text-right" data-title=" Sales">
                             {{account.creditTotal |giddhCurrency}}</td>
-                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'CREDIT' && account.closingBalance?.amount}" data-title="Closing">
-                            <span *ngIf="account.closingBalance?.type === 'CREDIT' && account.closingBalance?.amount">-</span>{{account.closingBalance?.amount |giddhCurrency}}
+                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0}" data-title="Closing">
+                            <span *ngIf="account.closingBalance?.type === 'CREDIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>{{account.closingBalance?.amount |giddhCurrency}}
                         </td>
                         <td class="text-lowercase word-wrap" *ngIf="showFieldFilter.email" data-title="Email">
                             {{account.email || '-' }}</td>
@@ -573,7 +605,7 @@
                         </td>
                         <td class="word-wrap" *ngIf="showFieldFilter.gstin && shouldShowTaxFilter" data-title="GSTIN">
                             {{account.gstIn || '-' }}</td>
-                        <td class="word-wrap" *ngIf="showFieldFilter.state " data-title="State">
+                        <td class="word-wrap" *ngIf="showFieldFilter.state" data-title="State">
                             {{account?.state?.name || '-'}}</td>
                         <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title=" Comment" class="commentField">
                             <ng-container *ngIf='updateCommentIdx != idx'>
@@ -586,14 +618,12 @@
 
                         </td>
                         <ng-container *ngFor="let item of account?.customFields">
-                            <td class="word-wrap" [attr.data-title]="item.key">
+                            <td *ngIf="item.key && showFieldFilter[item.uniqueName]" class="word-wrap" [attr.data-title]="item.key">
                                 {{item.value || '-' }}</td>
                         </ng-container>
-
                     </tr>
-                    <!---->
-                    <tr *ngIf="!(sundryDebtorsAccounts).length ">
-                        <td [attr.colspan]="colspanLength" class="text-center empty-table ">
+                    <tr>
+                        <td [attr.colspan]="colspanLength" *ngIf="!(sundryDebtorsAccounts).length " class="text-center empty-table ">
                             <h1>No Record Found !!</h1>
                         </td>
                     </tr>
@@ -733,15 +763,15 @@
                         <td class="word-wrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
                             <div class="table-email">{{account.groupUniqueName}}</div>
                         </td>
-                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'DEBIT' && account.openingBalance?.amount}" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
-                            <span *ngIf="account.openingBalance?.type === 'DEBIT' && account.openingBalance?.amount">-</span>{{account.openingBalance?.amount | giddhCurrency}}
+                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0}" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+                            <span *ngIf="account.openingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.openingBalance?.amount) > 0">-</span>{{account.openingBalance?.amount | giddhCurrency}}
                         </td>
                         <td class="word-wrap text-right" data-title="Purchase">
                             {{account.creditTotal |giddhCurrency}}</td>
                         <td class="word-wrap text-right" data-title="Payment">
                             {{account.debitTotal |giddhCurrency}}</td>
-                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'DEBIT' && account.closingBalance?.amount}" data-title="Closing">
-                            <span *ngIf="account.closingBalance?.type === 'DEBIT' && account.closingBalance?.amount">-</span>{{account.closingBalance?.amount | giddhCurrency}}
+                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0}" data-title="Closing">
+                            <span *ngIf="account.closingBalance?.type === 'DEBIT' && formatAmountInCurrency(account.closingBalance?.amount) > 0">-</span>{{account.closingBalance?.amount | giddhCurrency}}
                         </td>
                         <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.email " data-title="Email">
                             <div class="table-email ">{{account.email || '-' }}</div>
@@ -751,7 +781,7 @@
                         </td>
                         <td class="word-wrap" *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter" data-title="GSTIN">
                             {{account.gstIn || '-' }}</td>
-                        <td class="word-wrap" *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name}}
+                        <td class="word-wrap" *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name || '-' }}
                         </td>
                         <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title="Comment">
                             <ng-container *ngIf='updateCommentIdx != idx'>
@@ -761,6 +791,10 @@
                                 <textarea class='form-control' maxlength='100' [(ngModel)]='account.comment' (blur)='updateComment(account)'></textarea>
                             </ng-container>
                         </td>
+                        <ng-container *ngFor="let item of account?.customFields">
+                            <td *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]" class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value || '-' }}</td>
+                        </ng-container>
                         <td data-title="Action" *ngIf="isICICIIntegrated">
                             <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
@@ -768,13 +802,9 @@
                             <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
-                        <ng-container *ngFor="let item of account?.customFields">
-                            <td class="word-wrap" [attr.data-title]="item.key">
-                                {{item.value || '-' }}</td>
-                        </ng-container>
                     </tr>
                     <tr *ngIf="!(sundryCreditorsAccounts).length ">
-                        <td [attr.colspan]="colspanLength" class="text-center empty-table ">
+                        <td [attr.colspan]="colspanLength" class="text-center empty-table">
                             <h1>No Record Found !!</h1>
                         </td>
                     </tr>
@@ -785,14 +815,14 @@
     </div>
 
     <div colspan="100%" class="xs-pl-0 paginationWrapper">
-        <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
+        <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && totalCustomers>=paginationLimit">
             <div class="alC  ">
                 <pagination [totalItems]="sundryDebtorsAccountsBackup.totalItems" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryDebtorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>
             </div>
         </div>
 
-        <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
+        <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && totalVendors>=paginationLimit">
             <div class="alC ">
                 <pagination [totalItems]="sundryCreditorsAccountsBackup.totalItems" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryCreditorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>

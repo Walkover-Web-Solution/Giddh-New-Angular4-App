@@ -5,6 +5,7 @@ export class ReverseChargeReportGetRequest {
     sortBy: string;
     page: any;
     count: any;
+    branchUniqueName?: string;
 }
 
 export class ReverseChargeReportPostRequest {

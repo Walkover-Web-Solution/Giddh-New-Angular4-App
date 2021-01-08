@@ -23,6 +23,7 @@ export class GstReconcileInvoiceRequest {
     public action: GstReconcileActionsEnum;
     public refresh: boolean;
     public category: string;
+    public gstin?: string;
 }
 
 export interface GstReconcileInvoiceResult {

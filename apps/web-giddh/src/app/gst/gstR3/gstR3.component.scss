@@ -128,6 +128,9 @@ input.gsc-input {
     position: static;
     max-width: 835px;
     margin: auto;
+    &.no-border {
+        border: none !important;
+    }
 }
 
 .content-disabled::after {

@@ -172,7 +172,7 @@ export class UpdateLedgerVm {
     public getCategoryNameFromAccount(accountName: string): string {
         let categoryName = '';
         let account = find(this.flatternAccountList, (fla) => fla.uniqueName === accountName);
-        if (account && account.parentGroups[0]) {
+        if (account && account.parentGroups && account.parentGroups.length > 0 && account.parentGroups[0]) {
             categoryName = this.accountCatgoryGetterFunc(account, accountName);
         } else {
             let flatterAccounts: IFlattenAccountsResultItem[] = this.flatternAccountList;
@@ -193,7 +193,7 @@ export class UpdateLedgerVm {
     }
 
     public accountCatgoryGetterFunc(account, accountName): string {
-        let parent = account.parentGroups ? account.parentGroups[0] : '';
+        let parent = account && account.parentGroups && account.parentGroups.length > 0 ? account.parentGroups[0] : '';
         if (parent) {
             if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
                 return 'liabilities';
@@ -226,7 +226,8 @@ export class UpdateLedgerVm {
 
     public isThereStockEntry(uniqueName: string): boolean {
         // check if entry with same stock added multiple times
-        let count: number = this.selectedLedger.transactions.filter(f => f.particular.uniqueName === uniqueName).length;
+        let isAvailable = this.selectedLedger.transactions.filter(f => f.particular.uniqueName === uniqueName);
+        let count: number = isAvailable && isAvailable.length;
 
         if (count > 1) {
             return true;
@@ -242,12 +243,13 @@ export class UpdateLedgerVm {
     }
 
     public isThereIncomeOrExpenseEntry(): number {
-        return filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
+        let isAvailable = filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
             if (trx.particular.uniqueName) {
                 let category = this.accountCatgoryGetterFunc(trx.particular, trx.particular.uniqueName);
                 return this.isValidCategory(category) || trx.inventory;
             }
-        }).length;
+        });
+        return isAvailable && isAvailable.length;
     }
 
     public checkDiscountTaxesAllowedOnOpenedLedger(acc: AccountResponse): boolean {
@@ -281,7 +283,7 @@ export class UpdateLedgerVm {
     public onTxnAmountChange(txn: ILedgerTransactionItem) {
 
         if (!txn.isUpdated) {
-            if (this.selectedLedger.taxes.length && !txn.isTax) {
+            if (this.selectedLedger && this.selectedLedger.taxes && this.selectedLedger.taxes.length && !txn.isTax) {
                 txn.isUpdated = true;
             }
         }
@@ -465,17 +467,19 @@ export class UpdateLedgerVm {
         } else {
 
             // update every transaction conversion rates for multi-currency
-            this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
-                let category = this.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
+            if(this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
+                this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
+                    let category = this.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
 
-                // find account that's from category income || expenses || fixed assets and update it's amount too
-                if (this.isValidCategory(category)) {
-                    t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
-                    t.isUpdated = true;
-                }
-                t.convertedAmount = this.calculateConversionRate(t.amount);
-                return t;
-            });
+                    // find account that's from category income || expenses || fixed assets and update it's amount too
+                    if (this.isValidCategory(category)) {
+                        t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
+                        t.isUpdated = true;
+                    }
+                    t.convertedAmount = this.calculateConversionRate(t.amount);
+                    return t;
+                });
+            }
 
             // find account that's from category income || expenses || fixed assets
             // let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {

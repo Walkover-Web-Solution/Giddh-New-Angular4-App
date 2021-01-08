@@ -1,9 +1,8 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
-import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 
 @Component({
     selector: 'invoice-generate-model',
@@ -18,24 +17,19 @@ export class InvoiceGenerateModelComponent implements OnDestroy, OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private store: Store<AppState>,
-        private invoiceActions: InvoiceActions
+        private store: Store<AppState>
     ) {
     }
 
     public ngOnInit() {
-        this.store.select(p => p.receipt.voucher).pipe(
-            takeUntil(this.destroyed$),
-            distinctUntilChanged())
+        this.store.pipe(select(p => p.receipt.voucher), 
+            distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((o: any) => {
                 this.hasErr = false;
                 if (o && o.voucherDetails) {
                     this.goAhead = true;
-                } else {
-                    // this.hasErr = true;
                 }
-            }
-            );
+            });
     }
 
     public ngOnDestroy() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -31,6 +31,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public companyUniqueName: any;
     /* Taking input of purchase order unique name */
     @Input() public purchaseOrderUniqueName: any;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    @Input() public isCompany: boolean;
     /* Search element */
     @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
     /* Confirm box */
@@ -103,16 +105,11 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             }
         }
 
-        this.store.pipe(select(state => {
-            if (!state.session.companies) {
-                return;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
             }
-            state.session.companies.forEach(cmp => {
-                if (cmp.uniqueName === state.session.companyUniqueName) {
-                    this.selectedCompany = cmp;
-                }
-            });
-        }), takeUntil(this.destroyed$)).subscribe();
+        });
 
         this.store.pipe(select(state => state.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -449,9 +446,11 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             if (response && response.status === "success" && response.body) {
                 let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                 this.attachedDocumentBlob = blob;
-                this.pdfViewer.pdfSrc = blob;
-                this.pdfViewer.showSpinner = true;
-                this.pdfViewer.refresh();
+                if(this.pdfViewer) {
+                    this.pdfViewer.pdfSrc = blob;
+                    this.pdfViewer.showSpinner = true;
+                    this.pdfViewer.refresh();
+                }
                 this.pdfPreviewLoaded = true;
             } else {
                 this.pdfPreviewHasError = true;

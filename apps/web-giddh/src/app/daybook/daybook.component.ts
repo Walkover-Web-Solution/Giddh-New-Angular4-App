@@ -1,22 +1,25 @@
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.actions';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
-
 import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { DaybookAdvanceSearchModelComponent } from './advance-search/daybook-advance-search.component';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { GeneralService } from '../services/general.service';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../models/user-login-state';
 
 @Component({
     selector: 'daybook',
@@ -50,75 +53,70 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
     /** Daybook advance search component reference */
     @ViewChild('daybookAdvanceSearch', {static: true}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
-    public datePickerOptions: any = {
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
-            ],
-            'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
-            ],
-            'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Moment object */
+    public moment = moment;
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private searchFilterData: any = null;
-
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private _companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private _daybookActions: DaybookActions,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private generalService: GeneralService,
+        private modalService: BsModalService,
+        private settingsBranchAction: SettingsBranchActions
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.initialRequest();
-        let companyUniqueName;
-        let company;
-        store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$))
-            .subscribe(p => companyUniqueName = p);
 
-        store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$))
-            .subscribe(p => {
-                company = p.find(q => q.uniqueName === companyUniqueName);
-            });
-        this.companyName = company.name;
+        // this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        //     if(activeCompany) {
+        //         this.companyName = activeCompany.name;
+        //     }
+        // });
+
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {
         // set state details
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'daybook';
@@ -136,11 +134,57 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.showLoader = false;
             this.changeDetectorRef.detectChanges();
         });
+        this.store.pipe(
+            select(appState => appState.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                }
+                this.daybookQueryRequest.branchUniqueName = this.currentBranch.uniqueName;
+                this.initialRequest();
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
     }
 
     public selectedDate(value: any) {
-        let from = moment(value.picker.startDate).format('DD-MM-YYYY');
-        let to = moment(value.picker.endDate).format('DD-MM-YYYY');
+        let from = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        let to = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
             this.showLoader = true;
             this.daybookQueryRequest.from = from;
@@ -162,10 +206,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.searchFilterData = null;
         if (!obj.cancle) {
             this.searchFilterData = cloneDeep(obj.dataToSend);
-            this.datePickerOptions = {
-                ...this.datePickerOptions, startDate: moment(obj.fromDate, GIDDH_DATE_FORMAT).toDate(),
-                endDate: moment(obj.toDate, GIDDH_DATE_FORMAT).toDate()
-            };
             if (this.dateRangePickerCmp) {
                 this.dateRangePickerCmp.render();
             }
@@ -191,10 +231,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
     public toggleExpand() {
         this.isAllExpanded = !this.isAllExpanded;
-        this.daybookData$ = this.daybookData$.pipe(map(sc => {
-            sc.entries.map(e => e.isExpanded = this.isAllExpanded);
-            return sc;
-        }));
+        if(this.daybookData$) {
+            this.daybookData$ = this.daybookData$.pipe(map(sc => {
+                sc.entries.map(e => e.isExpanded = this.isAllExpanded);
+                return sc;
+            }));
+        }
         this.checkIsStockEntryAvailable();
     }
 
@@ -202,11 +244,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate()
-                };
-
+                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.go();
@@ -246,7 +287,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 componentInstance.maxSize = 5;
                 componentInstance.writeValue(data.page);
                 componentInstance.boundaryLinks = true;
-                componentInstance.pageChanged.subscribe(e => {
+                componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                     this.pageChanged(e);
                 });
             }
@@ -323,6 +364,74 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 };
             });
         });
+    }
+
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof DaybookComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof DaybookComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof DaybookComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            if ((this.daybookQueryRequest.from !== this.fromDate) || (this.daybookQueryRequest.to !== this.toDate)) {
+                this.showLoader = true;
+                this.daybookQueryRequest.from = this.fromDate;
+                this.daybookQueryRequest.to = this.toDate;
+                this.daybookQueryRequest.page = 0;
+                this.go();
+            }
+        }
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof DaybookComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.daybookQueryRequest.branchUniqueName = selectedEntity.value;
+        this.go();
     }
 }
 

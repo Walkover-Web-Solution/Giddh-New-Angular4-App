@@ -4,14 +4,10 @@
         <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr">
             <div class="d-flex">
                 <div class="form-group mrR1 d-flex">
-                    <div class="input-group ">
-                        <!-- <span class="icon-calender"></span> -->
-                        <span class="input-wrapper">
-                            <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                                class="form-control" (applyDaterangepicker)="dateRangeChanged($event)" />
-                        </span>
+                    <div class=" input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <i class="icon-calender calendar-addon"></i>
+                        <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker border-radius-2"/>
                     </div>
-
                     <div class="advance-icon cursor-pointer">
                         <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"
                             tooltip="Advance Search"></span>
@@ -28,7 +24,7 @@
 
         <!-- need to add functionality -->
         <div class="clear-filter" *ngIf="showResetAdvanceSearchIcon" (click)="resetAdvanceSearch()">
-            <button class="btn btn-filter pr-0">
+            <button class="btn btn-filter mr-0">
                 <span class="icon-cross"></span> Clear Filter
             </button>
         </div>
@@ -46,7 +42,7 @@
             <!-- region more items -->
             <div *ngIf="selectedItems.length === 1" style="height: 30px;">
 
-                <div class="btn-group" dropdown #dp="bs-dropdown"
+                <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown"
                     style="margin-bottom: 10px;display: inline-block !important;">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
@@ -68,13 +64,13 @@
             </div>
             <!-- endregion -->
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button *ngIf="!isCompany" class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button *ngIf="!isCompany" class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
@@ -100,18 +96,18 @@
         </div>
         <div class="d-flex mt-1">
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-15">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button *ngIf="!isCompany" class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-15">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button *ngIf="!isCompany" class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
             <div *ngIf="selectedItems.length === 1" style="height: 30px;">
-                <div class="btn-group" dropdown #dp="bs-dropdown"
+                <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown"
                     style="margin-bottom: 10px;display: inline-block !important;">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
@@ -262,7 +258,7 @@
                     <tr *ngFor="let item of voucherData.results; let i = index"
                         (mouseover)="hoveredItemUniqueName = item.uniqueName">
 
-                        <td class="mh18_img" data-title="#"
+                        <td class="mh18_img" width="4%" data-title="#"
                             *ngIf="hoveredItemUniqueName === item.uniqueName || item.isSelected || selectedItems.length > 0">
                             <div class="mh18_img"
                                 class="d-flex checkbox-td">
@@ -273,7 +269,7 @@
                             </div>
                         </td>
 
-                        <td *ngIf="!item.isSelected && hoveredItemUniqueName !== item.uniqueName && selectedItems.length === 0"
+                        <td width="4%" *ngIf="!item.isSelected && hoveredItemUniqueName !== item.uniqueName && selectedItems.length === 0"
                             data-title="#">
                             <div class="d-flex index-no">
                                 {{ i + 1}} </div>
@@ -288,8 +284,8 @@
       </td> -->
 
 
-                        <td attr.data-title="{{voucherType === 'proformas' ? 'Proforma No.' : 'Estimates No.'}} ">
-                            <div style="position: relative" class="d-flex">
+                        <td width="13%" attr.data-title="{{voucherType === 'proformas' ? 'Proforma No.' : 'Estimates No.'}} ">
+                            <div class="d-flex position-relative">
                                 <a href="javascript:void(0);" class="btn-link-2"
                                     (click)="onSelectInvoice(item)">{{item.uniqueName}}</a>
                                 <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
@@ -303,7 +299,7 @@
 
                         </td>
 
-                        <td (dblclick)="selectedCustomerUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                        <td width="19%" (dblclick)="selectedCustomerUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="selectedCustomerUniqueName = ''" data-title="Customer">
                             {{item.customerName}}
                             <div *ngIf="selectedCustomerUniqueName === item.uniqueName" account-detail-modal-component
@@ -313,11 +309,11 @@
                             </div>
                         </td>
 
-                        <td attr.data-title="{{ voucherType === 'proformas' ? 'Proforma' : 'Estimate' }} Date">
+                        <td width="10%" attr.data-title="{{ voucherType === 'proformas' ? 'Proforma' : 'Estimate' }} Date">
                             {{item.invoiceDate}}
                         </td>
                         <!-- <td class="text-right" data-title="Total Amt.">{{item.grandTotal | giddhCurrency}}</td> -->
-                        <td class="text-right"
+                        <td width="12%" class="text-right"
                             [tooltip]="(voucherType === 'proformas' || voucherType === 'estimates') ? grandTotalPopupTemplate : ''"
                             container="body" containerClass="invoice-preview">
                             {{item?.amount?.currencyForAccount?.symbol}}
@@ -325,12 +321,12 @@
                         </td>
                         <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
                         </ng-template>
-                        <td class="" data-title="Expiry Date">{{item.expiryDate}}</td>
+                        <td width="12%" data-title="Expiry Date">{{item.expiryDate}}</td>
                         <td data-title="Status">{{ item.status }}</td>
 
                         <!--for not cancelled status-->
 
-                        <td data-title="Action" (click)="clickedItemUniqueName = item.uniqueName" class="cp"
+                        <td width="10%" data-title="Action" (click)="clickedItemUniqueName = item.uniqueName" class="cp"
                             *ngIf="item.action !== 'invoiced'">
 
 
@@ -343,7 +339,7 @@
 
                                 <!-- dropdown -->
 
-                                <div class="btn-group icon-ellipse selectAction" dropdown #dropdown="bs-dropdown"
+                                <div *ngIf="!isCompany" class="btn-group icon-ellipse selectAction" dropdown #dropdown="bs-dropdown"
                                     container="body">
                                     <a href="javascript:void(0)" id="button-basic" dropdownToggle
                                         class="dropdown-toggle icon-dots-three-vertical pull-right"
@@ -420,7 +416,7 @@
                         </td>
 
                         <!--for cancelled/ declined status-->
-                        <td *ngIf="item.action === 'invoiced'" data-title="Action">
+                        <td width="10%" *ngIf="item.action === 'invoiced'" data-title="Action">
                             <span>{{ item.action}}</span>
                         </td>
 
@@ -505,7 +501,7 @@
 
     <!-- region invoice-preview-details -->
     <div *ngIf="selectedVoucher">
-        <invoice-preview-details-component [selectedItem]="selectedVoucher" [items]="itemsListForDetails"
+        <invoice-preview-details-component [selectedItem]="selectedVoucher" [items]="itemsListForDetails" [isCompany]="isCompany"
             [voucherType]="selectedVoucher.voucherType" [invoiceSetting]="invoiceSetting" [invoiceSearch]="invoiceSearch"
             [voucherNoForDetail]="voucherNoForDetail" [voucherDetailAction]="voucherDetailAction" (invoiceSearchEvent)="invoiceSearch = $event;"
             (closeEvent)="invoicePreviewClosed()" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
@@ -537,3 +533,12 @@
             </div>
         </div>
     </div>
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                                        [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                                        [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>

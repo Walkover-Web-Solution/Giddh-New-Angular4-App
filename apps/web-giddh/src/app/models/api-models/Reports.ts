@@ -34,6 +34,7 @@ export class ReportsRequestModel {
     public interval: string;
     public from: string;
     public to: string;
+    public branchUniqueName?: string;
 }
 export class ReportsDetailedRequestFilter {
     public q?: string;
@@ -43,7 +44,7 @@ export class ReportsDetailedRequestFilter {
     public sortBy?: string;
     public page?: number
     public count?: number
-
+    public branchUniqueName?: string;
 }
 export class Balance {
     public amount: number;
@@ -178,6 +179,7 @@ export interface GetAllAdvanceReceiptsRequest {
     totalAmountOperation?: string;
     unUsedAmount?: number
     unUsedAmountOperation?: string;
+    branchUniqueName?: string;
 }
 
 /** Request object model for advance receipts summary API */
@@ -185,6 +187,7 @@ export interface AdvanceReceiptSummaryRequest {
     companyUniqueName: string;
     from?: string;
     to?: string;
+    branchUniqueName?: string;
 }
 
 export class ColumnarResponseResult {

@@ -1,7 +1,7 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../store/roots';
@@ -23,7 +23,8 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
     styleUrls: ['./groups-account-sidebar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, AfterViewChecked {
+
+export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public ScrollToElement = false;
     public viewPortItems: IGroupOrAccount[];
@@ -53,7 +54,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     @Output() public resetSearchString: EventEmitter<boolean> = new EventEmitter();
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private navigateStack: any[] = [];
     /** Active group observable */
     private activeGroup$: Observable<any>;
     public currentGroup: any;
@@ -61,19 +61,21 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     public isGroupMoved: boolean = false;
     /* This will hold if group is deleted */
     public isGroupDeleted: boolean = false;
+    /** This will hold the search string */
+    public searchString: string = "";
 
     // tslint:disable-next-line:no-empty
     constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
         private accountsAction: AccountsAction, private _generalServices: GeneralService, private _cdRef: ChangeDetectorRef, private groupService: GroupService) {
         this.mc = new GroupAccountSidebarVM(this._cdRef, this.store);
-        this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeAccount = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
-        this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).pipe(takeUntil(this.destroyed$));
-        this.isUpdateAccountSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+        this.activeGroup = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.activeAccount = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.isUpdateGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$));
+        this.isUpdateAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.isDeleteGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isDeleteGroupSuccess), takeUntil(this.destroyed$));
-        this.groupsListBackupStream$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+        this.groupsListBackupStream$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
         this.isMoveGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isMoveGroupSuccess), takeUntil(this.destroyed$));
     }
 
@@ -101,10 +103,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         }
     }
 
-    public ngAfterViewInit() {
-        //
-    }
-
     public ngAfterViewChecked() {
         if (this.ScrollToElement) {
             this.columnView.forEach((p, index) => {
@@ -123,13 +121,13 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
             this.mc.handleEvents(s.name, s.payload);
 
             let groups: IGroupsWithAccounts[];
-            this.store.select(state => state.general.groupswithaccounts).pipe(take(1)).subscribe(grp => groups = grp);
+            this.store.pipe(select(state => state.general.groupswithaccounts), take(1)).subscribe(grp => groups = grp);
 
             let activeGroup: GroupResponse;
-            this.store.select(state => state.groupwithaccounts.activeGroup).pipe(take(1)).subscribe(grp => activeGroup = grp);
+            this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(grp => activeGroup = grp);
 
             let activeAccount;
-            this.store.select(state => state.groupwithaccounts.activeAccount).pipe(take(1)).subscribe(acc => activeAccount = acc);
+            this.store.pipe(select(state => state.groupwithaccounts.activeAccount), take(1)).subscribe(acc => activeAccount = acc);
 
             // reset search string when you're in search case for move group || move account || merge account
             if (s.name === eventsConst.groupMoved || s.name === eventsConst.accountMoved || s.name === eventsConst.accountMerged) {
@@ -164,6 +162,10 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                 this.isGroupDeleted = true;
                 this.getGroupDetails();
             }
+        });
+
+        this.store.pipe(select(state => state.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$)).subscribe(response => {
+            this.searchString = response;
         });
     }
 
@@ -226,9 +228,9 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                 }
             }
             // check if searching in groups and have active group
-            if (this.isSearchingGroups) {
-                let activeGroup = null;
-                this.store.select(state => state.groupwithaccounts.activeGroup).pipe(take(1)).subscribe(a => activeGroup = a);
+            // if (this.isSearchingGroups) {
+            //     let activeGroup = null;
+            //     this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(a => activeGroup = a);
 
                 // if (activeGroup) {
                 //   for (let m = 0; m < this.mc.columns.length; m++) {
@@ -241,14 +243,14 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                 //     }
                 //   }
                 // }
-            }
+            //}
         }
         this.columnsChanged.emit(this.mc);
     }
 
     public polulateColms(grps: IGroupsWithAccounts[]): ColumnGroupsAccountVM {
         let activeGroup = null;
-        this.store.select(state => state.groupwithaccounts.activeGroup).pipe(take(1)).subscribe(a => activeGroup = a);
+        this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(a => activeGroup = a);
 
         if (this.isSearchingGroups) {
             if (grps.length > 0) {
