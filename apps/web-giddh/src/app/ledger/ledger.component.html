@@ -195,7 +195,7 @@
 
                     <div class="d-flex">
                         <a href="javascript:void(0)" id="upload" class="icomoon-ico d-flex align-items-center"
-                            [tooltip]="'Import Bank Statement'" [placement]="'top'" (click)="showUploadBankStatementModal()">
+                            [tooltip]="'Import Statement'" [placement]="'top'" (click)="showUploadBankStatementModal()">
                             <i class="icon-upload-icon lh-0"></i>
                         </a>
                         <a href="javascript:void(0)" id="share" class="icomoon-ico d-flex align-items-center"
@@ -1656,10 +1656,10 @@
 </ng-template>
 
 <!-- share ladger popup -->
-<div bsModal #uploadBankStatementModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
+<div bsModal #importStatementModal="bs-modal" class="modal fade" role="dialog" tabindex="-1" (onHidden)="isImportStatementVisible = false">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <upload-bank-statement #uploadBankStatementComponent [accountUniqueName]="lc.accountUnq" (closeModal)="hideUploadBankStatementModal()"></upload-bank-statement>
+            <import-statement *ngIf="isImportStatementVisible" [accountUniqueName]="lc.accountUnq" (closeModal)="hideUploadBankStatementModal()"></import-statement>
         </div>
     </div>
 </div>

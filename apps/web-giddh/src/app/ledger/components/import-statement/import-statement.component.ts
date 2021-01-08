@@ -4,25 +4,27 @@ import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
-    selector: 'upload-bank-statement',
-    templateUrl: './upload-bank-statement.component.html',
-    styleUrls: ['./upload-bank-statement.component.scss']
+    selector: 'import-statement',
+    templateUrl: './import-statement.component.html',
+    styleUrls: ['./import-statement.component.scss']
 })
 
-export class UploadBankStatementComponent {
+export class ImportStatementComponent {
     /** Account unique name */
     @Input() public accountUniqueName: string = '';
     /** Directives to emit true if API call successful */
     @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
-
     /** Variable for File Upload */
     public selectedFile: any;
     /** Object for API request parameters */
     public getRequest: any = {entity: 'pdf', companyUniqueName: '', accountUniqueName: ''};
     /** Object for API post parameters */
-    public postRequest: any = {File: '', Password: ''};
+    public postRequest: any = {file: '', password: ''};
 
-    constructor(private ledgerService: LedgerService, public generalService: GeneralService, private toaster: ToasterService) {
+    constructor(
+        private ledgerService: LedgerService, 
+        public generalService: GeneralService, 
+        private toaster: ToasterService) {
         
     }
 
@@ -31,7 +33,7 @@ export class UploadBankStatementComponent {
      *
      * @param {FileList} file
      * @returns {void}
-     * @memberof UploadBankStatementComponent
+     * @memberof ImportStatementComponent
      */
     public onFileChange(file: FileList): void {
         let validExtensions = ['pdf'];
@@ -43,23 +45,23 @@ export class UploadBankStatementComponent {
                 this.toaster.errorToast('Only PDF files are supported for Import');
             }
             this.selectedFile = null;
-            this.postRequest.File = null;
+            this.postRequest.file = null;
             return;
         }
 
-        this.postRequest.File = file.item(0);
+        this.postRequest.file = file.item(0);
     }
 
     /**
      * This will call the api to upload file
      *
-     * @memberof UploadBankStatementComponent
+     * @memberof ImportStatementComponent
      */
-    public uploadBankStatement(): void {
+    public importStatement(): void {
         this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
         this.getRequest.accountUniqueName = this.accountUniqueName;
         
-        this.ledgerService.uploadBankStatementFile(this.getRequest, this.postRequest).subscribe(response => {
+        this.ledgerService.importStatement(this.getRequest, this.postRequest).subscribe(response => {
             if (response.status === 'success') {
                 this.toaster.successToast("File has been uploaded successfully.");
                 this.closeModal.emit(true);
@@ -67,16 +69,5 @@ export class UploadBankStatementComponent {
                 this.toaster.errorToast(response.message, response.code);
             }
         });
-    }
-
-    /**
-     * This will init the form
-     *
-     * @memberof UploadBankStatementComponent
-     */
-    public initForm(): void {
-        this.selectedFile = "";
-        this.postRequest.File = null;
-        this.postRequest.Password = "";
     }
 }
