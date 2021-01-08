@@ -9,7 +9,7 @@
                 </div>
                 <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
                 <div class="aside-pane-form">
-                    <section class="form_body witBg clearfix mrBChldLbl">
+                    <section class="form_body witBg clearfix margin-child-label">
                         <div class="form_bg clearfix">
                             <div class="row">
                                 <div class="form-group col-5 col-sm-5">
@@ -356,7 +356,7 @@
                             <div class="col-12 col-sm-12">
                                 <div class="checkbox">
                                     <label class="" for="isFsStock">
-                                        <input type="checkbox" class="focusBorder" formControlName="isFsStock"
+                                        <input #isFsStock type="checkbox" class="focusBorder" formControlName="isFsStock"
                                             id="isFsStock" #isFinishedStock [disabled]="" name="isFsStock"
                                             (change)="showManufacturingQuantitySection()"> Is
                                         it a finished stock? (Manufacturing/Combo)</label>

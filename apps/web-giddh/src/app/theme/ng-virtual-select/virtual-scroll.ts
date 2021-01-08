@@ -138,6 +138,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         }
         if (this.items && this.items.length) {
             currentItemIndex = (currentItemIndex === -1) ? 0 : currentItemIndex;
+            this.items.forEach(item => item.isHilighted = false);
             this.items[currentItemIndex].isHilighted = true;
         }
         this.refresh();

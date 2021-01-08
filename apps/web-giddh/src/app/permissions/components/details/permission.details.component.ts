@@ -1,8 +1,8 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
 import { PermissionActions } from '../../../actions/permission/permission.action';
@@ -31,14 +31,13 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public addUpdateRoleInProcess$: Observable<boolean>;
 
     constructor(private router: Router,
-        private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,
         private _location: Location,
         private permissionActions: PermissionActions,
         private _toaster: ToasterService
     ) {
 
-        this.store.select(p => p.permission).pipe(takeUntil(this.destroyed$)).subscribe((permission) => {
+        this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((permission) => {
             this.allRoles = _.cloneDeep(permission.roles);
             this.singlePageForFreshStart = _.find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
                 return o.uniqueName === 'super_admin';
@@ -54,7 +53,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
             this.newRole = permission.newRole;
             this.pageList = permission.pages;
         });
-        this.addUpdateRoleInProcess$ = this.store.select(p => p.permission.addUpdateRoleInProcess).pipe(takeUntil(this.destroyed$));
+        this.addUpdateRoleInProcess$ = this.store.pipe(select(p => p.permission.addUpdateRoleInProcess), takeUntil(this.destroyed$));
     }
 
     public ngOnDestroy() {

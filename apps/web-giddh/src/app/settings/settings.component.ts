@@ -24,10 +24,11 @@ import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
+import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.css']
+    styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
@@ -90,7 +91,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             }
         });
 
-        this._route.params.subscribe(params => {
+        this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
                 this.setStateDetails(params['type'], params['referrer']);
                 if (params['type'] === 'integration' && params['referrer']) {
@@ -103,22 +104,30 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 this.selectedChildTab = 0;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
+            } else {
+                this.integrationtab = params['referrer'];
             }
 
             this.tabChanged(this.activeTab);
 
             if (this.activeTab === "linked-accounts") {
                 setTimeout(() => {
-                    this.eBankComp.getInitialEbankInfo();
+                    if (this.eBankComp) {
+                        this.eBankComp.getInitialEbankInfo();
+                    }
                 }, 0);
             } else if (this.activeTab === "profile") {
                 setTimeout(() => {
-                    this.profileComponent.getInitialProfileData();
-                    this.profileComponent.getInventorySettingData();
+                    if (this.profileComponent) {
+                        this.profileComponent.getInitialProfileData();
+                        this.profileComponent.getInventorySettingData();
+                    }
                 }, 0);
             } else if (this.activeTab === "financial-year") {
                 setTimeout(() => {
-                    this.financialYearComp.getInitialFinancialYearData();
+                    if (this.financialYearComp) {
+                        this.financialYearComp.getInitialFinancialYearData();
+                    }
                 }, 0);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
@@ -128,7 +137,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             } else if (this.activeTab === "tag") {
                 setTimeout(() => {
-                    this.tagComp.getTags();
+                    if (this.tagComp) {
+                        this.tagComp.getTags();
+                    }
                 }, 0);
             }
         });
@@ -156,21 +167,29 @@ export class SettingsComponent implements OnInit, OnDestroy {
         const selectedId = this.staticTabs.tabs.findIndex(p => p.active);
         if (key === 'alt+right' && selectedId < this.staticTabs.tabs.length) {
             this.staticTabs.tabs[selectedId + 1].active = true;
-        } else if (selectedId > 0) {
+        } else if (selectedId > 0 && this.staticTabs.tabs.length) {
             this.staticTabs.tabs[selectedId - 1].active = true;
         }
     }
 
     public selectTab(id: number) {
-        this.staticTabs.tabs[id].active = true;
+        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs.length) {
+            this.staticTabs.tabs[id].active = true;
+        }
     }
 
     public assignChildtabForIntegration(childTab: string): number {
         switch (childTab) {
             case 'payment':
                 return 4;
+            case 'ecommerce':
+                return 3;    
+            case 'collection':
+                return 2;
             case 'email':
                 return 1;
+            case 'sms':
+                return 0;
             default:
                 return 0;
         }
@@ -215,7 +234,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public tabChanged(tab: string) {
-        if (tab === 'integration' && this.integrationtab) {
+        if ((tab === 'integration' || tab === 'profile') && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
@@ -279,7 +298,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     private setStateDetails(type, referer?: string) {
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         if (referer) {
@@ -342,5 +361,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.asideSettingMenuState = "out";
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Sets the current page title
+     *
+     * @param {string} title Title of the page
+     * @memberof SettingsComponent
+     */
+    public setCurrentPageTitle(title: string): void {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Settings > " + title;
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }

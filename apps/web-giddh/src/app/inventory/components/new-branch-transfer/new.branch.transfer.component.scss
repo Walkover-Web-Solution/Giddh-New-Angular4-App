@@ -152,7 +152,6 @@ tfoot td .tableSec.form-group {
     width: 100%;
     height: 28px !important;
     padding: 5px;
-    max-width: 200px;
     border: 1px solid #c7c7c7;
 }
 
@@ -419,6 +418,12 @@ tfoot td .tableSec.form-group {
     max-width: 1160px;
     width: 100%;
     margin-bottom: 20px !important;
+}
+.input-group {
+    sh-select.branch-dropdown {
+        width: 100%;
+        margin-right: 8px;
+    }
 }
 @media(max-width:991px){
     #table-recipt{

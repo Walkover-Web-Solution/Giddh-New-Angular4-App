@@ -1,15 +1,14 @@
-
 describe('This is Login Test', function() {
 
     let testData = "";
-    // beforeEach(() => {
-    //     // "this" points at the test context object
-    //     cy.fixture('example.json')
-    //         .then((data) => {
-    //             // "this" is still the test context object
-    //             testData = data
-    //         })
-    // })
+    beforeEach(() => {
+        // "this" points at the test context object
+        cy.fixture('example.json')
+            .then((data) => {
+                // "this" is still the test context object
+                testData = data
+            })
+    })
 
 
     before(function() {

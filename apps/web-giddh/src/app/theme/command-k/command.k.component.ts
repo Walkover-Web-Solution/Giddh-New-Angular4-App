@@ -40,7 +40,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public placement: string;
     @Input() public setParentWidth: boolean = false;
     @Input() public parentEle: any;
-    @Input() public ItemHeight: number = 50;
+    @Input() public ItemHeight: number = 52;
     @Input() public ItemWidth: number = 300;
     @Input() public visibleItems: number = 10;
 
@@ -87,7 +87,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public ngOnInit(): void {
         // listen on input for search
-        this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+        this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
             this.commandKRequestParams.page = 1;
             this.commandKRequestParams.q = term;
             this.searchCommandK(true);
@@ -503,5 +503,20 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         string = string.replace(/\//g, '-');
         string = string.replace(/^-|-$/g,'');
         return string;
+    }
+
+    /**
+     * This will search after paste
+     *
+     * @memberof CommandKComponent
+     */
+    public onPasteInSearch(): void {
+        setTimeout(() => {
+            if(this.searchEle && this.searchEle.nativeElement) {
+                let term = this.searchEle.nativeElement.value;
+                term = (term) ? term.trim() : "";
+                this.searchSubject.next(term);
+            }
+        }, 100);    
     }
 }

@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -58,7 +58,7 @@ import { ToasterService } from '../../../services/toaster.service';
     </div>
   `
 })
-export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     public showLoader: Observable<boolean>;
     public data$: Observable<AccountDetails>;
     public request: TrialBalanceRequest;
@@ -73,7 +73,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     private _selectedCompany: CompanyResponse;
 
     constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions, private _toaster: ToasterService) {
-        this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).pipe(takeUntil(this.destroyed$));
+        this.showLoader = this.store.pipe(select(p => p.tlPl.tb.showLoader), takeUntil(this.destroyed$));
     }
 
     public get selectedCompany(): CompanyResponse {
@@ -95,7 +95,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     }
 
     public ngOnInit() {
-        this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
+        this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
             let d = _.cloneDeep(p) as AccountDetails;
             if (d) {
                 if (d.message) {
@@ -111,7 +111,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
                 });
             }
             return d;
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
         this.data$.subscribe(p => {
             this.cd.markForCheck();
         });
@@ -135,19 +135,6 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
 
     public ngAfterViewInit() {
         this.cd.detectChanges();
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
-        //   this.cd.detectChanges();
-        // }
-        // if ('isV2' in changes && changes['isV2'].currentValue !== changes['isV2'].previousValue) {
-        //   if (changes['isV2'].currentValue) {
-        //     this.store.dispatch(this.tlPlActions.GetV2TrialBalance(_.cloneDeep(this.request)));
-        //   } else {
-        //     this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(this.request)));
-        //   }
-        // }
     }
 
     public filterData(request: TrialBalanceRequest) {

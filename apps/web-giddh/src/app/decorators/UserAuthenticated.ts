@@ -1,7 +1,7 @@
 import { AppState } from '../store';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import {Injectable, NgZone} from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { userLoginStateEnum } from '../models/user-login-state';
 import { ROUTES } from '../routes-array';
@@ -12,8 +12,8 @@ export class UserAuthenticated implements CanActivate {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged(), switchMap((p) => {
-            return this.store.select(k => k.session);
+        return this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), switchMap((p) => {
+            return this.store.pipe(select(k => k.session));
         }), map(p => {
             if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
                 if (ROUTES.findIndex(q => q.path.split('/')[0] === p.lastState.split('/')[0]) > -1) {
@@ -28,7 +28,11 @@ export class UserAuthenticated implements CanActivate {
                         });
                         this._router.navigate([p.lastState.replace(tempParams, '')], { queryParams });
                     } else {
-                        this._router.navigate([p.lastState]);
+                        if (p.lastState) {
+                            this._router.navigate([p.lastState]);
+                        } else {
+                            this._router.navigate(['home']);
+                        }
                     }
                 } else {
                     this._router.navigate(['home']);

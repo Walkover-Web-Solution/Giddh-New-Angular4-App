@@ -11,7 +11,8 @@ export interface TrialBalanceRequest {
 	to?: string;
 	refresh?: boolean;
 	selectedDateOption?: string;
-	tagName?: string;
+    tagName?: string;
+    branchUniqueName?: string;
 }
 
 export interface ProfitLossRequest extends TrialBalanceRequest {

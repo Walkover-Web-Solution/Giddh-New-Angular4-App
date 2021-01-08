@@ -4,10 +4,11 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InvViewService } from '../../inv.view.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'stock-list',
@@ -42,14 +43,13 @@ export class StockListComponent implements OnInit, OnDestroy {
     public stockUniqueName: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router, private inventoryAction: InventoryAction, private sideBarAction: SidebarAction,
-        private invViewService: InvViewService) {
-        this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
-        this.activeStockUniqueName$ = this.store.select(p => p.inventory.activeStockUniqueName);
+    constructor(private store: Store<AppState>, private route: ActivatedRoute, private inventoryAction: InventoryAction, private sideBarAction: SidebarAction, private invViewService: InvViewService) {
+        this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
+        this.activeStockUniqueName$ = this.store.pipe(select(p => p.inventory.activeStockUniqueName), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.sub = this.route.params.subscribe(params => {
+        this.sub = this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.groupUniqueName = params['groupUniqueName'];
         });
     }
@@ -66,17 +66,12 @@ export class StockListComponent implements OnInit, OnDestroy {
         e.stopPropagation();
         this.stockUniqueName = item.uniqueName;
         this.store.dispatch(this.sideBarAction.GetInventoryStock(item.uniqueName, this.Groups.uniqueName));
-        // setTimeout(() => {
-        // this._router.navigate(['/pages', 'inventory', 'stock', this.Groups.uniqueName, 'report', item.uniqueName]);
-        // }, 700);
     }
 
     public goToManageStock(stock) {
         if (stock && stock.uniqueName) {
             this.store.dispatch(this.inventoryAction.showLoaderForStock());
             this.store.dispatch(this.sideBarAction.GetInventoryStock(stock.uniqueName, this.Groups.uniqueName));
-            // this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
-            // this.setInventoryAsideState(true, false, true);
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
             this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
         }

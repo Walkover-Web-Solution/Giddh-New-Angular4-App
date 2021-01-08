@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
@@ -662,7 +662,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         // });
 
         // Get custom created templates
-        this.store.select(c => c.invoiceTemplate).pipe(takeUntil(this.destroyed$)).subscribe((s) => {
+        this.store.pipe(select(c => c.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((s) => {
             if (s && s.customCreatedTemplates) {
                 this.customCreatedTemplates = _.cloneDeep(s.customCreatedTemplates);
                 this.customCreatedTemplates.sort((a, b) => {
@@ -708,11 +708,11 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         let companyUniqueName = null;
         let companies = null;
         let defaultTemplate = null;
-        this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
             companyUniqueName = ss.companyUniqueName;
             companies = ss.companies;
         });
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
             if (this.templateType === 'voucher') {
                 defaultTemplate = ss.sampleTemplates[9];
@@ -839,7 +839,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         let customCreatedTemplates = null;
         let defaultTemplate = null;
 
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             customCreatedTemplates = ss.customCreatedTemplates;
             defaultTemplate = ss.defaultTemplate;
         });
@@ -858,7 +858,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         let customCreatedTemplates = null;
         let defaultTemplate = null;
 
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             customCreatedTemplates = ss.customCreatedTemplates;
             defaultTemplate = ss.defaultTemplate;
         });
