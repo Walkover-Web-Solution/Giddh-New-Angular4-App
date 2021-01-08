@@ -101,9 +101,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
     /** upload bank statement modal instance */
-    @ViewChild('uploadBankStatementModal', {static: true}) public uploadBankStatementModal: ModalDirective;
-    /** upload bank statement component instance */
-    @ViewChild('uploadBankStatementComponent', {static: false}) public uploadBankStatementComponent: UploadBankStatementComponent;
+    @ViewChild('importStatementModal', {static: true}) public importStatementModal: ModalDirective;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
@@ -245,6 +243,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** This will hold if import statement modal is visible */
+    public isImportStatementVisible: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -2352,8 +2352,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public showUploadBankStatementModal(): void {
-        if(this.uploadBankStatementModal) {
-            this.uploadBankStatementModal.show();
+        if(this.importStatementModal) {
+            this.isImportStatementVisible = true;
+            this.importStatementModal.show();
         }
     }
 
@@ -2363,12 +2364,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public hideUploadBankStatementModal(): void {
-        if(this.uploadBankStatementComponent) {
-            this.uploadBankStatementComponent.initForm();
-        }
-
-        if(this.uploadBankStatementModal) {
-            this.uploadBankStatementModal.hide();
+        if(this.importStatementModal) {
+            this.importStatementModal.hide();
         }
     }
 

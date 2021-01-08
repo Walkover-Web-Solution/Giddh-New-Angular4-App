@@ -526,22 +526,22 @@ export class LedgerService {
     }
 
     /**
-     * This will upload the bank statement pdf
+     * This will upload the statement pdf
      *
      * @param {*} getRequest
      * @param {*} postRequest
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
-    public uploadBankStatementFile(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + LEDGER_API.UPLOAD_BANK_STATEMENT
+    public importStatement(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + LEDGER_API.IMPORT_STATEMENT
             .replace(':companyUniqueName', encodeURIComponent(getRequest.companyUniqueName))
 			.replace(':accountUniqueName', encodeURIComponent(getRequest.accountUniqueName))
 			.replace(':entity', getRequest.entity);
 
 		const formData: FormData = new FormData();
-        formData.append('file', postRequest.File, postRequest.File.name);
-        formData.append('pdfpassword', postRequest.Password);
+        formData.append('file', postRequest.file, postRequest.file.name);
+        formData.append('pdfpassword', postRequest.password);
 		return this._http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
 			let data: BaseResponse<any, string> = res;
 			return data;
