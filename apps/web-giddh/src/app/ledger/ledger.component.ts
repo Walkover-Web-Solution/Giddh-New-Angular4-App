@@ -53,6 +53,7 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
+import { UploadBankStatementComponent } from './components/upload-bank-statement/upload-bank-statement.component';
 
 @Component({
     selector: 'ledger',
@@ -101,6 +102,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
     /** upload bank statement modal instance */
     @ViewChild('uploadBankStatementModal', {static: true}) public uploadBankStatementModal: ModalDirective;
+    /** upload bank statement component instance */
+    @ViewChild('uploadBankStatementComponent', {static: false}) public uploadBankStatementComponent: UploadBankStatementComponent;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
@@ -2360,6 +2363,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public hideUploadBankStatementModal(): void {
+        if(this.uploadBankStatementComponent) {
+            this.uploadBankStatementComponent.initForm();
+        }
+
         if(this.uploadBankStatementModal) {
             this.uploadBankStatementModal.hide();
         }
