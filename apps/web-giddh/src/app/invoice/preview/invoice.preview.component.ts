@@ -1685,6 +1685,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if(this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length > 0) {
             this.advanceReceiptAdjustmentData.adjustments.map(item => {
                 item.voucherDate = (item.voucherDate.toString().includes('/')) ? item.voucherDate.trim().replace(/\//g, '-') : item.voucherDate;
+                item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
             });
         }
         this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName).subscribe(response => {
