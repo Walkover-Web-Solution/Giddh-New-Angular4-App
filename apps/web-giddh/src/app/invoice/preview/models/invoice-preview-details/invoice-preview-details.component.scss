@@ -65,6 +65,8 @@
     color: $night-rider;
     font-size: 14px;
     margin-top: 3px;
+    white-space: normal;
+    word-break: break-all;
 }
 
 .invoice-sidebar .single-invoice-detail {
