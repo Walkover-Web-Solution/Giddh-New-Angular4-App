@@ -247,6 +247,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
             this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
             this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
+            this.searchFilterData = null;
         }
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
