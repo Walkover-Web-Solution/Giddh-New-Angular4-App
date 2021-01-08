@@ -53,6 +53,7 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
+import { UploadBankStatementComponent } from './components/upload-bank-statement/upload-bank-statement.component';
 
 @Component({
     selector: 'ledger',
@@ -99,6 +100,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
     @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
+    /** upload bank statement modal instance */
+    @ViewChild('importStatementModal', {static: true}) public importStatementModal: ModalDirective;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
@@ -240,6 +243,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showBranchSwitcher: boolean;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** This will hold if import statement modal is visible */
+    public isImportStatementVisible: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -2339,5 +2344,42 @@ export class LedgerComponent implements OnInit, OnDestroy {
         item.isOtherTaxesApplicable = event.isOtherTaxesApplicable;
         item.otherTaxModal = event.otherTaxModal;
         item.otherTaxType = event.otherTaxType;
+    }
+
+    /**
+     * This will show the bank statement upload modal
+     *
+     * @memberof LedgerComponent
+     */
+    public showUploadBankStatementModal(): void {
+        if(this.importStatementModal) {
+            this.isImportStatementVisible = true;
+            this.importStatementModal.show();
+        }
+    }
+
+    /**
+     * This will hide the bank statement upload modal
+     *
+     * @memberof LedgerComponent
+     */
+    public hideUploadBankStatementModal(): void {
+        if(this.importStatementModal) {
+            this.importStatementModal.hide();
+        }
+    }
+
+    /**
+     * Callback for date change
+     *
+     * @param {*} item
+     * @memberof LedgerComponent
+     */
+    public onChangeEntryDate(item: any): void {
+        if (item && item.entryDate) {
+            if (typeof item.entryDate !== 'string') {
+                item.entryDate = moment(item.entryDate).format(GIDDH_DATE_FORMAT);
+            }
+        }
     }
 }

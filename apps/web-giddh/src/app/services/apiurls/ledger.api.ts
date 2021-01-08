@@ -44,6 +44,6 @@ export const LEDGER_API = {
     GET_VOUCHER_INVOICE_LIST: 'company/:companyUniqueName/vouchers/invoice-list?voucherDate=:voucherDate',
     GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances',
     // Export Ledger get columnar report table
-    EXPORT_LEDGER_COLUMNAR_REPORT_TABLE: 'company/:companyUniqueName/accounts/:accountUniqueName/columnar-report?from=:from&to=:to'
+    EXPORT_LEDGER_COLUMNAR_REPORT_TABLE: 'company/:companyUniqueName/accounts/:accountUniqueName/columnar-report?from=:from&to=:to',
+    IMPORT_STATEMENT: 'company/:companyUniqueName/import-pdf/bank-statement/?entity=pdf&accountUniqueName=:accountUniqueName'
 };
-
