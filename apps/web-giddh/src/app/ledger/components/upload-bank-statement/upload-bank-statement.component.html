@@ -1,20 +1,20 @@
-<div id="exportModal">
+<div id="uploadBankStatementModal">
     <div class="modal-header">
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal.emit()" aria-label="Close">×</span>
-        <h3>Upload Bank Statement</h3>
+        <h3>Import Bank Statement</h3>
     </div>
-    <div class="modal-body mr-b4" id="export-body">
-        <form name="addShareEmailForm" novalidate autocomplete="off">
+    <div class="modal-body mr-b4">
+        <form name="uploadBankStatementForm" novalidate autocomplete="off">
             <div class="pd-b2 clearfix">
-                <label class="w100">File:</label>
+                <label class="w100 file-upload-label">File <sup>*</sup></label>
                 <label class="radio-inline p-0">
-                    <input type="file" name="File" [(ngModel)]="selectedFile" (change)="onFileChange($event.target.files)" required accept="application/pdf">
+                    <input type="file" name="File" class="form-control file-upload-field" [(ngModel)]="selectedFile" (change)="onFileChange($event.target.files)" required accept="application/pdf">
                 </label>
             </div>
             <div class="pd-b2 clearfix">
-                <label class="w100">Password:</label>
+                <label class="w100">Password</label>
                 <label class="radio-inline p-0">
-                    <input type="password" name="Password" [(ngModel)]="postRequest.Password">
+                    <input type="password" name="Password" class="form-control" [(ngModel)]="postRequest.Password">
                 </label>
             </div>
             <div class="modal-wrap">
