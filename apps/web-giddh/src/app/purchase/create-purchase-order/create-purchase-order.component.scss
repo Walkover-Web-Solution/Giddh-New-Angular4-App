@@ -1071,6 +1071,20 @@ span.eligible-ITC {
         line-height: 2.3 !important;
     }
 }
+ul.change-address-dropdown{
+    min-width: 240px;
+    left: -20px !important;
+    right: auto !important;
+    max-height: 200px;
+    overflow-y: auto;
+    li{
+        a{
+            white-space: normal;
+            word-break: break-word;
+        }
+    }
+}
+/* responsive */
 @media(max-width:1199px){
     .bill-add {
         margin-bottom: 15px;
@@ -1268,6 +1282,18 @@ span.eligible-ITC {
     }
 }
 @media (max-width: 575px) {
+
+    ul.change-address-dropdown{
+        left: auto !important;
+        right: -25px !important;
+        li{
+            a{
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+    }
+
     #actionPane .btn-group.dropup {
         display: block;
         margin-top: 5px;
