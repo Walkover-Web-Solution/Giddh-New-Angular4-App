@@ -229,8 +229,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
     // generate uniquename
     public generateUniqueName() {
-        let activeGrp = null;
-        this.activeGroup$.pipe(take(1)).subscribe(ag => activeGrp = ag);
         // if updating group don't generate uniqueName
         if (!this.addGroup) {
             return;

@@ -3,10 +3,7 @@ import setMenu from "./AppMenuManager";
 import {log} from "./util";
 import WindowManager from "./WindowManager";
 import {
-    AdditionalGoogleLoginParams,
-    AdditionalLinkedinLoginParams,
-    GoogleLoginElectronConfig,
-    LinkedinLoginElectronConfig
+    GoogleLoginElectronConfig
 } from "./main-auth.config";
 import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
 // import ElectronLinkedInOAuth2 from "./sampleLinkedin";

@@ -218,7 +218,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
         if (result) {
             this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
             this.addAccountForm.get('mobileCode').patchValue(result.value);
-            let stateObj = this.getStateGSTCode(this.stateList, result.countryflag)
             this.addAccountForm.get('currency').patchValue(company.baseCurrency);
             this.getOnboardingForm(result.countryflag);
             this.companyCountry = result.countryflag;
@@ -501,7 +500,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
-            let obj = this.getStateGSTCode(this.stateList, event.value)
             gstForm.get('stateCode').patchValue(event.value);
             gstForm.get('state').get('code').patchValue(event.value);
         }

@@ -24,7 +24,6 @@ export class TbsearchPipe implements PipeTransform {
         if (!_.isUndefined(search)) {
             this.srch = search.toLowerCase();
         }
-        let initial = input;
 
         if (!_.isUndefined(this.srch) && this.srch.length > 2) {
             this.zone.run(() => {

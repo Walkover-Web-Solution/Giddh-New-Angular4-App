@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';

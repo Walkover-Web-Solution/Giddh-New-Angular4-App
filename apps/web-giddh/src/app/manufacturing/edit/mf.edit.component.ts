@@ -12,7 +12,6 @@ import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { GroupService } from '../../services/group.service';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InventoryService } from '../../services/inventory.service';
@@ -455,7 +454,6 @@ export class MfEditComponent implements OnInit {
 
     public getStockUnit(selectedItem, itemQuantity) {
         if (selectedItem && itemQuantity && Number(itemQuantity) > 0) {
-            let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
             this._inventoryService.GetStockUniqueNameWithDetail(selectedItem).subscribe((res) => {
 
                 if (res.status === 'success') {

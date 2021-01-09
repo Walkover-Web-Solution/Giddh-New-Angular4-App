@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Input, Output, EventEmitter } from '@angular/core';
 
 // libs
 import { BaseComponent } from '@giddh-workspaces/core/base';

@@ -13,7 +13,7 @@ import { APPLY_TAX_API } from './apiurls/applyTax.api';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { ApplyDiscountRequest, AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
+import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import { APPLY_DISCOUNT_API } from './apiurls/applyDiscount';
 
 @Injectable()

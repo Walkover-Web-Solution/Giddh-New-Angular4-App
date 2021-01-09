@@ -18,7 +18,6 @@ import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { SettingsBranchService } from '../../services/settings.branch.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { OrganizationType } from '../../models/user-login-state';
 @Component({
     selector: 'app-completed-preview',
     templateUrl: './completed.component.html',

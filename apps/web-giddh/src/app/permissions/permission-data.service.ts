@@ -1,7 +1,6 @@
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from './../store/roots';
 import { Injectable } from '@angular/core';
-import { take } from 'rxjs/operators';
 
 export interface IScope {
     name: string;

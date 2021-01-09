@@ -5,7 +5,6 @@ import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
 	selector: 'ledger-discount',

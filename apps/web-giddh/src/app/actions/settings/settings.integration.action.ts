@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -271,7 +271,6 @@ export class SettingsIntegrationActions {
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
             })));
 
@@ -287,7 +286,6 @@ export class SettingsIntegrationActions {
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
             })));
 
@@ -325,7 +323,6 @@ export class SettingsIntegrationActions {
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
             })));
 
@@ -488,7 +485,6 @@ export class SettingsIntegrationActions {
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE),
             map((response: CustomActions) => {
-            let data: BaseResponse<any, any> = response.payload;
             return { type: 'EmptyAction' };
         })));
 

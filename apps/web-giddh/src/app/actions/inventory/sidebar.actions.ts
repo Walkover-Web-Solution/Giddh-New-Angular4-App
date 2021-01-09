@@ -4,7 +4,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StockDetailResponse, StockGroupResponse } from '../../models/api-models/Inventory';
 import { InventoryActionsConst } from './inventory.const';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -68,7 +68,6 @@ export class SidebarAction {
         .pipe(
             ofType(InventoryActionsConst.GetInventoryStockResponse),
             map((action: CustomActions) => {
-                let data: BaseResponse<StockDetailResponse, string> = action.payload;
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
@@ -109,7 +108,6 @@ export class SidebarAction {
         .pipe(
             ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse),
             map((action: CustomActions) => {
-                let data: BaseResponse<StockGroupResponse, string> = action.payload;
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
@@ -130,7 +128,6 @@ export class SidebarAction {
         .pipe(
             ofType(InventoryActionsConst.SearchGroupsWithStocksResponse),
             map((action: CustomActions) => {
-                let data: BaseResponse<StockGroupResponse, string> = action.payload;
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }

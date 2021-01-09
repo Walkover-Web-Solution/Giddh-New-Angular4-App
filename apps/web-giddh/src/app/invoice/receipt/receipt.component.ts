@@ -323,17 +323,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
             model.balanceEqual = true;
         }
 
-        let fromDate = null;
-        let toDate = null;
-        if (this.universalDate && this.universalDate.length && this.isUniversalDateApplicable) {
-            fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        }
-        // else {
-        //   fromDate = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-        //   toDate = moment().format(GIDDH_DATE_FORMAT);
-        // }
-
         model.from = o.from;
         model.to = o.to;
         model.count = o.count;

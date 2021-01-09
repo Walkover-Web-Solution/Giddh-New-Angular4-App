@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -30,13 +30,6 @@ export class InventoryUserComponent implements OnChanges, OnInit {
 
 	// public inventoryEntryDateValid;
 	constructor(private _fb: FormBuilder) {
-		const transaction = this._fb.group({
-			type: ['SENDER', Validators.required],
-			quantity: ['', Validators.required],
-			inventoryUser: ['', Validators.required],
-			stock: ['', Validators.required],
-			stockUnit: ['', Validators.required]
-		});
 		this.form = this._fb.group({
 			name: ['']
 		});

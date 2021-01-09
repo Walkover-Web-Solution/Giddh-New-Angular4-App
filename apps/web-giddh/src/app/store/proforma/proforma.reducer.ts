@@ -2,7 +2,7 @@ import { CustomActions } from '../customActions';
 import { PROFORMA_ACTIONS } from '../../actions/proforma/proforma.const';
 import { ProformaFilter, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaVersionItem } from '../../models/api-models/proforma';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GenericRequestForGenerateSCD, VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
+import { VoucherClass } from '../../models/api-models/Sales';
 import { cloneDeep } from '../../lodash-optimized';
 
 export interface ProformaState {

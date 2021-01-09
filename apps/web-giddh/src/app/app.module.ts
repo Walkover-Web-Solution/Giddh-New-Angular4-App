@@ -76,13 +76,6 @@ interface InternalStateType {
     [key: string]: any;
 }
 
-interface StoreType {
-    state: InternalStateType;
-    rootState: InternalStateType;
-    restoreInputValues: () => void;
-    disposeOldHosts: () => void;
-}
-
 // tslint:disable-next-line:prefer-const
 let CONDITIONAL_IMPORTS = [];
 

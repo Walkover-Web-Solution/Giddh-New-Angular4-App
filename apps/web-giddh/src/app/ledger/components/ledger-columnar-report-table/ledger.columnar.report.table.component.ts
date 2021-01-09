@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
-import { select, Store } from '@ngrx/store';
-import { takeUntil, take, single } from 'rxjs/operators';
-import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';

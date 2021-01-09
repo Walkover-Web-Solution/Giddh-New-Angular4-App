@@ -514,8 +514,6 @@ export class MaskApplierService {
      */
     private checkInputPrecisionForCustomInput = (inputValue: string, precision: number, decimalMarker: string): string => {
         if (precision < Infinity) {
-            let precisionRegEx: RegExp;
-
             const splitter = inputValue.split(decimalMarker);
             if (precision === 0) {
                 inputValue = splitter[0];

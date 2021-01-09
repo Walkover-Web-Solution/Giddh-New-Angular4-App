@@ -576,7 +576,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public addAmazonSellerRow(i?: number, item?: any) {
-        const AmazonSellerControl = this.amazonSellerForm.controls['sellers'] as FormArray;
         const control = this.amazonSellerForm.controls['sellers'] as FormArray;
         if (item) {
             if (control.controls[i]) {

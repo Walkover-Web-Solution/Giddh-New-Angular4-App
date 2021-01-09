@@ -3,7 +3,6 @@ import { takeUntil, delay } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VatReportTransactionsRequest } from '../../models/api-models/Vat';
-import * as _ from '../../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';

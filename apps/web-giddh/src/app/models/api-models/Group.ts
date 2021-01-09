@@ -1,4 +1,3 @@
-import { User } from 'oidc-client';
 import { ICreateGroup } from '../interfaces/groupCreate.interface';
 import { INameUniqueName } from './Inventory';
 import { IUserInfo } from '../interfaces/userInfo.interface';

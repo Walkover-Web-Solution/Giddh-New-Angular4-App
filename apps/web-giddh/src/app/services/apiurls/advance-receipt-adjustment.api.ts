@@ -1,5 +1,4 @@
 const COMMON_URL = 'company/:companyUniqueName';
-const COMMON_URL_FOR_ACCOUNT = 'company/:companyUniqueName/accounts/:accountUniqueName';
 const COMMON_URL_FOR_ACCOUNT_V4 = 'v4/company/:companyUniqueName/accounts/:accountUniqueName';
 
 export const ADVANCE_RECEIPTS_API = {

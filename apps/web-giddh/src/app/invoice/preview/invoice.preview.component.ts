@@ -818,7 +818,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public loadDownloadOrSendMailComponent() {
-        let transactionData = null;
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
         let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
         viewContainerRef.remove();

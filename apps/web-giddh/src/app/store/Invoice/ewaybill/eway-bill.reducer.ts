@@ -67,7 +67,6 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
 	switch (action.type) {
 
 		case EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS: {
-			let res: BaseResponse<IEwayBillAllList, any> = action.payload;
 			return Object.assign({}, state, {
 				isGetAllEwaybillRequestSuccess: false,
 				isGetAllEwaybillRequestInProcess: true

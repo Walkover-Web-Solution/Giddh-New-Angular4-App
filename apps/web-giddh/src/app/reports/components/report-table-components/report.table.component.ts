@@ -1,6 +1,4 @@
 import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { ILedgersInvoiceResult } from "../../../models/api-models/Invoice";
 import { ReportsModel } from "../../../models/api-models/Reports";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -153,7 +151,6 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
     public GotoDetailedSales(item: ReportsModel) {
         let from = item.from;
         let to = item.to;
-        let aa = this.activeFinacialYr;
 
         if (from != null && to != null) {
             this._router.navigate(['pages', 'reports', 'sales-detailed-expand'], {queryParams: {from: from, to: to, branchUniqueName: this.currentBranchUniqueName}});

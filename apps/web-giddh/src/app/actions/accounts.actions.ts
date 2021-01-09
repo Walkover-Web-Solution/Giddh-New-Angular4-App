@@ -16,7 +16,7 @@ import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { Observable } from 'rxjs';
-import { ApplyDiscountRequest, AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
+import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import {IUpdateDbRequest} from "../models/interfaces/ulist.interface";
 import { CommonActions } from './common.actions';
 

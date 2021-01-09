@@ -5,7 +5,7 @@ import { Moment } from 'moment';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { takeUntil, debounceTime, filter } from 'rxjs/operators';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 import { ReplaySubject, Subject } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
@@ -603,9 +603,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         // generate AM/PM
         if (!this.timePicker24Hour) {
-
-            const am_html = '';
-            const pm_html = '';
 
             if (minDate && selected.clone().hour(12).minute(0).second(0).isBefore(minDate)) {
                 this.timepickerVariables[side].amDisabled = true;

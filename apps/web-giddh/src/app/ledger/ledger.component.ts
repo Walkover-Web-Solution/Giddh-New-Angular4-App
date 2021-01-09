@@ -8,7 +8,6 @@ import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/s
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
-import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import {PaginationComponent} from 'ngx-bootstrap/pagination';
@@ -18,7 +17,6 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { v4 as uuidv4 } from 'uuid';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -26,15 +24,13 @@ import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 import { LoaderService } from '../loader/loader.service';
-import { cloneDeep, filter, find, orderBy, uniq } from '../lodash-optimized';
+import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
-import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
-import { SalesOtherTaxesModal, VoucherTypeEnum } from '../models/api-models/Sales';
+import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
-import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { GeneralService } from '../services/general.service';
@@ -53,7 +49,6 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
-import { UploadBankStatementComponent } from './components/upload-bank-statement/upload-bank-statement.component';
 
 @Component({
     selector: 'ledger',
@@ -423,7 +418,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
                 let unitCode = '';
-                let unitName = '';
                 let stockName = '';
                 let stockUniqueName = '';
 
@@ -439,7 +433,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     stockName = defaultUnit.name;
                     rate = defaultUnit.rate;
                     stockUniqueName = txn.selectedAccount.stock.uniqueName;
-                    unitName = defaultUnit.name;
                     unitCode = defaultUnit.code;
                 }
                 if (stockName && stockUniqueName) {

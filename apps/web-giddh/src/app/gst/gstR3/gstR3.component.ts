@@ -1,16 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
-    Gstr3bOverviewResult,
     GstOverViewRequest,
     GstDatePeriod,
-    GstrSheetDownloadRequest,
     Gstr3bOverviewResult2
 } from '../../models/api-models/GstReconcile';
 import { takeUntil, take } from 'rxjs/operators';
-import { Store, select, createSelector } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
-import { Route, Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 import * as moment from 'moment/moment';

@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import * as _ from '../../lodash-optimized';
@@ -425,20 +425,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.companyProfileObj.addresses[indx].isDefault = true;
             }
         }
-    }
-
-    public getDefaultGstNumber() {
-        if (this.companyProfileObj && this.companyProfileObj.addresses) {
-            let profileObj = this.companyProfileObj;
-            let defaultGstObjIndx;
-            profileObj.addresses.forEach((obj, indx) => {
-                if (profileObj.addresses[indx] && profileObj.addresses[indx].isDefault) {
-                    defaultGstObjIndx = indx;
-                }
-            });
-            return '';
-        }
-        return '';
     }
 
     // public checkGstNumValidation(ele: HTMLInputElement) {

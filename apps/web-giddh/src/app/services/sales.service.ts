@@ -9,7 +9,6 @@ import { GenericRequestForGenerateSCD } from '../models/api-models/Sales';
 import { SALES_API_V2, SALES_API_V4 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from "../models/api-models/Reports";
 import { AdvanceReceiptRequest, VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { ADVANCE_RECEIPTS_API } from './apiurls/advance-receipt-adjustment.api';
 

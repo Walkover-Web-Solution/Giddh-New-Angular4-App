@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { CustomActions } from '../../store/customActions';
 import { ToasterService } from '../../services/toaster.service';

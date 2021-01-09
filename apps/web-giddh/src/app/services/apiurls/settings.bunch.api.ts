@@ -1,5 +1,3 @@
-const COMMON = 'company/:companyUniqueName/';
-
 export const SETTINGS_BUNCH_API = {
     CREATE_BUNCH: 'bunch', // POST
     UPDATE_BUNCH: 'bunch/:bunchUniqueName', // PACTH

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, of as observableOf, of } from 'rxjs';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
 

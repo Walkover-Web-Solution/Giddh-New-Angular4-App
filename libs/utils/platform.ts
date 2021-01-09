@@ -110,7 +110,7 @@ export function download(filename, data, mimeType) {
                     );
                 },
                 (err) => {
-                   
+
                 }
             );
         });
@@ -131,7 +131,6 @@ export function isIOSCordova() {
     //   - "Mac OS X"
     //     debugger;
     if (window.cordova && cordova.platformId !== "browser") {
-        const devicePlatform = device.platform;
         return isCordova() && device.platform === "iOS";
     }
 }
@@ -150,7 +149,6 @@ export function isAndroidCordova() {
     //   - "Mac OS X"
     //     debugger;
     if (window.cordova && cordova.platformId !== "browser") {
-        const devicePlatform = device.platform;
         return isCordova() && device.platform === "Android";
     }
 }

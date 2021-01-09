@@ -1,7 +1,4 @@
-import { OnDestroy, Component } from '@angular/core';
 
-// libs
-import { Subject } from 'rxjs';
 
 
 export abstract class BaseComponent {

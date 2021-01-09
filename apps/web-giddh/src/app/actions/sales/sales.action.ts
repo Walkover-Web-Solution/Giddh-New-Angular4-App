@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -41,7 +41,6 @@ export class SalesActions {
         .pipe(
             ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
-                let data: BaseResponse<AccountResponseV2, string> = action.payload;
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
@@ -156,7 +155,6 @@ export class SalesActions {
         .pipe(
             ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
-                let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
                 if (action.payload.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);

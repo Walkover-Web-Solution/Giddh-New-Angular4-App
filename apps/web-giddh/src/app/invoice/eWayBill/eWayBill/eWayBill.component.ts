@@ -17,7 +17,6 @@ import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { NgForm, FormControl } from '@angular/forms';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { LocationService } from '../../../services/location.service';
-import { createSelector } from 'reselect';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 

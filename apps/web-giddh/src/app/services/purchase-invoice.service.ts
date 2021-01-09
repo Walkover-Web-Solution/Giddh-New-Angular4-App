@@ -165,7 +165,6 @@ export class PurchaseInvoiceService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
 
-        let apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':from', reqObj.period.from).replace(':to', reqObj.period.to).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber);
         // if (reqObj.gstType === 'GSTR2') {
         //   apiUrl = PURCHASE_INVOICE_API.DOWNLOAD_GSTR2_EXCEL_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.period.monthYear).replace(':company_gstin', reqObj.gstNumber);
         // }

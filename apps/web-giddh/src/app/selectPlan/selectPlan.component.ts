@@ -5,7 +5,7 @@ import { GeneralService } from '../services/general.service';
 import { CompanyActions } from '../actions/company.actions';
 import { ToasterService } from '../services/toaster.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { CompanyCreateRequest, CreateCompanyUsersPlan, SubscriptionRequest, CompanyResponse } from '../models/api-models/Company';
+import { CompanyCreateRequest, CreateCompanyUsersPlan, SubscriptionRequest } from '../models/api-models/Company';
 import { ReplaySubject, Observable } from 'rxjs';
 import { UserDetails } from '../models/api-models/loginModels';
 import { takeUntil } from 'rxjs/operators';

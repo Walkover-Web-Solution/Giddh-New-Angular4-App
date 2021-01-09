@@ -475,7 +475,6 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED_RESPONSE: {
             let newState = _.cloneDeep(state);
-            let res: BaseResponse<string, string> = action.payload;
             newState.exportInvoiceInprogress = false;
             newState.exportInvoicebase64Data = action.payload;
             return Object.assign({}, state, newState);

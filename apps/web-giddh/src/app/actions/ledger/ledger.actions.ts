@@ -7,7 +7,7 @@ import { AccountService } from '../../services/account.service';
  * Created by ad on 04-07-2017.
  */
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';

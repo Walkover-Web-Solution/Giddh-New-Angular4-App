@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CompanyResponse, ICurrencyResponse, Organization, StateDetailsResponse } from '../models/api-models/Company';
-import { Action, Store, select, createSelector } from '@ngrx/store';
+import { Action, Store, select } from '@ngrx/store';
 import {
     LinkedInRequestModel,
     SignupwithEmaillModel,
@@ -22,7 +22,7 @@ import { AppState } from '../store';
 import { Injectable, NgZone } from '@angular/core';
 import { map, switchMap, take } from 'rxjs/operators';
 import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DbService } from '../services/db.service';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
@@ -30,7 +30,6 @@ import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
 import { CustomActions } from '../store/customActions';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 import { AuthenticationService } from '../services/authentication.service';
-import { AccountService } from '../services/account.service';
 import { Configuration } from '../app.constant';
 import { ROUTES } from '../routes-array';
 import { SettingsProfileActions } from "./settings/profile/settings.profile.action";

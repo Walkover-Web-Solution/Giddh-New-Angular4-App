@@ -1,4 +1,3 @@
-import { GraphTypesResponse } from "../../models/api-models/Dashboard";
 
 export const DASHBOARD_API = {
     DASHBOARD: 'company/:companyUniqueName/dashboard?from=:from&to=:to&interval=:interval&refresh=:refresh', // get call

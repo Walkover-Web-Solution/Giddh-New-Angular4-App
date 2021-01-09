@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import * as _ from '../../lodash-optimized';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { takeUntil } from 'rxjs/operators';

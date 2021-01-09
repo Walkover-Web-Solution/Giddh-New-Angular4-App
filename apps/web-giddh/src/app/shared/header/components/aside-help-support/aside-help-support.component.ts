@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, HostListener } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, HostListener } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';

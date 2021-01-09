@@ -1,7 +1,7 @@
 import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store/roots';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
 import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';

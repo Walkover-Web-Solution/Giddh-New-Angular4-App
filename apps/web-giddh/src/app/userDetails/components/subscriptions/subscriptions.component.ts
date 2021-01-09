@@ -1,4 +1,4 @@
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';

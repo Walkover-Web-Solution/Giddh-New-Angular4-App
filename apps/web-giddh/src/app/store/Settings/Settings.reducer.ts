@@ -71,18 +71,6 @@ export interface Taxes {
     }]
 }
 
-const taxesInitialState: Taxes = {
-    taxes: [{
-        label: '',
-        value: '',
-        types: [{
-            label: '',
-            value: ''
-        }],
-        countries: []
-    }]
-};
-
 export interface SettingsState {
     integration: IntegrationPage;
     profile: any;

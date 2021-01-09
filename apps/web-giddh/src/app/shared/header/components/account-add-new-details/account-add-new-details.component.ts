@@ -1,5 +1,5 @@
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import { take, takeUntil} from 'rxjs/operators';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -664,7 +664,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event.label) {
-            let obj = this.getStateGSTCode(this.stateList, event.value)
             gstForm.get('stateCode').patchValue(event.value);
             gstForm.get('state').get('code').patchValue(event.value);
         }

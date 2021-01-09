@@ -1,6 +1,5 @@
 import { Observable, of, of as observableOf, ReplaySubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, auditTime } from 'rxjs/operators';
-import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
 import {
     ChangeDetectorRef,
@@ -31,12 +30,9 @@ import {
     InvoicePreviewDetailsVm
 } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { AccountService } from '../../services/account.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { ActivatedRoute } from '@angular/router';
-import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';

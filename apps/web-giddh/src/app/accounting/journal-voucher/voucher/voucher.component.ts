@@ -1011,7 +1011,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public onSelectStock(item) {
         if (item) {
-            let idx = this.selectedStockIdx;
             let entryItem = cloneDeep(item);
             this.prepareEntry(entryItem, this.selectedIdx);
             // setTimeout(() => {
@@ -1029,11 +1028,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public prepareEntry(item, idx) {
         let i = this.selectedStockIdx;
         if (item && item.stockUnit) {
-            let defaultUnit = {
-                stockUnitCode: item.stockUnit.name,
-                code: item.stockUnit.code,
-                rate: 0
-            };
 
             // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
 
@@ -1183,7 +1177,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             // this.inputForList = cloneDeep(this.allStocks);
             this.sortStockItems(cloneDeep(this.allStocks));
         } else {
-            const reqArray = parentGrpUnqName ? [parentGrpUnqName] : null;
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data.status === 'success') {
                     this.allStocks = cloneDeep(data.body.results);

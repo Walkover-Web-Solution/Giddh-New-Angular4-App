@@ -204,8 +204,6 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 			totalAmount = totalAmount + (entry.quantity * entry.rate) - (entry.discount); // Amount without tax
 		});
 
-		let totalQuantity = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.quantity)) ? 0 : parseFloat(entry.quantity));
-		let totalRate = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.rate)) ? 0 : parseFloat(entry.rate));
 		let totalAmountWithTax = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.amount)) ? 0 : parseFloat(entry.amount));
 		let totalDiscount = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.discount)) ? 0 : parseFloat(entry.discount));
 		let gstTaxesTotal = _.sumBy(data.entries, (entry) => isNaN(parseFloat(entry.tax)) ? 0 : parseFloat(entry.tax));

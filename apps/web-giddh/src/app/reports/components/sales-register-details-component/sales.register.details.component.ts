@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 
 @Component({

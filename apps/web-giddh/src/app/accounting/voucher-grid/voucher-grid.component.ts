@@ -10,7 +10,7 @@ import { AccountService } from './../../services/account.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy , findIndex} from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
@@ -22,11 +22,6 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-
-const TransactionsType = [
-    { label: 'By', value: 'Debit' },
-    { label: 'To', value: 'Credit' },
-];
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -475,7 +470,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public addNewEntry(amount, transactionObj, idx) {
         let indx = idx;
         let reqField: any = document.getElementById(`first_element_${idx - 1}`);
-        let lastIndx = this.requestObj.transactions.length - 1;
         if (amount === 0 || amount === '0') {
             if (idx === 0) {
                 this.isFirstRowDeleted = true;
@@ -725,7 +719,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      */
     public onSelectStock(item) {
         if (item) {
-            let idx = this.selectedStockIdx;
             let entryItem = cloneDeep(item);
             this.prepareEntry(entryItem, this.selectedIdx);
             // setTimeout(() => {
@@ -743,11 +736,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public prepareEntry(item, idx) {
         let i = this.selectedStockIdx;
         if (item && item.stockUnit) {
-            let defaultUnit = {
-                stockUnitCode: item.stockUnit.name,
-                code: item.stockUnit.code,
-                rate: 0
-            };
 
             // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
 
@@ -800,7 +788,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
     public changeQuantity(idx, val) {
         let i = this.selectedIdx;
-        let entry = this.requestObj.transactions[i];
         this.requestObj.transactions[i].inventory[idx].quantity = Number(val);
         this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
         this.amountChanged(idx);
@@ -895,7 +882,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             // this.inputForList = cloneDeep(this.allStocks);
             this.sortStockItems(cloneDeep(this.allStocks));
         } else {
-            const reqArray = parentGrpUnqName ? [parentGrpUnqName] : null;
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data.status === 'success') {
                     this.allStocks = cloneDeep(data.body.results);
@@ -905,8 +891,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                         this.selectedStockInputField.focus();
                     }
                     // this.inputForList = cloneDeep(this.allStocks);
-                } else {
-                    // this.noResult = true;
                 }
             });
         }

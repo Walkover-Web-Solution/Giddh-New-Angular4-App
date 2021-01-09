@@ -300,7 +300,6 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             if (resp.status === 'success') {
                 groupArray = _.cloneDeep(state.groupsWithStocks);
                 let activeGroup = _.cloneDeep(state.activeGroup);
-                let stateActiveGrp: StockGroupResponse = null;
                 if (resp.request.isSelfParent || !resp.request.isSubGroup) {
                     groupArray.map(gr => {
                         if (gr.uniqueName === activeGroup.uniqueName) {

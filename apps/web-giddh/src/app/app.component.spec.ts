@@ -3,8 +3,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 // Load the implementations that should be tested
 import { AppComponent } from './app.component';
-import { rootReducer } from './reducers';
-import { HomeActions } from './home';
 
 xdescribe(`App`, () => {
     let comp: AppComponent;

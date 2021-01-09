@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../company.actions';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';

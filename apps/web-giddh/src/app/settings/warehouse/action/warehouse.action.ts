@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { map, switchMap } from 'rxjs/operators';
 
 import { BaseResponse } from '../../../models/api-models/BaseResponse';

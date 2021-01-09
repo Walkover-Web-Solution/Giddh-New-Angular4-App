@@ -14,8 +14,6 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { GeneralActions } from '../../actions/general/general.actions';
 import { AccountAddNewDetailsComponent } from '../../shared/header/components';
 
-const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
-
 @Component({
     selector: 'aside-menu-account',
     styleUrls: ['aside.menu.account.component.scss'],

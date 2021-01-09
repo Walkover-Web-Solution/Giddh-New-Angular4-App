@@ -1,6 +1,5 @@
 import { map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { Domain } from '../models/domain';
 import { HttpClient } from '@angular/common/http';
 import { GeoLocationSearch } from '../models/other-models/GeoLocationSearch';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';

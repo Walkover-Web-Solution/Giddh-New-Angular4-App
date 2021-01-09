@@ -529,7 +529,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         if (this.isUpdatingStockForm) {
             return true;
         }
-        let groupName = null;
         let val: string = this.addStockForm.controls['name'].value;
         if (val) {
             val = uniqueNameInvalidStringReplace(val);
@@ -1055,15 +1054,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public mapSavedTaxes(taxes) {
         let taxToMap = [];
         let e: any = { target: { checked: true } };
-        let common = this.companyTaxesList$.subscribe(a => {
-            _.filter(a, (tax) => {
-                _.find(taxes, (unq) => {
-                    if (unq === tax.uniqueName) {
-                        return taxToMap.push(tax);
-                    }
-                });
-            });
-        });
         taxToMap.map((tax, i) => {
             this.selectTax(e, tax);
         });

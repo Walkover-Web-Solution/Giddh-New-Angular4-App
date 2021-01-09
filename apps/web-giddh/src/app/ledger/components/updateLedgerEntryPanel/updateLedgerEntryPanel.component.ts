@@ -434,27 +434,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // }
                     // TODO: Prateek end
 
-                    let isStockableAccount: boolean = false;
-
                     if (this.activeAccount) {
                         if (this.activeAccount.currency && this.vm.isMultiCurrencyAvailable) {
                             this.baseCurrency = this.activeAccount.currency;
                         }
-
-                        // check if current account category is type 'income' or 'expenses'
-                        let parentAcc = this.activeAccount.parentGroups[0].uniqueName;
-                        let incomeAccArray = ['revenuefromoperations', 'otherincome'];
-                        let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-                        let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
-
-                        // if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-                        //     let appTaxes = [];
-                        //     this.activeAccount.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-                        //     this.currentAccountApplicableTaxes = appTaxes;
-                        // }
-
-                        // check if account is stockable
-                        isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
                     }
 
                     this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name);
@@ -767,15 +750,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // if (this.vm.flatternAccountList && this.vm.flatternAccountList.length && this.activeAccount) {
                 //     stockListFormFlattenAccount = response[1].find((acc) => acc.uniqueName === this.activeAccount.uniqueName);
                 // }
-                let accountsArray: IOption[] = [];
-                let accountsForBaseAccountArray: IOption[] = [];
-                let isStockableAccount: boolean = false;
-                // check if current account category is type 'income' or 'expenses'
-                let parentAcc = (this.activeAccount && this.activeAccount.parentGroups && this.activeAccount.parentGroups.length > 0) ? this.activeAccount.parentGroups[0].uniqueName : "";
-                let incomeAccArray = ['revenuefromoperations', 'otherincome'];
-                let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-                let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
-                isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
                 // set account details for multi currency account
                 this.prepareMultiCurrencyObject(this.vm.selectedLedger);
                 // end multi currency assign

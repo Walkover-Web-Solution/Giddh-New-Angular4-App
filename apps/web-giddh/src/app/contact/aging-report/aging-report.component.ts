@@ -3,7 +3,6 @@ import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchComm
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AgingReportActions } from '../../actions/aging-report.actions';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';

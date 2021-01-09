@@ -37,7 +37,6 @@ export const initialState: AgingReportState = {
 
 export function agingReportReducer(state = initialState, action: CustomActions): AgingReportState {
     // let data: BaseResponse<LogsResponse, LogsRequest> = null;
-    let newState: AgingReportState = null;
     switch (action.type) {
         case AgingReportActions.CREATE_DUE_DAY_RANGE: {
             return Object.assign({}, state, { setDueRangeRequestInFlight: true });

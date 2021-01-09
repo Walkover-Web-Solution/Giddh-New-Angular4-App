@@ -1,15 +1,7 @@
-import { skipWhile, take, takeUntil } from 'rxjs/operators';
+
 import { AppState } from '../../../store/roots';
 import { HomeActions } from '../../../actions/home/home.actions';
-import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
-import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
-import { Component, Input, OnInit } from '@angular/core';
-//import { Options } from 'highcharts';
-import { Observable, ReplaySubject } from 'rxjs';
-//import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
-import { isNullOrUndefined } from 'util';
-import * as  moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 @Component({

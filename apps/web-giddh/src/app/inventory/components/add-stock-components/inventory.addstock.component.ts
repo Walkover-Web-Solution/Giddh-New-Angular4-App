@@ -550,7 +550,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (this.isUpdatingStockForm) {
             return true;
         }
-        let groupName = null;
         let val: string = this.addStockForm.controls['name'].value;
         if (val) {
             val = uniqueNameInvalidStringReplace(val);
@@ -982,16 +981,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 }
             }
         });
-    }
-
-    // group selected
-    public groupSelected(event: IOption) {
-        let selected;
-        // this.generateUniqueName();
-        this.groupsData$.subscribe(p => {
-            selected = p.find(q => q.value === event.value);
-        });
-        // this.activeGroup = selected;
     }
 
     // public autoGroupSelect(grpname) {

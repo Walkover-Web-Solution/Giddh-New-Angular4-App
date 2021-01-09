@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { fromEvent as observableFromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
+import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';

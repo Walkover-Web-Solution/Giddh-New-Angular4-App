@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { InvoiceRoutingModule } from './invoice.routing.module';
-import { SalesModule } from '../sales/sales.module';
 import { AsideMenuRecurringEntryComponent } from './aside.menu.recurringEntry.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';

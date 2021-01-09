@@ -11,7 +11,6 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { LoaderService } from '../../../../loader/loader.service';
 import { INVOICE_API } from '../../../../services/apiurls/invoice';
 import { Configuration } from '../../../../app.constant';
-import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { BulkUpdateInvoiceNote, BulkUpdateInvoiceImageSignature, BulkUpdateInvoiceTemplates, BulkUpdateInvoiceDueDates, BulkUpdateInvoiceSlogan, BulkUpdateInvoiceShippingDetails, BulkUpdateInvoiceCustomfields } from 'apps/web-giddh/src/app/models/api-models/Contact';
 import { InvoiceBulkUpdateService } from 'apps/web-giddh/src/app/services/invoice.bulkupdate.service';
 import { NgForm } from '@angular/forms';

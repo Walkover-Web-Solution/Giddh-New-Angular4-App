@@ -1,5 +1,5 @@
 // angular
-import { Injectable, Inject, ViewContainerRef } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 // app
 import { isObject, isNativeScript } from '@giddh-workspaces/utils';

@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { CustomActions } from '../../../store/customActions';
 import { INVOICE_RECEIPT_ACTIONS } from './receipt.const';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';

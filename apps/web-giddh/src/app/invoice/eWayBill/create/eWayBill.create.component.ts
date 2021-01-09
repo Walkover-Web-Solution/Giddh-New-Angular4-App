@@ -154,7 +154,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
-    
+
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
         })
@@ -277,7 +277,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public editTransporter(trans: any) {
-        let transportEditObject: IEwayBillTransporter = Object.assign({}, trans);
         this.seTransporterDetail(trans);
         this.transportEditMode = true;
     }

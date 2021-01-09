@@ -8,7 +8,7 @@ import { LogsRequest, LogsResponse, GetAuditLogsRequest, AuditLogsResponse } fro
  * Created by ad on 04-07-2017.
  */
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS, AUDIT_LOGS_ACTIONS_V2 } from './audit-logs.const';

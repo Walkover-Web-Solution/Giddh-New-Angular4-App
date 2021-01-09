@@ -5,7 +5,7 @@ import { Action, Store } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
 import { InventoryService } from '../../services/inventory.service';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { INVENTORY_BRANCH_TRANSFER, INVENTORY_LINKED_STOCKS, InventoryActionsConst } from './inventory.const';

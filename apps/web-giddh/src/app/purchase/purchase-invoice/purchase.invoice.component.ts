@@ -25,27 +25,10 @@ import {IUpdateDbRequest} from "../../models/interfaces/ulist.interface";
 import {GeneralService} from "../../services/general.service";
 import {GeneralActions} from "../../actions/general/general.actions";
 
-const otherFiltersOptions = [
-    { name: 'GSTIN Empty', uniqueName: 'GSTIN Empty' },
-    { name: 'GSTIN Filled', uniqueName: 'GSTIN Filled' },
-    { name: 'Invoice Empty', uniqueName: 'Invoice Empty' },
-    { name: 'Invoice Filled', uniqueName: 'Invoice Filled' }
-];
-
 const gstrOptions = [
     { name: 'GSTR1', uniqueName: 'gstr1-excel-export' },
     { name: 'GSTR2', uniqueName: 'gstr2-excel-export' },
     { name: 'GSTR3B', uniqueName: 'gstr3-excel-export' }
-];
-
-const purchaseReportOptions = [
-    { name: 'Credit Note', uniqueName: 'Credit Note' },
-    { name: 'Debit Note', uniqueName: 'Debit Note' }
-];
-
-const fileGstrOptions = [
-    { name: 'Download Sheet', uniqueName: 'Download Sheet' },
-    { name: 'Use JIOGST API', uniqueName: 'Use JIOGST API' }
 ];
 
 @Component({

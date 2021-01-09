@@ -1,9 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs';
-import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
-import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 

@@ -1,5 +1,4 @@
 import * as fromVerifyMobileReducer from './authentication/verifyMobile.reducer';
-import * as fromRouter from '@ngrx/router-store';
 import * as fromGeneral from './General/general.reducer';
 import * as fromHome from './home/home.reducer';
 import * as fromPermission from './Permission/permission.reducer';

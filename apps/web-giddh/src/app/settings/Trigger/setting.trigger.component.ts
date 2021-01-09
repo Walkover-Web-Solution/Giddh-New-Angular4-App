@@ -40,13 +40,6 @@ const scopeList = [
     { label: 'Closing Balance', value: 'closing balance' }
 ];
 
-const taxDuration = [
-    { label: 'Monthly', value: 'MONTHLY' },
-    { label: 'Quarterly', value: 'QUARTERLY' },
-    { label: 'Half-Yearly', value: 'HALFYEARLY' },
-    { label: 'Yearly', value: 'YEARLY' }
-];
-
 @Component({
     selector: 'setting-trigger',
     templateUrl: './setting.trigger.component.html',

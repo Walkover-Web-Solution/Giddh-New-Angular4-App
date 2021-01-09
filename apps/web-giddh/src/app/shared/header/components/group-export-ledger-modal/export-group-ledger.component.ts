@@ -1,10 +1,6 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { LedgerService } from '../../../services/ledger.service';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { ToasterService } from '../../services/toaster.service';
-import { ExportLedgerRequest, MailLedgerRequest } from '../../models/api-models/Ledger';
-import { validateEmail } from '../../shared/helpers/helperFunctions';
 import { some } from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';

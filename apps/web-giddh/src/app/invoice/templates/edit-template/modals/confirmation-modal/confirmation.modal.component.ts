@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 
 @Component({
     selector: 'delete-template-confirmation-modal',

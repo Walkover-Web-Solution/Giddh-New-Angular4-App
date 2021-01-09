@@ -94,8 +94,7 @@ import { TaxControlComponent } from '../theme/tax-control/tax-control.component'
 import { LoaderState } from "../loader/loader";
 import { LoaderService } from "../loader/loader.service";
 import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
-import { CurrentPage, OnboardingFormRequest } from '../models/api-models/Common';
-import { NAVIGATION_ITEM_LIST } from '../models/defaultMenus';
+import { OnboardingFormRequest } from '../models/api-models/Common';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
 import { WarehouseDetails } from '../ledger/ledger.vm';

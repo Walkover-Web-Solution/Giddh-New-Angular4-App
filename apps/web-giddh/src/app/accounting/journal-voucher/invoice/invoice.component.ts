@@ -42,11 +42,6 @@ import { KeyboardService } from '../../keyboard.service';
 import { TallyModuleService } from '../../tally-service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
-const TransactionsType = [
-	{ label: 'By', value: 'Debit' },
-	{ label: 'To', value: 'Credit' },
-];
-
 const CustomShortcode = [
 	{ code: 'F9', route: 'purchase' }
 ];

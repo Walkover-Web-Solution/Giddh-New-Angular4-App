@@ -7,7 +7,6 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../store';
-import { createSelector } from 'reselect';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 

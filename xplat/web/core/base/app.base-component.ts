@@ -1,4 +1,3 @@
-import { Component, Inject } from '@angular/core';
 
 // libs
 import { BaseComponent } from '@giddh-workspaces/core';

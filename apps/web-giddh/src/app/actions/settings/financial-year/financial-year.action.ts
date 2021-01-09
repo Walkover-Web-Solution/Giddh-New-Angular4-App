@@ -1,7 +1,7 @@
 import { map, switchMap } from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from './financial-year.const';
 import { CustomActions } from '../../../store/customActions';

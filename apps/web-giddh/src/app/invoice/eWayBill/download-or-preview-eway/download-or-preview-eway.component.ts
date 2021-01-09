@@ -1,16 +1,6 @@
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-// import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Store } from '@ngrx/store';
+
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import * as _ from '../../../../lodash-optimized';
-import { InvoiceActions } from 'app/actions/invoice/invoice.actions';
-import { InvoiceReceiptActions } from 'app/actions/invoice/receipt/receipt.actions';
-import { ReceiptVoucherDetailsRequest } from 'app/models/api-models/recipt';
-import { ToasterService } from 'app/services/toaster.service';
-import { AppState } from 'app/store';
 
 @Component({
     selector: 'download-or-preview-eway',

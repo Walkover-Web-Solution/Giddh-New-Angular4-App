@@ -891,7 +891,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public loadPaginationComponent(s) {
-        let transactionData = null;
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
         if (this.paginationChild && this.paginationChild.viewContainerRef) {
             let viewContainerRef = this.paginationChild.viewContainerRef;
@@ -1220,8 +1219,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         let offset = $('#edit-model-basic').position();
         if (offset) {
             let exactPositionTop = offset.top;
-            let exactPositionLeft = offset.left;
-
             $('#edit-model-basic').css('top', exactPositionTop);
         }
     }

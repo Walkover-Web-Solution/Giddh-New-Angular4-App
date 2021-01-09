@@ -4,7 +4,6 @@ import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
-import { ToasterService } from '../../services/toaster.service';
 import { createSelector } from 'reselect';
 import { SettingsTagActions } from '../../actions/settings/tag/settings.tag.actions';
 import { TagRequest } from '../../models/api-models/settingsTags';

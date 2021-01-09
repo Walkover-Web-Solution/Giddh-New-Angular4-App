@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { InvoicePreviewDetailsVm } from "../../models/api-models/Invoice";
 
 @Component({
     selector: 'app-send-email-invoice-component',

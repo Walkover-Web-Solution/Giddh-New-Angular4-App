@@ -173,7 +173,6 @@ const removeZeroAmountAccount = (grpList: ChildGroup[]) => {
 // TB Functions
 const addVisibleFlag = (grpList: ChildGroup[]) => {
     _.each(grpList, (grp) => {
-        let count = 0;
         let tempAcc = [];
         grp.isVisible = false;
         _.each(grp.accounts, (account) => {
@@ -201,46 +200,6 @@ const removeZeroAmountGroup = (grpList) => {
             // }
         });
     });
-};
-
-const orderGroups = (data) => {
-    let assets;
-    let expenses;
-    let income;
-    let liabilities;
-    let orderedGroups;
-    orderedGroups = [];
-    assets = [];
-    liabilities = [];
-    income = [];
-    expenses = [];
-    _.each(data, (grp: any) => {
-        switch (grp.category) {
-            case 'assets':
-                return assets.push(grp);
-            case 'liabilities':
-                return liabilities.push(grp);
-            case 'income':
-                return income.push(grp);
-            case 'expenses':
-                return expenses.push(grp);
-            default:
-                return assets.push(grp);
-        }
-    });
-    _.each(liabilities, (liability) => {
-        return orderedGroups.push(liability);
-    });
-    _.each(assets, (asset) => {
-        return orderedGroups.push(asset);
-    });
-    _.each(income, (inc) => {
-        return orderedGroups.push(inc);
-    });
-    _.each(expenses, (exp) => {
-        return orderedGroups.push(exp);
-    });
-    return orderedGroups;
 };
 
 // PL Functions

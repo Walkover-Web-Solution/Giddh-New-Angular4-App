@@ -510,8 +510,6 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
         }
         case HOME.COMPARISION_CHART.GET_NETWORTH_CHART_DATA_LAST_YEAR_RESPONSE: {
             let data = action.payload as IComparisionChartResponse;
-            let revenueLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueLastYear && (state.comparisionChart.revenueLastYear.length === 0))) ? processDataForGroupHistory(data.revenueLastYear) : _.cloneDeep(state.comparisionChart.revenueLastYear);
-            let ExpensesLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesLastYear && (state.comparisionChart.ExpensesLastYear.length === 0))) ? processDataForGroupHistory(data.ExpensesLastYear) : _.cloneDeep(state.comparisionChart.ExpensesLastYear);
             let NetworthLastYear = processDataForNetworth(data.NetworthLastYear);
             return Object.assign({}, state, {
                 networth_comparisionChart: {

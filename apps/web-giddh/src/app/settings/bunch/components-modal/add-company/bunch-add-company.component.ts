@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
-import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { FormBuilder } from '@angular/forms';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SettingsBunchService } from '../../../../services/settings.bunch.service';

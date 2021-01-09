@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 @Component({
     selector: 'manufacturing',
     templateUrl: './manufacturing.component.html',

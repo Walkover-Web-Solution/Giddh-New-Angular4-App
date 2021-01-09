@@ -26,11 +26,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 
-const TransactionsType = [
-	{ label: 'By', value: 'Debit' },
-	{ label: 'To', value: 'Credit' },
-];
-
 const CustomShortcode = [
 	{ code: 'F9', route: 'purchase' }
 ];
@@ -602,11 +597,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	 * prepareEntry
 	 */
 	public prepareEntry(item, stkIdx) {
-		let defaultUnit = {
-			stockUnitCode: item.stockUnit.name,
-			code: item.stockUnit.code,
-			rate: 0
-		};
 		// if (item.accountStockDetails.unitRates.length) {
 		// this.stocksTransaction[stkIdx].inventory.unit = item.accountStockDetails.unitRates[0];
 		this.stocksTransaction[stkIdx].inventory.unit.rate = item.amount / item.openingQuantity;

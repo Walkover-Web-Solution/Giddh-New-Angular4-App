@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { LedgerService } from '../../../services/ledger.service';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs';

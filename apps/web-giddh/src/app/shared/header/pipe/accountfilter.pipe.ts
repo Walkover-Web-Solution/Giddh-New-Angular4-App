@@ -22,7 +22,6 @@ export class AccountFilterPipe implements PipeTransform {
         if (!_.isUndefined(search)) {
             this.srch = search.toLowerCase();
         }
-        let initial = input;
 
         if (!_.isUndefined(this.srch)) {
             this.performSearch(input);

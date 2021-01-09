@@ -10,8 +10,6 @@ import { AccountRequestV2 } from '../../../../../models/api-models/Account';
 import { IFlattenGroupsAccountsDetail } from '../../../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { GroupsWithAccountsResponse } from '../../../../../models/api-models/GroupsWithAccounts';
 
-const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
-
 @Component({
 	selector: 'ledger-aside-pane-account',
 	styleUrls: ['./ledger-aside.pane.account.component.scss'],
