@@ -1,7 +1,6 @@
-@import "../../../../../assets/css/color.scss";
 /*invoice table*/
 .modal-title {
-    color: $white;
+    color: var(--white);
 }
 .strong {
     font-weight: bold;
@@ -38,7 +37,7 @@ p {
 
 #default {
     overflow: auto;
-    background: $white;
+    background: var(--white);
     padding: 0;
     font-size: 14px;
     max-width: 760px;
@@ -52,12 +51,12 @@ p {
 
 /* Track */
 #default::-webkit-scrollbar-track {
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 
 /* Handle */
 #default::-webkit-scrollbar-thumb {
-    background: $nobel;
+    background: var(--nobel);
     border-radius: 20px;
 }
 #default body {
@@ -67,16 +66,16 @@ p {
     padding: 0.1in;
     letter-spacing: 0;
     width: 100%;
-    background: $white;
+    background: var(--white);
     border-radius: 1px;
 }
 
 /* header */
 
 #default header {
-    background: $white;
+    background: var(--white);
     padding: 10px 15px;
-    border-bottom: 2px solid $bitter-sweet;
+    border-bottom: 2px solid var(--bitter-sweet);
 }
 
 #default header:after {
@@ -104,7 +103,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: $nero;
+    color: var(--nero);
 }
 
 .hidden-label {
@@ -176,7 +175,7 @@ p {
 }
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid var(--light-gray);
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;
@@ -201,18 +200,18 @@ p {
     position: relative;
     padding: 8px 7px;
     line-height: 1.2rem;
-    background-color: $white-smoke;
+    background-color: var(--white-smoke);
     font-size: 12px;
 }
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--light-gray);
 }
 /* tcs */
 .tcs hr {
     margin-top: 50px;
     width: 100%;
-    border-bottom: 1px solid $cinnabar-orange;
+    border-bottom: 1px solid var(--cinnabar-orange);
 }
 .tcs table {
     margin: 50px 0px;
@@ -224,7 +223,7 @@ p {
 .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid $light-gray;
+    border: 1px solid var(--light-gray);
     vertical-align: top;
     text-align: right;
 }
@@ -267,13 +266,13 @@ p {
 #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--light-gray);
     line-height: 1.2rem;
     vertical-align: top;
 }
 
 #default table.item td p {
-    color: $zambezi;
+    color: var(--zambezi);
 }
 
 #default table.balance {
@@ -298,17 +297,17 @@ p {
 }
 
 #default aside h1 {
-    border-color: $nobel;
+    border-color: var(--nobel);
     border-bottom-style: solid;
 }
 
 /*footer*/
 
 #default footer {
-    border-top: 1px solid $eastern-blue;
+    border-top: 1px solid var(--eastern-blue);
     padding: 16px 0px 30px 0;
     margin: 8px 0 0;
-    background: $white;
+    background: var(--white);
 }
 #default .company-address p {
     max-width: 400px;
@@ -325,7 +324,7 @@ p {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     margin: 3px 0;
 }
 
@@ -354,7 +353,7 @@ p {
     content: attr(title);
     width: auto;
     position: relative;
-    background: $white;
+    background: var(--white);
     margin: 0 auto;
     padding: 6px 16px;
     right: 0;

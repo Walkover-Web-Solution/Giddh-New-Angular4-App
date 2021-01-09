@@ -1,4 +1,3 @@
-@import "../../../../assets/css/color.scss";
 .gst-treatment-wrapper {
     background-color: #fff;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
@@ -22,6 +21,6 @@
     color: #fff;
 }
 .aqua-color a {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
     font-size: 12px;
 }

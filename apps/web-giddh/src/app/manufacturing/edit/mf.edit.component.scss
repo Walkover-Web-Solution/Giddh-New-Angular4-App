@@ -1,6 +1,5 @@
-@import "../../../assets/css/color.scss";
 .resources-table{
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 @media(max-width:991px){
    .resources-table{

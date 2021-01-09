@@ -1,6 +1,5 @@
-@import "../../../../assets/css/color.scss";
 .parent-Group > ul > li ul li div {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 .btn-group.show {
     display: inline-block !important;
@@ -9,38 +8,38 @@
     margin-left: 8px;
     margin-top: -3px;
     background: none;
-    color: $gray-44;
+    color: var(--gray-44);
     padding: 6px;
     margin-right: 0px !important;
 }
 .dropdown-menu > li > a:hover {
-    background: $gray-90;
+    background: var(--gray-90);
     cursor: pointer;
 }
 .dropdown-menu > li > a {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 span.caret {
     display: none;
 }
 #inventory-sidebar {
-    background: $white;
+    background: var(--white);
     min-height: 100vh;
     width: 260px;
 }
 .stock-grp-list > li:hover {
-    background: $lavender;
+    background: var(--lavender);
 }
 .stock-grp-list > li.active {
-    background: $lavender;
+    background: var(--lavender);
 }
 .stock-grp-list > li > a:hover {
-    color: $night-rider;
+    color: var(--night-rider);
 }
 :host ::ng-deep .nav-tabs > li {
     width: 50%;
     text-align: center;
-    background: $gray-95;
+    background: var(--gray-95);
 }
 .width-sidebar-form-control {
     width: 205px;
@@ -51,10 +50,10 @@ span.caret {
     display: inline-block;
 }
 .btn-link-2 {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 .no-data-box {
-    border-top: 1px solid $gray-88 !important;
+    border-top: 1px solid var(--gray-88) !important;
 }
 
 .text-light-2{

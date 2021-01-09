@@ -76,7 +76,6 @@ VERSION:  1
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
-@import "../../assets/css/color.scss";
 
 html,
 body {

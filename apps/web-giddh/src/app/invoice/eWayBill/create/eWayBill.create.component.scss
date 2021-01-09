@@ -1,6 +1,5 @@
-@import "../../../../assets/css/color.scss";
 .right-penal {
-    border-left: 1px solid $silver;
+    border-left: 1px solid var(--silver);
     position: fixed;
     right: 0;
     bottom: 0;
@@ -12,21 +11,21 @@
         width: 100%;
         margin-bottom: 15px;
         border-radius: 4px;
-        background-color: $white;
+        background-color: var(--white);
         padding: 15px;
         h2 {
             font-size: 14px;
-            color: $electric-blue;
+            color: var(--electric-blue);
         }
         label {
-            color: $dark-gray;
+            color: var(--dark-gray);
             font-size: 12px;
             width: 20%;
             font-weight: 800;
         }
         span {
             font-size: 12px;
-            color: $extra-dark-gray;
+            color: var(--extra-dark-gray);
         }
     }
 }
@@ -82,8 +81,8 @@
 }
 
 .list-icon-group input:checked + label {
-    background-color: $white;
-    box-shadow: 2px 2px 5px $gainsboro;
+    background-color: var(--white);
+    box-shadow: 2px 2px 5px var(--gainsboro);
 }
 
 .select-style {
@@ -111,14 +110,14 @@
 
 .aside-right {
     font-size: 14px;
-    background: $white;
+    background: var(--white);
     right: -530px;
     transition: 0.5s all ease;
     z-index: 999;
 }
 
 .bg-white {
-    background: $white !important;
+    background: var(--white) !important;
 }
 
 .aside-right .control-label {
@@ -127,7 +126,7 @@
 }
 
 .bg-gray {
-    background: $alice-blue-light;
+    background: var(--alice-blue-light);
 }
 
 .aside-right .list-icon-group label {
@@ -151,21 +150,21 @@
 
 .table-modal tbody td {
     border-top: 0px solid !important;
-    border-right: 1px solid $silver;
+    border-right: 1px solid var(--silver);
 }
 
 .table-modal thead th {
-    border-right: 1px solid $silver !important;
+    border-right: 1px solid var(--silver) !important;
 }
 
 .table-modal {
-    border-bottom: 1px solid $silver !important;
+    border-bottom: 1px solid var(--silver) !important;
 }
 
 .table-modal tbody tr td button {
     background: none;
     border: 0px;
-    color: $very-light-gray;
+    color: var(--very-light-gray);
     font-size: 16px;
     padding: 2px;
     margin-right: 3px;
@@ -173,7 +172,7 @@
 }
 
 .table-modal tbody tr td .icon-edit {
-    border-bottom: 2px solid $gainsboro;
+    border-bottom: 2px solid var(--gainsboro);
 }
 
 .aside-overlay.out {

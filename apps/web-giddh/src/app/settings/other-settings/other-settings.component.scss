@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 .other-information{
     margin-top: 15px;
     label{
@@ -18,7 +16,7 @@
 
 /*branch other tab design*/
 .other-detail-section{
-    color: $dark-gray;
+    color: var(--dark-gray);
     label{
         min-width: 200px;
     }

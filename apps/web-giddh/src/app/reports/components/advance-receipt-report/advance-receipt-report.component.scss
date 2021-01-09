@@ -1,9 +1,8 @@
-@import "../../../../assets/css/color.scss";
 .td-search-box {
     div {
         i {
             margin-top: 1px;
-            color: $wild-blue-yonder;
+            color: var(--wild-blue-yonder);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -34,7 +33,7 @@
         cursor: default;
         width: 100%;
         &:focus {
-            border-color: $gainsboro;
+            border-color: var(--gainsboro);
         }
     }
 }
@@ -46,8 +45,8 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
-    color: $nobel;
+    border-right: 1px solid var(--gainsboro);
+    color: var(--nobel);
 }
 .input-wrapper {
     display: block !important;
@@ -60,7 +59,7 @@
         display: block;
         height: 36px;
         width: 1px;
-        background-color: $gainsboro;
+        background-color: var(--gainsboro);
         left: 37px !important;
         z-index: 100;
         top: 0;
@@ -74,17 +73,17 @@
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 2px;
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     background: #fff;
 }
 
 .btn-filter {
-    background: $whisper-color;
-    border: 1px solid $gainsboro;
+    background: var(--whisper-color);
+    border: 1px solid var(--gainsboro);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     display: inline-flex;
     justify-content: space-between;
     -webkit-box-align: center;
@@ -120,13 +119,13 @@
 }
 .invoice-footer h3 {
     font-size: 16px;
-    color: $nobel;
+    color: var(--nobel);
     display: block;
     margin-right: 10px;
 }
 .invoice-footer h1 {
     font-size: 22px;
-    color: $extra-dark-gray;
+    color: var(--extra-dark-gray);
     display: block;
 }
 .giddh-table .td-search-box {

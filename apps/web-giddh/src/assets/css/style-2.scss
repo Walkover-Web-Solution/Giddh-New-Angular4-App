@@ -30,33 +30,33 @@
 
 .basic > tbody > tr td:last-child,
 .basic > thead > tr th:last-child {
-    border-right: 1px solid $gainsboro !important;
+    border-right: 1px solid var(--gainsboro) !important;
 }
 
 .basic > tbody > tr td:first-child,
 .basic > thead > tr th:first-child {
-    border-left: 1px solid $gainsboro !important;
+    border-left: 1px solid var(--gainsboro) !important;
 }
 
 .basic > thead > tr > th {
-    background: $white;
-    color: $nero;
-    border-right: 1px solid $gainsboro;
+    background: var(--white);
+    color: var(--nero);
+    border-right: 1px solid var(--gainsboro);
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     font-family: opensans-semibold;
     font-size: 14px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .basic {
-    background: $white;
+    background: var(--white);
 }
 @media (max-width: 768px) {
     .on-mobile-view tbody tr {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
-        background: $white;
+        background: var(--white);
         border-bottom: none;
         cursor: pointer;
         display: block;
@@ -191,7 +191,7 @@ body{
 }
 .clear-both{clear: both;}
 .border-bottom{
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 /* start MDB tweaks */
 .caret{
@@ -271,26 +271,26 @@ body{
 }
 
 .bt-1 {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .br-1 {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 
 .bb-1 {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .bl-1 {
-    border-left: 1px solid $gainsboro;
+    border-left: 1px solid var(--gainsboro);
 }
 
 .border-none {
     border: none !important;
 }
 .border-bottom{
-    border-bottom-color: $gainsboro;
+    border-bottom-color: var(--gainsboro);
 }
 /* end MDB tweaks */
 
@@ -355,7 +355,7 @@ input {
     display: block;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--chetwode-blue);
     border-radius: 30px;
 }
 
@@ -375,10 +375,10 @@ input {
     padding: 0;
     line-height: 15px;
     font-size: 12px;
-    color: $white;
+    color: var(--white);
     font-weight: bold;
     box-sizing: border-box;
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 
 .toggle-inner:before {
@@ -401,8 +401,8 @@ input {
     right: 28px;
     border-radius: 30px;
     transition: all 0.3s ease-in 0s;
-    background-color: $chetwode-blue;
-    border-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
+    border-color: var(--chetwode-blue);
 }
 
 .toggle-checkbox:checked + .toggle-label .toggle-inner {
@@ -432,7 +432,7 @@ input {
 
 .cube1,
 .cube2 {
-    background-color: $midnight-blue;
+    background-color: var(--midnight-blue);
     width: 15px;
     height: 15px;
     position: absolute;
@@ -508,7 +508,7 @@ input {
     position: absolute;
     right: 7px;
     top: 16px;
-    border-top: 5px solid $nobel;
+    border-top: 5px solid var(--nobel);
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     border-bottom: 5px solid transparent;
@@ -517,19 +517,19 @@ input {
 .invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
     z-index: 9;
     position: relative;
     top: -4px;
-    border-color: $gainsboro !important;
+    border-color: var(--gainsboro) !important;
 }
 
 .invoice-control .invoice-nav.navbar-nav > li > a:hover {
-    color: $white;
+    color: var(--white);
 }
 
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
-    background-color: $white;
+    background-color: var(--white);
 }
 .navbar {
     min-height: auto;
@@ -546,7 +546,7 @@ input {
     margin-right: 35px !important;
     margin-left: 0 !important;
     font-size: 14px;
-    color: $nero !important;
+    color: var(--nero) !important;
     border-width: 0px 0 4px 0 !important;
     height:41px;
 }
@@ -558,12 +558,12 @@ input {
 
 
 .invoice-control .nav-tabs > li.active > a {
-    border-bottom: 4px solid $deep-sky-blue !important;
-    color: $nero !important;
+    border-bottom: 4px solid var(--deep-sky-blue) !important;
+    color: var(--nero) !important;
 }
 
 .otherAccountEntry .header {
-    border: 1px solid $red !important;
+    border: 1px solid var(--red) !important;
     display: block;
     overflow: hidden;
 }
@@ -577,7 +577,7 @@ input {
 }
 
 .approve-modal .modal-top {
-    background: $alice-blue-light;
+    background: var(--alice-blue-light);
     padding: 15px 15px 0;
 }
 
@@ -586,7 +586,7 @@ input {
 }
 
 .white-box {
-    background: $white;
+    background: var(--white);
     padding: 20px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
@@ -600,9 +600,9 @@ input {
     position: absolute;
     top: -22px;
     z-index: 99;
-    background: $black;
+    background: var(--black);
     font-size: 12px;
-    color: $white !important;
+    color: var(--white) !important;
     padding: 2px 5px;
     border-radius: 4px;
     right: 0;
@@ -755,13 +755,13 @@ input {
 }
 
 .hover-orange:hover {
-    color: $lavender-blue !important;
+    color: var(--lavender-blue) !important;
     /* font-family: ''opensans-semibold''; */
 }
 
 .company-list button.btn-link {
     font-size: 13px;
-    color: $chetwode-blue !important;
+    color: var(--chetwode-blue) !important;
     display: block;
     padding: 7px 10px;
     display: block;
@@ -770,8 +770,8 @@ input {
 }
 
 .company-list button.btn-link:hover {
-    color: $chetwode-blue;
-    background: $lavender-light;
+    color: var(--chetwode-blue);
+    background: var(--lavender-light);
     text-decoration: none;
 }
 
@@ -789,13 +789,13 @@ ul.sub-list {
     float: right;
     padding-top: 4px;
     transform: rotate(270deg);
-    border: 2px solid $gray;
+    border: 2px solid var(--gray);
     padding: 3px;
     border-radius: 50%;
     justify-content: center;
     align-items: center;
     display: flex;
-    color: $gray;
+    color: var(--gray);
 }
 
 .sub-list li a {
@@ -807,7 +807,7 @@ ul.sub-list {
 }
 
 .company-list .input-group {
-    border-bottom: 1px solid  $gainsboro;
+    border-bottom: 1px solid  var(--gainsboro);
     display: flex;
     align-items: center;
 }
@@ -823,8 +823,8 @@ ul.sub-list {
     border-radius: 0px;
     border: 0px;
     font-size: 14px;
-    color: $night-rider;
-    border-left: 1px solid  $gainsboro !important;
+    color: var(--night-rider);
+    border-left: 1px solid  var(--gainsboro) !important;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -881,7 +881,7 @@ ul.sub-list {
 .tab-integraton .nav-tabs > li > a {
     width: 120px;
     height: 120px !important;
-    background: $white;
+    background: var(--white);
     display: flex;
     flex-direction: column;
     vertical-align: middle;
@@ -894,10 +894,10 @@ ul.sub-list {
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 .tab-integraton .nav-tabs > li.active a {
-    background: $white !important;
+    background: var(--white) !important;
     box-shadow: 0 6px 7px #cacaca;
-    border: 1px solid $midnight-express !important;
-    color: $night-rider !important;
+    border: 1px solid var(--midnight-express) !important;
+    color: var(--night-rider) !important;
     border-radius: 3px;
     /* display: block; */
 }
@@ -908,7 +908,7 @@ ul.sub-list {
 
 .tab-integraton .nav-tabs > li > a > span {
     font-size: 30px;
-    color: $midnight-express;
+    color: var(--midnight-express);
     opacity: 0.4;
     margin-bottom: 6px;
 }
@@ -918,7 +918,7 @@ ul.sub-list {
 }
 .customer-footer-box .number-total {
     font-size: 26px;
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 
 .customer-footer-box h5 {
@@ -927,7 +927,7 @@ ul.sub-list {
 }
 
 .customer-right {
-    background: $white;
+    background: var(--white);
     padding: 0 15px;
     float: right;
 }
@@ -938,7 +938,7 @@ ul.sub-list {
 
 .customer-right table tr td {
     padding: 15px;
-    color: $gray-44;
+    color: var(--gray-44);
 }
 
 .customer-right table tr td h3 {
@@ -958,7 +958,7 @@ ul.sub-list {
     background: none;
     border: 0;
     font-size: 14px;
-    color: $night-rider !important;
+    color: var(--night-rider) !important;
     position: relative;
     padding-bottom: 7px;
     padding-left: 0;
@@ -972,7 +972,7 @@ ul.sub-list {
     left: 0;
     width: 100%;
     padding: 10px 0px 0 43px !important;
-    border-bottom:1px solid $gainsboro;
+    border-bottom:1px solid var(--gainsboro);
     li{
         a{
             padding: 0 !important;
@@ -981,48 +981,48 @@ ul.sub-list {
     }
 }
 .custom-tabs .nav.nav-tabs > li a:hover {
-    color: $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
 }
 
 .custom-tabs .nav.nav-tabs > li.active a {
-    color: $nero !important;
+    color: var(--nero) !important;
 }
 
 .custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     padding:10px 0px 0 43px !important;
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
     z-index: 9;
     position: relative;
 }
 
 .btn-sky-blue {
-    background: $deep-sky-blue;
-    border: 1px solid $deep-sky-blue;
-    color: $white;
+    background: var(--deep-sky-blue);
+    border: 1px solid var(--deep-sky-blue);
+    color: var(--white);
 }
 
 .btn-sky-blue:hover,
 .btn-sky-blue:focus {
-    background: $deep-sky-blue-hover !important;
-    border-color: $deep-sky-blue-hover;
-    color: $white;
+    background: var(--deep-sky-blue-hover) !important;
+    border-color: var(--deep-sky-blue-hover);
+    color: var(--white);
 }
 
 .btn-light-gray {
-    background: $lavender;
-    border-color: $lavender;
-    color: $midnight-blue;
+    background: var(--lavender);
+    border-color: var(--lavender);
+    color: var(--midnight-blue);
 }
 
 .btn-light-gray:hover {
-    background: $deep-sky-blue;
-    border-color: $deep-sky-blue;
-    color: $white;
+    background: var(--deep-sky-blue);
+    border-color: var(--deep-sky-blue);
+    color: var(--white);
 }
 
 .top-aging-table-top {
-    background: $whisper-color;
+    background: var(--whisper-color);
     position: relative;
 }
 
@@ -1038,7 +1038,7 @@ ul.sub-list {
 }
 
 .sorting-box a {
-    color: $dim-gray;
+    color: var(--dim-gray);
     display: block;
     line-height: 0;
 }
@@ -1050,7 +1050,7 @@ ul.sub-list {
 
 .aging-table-top td {
     border: 0px solid !important;
-    background: $alice-blue-light !important;
+    background: var(--alice-blue-light) !important;
 }
 
 .aging-table-top .top-aging-table-top {
@@ -1059,7 +1059,7 @@ ul.sub-list {
 
 .aging-table-top .top-aging-table-top strong,
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    color: $nero;
+    color: var(--nero);
 }
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
@@ -1070,7 +1070,7 @@ ul.sub-list {
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
-    background: $white !important;
+    background: var(--white) !important;
 }
 
 .d-none {
@@ -1089,11 +1089,11 @@ ul.sub-list {
 }
 
 .top-aging-table-top1 {
-    background: $white;
+    background: var(--white);
     position: absolute;
     left: 0;
     right: 0;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     padding: 20px;
     box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
     top: 75px;
@@ -1102,7 +1102,7 @@ ul.sub-list {
 
 .top-aging-table-top1 p {
     font-size: 12px;
-    color: $nobel;
+    color: var(--nobel);
     font-style: italic;
     margin-bottom: 7px;
     text-align: left;
@@ -1113,7 +1113,7 @@ ul.sub-list {
 }
 
 .top-aging-table-box > span {
-    color: $nobel;
+    color: var(--nobel);
     margin-right: 5px;
     display: inline-block;
 }
@@ -1125,10 +1125,10 @@ ul.sub-list {
 .top-aging-table-box input {
     width: 30px !important;
     height: 26px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     padding: 5px;
     text-align: center;
-    color: $gray-44;
+    color: var(--gray-44);
     /* font-size: 14px; */
 }
 
@@ -1149,21 +1149,21 @@ ul.sub-list {
 }
 
 .basic > thead > tr > th .fa-sort {
-    color: $dim-gray;
+    color: var(--dim-gray);
     float: right;
     margin-top: 5px;
 }
 
 .pagination > li > a {
-    background: $white !important;
-    color: $nero !important;
-    border: 1px solid $midnight-blue !important;
+    background: var(--white) !important;
+    color: var(--nero) !important;
+    border: 1px solid var(--midnight-blue) !important;
 }
 
 .pagination > li.active > a {
-    background: $midnight-blue !important;
-    color: $white !important;
-    border: 1px solid $midnight-blue !important;
+    background: var(--midnight-blue) !important;
+    color: var(--white) !important;
+    border: 1px solid var(--midnight-blue) !important;
 }
 
 .table-checkbox {
@@ -1213,11 +1213,11 @@ ul.sub-list {
 }
 
 .text-gray {
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .advance-search .input-group-addon {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     background: none;
     border-left: 0 !important;
 }
@@ -1227,7 +1227,7 @@ ul.sub-list {
 }
 
 .advance-search p small {
-    color: $extra-silver;
+    color: var(--extra-silver);
 }
 
 .advance-search p {
@@ -1260,7 +1260,7 @@ ul.sub-list {
     width: 0;
     height: 0;
     border: 5px solid transparent;
-    border-top-color: $gainsboro;
+    border-top-color: var(--gainsboro);
 }
 
 .select-style select {
@@ -1270,9 +1270,9 @@ ul.sub-list {
     -moz-appearance: none;
     appearance: none;
     padding: 7px 22px 7px 7px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 2px;
-    background: $white;
+    background: var(--white);
     font-size: 14px;
     cursor: pointer;
 }
@@ -1293,29 +1293,29 @@ ul.sub-list {
     width: 150px;
 }
 .btn-green {
-    background: $deep-sky-blue;
-    color: $white;
+    background: var(--deep-sky-blue);
+    color: var(--white);
 }
 
 .btn-green:hover {
-    color: $white;
-    background: $deep-sky-blue-hover;
+    color: var(--white);
+    background: var(--deep-sky-blue-hover);
 }
 .choose-size label {
     font-weight: bold;
     display: inline-block;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 50%;
     width: 30px !important;
     text-align: center;
     height: 30px !important;
     line-height: 30px !important;
     margin-right: 5px;
-    color: $gray;
+    color: var(--gray);
 }
 
 .choose-size input:checked + label {
-    background: $whisper-color;
+    background: var(--whisper-color);
     clear: both;
 }
 
@@ -1347,11 +1347,11 @@ ul.sub-list {
 }
 
 .text-orange {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 
 .text-light {
-    color: $nobel !important;
+    color: var(--nobel) !important;
 }
 
 .list-middle li {
@@ -1373,13 +1373,13 @@ modal-container.modal {
         .modal-content {
             height: 100%;
             overflow: scroll;
-            background-color: $alice-blue-light;
+            background-color: var(--alice-blue-light);
         }
     }
 }
 
 .sales-invoice-modal .modal-header h4 {
-    color: $white !important;
+    color: var(--white) !important;
     font-size: 22px !important;
 }
 
@@ -1396,7 +1396,7 @@ modal-container.modal {
 }
 
 .sales-invoice-modal .modal-body {
-    background: $white;
+    background: var(--white);
 }
 
 .sales-invoice-modal .ps__thumb-y {
@@ -1405,7 +1405,7 @@ modal-container.modal {
 
 .sales-invoice-modal .ps__rail-y {
     opacity: 1;
-    background: $whisper !important;
+    background: var(--whisper) !important;
     padding: 10px;
 }
 
@@ -1413,7 +1413,7 @@ modal-container.modal {
     font-family: "opensans-regular" !important;
     /* background: red; */
     font-family: cursive;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 
 .modal-455 {
@@ -1456,8 +1456,8 @@ modal-container.modal {
 }
 
 .list-icon-group input:checked + label {
-    background-color: $white;
-    box-shadow: 2px 2px 5px $gainsboro;
+    background-color: var(--white);
+    box-shadow: 2px 2px 5px var(--gainsboro);
 }
 
 .modal-consolidated-details {
@@ -1496,12 +1496,12 @@ modal-container.modal {
 }
 
 .table-no-border tr th {
-    color: $nobel;
+    color: var(--nobel);
 }
 .price-input {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     font-size: 14px;
-    background: $white;
+    background: var(--white);
     padding: 1px 2px;
     display: inline-block;
     max-width: 90px;
@@ -1509,10 +1509,10 @@ modal-container.modal {
 }
 
 .input-search .input-group-addon {
-    background: $white;
+    background: var(--white);
     border-right: 0px;
-    border-color: $gainsboro;
-    color: $dim-gray;
+    border-color: var(--gainsboro);
+    color: var(--dim-gray);
     font-size: 12px;
     padding-top: 10px;
     padding-right: 0px;
@@ -1520,19 +1520,19 @@ modal-container.modal {
 }
 
 .input-search .form-control {
-    background: $white;
+    background: var(--white);
     border-radius: 0px 2px 2px 0px !important;
     border-left: 0px;
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 .btn-filter {
-    background: $white;
-    border: 1px solid $gainsboro;
+    background: var(--white);
+    border: 1px solid var(--gainsboro);
     font-size: 16px;
     padding: 4px 8px;
     line-height: initial !important;
-    color: $nobel;
+    color: var(--nobel);
     border-radius: 2px;
 }
 
@@ -1549,15 +1549,15 @@ modal-container.modal {
 }
 
 .dot-warning {
-    background: $grandis;
+    background: var(--grandis);
 }
 
 .dot-primary {
-    background: $cornflower-blue;
+    background: var(--cornflower-blue);
 }
 
 .dot-success {
-    background: $success-green;
+    background: var(--success-green);
 }
 
 .pt-85 {
@@ -1592,7 +1592,7 @@ modal-container.modal {
 }
 
 .color-primary {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
 }
 
 .justify-content-between {
@@ -1600,7 +1600,7 @@ modal-container.modal {
 }
 
 .text-blue {
-    color: $midnight-blue;
+    color: var(--midnight-blue);
 }
 
 .all-features-modal {
@@ -1621,7 +1621,7 @@ modal-container.modal {
         font-size: 13px;
         top: 11px;
         left: 10px;
-        color: $gray;
+        color: var(--gray);
     }
     .form-control {
         padding-left: 30px !important;
@@ -1659,25 +1659,25 @@ modal-container.modal {
     top: 0;
     z-index: 9;
     font-size: 17px;
-    color: $gray;
+    color: var(--gray);
     height: 36px;
     width: 32px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
-    color: $gray;
+    border-right: 1px solid var(--gainsboro);
+    color: var(--gray);
 }
 
 .custom-datepicker input {
-    background: $white !important;
+    background: var(--white) !important;
     font-size: 14px;
     position: relative;
     width: 230px !important;
     max-width: 230px;
     display: block;
     padding-left: 30px !important;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     height: 36px;
 }
 
@@ -1723,7 +1723,7 @@ modal-container.modal {
     width: 150px;
 }
 .sh-select-border .menu .scrollable-content > .item {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     height: initial !important;
 }
 /* my css end */
@@ -1731,18 +1731,18 @@ modal-container.modal {
 /*input*/
 
 .form-control {
-    background: $white !important;
-    border: 1px solid $gainsboro;
+    background: var(--white) !important;
+    border: 1px solid var(--gainsboro);
     border-radius: 2px !important;
     padding: 6px !important;
     outline: 0;
-    color: $nero !important;
+    color: var(--nero) !important;
     box-shadow: none;
     font-size: 14px !important;
 }
 
 input {
-    color: $nero !important;
+    color: var(--nero) !important;
 }
 
 .form-control::-webkit-input-placeholder,
@@ -1755,22 +1755,22 @@ input::-moz-placeholder,
 input:-ms-input-placeholder,
 .form-control:-moz-placeholder,
 input:-moz-placeholder {
-    color: $nobel !important;
+    color: var(--nobel) !important;
     font-size: 14px;
 }
 
 .form-control:focus {
     outline: none;
-    border-color: $chetwode-blue !important;
+    border-color: var(--chetwode-blue) !important;
     box-shadow: none;
 }
 
 .sidebar {
-    background: $whisper-new;
+    background: var(--whisper-new);
 }
 
 .account-accordion a {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .account-accordion .title {
@@ -1786,7 +1786,7 @@ input:-moz-placeholder {
 }
 
 .company-name ul li > span {
-    color: $night-rider !important;
+    color: var(--night-rider) !important;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -1799,7 +1799,7 @@ input:-moz-placeholder {
     display: inline-flex;
     width: 28px;
     height: 28px;
-    background-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
     text-align: center;
     border-radius: 50%;
     justify-content: center;
@@ -1808,7 +1808,7 @@ input:-moz-placeholder {
     margin-right: 15px;
     float: left;
     letter-spacing: -1px;
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 .company-name .company-text .fyear {
@@ -1820,26 +1820,26 @@ input:-moz-placeholder {
 }
 
 header .navbar {
-    background-color: $alice-blue-light;
-    border-bottom: 1px solid $gainsboro;
+    background-color: var(--alice-blue-light);
+    border-bottom: 1px solid var(--gainsboro);
     padding: 3px 0;
 }
 
 
 .thead-background1 th {
-    background: $white;
-    color: $dark-liver;
+    background: var(--white);
+    color: var(--dark-liver);
     padding: 11px !important;
     font-weight: 400;
 }
 
 .accountName {
-    color: $cinnabar-orange;
+    color: var(--cinnabar-orange);
     text-transform: capitalize;
 }
 
 .icomoon-ico {
-    color: $gray;
+    color: var(--gray);
 }
 
 .export-ledger-options > .arrow:after {
@@ -1849,7 +1849,7 @@ header .navbar {
 .export-ledger-options.left > .arrow,
 .export-ledger-options > .arrow {
     top: 0;
-    border-bottom-color: $gainsboro;
+    border-bottom-color: var(--gainsboro);
 }
 
 .export-ledger-options > .arrow,
@@ -1873,13 +1873,13 @@ header .navbar {
     list-style: none;
     position: relative;
     float: left;
-    background: $black;
+    background: var(--black);
 }
 
 .export-ledger-options > ul > li {
     width: 100%;
-    border-bottom: 1px solid $gainsboro;
-    color: $dark-gray;
+    border-bottom: 1px solid var(--gainsboro);
+    color: var(--dark-gray);
 }
 
 .ledg-head {
@@ -1889,11 +1889,11 @@ header .navbar {
 /*btn*/
 
 .btn-pink {
-    background: $deep-sky-blue;
-    border: 1px solid $deep-sky-blue;
-    color: $white;
+    background: var(--deep-sky-blue);
+    border: 1px solid var(--deep-sky-blue);
+    color: var(--white);
     &:hover{
-        color:$white;
+        color:var(--white);
     }
 }
 
@@ -1902,9 +1902,9 @@ header .navbar {
 }
 
 .btn-primary {
-    background: $white;
-    border-color: $chetwode-blue;
-    color: $midnight-express;
+    background: var(--white);
+    border-color: var(--chetwode-blue);
+    color: var(--midnight-express);
 }
 
 .btn-primary:hover,
@@ -1917,9 +1917,9 @@ header .navbar {
 .btn-primary:active:hover,
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: var(--chetwode-blue);
+    color: var(--white);
+    border-color: var(--chetwode-blue);
 }
 
 .btn-primary.disabled.focus,
@@ -1931,9 +1931,9 @@ header .navbar {
 fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: var(--chetwode-blue);
+    color: var(--white);
+    border-color: var(--chetwode-blue);
 }
 
 .btn {
@@ -1951,9 +1951,9 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn-default {
-    background: $white;
-    border-color: $chetwode-blue;
-    color: $midnight-express;
+    background: var(--white);
+    border-color: var(--chetwode-blue);
+    color: var(--midnight-express);
 }
 
 .btn-default:hover,
@@ -1965,17 +1965,17 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default:active,
 .btn-default:active:focus,
 .open > .dropdown-toggle.btn-default {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: var(--chetwode-blue);
+    color: var(--white);
+    border-color: var(--chetwode-blue);
 }
 
 .success-btn {
     font-size: 14px;
-    background: $success-green;
-    color: $white;
+    background: var(--success-green);
+    color: var(--white);
     &:hover {
-        color: $white;
+        color: var(--white);
     }
 }
 
@@ -1984,21 +1984,21 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 #actionPane .btn-default {
-    background: $whisper-new;
-    color: $night-rider;
-    border-color: $whisper-new;
+    background: var(--whisper-new);
+    color: var(--night-rider);
+    border-color: var(--whisper-new);
 }
 
 /*btn end*/
 
 .ledger-main .form-control {
-    background: $white !important;
+    background: var(--white) !important;
     height: 48px;
 }
 
 .ledger-header thead th {
-    background: $white;
-    border-right: 1px solid $gainsboro;
+    background: var(--white);
+    border-right: 1px solid var(--gainsboro);
 }
 
 .t-h-bg2 th {
@@ -2015,7 +2015,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .ledger-container table tr.bg3 th {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-left: 0;
 }
 .tax-list {
@@ -2030,9 +2030,9 @@ fieldset[disabled] .btn-primary:hover {
     min-height: 28px;
     border: 0;
     background: transparent;
-    color: $white;
+    color: var(--white);
     padding: 7px 35px 7px 10px !important;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 #accountSearch:focus {
@@ -2041,12 +2041,12 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .ledger_search i {
-    color: $white;
+    color: var(--white);
 }
 
 .ledger_search .input-group-addon {
-    background: $night-rider;
-    color: $white;
+    background: var(--night-rider);
+    color: var(--white);
     border: 0;
     border-top: 0;
     border-bottom: 0;
@@ -2093,16 +2093,16 @@ fieldset[disabled] .btn-primary:hover {
 .load-more {
     padding: 8px 10px;
     display: block;
-    background: $gray-95;
+    background: var(--gray-95);
     margin: 20px 0px;
 }
 
 #company-wrap i {
-    color: $gray;
+    color: var(--gray);
 }
 
 #ledger {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .export-ledger-options .dropdown_theme {
@@ -2111,12 +2111,12 @@ fieldset[disabled] .btn-primary:hover {
 
 .dropdown_theme {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    color: $dark-gray;
-    border: 1px solid $gainsboro;
+    color: var(--dark-gray);
+    border: 1px solid var(--gainsboro);
 }
 
 .export-ledger-options .list-unstyled {
-    background: $white;
+    background: var(--white);
     left: -80px;
     width: 151px;
 }
@@ -2142,7 +2142,7 @@ fieldset[disabled] .btn-primary:hover {
     font-size: 12px;
     height: 33px;
     border: 0px;
-    color: $night-rider;
+    color: var(--night-rider);
     padding: 3px !important;
     text-align: center;
 }
@@ -2157,14 +2157,14 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .btn-gray {
-    background: $dark-gray;
-    color: $white;
+    background: var(--dark-gray);
+    color: var(--white);
     /* font-size: 10px;
     padding: 7px 10px; */
 }
 
 .btn-gray:hover {
-    color: $white;
+    color: var(--white);
 }
 
 .p-t-5 {
@@ -2176,7 +2176,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .childTab > .nav.nav-tabs {
-    background: $gray-95;
+    background: var(--gray-95);
     text-align: center;
     width: 100%;
     padding: 0;
@@ -2200,7 +2200,7 @@ fieldset[disabled] .btn-primary:hover {
     line-height: inherit;
     border: 0;
     padding: 13px 18px;
-    color: $dark-gray;
+    color: var(--dark-gray);
     background: none;
     border: 1px solid transparent;
 }
@@ -2219,14 +2219,14 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .danger-btn {
-    color: $white;
+    color: var(--white);
     text-shadow: none;
     background-image: none;
     padding: 12px 25px;
     border-radius: 3px;
     outline: 0;
     box-shadow: none;
-    border: 1px solid $cinnabar-orange;
+    border: 1px solid var(--cinnabar-orange);
 }
 
 #company-wrap {
@@ -2236,10 +2236,10 @@ fieldset[disabled] .btn-primary:hover {
     display: inline-block;
     background: none;
     padding: 0px 5px 0 0 !important;
-    color: $white;
+    color: var(--white);
 }
 #companyList {
-    background: $white;
+    background: var(--white);
     padding-bottom: 0;
     padding: 0;
 }
@@ -2253,19 +2253,19 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 .selected-company a.text-ellipsis {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 
 #companyList li.selected-company a:focus {
-    background-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
 }
 
 #companyList li.selected-company a:hover span {
-    color: $chetwode-blue !important;
+    color: var(--chetwode-blue) !important;
 }
 
 #companyList li.selected-company a:focus span {
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 .company-name .icon-dots-three-vertical {
@@ -2275,7 +2275,7 @@ fieldset[disabled] .btn-primary:hover {
     bottom: 0;
     transform: translateY(-50%);
     right: 16px;
-    color: $white;
+    color: var(--white);
 }
 
 p.table-email {
@@ -2293,7 +2293,7 @@ p.table-email {
 }
 
 .professional-name {
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 .top-five-cr-dr-table .basic > tbody > tr td:last-child,
@@ -2349,7 +2349,7 @@ input[type="checkbox"]:before {
     z-index: 1;
     width: 12px;
     height: 7px;
-    border: 2px solid $white;
+    border: 2px solid var(--white);
     border-top-style: none;
     border-right-style: none;
 }
@@ -2359,18 +2359,18 @@ input[type="checkbox"]:after {
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     width: 18px;
     height: 18px;
-    background: $white;
+    background: var(--white);
     cursor: pointer;
     border-radius: 2px;
     visibility: visible;
 }
 
 input[type="checkbox"]:checked:after {
-    background-color: $chetwode-blue;
-    border-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
+    border-color: var(--chetwode-blue);
 }
 
 .tab-pane .list-inline > li {
@@ -2408,19 +2408,19 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success-outline {
-    border: 1px solid $light-sea-green;
-    color: $light-sea-green;
+    border: 1px solid var(--light-sea-green);
+    color: var(--light-sea-green);
 }
 
 .btn-success-outline:hover {
-    color: $white;
-    background: $light-sea-green;
+    color: var(--white);
+    background: var(--light-sea-green);
 }
 
 .btn-success {
-    background: $light-sea-green;
-    color: $white;
-    border: 1px solid $light-sea-green;
+    background: var(--light-sea-green);
+    color: var(--white);
+    border: 1px solid var(--light-sea-green);
 }
 
 .btn-success:hover,
@@ -2430,20 +2430,20 @@ input[type="checkbox"]:checked:after {
 .btn-success:not(:disabled):not(.disabled):active,
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle{
-    background: $teal;
-    color: $white;
-    border: 1px solid $teal;
+    background: var(--teal);
+    color: var(--white);
+    border: 1px solid var(--teal);
     box-shadow: none;
 }
 
 .btn-success:disabled,
 .btn-success:disabled:hover {
     color: rgba(255, 255, 255, 0.51);
-    border: 1px solid $success-green-disable;
-    background: $success-green-disable;
+    border: 1px solid var(--success-green-disable);
+    background: var(--success-green-disable);
 }
 .btn-warning{
-    color: $white !important;
+    color: var(--white) !important;
 }
 .btn-warning:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus, .show > .btn-warning.dropdown-toggle:focus{
     box-shadow: none;
@@ -2454,18 +2454,18 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-danger {
-    background: $whisper;
-    color:$red;
-    border-color: $whisper;
+    background: var(--whisper);
+    color:var(--red);
+    border-color: var(--whisper);
 }
 
 .btn-danger:hover,
 .btn-danger:active,
 .btn-danger:focus,
 .btn-danger:active:focus {
-    background: $gainsboro;
-    color:$red;
-    border-color: $gainsboro;
+    background: var(--gainsboro);
+    color:var(--red);
+    border-color: var(--gainsboro);
     outline: none;
     box-shadow: none;
 }
@@ -2475,34 +2475,34 @@ input[type="checkbox"]:checked:after {
 .btn-danger:active:focus,
 .btn-danger:active:hover,
 .btn-danger:focus {
-    background: $whisper;
-    color:$red;
-    border-color: $whisper;
+    background: var(--whisper);
+    color:var(--red);
+    border-color: var(--whisper);
     opacity: 0.5;
 }
 
 .btn-cancel {
-    background: $whisper;
-    color: $dark-gray;
-    border-color: $whisper;
+    background: var(--whisper);
+    color: var(--dark-gray);
+    border-color: var(--whisper);
 }
 
 .btn-cancel:hover,
 .btn-cancel:active,
 .btn-cancel:focus,
 .btn-cancel:active:focus {
-    background: $gainsboro;
-    color: $dark-gray;
-    border-color: $gainsboro;
+    background: var(--gainsboro);
+    color: var(--dark-gray);
+    border-color: var(--gainsboro);
     outline: none;
     box-shadow: none;
 }
 
 .btn-cancel:disabled,
 .btn-cancel:disabled:hover {
-    background: $whisper;
-    color: $dark-gray;
-    border-color: $whisper;
+    background: var(--whisper);
+    color: var(--dark-gray);
+    border-color: var(--whisper);
     opacity: 0.5;
 }
 
@@ -2518,7 +2518,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .thumbnail.active {
-    background: $white;
+    background: var(--white);
     box-shadow: 0 5px 34px 0 rgba(211, 95, 41, 0.18);
 }
 
@@ -2527,7 +2527,7 @@ input[type="checkbox"]:checked:after {
     float: left;
     overflow: hidden;
     padding: 0;
-    background: $white;
+    background: var(--white);
     border-color: #fbc2a8 !important;
 }
 
@@ -2538,14 +2538,14 @@ input[type="checkbox"]:checked:after {
 
 .thumbnail .caption {
     padding: 20px 7px;
-    color: $night-rider;
+    color: var(--night-rider);
     overflow: hidden;
     text-align: center;
 }
 
 .switch.wide.checked small {
     left: 31px;
-    background: $white;
+    background: var(--white);
 }
 
 .switch.wide {
@@ -2557,11 +2557,11 @@ input[type="checkbox"]:checked:after {
     border: 0;
     border-radius: 48px;
     top: 0;
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 
 .switch.checked {
-    background: $success-green;
+    background: var(--success-green);
     border: 0;
 }
 
@@ -2745,15 +2745,15 @@ input[type="checkbox"]:checked:after {
 }
 
 .text-green {
-    color: $success-green;
+    color: var(--success-green);
 }
 
 .text-light {
-    color: $very-light-gray;
+    color: var(--very-light-gray);
 }
 
 .text-light-2 {
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .subscription-title {
@@ -2762,15 +2762,15 @@ input[type="checkbox"]:checked:after {
 }
 
 .box2 {
-    background: $white;
+    background: var(--white);
 }
 
 .head-title {
-    background: $whisper-color;
+    background: var(--whisper-color);
     padding: 11px 20px;
     font-size: 14px;
     font-family: 'opensans-semibold';
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 .inner-box2 {
@@ -2793,17 +2793,17 @@ input[type="checkbox"]:checked:after {
 
 .campanien-list ul > li > a {
     display: block;
-    color: $aubergine;
+    color: var(--aubergine);
     padding: 10px 20px;
 }
 
 .campanien-list ul > li > a:hover {
-    color: $chetwode-blue;
-    background: $lavender;
+    color: var(--chetwode-blue);
+    background: var(--lavender);
 }
 
 .campanien-list ul > li > a > span {
-    color: $dark-gray;
+    color: var(--dark-gray);
     float: right;
 }
 
@@ -2838,7 +2838,7 @@ li.no-click {
 
 .subscription_modal .modal-content {
     border-radius: 0px;
-    box-shadow: 0 5px 15px $black-russian-light;
+    box-shadow: 0 5px 15px var(--black-russian-light);
 }
 
 .subscription_modal .modal-content .close {
@@ -2857,12 +2857,12 @@ li.no-click {
 .company-box h3 {
     font-weight: bold;
     margin-bottom: 7px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     padding-bottom: 15px;
 }
 
 .company-box {
-    background: $solitude;
+    background: var(--solitude);
     padding: 20px;
     margin-bottom: 30px;
     min-height: 220px;
@@ -2896,7 +2896,7 @@ li.no-click {
     background: none;
     border: 0px;
     padding: 0px;
-    color: $gray;
+    color: var(--gray);
 }
 
 .align-item-center {
@@ -2936,7 +2936,7 @@ li.no-click {
 .mandatory-asterisk {
     font-size: 14px;
     top: 0;
-    color: $red;
+    color: var(--red);
 }
 
 @media only screen and (max-width: 1400px) {
@@ -2969,7 +2969,7 @@ li.no-click {
 .proforma-list > .filters .separator {
     height: 30px;
     width: 1px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     margin-right: 10px;
     vertical-align: bottom;
     float: left;
@@ -3022,7 +3022,7 @@ li.no-click {
     height: 49px;
     border: 0;
     width: 200px;
-    background: $gainsboro-light;
+    background: var(--gainsboro-light);
     left: 0;
     padding-left: 16px;
     font-size: 17px;
@@ -3065,22 +3065,22 @@ li.no-click {
 
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: $chetwode-blue !important;
+    background-color: var(--chetwode-blue) !important;
     border-color: transparent;
-    color: $white;
+    color: var(--white);
 }
 
 .daterangepicker td.in-range {
-    background-color: $lavender-light !important;
+    background-color: var(--lavender-light) !important;
     border-color: transparent;
-    color: $black;
+    color: var(--black);
     border-radius: 0;
 }
 
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    color: $dark-gray;
-    border: 1px solid $gainsboro;
+    color: var(--dark-gray);
+    border: 1px solid var(--gainsboro);
     z-index: 9999 !important;
 }
 
@@ -3090,8 +3090,8 @@ li.no-click {
 }
 
 #user-dropdown {
-    color: $white;
-    background: $night-rider;
+    color: var(--white);
+    background: var(--night-rider);
     width: 50px;
     text-align: center;
     padding: 15px 0;
@@ -3106,18 +3106,18 @@ li.no-click {
     right: 11px;
     top: 22px;
     font-size: 8px;
-    color: $matterhorn;
+    color: var(--matterhorn);
 }
 
 .ranges li {
-    color: $matterhorn !important;
+    color: var(--matterhorn) !important;
 }
 
 .ranges li.active,
 .ranges li:hover {
-    background: $chetwode-blue !important;
-    border: 1px solid $chetwode-blue !important;
-    color: $white !important;
+    background: var(--chetwode-blue) !important;
+    border: 1px solid var(--chetwode-blue) !important;
+    color: var(--white) !important;
 }
 
 .download-invoice-ledger {
@@ -3132,7 +3132,7 @@ li.no-click {
     border-top-width: 0;
     top: 1px;
     border-right: 15px solid transparent;
-    border-bottom: 15px solid $white;
+    border-bottom: 15px solid var(--white);
     border-left: 15px solid transparent;
     left: -15px;
     z-index: 9;
@@ -3159,27 +3159,27 @@ button:focus {
 /*placeholder webkit css*/
 
 #accountSearch::-webkit-input-placeholder {
-    color: $white;
+    color: var(--white);
 }
 
 #accountSearch::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: $white;
+    color: var(--white);
 }
 
 #accountSearch::-moz-placeholder {
     /* Firefox 19+ */
-    color: $white;
+    color: var(--white);
 }
 
 #accountSearch:-ms-input-placeholder {
     /* IE 10+ */
-    color: $white;
+    color: var(--white);
 }
 
 #accountSearch:-moz-placeholder {
     /* Firefox 18- */
-    color: $white;
+    color: var(--white);
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -3193,7 +3193,7 @@ input[type="number"]::-webkit-inner-spin-button {
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-bottom: 8px solid $white;
+    border-bottom: 8px solid var(--white);
     position: absolute;
     top: 2px;
     left: -6px;
@@ -3203,20 +3203,20 @@ input[type="number"]::-webkit-inner-spin-button {
 .navbar-right .dropdown-menu,
 .pull-right > .dropdown-menu {
     top: 54px;
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 .datePickr .dropdown-menu {
-    box-shadow: 0 3px 28px 0 $black-russian-light;
-    color: $dark-gray;
-    border: 1px solid $gainsboro;
+    box-shadow: 0 3px 28px 0 var(--black-russian-light);
+    color: var(--dark-gray);
+    border: 1px solid var(--gainsboro);
 }
 
 .datePickr .dropdown-menu table {
-    border: 1px solid $white;
+    border: 1px solid var(--white);
     padding: 4px;
     border-radius: 4px;
-    background-color: $white;
+    background-color: var(--white);
 }
 
 .datePickr .dropdown-menu table th,
@@ -3231,7 +3231,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border: 1px solid $deep-sky-blue !important;
+    border: 1px solid var(--deep-sky-blue) !important;
     border-radius: 0 !important;
     box-shadow: none;
 }
@@ -3242,8 +3242,8 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .active.end-date.in-range.available,
 .daterangepicker td.start-date {
-    background: $chetwode-blue !important;
-    color: $white;
+    background: var(--chetwode-blue) !important;
+    color: var(--white);
     border-radius: 2px;
 }
 
@@ -3270,8 +3270,8 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .upload-btn {
-    background: $romance;
-    border: 1px solid $grandis;
+    background: var(--romance);
+    border: 1px solid var(--grandis);
     padding: 6px;
     border-radius: 2px;
     float: right;
@@ -3295,7 +3295,7 @@ input[type="number"]::-webkit-inner-spin-button {
 footer {
     padding: 10px 20px;
     text-align: center;
-    color: $gray;
+    color: var(--gray);
     font-size: 17px;
     margin-top: 20px;
     width: 100%;
@@ -3308,14 +3308,14 @@ footer > div {
 
 footer > div > a {
     margin: 0 22px;
-    color: $gray;
+    color: var(--gray);
     padding: 0;
     font-size: 16px;
 }
 
 footer > div > a:hover {
     text-decoration: none;
-    color: $white;
+    color: var(--white);
 }
 
 footer > div > a:first-child {
@@ -3346,7 +3346,7 @@ footer > div > a:last-child {
 
 .top_row {
     padding: 9px 10px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .search_box {
@@ -3359,7 +3359,7 @@ footer > div > a:last-child {
     transform: translateY(-50%);
     right: 10px;
     z-index: 99;
-    color: $matterhorn;
+    color: var(--matterhorn);
 }
 
 .stock-grp-list li:first-child {
@@ -3375,19 +3375,19 @@ footer > div > a:last-child {
 }
 
 .form-theme {
-    background: $solitude;
+    background: var(--solitude);
     padding: 20px;
-    border: 1px solid $solitude;
+    border: 1px solid var(--solitude);
 }
 
 .form-theme .form-control {
-    background: $white !important;
+    background: var(--white) !important;
 }
 
 .form-theme .form-control[disabled],
 .form-theme .form-control[readonly],
 .form-theme fieldset[disabled] .form-control {
-    background-color: $whisper-light !important;
+    background-color: var(--whisper-light) !important;
 }
 
 .btn-default-focus {
@@ -3396,8 +3396,8 @@ footer > div > a:last-child {
 
 .form_title {
     padding: 12px 20px;
-    background: $matterhorn;
-    color: $white;
+    background: var(--matterhorn);
+    color: var(--white);
 }
 
 .form_title label {
@@ -3436,7 +3436,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .add-row {
-    color: $success-green;
+    color: var(--success-green);
 }
 
 .dlet {
@@ -3444,32 +3444,32 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .table_theme {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 .table_theme > thead > tr,
 .table_theme > tbody > tr {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .table_theme > thead > tr > th {
-    background: $romance;
+    background: var(--romance);
     font-weight: 400;
 }
 
 .table_theme > tbody > tr > td,
 .table_theme > thead > tr > th {
     padding: 12px 20px;
-    color: $matterhorn;
+    color: var(--matterhorn);
 }
 
 .stkRprtTbl > tfoot > tr > td,
 .stkRprtTbl > tbody > tr > td {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .stkRprtTbl > thead > tr > th {
-    color: $nero;
+    color: var(--nero);
 }
 
 .noPdTd.table_theme > tbody > tr > td {
@@ -3477,7 +3477,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .addStockTbl.table_theme > tbody > tr > td {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 
 .addStockTbl.table_theme > tbody > tr > td:last-child {
@@ -3486,7 +3486,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .stkRprtTbl.table_theme > tbody > tr > td:last-child,
 .stkRprtTbl.table_theme > thead > tr > th:last-child {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 
 .action a + a {
@@ -3507,7 +3507,7 @@ a.btn.btn-xs.btn-link.pull-right {
     width: 100%;
     float: left;
     border: 0;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 
 #linkedStock .table_theme {
@@ -3532,14 +3532,14 @@ a.btn.btn-xs.btn-link.pull-right {
 
 #linkedStock .table_theme tbody {
     border: 0;
-    border-left: 1px solid $gainsboro;
-    border-top: 1px solid $gainsboro;
+    border-left: 1px solid var(--gainsboro);
+    border-top: 1px solid var(--gainsboro);
 }
 
 #linkedStock .table_theme tbody tr td:nth-child(1):before {
     position: absolute;
     width: 22px;
-    background: $matterhorn;
+    background: var(--matterhorn);
     height: 1px;
     content: " ";
     left: 0;
@@ -3548,7 +3548,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .wrap_section {
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 
 .Stock_info h1 {
@@ -3556,7 +3556,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .list-inline label {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .report-info {
@@ -3623,8 +3623,8 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .today.weekend.off.active.end-date.in-range.available {
-    background: $white !important;
-    color: $nobel;
+    background: var(--white) !important;
+    color: var(--nobel);
 }
 
 .dlt_btn {
@@ -3638,7 +3638,7 @@ a.btn.btn-xs.btn-link.pull-right {
     float: left;
     border-radius: 4px;
     transform: translateY(-50%);
-    color: $white;
+    color: var(--white);
 }
 
 .dlt_btn .glyphicon.glyphicon-remove {
@@ -3656,7 +3656,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .fileName {
-    color: $primary;
+    color: var(--primary);
     text-align: right;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -3675,7 +3675,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .blue {
-    color: $primary;
+    color: var(--primary);
 }
 
 .flowY_scroll {
@@ -3692,31 +3692,31 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .pop-panel .form-control {
     background: #f9f7f2;
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 .pop-panel label {
-    color: $nero;
+    color: var(--nero);
 }
 
 .inWords {
-    color:$nero;
+    color:var(--nero);
     text-align: right;
     text-transform: capitalize;
 }
 
 .bd-rt {
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 .popover.bottom > .arrow {
     right: 13%;
     left: auto;
-    border-bottom-color: $white;
+    border-bottom-color: var(--white);
 }
 
 .default-color {
-    color: $nero;
+    color: var(--nero);
 }
 
 .w50 {
@@ -3736,7 +3736,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background-size: 10px !important;
     background-position: 96% !important;
     background-repeat: no-repeat !important;
-    background-color: $white !important;
+    background-color: var(--white) !important;
     padding-right: 24px !important;
 }
 
@@ -3745,7 +3745,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background-size: 12px !important;
     background-position: 94% !important;
     background-repeat: no-repeat !important;
-    background-color: $white !important;
+    background-color: var(--white) !important;
     padding-right: 32px !important;
 }
 
@@ -3780,7 +3780,7 @@ a.btn.btn-xs.btn-link.pull-right {
     content: " ";
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 5px dashed $black;
+    border-top: 5px dashed var(--black);
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     top: 50%;
@@ -3826,9 +3826,9 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 #select_view {
-    background: $gainsboro !important;
-    border-color: $gainsboro !important;
-    color: $dark-liver;
+    background: var(--gainsboro) !important;
+    border-color: var(--gainsboro) !important;
+    color: var(--dark-liver);
 }
 
 #share-modal .input-group .input-group-btn:last-child > .btn {
@@ -3840,15 +3840,15 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .light-gray {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .shared-list li {
     list-style: none !important;
-    color: $dark-gray;
+    color: var(--dark-gray);
     font-size: 16px !important;
     padding: 5px 0 2px 0 !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
 }
 
 .shared-list select {
@@ -3856,7 +3856,7 @@ a.btn.btn-xs.btn-link.pull-right {
     border: 0;
     padding: 0 !important;
     height: auto !important;
-    color: $dark-gray !important;
+    color: var(--dark-gray) !important;
 }
 
 .shared-list select:focus {
@@ -3873,7 +3873,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .dashed {
     border-style: dashed;
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 .input-group button {
@@ -3899,8 +3899,8 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-header {
     position: relative;
-    background: $midnight-blue !important;
-    color: $white;
+    background: var(--midnight-blue) !important;
+    color: var(--white);
 }
 
 .close-modal {
@@ -3908,7 +3908,7 @@ a.btn.btn-xs.btn-link.pull-right {
     top: 50%;
     transform: translateY(-50%);
     right: 15px;
-    color: $white;
+    color: var(--white);
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
@@ -3924,7 +3924,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .email-type label {
     font-weight: normal;
-    color: $gray;
+    color: var(--gray);
 }
 
 .email-type input {
@@ -3936,12 +3936,12 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .modal-title.bg {
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 .modal-title {
     font-size: 18px !important;
-    /* color: $black !important */
+    /* color: var(--black) !important */
 }
 
 .radio {
@@ -3966,7 +3966,7 @@ input[type=radio]:checked:after {
     position: absolute;
     width: 6px;
     height: 6px;
-    background: $gray;
+    background: var(--gray);
     left: 3px;
     top: 4px;
     border-radius: 50%;
@@ -3988,14 +3988,14 @@ input[type=radio]:checked:after {
     position: absolute;
     right: 4px;
     font-size: 16px;
-    color: $dark-liver;
+    color: var(--dark-liver);
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
 }
 
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .pop-panel .ui-select-toggle {
@@ -4051,7 +4051,7 @@ select.form-control {
 }
 
 .isFsStock {
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .pdBth1015 {
@@ -4063,12 +4063,12 @@ select.form-control {
 }
 
 .addStockTbl .form-control {
-    background-color: $white !important;
+    background-color: var(--white) !important;
 }
 
 .linkStockTbl {
-    border-top: 1px solid $gainsboro;
-    border-left: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
+    border-left: 1px solid var(--gainsboro);
 }
 
 .linkStockTbl > tbody > tr > td {
@@ -4086,7 +4086,7 @@ select.form-control {
     width: 10px;
     height: 2px;
     display: inline-block;
-    background-color: $gainsboro;
+    background-color: var(--gainsboro);
     position: absolute;
     top: 50%;
     left: 0;
@@ -4127,7 +4127,7 @@ select.form-control {
 }
 
 .modal-header > h3 {
-    color: $white;
+    color: var(--white);
     font-size: 18px;
 }
 
@@ -4143,22 +4143,22 @@ select.form-control {
     min-width: 160px;
     font-size: 14px;
     text-align: left;
-    background-color: $white;
+    background-color: var(--white);
     background-clip: padding-box;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px $black-russian-light;
-    box-shadow: 0 6px 12px $black-russian-light;
+    -webkit-box-shadow: 0 6px 12px var(--black-russian-light);
+    box-shadow: 0 6px 12px var(--black-russian-light);
     z-index: 1001;
 }
 
 .stkRprtTbl td.cr {
-    color: $success-green;
+    color: var(--success-green);
 }
 
 .stkRprtTbl td.dr {
-    color: $speech-blue;
+    color: var(--speech-blue);
 }
 
 .grp-list {
@@ -4180,7 +4180,7 @@ select.form-control {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: $gray;
+    color: var(--gray);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -4198,7 +4198,7 @@ select.form-control {
 .col-wrapper {
     width: 255px;
     float: left;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
     min-height: 100%;
     height: 100%;
     position: relative;
@@ -4229,7 +4229,7 @@ select.form-control {
 }
 
 form label {
-    color: $nero;
+    color: var(--nero);
     font-weight: normal;
     padding-bottom: 0;
     font-size: 14px;
@@ -4247,12 +4247,12 @@ label {
 
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 #getGroupModal .detailed label {
     font-size: 14px;
-    color: $gray;
+    color: var(--gray);
 }
 
 .btn-add {
@@ -4261,11 +4261,11 @@ label {
 
 .btn-add:hover,
 .btn-add:focus {
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .pop-panel .ui-select-toggle {
@@ -4297,24 +4297,24 @@ label {
 
 #App_taxes .btn {
     padding: 4px;
-    background: $whisper-color;
-    color: $dark-gray;
+    background: var(--whisper-color);
+    color: var(--dark-gray);
     margin: 0 4px 5px 0;
 }
 
 #App_taxes .btn:hover {
-    background: $whisper-color;
-    color: $dark-gray;
+    background: var(--whisper-color);
+    color: var(--dark-gray);
     box-shadow: none;
 }
 
 #App_taxes .form-control {
-    background: $gray-95 !important;
-    border: 1px solid $gainsboro;
+    background: var(--gray-95) !important;
+    border: 1px solid var(--gainsboro);
 }
 
 .col-wrapper:nth-child(1) {
-    background: $gray-95;
+    background: var(--gray-95);
     position: fixed;
     height: calc(100% - 58px);
     min-height: 0;
@@ -4332,7 +4332,7 @@ label {
 }
 
 .col-wrapper:nth-child(1) .isParent {
-    background: $whisper-new !important;
+    background: var(--whisper-new) !important;
 }
 
 .col-wrapper:last-child ul li a.isParent {
@@ -4349,39 +4349,39 @@ label {
 }
 
 .isAcc {
-    color: $nero !important;
+    color: var(--nero) !important;
 }
 
 .isSelectedgrp {
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 
 .isParent {
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 
 .isActive {
-    color: $white !important;
-    background: $deep-sky-blue;
-    border-color: $deep-sky-blue;
+    color: var(--white) !important;
+    background: var(--deep-sky-blue);
+    border-color: var(--deep-sky-blue);
 }
 
 .isActive:hover {
-    color: $white !important;
-    background: $deep-sky-blue-hover;
-    border-color: $deep-sky-blue-hover;
+    color: var(--white) !important;
+    background: var(--deep-sky-blue-hover);
+    border-color: var(--deep-sky-blue-hover);
 }
 
 .isParent.isActive {
-    color: $white !important;
-    background: $deep-sky-blue !important;
-    border-color: $deep-sky-blue;
+    color: var(--white) !important;
+    background: var(--deep-sky-blue) !important;
+    border-color: var(--deep-sky-blue);
 }
 
 .isParent.isActive:hover {
-    color: $white !important;
-    background: $deep-sky-blue-hover !important;
-    border-color: $deep-sky-blue-hover;
+    color: var(--white) !important;
+    background: var(--deep-sky-blue-hover) !important;
+    border-color: var(--deep-sky-blue-hover);
 }
 
 .primary-color {
@@ -4415,27 +4415,27 @@ label {
 }
 
 .form-control::-webkit-input-placeholder {
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .form-control::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .form-control::-moz-placeholder {
     /* Firefox 19+ */
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .form-control:-ms-input-placeholder {
     /* IE 10+ */
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .form-control:-moz-placeholder {
     /* Firefox 18- */
-    color: $nobel;
+    color: var(--nobel);
 }
 
 label {
@@ -4448,12 +4448,12 @@ label {
 
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 #getGroupModal .detailed label {
     font-size: 14px;
-    color: $gray;
+    color: var(--gray);
 }
 
 .btn-add {
@@ -4462,11 +4462,11 @@ label {
 
 .btn-add:hover,
 .btn-add:focus {
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .pop-panel .ui-select-toggle {
@@ -4498,28 +4498,28 @@ label {
 
 #App_taxes .btn {
     padding: 4px;
-    background: $whisper-color;
-    color: $dark-gray;
+    background: var(--whisper-color);
+    color: var(--dark-gray);
     margin: 0 4px 5px 0;
 }
 
 #App_taxes .btn:hover {
-    background: $whisper-color;
-    color: $dark-gray;
+    background: var(--whisper-color);
+    color: var(--dark-gray);
     box-shadow: none;
 }
 
 #App_taxes .form-control {
-    background: $gray-95 !important;
-    border: 1px solid $gainsboro;
+    background: var(--gray-95) !important;
+    border: 1px solid var(--gainsboro);
 }
 
 .tax-bullet {
     display: inline-block;
     padding: 4px 8px;
-    color: $gray;
+    color: var(--gray);
     border-radius: 3px;
-    background: $whisper-color;
+    background: var(--whisper-color);
     margin: 0px 0 4px 4px;
 }
 
@@ -4580,14 +4580,14 @@ label {
 
 .accmerge li a {
     padding: 4px 8px;
-    color: $gray;
-    background: $whisper-color;
+    color: var(--gray);
+    background: var(--whisper-color);
     float: left;
     border-radius: 2px;
 }
 
 .accmerge li a.isActive {
-    color: $gray;
+    color: var(--gray);
 }
 
 .accmerge li > a > span {
@@ -4602,7 +4602,7 @@ label {
 }
 
 .accmerge li > a.isActive > span {
-    color: $white;
+    color: var(--white);
 }
 
 #getGroupModal hr {
@@ -4610,7 +4610,7 @@ label {
 }
 
 /*#getGroupModal small {
-    color: $very-light-gray;
+    color: var(--very-light-gray);
 }*/
 
 .breadcrumb {
@@ -4624,15 +4624,15 @@ label {
     padding-left: 4px;
     content: ">";
     font-size: 13px;
-    color: $gray;
+    color: var(--gray);
 }
 
 .breadcrumb > .active > a {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
 }
 
 .breadcrumb a {
-    color: $gray;
+    color: var(--gray);
 }
 
 .load-bar-wrap {
@@ -4645,7 +4645,7 @@ label {
 
 .new-btn {
     position: absolute;
-    background: $white;
+    background: var(--white);
     top: 0;
     padding: 4px 0;
     width: 100%;
@@ -4667,7 +4667,7 @@ label {
     position: absolute;
     height: 100%;
     z-index: 99;
-    background: $white;
+    background: var(--white);
     width: 100%;
     left: 0;
     display: table;
@@ -4706,7 +4706,7 @@ label {
     position: absolute;
     top: 22px;
     right: 8px;
-    color: $gray;
+    color: var(--gray);
 }
 
 .gst {
@@ -4743,7 +4743,7 @@ label {
 
 #manufacture .form-theme tbody tr td {
     padding: 7px 0;
-    color: $matterhorn;
+    color: var(--matterhorn);
 }
 
 #manufacture select showGiddhDatepicker {
@@ -4765,7 +4765,7 @@ label {
 }
 
 #manufacture .bd-rt {
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 #manufacture thead th {
@@ -4773,17 +4773,17 @@ label {
 }
 
 #manufacture .source thead {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 #manufacture .source .linkstock {
     height: auto;
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 #manufacture .source .linkstock thead th,
 #manufacture .source .linkstock tfoot tr th {
-    color: $night-rider;
+    color: var(--night-rider);
     font-weight: 100;
 }
 
@@ -4812,7 +4812,7 @@ label {
     width: 10px;
     height: 2px;
     display: inline-block;
-    background-color: $gainsboro;
+    background-color: var(--gainsboro);
     position: absolute;
     top: 50%;
     left: 0;
@@ -4828,7 +4828,7 @@ label {
     position: absolute;
     top: 20px;
     width: 2px;
-    background: $gainsboro-light;
+    background: var(--gainsboro-light);
     left: -2px;
 }
 
@@ -4873,7 +4873,7 @@ label {
 
 .companyGst .gst {
     padding-bottom: 20px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .Default_box {
@@ -4885,7 +4885,7 @@ label {
 }
 
 .grey-color {
-    color: $gray;
+    color: var(--gray);
 }
 
 .grp-col::-webkit-scrollbar {
@@ -4895,13 +4895,13 @@ label {
 }
 
 .grp-col::-webkit-scrollbar-track {
-    background: $whisper-light;
+    background: var(--whisper-light);
     margin-left: 255px;
 }
 
 .grp-col::-webkit-scrollbar-thumb {
-    background-color: $nobel;
-    outline: 1px solid $gray;
+    background-color: var(--nobel);
+    outline: 1px solid var(--gray);
     margin-left: 255px;
 }
 
@@ -4941,7 +4941,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: var(--whisper-new);
     content: "";
     top: -15px;
 }
@@ -4969,7 +4969,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: var(--whisper-new);
     content: "";
 }
 
@@ -4985,13 +4985,13 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-track {
-    background: $white-smoke;
+    background: var(--white-smoke);
     margin-left: 255px;
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: $nobel;
-    outline: 1px solid $gray;
+    background-color: var(--nobel);
+    outline: 1px solid var(--gray);
     margin-left: 255px;
 }
 
@@ -5060,19 +5060,19 @@ label {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-    color: $white;
+    color: var(--white);
 }
 
 .pagination > li > a:focus,
 .pagination > li > a:hover,
 .pagination > li > span:focus,
 .pagination > li > span:hover {
-    background-color: $gainsboro !important;
-    border-color: $gainsboro;
+    background-color: var(--gainsboro) !important;
+    border-color: var(--gainsboro);
 }
 
 #manufacture .section-title {
-    color: $dark-gray;
+    color: var(--dark-gray);
     font-size: 20px;
     line-height: 34px;
     vertical-align: middle;
@@ -5082,7 +5082,7 @@ label {
     border-radius: 0px !important;
     padding: 6px !important;
     outline: 0;
-    color: $dark-gray;
+    color: var(--dark-gray);
     font-size: 14px;
     box-shadow: none;
 }
@@ -5099,7 +5099,7 @@ label {
 
 .select2-container--default
 .select2-results__option--highlighted[aria-selected] {
-    background-color: $night-rider !important;
+    background-color: var(--night-rider) !important;
 }
 
 .select2-results__option[aria-selected] {
@@ -5138,7 +5138,7 @@ label {
 }
 
 .add-new-role-modal .dropdown-menu li label {
-    color: $gray;
+    color: var(--gray);
     font-weight: normal;
 }
 
@@ -5148,8 +5148,8 @@ label {
 }
 
 #single-role .panel-heading {
-    background: $very-light-gray;
-    color: $white;
+    background: var(--very-light-gray);
+    color: var(--white);
     border-radius: 0;
 }
 
@@ -5172,14 +5172,14 @@ label {
 }
 
 #single-role .panel-body tbody tr:nth-child(1) td {
-    background: $white;
+    background: var(--white);
     border-right: 0;
 }
 
 #single-role .panel-body label {
     font-size: 14px;
     text-transform: capitalize;
-    color: $gray;
+    color: var(--gray);
 }
 
 #single-role table {
@@ -5189,13 +5189,13 @@ label {
 /*************************************************** Dashboard CSS  ****************************************************/
 
 #dashboard .panel-default {
-    color: $dark-liver;
-    border-color: $gainsboro;
+    color: var(--dark-liver);
+    border-color: var(--gainsboro);
 }
 
 #dashboard .panel-default > .panel-heading {
     background-color: transparent;
-    /* border-color: $gainsboro; */
+    /* border-color: var(--gainsboro); */
     border: 0;
 }
 
@@ -5205,7 +5205,7 @@ label {
 
 #dashboard .panel-heading i {
     position: relative;
-    color: $gray;
+    color: var(--gray);
     padding: 8px 10px;
 }
 
@@ -5223,12 +5223,12 @@ label {
     position: absolute;
     width: 18px;
     height: 18px;
-    background: $white;
+    background: var(--white);
     /* top: -2px;
     right: -2px; */
     top: 0;
     right: 0;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 50%;
 }
 
@@ -5237,7 +5237,7 @@ label {
     position: absolute;
     width: 8px;
     height: 8px;
-    background: $chetwode-blue;
+    background: var(--chetwode-blue);
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -5246,7 +5246,7 @@ label {
 }
 
 .radio-theme:checked:before {
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--chetwode-blue);
 }
 
 .dropdown-container .dropdown-menu {
@@ -5278,11 +5278,11 @@ td
 .select2-container--default
 .select2-results__option--highlighted[aria-selected]
 a {
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 .ledger-row td .select2-results ul li a {
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 .ledger-row td .select2-container .select2-selection {
@@ -5292,7 +5292,7 @@ a {
 }
 
 .ledger-row td .select2-container .select2-search__field {
-    background: $romance !important;
+    background: var(--romance) !important;
 }
 
 /* .ledger-panel .dropdown-container .dropdown-menu li {
@@ -5303,7 +5303,7 @@ a {
 
 .dropdown-container .dropdown-menu li label span {
     max-width: calc(100% - 22px);
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 .dropdown-container .dropdown-menu {
@@ -5323,7 +5323,7 @@ a {
 }
 
 .sticky-footer {
-    background: $dark-gray;
+    background: var(--dark-gray);
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -5337,7 +5337,7 @@ a {
     border-radius: 0;
     border: 0;
     box-shadow: none;
-    background: $whisper-color;
+    background: var(--whisper-color);
 }
 
 #customInvoice .template-editor .btn-group-lg > .btn:focus {
@@ -5345,11 +5345,11 @@ a {
 }
 
 #customInvoice .template-editor .btn-group-lg > .btn:hover {
-    background: $white;
+    background: var(--white);
 }
 
 #customInvoice {
-    background: $solitude;
+    background: var(--solitude);
     height: calc(100vh - 70px);
 }
 
@@ -5370,8 +5370,8 @@ a {
 #customInvoice .template-editor .form-control,
 #customInvoice .template-editor .table > tbody > tr > td .form-control {
     margin: 7px 0;
-    background: $white;
-    border-color: $gainsboro;
+    background: var(--white);
+    border-color: var(--gainsboro);
     border-radius: 2px;
 }
 
@@ -5450,7 +5450,7 @@ a {
     width: 50px;
     height: 50px;
     float: left;
-    background: $white url("../images/designTool.svg") no-repeat;
+    background: var(--white) url("../images/designTool.svg") no-repeat;
     background-size: 65px;
 }
 
@@ -5485,12 +5485,12 @@ a {
 }
 
 .template-view li img {
-    background: $white;
+    background: var(--white);
     height: 100%;
     width: 100%;
     object-fit: contain;
     border-radius: 4px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 .logo-preview {
@@ -5502,7 +5502,7 @@ a {
     width: 100px;
     height: 100px;
     float: left;
-    background: $white;
+    background: var(--white);
     object-fit: contain;
 }
 
@@ -5514,18 +5514,18 @@ a {
     font-weight: bold;
     list-style: none;
     display: inline-block;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 50%;
     width: 30px;
     text-align: center;
     height: 30px;
     line-height: 30px;
-    color: $gainsboro;
+    color: var(--gainsboro);
 }
 
 .logo-tool ul li:hover {
-    border-color: $dark-gray;
-    color: $dark-gray;
+    border-color: var(--dark-gray);
+    color: var(--dark-gray);
 }
 
 .swatch-preview span {
@@ -5562,14 +5562,14 @@ a {
 }
 
 .scroll-auto::-webkit-scrollbar-track {
-    background: $gainsboro-light;
+    background: var(--gainsboro-light);
     /* margin-left: 255px; */
     border-radius: 8px;
 }
 
 .scroll-auto::-webkit-scrollbar-thumb {
-    background-color: $gainsboro;
-    outline: 1px solid $gray;
+    background-color: var(--gainsboro);
+    outline: 1px solid var(--gray);
     /* margin-left: 255px; */
     border-radius: 8px;
 }
@@ -5583,7 +5583,7 @@ a {
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
-    background-color: $whisper-light !important;
+    background-color: var(--whisper-light) !important;
 }
 
 input[type="checkbox"][disabled] {
@@ -5598,7 +5598,7 @@ input[type="checkbox"][disabled] {
 .top-bar {
     padding-top: 15px !important;
     padding-bottom: 15px !important;
-    border-bottom:0px solid $white;
+    border-bottom:0px solid var(--white);
     /* padding-left: 240px; */
 }
 
@@ -5614,8 +5614,8 @@ input[type="checkbox"][disabled] {
     font-size: 12px;
     line-height: 1.5;
     border-radius: 3px;
-    background: $whisper-light;
-    border: 1px solid $gainsboro;
+    background: var(--whisper-light);
+    border: 1px solid var(--gainsboro);
 }
 
 .dashboard-filter label {
@@ -5629,14 +5629,14 @@ input[type="checkbox"][disabled] {
 }
 
 .input-group-btn .btn-default {
-    background: $whisper-light;
-    border: 1px solid $gainsboro;
-    color: $charcoal;
+    background: var(--whisper-light);
+    border: 1px solid var(--gainsboro);
+    color: var(--charcoal);
 }
 
 .input-group-btn .btn-default:hover {
-    background: $whisper-light;
-    border: 1px solid $gainsboro;
+    background: var(--whisper-light);
+    border: 1px solid var(--gainsboro);
     box-shadow: none;
     outline: 0;
 }
@@ -5647,7 +5647,7 @@ input[type="checkbox"][disabled] {
 
 .subHead {
     font-size: 105%;
-    color: $night-rider;
+    color: var(--night-rider);
     padding-bottom: 10px;
 }
 
@@ -5684,8 +5684,8 @@ datepicker-inner .well table tbody tr td .btn-default {
 }
 
 datepicker-inner .well table tbody tr td .btn-default:hover {
-    background: $chetwode-blue !important;
-    color: $white !important;
+    background: var(--chetwode-blue) !important;
+    color: var(--white) !important;
     text-decoration: none;
     border-radius: 3px;
 }
@@ -5695,7 +5695,7 @@ datepicker-inner .well table tbody tr td .btn-default:hover span {
 }
 
 datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
-    color: $white;
+    color: var(--white);
 }
 
 datepicker-inner
@@ -5706,7 +5706,7 @@ tr
 td
 button.btn.btn-default.btn-info
 .text-success {
-    color: $green !important;
+    color: var(--green) !important;
 }
 
 datepicker-inner
@@ -5725,7 +5725,7 @@ tr
 td
 button.btn.btn-default.btn-link:hover
 .text-success {
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 .dropdown-menu.month-picker li a:hover {
@@ -5733,7 +5733,7 @@ button.btn.btn-default.btn-link:hover
 }
 
 datepicker-inner .well {
-    background-color: $white;
+    background-color: var(--white);
     border: none !important;
     box-shadow: none;
     margin: 0;
@@ -5744,7 +5744,7 @@ datepicker-inner .well table button.btn.btn-default.btn-sm {
     line-height: 1;
     background-color: transparent !important;
     font-size: 20px;
-    color: $night-rider !important;
+    color: var(--night-rider) !important;
     box-shadow: none !important;
 }
 
@@ -5762,7 +5762,7 @@ datepicker-inner .well table tbody .btn:active {
 
 datepicker-inner .well table tbody .btn.active .text-info,
 datepicker-inner .well table tbody .btn:active .text-info {
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 datepicker-inner .well table thead tr th .btn-secondary,
@@ -5779,7 +5779,7 @@ datepicker-inner .well table thead tr:nth-child(2) {
 
 datepicker-inner .well table tbody .btn-info .text-muted,
 datepicker-inner .well table tbody .btn-default.active {
-    color: $white;
+    color: var(--white);
 }
 
 .my-dropdown-menu datepicker-inner .well {
@@ -5792,7 +5792,7 @@ datepicker-inner .well table tbody .btn-default.active {
 
 .calendar-dropdown {
     /* box-shadow: none; */
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
     margin-top: 1px;
     border-radius: 2px;
 }
@@ -5817,7 +5817,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .form-bg {
-    background: $solitude;
+    background: var(--solitude);
 }
 
 .toggle-btn i {
@@ -5828,12 +5828,12 @@ input[type="checkbox"][disabled]:after {
 }
 
 .toggle-btn label {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
     font-size: 16px;
 }
 
 .table-container {
-    background: $white;
+    background: var(--white);
 }
 
 .table-container section div .group {
@@ -5860,12 +5860,12 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container thead tr th:first-child {
-    border-left: 6px solid $gainsboro;
+    border-left: 6px solid var(--gainsboro);
 }
 
 .table-container .account {
-    background: $solitude;
-    /* background: $whisper-light; */
+    background: var(--solitude);
+    /* background: var(--whisper-light); */
 }
 
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
@@ -5877,9 +5877,9 @@ input[type="checkbox"][disabled]:after {
 }
 
 .active-toggle-btn {
-    color: $white !important;
-    background-color: $chetwode-blue !important;
-    border-color: $chetwode-blue !important;
+    color: var(--white) !important;
+    background-color: var(--chetwode-blue) !important;
+    border-color: var(--chetwode-blue) !important;
 }
 
 .input-group-addon input[type="radio"] {
@@ -5891,15 +5891,15 @@ input[type="checkbox"][disabled]:after {
     position: absolute;
     width: 18px;
     height: 18px;
-    background: $white;
+    background: var(--white);
     top: -1px;
     right: -2px;
-    border: 1px solid $nobel;
+    border: 1px solid var(--nobel);
     border-radius: 50%;
 }
 
 .input-group-addon input[type="radio"]:checked:before {
-    border-color: $chetwode-blue;
+    border-color: var(--chetwode-blue);
 }
 
 .input-group-addon input[type="radio"]:checked:after {
@@ -5907,7 +5907,7 @@ input[type="checkbox"][disabled]:after {
     position: absolute;
     width: 10px;
     height: 10px;
-    background: $chetwode-blue;
+    background: var(--chetwode-blue);
     left: 0;
     top: 3px;
     border-radius: 50%;
@@ -5945,7 +5945,7 @@ input[type="checkbox"][disabled]:after {
 
 #verifyMobile .phoneNum ng-select > div > div.single > div.toggle {
     line-height: 46px;
-    color: $dark-liver;
+    color: var(--dark-liver);
     height: 44px;
 }
 
@@ -5998,21 +5998,21 @@ ng-select .select-drop i {
 }
 
 virtual-scroll .scrollable-content .item > a {
-    color: $nero;
+    color: var(--nero);
     padding: 10px;
     display: table-cell;
     vertical-align: middle;
     height: 100%;
 }
 virtual-scroll .scrollable-content .item:hover > a {
-    color: $chetwode-blue !important;
+    color: var(--chetwode-blue) !important;
 }
 virtual-scroll .scrollable-content .item > a .item-unique,
 virtual-scroll .scrollable-content .item > a .item-stock {
-    color: $moody-blue;
+    color: var(--moody-blue);
 }
 .customer-invoice-form virtual-scroll .scrollable-content .item > a {
-    color: $nero;
+    color: var(--nero);
     padding: 3px 10px;
     display: flex;
     vertical-align: middle;
@@ -6032,7 +6032,7 @@ virtual-scroll .scrollable-content .item>a{
     font-size: 14px !important;
 }
 virtual-scroll .scrollable-content .item.selected>a {
-    color: $chetwode-blue !important;
+    color: var(--chetwode-blue) !important;
 }
 
 virtual-scroll .scrollable-content .item:hover .item,
@@ -6053,9 +6053,9 @@ table input[type="number"] {
 }
 
 .btn-link {
-    color: $primary !important;
+    color: var(--primary) !important;
     &:hover {
-        color: $primary !important;
+        color: var(--primary) !important;
     }
 }
 
@@ -6063,7 +6063,7 @@ typeahead-container .dropdown-menu li.active > a,
 typeahead-container .dropdown-menu li:hover > a,
 typeahead-container .dropdown-menu > .active > a:hover,
 typeahead-container .dropdown-menu li.active > a > a:hover {
-    background-color: $solitude;
+    background-color: var(--solitude);
 }
 
 .has-item {
@@ -6075,7 +6075,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     right: 20px;
     top: 4px;
     line-height: 48px;
-    color: $white;
+    color: var(--white);
     opacity: 1;
     font-weight: 100;
     text-shadow: none;
@@ -6086,7 +6086,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 /**new modal design**/
 
 .welcome-header {
-    background: $white url("../images/Welcome.png") no-repeat center center;
+    background: var(--white) url("../images/Welcome.png") no-repeat center center;
     text-align: center;
     position: relative;
 }
@@ -6094,7 +6094,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .welcome-header h1 {
     font-size: 30px;
     font-family: "opensans-regular";
-    color: $midnight-blue;
+    color: var(--midnight-blue);
 }
 
 .welcome-header:after {
@@ -6200,8 +6200,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .btn-share,
 .btn-share:hover,
 .btn-share:focus {
-    background: $deep-sky-blue;
-    color: $white;
+    background: var(--deep-sky-blue);
+    color: var(--white);
 }
 
 .entry-modal {
@@ -6214,7 +6214,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .square-switch {
     width: 100%;
-    background: $white;
+    background: var(--white);
     height: 34px;
     line-height: 32px;
     margin: 0;
@@ -6227,9 +6227,9 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: relative;
     transition: all 0.3s ease;
     width: 100%;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 2px;
-    color: $dark-gray;
+    color: var(--dark-gray);
     padding: 0 7px;
     height: 34px;
 }
@@ -6240,7 +6240,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .square-switch input[type="checkbox"]:checked ~ label {
     background: #28ab00;
-    color: $white;
+    color: var(--white);
 }
 
 .square-switch > input[type="checkbox"] {
@@ -6249,7 +6249,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .square-switch input[type="checkbox"] ~ label::after {
     content: " ";
-    background: $very-light-gray;
+    background: var(--very-light-gray);
     position: absolute;
     height: 34px;
     width: 28px;
@@ -6270,7 +6270,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .user-list {
     padding: 15px 0;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     overflow: hidden;
 }
 
@@ -6279,8 +6279,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .option-box {
-    background: $lavender;
-    border-bottom: 1px solid $gainsboro;
+    background: var(--lavender);
+    border-bottom: 1px solid var(--gainsboro);
     margin-bottom: 10px;
 }
 
@@ -6301,17 +6301,17 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px !important;
-    border-bottom: 1px solid $gainsboro;
-    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
+    border-right: 1px solid var(--gainsboro);
     font-size: 13px;
-    color: $dark-liver;
+    color: var(--dark-liver);
     text-overflow: ellipsis;
     /* // overflow: hidden; */
     white-space: nowrap;
 }
 
 .ledger-row:hover {
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
 }
 
 .ledg-head table td.pdR25imp {
@@ -6321,10 +6321,10 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid $gainsboro;
-    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
+    border-right: 1px solid var(--gainsboro);
     font-size: 13px;
-    color: $dark-liver;
+    color: var(--dark-liver);
     text-overflow: ellipsis;
     /* overflow: hidden; */
     white-space: nowrap;
@@ -6363,8 +6363,8 @@ table td[class*=col-]:last-child {
 
 .ledger-stat {
     padding: 50px 0;
-    background: $white;
-    color: $gray;
+    background: var(--white);
+    color: var(--gray);
     font-size: 18px;
     margin: 100px 0;
 }
@@ -6407,7 +6407,7 @@ table td[class*=col-]:last-child {
     width: 50%;
     left: 25%;
     bottom: 100px;
-    background: $white;
+    background: var(--white);
     padding: 5px;
     font-size: 12px;
 }
@@ -6429,23 +6429,23 @@ table td[class*=col-]:last-child {
 }
 
 .thead-background1 th {
-    background: $solitude;
-    color: $dark-liver;
-    border-right: 1px solid $gainsboro;
+    background: var(--solitude);
+    color: var(--dark-liver);
+    border-right: 1px solid var(--gainsboro);
     padding: 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .ledger-book {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     clear: both;
     /* // overflow: hidden; */
     position: relative;
-    background: $white;
+    background: var(--white);
     float: left;
     width: 100%;
-    background: $white;
+    background: var(--white);
 }
 
 .Width600 {
@@ -6477,7 +6477,7 @@ table td[class*=col-]:last-child {
 //     bottom: 0;
 //     width: 1px;
 //     height: 100%;
-//     background: $very-light-gray;
+//     background: var(--very-light-gray);
 //     right: 1px;
 //     margin: 0 auto;
 // }
@@ -6513,8 +6513,8 @@ table td[class*=col-]:last-child {
 
 .form-header {
     padding: 20px 15px;
-    background: $midnight-blue;
-    color: $white;
+    background: var(--midnight-blue);
+    color: var(--white);
 }
 
 .form-header h3 {
@@ -6523,24 +6523,24 @@ table td[class*=col-]:last-child {
 }
 
 .form-body {
-    background: $white;
+    background: var(--white);
     /* padding: 15px; */
 }
 
 .no-hover:hover td {
-    background: $white !important;
+    background: var(--white) !important;
 }
 
 /* .universal-date label {
-    color: $white;
+    color: var(--white);
 } */
 
 .universal-date .btn-link {
-    color: $gray-95 !important;
+    color: var(--gray-95) !important;
     padding-top: 3px;
     padding-left: 0px;
     padding-right: 0px;
-    border-bottom: 1px solid $gray-95;
+    border-bottom: 1px solid var(--gray-95);
     padding-bottom: 0;
     border-radius: 0;
     margin-right: 0;
@@ -6575,21 +6575,21 @@ table td[class*=col-]:last-child {
 /* left bar menu */
 
 .form-body .toggle-btn label {
-    color: $gray;
+    color: var(--gray);
 }
 
 .user-dropdown-header {
     width: 270px;
     right: 4px;
     padding: 0px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     left: -15px !important;
 }
 
 .user-dropdown-header > li > a {
     font-size: 13px;
     padding: 6px 15px !important;
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 .app-list > ul {
@@ -6616,7 +6616,7 @@ table td[class*=col-]:last-child {
 }
 
 .footer-navigate {
-    background: $gray-95;
+    background: var(--gray-95);
     border-radius: 0 0 3px 3px;
 }
 
@@ -6630,12 +6630,12 @@ table td[class*=col-]:last-child {
     list-style-type: none;
     padding: 8px 20px;
     font-size: 11px;
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .app-list > ul li a {
     padding: 3px 0;
-    color: $davy-grey;
+    color: var(--davy-grey);
     display: block;
     position: relative;
     font-size: 12px;
@@ -6646,12 +6646,12 @@ table td[class*=col-]:last-child {
 }
 
 .app-list > ul li a:hover {
-    color: $black;
+    color: var(--black);
     background: none;
 }
 
 .user-circle {
-    background: $chetwode-blue;
+    background: var(--chetwode-blue);
     border-radius: 100%;
     margin-right: 10px;
     width: 30px;
@@ -6659,7 +6659,7 @@ table td[class*=col-]:last-child {
     display: inline-block;
     text-align: center;
     line-height: 30px;
-    color: $white;
+    color: var(--white);
     font-size: 14px;
     border: 1px solid var(--dark-blue);
     text-transform: uppercase;
@@ -6673,7 +6673,7 @@ table td[class*=col-]:last-child {
 .long-code-details figure ul li {
     list-style: none;
     padding: 12px 0;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .long-code-details figure ul li:last-child {
@@ -6681,7 +6681,7 @@ table td[class*=col-]:last-child {
 }
 
 .long-code-details figure ul {
-    background: $solitude;
+    background: var(--solitude);
     margin-bottom: 10px;
 }
 
@@ -6716,12 +6716,12 @@ table td[class*=col-]:last-child {
         height: 1px;
         margin: 9px 0;
         overflow: hidden;
-        background-color: $whisper-color;
+        background-color: var(--whisper-color);
     }
     >li{
         >a {
             padding: 4px 10px;
-            color: $nero;
+            color: var(--nero);
             display:block;
             line-height: 1.4;
         }
@@ -6816,7 +6816,7 @@ table td[class*=col-]:last-child {
     position: absolute;
     top: 2px;
     right: -48px;
-    background: $whisper-light;
+    background: var(--whisper-light);
     border-radius: 100%;
     padding: 7px 7px;
     text-transform: uppercase;
@@ -6828,7 +6828,7 @@ table td[class*=col-]:last-child {
     position: absolute;
     height: 41px;
     width: 2px;
-    background: $whisper-color;
+    background: var(--whisper-color);
     top: 29px;
     left: 19px;
     z-index: -1;
@@ -6843,13 +6843,13 @@ table td[class*=col-]:last-child {
     position: absolute;
     height: 2px;
     width: 30px;
-    background: $whisper-color;
+    background: var(--whisper-color);
     top: 68px;
     left: -10px;
 }
 
 .dropdown-option li a:hover {
-    background: $solitude;
+    background: var(--solitude);
 }
 
 .text-link,
@@ -6866,7 +6866,7 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .tbpl-dropdown > li:last-child {
@@ -6874,12 +6874,12 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li:hover a {
-    background: $solitude;
+    background: var(--solitude);
 }
 
 .tbpl-dropdown .caret {
     transform: rotate(180deg);
-    border-top: 7px dashed $autumn-fog;
+    border-top: 7px dashed var(--autumn-fog);
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     position: absolute;
@@ -6910,7 +6910,7 @@ panel.sFthanks.fieldset {
 
 .unit_action .btn {
     margin-right: 0;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     opacity: 0.5;
 }
 
@@ -6926,7 +6926,7 @@ panel.sFthanks.fieldset {
 
 .unit_action .isSelected {
     opacity: 1;
-    background-color: $white !important;
+    background-color: var(--white) !important;
 }
 
 /* ===============================================================
@@ -6939,7 +6939,7 @@ GST filing
 
 .tax-engine .column.list-column {
     display: block;
-    border-right: 1px solid $whisper;
+    border-right: 1px solid var(--whisper);
 }
 
 .tax-engine .column {
@@ -6962,7 +6962,7 @@ GST filing
 
 .tax-engine .list-filter {
     padding: 15px !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
     height: 80px;
 }
 
@@ -7056,12 +7056,12 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .cmp:hover,
 .user-dropdown-header > li a:hover .user-name-wrap small {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .user-dropdown-header > li a:hover {
-    color: $chetwode-blue;
-    background: $lavender;
+    color: var(--chetwode-blue);
+    background: var(--lavender);
 }
 
 .hamburger-menu button,
@@ -7081,7 +7081,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-size: 20px;
     text-transform: capitalize;
     width: auto;
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     font-family: 'opensans-semibold';
     vertical-align: middle;
 }
@@ -7134,7 +7134,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .dropdown-menu li .help-text,
 .tax-engine .modal-header .help-text,
 .tax-engine .text-muted {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .space {
@@ -7154,7 +7154,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .nav-tabs > li a {
     font-size: 15px;
-    color: $davy-grey;
+    color: var(--davy-grey);
     margin-right: 0;
     height: 100%;
     padding: 14px 40px;
@@ -7184,7 +7184,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary {
@@ -7205,7 +7205,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .transactions-overview
 .gstr-transactions-summary
 .transactions-table {
-    border: 1px solid $whisper;
+    border: 1px solid var(--whisper);
 }
 
 .tax-engine .table.transactions-table,
@@ -7229,11 +7229,11 @@ th:first-child {
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
     font-size: 14px;
-    border-bottom: 1px solid $whisper;
+    border-bottom: 1px solid var(--whisper);
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
@@ -7243,7 +7243,7 @@ th:first-child {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .tax-engine .table caption + thead tr:first-child td,
@@ -7256,8 +7256,8 @@ th:first-child {
 }
 
 .tax-engine .table thead > tr > th {
-    border-bottom: 1px solid $gainsboro;
-    color: $dark-gray;
+    border-bottom: 1px solid var(--gainsboro);
+    color: var(--dark-gray);
 }
 
 .tax-engine .table.transactions-table tbody > tr > td {
@@ -7269,7 +7269,7 @@ th:first-child {
 
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: $snow;
+    background-color: var(--snow);
 }
 
 .tax-engine .table tbody > tr > td,
@@ -7281,7 +7281,7 @@ th:first-child {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .tax-engine
@@ -7290,7 +7290,7 @@ th:first-child {
 > tr:not(.secondary-row)
 + tr.secondary-row
 > td {
-    border-top: 1px solid $whisper;
+    border-top: 1px solid var(--whisper);
 }
 
 .tax-engine
@@ -7303,8 +7303,8 @@ th:first-child {
 
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
-    background-color: $white;
-    border-right: 1px solid $whisper;
+    background-color: var(--white);
+    border-right: 1px solid var(--whisper);
     font-size: 13px;
     padding: 13px;
 }
@@ -7351,7 +7351,7 @@ th:first-child {
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a,
 .tax-engine .sub-filter-nav-bandnew ul > li.active > a {
-    color: $gray;
+    color: var(--gray);
     font-weight: 600;
 }
 
@@ -7411,7 +7411,7 @@ th:first-child {
 }
 
 .tax-engine .transactions-list .filter-band {
-    background-color: $alice-blue-dark;
+    background-color: var(--alice-blue-dark);
     padding: 20px;
     height: 66px;
 }
@@ -7459,8 +7459,8 @@ th:first-child {
 .tax-engine .transactions-list .filter-band .btn,
 .tax-engine .transactions-list .filter-band .btn:focus,
 .tax-engine .transactions-list .filter-band .btn:hover {
-    color: $primary;
-    border-color: $primary;
+    color: var(--primary);
+    border-color: var(--primary);
     background-color: transparent;
     box-shadow: none;
 }
@@ -7474,7 +7474,7 @@ th:first-child {
 .tax-engine .transactions-list .filter-band .btn .caret,
 .tax-engine .transactions-list .filter-band .btn:focus .caret,
 .tax-engine .transactions-list .filter-band .btn:hover .caret {
-    border-top-color: $primary;
+    border-top-color: var(--primary);
 }
 
 .tax-engine .caret {
@@ -7483,7 +7483,7 @@ th:first-child {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid $black;
+    border-top: 4px solid var(--black);
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -7514,8 +7514,8 @@ th:first-child {
 }
 
 .tax-engine .transactions-overview .transaction-info:hover {
-    border: 1px solid $gainsboro;
-    box-shadow: 0 0 20px 3px $snow;
+    border: 1px solid var(--gainsboro);
+    box-shadow: 0 0 20px 3px var(--snow);
 }
 
 .tax-engine .transactions-overview .transaction-info {
@@ -7557,15 +7557,15 @@ th:first-child {
     font-style: italic;
     padding: 14px 25px;
     font-size: 13px;
-    color: $curious-blue;
+    color: var(--curious-blue);
 }
 
 .tax-engine .sub-filter-nav-band > ul > li .count {
-    color: $red;
+    color: var(--red);
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a {
-    color: $gray;
+    color: var(--gray);
     font-weight: 600;
     border: 0;
 }
@@ -7575,7 +7575,7 @@ th:first-child {
 }
 
 .tax-engine .table.reconciliations-table {
-    border-bottom: 1px solid $whisper;
+    border-bottom: 1px solid var(--whisper);
 }
 
 .tax-engine .table-fixed {
@@ -7583,7 +7583,7 @@ th:first-child {
 }
 
 .zi-table {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     table-layout: fixed;
 }
 
@@ -7593,7 +7593,7 @@ th:first-child {
 }
 
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .list-column.expanded-list-column .zi-table tr td:first-of-type,
@@ -7617,7 +7617,7 @@ th:first-child {
 }
 
 .zi-table.table-hover tbody tr:hover td {
-    background-color: $gray-98;
+    background-color: var(--gray-98);
     cursor: pointer;
 }
 
@@ -7630,7 +7630,7 @@ th:first-child {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .tax-engine .details .details-info,
@@ -7648,7 +7648,7 @@ th:first-child {
 }
 
 .tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
-    border-right: 1px solid $whisper;
+    border-right: 1px solid var(--whisper);
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown {
@@ -7662,7 +7662,7 @@ th:first-child {
 tbody
 > tr:hover
 .actions-dropdown-btn {
-    border: 1px solid $primary;
+    border: 1px solid var(--primary);
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown-btn,
@@ -7671,11 +7671,11 @@ tbody
 tbody
 > tr:hover
 .reconcile-row-action {
-    color: $primary;
+    color: var(--primary);
 }
 
 .tax-engine .table.reconciliations-table .unrecognized-value {
-    color: $red;
+    color: var(--red);
 }
 
 /*.tax-engine .table.reconciliations-table .recognized-value,
@@ -7684,18 +7684,18 @@ tbody
 }*/
 
 .tax-engine .reconciliation-accepted {
-    color: $bright-green;
+    color: var(--bright-green);
 }
 
 .zi-table.table thead > tr > th {
-    color: $oxford-blue;
-    background: $white;
+    color: var(--oxford-blue);
+    background: var(--white);
     font-weight: 700;
     font-size: 14px;
     text-transform: capitalize;
     -webkit-font-smoothing: antialiased;
-    border-top: 1px solid $gainsboro;
-    border-bottom: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .subtabs-box1 {
@@ -7703,21 +7703,21 @@ tbody
 }
 
 .transactions-overview {
-    background: $white;
+    background: var(--white);
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
-    color: $gray;
+    color: var(--gray);
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: $snow;
+    background-color: var(--snow);
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(even) > th {
-    background-color: $white;
+    background-color: var(--white);
 }
 
 .tax-engine .sub-filter-nav-band .nav-tabs > li.active > a::before {
@@ -7725,12 +7725,12 @@ tbody
 }
 
 .tax-engine {
-    background: $white;
+    background: var(--white);
 }
 
 .tax-engine .header-band {
     width: 100%;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     padding: 5px 0;
     margin-bottom: 15px;
 }
@@ -7744,12 +7744,12 @@ tbody
 }
 
 .tax-engine .return-sel {
-    background-color: $gray-95;
+    background-color: var(--gray-95);
     border-radius: 18px;
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 .tax-engine svg.icon.filing-step-icon {
@@ -7759,7 +7759,7 @@ tbody
 }
 
 .push-gstin .nav.nav-tabs {
-    background: $white;
+    background: var(--white);
 }
 
 .push-gstin .nav.nav-tabs > li > a:hover,
@@ -7769,7 +7769,7 @@ tbody
 
 .tax-engine .gstr-transactions-summary .table > tbody > tr.row-hover:hover {
     cursor: pointer;
-    background-color: $gray-98;
+    background-color: var(--gray-98);
 }
 
 .tax-engine
@@ -7802,11 +7802,11 @@ app-header {
 }
 
 .invalid-inp {
-    border: 2px solid $red;
+    border: 2px solid var(--red);
 }
 
 .text-danger {
-    color: $red;
+    color: var(--red);
 }
 
 #ngb-typeahead-1 {
@@ -7827,11 +7827,11 @@ app-header {
 }
 
 .error-box {
-    border: 2px solid $red;
+    border: 2px solid var(--red);
 }
 
 .text-warning {
-    color: $orange-peel;
+    color: var(--orange-peel);
 }
 
 .heightVH-100 {
@@ -7862,20 +7862,20 @@ app-header {
     background-color: transparent;
     border: none;
     display: block;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     width: 100%;
     text-align: left;
     padding: 6px;
 }
 
 #form-place .dropdown-menu .dropdown-item:hover {
-    background-color: $solitude;
+    background-color: var(--solitude);
 }
 
 /* sticky footer css merged */
 
 .sticky-footer.sticky-footer-sale-amount {
-    background: $white;
+    background: var(--white);
     padding: 10px;
     box-shadow: 0 0px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
@@ -7896,12 +7896,12 @@ app-header {
 
 .sticky-footer-sale-amount .totalSale h3 {
     font-size: 20px;
-    color: $aluminum;
+    color: var(--aluminum);
     padding-right: 13px;
 }
 
 .sticky-footer-sale-amount h2 {
-    color: $night-rider;
+    color: var(--night-rider);
     font-size: 32px;
     margin-top: 3px;
 }
@@ -7948,11 +7948,11 @@ app-header {
 }
 
 .selection-none *::selection {
-    background: $white;
+    background: var(--white);
 }
 
 .selection-none-header *::selection {
-    background: $chablis;
+    background: var(--chablis);
 }
 
 .word-break {
@@ -8088,7 +8088,7 @@ div#getGroupModal {
 .invoice-footer {
     display: flex;
     padding: 20px;
-    background: $white;
+    background: var(--white);
     margin-top: 60px;
     position: fixed;
     width: 100%;
@@ -8102,7 +8102,7 @@ div#getGroupModal {
     left: 215px;
     display: flex;
     padding: 20px;
-    background: $white;
+    background: var(--white);
     margin-top: 60px;
     position: fixed;
     width: 100%;
@@ -8117,7 +8117,7 @@ ul#dropdown-nested li {
 }
 
 ul#dropdown-nested li a {
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 ul#dropdown-nested li:hover .dropdown-menu {
@@ -8129,7 +8129,7 @@ ul#dropdown-nested li:hover .dropdown-menu {
 }
 
 ul#dropdown-nested .dropdown-menu li .dropdown-item {
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 ul#dropdown-nested li:hover a,
@@ -8169,7 +8169,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     width: 0px;
     height: 0px;
     display: block;
-    border-top: 5px solid $gray-75;
+    border-top: 5px solid var(--gray-75);
     border-bottom: 5px solid transparent;
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
@@ -8179,7 +8179,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .welcome-header hr {
-    border-top-color: $heather;
+    border-top-color: var(--heather);
 }
 
 .btn-group-voucher-type label {
@@ -8194,7 +8194,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .welcome-container .select-box .custom-select input.form-control.selectedVal.cp,
 .welcome-container .select-box input,
 .welcome-container .select-box textarea {
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 .welcome-container input::placeholder {
@@ -8206,20 +8206,20 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .agingPage .icon-pointer .fa.fa-long-arrow-up {
-    color: $dim-gray;
+    color: var(--dim-gray);
 }
 
 .icon-pointer .fa.fa-long-arrow-up {
-    color: $dim-gray;
+    color: var(--dim-gray);
 }
 
 span.red-text {
-    color: $red;
+    color: var(--red);
 }
 
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
-    background: $white !important;
+    background: var(--white) !important;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 
@@ -8228,7 +8228,7 @@ span.red-text {
 }
 
 .welcome-header hr {
-    border-top-color: $heather;
+    border-top-color: var(--heather);
 }
 
 .no-select {
@@ -8247,8 +8247,8 @@ span.red-text {
 }
 
 .icon-btn .btn-xs {
-    border: 1px solid $gainsboro;
-    background-color: $whisper-light;
+    border: 1px solid var(--gainsboro);
+    background-color: var(--whisper-light);
 }
 
 .modal.fade.open-popup.in.show {
@@ -8277,7 +8277,7 @@ span.red-text {
 }
 
 .hamburger-menu i.icon-bar {
-    color: $midnight-blue;
+    color: var(--midnight-blue);
 }
 
 .page-count span {
@@ -8295,7 +8295,7 @@ span.red-text {
 }
 
 .total-sales-tabs .nav-tabs li a {
-    color: $charcoal;
+    color: var(--charcoal);
     font-size: 16px;
     padding: 0 5px;
     position: relative;
@@ -8306,7 +8306,7 @@ span.red-text {
     content: "";
     height: 15px;
     width: 1px;
-    background-color: $charcoal;
+    background-color: var(--charcoal);
     right: 0;
     top: 5px;
 }
@@ -8354,32 +8354,32 @@ span.red-text {
 }
 
 .ratio-chart-block:first-child span.pie-text_center {
-    color: $primary;
+    color: var(--primary);
 }
 
 .ratio-chart-block:nth-child(2) span.pie-text_center {
-    color: $vivid-orange;
+    color: var(--vivid-orange);
 }
 
 .ratio-chart-block:nth-child(3) span.pie-text_center {
-    color: $violet-red;
+    color: var(--violet-red);
 }
 
 .ratio-chart-block:nth-child(4) span.pie-text_center {
-    color: $java;
+    color: var(--java);
 }
 
 .dashboard-container input[type="checkbox"]:checked:after {
-    background-color: $chetwode-blue;
-    border: 1px solid $chetwode-blue;
+    background-color: var(--chetwode-blue);
+    border: 1px solid var(--chetwode-blue);
 }
 
 .dashboard-container input[type="checkbox"]:checked:before {
-    border-color: $white;
+    border-color: var(--white);
 }
 
 .dashboard-container input[type="checkbox"]:after {
-    border: 1px solid $nobel;
+    border: 1px solid var(--nobel);
 }
 
 .table-custom-invoice ul.dropdown-menu {
@@ -8398,7 +8398,7 @@ ul.dropdown-menu p.lead.pd {
 
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
-    border-bottom: 4px solid $deep-sky-blue !important;
+    border-bottom: 4px solid var(--deep-sky-blue) !important;
     font-family: 'opensans-semibold';
     background-color: inherit;
 }
@@ -8408,8 +8408,8 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .dropdown-menu>li>a:hover {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--chetwode-blue) !important;
+    background: var(--lavender) !important;
 }
 
 .debit-blank-row td .form-control,
@@ -8441,7 +8441,7 @@ ul.dropdown-menu p.lead.pd {
 #invoice-setting ul.nav.nav-tabs a {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-family: "opensans-regular";
-    color: $charcoal !important;
+    color: var(--charcoal) !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
     border-radius: 4px;
@@ -8452,13 +8452,13 @@ ul.dropdown-menu p.lead.pd {
 }
 
 #invoice-setting .nav > li > a.active {
-    border: 1px solid $deep-sky-blue !important;
-    border-bottom-color: $deep-sky-blue !important;
-    color: $deep-sky-blue !important;
+    border: 1px solid var(--deep-sky-blue) !important;
+    border-bottom-color: var(--deep-sky-blue) !important;
+    color: var(--deep-sky-blue) !important;
 }
 
 #invoice-setting .nav > li > a.active span {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
 }
 
 .aging-table th .table-checkbox {
@@ -8467,17 +8467,17 @@ ul.dropdown-menu p.lead.pd {
 
 .btn-lg.btn-primary {
     min-width: 155px;
-    background: $white;
-    color: $chetwode-blue;
+    background: var(--white);
+    color: var(--chetwode-blue);
     box-shadow: none;
 }
 
 .btn-lg.btn-primary:hover {
-    background: $chetwode-blue;
-    color: $white;
-    box-shadow: 0px 4px 4px -3px $dim-gray;
+    background: var(--chetwode-blue);
+    color: var(--white);
+    box-shadow: 0px 4px 4px -3px var(--dim-gray);
     border-radius: 0px;
-    border-color: $chetwode-blue;
+    border-color: var(--chetwode-blue);
 }
 
 .aside-panel-ledger button.btn.btn-lg.btn-primary {
@@ -8488,7 +8488,7 @@ ul.dropdown-menu p.lead.pd {
 .setting-page ul.nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
     z-index: 9;
     position: relative;
     top: -2px;
@@ -8501,7 +8501,7 @@ ul.dropdown-menu p.lead.pd {
     left: 0;
     width: 100%;
     padding: 10px 0px 0 50px !important;
-    border-bottom:1px solid $gainsboro;
+    border-bottom:1px solid var(--gainsboro);
 }
 
 .gstr-tabs-head .nav.nav-tabs{
@@ -8514,11 +8514,11 @@ ul.dropdown-menu p.lead.pd {
     margin-right: 25px;
     padding-bottom: 7px;
     font-size: 14px;
-    color: $night-rider !important;
+    color: var(--night-rider) !important;
 }
 
 .setting-page .nav > li > a:hover {
-    color: $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
 }
 
 #tab-integration .nav-tabs {
@@ -8531,7 +8531,7 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .setting-page .nav > li > a.active {
-    color: $nero !important;
+    color: var(--nero) !important;
 }
 
 #tab-integration .nav-tabs > li {
@@ -8545,26 +8545,26 @@ ul.dropdown-menu p.lead.pd {
 }
 
 #tab-integration .nav-tabs > li a:hover {
-    background-color: $white !important;
+    background-color: var(--white) !important;
 }
 
 #tab-integration .nav-tabs > li a.active {
-    border: 1px solid $deep-sky-blue !important;
+    border: 1px solid var(--deep-sky-blue) !important;
     font-family: "opensans-regular";
-    color: $deep-sky-blue !important;
-    border-color: $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
+    border-color: var(--deep-sky-blue) !important;
 }
 
 #tab-integration .nav-tabs > li a.active span {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
 }
 
 .input-group-addon {
     padding: 5px 12px;
-    color: $davy-grey;
+    color: var(--davy-grey);
     text-align: center;
-    background-color: $whisper-light;
-    border: 1px solid $gainsboro;
+    background-color: var(--whisper-light);
+    border: 1px solid var(--gainsboro);
     border-left: none !important;
 }
 
@@ -8574,20 +8574,20 @@ ul.dropdown-menu p.lead.pd {
 
 .date-advance-search .icon-calender {
     height: 36px !important;
-    border-right: 1px solid $gainsboro !important;
-    color: $nobel !important;
+    border-right: 1px solid var(--gainsboro) !important;
+    color: var(--nobel) !important;
     cursor: pointer;
 }
 
 .date-advance-search .input-group input.form-control {
-    border-color: $gainsboro !important;
+    border-color: var(--gainsboro) !important;
 }
 
 .advance-icon {
     height: 36px !important;
     width: 36px !important;
-    border: 1px solid $gainsboro !important;
-    color: $gray !important;
+    border: 1px solid var(--gainsboro) !important;
+    color: var(--gray) !important;
 }
 
 .table-bordered > tbody > tr > td,
@@ -8596,15 +8596,15 @@ ul.dropdown-menu p.lead.pd {
 .table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
 .table-bordered > thead > tr > th {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 table.basic td {
-    color: $nero;
+    color: var(--nero);
 }
 
 .invoice-table td > a {
-    color: $nero;
+    color: var(--nero);
 }
 
 button.btn.btn-filter {
@@ -8650,7 +8650,7 @@ button.btn.btn-filter {
 
 .icon-sort-asc:hover,
 .icon-sort-dsc:hover {
-    color: $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
 }
 
 .amount-arrow .icon-sort-asc {
@@ -8663,7 +8663,7 @@ button.btn.btn-filter {
 }
 
 .td-search-box div i.icon-search:hover {
-    color: $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
 }
 
 .mobileCode .menu {
@@ -8673,12 +8673,12 @@ button.btn.btn-filter {
 .form-group sup {
     font-size: 14px;
     top: 0;
-    color: $red;
+    color: var(--red);
 }
 
 .aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs {
     padding: 0 !important;
-    background-color: $white !important;
+    background-color: var(--white) !important;
 }
 
 .aside-pane-form #asidePaneFormTabs .nav > li > a {
@@ -8710,11 +8710,11 @@ button.btn.btn-filter {
 }
 
 .select2-ledger .menu .item:hover {
-    background: $lavender !important;
+    background: var(--lavender) !important;
 }
 
 .select2-ledger .menu .item:hover a {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 
 button.ladda-button,
@@ -8732,11 +8732,11 @@ button.ladda-button .ladda-label {
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: $white;
+    color: var(--white);
 }
 
 .ng-select-wrap.liq.select-group .below {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     height: 36px;
     align-items: center;
     display: flex;
@@ -8744,7 +8744,7 @@ button.ladda-button .ladda-label {
 
 .ng-select-wrap.liq ng-select .below {
     width: 100% !important;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     height: 36px;
     display: flex;
     align-items: center;
@@ -8816,36 +8816,36 @@ p.remvBrnchName {
 }
 
 .aside-panel-ledger .btn-lg:hover {
-    background-color: $chetwode-blue !important;
-    border-color: $chetwode-blue !important;
-    color: $white !important;
+    background-color: var(--chetwode-blue) !important;
+    border-color: var(--chetwode-blue) !important;
+    color: var(--white) !important;
 }
 
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: $chetwode-blue !important;
+    background-color: var(--chetwode-blue) !important;
 }
 
 .theme-green .bs-datepicker-head {
-    background-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
 }
 
 .theme-green .bs-datepicker-body table td span.selected,
 .theme-green .bs-datepicker-body table td.selected span,
 .theme-green .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-green .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
 }
 
 .bs-datepicker-body table.days td.active:not(.select-start):before,
 .bs-datepicker-body table.days td.in-range:not(.select-start):before,
 .bs-datepicker-body table.days span.active:not(.select-start):before,
 .bs-datepicker-body table.days span.in-range:not(.select-start):before {
-    background: $lavender-light;
+    background: var(--lavender-light);
 }
 
 .theme-green .bs-datepicker-body table td.week span {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 
 .mobileNumberWidth .menu {
@@ -8853,7 +8853,7 @@ p.remvBrnchName {
 }
 
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     padding: 0 0px 0 0 !important;
     background-color: transparent;
     z-index: 9;
@@ -8902,12 +8902,12 @@ p.remvBrnchName {
 
 .create-acc-form li.highlighted.selected,
 .create-acc-form li.highlighted {
-    background-color: $lavender !important;
+    background-color: var(--lavender) !important;
 }
 
 .create-acc-form li.highlighted.selected .account-list-item,
 .create-acc-form li.highlighted .account-list-item {
-    color: $chetwode-blue !important;
+    color: var(--chetwode-blue) !important;
 }
 
 button {
@@ -8966,8 +8966,8 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom + .checkbox-custom-label:before,
 .radio-custom + .radio-custom-label:before {
     content: "";
-    background: $white;
-    border: 1px solid $gainsboro;
+    background: var(--white);
+    border: 1px solid var(--gainsboro);
     display: inline-block;
     vertical-align: middle;
     width: 18px;
@@ -8987,7 +8987,7 @@ input.checkbox-custom[type="checkbox"] {
     z-index: 1;
     width: 12px;
     height: 7px;
-    border: 2px solid $white;
+    border: 2px solid var(--white);
     border-top-style: none;
     border-right-style: none;
     transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
@@ -8998,23 +8998,23 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 .checkbox-custom:checked + .checkbox-custom-label:before {
-    background: $chetwode-blue;
-    border: 2px solid $chetwode-blue;
+    background: var(--chetwode-blue);
+    border: 2px solid var(--chetwode-blue);
 }
 
 .radio-custom + .radio-custom-label:before {
     border-radius: 50%;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 .radio-custom:checked + :before {
-    background: $chetwode-blue;
-    border: 1px solid $chetwode-blue;
-    box-shadow: inset 0px 0px 0px 4px $white;
+    background: var(--chetwode-blue);
+    border: 1px solid var(--chetwode-blue);
+    box-shadow: inset 0px 0px 0px 4px var(--white);
 }
 
 .checkbox-custom:focus + .checkbox-custom-label:before {
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--chetwode-blue);
 }
 
 /* radio & checkbox new CSS end */
@@ -9084,7 +9084,7 @@ input.form-control.focused {
     border: none !important;
     box-shadow: 0 5px 15px rgba(0,0,0,.5);
     position: relative;
-    background-color: $white;
+    background-color: var(--white);
     background-clip: padding-box;
     border-radius: 6px;
     outline: 0;
@@ -9151,7 +9151,7 @@ ngx-daterangepicker-material {
     margin: 0 auto;
     .edit-date-modal {
         h5 {
-            color: $gray;
+            color: var(--gray);
             font-size: 13px;
         }
         .modal-date-range {
@@ -9160,12 +9160,12 @@ ngx-daterangepicker-material {
             justify-content: space-between;
             padding-top: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid $gainsboro;
+            border-bottom: 1px solid var(--gainsboro);
             margin-bottom: 15px;
             span {
                 padding: 5px 10px;
                 i {
-                    color: $gray;
+                    color: var(--gray);
                 }
             }
             .modal-inside-heading {
@@ -9178,17 +9178,17 @@ ngx-daterangepicker-material {
                 padding-top: 10px;
                 label {
                     position: absolute;
-                    background-color: $white;
+                    background-color: var(--white);
                     padding: 0 5px;
                     top: -6px;
                     left: 9px;
                     font-size: 12px;
-                    color: $gray;
+                    color: var(--gray);
                 }
                 input {
                     width: 130px;
                     height: 51px;
-                    border: 1px solid $gainsboro;
+                    border: 1px solid var(--gainsboro);
                     border-radius: 3px;
                     padding: 0 15px;
                     font-size: 14px;
@@ -9200,7 +9200,7 @@ ngx-daterangepicker-material {
             font-size: 14px;
             margin-top: 10px;
             a {
-                color: $deep-sky-blue;
+                color: var(--deep-sky-blue);
                 padding: 10px 10px;
                 display: inline-block;
             }
@@ -9232,7 +9232,7 @@ ngx-daterangepicker-material {
 }
 
 .HW_badge {
-    background: $red;
+    background: var(--red);
     width: 14px !important;
     height: 14px !important;
     line-height: 14px !important;
@@ -9263,19 +9263,19 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .mobile-home {
-    background-color: $lavender;
+    background-color: var(--lavender);
     .padding-top-fixed-mobile,
     .padding-top-fixed,
     .desktop-header {
         display: none;
     }
     #content-wrapper {
-        background-color: $lavender;
+        background-color: var(--lavender);
     }
 }
 
 .icon-home-icon {
-    color: $white;
+    color: var(--white);
 }
 .remove-header-lower-layer {
     .container-fluid.mr-b1 {
@@ -9317,7 +9317,7 @@ span#HW_badge_cont:nth-child(3) {
             a{
                 span{
                     i{
-                        color: $gray;
+                        color: var(--gray);
                         margin-right: 10px;
                         font-size: 14px;
                     }
@@ -9333,7 +9333,7 @@ span#HW_badge_cont:nth-child(3) {
             sh-select{
                 .header{
                     input.form-control{
-                        background-color: $white !important;
+                        background-color: var(--white) !important;
                         height: 28px !important;
                         padding-right: 15px !important;
                     }
@@ -9373,7 +9373,7 @@ span#HW_badge_cont:nth-child(3) {
 .select-border-bottom {
     .form-control {
         border: none;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--gainsboro);
         width: 100%;
     }
 }
@@ -9433,8 +9433,8 @@ span#HW_badge_cont:nth-child(3) {
 }
 .daterangepicker.dropdown-menu{
     box-shadow: 0 3px 28px 0 rgba(0,0,0,.14);
-    color: $dim-gray;
-    border: 1px solid $gainsboro;
+    color: var(--dim-gray);
+    border: 1px solid var(--gainsboro);
     z-index: 9999!important;
 }
 .manage-group-account-form .button-group .btn{
@@ -9486,7 +9486,7 @@ span#HW_badge_cont:nth-child(3) {
         width:268px;
         font-family: inherit;
         border-radius: 4px;
-        box-shadow: 0 3px 6px $black-russian;
+        box-shadow: 0 3px 6px var(--black-russian);
         top: 20% !important;
         .popover-arrow{
             display:none;
@@ -9525,10 +9525,10 @@ span#HW_badge_cont:nth-child(3) {
             align-items: center;
             display: flex;
             &:hover:after {
-                color: $rich-blue;
+                color: var(--rich-blue);
             }
             .icon-favorite-selected {
-                color: $rich-blue;
+                color: var(--rich-blue);
             }
         }
     }
@@ -9540,12 +9540,12 @@ span#HW_badge_cont:nth-child(3) {
             .nav-item{
                 .nav-link{
                     font-size: 16px !important;
-                    color: $midnight-blue !important;
+                    color: var(--midnight-blue) !important;
                 }
             }
             .active{
                 > .nav-link{
-                    color: $midnight-blue !important;
+                    color: var(--midnight-blue) !important;
                 }
             }
         }
@@ -9576,16 +9576,16 @@ span#HW_badge_cont:nth-child(3) {
 }
 .table-amount[disabled]{
    input{
-        background-color: $whisper-light !important;
+        background-color: var(--whisper-light) !important;
     }
 }
 
 
 #update-ledger-voucher-type-default.disabled-ledger, #update-ledger-assign-tag.disabled-ledger{
     .sh-select-disabled{
-        background-color: $whisper-light !important;
+        background-color: var(--whisper-light) !important;
         input.selectedVal.form-control, input[disabled]{
-                background-color: $whisper-light !important;
+                background-color: var(--whisper-light) !important;
         }
     }
 }
@@ -9634,7 +9634,7 @@ ul.dropdown-menu.action-dropdown {
 }
 .mat-form-field-appearance-fill .mat-form-field-flex{
     height: 36px;
-    background-color: $white;
+    background-color: var(--white);
     padding: 0;
 }
 .mat-form-field-appearance-fill .mat-form-field-underline::before{
@@ -9649,7 +9649,7 @@ ul.dropdown-menu.action-dropdown {
 .mat-form-field-appearance-fill .mat-form-field-flex{
     border-radius: 2px !important;
     padding: 0 !important;
-    border: 1px solid $gainsboro !important;
+    border: 1px solid var(--gainsboro) !important;
     display: flex !important;
     align-items: center !important;
 }
@@ -9669,7 +9669,7 @@ input.mat-input-element{
     padding-bottom: 0;
 }
 .mat-focused .mat-form-field-flex{
-    border:1px solid $chetwode-blue !important;
+    border:1px solid var(--chetwode-blue) !important;
 }
 .mat-form-field-underline{
     display: none !important;
@@ -9678,7 +9678,7 @@ input.mat-input-element{
     z-index: 99999;
 }
 .mat-calendar-body-selected{
-    background-color: $midnight-blue;
+    background-color: var(--midnight-blue);
 }
 .giddh-limit {
     &.single-line-clamp {
@@ -9691,9 +9691,9 @@ input.mat-input-element{
 /*material datepicker css end*/
     .master-custom-tabs.custom-tabs {
         .nav-tabs {
-            border-bottom: 1px solid $gainsboro;
+            border-bottom: 1px solid var(--gainsboro);
             padding: 0 0 0 15px !important;
-            background-color: $alice-blue-light;
+            background-color: var(--alice-blue-light);
             z-index: 9;
             position: relative !important;
             top: 0;
@@ -9860,7 +9860,7 @@ input.mat-input-element{
         }
         .grp-list {
             padding: 0px;
-            background: $solitude;
+            background: var(--solitude);
             width: 100%;
             display: block;
         }
@@ -9877,7 +9877,7 @@ input.mat-input-element{
         .left-account-operation {
             height: initial !important;
             width: 100%;
-            background: $white;
+            background: var(--white);
         }
         .users-last-list > li {
             display: inline-block;
@@ -9895,8 +9895,8 @@ input.mat-input-element{
         }
         .stock-lists {
             position: absolute;
-            box-shadow: 0 3px 6px $very-light-gray;
-            background: $white;
+            box-shadow: 0 3px 6px var(--very-light-gray);
+            background: var(--white);
             min-width: 200px;
             display: inline-block;
             z-index: 9;
@@ -10063,10 +10063,10 @@ input.mat-input-element{
         }
         .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
         .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-            background-color: $white;
+            background-color: var(--white);
         }
         .tax-engine .table-striped > tbody > tr:nth-of-type(odd) {
-            background-color: $white;
+            background-color: var(--white);
         }
         .modal-header {
             padding: 12px 15px !important;
@@ -10246,18 +10246,18 @@ input.mat-input-element{
             border-right: none;
         }
         header .navbar {
-            background-color: $midnight-blue !important;
+            background-color: var(--midnight-blue) !important;
             border-bottom: none !important;
         }
         header .hamburger-menu h4 {
-            color: $white;
+            color: var(--white);
             font-size: 14px;
             white-space: normal;
             word-break: break-word;
             width: 100%;
         }
         header .hamburger-menu i.icon-bar {
-            color: $white;
+            color: var(--white);
         }
         .dropdown-width ul.dropdown-menu.pd {
             min-width: 150px !important;
@@ -10303,7 +10303,7 @@ input.mat-input-element{
             display: none;
         }
         .card-table tbody tr {
-            border-bottom: 1px solid $gainsboro;
+            border-bottom: 1px solid var(--gainsboro);
         }
         .card-table,
         .card-table tbody,
@@ -10427,7 +10427,7 @@ input.mat-input-element{
         }
         .tax-engine .list-filter {
             padding: 15px !important;
-            border-bottom: 1px solid $gainsboro !important;
+            border-bottom: 1px solid var(--gainsboro) !important;
             height: auto;
         }
         .list-style ul.list-inline.list-middle.download-drop-down {
@@ -10441,7 +10441,7 @@ input.mat-input-element{
             display: block;
         }
         .c-text span.c-name {
-            color: $white !important;
+            color: var(--white) !important;
         }
         .user-dropdown-header {
             left: 0px !important;
@@ -10632,7 +10632,7 @@ input.mat-input-element{
             overflow-x: hidden;
         }
         #companyList {
-            background: $white;
+            background: var(--white);
             padding-bottom: 4px;
             left: 0px;
             top: 30px;
@@ -10773,7 +10773,7 @@ input.mat-input-element{
         }
         .grp-list {
             padding: 10px 0px !important;
-            background: $solitude;
+            background: var(--solitude);
             width: 100%;
             display: block;
         }
@@ -10805,10 +10805,10 @@ input.mat-input-element{
             padding: 4px 15px !important;
         }
         .bgWhiteMo {
-            background-color: $white;
+            background-color: var(--white);
         }
         .breadcrumbs {
-            border-top: 1px solid $gainsboro;
+            border-top: 1px solid var(--gainsboro);
         }
         #getGroupModal #middleBody {
             height: 100%;
@@ -10824,15 +10824,15 @@ input.mat-input-element{
             position: relative;
         }
         .grp-list:nth-child(2) {
-            background-color: $white;
+            background-color: var(--white);
         }
         .col-wrapper.left-account-operation:nth-child(3),
         .col-wrapper.left-account-operation:nth-child(2),
         .col-wrapper.left-account-operation:nth-child(4) {
-            border-top: 1px solid $gainsboro;
+            border-top: 1px solid var(--gainsboro);
         }
         .manage-account-popup.modal {
-            background-color: $solitude;
+            background-color: var(--solitude);
             opacity: 1;
         }
         .manage-account-popup .modal-content.full-screen-modal {
@@ -10935,7 +10935,7 @@ input.mat-input-element{
                         border-bottom: none;
                         padding: 12px 0 0;
                         margin-bottom: 0;
-                        border-right: 1px solid $gainsboro;
+                        border-right: 1px solid var(--gainsboro);
                         margin-right: 15px;
 
                         p {
@@ -11120,10 +11120,10 @@ input.mat-input-element{
         height: 5px;
     }
     *::-webkit-scrollbar-track {
-        background: $white-smoke;
+        background: var(--white-smoke);
     }
     *::-webkit-scrollbar-thumb {
-        background: $nobel;
+        background: var(--nobel);
         border-radius: 5px;
         min-height: 60px;
     }

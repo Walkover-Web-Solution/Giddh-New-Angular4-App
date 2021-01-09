@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 .section-title {
     padding: 15px 0;
 }
@@ -51,7 +49,7 @@
 }
 
 .bt-border-1px {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .tr-td-div > td div {
@@ -223,7 +221,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 
 svg.icon.icon-xxlg-md {

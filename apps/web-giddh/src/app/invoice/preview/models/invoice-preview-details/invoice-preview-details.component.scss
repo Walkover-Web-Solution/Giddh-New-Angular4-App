@@ -1,4 +1,3 @@
-@import "../../../../../assets/css/color.scss";
 .invoice-preview-sidebar {
     z-index: 200;
 }
@@ -8,7 +7,7 @@
     content: "";
     width: 100%;
     height: 100%;
-    background-color: $white;
+    background-color: var(--white);
     top: 170px;
     bottom: 0;
     left: 0;
@@ -29,7 +28,7 @@
     position: fixed;
     top: 59px;
     width: 100%;
-    background-color: $white;
+    background-color: var(--white);
     margin: 0 0;
     height: 100vh;
     z-index: 999;
@@ -37,7 +36,7 @@
 }
 
 .invoice-sidebar {
-    background-color: $white;
+    background-color: var(--white);
     padding: 0;
     height: calc(100vh - 120px);
 }
@@ -54,15 +53,15 @@
 }
 
 .invoice-sidebar .invoice-number-date span.invoice-number {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 
 .invoice-sidebar .invoice-number-date span.invoice-date {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .invoice-sidebar .invoice-holder-name p {
-    color: $night-rider;
+    color: var(--night-rider);
     font-size: 14px;
     margin-top: 3px;
     white-space: normal;
@@ -71,16 +70,16 @@
 
 .invoice-sidebar .single-invoice-detail {
     padding: 10px 15px;
-    border-bottom: 1px solid $gray-87;
+    border-bottom: 1px solid var(--gray-87);
     list-style: none;
 }
 
 .invoice-sidebar .single-invoice-detail:hover {
-    background-color: $gray-94;
+    background-color: var(--gray-94);
 }
 
 .invoice-sidebar .single-invoice-detail.activeItem {
-    background-color: $gray-94;
+    background-color: var(--gray-94);
 }
 
 .invoice-sidebar .single-invoice-detail:last-child {
@@ -124,7 +123,7 @@
 }
 
 .invoice-detail-header .edit-change-status .edit-link {
-    color: $electric-blue;
+    color: var(--electric-blue);
     padding-right: 10px;
     font-size: 16px;
 }
@@ -135,11 +134,11 @@
 
 .invoice-detail-header .edit-change-status .edit-action-btn-groups {
     display: flex;
-    background-color: $white;
-    border: 1px solid $cerebellum-gray;
+    background-color: var(--white);
+    border: 1px solid var(--cerebellum-gray);
     margin-right: 10px;
     span {
-        border-left: 1px solid $cerebellum-gray;
+        border-left: 1px solid var(--cerebellum-gray);
         padding: 5px;
         height: 30px;
         width: 30px;
@@ -147,13 +146,13 @@
             border-left: none;
         }
         a {
-            color: $dark-gray;
+            color: var(--dark-gray);
             display: block;
             text-align: center;
         }
     }
     .disabled {
-        background: $gainsboro !important;
+        background: var(--gainsboro) !important;
         cursor: not-allowed;
         a {
             cursor: not-allowed;
@@ -174,7 +173,7 @@
 .payment-detail .payment-icon {
     width: 35px;
     height: 35px;
-    background-color: $very-light-gray;
+    background-color: var(--very-light-gray);
     border-radius: 50%;
     text-align: center;
     vertical-align: middle;
@@ -185,13 +184,13 @@
 }
 
 .single-payment-detail a {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 
 .payment-detail p.payment-content {
     font-size: 14px;
     margin-bottom: 5px;
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 .payment-log {
@@ -200,7 +199,7 @@
 
 .invoice-image-section {
     text-align: center;
-    background-color: $white;
+    background-color: var(--white);
     margin-bottom: 35px;
     z-index: -9;
     height: 100%;
@@ -225,7 +224,7 @@
         font-size: 36px;
         max-width: 60%;
         margin: 0 auto;
-        color: $red;
+        color: var(--red);
     }
     .img-expand-collapse{
         padding: 50px 50px 0 50px;
@@ -256,7 +255,7 @@
 }
 
 .single-payment-detail {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 
 .payment-log-div li {
@@ -272,23 +271,23 @@
 .payment-log-div span.small-circle {
     height: 10px;
     width: 10px;
-    border: 1px solid $dark-gray;
+    border: 1px solid var(--dark-gray);
     border-radius: 50%;
     display: inline-block;
     margin-right: 7px;
 }
 
 .payment-log-div .activeLog span.small-circle {
-    background-color: $electric-blue;
-    border-color: $electric-blue;
+    background-color: var(--electric-blue);
+    border-color: var(--electric-blue);
 }
 
 .payment-log-div .about-payment-log {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .payment-log-div .activeLog .about-payment-log {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 
 .payment-log-div ul {
@@ -300,7 +299,7 @@
     content: "";
     height: calc(100% - 30px);
     width: 1px;
-    border-left: 1px dashed $dark-gray;
+    border-left: 1px dashed var(--dark-gray);
     top: 16px;
     left: 4.5px;
 }
@@ -310,7 +309,7 @@
 }
 
 .invoice-detail {
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
     padding-bottom: 20px;
 }
 
@@ -320,8 +319,8 @@ span.close-modal.cp.pull-right {
     align-items: center;
     height: 32px;
     width: 32px;
-    background-color: $gainsboro-light;
-    border: 1px solid $gainsboro;
+    background-color: var(--gainsboro-light);
+    border: 1px solid var(--gainsboro);
     position: static;
     transform: inherit;
 }
@@ -348,13 +347,13 @@ span.close-modal.cp.pull-right {
 }
 
 .dropdown-menu>li>a:hover {
-    color: $chetwode-blue;
-    background: $gray-90;
+    color: var(--chetwode-blue);
+    background: var(--gray-90);
 }
 
 .invoice-search-box input {
     flex: 1;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     height: 37px;
     padding: 0 30px;
     background-image: url("../../../../../assets/images/searchIcon.svg");
@@ -393,9 +392,9 @@ span.close-modal.cp.pull-right {
         display: flex;
         justify-content: space-between;
         height: 54px;
-        background-color: $white;
-        border-top: 1px solid $gainsboro;
-        border-bottom: 1px solid $gainsboro;
+        background-color: var(--white);
+        border-top: 1px solid var(--gainsboro);
+        border-bottom: 1px solid var(--gainsboro);
         align-items: center;
         span {
             padding: 10px;
@@ -407,8 +406,8 @@ span.close-modal.cp.pull-right {
         span.close-modal {
             height: 32px;
             width: 32px;
-            background-color: $gainsboro-light;
-            border: 1px solid $gainsboro;
+            background-color: var(--gainsboro-light);
+            border: 1px solid var(--gainsboro);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -447,17 +446,17 @@ span.close-modal.cp.pull-right {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
     animation: loading 2s linear infinite;
 }
 
 label.labeled {
-    border: 1px solid $gainsboro;
-    color: $extra-dark-gray;
+    border: 1px solid var(--gainsboro);
+    color: var(--extra-dark-gray);
     padding: 5px 10px;
     border-radius: 3px;
     margin: 0 10px 0 0;
-    background-color: $light-gray;
+    background-color: var(--light-gray);
     position: relative;
     top: -1px;
 }
@@ -474,7 +473,7 @@ label.labeled {
     margin: 15px;
     top: 0;
     a {
-        color: $gray;
+        color: var(--gray);
         span {
             margin-right: 5px;
         }
@@ -513,15 +512,15 @@ label.labeled {
     top: 40px;
     z-index: 10;
     right: 0;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     .send-email-modal-wrapper {
-        background-color: $white;
+        background-color: var(--white);
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
         .send-email-modal-header {
-            background-color: $light-gray-extra;
+            background-color: var(--light-gray-extra);
             padding: 8px 10px;
-            border-bottom: 1px solid $gainsboro;
+            border-bottom: 1px solid var(--gainsboro);
             span {
                 width: unset;
             }
@@ -535,13 +534,13 @@ label.labeled {
         margin-bottom: 7px;
     }
     .btn-success {
-        background: $deep-green;
-        color: $white;
+        background: var(--deep-green);
+        color: var(--white);
     }
     .aqua-color {
         cursor: pointer;
         a {
-            color: $deep-sky-blue;
+            color: var(--deep-sky-blue);
             font-size: 12px;
         }
     }
@@ -550,12 +549,12 @@ label.labeled {
 .linked-purchase-order {
     padding: 0 15px;
     .purchase-order-number {
-        color: $gray;
+        color: var(--gray);
         .aqua-color {
-            color: $deep-sky-blue;
+            color: var(--deep-sky-blue);
             cursor: pointer;
             span {
-                color: $very-light-gray;
+                color: var(--very-light-gray);
                 margin: 0 10px;
             }
         }
@@ -584,7 +583,7 @@ label.labeled {
 }
 
 .dashed-border {
-    border: 2px dashed $gainsboro;
+    border: 2px dashed var(--gainsboro);
 }
 
 #csv-upload-input {
@@ -599,16 +598,16 @@ label.labeled {
 }
 
 .select-file {
-    color: $leave-green;
+    color: var(--leave-green);
 }
 
 .file-upload-panel {
     width: 100%;
     text-align: left;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     padding: 8px;
     border-radius: 4px;
-    color: $very-light-gray;
+    color: var(--very-light-gray);
 }
 
 .file-input-wrapper img {
@@ -673,7 +672,7 @@ p {
 
 #default {
     overflow: auto;
-    background: $white;
+    background: var(--white);
     padding: 0;
     font-size: 14px;
     max-width: 760px;
@@ -689,14 +688,14 @@ p {
 /* Track */
 
 #default::-webkit-scrollbar-track {
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 
 
 /* Handle */
 
 #default::-webkit-scrollbar-thumb {
-    background: $nobel;
+    background: var(--nobel);
     border-radius: 20px;
 }
 
@@ -707,7 +706,7 @@ p {
     padding: 0.1in;
     letter-spacing: 0;
     width: 100%;
-    background: $white;
+    background: var(--white);
     border-radius: 1px;
 }
 
@@ -715,9 +714,9 @@ p {
 /* header */
 
 #default header {
-    background: $white;
+    background: var(--white);
     padding: 10px 15px;
-    border-bottom: 2px solid $bitter-sweet;
+    border-bottom: 2px solid var(--bitter-sweet);
 }
 
 #default header:after {
@@ -746,7 +745,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: $nero;
+    color: var(--nero);
 }
 
 .hidden-label {
@@ -821,7 +820,7 @@ p {
 
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid var(--light-gray);
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;
@@ -849,13 +848,13 @@ p {
     position: relative;
     padding: 8px 7px;
     line-height: 1.2rem;
-    background-color: $white-smoke;
+    background-color: var(--white-smoke);
     font-size: 12px;
 }
 
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--light-gray);
 }
 
 
@@ -864,7 +863,7 @@ p {
 .tcs hr {
     margin-top: 50px;
     width: 100%;
-    border-bottom: 1px solid $cinnabar-orange;
+    border-bottom: 1px solid var(--cinnabar-orange);
 }
 
 .tcs table {
@@ -878,7 +877,7 @@ p {
 .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid $light-gray;
+    border: 1px solid var(--light-gray);
     vertical-align: top;
     text-align: right;
 }
@@ -922,13 +921,13 @@ p {
 #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--light-gray);
     line-height: 1.2rem;
     vertical-align: top;
 }
 
 #default table.item td p {
-    color: $zambezi;
+    color: var(--zambezi);
 }
 
 #default table.balance {
@@ -955,7 +954,7 @@ p {
 }
 
 #default aside h1 {
-    border-color: $nobel;
+    border-color: var(--nobel);
     border-bottom-style: solid;
 }
 
@@ -963,10 +962,10 @@ p {
 /*footer*/
 
 #default footer {
-    border-top: 1px solid $eastern-blue;
+    border-top: 1px solid var(--eastern-blue);
     padding: 16px 0px 30px 0;
     margin: 8px 0 0;
-    background: $white;
+    background: var(--white);
 }
 
 #default .company-address p {
@@ -985,7 +984,7 @@ p {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     margin: 3px 0;
 }
 
@@ -1014,7 +1013,7 @@ p {
     content: attr(title);
     width: auto;
     position: relative;
-    background: $white;
+    background: var(--white);
     margin: 0 auto;
     padding: 6px 16px;
     right: 0;
@@ -1072,11 +1071,11 @@ strong {
 .wrap-edit-history-btn {
     .history-btn {
         i.icon-history-icon{
-        color: $gray;
+        color: var(--gray);
         }
         &:hover{
             i.icon-history-icon{
-                color: $white;
+                color: var(--white);
             }
         }
     }
@@ -1157,13 +1156,13 @@ strong {
     .invoice-sidebar .invoice-number-date span.invoice-date:before {
         position: absolute;
         content: "";
-        background-color: $white;
+        background-color: var(--white);
         width: 3px;
         height: 12px;
         top: 3px;
     }
     .invoice-sidebar li.activeItem .invoice-number-date span.invoice-date:before {
-        background-color: $gray-94;
+        background-color: var(--gray-94);
     }
     .invoice-preview-sidebar {
         padding-right: 15px;
@@ -1192,7 +1191,7 @@ strong {
         display: none;
     }
     .invoice-sidebar {
-        background-color: $white;
+        background-color: var(--white);
         padding: 0;
         height: inherit;
         max-height: 46vmax;

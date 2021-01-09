@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -21,7 +19,7 @@
 }
 .td-search-box div i {
     margin-top: 3px;
-    color: $gray;
+    color: var(--gray);
     padding-right: 8px;
     cursor: pointer;
 }
@@ -36,12 +34,12 @@
 }
 .p-modal-tooltip {
     position: absolute;
-    background-color: $white;
+    background-color: var(--white);
     z-index: 1000;
     width: 257px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 4px;
-    box-shadow: 0 7px 24px $black-russian-light;
+    box-shadow: 0 7px 24px var(--black-russian-light);
 }
 .account-detail-modal-div {
     height: 100%;
@@ -51,7 +49,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: $chablis;
+    background: var(--chablis);
 }
 .account-detail-custom-title {
     font-family: "opensans-semibold" !important;
@@ -66,23 +64,23 @@
     text-transform: none !important;
 }
 .custom-detail h4 {
-    color: $gray;
+    color: var(--gray);
     margin-top: 7px;
     font-size: 14px !important;
     font-family: 'opensans-regular' !important;
 }
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 ul.list-unstyled li a {
-    color: $black;
+    color: var(--black);
 }
 .li-link {
     margin-top: 15px !important;
 }
 .btn-group > a {
-    color: $night-rider;
+    color: var(--night-rider);
 }
 .ac-detail,
 .ac-detail a {

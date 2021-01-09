@@ -1,4 +1,3 @@
-@import "../../../assets/css/color.scss";
 .ddMaxHeight {
     max-height: 500px;
 }
@@ -12,7 +11,7 @@
     top: 61px;
     bottom: 0;
     min-height: 100vh;
-    background: $white;
+    background: var(--white);
     width: 215px;
     left: -215px;
     z-index: 991;
@@ -23,13 +22,13 @@
 }
 
 .account-search .input-group-addon {
-    color: $charcoal;
+    color: var(--charcoal);
     font-size: 12px;
     padding-right: 0px;
     background-color: transparent;
     vertical-align: top;
     line-height: 1.8;
-    border:0px solid $white;
+    border:0px solid var(--white);
 }
 
 .account-search .input-group-addon i.icon-search {
@@ -42,31 +41,31 @@
     background: none !important;
     height: 36px;
     padding-left: 3px !important;
-    border: 0px solid $white !important;
+    border: 0px solid var(--white) !important;
 }
 
 .account-search .form-control:focus {
-    border-color: $gainsboro !important;
-    color: $dark-pink-swan;
+    border-color: var(--gainsboro) !important;
+    color: var(--dark-pink-swan);
 }
 
 .account-search {
     position: relative;
     height: 36px;
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
     border-radius: 20px 20px 20px 20px !important;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     margin: 10px 0px 5px 0px;
 }
 
 .account-search:hover:after {
-    color: $rich-blue;
+    color: var(--rich-blue);
     cursor: pointer;
 }
 
 a[vr-item]:focus {
-    background-color: $primary;
-    color: $white;
+    background-color: var(--primary);
+    color: var(--white);
     cursor: pointer;
 }
 
@@ -79,11 +78,11 @@ a[vr-item]:focus {
     right: 10px;
     font-size: 12px;
     line-height: 36px;
-    color: $charcoal;
+    color: var(--charcoal);
 }
 
 .account-search .form-control:after {
-    background: $red;
+    background: var(--red);
     content: "";
     width: 90px;
     height: 90px;
@@ -92,28 +91,28 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control::-webkit-input-placeholder {
-    color: $charcoal;
+    color: var(--charcoal);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control::-moz-placeholder {
-    color: $charcoal;
+    color: var(--charcoal);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
-    color: $charcoal;
+    color: var(--charcoal);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-moz-placeholder {
-    color: $charcoal;
+    color: var(--charcoal);
     font-size: 12px;
     position: relative;
     top: -2px;
@@ -124,7 +123,7 @@ a[vr-item]:focus {
 .account-search .form-control::-moz-placeholder,
 .account-search .form-control:-ms-input-placeholder,
 .account-search .form-control:-moz-placeholder {
-    color: $charcoal !important;
+    color: var(--charcoal) !important;
 }
 
 .left-fixed-header li:hover {
@@ -142,7 +141,7 @@ a[vr-item]:focus {
 
 .main-company-name > li > a:hover .company-text .company-name,
 .main-company-name > li > a:hover .icon-dots-three-vertical {
-    color: $white;
+    color: var(--white);
 }
 
 .left-fixed-header > li {
@@ -166,7 +165,7 @@ a[vr-item]:focus {
 .left-fixed-header > li > a {
     display: block;
     padding: 7px 15px;
-    color: $nero;
+    color: var(--nero);
     position: relative;
 }
 
@@ -181,7 +180,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header > li > a:hover {
-    color: $nero;
+    color: var(--nero);
 }
 .left-fixed-header > li > a:hover .label > span,
 .left-fixed-header > li > a:hover .label {
@@ -189,12 +188,12 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header > li a.active {
-    background: $lavender;
+    background: var(--lavender);
 }
 
 .left-fixed-header > li > a.active .label,
 .left-fixed-header > li > a.active .label > span {
-    color: $nero;
+    color: var(--nero);
 }
 
 .left-fixed-header > li > a .label {
@@ -203,7 +202,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     padding-left: 0px;
     text-align: left;
-    color: $nero;
+    color: var(--nero);
     letter-spacing: 0.6px;
     font-weight: normal;
     font-family: "opensans-semibold";
@@ -222,7 +221,7 @@ a[vr-item]:focus {
 .left-fixed-header > li:hover a,
 .left-fixed-header > li > a:hover span,
 .left-fixed-header > li:hover a span {
-    color: $white;
+    color: var(--white);
 }
 */
 
@@ -232,7 +231,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header .divider {
-    border-bottom: 1px solid $vulcan;
+    border-bottom: 1px solid var(--vulcan);
     padding: 4px 0;
     height: 0;
     margin-bottom: 4px;
@@ -274,7 +273,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header h6 {
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     font-size: 16px;
     padding-left: 15px;
     padding-right: 15px;
@@ -287,14 +286,14 @@ a[vr-item]:focus {
 .left-fixed-header > h6 > i {
     float: right;
     font-size: 10px;
-    background: $midnight-blue;
+    background: var(--midnight-blue);
     display: inline-block;
     width: 15px;
     height: 15px;
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: $white;
+    color: var(--white);
     margin-top: 1px;
     margin-right: 2px;
 }
@@ -314,8 +313,8 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header > h6 > i:hover {
-    color: $white;
-    background: $dark-blue;
+    color: var(--white);
+    background: var(--dark-blue);
 }
 
 .nav-tabs {
@@ -328,7 +327,7 @@ a[vr-item]:focus {
 
 .left-sub-menu ul > li > a {
     font-size: 14px;
-    color: $dim-gray;
+    color: var(--dim-gray);
     display: block;
     clear: both;
     padding: 6px 15px;
@@ -336,7 +335,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu ul > li > a:hover {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
 }
 
 .left-sub-menu ul {
@@ -347,7 +346,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu {
-    background: $white;
+    background: var(--white);
     position: absolute;
     left: -12px;
     bottom: 0;
@@ -371,7 +370,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     text-align: right;
     position: relative;
-    color: $quick-silver;
+    color: var(--quick-silver);
     top: 6px;
 }
 
@@ -382,7 +381,7 @@ a[vr-item]:focus {
 .sub-menu > li > a {
     display: block;
     padding: 8px 20px;
-    color: $dark-pink-swan;
+    color: var(--dark-pink-swan);
 }
 
 .left-fixed-header > li > a > i {
@@ -434,7 +433,7 @@ a[vr-item]:focus {
 .universal-date li {
     display: inline-block;
     position: relative;
-    border: 1px solid $white;
+    border: 1px solid var(--white);
     border-radius: 20px;
     padding: 0 10px;
     i {
@@ -443,7 +442,7 @@ a[vr-item]:focus {
         position: relative;
         left: 16px;
         padding: 0 20px;
-        color: $white;
+        color: var(--white);
         font-size: 20px;
 
     }
@@ -451,7 +450,7 @@ a[vr-item]:focus {
 
 .universal-date li input {
     padding-left: 20px !important;
-    color: $white !important;
+    color: var(--white) !important;
     padding-right: 0 !important;
     text-align: left;
 }
@@ -462,7 +461,7 @@ a[vr-item]:focus {
 .header-date {
     padding: 5px 11px;
     border-radius: 0px 2px 2px 0px;
-    color: $white;
+    color: var(--white);
     padding-left: 0;
 }
 
@@ -471,7 +470,7 @@ a[vr-item]:focus {
 }
 
 .calendar-addon {
-    color: $white;
+    color: var(--white);
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
     font-size: 14px;
@@ -489,7 +488,7 @@ a[vr-item]:focus {
         margin:auto;
     }
     .input-date{
-        border: 1px solid $white;
+        border: 1px solid var(--white);
         border-radius: 20px !important;
         height: 34px;
         width: 220px;
@@ -503,13 +502,13 @@ a[vr-item]:focus {
 
 #add-manage.btn-gray {
     background: transparent;
-    color: $white;
+    color: var(--white);
     position: relative;
     padding-left: 15px;
     padding-top: 5px;
     padding-bottom: 6px;
     padding-right: 15px;
-    border: 1px solid $white;
+    border: 1px solid var(--white);
     border-radius: 20px;
     margin-right: 15px;
     display: inline-block !important;
@@ -519,11 +518,11 @@ a[vr-item]:focus {
     }
 }
 span.icon-support.dropdown-toggle {
-    background-color: $governor-bay;
-    color: $white;
+    background-color: var(--governor-bay);
+    color: var(--white);
     padding: 6px 7px;
     font-size: 17px;
-    border: 1px solid $governor-bay;
+    border: 1px solid var(--governor-bay);
     border-radius: 1px;
     position: relative;
     top: 1px;
@@ -540,14 +539,14 @@ span.icon-support.dropdown-toggle {
 }
 
 .other a {
-    color: $extra-dark-gray;
+    color: var(--extra-dark-gray);
     text-transform: uppercase;
 }
 .show-more-opt {
     font-size: 14px;
     padding: 0 15px;
     font-family: "opensans-semibold";
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
 }
 
 // top header css
@@ -556,7 +555,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .primary-header {
-    background-color: $midnight-blue;
+    background-color: var(--midnight-blue);
     min-height: 60px;
     position: fixed;
     width: 100%;
@@ -620,7 +619,7 @@ ul.sub-list {
 }
 
 .nav-left-bar .company-name .company-text span {
-    color: $nero;
+    color: var(--nero);
     word-break: break-all;
 }
 
@@ -639,7 +638,7 @@ ul.sub-list {
 
 .nav-left-bar .company-name .branch-unique-name {
     font-size: 12px;
-    color: $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
     padding: 0 0 3px 0;
 }
 
@@ -668,7 +667,7 @@ ul.sub-list {
     right: 30px;
     background: none;
     border: 0px;
-    color: $nero;
+    color: var(--nero);
     cursor: pointer;
     font-size: 20px;
     z-index: 9999;
@@ -677,8 +676,8 @@ ul.sub-list {
     transition: 2s linear;
 }
 .head-nav {
-    background: $light-white-smoke;
-    border-bottom: 1px solid $gainsboro;
+    background: var(--light-white-smoke);
+    border-bottom: 1px solid var(--gainsboro);
     margin-bottom: 5px;
 }
 .ledger-page {
@@ -687,7 +686,7 @@ ul.sub-list {
     z-index: 10;
 }
 .help-setting-icons {
-    color: $white;
+    color: var(--white);
     i{
         font-size:20px;
         line-height: 1.3;
@@ -698,33 +697,33 @@ ul.sub-list {
 }
 .show-more-module a {
     font-size: 14px;
-    color: $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
     font-family: "opensans-semibold";
 }
 /*notification css*/
 .white-row {
-    background-color: $white;
+    background-color: var(--white);
     padding: 10px 15px;
     margin-bottom: 10px;
     font-size: 16px;
-    box-shadow: 1px 1px 3px $black-russian;
+    box-shadow: 1px 1px 3px var(--black-russian);
     margin-top: 10px;
     p {
         font-family: "opensans-semibold";
         font-size: 14px;
     }
     .click-here {
-        color: $chetwode-blue;
+        color: var(--chetwode-blue);
         cursor: pointer;
     }
 
     span.icon-traingle-info {
-        color: $bitter-sweet;
+        color: var(--bitter-sweet);
         font-size: 15px;
         margin-right: 10px;
     }
     span.icon-info-icon {
-        color: $nobel;
+        color: var(--nobel);
         font-size: 18px;
         margin-right: 10px;
     }
@@ -756,12 +755,12 @@ ul.sub-list {
 
 .name-year{
     font-size:12px !important;
-    color:$deep-sky-blue !important;
+    color:var(--deep-sky-blue) !important;
 }
 .company-name{
     ul.dropdown-menu.user-dropdown-header{
         left: 0 !important;
-        color: $night-rider;
+        color: var(--night-rider);
         .company-name-finance-year{
             .ellp{
                 white-space: normal;
@@ -770,19 +769,19 @@ ul.sub-list {
     }
 }
 .create-company-btn{
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 .user-dropdown-header:after {
     position: absolute;
     content: '';
     height: 20px;
     width: 20px;
-    background-color: $whisper;
+    background-color: var(--whisper);
     top: -9px;
     z-index: -1;
     transform: rotate(45deg);
     left: 15px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 .switch-branch-wrapper{
     .btn-group{
@@ -792,8 +791,8 @@ ul.sub-list {
             display: flex;
             padding: 15px;
             font-family: 'opensans-bold';
-            color: $nero;
-            border-bottom: 1px solid $gainsboro;
+            color: var(--nero);
+            border-bottom: 1px solid var(--gainsboro);
             width: 100%;
             align-items: center;
             justify-content: space-between;
@@ -804,13 +803,13 @@ ul.sub-list {
                 float: right;
                 padding-top: 4px;
                 transform: rotate(270deg);
-                border: 2px solid $gray;;
+                border: 2px solid var(--gray);;
                 padding: 3px;
                 border-radius: 50%;
                 justify-content: center;
                 align-items: center;
                 display: flex;
-                color: $gray;
+                color: var(--gray);
             }
         }
         .dropdown-menu{
@@ -819,7 +818,7 @@ ul.sub-list {
             top: 10px !important;
             transform: translateY(0px);
             bottom: auto;
-            border: 1px solid $gainsboro;
+            border: 1px solid var(--gainsboro);
             box-shadow: 0 6px 12px rgba(0,0,0,.175);
             min-width: 270px;
             max-width: 270px;
@@ -836,15 +835,15 @@ ul.sub-list {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    color: $nero !important;
+                    color: var(--nero) !important;
                     cursor: pointer;
                     &.dropdown-item.active-branch {
-                        color: $chetwode-blue;
+                        color: var(--chetwode-blue);
                         font-weight: bold;
 
                     }
                     &:hover{
-                        color: $chetwode-blue !important;
+                        color: var(--chetwode-blue) !important;
                     }
                 }
                 span{
@@ -857,7 +856,7 @@ ul.sub-list {
                 }
             }
             .go-to-company{
-                color: $deep-sky-blue;
+                color: var(--deep-sky-blue);
                 &.company-label {
                     flex-direction: column;
                     justify-content: flex-start;
@@ -865,7 +864,7 @@ ul.sub-list {
                 }
             }
             .company-create{
-                color: $chetwode-blue;
+                color: var(--chetwode-blue);
             }
             div{
                 input{
@@ -959,7 +958,7 @@ ul.sub-list {
             position: relative;
             left: 0;
             padding: 0 20px;
-            color: $white;
+            color: var(--white);
             margin-right: 0;
             height: 34px;
             align-items: center;
@@ -977,7 +976,7 @@ ul.sub-list {
     .close-2 {
         top: 65px;
         right: 66px;
-        background-color: $white;
+        background-color: var(--white);
         width: 35px;
         height: 35px;
         position: fixed;
@@ -1015,9 +1014,9 @@ ul.sub-list {
     .mobile-menu-icon {
         position: absolute;
         top: 14px;
-        color: $white;
+        color: var(--white);
         right: -35px;
-        background-color: $midnight-blue;
+        background-color: var(--midnight-blue);
         width: 35px;
         height: 35px;
         text-align: center;
@@ -1032,10 +1031,10 @@ ul.sub-list {
         display: flex;
     }
     .upper-layer-header .open .dropdown-menu {
-        background-color: $white;
+        background-color: var(--white);
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--gainsboro);
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 4px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -1111,7 +1110,7 @@ ul.sub-list {
     }
     .mobile-back-btn {
         display: none;
-        color: $white;
+        color: var(--white);
         margin-right: 10px;
     }
     .not-today {

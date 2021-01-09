@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 .navbar-brand {
     height: auto;
     padding: 5px 15px;
@@ -13,7 +11,7 @@
     padding: 0;
 }
 .dropdown-menu > li > a:hover {
-    background: $solitude;
+    background: var(--solitude);
 }
 .dropdown-menu {
     margin-top: 0;

@@ -6,7 +6,6 @@ $greyClr: #6d6d6d;
 /**
 # margin mixin pass direction and number
 */
-@import "../../../assets/css/color.scss";
 @mixin marg($d, $num) {
     @if $d== "B" {
         margin-bottom: $num;
@@ -70,7 +69,7 @@ $greyClr: #6d6d6d;
 
 // common class for extend
 .white-bg {
-    background-color: $white;
+    background-color: var(--white);
 }
 
 .cp {
@@ -133,13 +132,13 @@ $greyClr: #6d6d6d;
         right: 0;
         bottom: 0;
         padding: 0 1em;
-        color: $very-light-gray;
+        color: var(--very-light-gray);
         pointer-events: none;
     }
 
     /* Transition */
     &:hover::after {
-        color: $valspar-paint-autumn-fog;
+        color: var(--valspar-paint-autumn-fog);
     }
 
     &::after {
@@ -234,7 +233,7 @@ $greyClr: #6d6d6d;
         li {
             a {
                 &:hover {
-                    background: $solitude;
+                    background: var(--solitude);
                 }
             }
         }
@@ -377,13 +376,13 @@ ng-select.splSales {
 }
 
 .billing-address {
-    background: $white;
-    border: 1px solid $light-gray;
+    background: var(--white);
+    border: 1px solid var(--light-gray);
     padding: 5px;
     padding-bottom: 10px;
 
     &.disabled {
-        background: $whisper-light;
+        background: var(--whisper-light);
     }
 
     textarea {
@@ -406,7 +405,7 @@ textarea:focus {
 
 .input-custom {
     border: none;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .pl0 {
@@ -415,7 +414,7 @@ textarea:focus {
 
 .balance-due {
     display: block;
-    color: $comet;
+    color: var(--comet);
     line-height: 1.2rem;
     font-size: 14px;
     font-weight: 500;
@@ -430,7 +429,7 @@ textarea:focus {
     > thead {
         > tr {
             > th {
-                border: 1px solid $gainsboro !important;
+                border: 1px solid var(--gainsboro) !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
@@ -452,7 +451,7 @@ textarea:focus {
     > tbody {
         > tr {
             > td {
-                border: 1px solid $gainsboro !important;
+                border: 1px solid var(--gainsboro) !important;
                 padding: 10px 8px;
                 white-space: nowrap;
 
@@ -484,7 +483,7 @@ textarea:focus {
 }
 
 .disabled {
-    background: $whisper-light;
+    background: var(--whisper-light);
     pointer-events: none;
     opacity: 0.7;
 }
@@ -508,18 +507,18 @@ textarea:focus {
 #deposit-dropdown {
     left: inherit;
     width: 300px;
-    background: $solitude;
+    background: var(--solitude);
     display: block;
 }
 
 #deposit-dropdown .caret {
-    border-top: 7px dashed $ghost;
+    border-top: 7px dashed var(--ghost);
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     right: -15px;
     position: absolute;
     top: 47%;
-    background: $solitude;
+    background: var(--solitude);
     transform: rotate(-90deg) translateY(-50%);
 }
 
@@ -563,25 +562,25 @@ textarea:focus {
     background: rgba(112, 112, 112, 0.92);
     bottom: 0;
     width: 100%;
-    color: $white;
+    color: var(--white);
     padding: 10px;
     text-align: center;
 }
 
 .modal-invoice-footer .btn {
-    background: $dark-gray;
+    background: var(--dark-gray);
     font-size: 12px;
     border-radius: 90px;
     padding: 1px 6px;
     vertical-align: middle;
     margin-right: 0px;
     transition: 0.5s all ease;
-    color: $white;
+    color: var(--white);
 }
 
 .modal-invoice-footer .btn:hover {
-    background: $dark-green;
-    color: $white;
+    background: var(--dark-green);
+    color: var(--white);
 }
 
 .sales-invoice-modal .modal-body perfect-scrollbar {
@@ -593,8 +592,8 @@ textarea:focus {
 }
 
 .modal-invoice-footer ul > li > input:checked + label {
-    background: $dark-green;
-    color: $white;
+    background: var(--dark-green);
+    color: var(--white);
 }
 
 // my css
@@ -606,12 +605,12 @@ textarea:focus {
 }
 
 .other-options {
-    color: $dim-gray;
+    color: var(--dim-gray);
     padding-top: 5px;
 }
 
 .other-options a {
-    color: $electric-blue;
+    color: var(--electric-blue);
     font-size: 12px;
 }
 
@@ -630,7 +629,7 @@ form label {
     border: none !important;
     padding-right: 2px !important;
     background-color: transparent !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
     height: 28px;
 }
 
@@ -658,7 +657,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 
 .billingaddresFull p {
     font-size: 14px;
-    color: $dark-gray;
+    color: var(--dark-gray);
     margin-bottom: 5px;
 }
 
@@ -671,7 +670,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .change-label {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 
 .wrap-invoiceNumberDetails .form-group {
@@ -683,7 +682,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .bg-white {
-    background-color: $white;
+    background-color: var(--white);
     padding: 10px 0;
     margin: 0 0;
 }
@@ -699,7 +698,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .description textarea {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -707,8 +706,8 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 
 .sales-invoice-table table input[disabled] {
     cursor: default;
-    background-color: $whisper-light;
-    border: 1px solid $gainsboro;
+    background-color: var(--whisper-light);
+    border: 1px solid var(--gainsboro);
     padding: 5px;
     width: 100%;
     // max-width: 150px;
@@ -725,7 +724,7 @@ input[type="text"] {
 }
 
 a.copyInvoice {
-    color: $primary;
+    color: var(--primary);
     margin-left: 10px;
 }
 
@@ -746,7 +745,7 @@ a.copyInvoice img {
     padding: 0;
 }
 .shipping-address textarea {
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
 }
 
 .mb-0 {
@@ -792,7 +791,7 @@ a.copyInvoice img {
 .add-bulk-items {
     font-size: 12px;
     padding-bottom: 0;
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 
 .otherDetailTable th,
@@ -848,8 +847,8 @@ span.edit-icon {
 
 .hsn-code-dropdown {
     position: absolute;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--white);
+    border: 1px solid var(--gainsboro);
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
@@ -872,18 +871,18 @@ span.edit-icon {
     height: 28px !important;
     padding: 5px;
     max-width: 200px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: $light-silver;
+    color: var(--light-silver);
 }
 
 .hsn-code-dropdown a {
     display: inline-block;
     text-align: center;
-    color: $very-light-gray;
+    color: var(--very-light-gray);
     padding: 5px 8px;
     font-size: 16px;
 }
@@ -895,8 +894,8 @@ span.edit-icon {
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success,
 .bulk-item-btn-group button.btn.btn-sm.btn-success {
-    background-color: $deep-green;
-    color: $white;
+    background-color: var(--deep-green);
+    color: var(--white);
 }
 
 .template-footer {
@@ -907,13 +906,13 @@ span.edit-icon {
 }
 
 .update-text {
-    color: $electric-blue;
+    color: var(--electric-blue);
     padding: 0 5px;
 }
 
 .select-account-label {
     font-size: 14px;
-    color: $extra-light-gray;
+    color: var(--extra-light-gray);
     padding-bottom: 3px;
 }
 
@@ -976,9 +975,9 @@ section.static-invoice-table {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     padding-left: 0;
-    border-bottom-color: $light-gray;
+    border-bottom-color: var(--light-gray);
 }
 
 .customer-invoice-form {
@@ -995,7 +994,7 @@ section.static-invoice-table {
     top: 110px;
     opacity: 0.6;
     z-index: 99;
-    background: $alice-blue-light;
+    background: var(--alice-blue-light);
 }
 
 .customer-invoice-form-purchase:before {
@@ -1009,7 +1008,7 @@ section.static-invoice-table {
 }
 
 .aqua-color a {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
     font-size: 12px;
 }
 
@@ -1060,10 +1059,10 @@ section.static-invoice-table {
 }
 
 section.sales-invoiceBGwhite {
-    background-color: $white;
+    background-color: var(--white);
 }
 .upper-layer {
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
     padding-top: 10px;
 }
 .attention-to {

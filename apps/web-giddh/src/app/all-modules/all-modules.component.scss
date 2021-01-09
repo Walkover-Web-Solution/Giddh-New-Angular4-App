@@ -1,7 +1,6 @@
-@import "../../assets/css/color.scss";
 .reports-main p > a {
   font-weight: normal;
-  color: $primary;
+  color: var(--primary);
 }
 .reports-main p {
   margin-bottom: 10px;
@@ -9,7 +8,7 @@
   font-weight: 600;
 }
 .coming-soon-report {
-  color: $dark-gray !important;
+  color: var(--dark-gray) !important;
 }
 .single-report-list{
     min-height: 300px;

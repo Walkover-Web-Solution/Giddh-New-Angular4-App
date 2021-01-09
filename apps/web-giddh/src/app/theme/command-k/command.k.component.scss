@@ -1,14 +1,12 @@
-@import "../../../assets/css/color.scss";
-
 :host {
     .search-wrapper {
         padding: 1.25rem 2rem 1.25rem 4.2rem;
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: $white;
+        background-color: var(--white);
         flex-wrap: wrap !important;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--gainsboro);
         width:100% !important;
         max-width: 580px;
         .search-element {
@@ -25,7 +23,7 @@
             right: 0;
             width: 4.2rem;
             text-align: center;
-            color: $gray-shade;
+            color: var(--gray-shade);
         }
     }
     .vR {
@@ -74,7 +72,7 @@
 }
 
 .universal-data-list-wrapper {
-    background-color: $white;
+    background-color: var(--white);
     overflow: auto;
     display: none;
     box-sizing: border-box;
@@ -130,7 +128,7 @@
                 min-height: auto;
             }
             .item-icon {
-                color: $ford-gray;
+                color: var(--ford-gray);
                 font-size: 14px;
                 .icon-account {
                     font-size: 11px;
@@ -142,7 +140,7 @@
             .item-details {
                 position: relative;
                 font-size: 14px;
-                color: $night-rider;
+                color: var(--night-rider);
                 text-transform: capitalize;
                 margin-left: 25px;
                 padding: 5px 0;
@@ -158,10 +156,10 @@
                 }
                 small {
                     font-size: 12px;
-                    color: $gray-shade;
+                    color: var(--gray-shade);
                 }
                 .command-hover-text {
-                    color: $white;
+                    color: var(--white);
                     right: 0;
                     text-transform: initial;
                     width: 25%;
@@ -175,15 +173,15 @@
             }
             // hover effect
             &.selected {
-                background-color: $chetwode-blue;
+                background-color: var(--chetwode-blue);
                 .item-details {
-                    color: $white;
+                    color: var(--white);
                     small {
-                        color: $white;
+                        color: var(--white);
                     }
                 }
                 .item-icon {
-                    color: $white;
+                    color: var(--white);
                 }
             }
         }

@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .mr-t2 {
     margin-top: 20px;
 }
@@ -7,7 +5,7 @@
     margin-right: 10px;
 }
 form label {
-    color:$nero;
+    color:var(--nero);
     font-weight: normal;
 }
 
@@ -23,9 +21,9 @@ form label {
 }
 
 .form-inline .form-control.selectedVal {
-    border: 1px solid $light-gray !important;
+    border: 1px solid var(--light-gray) !important;
     padding-right: 22px !important;
-    background: $white !important;
+    background: var(--white) !important;
 }
 .clear {
     position: absolute;
@@ -38,7 +36,7 @@ form label {
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
-    color: $black;
+    color: var(--black);
     transform: translateY(-50%);
 }
 .form-group.close-btn {
@@ -52,10 +50,10 @@ input.checkbox-btn {
 span.expand {
     display: inline-block;
     padding: 2px 5.8px;
-    background: $whisper-light;
+    background: var(--whisper-light);
     font-size: 18px;
 
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     width: 30px;
     height: 30px;
     cursor: pointer;

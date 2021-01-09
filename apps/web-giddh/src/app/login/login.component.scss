@@ -1,5 +1,4 @@
 /************ login page start *****************/
-@import "../../assets/css/color.scss";
 /*typography styles*/
 
 body.ununresponsive {
@@ -31,7 +30,7 @@ body.ununresponsive {
 }
 
 .modal-header h3 {
-    color: $white;
+    color: var(--white);
     font-size: 1.3rem;
 }
 
@@ -46,7 +45,7 @@ body.ununresponsive {
 }
 
 #box {
-    background-color: $white;
+    background-color: var(--white);
     padding: 20px 30px;
     margin: 0 auto;
     width: 360px;
@@ -77,7 +76,7 @@ body.ununresponsive {
 
 #box .btn:hover,
 #box .btn:hover {
-    color: $white;
+    color: var(--white);
 }
 
 .mr-b1 {
@@ -102,7 +101,7 @@ body.ununresponsive {
 
 .btn-login {
     text-transform: uppercase;
-    color: $white;
+    color: var(--white);
     margin-bottom: 10px;
     display: inline-block;
     vertical-align: middle;
@@ -133,7 +132,7 @@ body.ununresponsive {
     background: #221f1f none repeat scroll 0 0;
     border: 7px solid #c63b13;
     border-radius: 50%;
-    box-shadow: 0 -10px 0 14px $white inset;
+    box-shadow: 0 -10px 0 14px var(--white) inset;
     box-sizing: border-box;
     height: 60px;
     width: 60px;
@@ -156,13 +155,13 @@ body.ununresponsive {
 
 .btn-login.btn-default {
     color: #333;
-    background-color: $white;
+    background-color: var(--white);
     border-color: #ccc;
 }
 
 .btn-login.btn-default:hover {
     color: #000 !important;
-    background-color: $white;
+    background-color: var(--white);
     border-color: #ccc;
     box-shadow: none;
 }
@@ -214,15 +213,15 @@ button.close {
 }
 
 .btn-success {
-    background: $midnight-blue;
-    color: $white;
-    border-color: $midnight-blue;
+    background: var(--midnight-blue);
+    color: var(--white);
+    border-color: var(--midnight-blue);
 }
 
 .btn-success:hover {
-    background: $midnight-blue-hover;
-    border-color: $midnight-blue-hover;
-    color: $white;
+    background: var(--midnight-blue)-hover;
+    border-color: var(--midnight-blue)-hover;
+    color: var(--white);
 }
 
 strong {
@@ -243,7 +242,7 @@ h1 {
 
 .slide-content {
     padding: 80px 100px;
-    color: $white;
+    color: var(--white);
     background: #2c2c43;
     text-align: center;
     flex-direction: column;
@@ -306,14 +305,14 @@ small {
 /* social icon */
 
 .linkedin-ico a {
-    color: $cerulean;
-    border-color: $cerulean;
+    color: var(--cerulean);
+    border-color: var(--cerulean);
 }
 
 .google-ico a {
-    background: $deep-sky-blue;
-    border-color: $deep-sky-blue !important;
-    color: $white;
+    background: var(--deep-sky-blue);
+    border-color: var(--deep-sky-blue) !important;
+    color: var(--white);
     padding-left: 40px !important;
 }
 
@@ -364,12 +363,12 @@ small {
 
 .slide-content .btn-white {
     color: #fff7eb;
-    border: 1px solid $white;
+    border: 1px solid var(--white);
 }
 
 .slide-content .btn-white:hover {
     color: #0f0f27;
-    background: $white;
+    background: var(--white);
 }
 
 .slide-content > div > img {
@@ -411,7 +410,7 @@ small {
     border: 1px solid;
     min-width: 40px;
     line-height: 40px;
-    color: $white;
+    color: var(--white);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -419,7 +418,7 @@ small {
 
 .app-ico ul li a:hover,
 .download-app ul li a:hover {
-    background: $white;
+    background: var(--white);
     color: #2c2d43;
 }
 
@@ -439,7 +438,7 @@ small {
     position: relative;
 }
 .login-left {
-    background-color: $midnight-blue;
+    background-color: var(--midnight-blue);
     position: absolute;
     left: 0;
     height: 100vh;
@@ -470,7 +469,7 @@ small {
     overflow: hidden;
 }
 .logo-login {
-    background-color: $dark-midnight-blue;
+    background-color: var(--dark-midnight-blue);
     height: 98px;
     display: flex;
     align-items: center;
@@ -480,46 +479,46 @@ small {
 .accounting-space {
     padding: 30px;
     border-radius: 0;
-    background-color: $white;
+    background-color: var(--white);
 }
 .accounting-space h4 {
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     /*font-weight: 600;*/
     font-size: 20px;
 }
 .btn-outline-primary {
-    background-color: $deep-sky-blue;
+    background-color: var(--deep-sky-blue);
     border-radius: 3px;
     min-width: 160px;
     border-radius: 5px;
-    color: $white;
+    color: var(--white);
     margin-bottom: 10px;
     font-size: 14px;
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: $deep-sky-blue-hover;
+    background-color: var(--deep-sky-blue-hover);
     box-shadow: none;
     outline: none;
 }
 .login-with {
     a {
-        color: $midnight-blue;
+        color: var(--midnight-blue);
         text-decoration: none;
     }
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     font-size: 14px;
 }
 .btn-secondary {
-    background-color: $white;
-    color: $navy;
-    border: 1px solid $chetwode-blue;
+    background-color: var(--white);
+    color: var(--navy);
+    border: 1px solid var(--chetwode-blue);
     border-radius: 5px;
 }
 .btn-secondary:hover {
-    color: $white !important;
-    background-color: $chetwode-blue;
-    border-color: $chetwode-blue;
+    color: var(--white) !important;
+    background-color: var(--chetwode-blue);
+    border-color: var(--chetwode-blue);
 }
 
 .loader-main {
@@ -527,7 +526,7 @@ small {
     width: 100%;
     height: 100%;
     z-index: 9999999;
-    background: $white;
+    background: var(--white);
     top: 0;
     right: 0;
     left: 0;

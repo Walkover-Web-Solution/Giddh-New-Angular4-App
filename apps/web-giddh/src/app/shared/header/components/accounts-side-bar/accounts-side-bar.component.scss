@@ -1,4 +1,3 @@
-@import "../../../../../assets/css/color.scss";
 .ul_0 {
     height: calc(100vh - 69px);
     overflow: scroll;
@@ -26,12 +25,12 @@
 /* Track */
 
 .account-accordion::-webkit-scrollbar-track {
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 
 
 /* Handle */
 
 .account-accordion::-webkit-scrollbar-thumb {
-    background: $nobel;
+    background: var(--nobel);
 }

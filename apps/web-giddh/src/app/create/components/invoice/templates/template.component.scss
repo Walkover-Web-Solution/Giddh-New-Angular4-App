@@ -63,7 +63,7 @@ h4 {
 [id^="template-"] {
     font: 12px/1 "Open Sans", sans-serif;
     overflow: auto;
-    background: $white;
+    background: var(--white);
     border: 1px solid $color_silver_approx;
     max-width: 8.3in;
     width: 100%;
@@ -88,7 +88,7 @@ h4 {
         }
     }
     header {
-        border-bottom: 1px solid $black;
+        border-bottom: 1px solid var(--black);
         padding: 20px 0;
         margin: 0 10px;
     }

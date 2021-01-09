@@ -1,5 +1,3 @@
-@import "../../../../../assets/css/color.scss";
-
 /* ::ng-deep .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -25,7 +23,7 @@
     height: 1px;
     margin: 0.5rem 0;
     overflow: hidden;
-    background-color: $bright-gray;
+    background-color: var(--bright-gray);
 }
 
 ::ng-deep .dropdown-item {
@@ -34,7 +32,7 @@
     padding: 3px 7px;
     clear: both;
     font-weight: normal;
-    color: $cinder;
+    color: var(--cinder);
     text-align: inherit;
     white-space: nowrap;
     background: none;
@@ -44,35 +42,35 @@
 
 ::ng-deep .dropdown-item:focus,
 .dropdown-item:hover {
-    color: $black-pearl;
+    color: var(--black-pearl);
     text-decoration: none;
-    background-color: $ghost-white-light;
+    background-color: var(--ghost-white-light);
 }
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    background: $solitude;
+    background: var(--solitude);
 }
 
 ::ng-deep .dropdown-item.disabled,
 .dropdown-item:disabled {
-    color: $mid-gray;
+    color: var(--mid-gray);
     cursor: not-allowed;
     background-color: transparent;
 }
 
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
-    background: $solitude;
+    background: var(--solitude);
 }
 
 .hasError {
-    border: 1px solid $red;
+    border: 1px solid var(--red);
 }
 
 #createCompForm p {
     font-size: 14px;
-    color: $extra-pink-swan;
+    color: var(--extra-pink-swan);
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -102,7 +100,7 @@
     width: 100%;
 }
 .add-company-detail {
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
 }
 
 .phone-code-caret{

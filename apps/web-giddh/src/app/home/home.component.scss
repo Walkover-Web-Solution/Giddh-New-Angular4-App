@@ -1,7 +1,6 @@
 /*styles for home content only*/
 // @import url('../../assets/css/color.css');
 
-@import "../../assets/css/color.scss";
 .dashboard-option {
     padding: 0;
     display: flex;
@@ -19,39 +18,39 @@
 }
 // new dashboard css
 .white-row {
-    background-color: $white;
+    background-color: var(--white);
     padding: 9px;
     margin-bottom: 10px;
     font-size: 16px;
-    box-shadow: 1px 1px 3px $black-russian;
+    box-shadow: 1px 1px 3px var(--black-russian);
 }
 .click-here {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 .dashboard-container {
     max-width: 1170px;
     width: 100%;
 }
 span.icon-traingle-info {
-    color: $bitter-sweet;
+    color: var(--bitter-sweet);
     font-size: 15px;
     margin-right: 10px;
 }
 span.icon-info-icon {
-    color: $nobel;
+    color: var(--nobel);
     font-size: 18px;
     margin-right: 10px;
 }
 .dropdown-menu {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 a.dropdown-item {
-    color: $charcoal;
+    color: var(--charcoal);
 }
 
 a.dropdown-item:hover {
-    background-color: $lavender;
-    color: $chetwode-blue;
+    background-color: var(--lavender);
+    color: var(--chetwode-blue);
 }
 .dashboard-notification {
     margin-bottom: 20px;
@@ -67,7 +66,7 @@ a.dropdown-item:hover {
     background: transparent;
 }
 .form-control:focus {
-    border-color: $chetwode-blue !important;
+    border-color: var(--chetwode-blue) !important;
 }
 .form-control {
     height: 32px;

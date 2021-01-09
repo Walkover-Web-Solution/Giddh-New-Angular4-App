@@ -1,5 +1,3 @@
-@import "../../assets/css/color.scss";
-
 .inventory-main{
     min-height:100%;
 }
@@ -8,7 +6,7 @@
     padding: 2px 0px !important;
     margin-right: 35px !important;
     border-bottom: 4px solid transparent !important;
-    color: $black !important;
+    color: var(--black) !important;
     border-top: transparent !important;
     border-right: transparent !important;
     border-left: transparent !important;
@@ -19,28 +17,28 @@
 .inventory-control ::ng-deep.nav.nav-tabs {
     margin-bottom: 0;
     padding: 0 0px 0 15px !important;
-    background-color: $white;
+    background-color: var(--white);
     z-index: 9;
     position: relative;
     top: -4px;
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
 
     position: absolute !important;
     top: 0;
     left: 0;
     width: 100%;
     padding: 10px 0px 0 50px !important;
-    border-bottom:1px solid $gainsboro;
+    border-bottom:1px solid var(--gainsboro);
 }
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
-    color: $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
 }
 .inventory-control ::ng-deep.nav-tabs > ::ng-deep li.active > a,
 .nav-tabs > ::ng-deep li.active > a:focus,
 ::ng-deep.nav-tabs > li.active > a:hover {
-    color: $nero !important;
-    border-bottom: 4px solid $deep-sky-blue !important;
+    color: var(--nero) !important;
+    border-bottom: 4px solid var(--deep-sky-blue) !important;
     cursor: pointer !important;
     background-color: unset !important;
     border-top: transparent !important;
@@ -48,8 +46,8 @@
     border-left: transparent !important;
 }
 .inventory-control .nav-tabs > li > a:hover {
-    color: $deep-sky-blue !important;
-    border-bottom: 4px solid $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
+    border-bottom: 4px solid var(--deep-sky-blue) !important;
 }
 .navbar {
     min-height: auto;

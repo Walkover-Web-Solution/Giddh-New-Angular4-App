@@ -1,8 +1,6 @@
-@import "../../assets/css/color.scss";
-
 .form-control,
 input {
-    color: $nero;
+    color: var(--nero);
 }
 .notfound-option {
     display: flex;
@@ -11,10 +9,10 @@ input {
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px 10px !important;
-    border-bottom: 1px solid $gainsboro;
-    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
+    border-right: 1px solid var(--gainsboro);
     font-size: 13px;
-    color: $nero;
+    color: var(--nero);
     text-overflow: ellipsis;
     white-space: nowrap;
     display: flex;
@@ -37,8 +35,8 @@ input {
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid $gainsboro;
-    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
+    border-right: 1px solid var(--gainsboro);
     font-size: 13px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -61,7 +59,7 @@ input {
     .ledger-main {
         .ledger-row.row{
             td, th{
-                border-bottom: 1px solid $gainsboro !important;
+                border-bottom: 1px solid var(--gainsboro) !important;
                 border-top: none !important;
             }
             td[class*="col-"]{
@@ -104,15 +102,15 @@ input {
     .single-search-box {
         position: relative;
         i {
-            color: $gray;
+            color: var(--gray);
             left: 9px;
             top: 10px;
         }
     }
 }
 .ledger-head-top i.icon-search.pos-abs {
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--chetwode-blue);
+    color: var(--white);
     width: 32px;
     height: 36px;
     top: 0px !important;
@@ -125,11 +123,11 @@ input {
 }
 .ledger-stat {
     padding: 10px 15px 0;
-    background: $white;
-    color: $gray;
+    background: var(--white);
+    color: var(--gray);
     font-size: 18px;
     margin: 0px !important;
-    box-shadow: 0px 2px 6px $black-russian-light;
+    box-shadow: 0px 2px 6px var(--black-russian-light);
 }
 .ledger-stat .row {
     display: flex;
@@ -159,7 +157,7 @@ input {
 }
 
 .ledger-head th {
-    color: $jacksons-purple;
+    color: var(--jacksons-purple);
     padding-top: 5px;
     padding-bottom: 10px;
     &.first-child{
@@ -186,7 +184,7 @@ input {
     width: 100% !important;
     left: 0% !important;
     bottom: 100px;
-    background: $white;
+    background: var(--white);
     padding: 5px;
     font-size: 12px;
     z-index: 0;
@@ -198,7 +196,7 @@ input {
     text-align: center;
 }
 .pagination > li > a:hover {
-    color: $cinnabar-orange;
+    color: var(--cinnabar-orange);
 }
 .ledger-panel label {
     font-weight: 400;
@@ -207,7 +205,7 @@ input {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 .upload-div label {
     padding: 6px;
@@ -216,30 +214,30 @@ input {
     padding-right: 25px !important;
 }
 .thead-background1 th {
-    background: $white;
-    color: $black;
-    border-right: 1px solid $gainsboro;
+    background: var(--white);
+    color: var(--black);
+    border-right: 1px solid var(--gainsboro);
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     font-family: 'opensans-semibold';
     font-size: 14px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 .ledger-main .form-control,
 .ledger-main input {
-    color: $nero;
+    color: var(--nero);
 }
 
 .ledger-book {
-    border: 0px solid $gainsboro;
+    border: 0px solid var(--gainsboro);
     clear: both;
     position: relative;
     float: left;
     width: 100%;
     margin-bottom: 16px;
-    background: $white;
-    box-shadow: 0 0 6px $black-russian-light;
+    background: var(--white);
+    box-shadow: 0 0 6px var(--black-russian-light);
 }
 .Width600 {
     position: absolute;
@@ -273,7 +271,7 @@ input {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: $gainsboro;
+    background-color: var(--gainsboro);
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -310,24 +308,24 @@ input[type="date"]::-webkit-outer-spin-button {
     border: unset !important;
 }
 tr[vr-item]:focus {
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
     outline: 0;
 }
 sh-select:focus {
-    outline: 1px $cinnabar-orange solid;
+    outline: 1px var(--cinnabar-orange) solid;
 }
 .notfound-option.active {
-    background: $lavender !important;
+    background: var(--lavender) !important;
     padding: 2px 5px !important;
 }
 .amount-total {
     font-size: 12px;
-    color: $nobel;
+    color: var(--nobel);
     padding-left: 5px;
 }
 .ledger-book .left-col-new,
 .ledger-book .right-col-new {
-    background: $white;
+    background: var(--white);
     padding: 0 15px 350px;
 }
 .left-col-new table.width100.h-table tbody tr td:last-child,
@@ -336,30 +334,30 @@ sh-select:focus {
 }
 .left-col-new table.width100.h-table tbody tr td:first-child,
 .left-col-new table.width100.h-table thead tr th:first-child {
-    border-left: 1px solid $gainsboro !important;
+    border-left: 1px solid var(--gainsboro) !important;
 }
 .custom-tabs {
     display: none;
 }
 .ledg-head .icomoon-ico {
-    color: $gray;
+    color: var(--gray);
     width: 36px;
     height: 36px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     padding: 3px;
     display: flex;
     justify-content: center;
     border-top-width: 1px;
-    background-color: $white;
+    background-color: var(--white);
     border-radius: 50%;
 }
 .advance-search-block input {
-    background: $solitude !important;
+    background: var(--solitude) !important;
     height: 28px;
-    border-color: $solitude !important;
+    border-color: var(--solitude) !important;
 }
 .advance-search-block input::placeholder {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .left-col-new,
@@ -373,9 +371,9 @@ sh-select:focus {
 .advance-search-block .icon-search {
     right: 0;
     top: 0;
-    background-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
     padding: 6px 9px;
-    color: $white;
+    color: var(--white);
 }
 .left-col-new table.width100.h-table#blank-ledger-container .no-left-border{
     border-left: none !important;
@@ -384,7 +382,7 @@ sh-select:focus {
     margin-right: 15px;
 }
 .ledger-book .ledger-footer-1 .total-col .border-top {
-    border-top: 1px solid $gainsboro !important;
+    border-top: 1px solid var(--gainsboro) !important;
 }
 .ledger-book .ledger-footer-1 .total-col .bd-rt {
     border: none;
@@ -392,7 +390,7 @@ sh-select:focus {
 
 .advance-search-by-date {
     display: inline-flex;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 20px;
     position: relative;
 }
@@ -401,7 +399,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: $gainsboro;
+    background-color: var(--gainsboro);
     left: -33%;
     top: 17px;
 }
@@ -410,7 +408,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: $gainsboro;
+    background-color: var(--gainsboro);
     right: -33%;
     top: 17px;
 }
@@ -419,15 +417,15 @@ sh-select:focus {
     margin-top: 25px;
 }
 .ledger-stat h1 {
-    color: $nero;
+    color: var(--nero);
     font-size: 14px;
     margin-bottom: 10px;
 }
 .digit-blue {
-    color: $midnight-blue;
+    color: var(--midnight-blue);
 }
 .greyTextClr {
-    color: $dark-gray !important;
+    color: var(--dark-gray) !important;
     font-size: 14px;
 }
 
@@ -435,30 +433,30 @@ sh-select:focus {
     font-size: 14px;
 }
 .stat-block {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
 .stat-block:first-child {
-    border-bottom: 8px solid $midnight-express;
+    border-bottom: 8px solid var(--midnight-express);
 }
 .stat-block:nth-child(2) {
-    border-bottom: 8px solid $jacksons-purple;
+    border-bottom: 8px solid var(--jacksons-purple);
 }
 .stat-block:nth-child(3) {
-    border-bottom: 8px solid $chetwode-blue;
+    border-bottom: 8px solid var(--chetwode-blue);
 }
 .stat-block:last-child {
     border-right: none;
-    border-bottom: 8px solid $portage;
+    border-bottom: 8px solid var(--portage);
 }
 .advance-search-filter {
     justify-content: center;
     align-items: center;
     margin-right: 7px;
     border-radius: 50%;
-    background-color: $white;
+    background-color: var(--white);
     img {
         width: 18px;
     }
@@ -483,12 +481,12 @@ sh-select:focus {
     margin-right: 0;
 }
 .clear-filter-btn {
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     font-size: 14px;
-    border: 1px solid $midnight-blue;
+    border: 1px solid var(--midnight-blue);
     border-radius: 20px;
     padding: 0 15px;
-    background-color: $white;
+    background-color: var(--white);
 }
 .clear-filter-btn i {
     font-size: 12px;
@@ -521,7 +519,7 @@ sh-select:focus {
     background-color: transparent;
 }
 .date-range-picker {
-    background-color: $white !important;
+    background-color: var(--white) !important;
     text-decoration-line: none;
     text-decoration-style: none;
     background-image: url(../../assets/images/calender-icon.svg) !important;
@@ -539,12 +537,12 @@ sh-select:focus {
     min-width: 225px !important;
     border-radius: 30px;
     &:focus {
-        border-color: $chetwode-blue;
+        border-color: var(--chetwode-blue);
     }
 }
 .ipad-view-datepicker {
     .date-range-picker {
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--gainsboro);
         border-radius: 20px;
         width: 203px !important;
     }
@@ -568,7 +566,7 @@ sh-select:focus {
     table {
         width: 100%;
         tbody {
-            background-color: $white;
+            background-color: var(--white);
             .transaction-date {
                 font-size: 16px;
                 font-family: "opensans-semibold";
@@ -576,13 +574,13 @@ sh-select:focus {
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
-                border-bottom: 1px solid $gray-82;
+                border-bottom: 1px solid var(--gray-82);
                 font-size: 14px;
             }
             .second-row {
                 td {
                     &:first-child {
-                        border-right: 1px solid $gainsboro;
+                        border-right: 1px solid var(--gainsboro);
                         width: 60%;
                     }
                     span.account-holder-checkbox {
@@ -624,10 +622,10 @@ sh-select:focus {
             padding-top: 10px;
             &:first-child {
                 padding-right: 15px;
-                border-left: 1px solid $gainsboro;
+                border-left: 1px solid var(--gainsboro);
             }
             &:last-child{
-                border-right: 1px solid $gainsboro;
+                border-right: 1px solid var(--gainsboro);
             }
         }
     }
@@ -654,7 +652,7 @@ sh-select:focus {
         }
     }
     .transaction-table-row table td {
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--gainsboro);
     }
     .transaction-table-row table:last-child td {
         border-bottom: none;
@@ -677,7 +675,7 @@ sh-select:focus {
 }
 
 .list-item{
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .ledger-row{
@@ -699,7 +697,7 @@ sh-select:focus {
     position: sticky;
     top: 60px;
     z-index: 1;
-    background-color: $alice-blue-light;
+    background-color: var(--alice-blue-light);
     padding-left: 5px;
 }
 .show-if-ledger-open{
@@ -723,10 +721,10 @@ sh-select:focus {
             align-items: center;
             display: flex;
             &:hover:after {
-                color: $rich-blue;
+                color: var(--rich-blue);
             }
             .icon-favorite-selected {
-                color: $rich-blue;
+                color: var(--rich-blue);
             }
         }
     }
@@ -821,14 +819,14 @@ sh-select:focus {
         margin-bottom: 0;
     }
     .amount-total {
-        background: $whisper-color;
+        background: var(--whisper-color);
     }
     .page-count {
         width: 100%;
         left: 0;
         bottom: 0;
         position: relative;
-        box-shadow: 0px 2px 6px $black-russian-light;
+        box-shadow: 0px 2px 6px var(--black-russian-light);
         margin-top: 0;
         padding-top: 20px;
         padding-bottom: 20px;
@@ -858,7 +856,7 @@ sh-select:focus {
         display: block;
     }
     .right-col-new .ledger-head {
-        background: $alice-blue-light;
+        background: var(--alice-blue-light);
     }
     .ledger-row td:empty {
         display: none !important;
@@ -882,7 +880,7 @@ sh-select:focus {
     }
     .left-col-new table.width100.h-table tbody tr td:first-child,
     .left-col-new table.width100.h-table thead tr th:first-child {
-        border-left: 0px solid $gainsboro !important;
+        border-left: 0px solid var(--gainsboro) !important;
     }
     .ledg-head.some.transactions-page {
         margin-top: 50px;
@@ -925,7 +923,7 @@ sh-select:focus {
                 i {
                     left: -3px;
                     top: 0;
-                    color: $midnight-blue;
+                    color: var(--midnight-blue);
                 }
             }
         }
@@ -941,8 +939,8 @@ sh-select:focus {
         .ledger-datepicker {
             width: 36px;
             height: 36px;
-            background-color: $white;
-            border: 1px solid $gainsboro;
+            background-color: var(--white);
+            border: 1px solid var(--gainsboro);
             text-align: center;
             align-items: center;
             justify-content: center;
@@ -957,7 +955,7 @@ sh-select:focus {
         right: 0px;
         .btn {
             background-color: transparent;
-            color: $nero;
+            color: var(--nero);
             font-size: 18px;
         }
         ul {
@@ -993,7 +991,7 @@ sh-select:focus {
         top: 8px;
         i {
             top: 0;
-            color: $gray;
+            color: var(--gray);
         }
     }
     .ledger-head thead tr th.active {
@@ -1014,7 +1012,7 @@ sh-select:focus {
         height: calc(100% - 220px);
         position: absolute;
         width: 0;
-        border-left: 1px solid $gainsboro;
+        border-left: 1px solid var(--gainsboro);
         top: 0px;
         bottom: 0;
         z-index: 1;
@@ -1024,7 +1022,7 @@ sh-select:focus {
     }
 
     table.ledger-footer-1:first-child {
-        border-right: 1px solid $gainsboro;
+        border-right: 1px solid var(--gainsboro);
     }
 }
 */
@@ -1046,7 +1044,7 @@ sh-select:focus {
         position: fixed;
         .btn {
             background-color: transparent;
-            color: $white;
+            color: var(--white);
             font-size: 18px;
         }
     }

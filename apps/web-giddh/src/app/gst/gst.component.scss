@@ -1,18 +1,16 @@
-@import "../../assets/css/color.scss";
-
 .return-body .main-wrapper {
-    background-color: $gray-95;
+    background-color: var(--gray-95);
     padding: 0;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 
 .return-content {
     padding: 15px;
-    background-color: $white;
+    background-color: var(--white);
 }
 
 .btn-primary {
-    border-color: $chetwode-blue !important;
+    border-color: var(--chetwode-blue) !important;
 }
 .btn-primary.disabled,
 .btn-primary.disabled.active,
@@ -37,9 +35,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    border-color: $chetwode-blue !important;
-    background: $chetwode-blue;
-    color: $white;
+    border-color: var(--chetwode-blue) !important;
+    background: var(--chetwode-blue);
+    color: var(--white);
 }
 
 .btn,
@@ -75,7 +73,7 @@ svg.icon.icon-xxlg-md {
             margin: 3px auto;
         }
     }
-} 
+}
 
 .text-middle {
     vertical-align: middle;
@@ -86,7 +84,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .return-content .return-filed {
-    background-color: $jade-color;
+    background-color: var(--jade-color);
 }
 
 .text-uppercase {
@@ -94,7 +92,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .text-muted {
-    color: $grimmys-gray;
+    color: var(--grimmys-gray);
 }
 
 .return-content .content-graph {
@@ -122,7 +120,7 @@ svg.icon.gstr-icon {
 
 .return-content .line {
     margin: 5px 18px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .return-content .line::before {
@@ -131,7 +129,7 @@ svg.icon.gstr-icon {
     width: 9px;
     height: 9px;
     border-radius: 5px;
-    background-color: $whisper-color;
+    background-color: var(--whisper-color);
     position: relative;
     top: 5px;
     right: 19px;
@@ -168,7 +166,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
     margin: 20px 0px 0px;
     i{
         padding: 0 4%;
@@ -192,14 +190,14 @@ svg.icon.icon-xxlg-md {
 }
 
 .btn-default {
-    color: $night-rider;
-    background-color: $gray-95;
-    border-color: $gainsboro;
+    color: var(--night-rider);
+    background-color: var(--gray-95);
+    border-color: var(--gainsboro);
 }
 
 .return-body .notification {
     padding-top: 25px;
-    background: $white;
+    background: var(--white);
 }
 
 .filing-demo-video {
@@ -228,13 +226,13 @@ svg.icon.icon-xxlg-md {
 }
 
 .label-default {
-    background-color: $nobel;
+    background-color: var(--nobel);
 }
 
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .filing-due-date {
@@ -243,7 +241,7 @@ hr {
 
 .filing-due-date .return-details {
     margin-top: 10px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 4px;
 }
 
@@ -279,7 +277,7 @@ hr {
 
 .return-body .notification .notify-title {
     font-size: 13px;
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .return-body .notification .activity-graph {
@@ -298,14 +296,14 @@ hr {
     left: 4px;
     bottom: 5px;
     height: 75%;
-    border-left: 1px solid $whisper;
+    border-left: 1px solid var(--whisper);
 }
 
 .return-body .notification .activity-graph .notify-circle {
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: $primary;
+    background-color: var(--primary);
     display: inline-block;
     margin-right: 15px;
     margin-top: 4px;
@@ -324,12 +322,12 @@ hr {
 
 .notify label.font-xs.text-muted strong {
     font-weight: 600;
-    color: $grimmys-gray !important;
+    color: var(--grimmys-gray) !important;
 }
 
 .font-normal {
     font-size: 13px;
-    color: $grimmys-gray;
+    color: var(--grimmys-gray);
 }
 
 .return-body .notification .faq-list {
@@ -349,14 +347,14 @@ hr {
 #c-tab ::ng-deep .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
-    color: $davy-grey;
+    color: var(--davy-grey);
     cursor: default;
-    background-color: $white;
-    border: 2px solid $gainsboro;
+    background-color: var(--white);
+    border: 2px solid var(--gainsboro);
     border-right: 0 !important;
     border-left: 0 !important;
     border-top: 0 !important;
-    border-bottom-color: $navy-blue
+    border-bottom-color: var(--navy-blue)
 }
 
 .my-dropdown-menu {
@@ -391,8 +389,8 @@ hr {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $gray-90;
+    color: var(--chetwode-blue);
+    background: var(--gray-90);
 }
 
 .month-picker {
@@ -415,26 +413,26 @@ hr {
     margin-top: 0;
 }
 ::ng-deep #monthPicker button.btn.btn-default.btn-info {
-    background: $chetwode-blue !important;
-    color: $white!important;
+    background: var(--chetwode-blue) !important;
+    color: var(--white)!important;
     text-decoration: none;
     border-radius: 3px;
 }
 
 ::ng-deep #monthPicker .btn-info > .text-success {
-    color: $primary !important;
+    color: var(--primary) !important;
 }
 ::ng-deep #monthPicker .btn-default.btn-info > .text-success {
     color: inherit !important;
 }
 ::ng-deep #monthPicker .btn-info:hover .text-success {
-    color: $white !important;
+    color: var(--white) !important;
 }
 ::ng-deep #monthPicker .btn-default > .text-success {
     color: inherit !important;
 }
 ::ng-deep #monthPicker .btn-default:hover > .text-success {
-    color: $white !important;
+    color: var(--white) !important;
 }
 .parent {
     position: relative;
@@ -459,7 +457,7 @@ hr {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
     animation: loading 2s linear infinite;
 }
 
@@ -509,7 +507,7 @@ hr {
 /*responsive*/
 @media (max-width: 767px) {
     .return-content {
-        background-color: $white;
+        background-color: var(--white);
     }
     .filing-steps .font-large {
         font-size: 14px;

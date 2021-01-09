@@ -1,4 +1,3 @@
-@import "../../../assets/css/color.scss";
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -53,7 +52,7 @@ tfoot {
 
 .td-search-box div i {
     margin-top: 3px;
-    color: $olive;
+    color: var(--olive);
     padding-right: 8px;
     cursor: pointer;
 }
@@ -77,7 +76,7 @@ tfoot {
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 
 .icon-pointer .glyphicon {
@@ -85,8 +84,8 @@ tfoot {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $gray-90;
+    color: var(--chetwode-blue);
+    background: var(--gray-90);
 }
 
 .dropdown-menu {
@@ -110,7 +109,7 @@ tfoot {
     resize: vertical;
     margin-top: 7px;
     width: 100%;
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
     border-radius: 2px;
     padding: 7px;
 }
@@ -156,7 +155,7 @@ tfoot {
 }
 
 .input-group input.form-control:focus {
-    border-color: $chetwode-blue;
+    border-color: var(--chetwode-blue);
 }
 
 .icon-calender {
@@ -167,7 +166,7 @@ tfoot {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $chetwode-blue;
+    border-right: 1px solid var(--chetwode-blue);
 }
 
 .input-wrapper {
@@ -183,17 +182,17 @@ tfoot {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: $gainsboro;
+    background-color: var(--gainsboro);
     left: 37px !important;
     z-index: 100;
     top: 0;
 }
 
 button.btn.btn-filter {
-    background: $whisper-color;
-    border: 1px solid $gainsboro;
+    background: var(--whisper-color);
+    border: 1px solid var(--gainsboro);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -220,9 +219,9 @@ button.btn.btn-filter span.icon-cross {
         display: flex;
         justify-content: space-between;
         height: 54px;
-        background-color: $white;
-        border-top: 1px solid $gainsboro;
-        border-bottom: 1px solid $gainsboro;
+        background-color: var(--white);
+        border-top: 1px solid var(--gainsboro);
+        border-bottom: 1px solid var(--gainsboro);
         align-items: center;
         span {
             padding: 10px;
@@ -234,8 +233,8 @@ button.btn.btn-filter span.icon-cross {
         span.close-modal {
             height: 32px;
             width: 32px;
-            background-color: $very-light-gray;
-            border: 1px solid $gainsboro;
+            background-color: var(--very-light-gray);
+            border: 1px solid var(--gainsboro);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -255,8 +254,8 @@ span.close-modal.cp.pull-right {
     align-items: center;
     height: 32px;
     width: 32px;
-    background-color: $very-light-gray;
-    border: 1px solid $gainsboro;
+    background-color: var(--very-light-gray);
+    border: 1px solid var(--gainsboro);
     margin-right: 8px;
     position: static;
     transform: inherit;
@@ -371,7 +370,7 @@ span.close-modal.cp.pull-right {
         }
     }
     .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td{
-        border-right: 1px solid $gainsboro !important;
+        border-right: 1px solid var(--gainsboro) !important;
     }
     .pending-table.on-mobile-view tr td .table.nested-table tr td:last-child{
         border-bottom: none !important;

@@ -1,13 +1,12 @@
-@import "../../../../../assets/css/color.scss";
 .form-header {
     padding: 20px 15px;
-    background: $midnight-blue;
-    color: $white;
+    background: var(--midnight-blue);
+    color: var(--white);
 }
 
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0px 3px 6px $black-russian-light;
+    background-color: var(--white);
+    box-shadow: 0px 3px 6px var(--black-russian-light);
     padding: 15px 15px;
     //  height: 100vh;
     overflow: auto;
@@ -18,7 +17,7 @@
 .aside-pane-container {
     padding: 15px;
     font-size: 14px;
-    color: $nero;
+    color: var(--nero);
 }
 
 .aside-pane-form label {
@@ -48,8 +47,8 @@ span.dr-label {
 }
 
 .cr-dr-account span.active {
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--chetwode-blue);
+    color: var(--white);
 }
 
 .aside-pane-form .col-sm-4,
@@ -65,13 +64,13 @@ span.dr-label {
     margin-bottom: 20px;
     .input-group{
         .input-group-addon{
-            border-left: 1px solid $gainsboro !important;
+            border-left: 1px solid var(--gainsboro) !important;
         }
         input{
-            border-left: 1px solid $gainsboro !important;
+            border-left: 1px solid var(--gainsboro) !important;
             border-right: none !important;
             &:focus{
-                border-left: 1px solid $chetwode-blue !important;
+                border-left: 1px solid var(--chetwode-blue) !important;
             }
         }
     }
@@ -84,7 +83,7 @@ form.gstin-form {
 .add-address-default {
     display: flex;
     justify-content: space-between;
-    background-color: $gainsboro;
+    background-color: var(--gainsboro);
     padding: 6px 10px;
     align-items: center;
     margin: 20px 0;
@@ -92,7 +91,7 @@ form.gstin-form {
 
 .add-address-default h3 {
     font-size: 16px;
-    color: $nero;
+    color: var(--nero);
 }
 
 .contact-form,
@@ -119,7 +118,7 @@ form.gstin-form {
 
 .move-to-group{
     .list-item{
-        border-bottom:1px solid $gainsboro;
+        border-bottom:1px solid var(--gainsboro);
     }
 }
 .name-of-field{
@@ -138,6 +137,6 @@ form.gstin-form {
 }
 
 .contact-number-select{
-    width: 60px; 
+    width: 60px;
     margin-right: 10px;
 }

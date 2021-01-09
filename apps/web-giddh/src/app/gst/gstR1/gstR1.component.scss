@@ -1,12 +1,10 @@
-@import "../../../assets/css/color.scss";
-
 .column.list-column.expanded-list-column {
     width: auto;
 }
 .tax-engine .column.list-column {
     display: block;
 
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 .tax-engine .column {
     height: 100%;
@@ -24,7 +22,7 @@
 }
 .tax-engine .list-filter {
     padding: 15px !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
     height: 80px;
 }
 .tax-engine{
@@ -33,7 +31,7 @@
             .btn-toolbar {
                 margin-top: 2px;
                 .btn-link{
-                    border: 1px solid $gainsboro;
+                    border: 1px solid var(--gainsboro);
                 }
             }
         }
@@ -78,7 +76,7 @@ fieldset[disabled] .btn-link {
     box-shadow: none;
 }
 .btn-link {
-    color: $curious-blue;
+    color: var(--curious-blue);
     font-weight: 400;
     cursor: pointer;
     border-radius: 0;
@@ -140,7 +138,7 @@ svg.icon.icon-sm {
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 .space {
     margin-top: 10px;
@@ -151,7 +149,7 @@ svg.icon.icon-sm {
     display: inline-block;
     width: 6px;
     height: 6px;
-    background-color: $primary;
+    background-color: var(--primary);
     border-radius: 50%;
     margin-right: 5px;
     vertical-align: middle;
@@ -195,7 +193,7 @@ svg.icon.icon-sm {
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 .tax-engine .transactions-overview .gstr-transactions-summary {
     padding: 15px 35px;
@@ -214,7 +212,7 @@ hr {
     .transactions-overview
     .gstr-transactions-summary
     .transactions-table {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 .tax-engine .table.transactions-table,
 .tax-engine .transactions-list .zi-table.table-scroll {
@@ -234,10 +232,10 @@ address {
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
     font-size: 14px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
     padding: 10px;
@@ -245,7 +243,7 @@ address {
     font-weight: 600;
 }
 .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 .table caption + thead tr:first-child td,
 .table caption + thead tr:first-child th,
@@ -256,8 +254,8 @@ address {
     border-top: 0;
 }
 .table thead > tr > th {
-    border-bottom: 1px solid $gainsboro;
-    color: $dark-gray;
+    border-bottom: 1px solid var(--gainsboro);
+    color: var(--dark-gray);
 }
 .tax-engine .table.transactions-table tbody > tr > td {
     max-width: 160px;
@@ -275,7 +273,7 @@ address {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .tax-engine
@@ -284,7 +282,7 @@ address {
     > tr:not(.secondary-row)
     + tr.secondary-row
     > td {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 .tax-engine
     .table.transactions-summary-table
@@ -296,7 +294,7 @@ address {
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
     background-color: #fff;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
     font-size: 13px;
     padding: 13px;
 }
@@ -328,11 +326,11 @@ address {
 .tax-engine .nav-band .nav-tabs {
     white-space: nowrap;
 
-    background-color: $lynx-white;
+    background-color: var(--lynx-white);
 }
 .tax-engine{
     .sub-filter-nav-band{
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--gainsboro);
         ul{
             > li {
             display: inline-block;
@@ -350,12 +348,12 @@ address {
 .tax-engine .sub-filter-nav-band ul > li.active:after {
     content: "";
     display: block;
-    border-bottom: 2px solid $primary;
+    border-bottom: 2px solid var(--primary);
     width: 55%;
     margin: auto;
 }
 .tax-engine .sub-filter-nav-band ul > li.active > a {
-    color: $gray-black;
+    color: var(--gray-black);
     font-weight: 600;
 }
 #subtabs {
@@ -363,7 +361,7 @@ address {
 }
 .tax-engine .gstr-transactions-summary .gstr-summary-title {
     margin: 0 0 6px;
-    color: $grimmys-gray;
+    color: var(--grimmys-gray);
 }
 .gstr-transactions-summary p {
     margin-bottom: 10px;
@@ -402,7 +400,7 @@ svg.icon.icon-xs {
     display: block;
 }
 .tax-engine .transactions-list .filter-band {
-    background-color: $alice-blue-dark;
+    background-color: var(--alice-blue-dark);
     padding: 20px;
     height: 66px;
 }
@@ -442,8 +440,8 @@ svg.icon.icon-sm {
 .tax-engine .transactions-list .filter-band .btn,
 .tax-engine .transactions-list .filter-band .btn:focus,
 .tax-engine .transactions-list .filter-band .btn:hover {
-    color: $primary;
-    border-color: $primary;
+    color: var(--primary);
+    border-color: var(--primary);
     background-color: transparent;
     box-shadow: none;
 }
@@ -454,7 +452,7 @@ svg.icon.icon-sm {
 .tax-engine .transactions-list .filter-band .btn .caret,
 .tax-engine .transactions-list .filter-band .btn:focus .caret,
 .tax-engine .transactions-list .filter-band .btn:hover .caret {
-    border-top-color: $primary;
+    border-top-color: var(--primary);
 }
 .caret {
     display: inline-block;
@@ -462,7 +460,7 @@ svg.icon.icon-sm {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid $white;
+    border-top: 4px solid var(--white);
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -480,17 +478,17 @@ svg.icon.icon-sm {
 }
 .table-striped > tbody > tr:hover {
     cursor: pointer;
-    background-color: $snow !important;
+    background-color: var(--snow) !important;
 }
 .table-striped > tbody > tr:nth-child(odd) {
-    background-color: $snow;
+    background-color: var(--snow);
 }
 
 .table-striped > tbody > tr:nth-child(even) {
-    background-color: $white;
+    background-color: var(--white);
 }
 .zi-table.table-hover tbody tr:hover td {
-    background-color: $snow;
+    background-color: var(--snow);
     cursor: pointer;
 }
 .table-hover > tbody > tr:hover > td,
@@ -507,7 +505,7 @@ svg.icon.icon-sm {
 .table > thead > tr.active > th,
 .table > thead > tr > td.active,
 .table > thead > tr > th.active {
-    background-color: $gray-95;
+    background-color: var(--gray-95);
 }
 .tax-engine
     .table.transactions-table
@@ -519,16 +517,16 @@ svg.icon.icon-sm {
 
 
 .return-detail-col{
-    background-color: $extra-dark-alice-blue;
+    background-color: var(--extra-dark-alice-blue);
     width: 50%;
 }
 
 .failed-transaction{
     padding: 10px 25px;
     margin: 5px auto;
-    border-left: 1px solid $light-grey;
+    border-left: 1px solid var(--light-grey);
 }
 
 .zi-table-child{
-    border-left: 1px solid $gainsboro;
+    border-left: 1px solid var(--gainsboro);
 }

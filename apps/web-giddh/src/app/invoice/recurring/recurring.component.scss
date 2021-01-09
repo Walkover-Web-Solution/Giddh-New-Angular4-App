@@ -1,6 +1,4 @@
 /*td-in-searchbox_style*/
-@import "../../../assets/css/color.scss";
-
 .recurring-form {
     flex: 1;
     display: flex;
@@ -13,10 +11,10 @@
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 2px;
-    color: $gray;
-    background: $white;
+    color: var(--gray);
+    background: var(--white);
     align-items: center;
     justify-content: center;
 }
@@ -31,7 +29,7 @@
 
 .td-search-box div i {
     margin-top: 4px;
-    color: $wild-blue-yonder;
+    color: var(--wild-blue-yonder);
     padding-right: 8px;
     cursor: pointer;
     padding-left: 10px;
@@ -48,7 +46,7 @@
     padding: 11px;
     padding-right: 40px;
     border: none;
-    background-color: $white-smoke;
+    background-color: var(--white-smoke);
 }
 
 .td-search-box .input-container i {
@@ -62,15 +60,15 @@
 }
 
 .list-item{
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
 }
 
 .active-text-color {
-    color: $deep-sky-blue !important;
+    color: var(--deep-sky-blue) !important;
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 .icon-pointer {
     margin-left: 6px;
@@ -81,7 +79,7 @@
 }
 
 .td-search-box div i:hover {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
 }
 
 .check-image img {
@@ -99,13 +97,13 @@
 }
 .icon-sort-asc,
 .icon-sort-dsc {
-    color: $wild-blue-yonder;
+    color: var(--wild-blue-yonder);
 }
 .table-bordered .d-flex {
     align-items: center;
 }
 .btn-link-2 {
-    color: $nero;
+    color: var(--nero);
 }
 .search-invoice-filed {
     display: none;

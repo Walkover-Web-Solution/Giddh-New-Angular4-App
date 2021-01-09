@@ -1,4 +1,3 @@
-@import "../../../assets/css/color.scss";
 .input-group-addon {
     position: relative;
     position: relative;
@@ -24,7 +23,7 @@
     .form-group{
         .input-group {
             .input-group-addon {
-            border-left: 1px solid $gainsboro !important;
+            border-left: 1px solid var(--gainsboro) !important;
         }
         input{
                 border-left: none !important;

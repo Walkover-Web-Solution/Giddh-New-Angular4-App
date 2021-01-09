@@ -1,9 +1,8 @@
-@import "../../../../assets/css/color.scss";
 .flex-fill {
     flex: 1 1 auto;
 }
 .basic > tbody > tr:hover td > a {
-    color: $midnight-blue;
+    color: var(--midnight-blue);
 }
 .basic > tbody > tr > td,
 .basic > thead > tr > th,
@@ -17,19 +16,19 @@
     float: right;
     margin-top: 2px;
     font-size: 19px;
-    color: $extra-dark-gray;
+    color: var(--extra-dark-gray);
 }
 .bgChange {
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 .btn-sort {
     display: flex !important;
     width: 36px;
     height: 36px;
-    background-color: $white;
+    background-color: var(--white);
     font-size: 18px;
-    color: $midnight-blue !important;
-    border: 1px solid $gainsboro;
+    color: var(--midnight-blue) !important;
+    border: 1px solid var(--gainsboro);
     justify-content: center;
     align-items: center;
 }

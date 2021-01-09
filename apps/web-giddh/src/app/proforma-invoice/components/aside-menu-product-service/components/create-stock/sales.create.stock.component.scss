@@ -1,4 +1,3 @@
-@import "../../../../../../assets/css/color.scss";
 .output_row > td {
     padding: 12px 10px 12px 0 !important;
 }
@@ -25,7 +24,7 @@
         background: none;
         border: none;
         max-width: 108px;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--gainsboro);
     }
     .item-label {
         display: inline-block;
@@ -39,16 +38,16 @@
     i {
         margin-left: 10px;
         padding-bottom: 3px;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--gainsboro);
     }
     .new-btn {
         font-size: 12px;
-        color: $primary;
+        color: var(--primary);
         padding-top: 30px;
         cursor: pointer;
     }
     .text-danger {
-        color: $red;
+        color: var(--red);
     }
 }
 
@@ -62,17 +61,17 @@ tr.fsstock td {
     padding-bottom: 15px;
 }
 .table_label strong {
-    color: $charcoal;
+    color: var(--charcoal);
     font-weight: normal !important;
     font-size: 14px;
     font-family: "opensans-regular";
 }
 input.focusBorder[type="checkbox"]:focus:after {
-    border-color: $chetwode-blue;
+    border-color: var(--chetwode-blue);
 }
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0px 3px 6px $black-russian-light;
+    background-color: var(--white);
+    box-shadow: 0px 3px 6px var(--black-russian-light);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -86,7 +85,7 @@ input.focusBorder[type="checkbox"]:focus:after {
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: $white;
+    color: var(--white);
     font-size: 17px;
     top: 18px;
     margin-right: 0;
@@ -97,7 +96,7 @@ input.focusBorder[type="checkbox"]:focus:after {
 
 .collapse-icons{
     font-size: 10px;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--chetwode-blue);
     border-radius: 4px;
     padding: 2px;
     top: 0;

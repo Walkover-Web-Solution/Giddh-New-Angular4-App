@@ -1,9 +1,7 @@
-@import "../../../../../../../assets/css/color.scss";
-
 * {
     border: 0;
     box-sizing: content-box;
-    color: $nero;
+    color: var(--nero);
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
@@ -120,7 +118,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: $nero;
+    color: var(--nero);
 }
 
 .hidden-label {
@@ -215,13 +213,13 @@ header img {
 }
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--light-gray);
 }
 /* tcs */
 .tcs hr {
     margin-top: 50px;
     width: 100%;
-    border-bottom: 1px solid $cinnabar-orange;
+    border-bottom: 1px solid var(--cinnabar-orange);
 }
 .tcs table {
     margin: 50px 0px;
@@ -233,7 +231,7 @@ header img {
 .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid $light-gray;
+    border: 1px solid var(--light-gray);
     vertical-align: top;
     text-align: right;
 }
@@ -277,13 +275,13 @@ header img {
 #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--light-gray);
     line-height: 1.2rem;
     vertical-align: top;
 }
 
 #default table.item td p {
-    color: $zambezi;
+    color: var(--zambezi);
 }
 
 #default table.balance {
@@ -471,7 +469,7 @@ strong {
     padding: 6px 16px;
 }
 .tax-table p {
-    color: $zambezi;
+    color: var(--zambezi);
 }
 
 .tax-table tfoot th {
@@ -485,7 +483,7 @@ strong {
 .tax-table tbody tr td,
 .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid $light-gray;
+    border-right: 1px solid var(--light-gray);
 }
 
 .tax-table thead tr th:last-child,
@@ -498,14 +496,14 @@ table.tax-table.item {
     padding-top: 0px !important;
 }
 .tax-table.item tfoot tr th {
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid var(--light-gray);
 }
 .tax-table tbody tr td {
     border-top: 0px solid;
 }
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid var(--light-gray);
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;

@@ -1,8 +1,6 @@
-@import "../../../../assets/css/color.scss";
-
 .role {
-    background: $lavender;
-    border: 1px solid $lavender;
+    background: var(--lavender);
+    border: 1px solid var(--lavender);
     box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
@@ -28,7 +26,7 @@
 }
 
 #single-role table {
-    background: $white-smoke;
+    background: var(--white-smoke);
 }
 
 #single-role td {
@@ -83,7 +81,7 @@
 }
 
 .new_col {
-    background: $white-smoke;
+    background: var(--white-smoke);
     border: 1px solid #c2cdd3;
 }
 
@@ -105,7 +103,7 @@
 
 .role ul li {
     width: 25%;
-    color: $nero;
+    color: var(--nero);
     padding: 6px;
     font-family: 'opensans-semibold';
     word-break: break-word;
@@ -117,7 +115,7 @@
 
 .new-box h1 {
     font-size: 2.5rem;
-    color: $nero;
+    color: var(--nero);
 }
 
 .dropdown_select.open > .dropdown-menu {
@@ -150,8 +148,8 @@
     tr
     td:nth-child(1n + 2)
     input[type="checkbox"]:checked:after {
-    background: $white-smoke;
-    border-color: $white-smoke;
+    background: var(--white-smoke);
+    border-color: var(--white-smoke);
     content: "";
 }
 
@@ -172,8 +170,8 @@
 #single-role tbody tr td:nth-child(1n + 2) input[type="checkbox"]:after {
     content: "\f00d";
     font-family: FontAwesome;
-    background: $white-smoke;
-    border-color: $white-smoke;
+    background: var(--white-smoke);
+    border-color: var(--white-smoke);
 }
 .role-head .vertical-center {
     max-width: 100%;
@@ -184,8 +182,8 @@
     flex-direction: column;
 }
 .new-box{
-    background-color: $white;
-    border:1px solid $chetwode-blue;
+    background-color: var(--white);
+    border:1px solid var(--chetwode-blue);
 }
 @media(max-width:767px){
     .role{

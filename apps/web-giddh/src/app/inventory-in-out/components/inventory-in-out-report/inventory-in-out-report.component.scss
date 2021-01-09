@@ -1,7 +1,5 @@
-@import "../../../../assets/css/color.scss";
-
 .bdrT {
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 :host ::ng-deep .fb__1-container {

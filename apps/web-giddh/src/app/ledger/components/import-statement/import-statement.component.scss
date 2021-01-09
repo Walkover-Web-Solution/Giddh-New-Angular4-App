@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .file-upload-label {
     vertical-align: top;
 }
@@ -9,7 +7,7 @@
 }
 .file-upload-label sup {
     font-size: 14px;
-    color: $red;
+    color: var(--red);
     top: 0px;
 }
 #import-statement-modal label.radio-inline.p-0 {

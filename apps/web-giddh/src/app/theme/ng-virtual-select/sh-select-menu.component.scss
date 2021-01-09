@@ -1,9 +1,8 @@
-@import "../../../assets/css/color.scss";
 .menu {
     margin: 0;
     padding: 0;
     position: absolute;
-    background-color: $white;
+    background-color: var(--white);
     width: 100%;
     overflow: auto;
     box-sizing: border-box;
@@ -23,23 +22,23 @@
     word-break: break-word;
     height: auto !important;
     &:hover {
-        background: $lavender;
+        background: var(--lavender);
     }
 }
 .item:hover a {
-    color: $chetwode-blue !important;
+    color: var(--chetwode-blue) !important;
 }
 
 .item.selected {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--chetwode-blue) !important;
+    background: var(--lavender) !important;
 }
 .item.hilighted {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--chetwode-blue) !important;
+    background: var(--lavender) !important;
 }
 .item.hilighted a {
-    color: $chetwode-blue !important;
+    color: var(--chetwode-blue) !important;
 }
 
 .item > a {
@@ -47,12 +46,12 @@
     font-size:14px;
 }
 .item > a:hover {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--chetwode-blue) !important;
+    background: var(--lavender) !important;
 }
 
 .no-result-link > a {
-    color: $cerulean !important;
+    color: var(--cerulean) !important;
 }
 
 #noresult:hover {
@@ -68,7 +67,7 @@
 .disabled a,
 .disabled a .item {
     cursor: not-allowed !important;
-    color: $gray !important;
+    color: var(--gray) !important;
 }
 @media (max-width: 767px) {
     .menu {

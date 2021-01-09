@@ -1,5 +1,3 @@
-@import "../../../../../../assets/css/color.scss";
-
 .swatch ul {
     max-width: 260px;
 }
@@ -10,85 +8,85 @@
 }
 
 .swatch ul li:nth-child(1) {
-    background: $gray-74;
+    background: var(--gray-74);
 }
 
 .swatch ul li:nth-child(2) {
-    background: $granite-gray;
+    background: var(--granite-gray);
 }
 
 .swatch ul li:nth-child(3) {
-    background: $black;
+    background: var(--black);
 }
 
 .swatch ul li:nth-child(4) {
-    background: $crimson;
+    background: var(--crimson);
 }
 
 .swatch ul li:nth-child(5) {
-    background: $light-grayish;
+    background: var(--light-grayish);
 }
 
 .swatch ul li:nth-child(6) {
-    background: $san-juan;
+    background: var(--san-juan);
 }
 
 .swatch ul li:nth-child(7) {
-    background: $bud-green;
+    background: var(--bud-green);
 }
 
 .swatch ul li:nth-child(8) {
-    background: $eastern-blue;
+    background: var(--eastern-blue);
 }
 
 .swatch ul li:nth-child(9) {
-    background: $cloud-burst;
+    background: var(--cloud-burst);
 }
 
 .swatch ul li:nth-child(10) {
-    background: $atlantis;
+    background: var(--atlantis);
 }
 
 .swatch ul li:nth-child(11) {
-    background: $dell;
+    background: var(--dell);
 }
 
 .swatch ul li:nth-child(12) {
-    background: $sherpa-blue;
+    background: var(--sherpa-blue);
 }
 
 .swatch ul li:nth-child(13) {
-    background: $dark-orange;
+    background: var(--dark-orange);
 }
 
 .swatch ul li:nth-child(14) {
-    background: $burgundy;
+    background: var(--burgundy);
 }
 
 .swatch ul li:nth-child(15) {
-    background: $dull-pink;
+    background: var(--dull-pink);
 }
 
 .swatch ul li:nth-child(16) {
-    background: $tickle-pink;
+    background: var(--tickle-pink);
 }
 
 .swatch ul li:nth-child(17) {
-    background: $deep-pink;
+    background: var(--deep-pink);
 }
 
 .swatch ul li:nth-child(18) {
-    background: $dark-magenta;
+    background: var(--dark-magenta);
 }
 
 .upload-button {
     width: 100px !important;
-    background: $white;
+    background: var(--white);
     display: table-cell;
     text-align: center;
     height: 100px;
     vertical-align: middle;
-    border: 4px dashed $nobel;
+    border: 4px dashed var(--nobel);
     cursor: pointer;
 }
 

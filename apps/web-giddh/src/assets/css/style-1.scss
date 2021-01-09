@@ -21,9 +21,9 @@ VERSION:  1
 html,
 body {
     height: 100%;
-    background: $alice-blue-light;
+    background: var(--alice-blue-light);
     font-family: "opensans-regular";
-    color: $nero;
+    color: var(--nero);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 14px;
@@ -214,17 +214,17 @@ aside-menu-account .container-fluid {
 /*header nav links override*/
 
 .navbar-inverse .navbar-nav > li > a {
-    color: $vulcan;
+    color: var(--vulcan);
     line-height: 24px;
 }
 
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-    color: $vulcan !important;
+    color: var(--vulcan) !important;
 }
 
 .navbar-inverse .navbar-text {
-    color: $white;
+    color: var(--white);
 }
 
 #company-wrap {
@@ -291,7 +291,7 @@ aside-menu-account .container-fluid {
     display: block;
     width: 240px;
     padding: 12px;
-    color: $white !important;
+    color: var(--white) !important;
     text-decoration: none;
     border-bottom: 1px solid rgba(256, 256, 256, 0.2);
 }
@@ -631,7 +631,7 @@ aside-menu-account .container-fluid {
 }
 
 .bdr {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 .border-none {
@@ -642,19 +642,19 @@ aside-menu-account .container-fluid {
 .bd-r-left-none{border-left:none;}
 .bd-r-right-none{border-right:none;}
 .bd-rt {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
 }
 
 .bd-rb {
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
 }
 
 .bd-rl {
-    border-left: 1px solid $gainsboro;
+    border-left: 1px solid var(--gainsboro);
 }
 
 .bd-rr {
-    border-right: 1px solid $gainsboro !important;
+    border-right: 1px solid var(--gainsboro) !important;
 }
 
 .bdrR0 {
@@ -674,20 +674,20 @@ aside-menu-account .container-fluid {
 }
 
 .white-color {
-    color: $white;
+    color: var(--white);
 }
 
 .dark-grey-bg{
-    background: $matterhorn;
+    background: var(--matterhorn);
 }
 
 .grey-bg {
-    background: $gray-95;
+    background: var(--gray-95);
     /*min-width:320px;*/
 }
 
 .white-bg {
-    background: $white !important;
+    background: var(--white) !important;
 }
 
 .transBg {
@@ -760,7 +760,7 @@ aside-menu-account .container-fluid {
 
 .companyList li {
     min-height: 49px;
-    border-bottom: 1px solid $gray-90;
+    border-bottom: 1px solid var(--gray-90);
     position: relative;
     padding-top: 4px;
 }
@@ -770,7 +770,7 @@ aside-menu-account .container-fluid {
 }
 
 .companyList li.active {
-    background: $gainsboro-light;
+    background: var(--gainsboro-light);
 }
 
 .companyList > li > a {
@@ -782,7 +782,7 @@ aside-menu-account .container-fluid {
 
 .companyList li h3 {
     padding: 4px 0 2px;
-    color: $night-rider;
+    color: var(--night-rider);
     font-size: 14px;
 }
 
@@ -810,9 +810,9 @@ aside-menu-account .container-fluid {
 /*manage company detail*/
 
 .grey-box {
-    color: $dark-gray;
-    background: $gray-95;
-    border: solid 1px $gainsboro;
+    color: var(--dark-gray);
+    background: var(--gray-95);
+    border: solid 1px var(--gainsboro);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     padding: 15px;
 }
@@ -892,7 +892,7 @@ aside-menu-account .container-fluid {
     bottom: 20px;
     height: 25px;
     width: 25px;
-    background: $pink-swan;
+    background: var(--pink-swan);
     border-radius: 50%;
     cursor: pointer;
 }
@@ -901,7 +901,7 @@ aside-menu-account .container-fluid {
 
 .dGryHead {
     background-color: #e2e2e2;
-    color: $night-rider;
+    color: var(--night-rider);
     font-size: 15px;
     padding: 9px 20px;
 }
@@ -938,7 +938,7 @@ aside-menu-account .container-fluid {
 
 .angular-ui-tree-handle {
     background: #f8faff;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--gainsboro);
     color: #567288;
     padding: 7px 10px;
     cursor: pointer;
@@ -953,7 +953,7 @@ aside-menu-account .container-fluid {
 }
 
 li:last-child .angular-ui-tree-handle {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .angular-ui-tree-handle p {
@@ -1037,7 +1037,7 @@ li:last-child .angular-ui-tree-handle {
 */
 
 .search-loading {
-    color: $suva-grey;
+    color: var(--suva-grey);
     display: block;
     text-align: center;
     padding: 20px 0;
@@ -1162,7 +1162,7 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .account-accordion a {
-    color: $extra-dark-gray;
+    color: var(--extra-dark-gray);
 }
 
 .account-accordion .title a {
@@ -1215,25 +1215,25 @@ li:last-child .angular-ui-tree-handle {
 .LIB:hover,
 .LIB.active {
     background-color: #f90;
-    color: $white;
+    color: var(--white);
 }
 
 .ASS:hover,
 .ASS.active {
     background-color: #39f;
-    color: $white;
+    color: var(--white);
 }
 
 .INC:hover,
 .INC.active {
     background-color: #009900;
-    color: $white;
+    color: var(--white);
 }
 
 .EXP:hover,
 .EXP.active {
     background-color: #c0f;
-    color: $white;
+    color: var(--white);
 }
 
 .LIB1:hover,
@@ -1258,22 +1258,22 @@ li:last-child .angular-ui-tree-handle {
 
 .LIB1:hover a,
 .LIB1.active a {
-    color: $white;
+    color: var(--white);
 }
 
 .ASS2:hover a,
 .ASS2.active a {
-    color: $white;
+    color: var(--white);
 }
 
 .INC3:hover a,
 .INC3.active a {
-    color: $white;
+    color: var(--white);
 }
 
 .EXP4:hover a,
 .EXP4.active a {
-    color: $white;
+    color: var(--white);
 }
 
 /*ledger style*/
@@ -1285,8 +1285,8 @@ li:last-child .angular-ui-tree-handle {
 
 #eledgerwrap .alert-danger {
     color: inherit;
-    border: 2px dashed $pale-rose;
-    background-color: $white;
+    border: 2px dashed var(--pale-rose);
+    background-color: var(--white);
 }
 
 #eledgerwrap .alert .close {
@@ -1311,12 +1311,12 @@ li:last-child .angular-ui-tree-handle {
 
 .grey-bg td,
 .grey-bg th {
-    background-color: $gray-95;
+    background-color: var(--gray-95);
 }
 
 .splBg th {
-    background-color: $dark-greyish;
-    color: $white;
+    background-color: var(--dark-greyish);
+    color: var(--white);
 }
 
 .ledgerBodyContent td {
@@ -1327,7 +1327,7 @@ li:last-child .angular-ui-tree-handle {
     width: 100%;
     border: 0;
     padding: 8px;
-    background-color: $white;
+    background-color: var(--white);
 }
 
 .ledgerBodyContent input.nobdr.error {
@@ -1345,8 +1345,8 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .ldgrInnerTbl > tbody > tr > td {
-    border-right: 1px solid $gainsboro;
-    border-bottom: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
+    border-bottom: 1px solid var(--gainsboro);
     border-top: 0px;
 }
 
@@ -1355,7 +1355,7 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .ledger-table.table tfoot td {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .ledger-top-header-left span,
@@ -1495,12 +1495,12 @@ li:last-child .angular-ui-tree-handle {
 .tb-head {
     margin: 0;
     /* background: #337ab7; */
-    /* color: $white; */
+    /* color: var(--white); */
 }
 
 .tb-head th {
     padding: 8px !important;
-    border-right: 1px solid $white;
+    border-right: 1px solid var(--white);
 }
 
 .tb-head th:last-child {
@@ -1515,11 +1515,11 @@ li:last-child .angular-ui-tree-handle {
 
 .tb-head th:nth-child(3) th {
     border: none;
-    border-top: 1px solid $dark-eclipse;
+    border-top: 1px solid var(--dark-eclipse);
 }
 
 .tb-head th:nth-child(3) th:first-child {
-    border-right: 1px solid $dark-eclipse;
+    border-right: 1px solid var(--dark-eclipse);
 }
 
 .fl-none {
@@ -1533,7 +1533,7 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .plBtTbl thead {
-    background: $gray-88;
+    background: var(--gray-88);
 }
 
 .plBtTbl tfoot {
@@ -1662,7 +1662,7 @@ v-pane.is-expanded > v-pane-content > div {
 v-pane[disabled] > v-pane-header {
     opacity: 1;
     cursor: default;
-    border-bottom-color: $gainsboro !important;
+    border-bottom-color: var(--gainsboro) !important;
 }
 
 v-pane-header {
@@ -1809,7 +1809,7 @@ v-pane-header.show-pseudo {
     left: -165px;
     top: -35px;
     background: #000;
-    color: $white;
+    color: var(--white);
     border-radius: 5px;
     z-index: 9999;
     opacity: 0.9;
@@ -1826,7 +1826,7 @@ v-pane-header.show-pseudo {
     right: -140px;
     top: -35px;
     background: #000;
-    color: $white;
+    color: var(--white);
     border-radius: 5px;
     z-index: 9999;
     opacity: 0.9;
@@ -1868,11 +1868,11 @@ v-pane-header.show-pseudo {
     cursor: pointer;
     line-height: 25px;
     padding: 5px 10px;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid var(--white);
 }
 
 .export-options > ul > li > a {
-    color: $white;
+    color: var(--white);
 }
 
 .export-options > ul > li:last-child {
@@ -1942,8 +1942,8 @@ v-pane-header.show-pseudo {
 
 .title-bar {
     height: 50px;
-    background: $gray-95;
-    border-bottom: 1px solid $gray-88;
+    background: var(--gray-95);
+    border-bottom: 1px solid var(--gray-88);
     width: 100%;
     line-height: 50px;
     overflow: hidden;
@@ -1955,7 +1955,7 @@ v-pane-header.show-pseudo {
 
 .filter-bar {
     padding: 10px 10px;
-    border-bottom: 1px solid $gray-88;
+    border-bottom: 1px solid var(--gray-88);
     width: 100%;
 }
 
@@ -1989,7 +1989,7 @@ table.borderless th {
 }
 
 .table-l tr:last-child {
-    border-top: 1px solid $white;
+    border-top: 1px solid var(--white);
 }
 
 .table-r {
@@ -2010,8 +2010,8 @@ table.borderless th {
 .table-r tbody tr {
     height: 36px;
     line-height: 18px;
-    border-bottom: 1px solid $gainsboro-dark;
-    background: $gray-95;
+    border-bottom: 1px solid var(--gainsboro-dark);
+    background: var(--gray-95);
 }
 
 .table-l tbody tr td,
@@ -2026,7 +2026,7 @@ table.borderless th {
 
 .total {
     border-bottom: 1px solid;
-    background: $white;
+    background: var(--white);
 }
 
 .pdf-export,
@@ -2036,7 +2036,7 @@ table.borderless th {
 }
 
 .ui-match {
-    background: $school-bus-yellow;
+    background: var(--school-bus-yellow);
     padding: 0;
 }
 
@@ -2092,8 +2092,8 @@ z-index: 9;
 }
 
 .table-container div.row {
-    border-bottom: 1px solid $gray-88;
-    /* border-right: 1px solid $gray-88; */
+    border-bottom: 1px solid var(--gray-88);
+    /* border-right: 1px solid var(--gray-88); */
 }
 
 .table-container .isHidden {
@@ -2101,34 +2101,34 @@ z-index: 9;
 }
 
 .profitLoss.table-container > div > section {
-    border-left: 1px solid $gray-88;
+    border-left: 1px solid var(--gray-88);
 }
 
 .trial-balance.table-container > div > section {
-    border-left: 7px solid $gray-88;
+    border-left: 7px solid var(--gray-88);
 }
 
 .table-container > div > section.assets {
-    border-left: 7px solid $school-bus-yellow;
+    border-left: 7px solid var(--school-bus-yellow);
 }
 
 .table-container > div > section.liabilities {
-    border-left: 7px solid $cactus;
+    border-left: 7px solid var(--cactus);
 }
 
 .table-container > div > section.income {
-    border-left: 7px solid $cornflower-blue;
+    border-left: 7px solid var(--cornflower-blue);
 }
 
 .table-container > div > section.expenses {
-    border-left: 7px solid $flamingo;
+    border-left: 7px solid var(--flamingo);
 }
 
 .no-data {
     text-align: center;
     margin-top: 150px;
     font-size: 36px;
-    color: $dark-nobel;
+    color: var(--dark-nobel);
 }
 
 .no-data > img {
@@ -2295,20 +2295,20 @@ padding: 0;
     float: left;
     display: inline-block;
     position: relative;
-    background: $solitude;
+    background: var(--solitude);
     border-radius: 2px;
     box-sizing: border-box;
     margin: 7px;
     transition: all 0.5s ease-in-out;
     padding: 10px;
-    border: 1px solid $solitude-light;
+    border: 1px solid var(--solitude-light);
     word-break: break-all;
 }
 .account-card:first-child {
     margin-left: 0px;
 }
 .account-card:hover {
-    background: $white;
+    background: var(--white);
     box-shadow: 0 5px 5px 0 rgba(58, 58, 58, 0.18);
 }
 
@@ -2317,7 +2317,7 @@ padding: 0;
     padding-bottom: 5px;
     padding-right: 45px;
     margin-bottom: 5px;
-    border-bottom: 1px solid $curious-blue;
+    border-bottom: 1px solid var(--curious-blue);
     text-overflow: ellipsis;
     max-width: 325px;
     white-space: nowrap;
@@ -2326,11 +2326,11 @@ padding: 0;
 
 .account-card > .balances > span.title {
     display: block;
-    color: $extra-dark-gray;
+    color: var(--extra-dark-gray);
 }
 
 .account-card > .balance {
-    color: $extra-dark-gray;
+    color: var(--extra-dark-gray);
     font-size: 18px;
     padding-bottom: 10px;
     line-height: normal;
@@ -2371,19 +2371,19 @@ padding: 0;
 .linked-accounts {
     width: 100%;
     padding: 10px;
-    border: 1px solid $gray-88;
+    border: 1px solid var(--gray-88);
     margin-bottom: 20px;
-    background: $ivory;
+    background: var(--ivory);
     position: relative;
     word-break: break-all;
 }
 
 .linked-accounts:nth-child(odd) {
-    background: $gray-95;
+    background: var(--gray-95);
 }
 
 .linked-accounts:nth-child(odd) > .title {
-    border-bottom: 2px solid $curious-blue;
+    border-bottom: 2px solid var(--curious-blue);
 }
 
 .linked-accounts > .title {
@@ -2409,7 +2409,7 @@ padding: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.7);
     z-index: 9;
-    color: $white;
+    color: var(--white);
     text-align: center;
 }
 
@@ -2421,21 +2421,21 @@ padding: 0;
 
 .error-msg {
     font-size: 12px;
-    color: $red;
+    color: var(--red);
     line-height: 18px;
 }
 
 .loading-bar {
     width: 100%;
     height: 20px;
-    border: 1px solid $curious-blue;
+    border: 1px solid var(--curious-blue);
     border-radius: 3px;
     background-image: repeating-linear-gradient(
         -45deg,
-        $curious-blue,
-        $curious-blue 11px,
-        $whisper-light 10px,
-        $whisper-light 20px /* determines size */
+        var(--curious-blue),
+        var(--curious-blue) 11px,
+        var(--whisper-light) 10px,
+        var(--whisper-light) 20px /* determines size */
     );
     background-size: 28px 28px;
     animation: move 0.5s linear infinite;
@@ -2452,9 +2452,9 @@ padding: 0;
 
 .add-manage-grouplist .group {
     height: 42px;
-    background: $white;
+    background: var(--white);
     line-height: 43px;
-    border-bottom: 1px solid $gray-95;
+    border-bottom: 1px solid var(--gray-95);
 }
 
 .add-manage-grouplist .group span {
@@ -2466,19 +2466,19 @@ padding: 0;
 }
 
 .add-manage-grouplist > section.liabilities {
-    border-left: 8px solid $cactus;
+    border-left: 8px solid var(--cactus);
 }
 
 .add-manage-grouplist > section.assets {
-    border-left: 8px solid $school-bus-yellow;
+    border-left: 8px solid var(--school-bus-yellow);
 }
 
 .add-manage-grouplist > section.income {
-    border-left: 8px solid $cornflower-blue;
+    border-left: 8px solid var(--cornflower-blue);
 }
 
 .add-manage-grouplist > section.expenses {
-    border-left: 8px solid $flamingo;
+    border-left: 8px solid var(--flamingo);
 }
 
 .add-manage-grouplist .isHidden {
@@ -2499,8 +2499,8 @@ background: #f9f9f9;
     position: relative;
     margin: 0 10px 15px 0;
     padding: 10px;
-    color: $tundora;
-    background: $white;
+    color: var(--tundora);
+    background: var(--white);
     border-radius: 2px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     transition: all 0.2s ease-in-out;
@@ -2526,8 +2526,8 @@ background: #f9f9f9;
 }
 
 .audit-log .border-top-btm {
-    border-bottom: 1px solid $gainsboro;
-    border-top: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
+    border-top: 1px solid var(--gainsboro);
     padding: 5px;
 }
 
@@ -2579,7 +2579,7 @@ background: #f9f9f9;
         float: none;
         width: auto;
         margin-top: 0;
-        background-color: $dark-black;
+        background-color: var(--dark-black);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     }
 
@@ -2627,7 +2627,7 @@ background: #f9f9f9;
 } */
 
 /* #searchQueryForm span {
-    border-bottom: 2px dashed $gainsboro;
+    border-bottom: 2px dashed var(--gainsboro);
     margin: 0 10px;
 } */
 
@@ -2644,24 +2644,24 @@ background: #f9f9f9;
 
 .head-block-head {
     display: table-header-group;
-    background-color: $gainsboro-light;
+    background-color: var(--gainsboro-light);
 }
 
 .head-block-cell,
 .head-block-head {
     display: table-cell;
     padding: 8px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 .head-block-head {
     display: table-header-group;
-    background-color: $gainsboro-light;
+    background-color: var(--gainsboro-light);
 }
 
 .head-block-foot {
     display: table-footer-group;
-    background-color: $gainsboro-light;
+    background-color: var(--gainsboro-light);
 }
 
 .head-block-body {
@@ -2669,7 +2669,7 @@ background: #f9f9f9;
 }
 
 .head-block .head-block-row:nth-of-type(odd) {
-    background-color: $snow;
+    background-color: var(--snow);
 }
 
 /* ng2 component styles */
@@ -2677,9 +2677,9 @@ background: #f9f9f9;
 .ng2-select-box {
     height: 34px;
     width: 150px;
-    background: $white;
+    background: var(--white);
     border-radius: 3px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     position: relative;
     cursor: pointer;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -2712,7 +2712,7 @@ background: #f9f9f9;
 
 .uncEntry input,
 .uncEntry td {
-    background: $apricot;
+    background: var(--apricot);
 }
 
 .isNotEditable {
@@ -2792,7 +2792,7 @@ table td.nopad {
 
 .inner-table thead tr,
 .inner-table tbody tr {
-    border-bottom: 1px solid $gray-94;
+    border-bottom: 1px solid var(--gray-94);
     text-align: center;
 }
 
@@ -2802,7 +2802,7 @@ table td.nopad {
 
 .inner-table tbody td,
 .inner-table thead th {
-    border-right: 1px solid $gray-94;
+    border-right: 1px solid var(--gray-94);
 }
 
 .inner-table tbody td:last-child,
@@ -2824,11 +2824,11 @@ table td.nopad {
 }
 
 .table-striped .selected-for-inv {
-    background-color: $mabel !important;
+    background-color: var(--mabel) !important;
 }
 
 .table-bordered > tbody > tr.selected-for-inv > td {
-    border-color: $cowboy;
+    border-color: var(--cowboy);
 }
 
 /*Invoice*/
@@ -2877,22 +2877,22 @@ ul.pills {
 ul.pills li {
     line-height: 16px;
     font-size: 12px;
-    background: $tundora;
+    background: var(--tundora);
     border-radius: 5px;
     overflow: hidden;
     margin-right: 5px;
     padding: 5px 10px;
     cursor: pointer;
-    background-color: $solitude;
-    color: $night-rider;
+    background-color: var(--solitude);
+    color: var(--night-rider);
     display: inline-block;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 
 .load-more {
     margin-top: 10px;
     font-size: 12px;
-    color: $curious-blue;
+    color: var(--curious-blue);
 }
 
 .on-btn {
@@ -2900,7 +2900,7 @@ ul.pills li {
     width: 12px;
     margin: 4px 7px;
     border-radius: 50%;
-    background: $green;
+    background: var(--green);
 }
 
 .borderless,
@@ -2964,12 +2964,12 @@ ul.pills li {
 }
 
 .left-col {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-top: none;
 }
 
 .right-col {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-left: none;
     border-top: none;
 }
@@ -3036,8 +3036,8 @@ ul.pills li {
 }
 
 .eledger-inner tbody td {
-    border-right: 1px solid $gainsboro;
-    border-bottom: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
+    border-bottom: 1px solid var(--gainsboro);
 }
 
 .eledger-inner tbody td input,
@@ -3052,19 +3052,19 @@ ul.pills li {
 }
 
 .thead-background1 th {
-    background: $dark-greyish;
-    color: $white;
+    background: var(--dark-greyish);
+    color: var(--white);
 }
 
 .t-h-bg2 th,
 .t-h-bg2 td {
-    background: $whisper-new;
+    background: var(--whisper-new);
 }
 
 .t-h-bg3 th,
 .t-h-bg3 td {
-    background: $gray-95;
-    color: $extra-dark-gray;
+    background: var(--gray-95);
+    color: var(--extra-dark-gray);
 }
 
 .ledger-table-body {
@@ -3076,8 +3076,8 @@ ul.pills li {
 }
 
 .ledger-table-body table tbody.ledger-main tr td {
-    border-bottom: 1px solid $gainsboro;
-    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
+    border-right: 1px solid var(--gainsboro);
     padding: 0 10px;
 }
 
@@ -3095,30 +3095,30 @@ ul.pills li {
 }
 
 .ledger-container table tr.bg3 th {
-    background: $gray-95;
+    background: var(--gray-95);
     height: 32px;
     padding: 5px 10px;
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 /*.ledger-container-w table tr.bg3 th {*/
 
-/*background: $gray-95;*/
+/*background: var(--gray-95);*/
 
 /*height: 32px;*/
 
 /*padding: 5px 10px;*/
 
-/*color: $night-rider;*/
+/*color: var(--night-rider);*/
 
 /*}*/
 
 .bdr-w-t {
-    border-top: 1px solid $white;
+    border-top: 1px solid var(--white);
 }
 
 .white {
-    color: $white;
+    color: var(--white);
 }
 
 .h42 {
@@ -3138,22 +3138,22 @@ ul.pills li {
 
 .uncEntry td,
 .uncEntry td input {
-    background: $apricot;
+    background: var(--apricot);
 }
 
 .highlight-txn td,
 .highlight-txn td input {
-    background: $golden-tainoi;
+    background: var(--golden-tainoi);
 }
 
 .add-entry-row .ledger-row td,
 .add-entry-row .ledger-row td input {
-    background: $dark-greyish;
-    color: $white;
+    background: var(--dark-greyish);
+    color: var(--white);
 }
 
 .ledger-panel {
-    background: $solitude;
+    background: var(--solitude);
     border-radius: 2px;
     position: relative;
     padding: 6px 14px;
@@ -3164,7 +3164,7 @@ ul.pills li {
     font-family: "opensans-regular";
     font-size: 100%;
     font-size: 14px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     z-index: 100;
 }
 
@@ -3312,14 +3312,14 @@ ul.pills li {
 
 .sub_nav_menu ul li:not(.divider):hover {
     /* background: rgba(63, 63, 63, .9); */
-    background: $primary;
+    background: var(--primary);
 }
 
 .sub_nav_menu li i.glyphicon-trash {
     position: absolute;
     right: 10px;
     top: 8px;
-    color: $white;
+    color: var(--white);
 }
 
 .company-list-container {
@@ -3339,7 +3339,7 @@ ul.pills li {
 #InvoiceTemplate.no-border input {
     border: none !important;
     box-shadow: none !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
     border-radius: 0px;
     padding: 6px 0px;
 }
@@ -3347,7 +3347,7 @@ ul.pills li {
 #InvoiceTemplate.no-border textarea {
     border: none !important;
     box-shadow: none !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
     border-radius: 0px;
     padding: 6px 0px;
     /*height:initial;*/
@@ -3372,7 +3372,7 @@ ul.pills li {
 }
 
 .edit-tax-section p {
-    color: $dark-gray;
+    color: var(--dark-gray);
 }
 
 .download-invoice-ledger {
@@ -3386,7 +3386,7 @@ ul.pills li {
 
 .download-invoice-ledger > i {
     top: 10px;
-    color: $gray;
+    color: var(--gray);
 }
 
 .ledger-row.ng-enter {
@@ -3401,7 +3401,7 @@ ul.pills li {
 }
 
 .add-entry-row {
-    border-top: 2px solid $dark-greyish;
+    border-top: 2px solid var(--dark-greyish);
 }
 
 
@@ -3417,7 +3417,7 @@ ul.pills li {
 .verified {
     right: 10px;
     top: 32px;
-    color: $green;
+    color: var(--green);
 }
 
 .unverified {
@@ -3433,8 +3433,8 @@ ul.pills li {
     position: absolute;
     left: -95px;
     top: 0;
-    background: $black;
-    color: $white;
+    background: var(--black);
+    color: var(--white);
     border-radius: 5px;
     z-index: 9999;
     opacity: 0.9;
@@ -3450,8 +3450,8 @@ ul.pills li {
     left: inherit;
     right: -95px;
     top: -15px;
-    background: $black;
-    color: $white;
+    background: var(--black);
+    color: var(--white);
     border-radius: 5px;
     z-index: 9999;
     opacity: 0.9;
@@ -3470,7 +3470,7 @@ ul.pills li {
     height: 0px;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
-    border-bottom: 10px solid $black;
+    border-bottom: 10px solid var(--black);
     transform: rotate(-90deg);
 }
 
@@ -3482,7 +3482,7 @@ ul.pills li {
     height: 0px;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
-    border-bottom: 10px solid $black;
+    border-bottom: 10px solid var(--black);
     transform: rotate(90deg);
 }
 
@@ -3493,11 +3493,11 @@ ul.pills li {
     cursor: pointer;
     line-height: 25px;
     padding: 5px 10px;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid var(--white);
 }
 
 .export-ledger-options > ul > li > a {
-    color: $white;
+    color: var(--white);
 }
 
 .export-ledger-options > ul > li:last-child {
@@ -3563,7 +3563,7 @@ ul.pills li {
 
 .failed-entry td,
 .failed-entry td input {
-    background: $golden-tainoi;
+    background: var(--golden-tainoi);
 }
 
 @media only screen and (max-width: 1440px) and (orientation: landscape) {
@@ -3578,17 +3578,17 @@ ul.pills li {
 }
 
 .shadow {
-    box-shadow: $black 0px 0px 14px -4px;
+    box-shadow: var(--black) 0px 0px 14px -4px;
 }
 
 /*giddh loader*/
 
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
-    background: $nero none repeat scroll 0 0;
-    border: 7px solid $bright-red;
+    background: var(--nero) none repeat scroll 0 0;
+    border: 7px solid var(--bright-red);
     border-radius: 50%;
-    box-shadow: 0 -10px 0 14px $white inset;
+    box-shadow: 0 -10px 0 14px var(--white) inset;
     box-sizing: border-box;
     height: 60px;
     width: 60px;
@@ -3615,7 +3615,7 @@ ul.pills li {
 }
 
 .font-white {
-    color: $white;
+    color: var(--white);
     padding: 10px;
 }
 
@@ -3663,7 +3663,7 @@ tr.db-bnk-account > td.reconnectDiv {
     top: 0;
     left: 0;
     bottom: 0;
-    background: $white;
+    background: var(--white);
     z-index: 1040;
     opacity: 0.8;
 }
@@ -3702,7 +3702,7 @@ tr.db-bnk-account > td.reconnectDiv {
 }
 
 .font-black {
-    color: $tundora;
+    color: var(--tundora);
     padding: 10px;
     padding-top: 40px;
 }
@@ -3746,7 +3746,7 @@ tr.db-bnk-account > td.reconnectDiv {
 
 .custom-tabset ul li a {
     border: 0px !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--gainsboro) !important;
 }
 
 .y-scroll {
@@ -3773,10 +3773,10 @@ tr.db-bnk-account > td.reconnectDiv {
 .flying-div {
     right: 0px;
     height: 100%;
-    background: $white;
+    background: var(--white);
     width: 100%;
     float: right;
-    border-left: $light-gray 1px solid;
+    border-left: var(--light-gray) 1px solid;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -3803,13 +3803,13 @@ tr.db-bnk-account > td.reconnectDiv {
 }
 
 .required {
-    color: $red;
+    color: var(--red);
 }
 
 .invoice-widget {
     width: 400px;
     height: 400px;
-    border: 1px solid $gray-88;
+    border: 1px solid var(--gray-88);
     margin: 0 5px;
     padding: 5px;
     position: relative;
@@ -3849,7 +3849,7 @@ tr.db-bnk-account > td.reconnectDiv {
 .gridster-item-heading {
     position: relative;
     min-height: 24px;
-    background-color: $gainsboro-light;
+    background-color: var(--gainsboro-light);
 }
 
 #remove-widget {
@@ -3868,7 +3868,7 @@ tr.db-bnk-account > td.reconnectDiv {
 }
 
 .invoice-wrapper-m {
-    background: $pattens-blue;
+    background: var(--pattens-blue);
     display: block;
     margin: 0 auto;
     margin-bottom: 0.5cm;
@@ -3889,7 +3889,7 @@ tr.db-bnk-account > td.reconnectDiv {
 .invoice-widget {
     height: 200px;
     width: 200px;
-    background: $white !important;
+    background: var(--white) !important;
     position: relative;
     padding: 5px;
 }
@@ -3983,7 +3983,7 @@ tr.db-bnk-account > td.reconnectDiv {
 /* add generic styling for the editor */
 
 .ta-root.focussed > .ta-scroll-window.form-control {
-    border-color: $malibu;
+    border-color: var(--malibu);
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
         0 0 8px rgba(102, 175, 233, 0.6);
@@ -4028,8 +4028,8 @@ tr.db-bnk-account > td.reconnectDiv {
     position: absolute;
     bottom: 16px;
     right: 16px;
-    border: 1px solid $black;
-    background-color: $white;
+    border: 1px solid var(--black);
+    background-color: var(--white);
     padding: 0 4px;
     opacity: 0.7;
 }
@@ -4040,7 +4040,7 @@ tr.db-bnk-account > td.reconnectDiv {
     right: 5px;
     left: 5px;
     top: 5px;
-    border: 1px solid $black;
+    border: 1px solid var(--black);
     background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -4053,30 +4053,30 @@ tr.db-bnk-account > td.reconnectDiv {
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tl {
     top: 0;
     left: 0;
-    border-left: 1px solid $black;
-    border-top: 1px solid $black;
+    border-left: 1px solid var(--black);
+    border-top: 1px solid var(--black);
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-tr {
     top: 0;
     right: 0;
-    border-right: 1px solid $black;
-    border-top: 1px solid $black;
+    border-right: 1px solid var(--black);
+    border-top: 1px solid var(--black);
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-bl {
     bottom: 0;
     left: 0;
-    border-left: 1px solid $black;
-    border-bottom: 1px solid $black;
+    border-left: 1px solid var(--black);
+    border-bottom: 1px solid var(--black);
 }
 
 .ta-resizer-handle-overlay > .ta-resizer-handle-corner-br {
     bottom: 0;
     right: 0;
-    border: 1px solid $black;
+    border: 1px solid var(--black);
     cursor: se-resize;
-    background-color: $white;
+    background-color: var(--white);
 }
 
 /* copy the popover code from bootstrap so this will work even without it */
@@ -4094,10 +4094,10 @@ font-weight: normal;
 line-height: 1.42857143;
 text-align: left;
 white-space: normal;
-background-color: $white;
+background-color: var(--white);
 -webkit-background-clip: padding-box;
         background-clip: padding-box;
-border: 1px solid $gainsboro;
+border: 1px solid var(--gainsboro);
 border: 1px solid rgba(0, 0, 0, .2);
 border-radius: 6px;
 -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
@@ -4148,7 +4148,7 @@ border-bottom-width: 0;
 bottom: 1px;
 margin-left: -10px;
 content: " ";
-border-top-color: $white;
+border-top-color: var(--white);
 border-bottom-width: 0;
 }
 .popover.bottom > .arrow {
@@ -4164,7 +4164,7 @@ top: 1px;
 margin-left: -10px;
 content: " ";
 border-top-width: 0;
-border-bottom-color: $white;
+border-bottom-color: var(--white);
 }
 */
 
@@ -4183,7 +4183,7 @@ border-bottom-color: $white;
     border: 0 solid #cacaca;
     border: 0 solid rgba(0, 0, 0, 0.2) !important;
     height: 100%;
-    background-color: $gray-94;
+    background-color: var(--gray-94);
     overflow-y: auto;
 }
 
@@ -4202,7 +4202,7 @@ display:none;
 
 .proforma-list > .filters {
     padding: 5px 0;
-    border-bottom: 1px solid $gray-88;
+    border-bottom: 1px solid var(--gray-88);
     margin-bottom: 5px;
     position: relative;
 }
@@ -4216,7 +4216,7 @@ display:none;
 .proforma-list > .filters .separator {
     height: 22px;
     width: 1px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     margin-right: 10px;
     vertical-align: bottom;
 }
@@ -4278,13 +4278,13 @@ width:30px;
 }
 
 .invoice-wrapper-m.a4 .hasVar input:disabled {
-    background: $white;
+    background: var(--white);
     border: none;
     box-shadow: none;
 }
 
 .invoice-wrapper-m.a4 .hasVar input.isEditable {
-    border: 1px solid $tundora;
+    border: 1px solid var(--tundora);
 }
 
 .proforma-particulars tr td {
@@ -4360,7 +4360,7 @@ left: 16px !important;
 }
 
 .steps-indicator li.current:last-child a:before {
-    background-color: $cloud-burst;
+    background-color: var(--cloud-burst);
 }
 
 /*** stock inventory**/
@@ -4368,7 +4368,7 @@ left: 16px !important;
 /*.stock-bar{
 padding:10px;
 margin:0;
-border-bottom: 1px solid $gray-88;
+border-bottom: 1px solid var(--gray-88);
 }*/
 
 .stock-bar ul {
@@ -4390,13 +4390,13 @@ border-bottom: 1px solid $gray-88;
 .search-input input,
 .search-input input:focus,
 .search-input input:active {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     box-shadow: none;
     outline: none;
 }
 
 .stock-bar ul li .input-group i {
-    color: $gainsboro;
+    color: var(--gainsboro);
 }
 
 .h100 {
@@ -4406,8 +4406,8 @@ border-bottom: 1px solid $gray-88;
 .sidebar {
     width: 320px;
     height: 100%;
-    border-right: 1px solid $gray-88;
-    border-left: 1px solid $gray-88;
+    border-right: 1px solid var(--gray-88);
+    border-left: 1px solid var(--gray-88);
     padding: 10px;
 }
 
@@ -4417,23 +4417,23 @@ border-bottom: 1px solid $gray-88;
 
 .stock-grp-list > li > a {
     /* text-transform: uppercase; */
-    color: $dim-gray-new;
+    color: var(--dim-gray-new);
 }
 
 .sub-grp > li > a {
     text-transform: uppercase;
-    color: $dim-gray-new;
+    color: var(--dim-gray-new);
     font-weight: 400;
 }
 
 .stock-items > li > a {
     text-transform: capitalize;
-    color: $suva-grey;
+    color: var(--suva-grey);
 }
 
 .stock-items > li > a:hover,
 .sub-grp > li > a:hover {
-    color: $dim-gray-new;
+    color: var(--dim-gray-new);
 }
 
 .stock-grp.list {
@@ -4443,7 +4443,7 @@ border-bottom: 1px solid $gray-88;
 
 .stock-grp-list li > i {
     top: 3px;
-    color: $dim-gray-new;
+    color: var(--dim-gray-new);
     float: right;
 }
 
@@ -4456,7 +4456,7 @@ border-bottom: 1px solid $gray-88;
 .stock-grp-list > li {
     /* padding: 7px 0; */
     padding: 6px 0 6px 15px;
-    border-bottom: 1px solid $gray-88;
+    border-bottom: 1px solid var(--gray-88);
     /* background-color: rgb(220, 220, 220); */
 }
 
@@ -4489,7 +4489,7 @@ border-bottom: 1px solid $gray-88;
 
 .stock-twin-list ul li {
     padding: 5px;
-    border-top: 1px solid $gray-88;
+    border-top: 1px solid var(--gray-88);
 }
 
 .stock-twin-list ul li:first-child {
@@ -4497,7 +4497,7 @@ border-bottom: 1px solid $gray-88;
 }
 
 .stock-twin-list ul li > a {
-    color: $tundora;
+    color: var(--tundora);
 }
 
 .uppercase {
@@ -4515,20 +4515,20 @@ border-bottom: 1px solid $gray-88;
 }
 
 .recurring-entry-grid .re-header {
-    background: $curious-blue;
+    background: var(--curious-blue);
     overflow: hidden;
 }
 
 .recurring-entry-grid .re-header > div:not(last-child) {
-    border-right: 1px solid $white;
-    color: $white;
+    border-right: 1px solid var(--white);
+    color: var(--white);
     padding: 5px;
 }
 
 .recurring-entry-grid .re-body .row {
     padding: 0;
     margin: 0;
-    border: 1px solid $gray-88;
+    border: 1px solid var(--gray-88);
     border-top: none;
     max-height: 42px;
     transition: max-height 0.15s ease-out;
@@ -4579,9 +4579,9 @@ border-bottom: 1px solid $gray-88;
     width: 100%;
     height: auto;
     padding: 10px;
-    background: $white;
+    background: var(--white);
     overflow: hidden;
-    border-top: 1px solid $gray-95;
+    border-top: 1px solid var(--gray-95);
     position: relative;
 }
 
@@ -4591,16 +4591,16 @@ border-bottom: 1px solid $gray-88;
 }
 
 .recurring-entry-grid .re-body .row.animate input {
-    border: 1px solid $gray-94;
+    border: 1px solid var(--gray-94);
 }
 
 .recurring-entry-grid .re-body .row.animate input:disabled {
-    background: $gray-88;
+    background: var(--gray-88);
 }
 
 .recurring-entry-grid .filters {
     padding: 10px 0;
-    border-top: 1px solid $gray-88;
+    border-top: 1px solid var(--gray-88);
 }
 
 .recurring-entry-grid .filters ul li input,
@@ -4622,7 +4622,7 @@ border-bottom: 1px solid $gray-88;
     font-size: 10px;
     right: calc(50% + 10px);
     top: 22px;
-    color: $dark-nobel;
+    color: var(--dark-nobel);
 }
 
 .mtop-neg-54 {
@@ -4638,7 +4638,7 @@ border-bottom: 1px solid $gray-88;
 }
 
 .txn-row td {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-top: 0;
 }
 
@@ -4661,8 +4661,8 @@ border-bottom: 1px solid $gray-88;
     left: 47px;
     margin: 0;
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    border-right: 1px solid $gainsboro;
-    background: $ghost-white;
+    border-right: 1px solid var(--gainsboro);
+    background: var(--ghost-white);
 }
 
 .tour-backdrop {
@@ -4690,7 +4690,7 @@ border-bottom: 1px solid $gray-88;
 .map-txn-container {
     position: absolute;
     z-index: 99;
-    background: $white;
+    background: var(--white);
     left: 160px;
     right: 18px;
     top: -6px;
@@ -4748,9 +4748,9 @@ border-bottom: 1px solid $gray-88;
     font-size: 14px;
     text-align: left;
     list-style: none;
-    background-color: $white;
+    background-color: var(--white);
     background-clip: padding-box;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -4768,7 +4768,7 @@ border-bottom: 1px solid $gray-88;
     font-size: 14px;
     text-align: left;
     list-style: none;
-    background-color: $white;
+    background-color: var(--white);
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
     border: 1px solid rgba(0,0,0,.15);
@@ -4788,7 +4788,7 @@ border-bottom: 1px solid $gray-88;
 }
 
 .modal-dialog.gray .modal-content {
-    background: $solitude;
+    background: var(--solitude);
     border-radius: 0;
 }
 
@@ -4805,19 +4805,19 @@ border-bottom: 1px solid $gray-88;
 
 .modal-liquid.modal-dialog .modal-content .modal-header,
 .modal-liquid.modal-dialog .modal-content .modal-body {
-    background: $solitude;
+    background: var(--solitude);
 }
 
 /*box styles  on settings integration page*/
 
 .box {
     padding: 15px;
-    background-color: $white;
+    background-color: var(--white);
     /* margin: 20px 0; */
 }
 
 #setting-tab .nav > li > a {
-    color: $aubergine;
+    color: var(--aubergine);
     border: 0;
 }
 
@@ -4828,7 +4828,7 @@ border-bottom: 1px solid $gray-88;
 
 .select2-parent .select2-container--default .select2-selection--single {
     border-radius: 0;
-    background-color: $white;
+    background-color: var(--white);
     border: 1px solid #cecece;
 }
 
@@ -4841,7 +4841,7 @@ border-bottom: 1px solid $gray-88;
     .select2-selection--single
     .select2-selection__rendered {
     line-height: 32px;
-    color: $dim-gray-new;
+    color: var(--dim-gray-new);
     font-size: 14px;
     padding-left: 0;
 }
@@ -4882,7 +4882,7 @@ border-bottom: 1px solid $gray-88;
 .dropdown-menu > .active > a > a,
 .dropdown-menu > .active > a > a:focus,
 .dropdown-menu > .active > a > a:hover {
-    color: $white;
+    color: var(--white);
 }
 
 .dropdown-menu > li > a,
@@ -4891,8 +4891,8 @@ border-bottom: 1px solid $gray-88;
 .dropdown-menu > li > a > a,
 .dropdown-menu > li > a > a:focus,
 .dropdown-menu > li > a > a:hover {
-    color: $black;
-    background-color: $white;
+    color: var(--black);
+    background-color: var(--white);
 }
 
 #setting-tab .nav > li > a:focus,
@@ -4900,7 +4900,7 @@ border-bottom: 1px solid $gray-88;
     background: transparent;
 }
 .navbar-inverse .navbar-nav > .open > a {
-    background-color: $nero;
+    background-color: var(--nero);
     border-color: transparent;
 }
 
@@ -4917,17 +4917,17 @@ strong {
 }
 
 .hamburger-menu a:hover {
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 .hamburger-menu.open a {
     background: transparent !important;
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 .navbar-inverse .btn-link:focus,
 .navbar-inverse .btn-link:hover {
-    color: $night-rider;
+    color: var(--night-rider);
 }
 
 b,
@@ -4993,7 +4993,7 @@ bs-datepicker-container {
 #sFSection-Jkvq .sFsubmit.btn-primary {
     font-size: 14px !important;
     background: #28ab00 !important;
-    color: $white !important;
+    color: var(--white) !important;
 }
 
 /* added by sarfaraz */
@@ -5028,11 +5028,11 @@ bs-datepicker-container {
 }
 
 .modal-dialog.universal_modal .shortcuts {
-    background: $snow;
+    background: var(--snow);
     border-top: none;
     margin: 0;
     padding: 12px 16px 12px 20px;
-    color: $nevada;
+    color: var(--nevada);
     font-size: 12px;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -5052,12 +5052,12 @@ perfect-scrollbar.ps-show-active
 
 .sub-menu-nav li > a {
     padding: 5px 12px;
-    color: $night-rider;
+    color: var(--night-rider);
     display: block;
 }
 
 .sub-menu-nav li > a:hover {
-    background: $primary;
+    background: var(--primary);
 }
 
 .no-dbl-click-select {
@@ -5072,18 +5072,18 @@ perfect-scrollbar.ps-show-active
 }
 
 .custom-item:hover , .discount-item:hover {
-    background-color: $lavender !important;
+    background-color: var(--lavender) !important;
     color: #5b64c9 !important;
     &:hover {
         .pull-left.text-ellipsis {
-            color: $chetwode-blue !important;
+            color: var(--chetwode-blue) !important;
         }
     }
 }
 
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid $nobel;
+    border-bottom: 1px solid var(--nobel);
     display: inline-block;
     width: 57px;
     margin-right: 13px;
@@ -5091,7 +5091,7 @@ perfect-scrollbar.ps-show-active
 
 .or-line::after {
     content: "";
-    border-bottom: 1px solid $nobel;
+    border-bottom: 1px solid var(--nobel);
     display: inline-block;
     width: 57px;
     margin-left: 13px;
@@ -5100,26 +5100,26 @@ perfect-scrollbar.ps-show-active
 .or-line {
     display: flex;
     align-items: center;
-    color: $nobel;
+    color: var(--nobel);
     margin-bottom: 10px;
 }
 
 /* my css */
 
 .basic {
-    background: $white;
+    background: var(--white);
 }
 
 .basic thead tr th {
-    background: $gray-90;
-    color: $nero;
+    background: var(--gray-90);
+    color: var(--nero);
     border: 0;
     font-family: "" opensans-semibold "";
     text-transform: capitalize;
 }
 
 .basic tbody tr:hover td {
-    background: $solitude;
+    background: var(--solitude);
 }
 
 body.fixed {
@@ -5225,7 +5225,7 @@ form#groupDetailForm {
     }
     .ledger-book .h-table tbody .ledger-row {
         width: 100%;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--gainsboro);
     }
     bs-daterangepicker-container,
     bs-datepicker-container {

@@ -1,7 +1,5 @@
-@import "../../../../assets/css/color.scss";
-
 .bd-rt {
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 .flex-fill {
@@ -23,7 +21,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: $wild-blue-yonder;
+    color: var(--wild-blue-yonder);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -43,9 +41,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: $nero;
+    color: var(--nero);
     border: none;
-    background-color: $white-smoke;
+    background-color: var(--white-smoke);
 }
 
 .td-search-box .input-container i {
@@ -55,7 +53,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 
 .icon-pointer .glyphicon {
@@ -63,42 +61,42 @@
 }
 
 .td-search-box div i:hover {
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $gray-90;
+    color: var(--chetwode-blue);
+    background: var(--gray-90);
 }
 .stock-input {
     background-color: transparent !important;
-    border-bottom: 1px dotted $white !important;
+    border-bottom: 1px dotted var(--white) !important;
     border: none;
     width: auto;
     padding: 0 !important;
     height: auto;
     text-align: center;
     min-width: 155px;
-    color: $white;
+    color: var(--white);
 }
 .inventory-stock-table input.form-control.stock-input {
-    color: $nero;
+    color: var(--nero);
     text-align: left;
 }
 .table-border input.form-control.stock-input {
-    color: $nero;
+    color: var(--nero);
     text-align: left;
 }
 .footer-tr td {
-    background-color: $gray-90;
+    background-color: var(--gray-90);
 }
 .total-footer {
-    background-color: $white;
+    background-color: var(--white);
     display: flex;
     .footitem {
         padding: 41px;
         h2 {
-            color: $aluminum;
+            color: var(--aluminum);
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -109,33 +107,33 @@
 }
 
 .Journal_Voucher {
-    color: $light-silver-gray;
+    color: var(--light-silver-gray);
 }
 
 .Purchase {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 .Sales {
-    color: $dark-green;
+    color: var(--dark-green);
 }
 
 /* class name same as what we are getting data */
 
 .PURCHASE {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 .SALES {
-    color: $dark-green;
+    color: var(--dark-green);
 }
 
 .JOURNAL {
-    color: $hint-of-cyan;
+    color: var(--hint-of-cyan);
 }
 .CREDIT {
-    color: $dark-navy-blue;
+    color: var(--dark-navy-blue);
 }
 .DEBIT {
-    color: $bright-orange;
+    color: var(--bright-orange);
 }
 .modal-content {
     border-radius: 0px;
@@ -157,11 +155,11 @@
 
 /* voucher type DDL */
 .c-3 {
-    color: $white;
+    color: var(--white);
 }
 .btn-group-voucher-type {
     width: 100%;
-    color: $nero !important;
+    color: var(--nero) !important;
     white-space: nowrap;
     min-width: 140px;
     max-width: 140px;
@@ -171,7 +169,7 @@
     button {
         text-align: left;
         width: 100%;
-        color: $nero;
+        color: var(--nero);
          margin-right: 0;
         &:focus,
         &:hover {
@@ -189,7 +187,7 @@
     border-radius: 0px;
     padding: 0px;
     input[type="checkbox"]:after {
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--gainsboro);
         width: 15px;
         height: 15px;
         top: 2px;
@@ -198,12 +196,12 @@
         top: 6px;
         width: 9px;
         height: 5px;
-        border: 2px solid $white;
+        border: 2px solid var(--white);
         border-top-style: none;
         border-right-style: none;
     }
     li {
-        color: $night-rider;
+        color: var(--night-rider);
         padding: 3px 7px !important;
         font-size: 12px;
     }
@@ -213,7 +211,7 @@
     }
 }
 button[aria-expanded="true"] i {
-    color: $gray-68;
+    color: var(--gray-68);
 }
 /* voucher type DDL */
 
@@ -221,7 +219,7 @@ button[aria-expanded="true"] i {
     text-transform: capitalize;
 }
 .table-border {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
 }
 .border-none {
     border: none !important;
@@ -237,10 +235,10 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-dsc {
     line-height: 20px;
     width: 15px;
-    color: $wild-blue-yonder;
+    color: var(--wild-blue-yonder);
 }
 .icon-pointer .active-text-color {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
 }
 .sticky-footer-sale-amount {
     .inner-content-footer {
@@ -256,7 +254,7 @@ button[aria-expanded="true"] i {
         }
         .operators {
             font-size: 39px;
-            color: $aluminum;
+            color: var(--aluminum);
         }
         h2 {
             font-size: 18px;
@@ -276,13 +274,13 @@ button[aria-expanded="true"] i {
     width: 100% !important;
 }
 .text-orange {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 .bg-white {
-    background: $white;
+    background: var(--white);
 }
 .btn-link-2 {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 .mb-100 {
     margin-bottom: 100px;
@@ -295,10 +293,10 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--chetwode-blue);
     border-radius: 2px;
-    color: $midnight-blue;
-    background: $white;
+    color: var(--midnight-blue);
+    background: var(--white);
 }
 .inventory-stock-table .d-flex {
     align-items: center;
@@ -308,10 +306,10 @@ button[aria-expanded="true"] i {
     cursor: pointer;
 }
 button.btn.btn-filter {
-    background: $whisper;
-    border: 1px solid $whisper;
+    background: var(--whisper);
+    border: 1px solid var(--whisper);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -336,11 +334,11 @@ button.btn.btn-filter {
     display:table;
 }
 .icon-btn {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     height: 36px;
     width: 36px;
     margin-top: 0;
-    background-color: $white;
+    background-color: var(--white);
     .strong {
         font-weight: bold;
     }
@@ -350,7 +348,7 @@ button.btn.btn-filter {
         tr{
             &:last-child{
                 td{
-                    border-bottom: 1px solid $gainsboro;
+                    border-bottom: 1px solid var(--gainsboro);
                 }
             }
         }
@@ -405,7 +403,7 @@ button.btn.btn-filter {
     }
 
     .table-border {
-        border: 0px solid $white !important;
+        border: 0px solid var(--white) !important;
     }
 }
 

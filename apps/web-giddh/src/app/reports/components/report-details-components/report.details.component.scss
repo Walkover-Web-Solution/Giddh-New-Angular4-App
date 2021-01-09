@@ -1,4 +1,3 @@
-@import "../../../../assets/css/color.scss";
 .width-160 {
     width: 160px;
 }
@@ -29,9 +28,9 @@
 .btn.dropdown-toggle {
     width: 100%;
     text-align: left;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     padding-left: 7px !important;
-    background: $white;
+    background: var(--white);
 }
 .btn.dropdown-toggle .caret {
     position: absolute;
@@ -97,13 +96,13 @@ ul#dropdown-nested li .caret {
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     .nav-report{
         li{
             font-family: 'opensans-semibold';
             font-size: 20px;
             a{
-                color: $midnight-blue;
+                color: var(--midnight-blue);
             }
         }
     }

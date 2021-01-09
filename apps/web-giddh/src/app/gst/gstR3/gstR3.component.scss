@@ -1,11 +1,9 @@
-@import "../../../assets/css/color.scss";
-
 .font-xlarge {
     font-size: 18px;
 }
 
 a {
-    color: $curious-blue;
+    color: var(--curious-blue);
     text-decoration: none;
 }
 
@@ -27,9 +25,9 @@ svg.icon.icon-lg {
 .tax-engine .gstr3b-sel {
     display: inline-block;
     padding: 4px 4px 4px 8px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 2px;
-    background: $white;
+    background: var(--white);
 }
 
 svg.icon.icon-sm {
@@ -48,7 +46,7 @@ svg.icon.icon-sm {
 }
 
 .text-primary {
-    color: $curious-blue;
+    color: var(--curious-blue);
 }
 
 .caret {
@@ -57,7 +55,7 @@ svg.icon.icon-sm {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid $black;
+    border-top: 4px solid var(--black);
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -115,13 +113,13 @@ input.gsc-input {
 .tax-engine .gstr3b-header:before {
     /* content: '';
     position: absolute;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     top: 24px;
     width: 100%; */
 }
 
 .tax-engine .gstr3b-header .sel-tab {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-radius: 25px;
     overflow: hidden;
     padding: 0;
@@ -146,11 +144,11 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active {
-    background-color: $chetwode-blue;
+    background-color: var(--chetwode-blue);
 }
 
 .tax-engine .gstr3b-header .sel-tab li:before {
-    border-left: 23px solid $gainsboro;
+    border-left: 23px solid var(--gainsboro);
     top: 42%;
     margin-top: -22px;
     margin-left: 1px;
@@ -158,11 +156,11 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active:after {
-    border-left: 23px solid $chetwode-blue;
+    border-left: 23px solid var(--chetwode-blue);
 }
 
 .tax-engine .gstr3b-header .sel-tab li:after {
-    border-left: 23px solid $white;
+    border-left: 23px solid var(--white);
     top: 41%;
     margin-top: -21px;
     z-index: 2;
@@ -188,12 +186,12 @@ svg.icon.icon-xxlg {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active a {
-    color: $white;
+    color: var(--white);
 }
 
 .tax-engine .gstr3b-header .sel-tab li a {
     padding: 0 10px;
-    color: $gray-black;
+    color: var(--gray-black);
 }
 
 svg.icon.icon-xxlg {
@@ -202,7 +200,7 @@ svg.icon.icon-xxlg {
 }
 
 .column.content-column.gst-filing-container.navs-list {
-    background: $white;
+    background: var(--white);
 }
 
 .tax-engine .gstr3b-header .sel-tab li {
@@ -242,7 +240,7 @@ address {
 }
 
 .tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td {
-    border: 1px solid $faux-cadet-blue;
+    border: 1px solid var(--faux-cadet-blue);
     padding: 10px 30px 10px 10px;
 }
 
@@ -261,14 +259,14 @@ address {
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
-    border: 1px solid $faux-cadet-blue !important;
+    border: 1px solid var(--faux-cadet-blue) !important;
     padding: 6px;
     font-size: 13px;
 }
 
 .btn-link:focus,
 .btn-link:hover {
-    color: $lochmara;
+    color: var(--lochmara);
     background-color: transparent;
     text-decoration: none;
 }
@@ -279,24 +277,24 @@ table {
 }
 
 .gstr-3b-report tr:hover {
-    background-color: $hint-of-red;
+    background-color: var(--hint-of-red);
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
     font-size: 13px;
-    border: 1px solid $faux-cadet-blue !important;
+    border: 1px solid var(--faux-cadet-blue) !important;
     padding: 6px;
 }
 
 .gstr3-subheading,
 .vat-summary thead > tr {
-    background-color: $hint-of-red;
+    background-color: var(--hint-of-red);
 }
 
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: $grimmys-gray;
+    color: var(--grimmys-gray);
 }
 
 *,
@@ -338,7 +336,7 @@ h6 {
     position: fixed;
     top: 0;
     z-index: 1030;
-    background-color: $white;
+    background-color: var(--white);
     transition: all 0.3s;
 }
 
@@ -356,13 +354,13 @@ h6 {
 
 .modal-header {
     padding: 20px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--gainsboro);
     min-height: 21.43px;
-    background-color: $gray-95;
+    background-color: var(--gray-95);
 }
 
 .highlight-info {
-    background-color: $alice-blue;
+    background-color: var(--alice-blue);
 }
 
 .alert {
@@ -396,9 +394,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    color: $white;
-    background-color: $light-red;
-    border-color: $light-red;
+    color: var(--white);
+    background-color: var(--light-red);
+    border-color: var(--light-red);
 }
 
 .btn,
@@ -408,9 +406,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 }
 
 .btn-primary {
-    color: $white;
-    background-color: $dark-red;
-    border-color: $dark-red;
+    color: var(--white);
+    background-color: var(--dark-red);
+    border-color: var(--dark-red);
 }
 
 .btn {
@@ -437,8 +435,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 }
 
 .tax-engine .gstr3-points .point {
-    background-color: $vivid-blue;
-    color: $white;
+    background-color: var(--vivid-blue);
+    color: var(--white);
     width: 22px;
     height: 22px;
     /* padding-top: 3px; */
@@ -464,19 +462,19 @@ tax-engine .caret-right {
 }
 
 .tax-engine .gstr3-points a .caret-right {
-    color: $autumn-fog;
+    color: var(--autumn-fog);
 }
 
 .gstr3-filing-procedure > div {
     width: 900px;
     margin: 30px auto 0;
-    box-shadow: 1px 1px 11px $very-light-gray;
+    box-shadow: 1px 1px 11px var(--very-light-gray);
     border-radius: 3px;
     padding: 20px 50px 10px;
 }
 
 .tax-engine .gstr3-points {
-    border-left: 1px dashed $gainsboro;
+    border-left: 1px dashed var(--gainsboro);
     padding-left: 41px;
 }
 
@@ -488,22 +486,22 @@ dropdown-menu-right {
 
 .successful-file-detail h3,
 .gst-return-date h3 {
-    color: $night-rider !important;
+    color: var(--night-rider) !important;
     font-size: 24px !important;
     margin: 20px 0 7px !important;
 }
 
 .btn-2 {
-    background: $white;
-    color: $chetwode-blue;
+    background: var(--white);
+    color: var(--chetwode-blue);
     border: 0px;
     border-radius: 4px;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--chetwode-blue);
 }
 
 .btn-2:hover {
-    color: $white;
-    background: $chetwode-blue;
+    color: var(--white);
+    background: var(--chetwode-blue);
 }
 
 .file-your-return{

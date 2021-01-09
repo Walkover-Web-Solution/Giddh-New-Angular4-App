@@ -1,6 +1,5 @@
-@import "../../../../assets/css/color.scss";
 .bd-rt {
-    border-color: $gainsboro;
+    border-color: var(--gainsboro);
 }
 
 :host ::ng-deep .fb-1-container {
@@ -95,7 +94,7 @@ tfoot {
 
 .td-search-box div i {
     margin-top: 1px;
-    color: $wild-blue-yonder;
+    color: var(--wild-blue-yonder);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -116,9 +115,9 @@ tfoot {
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: $nero;
+    color: var(--nero);
     border: none;
-    background-color: $white-smoke;
+    background-color: var(--white-smoke);
 }
 
 .td-search-box .input-container i {
@@ -133,7 +132,7 @@ tfoot {
 }
 
 .basic>thead>tr>th {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--gainsboro);
 }
 
 .icon-pointer .glyphicon {
@@ -141,37 +140,37 @@ tfoot {
 }
 
 .td-search-box div i:hover {
-    color: $nobel;
+    color: var(--nobel);
 }
 
 .dropdown-menu>li>a:hover {
-    color: $chetwode-blue;
-    background: $gray-90;
+    color: var(--chetwode-blue);
+    background: var(--gray-90);
 }
 
 .stock-input {
     background-color: transparent !important;
-    border-bottom: 1px dotted $white !important;
+    border-bottom: 1px dotted var(--white) !important;
     border: none;
     width: auto;
     padding: 0 !important;
     height: auto;
     text-align: center;
     min-width: 155px;
-    color: $white;
+    color: var(--white);
 }
 
 .footer-tr td {
-    background-color: $gray-90;
+    background-color: var(--gray-90);
 }
 
 .total-footer {
-    background-color: $white;
+    background-color: var(--white);
     display: flex;
     .footitem {
         padding: 41px;
         h2 {
-            color: $aluminum;
+            color: var(--aluminum);
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -222,11 +221,11 @@ tfoot {
 .icon-pointer .icon-sort-dsc {
     line-height: 20px;
     width: 15px;
-    color: $wild-blue-yonder;
+    color: var(--wild-blue-yonder);
 }
 
 .icon-pointer .active-text-color {
-    color: $deep-sky-blue;
+    color: var(--deep-sky-blue);
 }
 
 .sticky-footer-sale-amount {
@@ -248,7 +247,7 @@ tfoot {
         }
         .operators {
             font-size: 39px;
-            color: $aluminum;
+            color: var(--aluminum);
         }
         h2 {
             font-size: 18px;
@@ -292,11 +291,11 @@ tfoot {
 }*/
 
 .text-orange {
-    color: $chetwode-blue;
+    color: var(--chetwode-blue);
 }
 
 .btn-link-2 {
-    color: $electric-blue;
+    color: var(--electric-blue);
 }
 
 .mb-100 {
@@ -319,10 +318,10 @@ td.brNone {
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--chetwode-blue);
     border-radius: 2px;
-    color: $midnight-blue;
-    background: $white;
+    color: var(--midnight-blue);
+    background: var(--white);
 }
 
 .inventory-stock-table{
@@ -338,10 +337,10 @@ td.brNone {
 }
 
 button.btn.btn-filter {
-    background: $whisper;
-    border: 1px solid $whisper;
+    background: var(--whisper);
+    border: 1px solid var(--whisper);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--midnight-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -353,12 +352,12 @@ button.btn.btn-filter {
 }
 
 .inventory-stock-table input.form-control.stock-input {
-    color: $nero;
+    color: var(--nero);
     text-align: left;
 }
 
 .recept-modal .modal-title {
-    color: $white;
+    color: var(--white);
 }
 
 .mt-0 {
@@ -369,11 +368,11 @@ button.btn.btn-filter {
     text-transform: none;
 }
 .icon-btn {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     height: 36px;
     width: 36px;
     margin-top: 0;
-    background-color: $white;
+    background-color: var(--white);
     .strong {
         font-weight: bold;
     }
@@ -441,7 +440,7 @@ button.btn.btn-filter {
             .dropdown-toggle {
                 border-width: 0px !important;
                 background: transparent;
-                color:$white;
+                color:var(--white);
             }
         }
         .bottom-details {
@@ -457,9 +456,9 @@ button.btn.btn-filter {
         text-align: end !important;
         margin-bottom: 0 !important;
         a {
-            background: $deep-sky-blue;
-            border: 1px solid $deep-sky-blue;
-            color: $white;
+            background: var(--deep-sky-blue);
+            border: 1px solid var(--deep-sky-blue);
+            color: var(--white);
             border-radius: 2px;
             font-size: 14px;
             padding: 7px 8px;
@@ -469,9 +468,9 @@ button.btn.btn-filter {
 
 }
 .input-group-addon{
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--gainsboro);
     border-left: 0;
-    background-color: $whisper-light;
+    background-color: var(--whisper-light);
 }
 
 

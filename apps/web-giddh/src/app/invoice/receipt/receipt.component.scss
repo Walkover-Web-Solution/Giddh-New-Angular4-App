@@ -1,6 +1,4 @@
 /*td-in-searchbox_style*/
-@import "../../../assets/css/color.scss";
-
 .td-search-box div {
     display: flex;
 }
@@ -44,7 +42,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid $silver;
+    border-right: 1px solid var(--silver);
 }
 
 .icon-pointer .glyphicon {
@@ -57,8 +55,8 @@
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $gray-90;
+    color: var(--chetwode-blue);
+    background: var(--gray-90);
 }
 
 .dropdown-menu {
@@ -66,7 +64,7 @@
 }
 
 .icon-refresh{
-    color: $extra-dark-gray;
+    color: var(--extra-dark-gray);
 }
 
 .dropdown-height{

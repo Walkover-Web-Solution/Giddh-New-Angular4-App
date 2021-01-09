@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 select-dropdown {
     font-size: 14px;
     > div {
@@ -41,12 +39,12 @@ select-dropdown {
         background-color: #eeeff9 !important;
         &.highlighted {
             background-color: #eeeff9 !important;
-            color: $chetwode-blue !important;
+            color: var(--chetwode-blue) !important;
         }
     }
     .highlighted {
         background-color: #eeeff9 !important;
-        color: $chetwode-blue !important;
+        color: var(--chetwode-blue) !important;
     }
     .disabled {
         background-color: #fff;
