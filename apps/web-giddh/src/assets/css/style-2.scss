@@ -11131,3 +11131,10 @@ input.mat-input-element{
     .delete-icon-opacity {
         opacity: 0.5;
     }
+    .change-address-dropdown li {
+        border-bottom: 1px solid $very-light-gray;
+        padding-bottom: 4px;
+    }
+    .change-address-dropdown li:last-child {
+        border: none;
+    }
