@@ -1,7 +1,7 @@
 <section id="manufacture" class="clearfix">
     <!-- page Title -->
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
-    <div class="mt-15 d-flex justify-content-between pr-3">
+    <div class="mt-15 justify-content-between pr-3" [ngClass]="{'d-flex' : currentCompanyBranches?.length > 2}">
         <div *ngIf="currentCompanyBranches?.length > 2" class="form-group col-lg-2 col-md-6 linked-entities">
             <label class="d-block pb-1">Entity</label>
             <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
@@ -28,7 +28,7 @@
             </sh-select>
         </div>
         <div>
-            <label class="d-block">&nbsp;</label>
+            <label class="d-none" [ngClass]="{'d-block' : currentCompanyBranches?.length > 2}" >&nbsp;</label>
             <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
             Manufacture</button>
         </div>
