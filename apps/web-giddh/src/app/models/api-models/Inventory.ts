@@ -39,6 +39,7 @@ export class StockGroupResponse {
     public parentStockGroupNames: string[];
     public stocks: INameUniqueName[];
     public uniqueName: string;
+    public taxes?: any;
 }
 
 /**
