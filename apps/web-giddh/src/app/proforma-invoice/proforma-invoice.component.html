@@ -237,6 +237,16 @@
 
                                                         <div class="form-group">
                                                             <label class="pb-0">Billing Address</label>
+                                                            <div class="btn-group btn-block" dropdown #billingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="billingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1">
+                                                                <a dropdownToggle type="button" class="dropdown-toggle"> Change Address</a>
+                                                                <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                                                                    <li role="menuitem" *ngFor="let address of accountAddressList">
+                                                                        <a class="dropdown-item" (click)="selectAddress(invFormData.accountDetails.billingDetails, address)">
+                                                                            {{address.address}} {{address.state?.name}} {{ address.gstNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.gstNumber : "" }}
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
 
                                                             <div class="billing-address clearfix">
                                                                 <textarea name="billingDetails.address"
@@ -304,6 +314,16 @@
                                                                 Billing
                                                                 Address
                                                             </label>
+                                                            <div class="btn-group btn-block" dropdown #shippingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="shippingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1 && !autoFillShipping">
+                                                                <a dropdownToggle type="button" class="dropdown-toggle"> Change Address</a>
+                                                                <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                                                                    <li role="menuitem" *ngFor="let address of accountAddressList">
+                                                                        <a class="dropdown-item" (click)="selectAddress(invFormData.accountDetails.shippingDetails, address)">
+                                                                            {{address.address}} {{address.state?.name}} {{ address.gstNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.gstNumber : "" }}
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
 
                                                             <div class="billing-address"
                                                                 [ngClass]="{'disabled': autoFillShipping}">
@@ -497,6 +517,16 @@
                                                 <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                     <div class="form-group">
                                                         <label>Billing Address</label>
+                                                        <div class="btn-group btn-block" dropdown #companyBillingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="companyBillingAddressDropDownWeb.hide()" *ngIf="companyAddressList?.length > 1">
+                                                            <a dropdownToggle type="button" class="dropdown-toggle"> Change Address</a>
+                                                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                                                                <li role="menuitem" *ngFor="let address of companyAddressList">
+                                                                    <a class="dropdown-item" (click)="selectAddress(purchaseBillCompany.billingDetails, address, true)">
+                                                                        {{address.address}} {{address.stateName}} {{ address.taxNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.taxNumber : "" }}
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                         <div class="billing-address clearfix">
                                                             <textarea name="companyBillingDetailsAddress"
                                                                 (keyup)="autoFillCompanyShippingDetails()"
@@ -548,6 +578,16 @@
                                                                 (change)="autoFillCompanyShippingDetails()"> Shipping Address
                                                             Same as Billing Address
                                                         </label>
+                                                        <div class="btn-group btn-block" dropdown #companyShippingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="companyShippingAddressDropDownWeb.hide()" *ngIf="companyAddressList?.length > 1 && !autoFillCompanyShipping">
+                                                            <a dropdownToggle type="button" class="dropdown-toggle"> Change Address</a>
+                                                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                                                                <li role="menuitem" *ngFor="let address of companyAddressList">
+                                                                    <a class="dropdown-item" (click)="selectAddress(purchaseBillCompany.shippingDetails, address, true)">
+                                                                        {{address.address}} {{address.stateName}} {{ address.taxNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.taxNumber : "" }}
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                         <div
                                                             [ngClass]="{'billing-address': true, 'disabled': autoFillCompanyShipping}">
                                                             <textarea name="companyShippingDetailsAddress"
