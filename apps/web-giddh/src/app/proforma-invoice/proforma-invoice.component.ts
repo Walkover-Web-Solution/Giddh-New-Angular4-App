@@ -588,6 +588,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isCompany: boolean;
     /** Current branches */
     public branches: Array<any>;
+    /** This will hold account addresses */
+    public accountAddressList: any[] = [];
+    /** This will hold company addresses */
+    public companyAddressList: any[] = [];
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -736,6 +740,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.selectedCompany = activeCompany;
+                this.companyAddressList = activeCompany.addresses;
             }
         });
 
@@ -912,6 +917,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.selectedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
                 this.assignAccountDetailsValuesInForm(accountDetails);
+            }
+        });
+
+        this.updatedAccountDetails$.subscribe(accountDetails => {
+            if(accountDetails) {
+                this.accountAddressList = accountDetails.addresses;
             }
         });
 
@@ -1863,6 +1874,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
+        this.accountAddressList = data.addresses;
         this.customerCountryName = data.country.countryName;
         this.initializeAccountCurrencyDetails(data);
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
@@ -6725,5 +6737,27 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public onFocusInvoiceDate(): void {
         this.voucherDateBeforeUpdate = this.invFormData.voucherDetails.voucherDate;
+    }
+
+    /**
+     * This will fill the selected address
+     *
+     * @param {*} data
+     * @param {*} address
+     * @param {false} isCompanyAddress
+     * @memberof ProformaInvoiceComponent
+     */
+    public selectAddress(data: any, address: any, isCompanyAddress: false): void {
+        if(data && address) {
+            data.address[0] = address.address;
+            data.state.code = (isCompanyAddress) ? address.stateCode : address.state.code;
+            data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
+
+            if(isCompanyAddress) {
+                this.autoFillCompanyShippingDetails();
+            } else {
+                this.autoFillShippingDetails();
+            }
+        }
     }
 }
