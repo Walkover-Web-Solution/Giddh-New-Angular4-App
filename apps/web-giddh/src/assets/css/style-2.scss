@@ -9586,13 +9586,19 @@ input.mat-input-element{
     .font-xxlarge {
         font-size: 20px;
     }
-}
-@media (max-width: 1024px) {
-    /* bs-datepicker-container{
-            position: absolute !important;
-            left: 15px !important;
-            top: 40px !important;
-            transform: none !important;
+    #ledger-transaction-left-list sh-select::ng-deep input,
+     #ledger-transaction-right-list sh-select::ng-deep input{
+            min-height: 49px;
+            height: 49px;
+            border:0 !important;
+
+        }
+    /* responsive */
+
+    @media (max-width: 1440px) {
+        .font-xxlarge {
+            font-size: 20px;
+        }
     }
     .payment-date{
         bs-datepicker-container{
