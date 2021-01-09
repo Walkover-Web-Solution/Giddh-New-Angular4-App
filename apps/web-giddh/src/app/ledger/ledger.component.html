@@ -256,61 +256,266 @@
                         (click)="lc.showEledger = !lc.showEledger">Close</span>
                 </button>
 
-                <table class="table ledger-table transaction-mapped-table mb-0">
-                    <thead>
-                        <th class="nopad top-head-table" colspan="6">
-                            <div class="clearfix ledger-top-header-left">
-                                <h3 class="ledger-main-head">
-                                    <span>Transactions from mapped account</span>
-                                </h3>
-                            </div>
-                        </th>
-                    </thead>
-                    <tbody>
+                <div>
+                    <div class="clearfix ledger-top-header-left">
+                        <h3 class="ledger-main-head">
+                            <span>Transactions from mapped account</span>
+                        </h3>
+                    </div>
+                </div>
+                <div class="wrap-transaction-map clearfix">
+                    <table class="ledger-head transaction-mapped mt-0" width="100%" colspan="100%">
                         <tr>
-                            <td width="100%" colspan="100%" class="ledger-head transaction-mapped">
-                                <table class="table" width="100%">
-                                    <tr>
-                                        <th colspan="6">Debit <span class="pull-right text-gray">Dr</span></th>
-                                        <th colspan="6">Credit <span class="pull-right text-gray">Cr</span></th>
+                            <th colspan="6" class="px-3 font-14">Debit <span class="pull-right text-gray">Dr</span></th>
+                            <th colspan="6" class="px-3 font-14">Credit <span class="pull-right text-gray">Cr</span></th>
+                        </tr>
+                    </table>
+                    <div class="ledger-book">
+                        <div class="left-col-new">
+                            <table class="table ledger-table transaction-mapped-table mb-0">
+                                <thead>
+                                    <tr class="row">
+                                        <th class="col-3 col-md-3 col-lg-3">Date
+                                        </th>
+                                        <th class="col-5 col-md-6 col-lg-6">Particular</th>
+                                        <th class="col-4 col-md-3 col-lg-3 text-right">Amount</th>
                                     </tr>
-                                </table>
-                            </td>
-                        </tr>
+                                </thead>
+
+                            </table>
+                            <table  id="ledger-transaction-left-list" class="width100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
+                                <tbody>
+
+                                        <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
+                                            <ng-container *ngFor="let txn of item.transactions;">
+                                                <ng-container *ngIf="txn.type === 'DEBIT'">
+                                                    <tr class="ledger-row row" [ngClass]="{'compoundEntry': txn.id === lc.selectedBankTxnUniqueName}">
+                                                        <td class="col-3 col-md-3 col-lg-3">
+                                                            <div class="d-flex align-items-center">
+                                                                <span class="pl-05 checkbox-span">
+                                                                    <input type="checkbox" id="{{'transaction-mapped-select-entry-dr-' + i}}"
+                                                                        (click)="selectEntryForBulkAction($event, item)" /></span>
+                                                                <span class="ml-05">
+                                                                    <input class="form-control" [maxlength]="10" autocomplete="off" name="bsdateledger" type="text"
+                                                                        [(ngModel)]="item.entryDate" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                        (ngModelChange)="onChangeEntryDate(item)" [outsideClick]="true"></span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger">
+                                                            <div class="w-100" *ngIf="txn.type === 'DEBIT'" (click)="showBankLedgerPopup(txn, item);">
+                                                                <sh-select [options]="searchResults" [(ngModel)]="txn.particular" [isPaginationEnabled]="true"
+                                                                    (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                    [notFoundMsg]="noResultsFoundLabel"
+                                                                    [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
+                                                                    [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
+                                                                    [enableDynamicSearch]="true" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
+                                                                    [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [showClear]="false"
+                                                                    [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
+                                                                    <ng-template #optionTemplate let-option="option">
+                                                                        <ng-container *ngIf="!option.additional?.stock">
+                                                                            <a href="javascript:void(0)" class="list-item">
+                                                                                <div class="item">{{ option.label }}
+                                                                                </div>
+                                                                                <div class="item-unique">
+                                                                                    {{ option.additional?.uniqueName }}
+                                                                                </div>
+                                                                            </a>
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="option.additional?.stock">
+                                                                            <a href="javascript:void(0)" class="list-item">
+                                                                                <div class="item">{{ option.label }}
+                                                                                </div>
+                                                                                <div class="item-unique">
+                                                                                    {{ option.additional?.uniqueName }}
+                                                                                </div>
+                                                                                <div class="item-stock">Stock:
+                                                                                    {{ option.additional?.stock.name }}
+                                                                                </div>
+                                                                            </a>
+                                                                        </ng-container>
+                                                                    </ng-template>
+                                                                </sh-select>
+                                                                <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
+                                                                    <li>Create New Account</li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+
+                                                        <td class="col-4 col-md-3 col-lg-3 position-relative">
+                                                            <input class="form-control text-right" type="text" id="{{'enter-amount-dr-' + i}}" decimalDigitsDirective
+                                                                [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                                                                (click)="blankLedgerAmountClick()" *ngIf="txn.type === 'DEBIT'" (click)="showBankLedgerPopup(txn, item);">
+                                                        </td>
+                                                    </tr>
+                                                    <div class="pos-abs entry-modal"
+                                                        *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'DEBIT'">
+                                                        <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
+                                                            [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                                                            [isReadOnly]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
+                                                            (moreDetailOpen)="handleOpenMoreDetail($event)" (changeTransactionType)="toggleTransactionType($event)"
+                                                            [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()"
+                                                            (clickedOutsideEvent)="hideBankLedgerPopup($event)" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                                            [invoiceList]="invoiceList" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                            [isTouristSchemeApplicable]="isTouristSchemeApplicable" (saveOtherTax)="saveOtherTax(item, $event)">
+                                                        </new-ledger-entry-panel>
+                                                    </div>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="right-col-new">
+                            <table class="table ledger-table transaction-mapped-table mb-0">
+                                <thead>
+                                    <tr class="row">
+                                        <th class="col-3 col-md-3 col-lg-3">Date
+                                        </th>
+                                        <th class="col-5 col-md-6 col-lg-6">Particular</th>
+                                        <th class="col-4 col-md-3 col-lg-3 text-right">Amount</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                            <table id="ledger-transaction-right-list" class="width100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
+                                <tbody>
+                                    <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
+                                        <ng-container *ngFor="let txn of item.transactions;">
+                                            <ng-container *ngIf="txn.type === 'CREDIT'">
+                                                <tr class="ledger-row row">
+                                                    <td class="col-3 col-md-3 col-lg-3">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="pl-05 checkbox-span">
+                                                                <input type="checkbox" id="{{'transaction-mapped-select-entry-cr-' + i}}" [(ngModel)]="txn.isChecked"
+                                                                    (click)="selectEntryForBulkAction($event, item)" />
+                                                            </span>
+                                                            <span class="ml-05">
+                                                                <input class="form-control" [maxlength]="10" name="bsDates" autocomplete="off" type="text"
+                                                                    #cbs='bsDatepicker' [(ngModel)]="item.entryDate" bsDatepicker
+                                                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }" (ngModelChange)="onChangeEntryDate(item)"
+                                                                    [outsideClick]="true">
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
+                                                        <div class="w-100" *ngIf="txn.type === 'CREDIT'" (click)="showBankLedgerPopup(txn, item);">
+                                                            <sh-select [options]="searchResults" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
+                                                                [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+                                                                (dynamicSearchedQuery)="onSearchQueryChanged($event)" [notFoundMsg]="noResultsFoundLabel"
+                                                                [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
+                                                                [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
+                                                                [enableDynamicSearch]="true" [placeholder]="'Select Accounts'" [notFoundLink]="true"
+                                                                (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="67" [showClear]="false"
+                                                                [useInBuiltFilterForFlattenAc]="true">
+                                                                <ng-template #optionTemplate let-option="option">
+                                                                    <ng-container *ngIf="!option.additional?.stock">
+                                                                        <a href="javascript:void(0)" class="list-item">
+                                                                            <div class="item">{{ option.label }}
+                                                                            </div>
+                                                                            <div class="item-unique">
+                                                                                {{ option.additional?.uniqueName }}
+                                                                            </div>
+                                                                            <!-- <span class="list-item" style="visibility: hidden;font-size:11px">&nbsp;</span> -->
+                                                                        </a>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="option.additional?.stock">
+                                                                        <a href="javascript:void(0)" class="list-item">
+                                                                            <div class="item">{{ option.label }}
+                                                                            </div>
+                                                                            <div class="item-unique">
+                                                                                {{ option.additional?.uniqueName }}
+                                                                            </div>
+                                                                            <div class="item-stock">Stock:
+                                                                                {{ option.additional?.stock.name }}
+                                                                            </div>
+                                                                        </a>
+                                                                    </ng-container>
+                                                                </ng-template>
+                                                            </sh-select>
+                                                            <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
+                                                                <li>Create New Account</li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+
+                                                    <td class="col-4 col-md-3 col-lg-3 position-relative">
+                                                        <input class="form-control text-right" type="text" id="{{'enter-amount-cr-' + i}}" decimalDigitsDirective
+                                                            [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                                                            (click)="blankLedgerAmountClick()" *ngIf="txn.type === 'CREDIT'" (click)="showBankLedgerPopup(txn, item);">
+                                                    </td>
+                                                </tr>
+                                                <!--new ledge popup-->
+                                                <div class="pos-abs entry-modal"
+                                                    *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'CREDIT'">
+                                                    <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
+                                                        [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                                                        [isReadOnly]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
+                                                        (moreDetailOpen)="handleOpenMoreDetail($event)" (changeTransactionType)="toggleTransactionType($event)"
+                                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()"
+                                                        (clickedOutsideEvent)="hideBankLedgerPopup($event)" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)" [invoiceList]="invoiceList"
+                                                        (saveOtherTax)="saveOtherTax(item, $event)">
+                                                    </new-ledger-entry-panel>
+                                                </div>
+                                                <!-- end  -->
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <table class="w-100">
                         <tr>
-                            <td width="50%" class="nopad bd-rl bd-rr hidden-xs transaction-mapped-head" colspan="3">
-                                <table class="table">
-                                    <thead>
-                                        <tr class="row">
-                                            <th class="col-3 col-md-3 col-lg-3">Date
-                                            </th>
-                                            <th class="col-5 col-md-6 col-lg-6">Particular</th>
-                                            <th class="col-4 col-md-3 col-lg-3 text-right">Amount</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                            <td colspan="12" class="py-2 px-3">
+                                <!-- *ngIf="eLedgType == 'CREDIT'" -->
+                                <div class="pull-right" >
+                                    C/F Balance
+                                    <span class="pl-15 text-primary" *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | giddhCurrency}} </span>
+                                </div>
                             </td>
-                            <!-- main left td end here -->
-                            <td width="50%" class="nopad bd-rl bd-rr hidden-xs transaction-mapped-head" colspan="3">
-                                <table class="table">
-                                    <thead>
-                                        <tr class="row">
-                                            <th class="col-3 col-md-3 col-lg-3">Date
-                                            </th>
-                                            <th class="col-5 col-md-6 col-lg-6">Particular</th>
-                                            <th class="col-4 col-md-3 col-lg-3 text-right">Amount</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                            <td colspan="12" class="bd-rl py-2 px-3">
+                                <!-- *ngIf="eLedgType == 'DEBIT'" -->
+                                <div class="pull-right">
+                                    C/F Balance <span  class="pl-15 text-primary" *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
+                                </div>
                             </td>
-                            <!-- main right td end here -->
                         </tr>
+                    </table>
+                    <!-- <tfoot>
+                        <tr>
+                            <td colspan="2" class="bd-rl" width="36%">
+                                <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
+                                    C/F Balance
+                                </div>
+                            </td>
+                            <td width="14%" class="bd-rr text-right">
+                                <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | giddhCurrency}}</span>
+                            </td>
+                            <td colspan="2" width="36%" class="bd-rl">
+                                <div class="pull-right" *ngIf="eLedgType == 'DEBIT'">
+                                    C/F Balance
+                                </div>
+                            </td>
+                            <td width="14%" class="bd-rr text-right">
+                                <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
+                            </td>
+                        </tr>
+
+                    </tfoot> -->
+                    <!-- end main tfoot -->
+                </div>
+
+                <table class="table ledger-table transaction-mapped-table mb-0">
+                    <tbody>
                         <tr class="transaction-table-row">
-                            <td class="nopad bd-rl bd-rr" colspan="3">
-                                <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
-                                <table class="width100"
-                                    (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
+                            <!-- <td class="nopad bd-rl bd-rr" colspan="3">
+                                <table class="width100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
+                                <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
+
                                     <ng-container *ngFor="let txn of item.transactions;">
                                         <ng-container *ngIf="txn.type === 'DEBIT'">
                                         <tr>
@@ -400,7 +605,7 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <!--new ledge popup-->
+
                                                 <div class="pos-abs entry-modal"
                                                     *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'DEBIT'">
                                                     <new-ledger-entry-panel #newLedPanel
@@ -420,166 +625,146 @@
                                                         (saveOtherTax)="saveOtherTax(item, $event)">
                                                     </new-ledger-entry-panel>
                                                 </div>
-                                                <!-- end  -->
-                                            </td>
-                                        </tr>
-                                        </ng-container>
-                                    </ng-container>
-                                    </tbody>
-                                </table>
-                                </ng-container>
-                            </td>
-                            <td colspan="3" class="nopad bd-rl bd-rr">
-                                <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
-                                <table class="width100"
-                                    (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
-                                    <tbody>
-                                    <ng-container *ngFor="let txn of item.transactions;" >
-                                        <ng-container *ngIf="txn.type === 'CREDIT'">
-                                        <tr >
-                                            <td class="width100 position-relative upper-td">
-                                                <table class="width100">
-                                                    <tbody class="ledger-main">
-                                                        <tr class="ledger-row row">
-                                                            <td class="col-3 col-md-3 col-lg-3">
-                                                                <div class="d-flex align-items-center"
-                                                                    >
-                                                                    <span class="pl-05">
-                                                                        <input type="checkbox" id="{{'transaction-mapped-select-entry-cr-' + i}}"[(ngModel)]="txn.isChecked"
-                                                                            (click)="selectEntryForBulkAction($event, item)" />
-                                                                    </span>
-                                                                    <span class="ml-05">
-                                                                        <input class="form-control" [maxlength]="10"
-                                                                            name="bsDates" autocomplete="off"
-                                                                            type="text" #cbs='bsDatepicker'
-                                                                            [(ngModel)]="item.entryDate" bsDatepicker
-                                                                            [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                                            (ngModelChange)="onChangeEntryDate(item)"
-                                                                            [outsideClick]="true">
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td
-                                                                class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
-                                                                <div class="w-100" *ngIf="txn.type === 'CREDIT'"
-                                                                    (click)="showBankLedgerPopup(txn, item);">
-                                                                    <sh-select [options]="searchResults"
-                                                                        [(ngModel)]="txn.particular"
-                                                                        (selected)="selectAccount($event,txn)"
-                                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
-                                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                                                                        [notFoundMsg]="noResultsFoundLabel"
-                                                                        [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
-                                                                        [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
-                                                                        [enableDynamicSearch]="true"
-                                                                        [placeholder]="'Select Accounts'"
-                                                                        [notFoundLink]="true"
-                                                                        (noResultsClicked)="showQuickAccountModal()"
-                                                                        [multiple]="false" [ItemHeight]="67"
-                                                                        [showClear]="false"
-                                                                        [useInBuiltFilterForFlattenAc]="true">
-                                                                        <ng-template #optionTemplate
-                                                                            let-option="option">
-                                                                            <ng-container
-                                                                                *ngIf="!option.additional?.stock">
-                                                                                <a href="javascript:void(0)"
-                                                                                    class="list-item">
-                                                                                    <div class="item">{{ option.label }}
-                                                                                    </div>
-                                                                                    <div class="item-unique">
-                                                                                        {{ option.additional?.uniqueName }}
-                                                                                    </div>
-                                                                                    <!-- <span class="list-item" style="visibility: hidden;font-size:11px">&nbsp;</span> -->
-                                                                                </a>
-                                                                            </ng-container>
-                                                                            <ng-container
-                                                                                *ngIf="option.additional?.stock">
-                                                                                <a href="javascript:void(0)"
-                                                                                    class="list-item">
-                                                                                    <div class="item">{{ option.label }}
-                                                                                    </div>
-                                                                                    <div class="item-unique">
-                                                                                        {{ option.additional?.uniqueName }}
-                                                                                    </div>
-                                                                                    <div class="item-stock">Stock:
-                                                                                        {{ option.additional?.stock.name }}
-                                                                                    </div>
-                                                                                </a>
-                                                                            </ng-container>
-                                                                        </ng-template>
-                                                                    </sh-select>
-                                                                    <ul class="no-result-template"
-                                                                        *ngIf="lc.noAccountChosenForNewEntry">
-                                                                        <li>Create New Account</li>
-                                                                    </ul>
-                                                                </div>
-                                                            </td>
 
-                                                            <td class="col-4 col-md-3 col-lg-3 position-relative">
-                                                                <input class="form-control text-right" type="text"  id="{{'enter-amount-cr-' + i}}"
-                                                                    decimalDigitsDirective [DecimalPlaces]="2"
-                                                                    [(ngModel)]="txn.amount"
-                                                                    (input)="needToReCalculate.next(true)"
-                                                                    (click)="blankLedgerAmountClick()"
-                                                                    *ngIf="txn.type === 'CREDIT'"
-                                                                    (click)="showBankLedgerPopup(txn, item);">
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <!--new ledge popup-->
-                                                <div class="pos-abs entry-modal"
-                                                    *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'CREDIT'">
-                                                    <new-ledger-entry-panel #newLedPanel
-                                                        [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
-                                                        [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
-                                                        [needToReCalculate]="needToReCalculate"
-                                                        [isReadOnly]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
-                                                        (moreDetailOpen)="handleOpenMoreDetail($event)"
-                                                        (changeTransactionType)="toggleTransactionType($event)"
-                                                        [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
-                                                        (saveBlankLedger)="saveBankTransaction()"
-                                                        (clickedOutsideEvent)="hideBankLedgerPopup($event)"
-                                                        (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
-                                                        [invoiceList]="invoiceList"
-                                                        (saveOtherTax)="saveOtherTax(item, $event)">
-                                                    </new-ledger-entry-panel>
-                                                </div>
-                                                <!-- end  -->
                                             </td>
                                         </tr>
                                         </ng-container>
                                     </ng-container>
-                                    </tbody>
-                                </table>
+
                                 </ng-container>
+                                </tbody>
+                                </table>
+                            </td> -->
+                            <td colspan="3" class="nopad bd-rl bd-rr">
+                                <!-- <table class="width100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
+                                    <tbody>
+                                    <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
+                                        <ng-container *ngFor="let txn of item.transactions;" >
+                                            <ng-container *ngIf="txn.type === 'CREDIT'">
+                                            <tr>
+                                                <td class="width100 position-relative upper-td">
+                                                    <table class="width100">
+                                                        <tbody class="ledger-main">
+                                                            <tr class="ledger-row row">
+                                                                <td class="col-3 col-md-3 col-lg-3">
+                                                                    <div class="d-flex align-items-center"
+                                                                        >
+                                                                        <span class="pl-05">
+                                                                            <input type="checkbox" id="{{'transaction-mapped-select-entry-cr-' + i}}"[(ngModel)]="txn.isChecked"
+                                                                                (click)="selectEntryForBulkAction($event, item)" />
+                                                                        </span>
+                                                                        <span class="ml-05">
+                                                                            <input class="form-control" [maxlength]="10"
+                                                                                name="bsDates" autocomplete="off"
+                                                                                type="text" #cbs='bsDatepicker'
+                                                                                [(ngModel)]="item.entryDate" bsDatepicker
+                                                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                                (ngModelChange)="onChangeEntryDate(item)"
+                                                                                [outsideClick]="true">
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                                <td
+                                                                    class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
+                                                                    <div class="w-100" *ngIf="txn.type === 'CREDIT'"
+                                                                        (click)="showBankLedgerPopup(txn, item);">
+                                                                        <sh-select [options]="searchResults"
+                                                                            [(ngModel)]="txn.particular"
+                                                                            (selected)="selectAccount($event,txn)"
+                                                                            [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+                                                                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                            [notFoundMsg]="noResultsFoundLabel"
+                                                                            [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
+                                                                            [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
+                                                                            [enableDynamicSearch]="true"
+                                                                            [placeholder]="'Select Accounts'"
+                                                                            [notFoundLink]="true"
+                                                                            (noResultsClicked)="showQuickAccountModal()"
+                                                                            [multiple]="false" [ItemHeight]="67"
+                                                                            [showClear]="false"
+                                                                            [useInBuiltFilterForFlattenAc]="true">
+                                                                            <ng-template #optionTemplate
+                                                                                let-option="option">
+                                                                                <ng-container
+                                                                                    *ngIf="!option.additional?.stock">
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="list-item">
+                                                                                        <div class="item">{{ option.label }}
+                                                                                        </div>
+                                                                                        <div class="item-unique">
+                                                                                            {{ option.additional?.uniqueName }}
+                                                                                        </div>
+                                                                                          <span class="list-item" style="visibility: hidden;font-size:11px">&nbsp;</span>
+                                                                                    </a>
+                                                                                </ng-container>
+                                                                                <ng-container
+                                                                                    *ngIf="option.additional?.stock">
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="list-item">
+                                                                                        <div class="item">{{ option.label }}
+                                                                                        </div>
+                                                                                        <div class="item-unique">
+                                                                                            {{ option.additional?.uniqueName }}
+                                                                                        </div>
+                                                                                        <div class="item-stock">Stock:
+                                                                                            {{ option.additional?.stock.name }}
+                                                                                        </div>
+                                                                                    </a>
+                                                                                </ng-container>
+                                                                            </ng-template>
+                                                                        </sh-select>
+                                                                        <ul class="no-result-template"
+                                                                            *ngIf="lc.noAccountChosenForNewEntry">
+                                                                            <li>Create New Account</li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </td>
+
+                                                                <td class="col-4 col-md-3 col-lg-3 position-relative">
+                                                                    <input class="form-control text-right" type="text"  id="{{'enter-amount-cr-' + i}}"
+                                                                        decimalDigitsDirective [DecimalPlaces]="2"
+                                                                        [(ngModel)]="txn.amount"
+                                                                        (input)="needToReCalculate.next(true)"
+                                                                        (click)="blankLedgerAmountClick()"
+                                                                        *ngIf="txn.type === 'CREDIT'"
+                                                                        (click)="showBankLedgerPopup(txn, item);">
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <div class="pos-abs entry-modal"
+                                                        *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'CREDIT'">
+                                                        <new-ledger-entry-panel #newLedPanel
+                                                            [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
+                                                            [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
+                                                            [needToReCalculate]="needToReCalculate"
+                                                            [isReadOnly]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
+                                                            (moreDetailOpen)="handleOpenMoreDetail($event)"
+                                                            (changeTransactionType)="toggleTransactionType($event)"
+                                                            [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                                            (saveBlankLedger)="saveBankTransaction()"
+                                                            (clickedOutsideEvent)="hideBankLedgerPopup($event)"
+                                                            (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                                            (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                            [invoiceList]="invoiceList"
+                                                            (saveOtherTax)="saveOtherTax(item, $event)">
+                                                        </new-ledger-entry-panel>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </tbody>
+                                </table> -->
                             </td>
                         </tr>
                     </tbody>
                     <!-- end main tbody -->
-                    <tfoot>
-                        <tr>
-                            <td colspan="2" class="bd-rl" width="36%">
-                                <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
-                                    C/F Balance
-                                </div>
-                            </td>
-                            <td width="14%" class="bd-rr text-right">
-                                <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | giddhCurrency}}</span>
-                            </td>
-                            <td colspan="2" width="36%" class="bd-rl">
-                                <div class="pull-right" *ngIf="eLedgType == 'DEBIT'">
-                                    C/F Balance
-                                </div>
-                            </td>
-                            <td width="14%" class="bd-rr text-right">
-                                <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
-                            </td>
-                        </tr>
 
-                    </tfoot>
-                    <!-- end main tfoot -->
+
                 </table>
             </div>
         </section>

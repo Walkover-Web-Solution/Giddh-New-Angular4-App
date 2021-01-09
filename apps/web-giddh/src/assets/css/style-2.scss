@@ -9707,6 +9707,13 @@ input.mat-input-element{
     .delete-modal-overlay {
         z-index: 9992; /*for delete custom zIndex modal*/
     }
+    #ledger-transaction-left-list sh-select::ng-deep input,
+     #ledger-transaction-right-list sh-select::ng-deep input{
+            min-height: 49px;
+            height: 49px;
+            border:0 !important;
+
+        }
     /* responsive */
 
     @media (max-width: 1440px) {
