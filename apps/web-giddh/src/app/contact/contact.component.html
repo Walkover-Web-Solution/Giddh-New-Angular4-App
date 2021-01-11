@@ -85,7 +85,7 @@
                                                 </span>
                                                 <span class="entity-details">
                                                     <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                    <div class="item-unq giddh-limit single-line-clamp">
+                                                    <div class="item-unique giddh-limit single-line-clamp">
                                                         {{ option.name || '-' }}
                                                     </div>
                                                 </span>
@@ -336,7 +336,6 @@
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
 <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-
     <payment-aside class="account-aside-menu-state transform-inherit" [selectedAccForPayment]="selectedAccForPayment">
     </payment-aside>
 </div>
@@ -821,6 +820,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && totalCustomers>=paginationLimit">
 =======
         <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
@@ -837,6 +837,9 @@
 =======
         <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && totalCustomers>=paginationLimit">
 >>>>>>> 6098b894bc... code improvement done
+=======
+        <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && totalCustomers>=paginationLimit">
+>>>>>>> a1c0c58631... conflict resolved
             <div class="text-center">
                 <pagination [totalItems]="sundryDebtorsAccountsBackup.totalItems" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryDebtorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>
@@ -845,6 +848,7 @@
 
 <<<<<<< HEAD
         <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && totalVendors>=paginationLimit">
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
         <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && Totalcontacts>=paginationLimit">
@@ -860,6 +864,8 @@
 >>>>>>> 7a3b4faa36... changes done
 =======
 >>>>>>> 6098b894bc... code improvement done
+=======
+>>>>>>> a1c0c58631... conflict resolved
             <div class="text-center">
                 <pagination [totalItems]="sundryCreditorsAccountsBackup.totalItems" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryCreditorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                 </pagination>

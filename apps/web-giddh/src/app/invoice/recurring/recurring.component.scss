@@ -123,6 +123,17 @@
     display: none;
 }
 
+.more-dropdown{
+    height: 30px !important;
+    .dropdown-menu{
+        right: -53px !important;
+    }
+}
+
+.search-invoice-filed {
+    display: none;
+}
+
 .giddh-table{
     td{
         white-space: normal !important;
