@@ -848,7 +848,6 @@ ul.sub-list {
     display: block !important;
     width: 100%;
 }
-
 /* file upload css start */
 
 .input-upload .input-group-btn {
@@ -9611,6 +9610,11 @@ span#HW_badge_cont:nth-child(3) {
     word-break: break-all;
     font-size: 24px;
     top:56px !important;
+}
+.transaction-list-sh-select input{
+    min-height: 49px;
+    height: 49px;
+    border: 0 none !important;
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {
