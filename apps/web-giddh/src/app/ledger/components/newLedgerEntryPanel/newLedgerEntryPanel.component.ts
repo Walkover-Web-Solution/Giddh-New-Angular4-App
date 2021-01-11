@@ -291,11 +291,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.assignUpdateActiveAccount(acc);
             }
         });
-        this.store.pipe(select(stateAccount => stateAccount.groupwithaccounts.activeAccount),takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.assignUpdateActiveAccount(response);
-            }
-        });
+        // commented due to TCS TDS taxed key included in active acc response
+        // this.store.pipe(select(stateAccount => stateAccount.groupwithaccounts.activeAccount),takeUntil(this.destroyed$)).subscribe(response => {
+        //     if (response) {
+        //         this.assignUpdateActiveAccount(response);
+        //     }
+        // });
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
@@ -382,11 +383,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let activeAccountTaxes = [];
         if (this.activeAccount && this.activeAccount.applicableTaxes) {
             activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
+            if(this.activeAccount.otherApplicableTaxes && this.activeAccount.otherApplicableTaxes.length && activeAccountTaxes && activeAccountTaxes.length) {
+                if(this.activeAccount.otherApplicableTaxes[0].uniqueName !== activeAccountTaxes[0] && activeAccountTaxes.includes(this.activeAccount.otherApplicableTaxes[0].uniqueName)) {
+                  activeAccountTaxes = activeAccountTaxes.reverse();
+                }
+            }
         }
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
+            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes, []);
         } else if (this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.parentGroups && this.currentTxn.selectedAccount.parentGroups.length) {
-            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
+            this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes, this.currentTxn.selectedAccount.particularAccountTax);
         } else {
             this.taxListForStock = [];
         }
@@ -400,7 +406,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if(this.taxListForStock && this.taxListForStock.length > 0) {
             this.taxListForStock.forEach(tl => {
-                let tax = companyTaxes.find(f => f.uniqueName === tl);
+                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f.uniqueName === tl) : undefined;
                 if (tax) {
                     switch (tax.taxType) {
                         case 'tcsrc':
@@ -518,12 +524,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.totalForTax = this.currentTxn.total;
+                    this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
                 } else {
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+                    const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
                     this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
                 }
-                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
             } else {
                 // Amount is zero, set other parameters to zero
                 if (this.isAdvanceReceipt) {
@@ -555,7 +563,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.taxControll) {
                 this.taxControll.change();
             }
-            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
         }
 
         if (this.shouldShowRcmTaxableAmount) {
@@ -577,7 +589,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
 
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
 
             // calculate discount on change of price
             if (this.discountControl) {
@@ -593,7 +609,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public changeQuantity(val: string) {
         this.currentTxn.inventory.quantity = Number(val);
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.highPrecisionRate * this.currentTxn.inventory.quantity).toFixed(this.giddhBalanceDecimalPlaces));
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        if (this.currentTxn.inventory) {
+            this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+        } else {
+            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        }
 
         // calculate discount on change of price
         if (this.discountControl) {
@@ -653,7 +673,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
 
         if (this.discountControl) {
             this.discountControl.ledgerAmount = this.currentTxn.amount;
@@ -1051,6 +1075,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.removeSelectedInvoice();
             this.getInvoiceListsForCreditNote.emit(event.value);
             this.blankLedger.generateInvoice = true;
+            this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
@@ -1152,8 +1177,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public exchangeRateChanged() {
         this.blankLedger.exchangeRate = Number(this.blankLedger.exchangeRateForDisplay) || 0;
-        this.amountChanged();
-        this.calculateTotal();
+        if (this.currentTxn.inventory && this.currentTxn.inventory.unit && this.currentTxn.unitRate) {
+            const stock = this.currentTxn.unitRate.find(rate => {
+                return rate.stockUnitCode === this.currentTxn.inventory.unit.code;
+            });
+            const stockRate = stock ? stock.rate : 0;
+            this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger.exchangeRate).toFixed(this.ratePrecision));
+            this.changePrice(this.currentTxn.inventory.rate);
+        } else {
+            this.amountChanged();
+            this.calculateTotal();
+        }
     }
 
     /**
@@ -1243,7 +1277,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public handleAdvanceReceiptChange(): void {
-        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? SubVoucher.AdvanceReceipt : '';
+        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? SubVoucher.AdvanceReceipt : this.isRcmEntry ? SubVoucher.ReverseCharge : '';
         this.blankLedger.generateInvoice = this.isAdvanceReceipt;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.calculateTax();
@@ -1298,7 +1332,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if(adjustments && adjustments.length > 0) {
                 adjustments.forEach(adjustment => {
                     adjustment.adjustmentAmount = adjustment.balanceDue;
-                    // delete adjustment.balanceDue;
+                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
             }
             this.currentTxn.voucherAdjustments = {
@@ -1400,7 +1434,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     * @returns {Array<string>} Merged taxes array of unique taxes from both accounts
     * @memberof NewLedgerEntryPanelComponent
     */
-    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
+    private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>, particularAccountTax: Array<any>): Array<string> {
         const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
         if (secondAccountTaxes) {
             secondAccountTaxes.reverse().forEach((tax: string) => {
@@ -1409,6 +1443,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             });
 
+        }
+        if (particularAccountTax && particularAccountTax.length) {
+            mergedAccountTaxes.push(particularAccountTax[0].uniqueName);
         }
         return mergedAccountTaxes;
     }
@@ -1475,10 +1512,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
             this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
-        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
-            accountDetails.inheritedDiscounts.forEach(element => {
-                this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
-            });
+        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount.length)) {
+            this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
+        }
+        if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {
+            accountDetails.applicableTaxes.unshift(accountDetails.otherApplicableTaxes[0]);
         }
         this.accountOtherApplicableDiscount.map(item => item.isActive = true);
     }
@@ -1492,14 +1530,27 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts && this.currentTxn.selectedAccount.accountApplicableDiscounts.length) {
             this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
             this.currentTxn.discounts.map(item => { item.isActive = false });
-            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
-                this.currentTxn.discounts.map(item => {
-                    if (element.uniqueName === item.discountUniqueName) {
-                        item.isActive = true;
-                    }
-                    return item;
+            if(this.currentTxn.discounts && this.currentTxn.discounts.length === 1) {
+                setTimeout(() => {
+                    this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                        this.currentTxn.discounts.map(item => {
+                            if (element.uniqueName === item.discountUniqueName) {
+                                item.isActive = true;
+                            }
+                            return item;
+                        });
+                    });
+                }, 300);
+            } else {
+                this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                    this.currentTxn.discounts.map(item => {
+                        if (element.uniqueName === item.discountUniqueName) {
+                            item.isActive = true;
+                        }
+                        return item;
+                    });
                 });
-            });
+            }
         } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
             this.currentTxn.discounts.map(item => { item.isActive = false });
             this.accountOtherApplicableDiscount.forEach(element => {

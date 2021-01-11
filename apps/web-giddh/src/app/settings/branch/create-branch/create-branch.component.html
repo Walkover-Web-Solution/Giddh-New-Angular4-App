@@ -33,7 +33,7 @@
                     <label>
                         Branch Name <span class="red-text">*</span>
                     </label>
-                    <input [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
+                    <input maxlength="50" [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
                         type="text" class="form-control" formControlName="alias" placeholder="Enter Name">
                     <span class="danger pl-1"
                         *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength">
@@ -68,7 +68,7 @@
                                                 [value]="option.value"></span>&nbsp;
                                         <span class="entity-details">
                                             <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                            <div class="item-unq">
+                                            <div class="item-unique">
                                                 <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
                                                     {{ option.taxNumber }}</p>
                                             </div>

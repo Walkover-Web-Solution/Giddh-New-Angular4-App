@@ -2750,7 +2750,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .contact-main {
-    min-height: 650px;
+    min-height: 560px;
 }
 
 .hide-header .nav.nav-tabs {
@@ -8781,6 +8781,16 @@ highcharts-chart .highcharts-container{
     flex-shrink: 1 !important;
 }
 
+highcharts-chart{
+    .highcharts-container{
+        .highcharts-title{
+                width: 62px !important;
+                white-space: normal !important;
+                text-align: center;
+            }
+    }
+}
+
 #incomeChart #highcharts-ufrwew1-29 {
     display: block;
     width: 100%;
@@ -8831,29 +8841,29 @@ p.remvBrnchName {
 
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: #5864c9 !important;
+    background-color: $chetwode-blue !important;
 }
 
 .theme-green .bs-datepicker-head {
-    background-color: #5864c9;
+    background-color: $chetwode-blue;
 }
 
 .theme-green .bs-datepicker-body table td span.selected,
 .theme-green .bs-datepicker-body table td.selected span,
 .theme-green .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-green .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: #5864c9;
+    background-color: $chetwode-blue;
 }
 
 .bs-datepicker-body table.days td.active:not(.select-start):before,
 .bs-datepicker-body table.days td.in-range:not(.select-start):before,
 .bs-datepicker-body table.days span.active:not(.select-start):before,
 .bs-datepicker-body table.days span.in-range:not(.select-start):before {
-    background: #ebedff;
+    background: $lavender-light;
 }
 
 .theme-green .bs-datepicker-body table td.week span {
-    color: #5864c9;
+    color: $chetwode-blue;
 }
 
 .mobileNumberWidth .menu {
@@ -9599,6 +9609,22 @@ span#HW_badge_cont:nth-child(3) {
         right:  7px !important;
     }
 }
+.mobile-setting-sidebar {
+    overflow-y: hidden;
+}
+.select-linked-accounts sh-select-menu .menu {
+    max-height: 250px;
+}
+.ratio-chart-block .highcharts-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    white-space: normal !important;
+    word-break: break-all;
+    font-size: 24px;
+    top:56px !important;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -9777,24 +9803,24 @@ input.mat-input-element{
         .right-bar {
         width: 100% !important;
     }
-}
-@media(max-width:1191px) and (min-width:1024px){
-    .recurring-form-wrapper{
-        .recurring-form{
-            sh-select{
-                div{
-                    width: 100%;
-                    input{
-                        min-width: 100%;
-                        max-width: 100%;
+    @media(max-width:1191px) and (min-width:1024px){
+        .recurring-form-wrapper{
+            .recurring-form{
+                sh-select{
+                    div{
+                        width: 100%;
+                        input{
+                            min-width: 100%;
+                            max-width: 100%;
+                        }
                     }
                 }
-            }
-            giddh-datepicker{
-                width: 100%;
-                .mat-form-field{
-                    max-width: 100%;
-                    min-width: 100%;
+                giddh-datepicker{
+                    width: 100%;
+                    .mat-form-field{
+                        max-width: 100%;
+                        min-width: 100%;
+                    }
                 }
             }
         }
@@ -11064,6 +11090,10 @@ input.mat-input-element{
     margin: 0 !important;
 }
 
+.modal.fade.giddh-calendar.show {
+    z-index: 999999;
+}
+
 body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
@@ -11082,8 +11112,16 @@ body.prevent-body-scroll {
         display: none!important;
     }
 }
-.modal.fade.giddh-calendar.show {
-    z-index: 999999;
+/*media query for height resolution*/
+@media(max-height:999px){
+    .contact-main {
+        min-height: calc(100vh - 420px);
+    }
+}
+@media(min-height:300px) and (max-height:730px){
+   .linked-address sh-select-menu .total-padding {
+        height: 257px !important;
+    }
 }
 *::-webkit-scrollbar {
   width: 10px;

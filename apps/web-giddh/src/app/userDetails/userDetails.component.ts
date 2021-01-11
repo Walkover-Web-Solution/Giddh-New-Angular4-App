@@ -216,6 +216,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.selectTab(val.tabIndex);
             }
         });
+        
+        if(document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
+            document.getElementsByClassName('nav-item')[3].addEventListener('click', (event) => {
+                this.onTabChanged("subscription");
+            });
+        }
     }
     public addNumber(no: string) {
         this.oneTimePassword = '';
@@ -373,7 +379,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public selectTab(id: number) {
-        if(this.staticTabs) {
+        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
             this.staticTabs.tabs[id].active = true;
         }
     }
@@ -468,9 +474,3 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 }
-
-
-
-
-
-

@@ -80,10 +80,10 @@
                 <h3 class="subHead bd-rb">
                     {{acc.siteName}}
                     <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.yodleeAccounts[0], false)" *ngIf="acc.status !== 'FAILED'">
-                        <i class="fa fa-refresh"></i> Refresh
+                        <i class="icon-refresh"></i> Refresh
                     </button>
-                    <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="connectBank(acc.siteId, acc.yodleeAccounts[0].providerAccount.providerAccountId)" *ngIf="acc.status === 'FAILED'">
-                        <i class="fa fa-refresh"></i> Refresh
+                    <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="connectBank(acc.siteId, acc?.yodleeAccounts[0]?.providerAccount?.providerAccountId)" *ngIf="acc.status === 'FAILED'">
+                        <i class="icon-refresh"></i> Refresh
                     </button>
                 </h3>
                 <aside class="body">
@@ -134,7 +134,7 @@
 
                         <ng-container *ngIf="acc.status === 'FAILED'">
                             <div class="account-number">
-                                <b>Provider Id</b>: {{card.providerAccount.providerAccountId}}
+                                <b>Provider Id</b>: {{card?.providerAccount?.providerAccountId}}
                             </div>
                             <p class="mr-t2">Status: <span class="text-danger font-14"><i
                                         class="fa fa-exclamation-circle"></i>
@@ -158,7 +158,7 @@
 
                         <ng-container *ngIf="acc.status === 'ALREADY_ADDED' && card.status !== 'SUCCESS'">
                             <div class="account-number">
-                                <b>Provider Id</b>: {{card.providerAccount.providerAccountId}}
+                                <b>Provider Id</b>: {{card?.providerAccount?.providerAccountId}}
                             </div>
                             <p class="mr-t2">Status: <span class="text-danger font-14"><i
                                         class="fa fa-exclamation-circle"></i>
@@ -166,12 +166,12 @@
                             <p>Reason: {{acc.reason}}</p>
                             <div class="clearfix mr-t2" *ngIf="acc.status === 'ALREADY_ADDED'">
                                 <button class="btn btn-default" *ngIf="card.status !== 'INCORRECT_CREDENTIALS'" (click)="onRefreshToken(card)">Reconnect</button>
-                                <button class="btn btn-default" *ngIf="card.status === 'INCORRECT_CREDENTIALS'" (click)="connectBank(acc.siteId, card.providerAccount.providerAccountId)">Try
+                                <button class="btn btn-default" *ngIf="card.status === 'INCORRECT_CREDENTIALS'" (click)="connectBank(acc.siteId, card?.providerAccount?.providerAccountId)">Try
                                     Again</button>
                             </div>
                             <div class="clearfix mr-t2" *ngIf="acc.status !== 'ALREADY_ADDED'">
                                 <button class="btn btn-default" *ngIf="acc.status !== 'INCORRECT_CREDENTIALS'" (click)="onRefreshToken(card)">Reconnect</button>
-                                <button class="btn btn-default" *ngIf="acc.status === 'INCORRECT_CREDENTIALS'" (click)="connectBank(acc.siteId, card.providerAccount.providerAccountId)">Try
+                                <button class="btn btn-default" *ngIf="acc.status === 'INCORRECT_CREDENTIALS'" (click)="connectBank(acc.siteId, card?.providerAccount?.providerAccountId)">Try
                                     Again</button>
                             </div>
                         </ng-container>

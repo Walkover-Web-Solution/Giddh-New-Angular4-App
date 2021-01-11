@@ -256,7 +256,7 @@
                     <tr *ngFor="let item of voucherData.results; let i = index"
                         (mouseover)="hoveredItemUniqueName = item.uniqueName">
 
-                        <td class="check-image" data-title="#"
+                        <td class="check-image" width="4%" data-title="#"
                             *ngIf="hoveredItemUniqueName === item.uniqueName || item.isSelected || selectedItems.length > 0">
                             <div class="check-image"
                                 class="d-flex checkbox-td">
@@ -267,7 +267,7 @@
                             </div>
                         </td>
 
-                        <td *ngIf="!item.isSelected && hoveredItemUniqueName !== item.uniqueName && selectedItems.length === 0"
+                        <td width="4%" *ngIf="!item.isSelected && hoveredItemUniqueName !== item.uniqueName && selectedItems.length === 0"
                             data-title="#">
                             <div class="d-flex index-no">
                                 {{ i + 1}} </div>
@@ -282,8 +282,8 @@
       </td> -->
 
 
-                        <td attr.data-title="{{voucherType === 'proformas' ? 'Proforma No.' : 'Estimates No.'}} ">
-                            <div style="position: relative" class="d-flex">
+                        <td width="13%" attr.data-title="{{voucherType === 'proformas' ? 'Proforma No.' : 'Estimates No.'}} ">
+                            <div class="d-flex position-relative">
                                 <a href="javascript:void(0);" class="btn-link-2"
                                     (click)="onSelectInvoice(item)">{{item.uniqueName}}</a>
                                 <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
@@ -297,7 +297,7 @@
 
                         </td>
 
-                        <td (dblclick)="selectedCustomerUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                        <td width="19%" (dblclick)="selectedCustomerUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                             (clickOutside)="selectedCustomerUniqueName = ''" data-title="Customer">
                             {{item.customerName}}
                             <div *ngIf="selectedCustomerUniqueName === item.uniqueName" account-detail-modal-component
@@ -307,11 +307,11 @@
                             </div>
                         </td>
 
-                        <td attr.data-title="{{ voucherType === 'proformas' ? 'Proforma' : 'Estimate' }} Date">
+                        <td width="10%" attr.data-title="{{ voucherType === 'proformas' ? 'Proforma' : 'Estimate' }} Date">
                             {{item.invoiceDate}}
                         </td>
                         <!-- <td class="text-right" data-title="Total Amt.">{{item.grandTotal | giddhCurrency}}</td> -->
-                        <td class="text-right"
+                        <td width="12%" class="text-right"
                             [tooltip]="(voucherType === 'proformas' || voucherType === 'estimates') ? grandTotalPopupTemplate : ''"
                             container="body" containerClass="invoice-preview">
                             {{item?.amount?.currencyForAccount?.symbol}}
@@ -319,12 +319,12 @@
                         </td>
                         <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
                         </ng-template>
-                        <td class="" data-title="Expiry Date">{{item.expiryDate}}</td>
+                        <td width="12%" data-title="Expiry Date">{{item.expiryDate}}</td>
                         <td data-title="Status">{{ item.status }}</td>
 
                         <!--for not cancelled status-->
 
-                        <td data-title="Action" (click)="clickedItemUniqueName = item.uniqueName" class="cp"
+                        <td width="10%" data-title="Action" (click)="clickedItemUniqueName = item.uniqueName" class="cp"
                             *ngIf="item.action !== 'invoiced'">
 
 
@@ -414,7 +414,7 @@
                         </td>
 
                         <!--for cancelled/ declined status-->
-                        <td *ngIf="item.action === 'invoiced'" data-title="Action">
+                        <td width="10%" *ngIf="item.action === 'invoiced'" data-title="Action">
                             <span>{{ item.action}}</span>
                         </td>
 

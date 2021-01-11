@@ -556,8 +556,6 @@ sh-select:focus {
 
 .download-invoice-ledger {
     padding-left: 6px;
-    position: unset !important;
-    align-items: center;
 }
 .icon-download-circle{
     font-size:15px;
@@ -1118,5 +1116,12 @@ sh-select:focus {
         img{
             padding-top: 5px;
         }
+    }
+}
+
+@media (min-width:992px){
+    .download-invoice-ledger {
+        position: unset;
+        align-items: center;
     }
 }

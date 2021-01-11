@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Eve
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
@@ -337,11 +337,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
-            if (data && data.yodleeAdded) {
-                this.getBankTransactions();
-            } else {
-                this.hideEledgerWrap();
-            }
+            this.getBankTransactions();
         });
     }
 
@@ -381,7 +377,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (data && data.body) {
                 txn.showTaxationDiscountBox = false;
                 // Take taxes of parent group and stock's own taxes
-                const taxes = data.body.taxes || [];
+                let taxes = data.body.taxes || [];
                 if (data.body.stock) {
                     taxes.push(...data.body.stock.taxes);
                 }
@@ -390,6 +386,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         tax.isChecked = false;
                         tax.isDisabled = false;
                     });
+                }
+                if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
+                    taxes.unshift(data.body.applicableTaxes[0].uniqueName);
                 }
                 txn.selectedAccount = {
                     ...e.additional,
@@ -407,8 +406,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     nameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                     stock: data.body.stock,
                     uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
-                    accountApplicableDiscounts: data.body.applicableDiscounts
+                    accountApplicableDiscounts: data.body.applicableDiscounts,
+                    parentGroups: data.body.parentGroups,  // added due to parentGroups is getting null in search API
                 };
+                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                    txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                }
+                if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
+                    txn.selectedAccount.particularAccountTax = data.body.applicableTaxes;
+                }
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
                 let unitCode = '';
@@ -444,8 +450,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             rate
                         }
                     };
+                } else {
+                    delete txn.inventory;
                 }
-                if (rate > 0 && txn.amount === 0) {
+                if (rate > 0) {
                     txn.amount = rate;
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
@@ -865,11 +873,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // After the success of the entrance call for bank transactions
                 this.lc.activeAccount$.subscribe((data: AccountResponse) => {
                     this._loaderService.show();
-                    if (data && data.yodleeAdded) {
-                        this.getBankTransactions();
-                    } else {
-                        this.hideEledgerWrap();
-                    }
+                    this.getBankTransactions();
                 });
             }
         });
@@ -901,11 +905,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.advanceSearchComp.resetAdvanceSearchModal();
                 }
 
-                if (accountDetails.yodleeAdded) {
-                    this.getBankTransactions();
-                } else {
-                    this.hideEledgerWrap();
-                }
+                this.getBankTransactions();
 
                 this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
                 if (accountDetails.currency && profile.baseCurrency) {
@@ -2073,13 +2073,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     private handleRcmVisibility(transaction: TransactionVM): void {
+        let formattedCurrentLedgerAccountParentGroups = [];
+        if (transaction.selectedAccount) {
+            formattedCurrentLedgerAccountParentGroups = transaction.selectedAccount.parentGroups.map(parent => ({uniqueName: parent}));
+        }
         const currentLedgerAccountDetails = {
-            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
-            parentGroups: transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
+            uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
+            parentGroups: this.lc.activeAccount && this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
         };
         const selectedAccountDetails = {
-            uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
-            parentGroups: this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
+            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
+            parentGroups: formattedCurrentLedgerAccountParentGroups.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
         };
         const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
         if (this.lc && this.lc.currentBlankTxn) {

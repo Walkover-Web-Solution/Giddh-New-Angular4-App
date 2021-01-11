@@ -92,7 +92,7 @@
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content ledger-book row" id="transaction_table">
-                            <div role="tabpanel" class="tab-pane col-md-6 col-12"
+                            <div role="tabpanel" class="tab-pane col-lg-6 col-md-12 col-12"
                                 v-bind:class="{'active': selectedTab === 'debit' || !selectedTab, 'pt-350':!isResponsive}"
                                 id="debit" v-if="!selectedTab || selectedTab == 'debit'">
                                 <div class="row">
@@ -115,9 +115,9 @@
                                         <tbody class="bd-rl">
                                             <tr class="ledger-row bd-rb row mr-0 ml-0"
                                                 v-if="legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'DEBIT'">
-                                                <td class="col-3 bd-rr"></td>
-                                                <td class="col-6 bd-rr">To Balance B/F</td>
-                                                <td class="col-3 text-right">
+                                                <td class="col-3"></td>
+                                                <td class="col-6 bd-rl">To Balance B/F</td>
+                                                <td class="col-3 bd-rl text-right">
                                                     <!-- | number: '1.2-2'  -->
                                                     <span v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'"
                                                         class="">{{ legderBalanceData.forwardedBalance.amount | currency }}</span>
@@ -209,7 +209,7 @@
                                 </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane col-md-6 col-12"
+                            <div role="tabpanel" class="tab-pane col-lg-6 col-md-12 col-md-12"
                                 v-bind:class="{'active': selectedTab === 'credit', 'pt-350':!isResponsive}" id="credit"
                                 v-if="!selectedTab || selectedTab == 'credit'">
                                 <div class="row">
@@ -229,12 +229,12 @@
                                                 <th class="text-right col-3 bd-rl bd-rr">Amount</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr class="ledger-row row mr-0 ml-0 bd-rb" 
-                                                v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
-                                                <td class="col-3 bd-rr"></td>
-                                                <td class="col-6 bd-rr">By Balance B/F</td>
-                                                <td class="col-3 text-right bd-rr">
+                                        <tbody class="bd-rl">
+                                            <tr class="ledger-row row mr-0 ml-0 bd-rb"
+                                            v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
+                                                <td class="col-3"></td>
+                                                <td class="col-6 bd-rl">By Balance B/F</td>
+                                                <td class="col-3 text-right bd-rl bd-rr">
                                                     <span v-if="legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                         <!-- | number: '1.2-2' -->
                                                         {{ legderBalanceData.forwardedBalance.amount | currency }}</span>

@@ -371,7 +371,7 @@
                     <tr *ngFor="let item of voucherData.items; let i = index"
                         (mouseover)="hoveredItemForAction = item.uniqueName">
 
-                        <td class="check-image"
+                        <td width="4%" class="check-image"
                             *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
                             <div class="check-image d-flex justify-content-start">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
@@ -388,9 +388,8 @@
                         </td>
 
                         <!-- Invoice No. -->
-                        <td data-title="Invoice No.">
-                            <div (click)="onSelectInvoice(item)" [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
-                                style="position: relative" class="d-flex">
+                        <td width="13%" data-title="Invoice No.">
+                            <div (click)="onSelectInvoice(item)" [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}" class="d-flex position-relative">
                                 <a href="javascript:void(0);" class="btn-link-2">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
@@ -405,7 +404,7 @@
                         </td>
                         <!-- <td>PO82479</td> -->
                         <!-- Customer -->
-                        <td data-title="Customer" [ngClass]="{'cp': selectedVoucher !== 'purchase'}"
+                        <td width="19%" data-title="Customer" [ngClass]="{'cp': selectedVoucher !== 'purchase'}"
                             (dblclick)="(selectedVoucher !== 'purchase') ? modalUniqueName = item.uniqueName : ''"
                             class="no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
                             <div dropdown container="body">
@@ -423,7 +422,7 @@
                         <td data-title="Linked Voucher" *ngIf="(selectedVoucher === 'purchase')">{{item.purchaseOrderNumbers}}</td>
 
                         <!-- Total Amt. -->
-                        <td data-title="Total Amount"
+                        <td width="10%" data-title="Total Amount"
                             [tooltip]="(selectedVoucher !== 'purchase') ? grandTotalPopupTemplate : ''" container="body"
                             containerClass="invoice-preview">{{item.accountCurrencySymbol}}
                             {{item.grandTotal?.amountForAccount | giddhCurrency}}
@@ -433,18 +432,18 @@
 
                         <!-- Balance Due -->
 
-                        <td data-title="Total Amount" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
+                        <td width="12%" data-title="Total Amount" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
                             {{item.accountCurrencySymbol}} {{item?.totalBalance?.amountForAccount | giddhCurrency}}
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
                         </ng-template>
 
                         <!-- Due Date -->
-                        <td data-title="Due Date">{{item.dueDate ? item.dueDate : '-' }}</td>
+                        <td width="12%" data-title="Due Date">{{item.dueDate ? item.dueDate : '-' }}</td>
 
                         <!-- Status -->
                         <!--for not cancelled status-->
-                        <td data-title="Status" class="cp" *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus !== 'cancel'">
+                        <td width="10%" data-title="Status" class="cp" *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus !== 'cancel'">
                             <div class="d-flex align-items-center">
                                 <div class="flex-fill select-action">
                                     <span
@@ -484,7 +483,7 @@
                         </td>
 
                         <!--for cancelled status-->
-                        <td  data-title="Status" *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus === 'cancel'">
+                        <td width="10%" data-title="Status" *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus === 'cancel'">
                             <span>{{ item.balanceStatus}}</span>
                             <!-- <div class="action-icon ml-15">
                                 <a tooltip="Convert to bill">

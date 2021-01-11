@@ -13,7 +13,7 @@
                 <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
                 <div class="aside-body">
-                    <div class="aside-pane-form">
+                    <div class="aside-pane-form" [ngClass]="{'edit-branch-mode': addressConfiguration.type === 'editBranch'}">
                         <section
                             *ngIf="addressConfiguration.type !== 'editBranch' && addressConfiguration.type !== 'editWarehouse'"
                             class="clearfix margin-child-label">
@@ -25,7 +25,7 @@
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control"
                                             placeholder="Enter name">
@@ -103,7 +103,7 @@
                                                             </span>
                                                             <span class="entity-details">
                                                                 <div class="item">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq">
+                                                                <div class="item-unique">
                                                                     {{ option.name || '-' }}
                                                                 </div>
                                                             </span>
@@ -131,7 +131,7 @@
                                     <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
                                     <div hidden class="form-group col-12">
                                         <label>Branch Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control" placeholder="Enter">
                                         <span class="danger"
@@ -159,7 +159,7 @@
                                     <div class="form-group col-12 linked-entities linked-add create">
                                         <label>Linked Address/es</label>
                                         <div class="form-group">
-                                            <sh-select [options]="addressConfiguration?.linkedEntities"
+                                            <sh-select class="linked-address" [options]="addressConfiguration?.linkedEntities"
                                                 name="linkedEntities" formControlName="linkedEntity"
                                                 (clearSingleItem)="handleFinalSelection($event)" [ItemHeight]="200"
                                                 [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity">
@@ -172,7 +172,7 @@
                                                                     [value]="option.value"></span>&nbsp;
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq">
+                                                                <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>
@@ -206,7 +206,7 @@
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control"
                                             placeholder="Enter name" required>
@@ -231,7 +231,7 @@
                                                             class="list-item d-flex">
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq">
+                                                                <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>

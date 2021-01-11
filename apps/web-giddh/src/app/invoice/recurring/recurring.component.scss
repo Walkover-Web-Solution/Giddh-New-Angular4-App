@@ -122,6 +122,18 @@
 .search-invoice-filed {
     display: none;
 }
+.more-dropdown{
+    height: 30px !important;
+    .dropdown-menu{
+        right: -53px !important;
+    }
+}
+.giddh-table{
+    td{
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
+}
 // responsive
 @media(max-width:1190px){
     .recurring-form {
@@ -170,6 +182,11 @@
     }
 }
 @media (max-width: 768px) {
+    .giddh-table{
+        td{
+            width: 100%;
+        }
+    }
     .form-view .input-group {
         display: flex;
     }

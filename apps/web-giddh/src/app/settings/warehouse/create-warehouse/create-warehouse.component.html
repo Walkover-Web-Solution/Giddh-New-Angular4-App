@@ -37,7 +37,7 @@
                         Warehouse Name <span class="red-text">*</span>
                     </label>
                     <input [class.error-box]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid"
-                        type="text" required formControlName="name" class="form-control">
+                        type="text" maxlength="100" required formControlName="name" class="form-control">
                     <span class="danger pl-1"
                         *ngIf="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.errors?.maxlength">
                         Max. 100 characters allowed
@@ -70,7 +70,7 @@
                                         </span>
                                         <span class="entity-details">
                                             <div class="item">{{ option.label || '-' }}</div>
-                                            <div class="item-unq">
+                                            <div class="item-unique">
                                                 {{ option.name || '-' }}
                                             </div>
                                         </span>
@@ -100,7 +100,7 @@
                                         href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-details">
                                             <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                            <div class="item-unq">
+                                            <div class="item-unique">
                                                 <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
                                                     {{ option.taxNumber }}</p>
                                             </div>

@@ -18,7 +18,7 @@
                                     </span>
                                     <span class="entity-details">
                                         <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                        <div class="item-unq giddh-limit single-line-clamp">
+                                        <div class="item-unique giddh-limit single-line-clamp">
                                             {{ option.name || '-' }}
                                         </div>
                                     </span>
@@ -36,7 +36,7 @@
                     <i class="icon-calender calendar-addon"></i>
                     <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
                 </div>
-            </div>
+                </div>
             </div>
             <div class="clear-filter width-100 align-items-center d-flex justify-content-center" *ngIf="checkIfFiltersApplied()">
                 <button class="btn btn-filter" (click)="resetFilters()"><span class="icon-cross"></span> Clear
