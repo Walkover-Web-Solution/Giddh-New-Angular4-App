@@ -1,35 +1,37 @@
 <section id="manufacture" class="clearfix">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
-    <div class="mt-15 justify-content-between pr-3" [ngClass]="{'d-flex' : currentCompanyBranches?.length > 2}">
-        <div *ngIf="currentCompanyBranches?.length > 2" class="form-group col-lg-2 col-md-6 linked-entities">
-            <label class="d-block pb-1">Entity</label>
-            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
-                name="entityDropdown" [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
-                [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
-                <ng-template #optionTemplate let-option="option">
-                    <ng-container>
-                        <a href="javascript:void(0)" class="list-item d-flex">
-                            <span class="entity-icon">
-                                <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
-                                <i class="icon-branch-icon pull-right" *ngIf="!option.parentBranch && !option.isCompany"
-                                    tooltip="HO Branch"></i>
-                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
-                            </span>
-                            <span class="entity-details">
-                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                <div class="item-unique giddh-limit single-line-clamp">
-                                    {{ option.name || '-' }}
-                                </div>
-                            </span>
-                        </a>
-                    </ng-container>
-                </ng-template>
-            </sh-select>
-        </div>
-        <div>
-            <label class="d-none" [ngClass]="{'d-block' : currentCompanyBranches?.length > 2}" >&nbsp;</label>
-            <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
-            Manufacture</button>
+    <div class="clearfix">
+        <div class="mt-15 justify-content-between pr-3" [ngClass]="{'d-flex' : currentCompanyBranches?.length > 2}">
+            <div *ngIf="currentCompanyBranches?.length > 2" class="form-group col-lg-2 col-md-6 linked-entities">
+                <label class="d-block pb-1">Entity</label>
+                <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
+                    name="entityDropdown" [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
+                    [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                    <ng-template #optionTemplate let-option="option">
+                        <ng-container>
+                            <a href="javascript:void(0)" class="list-item d-flex">
+                                <span class="entity-icon">
+                                    <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
+                                    <i class="icon-branch-icon pull-right" *ngIf="!option.parentBranch && !option.isCompany"
+                                        tooltip="HO Branch"></i>
+                                    <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
+                                </span>
+                                <span class="entity-details">
+                                    <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                    <div class="item-unique giddh-limit single-line-clamp">
+                                        {{ option.name || '-' }}
+                                    </div>
+                                </span>
+                            </a>
+                        </ng-container>
+                    </ng-template>
+                </sh-select>
+            </div>
+            <div>
+                <label class="d-none" [ngClass]="{'d-block' : currentCompanyBranches?.length > 2}" >&nbsp;</label>
+                <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
+                Manufacture</button>
+            </div>
         </div>
     </div>
     <!-- form -->
