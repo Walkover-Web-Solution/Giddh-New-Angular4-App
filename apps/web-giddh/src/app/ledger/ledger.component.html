@@ -265,12 +265,16 @@
                     </div>
                 </div>
                 <div class="wrap-transaction-map clearfix">
-                    <table class="ledger-head transaction-mapped mt-0" width="100%" colspan="100%">
-                        <tr>
-                            <th colspan="6" class="px-3 font-14">Debit <span class="pull-right text-gray">Dr</span></th>
-                            <th colspan="6" class="px-3 font-14">Credit <span class="pull-right text-gray">Cr</span></th>
-                        </tr>
-                    </table>
+                    <div class="row">
+                        <div class="px-3 w-100">
+                            <table class="ledger-head transaction-mapped mt-0" width="100%" colspan="100%">
+                                <tr>
+                                    <th colspan="6" class="pl-15 pr-2 font-14">Debit <span class="pull-right text-gray">Dr</span></th>
+                                    <th colspan="6" class="pr-15 pl-1 font-14">Credit <span class="pull-right text-gray">Cr</span></th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                     <div class="ledger-book">
                         <div class="left-col-new">
                             <table class="table ledger-table transaction-mapped-table mb-0">
@@ -470,43 +474,19 @@
                     </div>
                     <table class="w-100">
                         <tr>
-                            <td colspan="12" class="py-2 px-3">
-                                <!-- *ngIf="eLedgType == 'CREDIT'" -->
-                                <div class="pull-right" >
+                            <td colspan="12" class="py-2 px-3 font-14">
+                                <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
                                     C/F Balance
-                                    <span class="pl-15 text-primary" *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | giddhCurrency}} </span>
+                                    <span class="pl-15 digit-blue" *ngIf="eLedgType == 'CREDIT'" >{{eDrBalAmnt | giddhCurrency}} 500 </span>
                                 </div>
                             </td>
-                            <td colspan="12" class="bd-rl py-2 px-3">
-                                <!-- *ngIf="eLedgType == 'DEBIT'" -->
+                            <td colspan="12" class="bd-rl py-2 px-3 font-14" *ngIf="eLedgType == 'DEBIT'">
                                 <div class="pull-right">
-                                    C/F Balance <span  class="pl-15 text-primary" *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
+                                    C/F Balance <span  class="pl-15 digit-blue" *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}} 500</span>
                                 </div>
                             </td>
                         </tr>
                     </table>
-                    <!-- <tfoot>
-                        <tr>
-                            <td colspan="2" class="bd-rl" width="36%">
-                                <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
-                                    C/F Balance
-                                </div>
-                            </td>
-                            <td width="14%" class="bd-rr text-right">
-                                <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | giddhCurrency}}</span>
-                            </td>
-                            <td colspan="2" width="36%" class="bd-rl">
-                                <div class="pull-right" *ngIf="eLedgType == 'DEBIT'">
-                                    C/F Balance
-                                </div>
-                            </td>
-                            <td width="14%" class="bd-rr text-right">
-                                <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
-                            </td>
-                        </tr>
-
-                    </tfoot> -->
-                    <!-- end main tfoot -->
                 </div>
 
                 <table class="table ledger-table transaction-mapped-table mb-0">
