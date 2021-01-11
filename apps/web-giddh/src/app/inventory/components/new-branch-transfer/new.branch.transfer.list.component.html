@@ -17,7 +17,7 @@
                                     </span>
                                     <span class="entity-details">
                                         <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                        <div class="item-unq giddh-limit single-line-clamp">
+                                        <div class="item-unique giddh-limit single-line-clamp">
                                             {{ option.name || '-' }}
                                         </div>
                                     </span>
@@ -171,8 +171,14 @@
                 <tbody class="on-mobile-view no-records" *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
                         <td *ngIf="!isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11" align="center">No records found.</td>
-                        <td *ngIf="isLoading" colspan="8">
-
+                        <td *ngIf="isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11">
+                                <div class="no-data mt-0 loader-main">
+                                    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                                    <div class="spinner2">
+                                        <div class="cube1"></div>
+                                        <div class="cube2"></div>
+                                    </div>
+                                </div>
                         </td>
                     </tr>
                 </tbody>

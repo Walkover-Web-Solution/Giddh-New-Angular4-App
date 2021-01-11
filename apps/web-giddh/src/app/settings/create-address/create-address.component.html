@@ -103,7 +103,7 @@
                                                             </span>
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq giddh-limit single-line-clamp">
+                                                                <div class="item-unique giddh-limit single-line-clamp">
                                                                     {{ option.name || '-' }}
                                                                 </div>
                                                             </span>
@@ -126,7 +126,7 @@
                         </section>
 
                         <section *ngIf="addressConfiguration.type === 'editBranch'" class="clearfix margin-child-label">
-                            <div class="form_bg clearfix">
+                            <div class="clearfix">
                                 <div class="row">
                                     <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
                                     <div hidden class="form-group col-12">
@@ -172,7 +172,7 @@
                                                                     [value]="option.value"></span>&nbsp;
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq">
+                                                                <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>
@@ -202,7 +202,7 @@
                         </section>
 
                         <section *ngIf="addressConfiguration.type === 'editWarehouse'" class="clearfix margin-child-label">
-                            <div class="form_bg clearfix">
+                            <div class="clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
@@ -231,7 +231,7 @@
                                                             class="list-item d-flex">
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq">
+                                                                <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>

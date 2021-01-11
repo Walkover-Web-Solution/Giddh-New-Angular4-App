@@ -160,9 +160,6 @@ html, body{
         padding: 5px 10px 5px 53% !important;
     }
 }
-.text-right{
-    text-align: right;
-}
 .table-cell{
     display: table-cell;
 }
@@ -590,7 +587,7 @@ input {
     padding: 0 15px;
 }
 
-.custom-tooltipe {
+.custom-tooltip {
     position: absolute;
     top: -22px;
     z-index: 99;
@@ -624,52 +621,8 @@ input {
     margin-right: 15px;
 }
 
-.mt-1 {
-    margin-top: 10px;
-}
-
-.mt-2 {
-    margin-top: 20px;
-}
-
-.mt-3 {
-    margin-top: 30px;
-}
-
-.mt-4 {
-    margin-top: 40px;
-}
-
-.mt-5 {
-    margin-top: 50px;
-}
-
-.mt-6 {
-    margin-top: 60px;
-}
-
 .mt-15 {
     margin-top: 15px;
-}
-
-.mb-1 {
-    margin-bottom: 10px !important;
-}
-
-.mb-2 {
-    margin-bottom: 20px;
-}
-
-.mb-3 {
-    margin-bottom: 30px;
-}
-
-.mb-4 {
-    margin-bottom: 40px;
-}
-
-.mb-5 {
-    margin-bottom: 50px;
 }
 
 .mb-15 {
@@ -686,46 +639,6 @@ input {
 
 .mt-15 {
     margin-top: 15px;
-}
-
-.mr-1 {
-    margin-right: 10px;
-}
-
-.mr-2 {
-    margin-right: 20px;
-}
-
-.mr-3 {
-    margin-right: 30px !important;
-}
-
-.mr-4 {
-    margin-right: 40px;
-}
-
-.mr-5 {
-    margin-right: 50px;
-}
-
-.ml-1 {
-    margin-left: 10px;
-}
-
-.ml-2 {
-    margin-left: 20px;
-}
-
-.ml-3 {
-    margin-left: 30px;
-}
-
-.ml-4 {
-    margin-left: 40px;
-}
-
-.ml-5 {
-    margin-left: 50px;
 }
 
 .ml-05 {
@@ -757,7 +670,7 @@ input {
     font-size: 13px;
     color: $chetwode-blue !important;
     display: block;
-    padding: 7px 10px !important;
+    padding: 7px 10px;
     display: block;
     width: 100%;
     text-align: left;
@@ -867,12 +780,12 @@ ul.sub-list {
 
 /* file upload css end */
 
-.tab-integraton .nav-tabs {
+.tab-integration .nav-tabs {
     padding: 40px;
     border-bottom: 0px;
 }
 
-.tab-integraton .nav-tabs > li > a {
+.tab-integration .nav-tabs > li > a {
     width: 120px;
     height: 120px !important;
     background: $white;
@@ -884,10 +797,10 @@ ul.sub-list {
     font-size: 18px;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
-.tab-integraton .nav-tabs > li > a:hover{
+.tab-integration .nav-tabs > li > a:hover{
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
-.tab-integraton .nav-tabs > li.active a {
+.tab-integration .nav-tabs > li.active a {
     background: $white !important;
     box-shadow: 0 6px 7px $very-light-gray;
     border: 1px solid $midnight-express !important;
@@ -896,18 +809,18 @@ ul.sub-list {
     /* display: block; */
 }
 
-.tab-integraton .nav-tabs > li.active a span {
+.tab-integration .nav-tabs > li.active a span {
     opacity: 1;
 }
 
-.tab-integraton .nav-tabs > li > a > span {
+.tab-integration .nav-tabs > li > a > span {
     font-size: 30px;
     color: $midnight-express;
     opacity: 0.4;
     margin-bottom: 6px;
 }
 
-.tab-integraton .nav-tabs > li {
+.tab-integration .nav-tabs > li {
     margin-right: 25px;
 }
 
@@ -1066,10 +979,6 @@ ul.sub-list {
     border: 0px;
     margin-bottom: 0px;
     background: $white !important;
-}
-
-.d-none {
-    display: none;
 }
 
 .aging-checkbox {
@@ -3308,9 +3217,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 footer {
+    background-color: #26263a;
     padding: 10px 20px;
     text-align: center;
-    color: $gray;
+    color: $light-gray;
     font-size: 17px;
     margin-top: 20px;
     width: 100%;
@@ -3323,7 +3233,7 @@ footer > div {
 
 footer > div > a {
     margin: 0 22px;
-    color: $gray;
+    color: $light-gray;
     padding: 0;
     font-size: 16px;
 }
@@ -4349,7 +4259,7 @@ label {
 }
 
 .col-wrapper:nth-child(1) .isParent {
-    background: $whisper-new !important;
+    background: $whisper !important;
 }
 
 .col-wrapper:last-child ul li a.isParent {
@@ -4958,7 +4868,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: $whisper;
     content: "";
     top: -15px;
 }
@@ -4986,7 +4896,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: $whisper;
     content: "";
 }
 
@@ -7225,7 +7135,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     .transactions-overview
     .gstr-transactions-summary
     .transactions-table {
-    border: 1px solid $gainsboro;
+    border: 1px solid $whisper-color;
 }
 
 .tax-engine .table.transactions-table,
@@ -7310,7 +7220,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     > tr:not(.secondary-row)
     + tr.secondary-row
     > td {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid $whisper-color;
 }
 
 .tax-engine
@@ -7324,7 +7234,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
     background-color: $white;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid $whisper-color;
     font-size: 13px;
     padding: 13px;
 }
@@ -7789,7 +7699,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .gstr-transactions-summary .table > tbody > tr.row-hover:hover {
     cursor: pointer;
-    background-color: $whisper-color;
+    background-color: $gray-95;
 }
 
 .tax-engine
@@ -8840,29 +8750,29 @@ p.remvBrnchName {
 
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: #5864c9 !important;
+    background-color: $chetwode-blue !important;
 }
 
 .theme-green .bs-datepicker-head {
-    background-color: #5864c9;
+    background-color: $chetwode-blue;
 }
 
 .theme-green .bs-datepicker-body table td span.selected,
 .theme-green .bs-datepicker-body table td.selected span,
 .theme-green .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-green .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: #5864c9;
+    background-color: $chetwode-blue;
 }
 
 .bs-datepicker-body table.days td.active:not(.select-start):before,
 .bs-datepicker-body table.days td.in-range:not(.select-start):before,
 .bs-datepicker-body table.days span.active:not(.select-start):before,
 .bs-datepicker-body table.days span.in-range:not(.select-start):before {
-    background: #ebedff;
+    background: $lavender-light;
 }
 
 .theme-green .bs-datepicker-body table td.week span {
-    color: #5864c9;
+    color: $chetwode-blue;
 }
 
 .mobileNumberWidth .menu {
@@ -9766,19 +9676,19 @@ input.mat-input-element{
         float: left;
         margin-bottom: 0px;
     }
-    #setting-tab .tab-integraton .nav.nav-tabs {
+    #setting-tab .tab-integration .nav.nav-tabs {
         overflow: auto;
         white-space: initial;
         width: 100%;
         margin: 0 auto;
         display: block;
     }
-    #setting-tab .tab-integraton .nav-tabs > li {
+    #setting-tab .tab-integration .nav-tabs > li {
         width: 100px;
         margin-bottom: 20px;
         margin-right: 10px;
     }
-    #setting-tab .tab-integraton .nav-tabs > li > a {
+    #setting-tab .tab-integration .nav-tabs > li > a {
         width: 90px;
         height: 90px !important;
         font-size: 14px;
@@ -9786,15 +9696,15 @@ input.mat-input-element{
     .groups-buttons {
         height: auto;
     }
-    #setting-tab-wrapper .tab-integraton .nav-tabs {
+    #setting-tab-wrapper .tab-integration .nav-tabs {
         display: inline-block;
         width: 100%;
         white-space: nowrap;
     }
-    #setting-tab-wrapper .purchase-setting-tab.tab-integraton .nav-tabs{
+    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs{
             display: inline-flex;
         }
-    #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
+    #setting-tab-wrapper .tab-integration .nav-tabs > li > a {
         width: 90px;
         height: 90px;
         font-size: 14px;
@@ -9963,20 +9873,20 @@ input.mat-input-element{
         left: auto;
         right: 0 !important;
     }
-    #setting-tab .tab-integraton .nav-tabs {
+    #setting-tab .tab-integration .nav-tabs {
         padding-top: 0 !important;
     }
-    #setting-tab .tab-integraton .nav-tabs > li > a {
+    #setting-tab .tab-integration .nav-tabs > li > a {
         width: 70px;
         height: 70px !important;
     }
-    .tab-integraton .nav-tabs > li > a > span {
+    .tab-integration .nav-tabs > li > a > span {
         font-size: 22px;
     }
-    .tab-integraton .nav-tabs > li > a span:first-child {
+    .tab-integration .nav-tabs > li > a span:first-child {
         display: none;
     }
-    #setting-tab .tab-integraton .nav-tabs > li {
+    #setting-tab .tab-integration .nav-tabs > li {
         width: 70px;
         margin-bottom: 15px;
     }
@@ -10140,7 +10050,7 @@ input.mat-input-element{
         margin-bottom: 15px;
         padding: 0 0px 0 15px !important;
     }
-    #setting-tab .tab-integraton .nav-tabs > li {
+    #setting-tab .tab-integration .nav-tabs > li {
         margin-top: 0 !important;
     }
     .hamburger-menu-icon{
@@ -10705,7 +10615,7 @@ input.mat-input-element{
     .welcome-header:after {
         bottom: 0;
     }
-    #setting-tab-wrapper .tab-integraton .nav-tabs {
+    #setting-tab-wrapper .tab-integration .nav-tabs {
         overflow-y: hidden;
     }
 }

@@ -85,7 +85,7 @@
                                                 </span>
                                                 <span class="entity-details">
                                                     <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                    <div class="item-unq giddh-limit single-line-clamp">
+                                                    <div class="item-unique giddh-limit single-line-clamp">
                                                         {{ option.name || '-' }}
                                                     </div>
                                                 </span>
@@ -202,30 +202,6 @@
                             <div class="text-right">
                                 <h4 class="mb-1 pd-r2">Result Total</h4>
                             </div>
-
-                            <div class="bg-white clearfix">
-                                <div class="customer-right clearfix w-100" >
-                                    <table class="text-right">
-                                        <tr>
-                                            <td>
-                                                <p *ngIf="activeTab === 'vendor'">Purchase</p>
-                                                <p *ngIf="activeTab === 'customer'">Sales</p>
-                                                <h3>{{totalSales |giddhCurrency }}/-</h3>
-                                            </td>
-                                            <td>
-                                                <p *ngIf="activeTab === 'vendor'">Payment</p>
-                                                <p *ngIf="activeTab === 'customer'">Receipt</p>
-                                                <h3>{{totalReceipts | giddhCurrency}}/-</h3>
-                                            </td>
-                                            <td>
-                                                <p>Due</p>
-                                                <h3>{{totalDue | giddhCurrency}}/-</h3>
-                                            </td>
-
-                                        </tr>
-
-                                    </table>
-                                </div>
 
                         <div class="bg-white clearfix">
                             <div class="customer-right  clearfix width-100">
@@ -746,7 +722,7 @@
 
                                                 <div class="border-radius-0" style="padding: 8px 8px 8px 8px;">
 
-                                                    <div class="modal-header ttheme-bg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
+                                                    <div class="modal-header theme-bg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
                                                         <h3 class="modal-title bg" id="modal-title">
                                                             {{messageBody.header.set}}</h3>
                                                         <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>

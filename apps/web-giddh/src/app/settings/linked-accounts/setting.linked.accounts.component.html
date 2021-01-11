@@ -81,10 +81,10 @@
                 <h3 class="subHead bd-rb">
                     {{acc.siteName}}
                     <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.yodleeAccounts[0], false)" *ngIf="acc.status !== 'FAILED'">
-                        <i class="fa fa-refresh"></i> Refresh
+                        <i class="icon-refresh"></i> Refresh
                     </button>
                     <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="connectBank(acc.siteId, acc?.yodleeAccounts[0]?.providerAccount?.providerAccountId)" *ngIf="acc.status === 'FAILED'">
-                        <i class="fa fa-refresh"></i> Refresh
+                        <i class="icon-refresh"></i> Refresh
                     </button>
                 </h3>
                 <aside class="body">
