@@ -1,13 +1,27 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
-import { ReplaySubject } from 'rxjs';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { AddAccountRequest } from '../../../models/api-models/Account';
+import { AccountService } from '../../../services/account.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'aside-menu-product-service',
     styleUrls: ['./component.scss'],
-    templateUrl: './component.html'
+    templateUrl: './component.html',
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
+
 export class AsideMenuProductServiceComponent {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -19,14 +33,14 @@ export class AsideMenuProductServiceComponent {
     public isAddStockOpen: boolean = false;
     public isAddServiceOpen: boolean = false;
     public hideFirstStep: boolean = false;
-
-    // private below
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Aside menu state */
+    public accountAsideMenuState: string = "in";
 
     constructor(
-        private store: Store<AppState>
+        private accountService: AccountService,
+        private toasterService: ToasterService
     ) {
-        // constructor methods
+
     }
 
     public toggleStockPane() {
@@ -59,5 +73,22 @@ export class AsideMenuProductServiceComponent {
         this.hideFirstStep = false;
         this.isAddStockOpen = false;
         this.isAddServiceOpen = false;
+    }
+
+    /**
+     * This will create the service account
+     *
+     * @param {AddAccountRequest} item
+     * @memberof AsideMenuProductServiceComponent
+     */
+    public addNewServiceAccount(item: AddAccountRequest): void {
+        this.accountService.CreateAccountV2(item.accountRequest, item.activeGroupUniqueName).subscribe(response => {
+            if(response.status === "success") {
+                this.toasterService.successToast("Account Created Successfully");
+                this.closeAsideEvent.emit();
+            } else {
+                this.toasterService.errorToast(response.message);
+            }
+        });
     }
 }
