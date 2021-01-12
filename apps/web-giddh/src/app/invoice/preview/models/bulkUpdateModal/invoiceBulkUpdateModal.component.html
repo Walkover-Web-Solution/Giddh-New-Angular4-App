@@ -16,7 +16,7 @@
 
                 <div class="col-md-6 col-sm-6">
                     <div class="form-group" *ngIf="selectedField === 'pdfTemplate'">
-                        <sh-select placeholder="Select" [options]="allTemplatesOptions" autocomplete="off" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName"></sh-select>
+                        <sh-select placeholder="Select" [options]="allTemplatesOptions" autocomplete="off" required [isRequired]="true" [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName" [(ngModel)]="updateTemplatesRequest.templateUniqueName"></sh-select>
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'notes'">
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="form-group" *ngIf="selectedField === 'signature'">
-                        <sh-select placeholder="Select option" [options]="templateSignaturesOptions" autocomplete="off" required [isFilterEnabled]="true" name="signatureOptions" [(ngModel)]="signatureOptions" [ItemHeight]="33"></sh-select>
+                        <sh-select placeholder="Select option" [options]="templateSignaturesOptions" autocomplete="off" required [isRequired]="true" [isFilterEnabled]="true" name="signatureOptions" [(ngModel)]="signatureOptions" [ItemHeight]="33"></sh-select>
                     </div>
 
                     <div class="relative form-group" *ngIf="selectedField === 'dueDate'">
@@ -75,7 +75,7 @@
 
                         <div class="col-md-6">
                             <div class="relative form-group">
-                                <sh-select placeholder="State" [options]="allTemplatesOptions" autocomplete="off" required [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName">
+                                <sh-select placeholder="State" [options]="allTemplatesOptions" autocomplete="off" required [isRequired]="true" [isFilterEnabled]="true" [ItemHeight]="33" name="templateUniqueName">
                                 </sh-select>
                             </div>
                         </div>

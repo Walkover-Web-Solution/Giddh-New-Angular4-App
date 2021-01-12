@@ -52,7 +52,7 @@
 											[disabled]="!addGroupForm.get('isSubGroup').value"
 											[placeholder]="'Select Parent Group'" [multiple]="false"
 											(selected)="groupSelected($event)" [ItemHeight]="33"
-											[forceClearReactive]="forceClear$ | async"></sh-select>
+											[forceClearReactive]="forceClear$ | async" [isRequired]="true"></sh-select>
 									</div>
                                 </div>
                                 <div class="form-group col-xs-6 col-sm-6">
