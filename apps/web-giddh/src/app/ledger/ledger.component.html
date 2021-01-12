@@ -287,7 +287,6 @@
                                             <th class="col-4 col-md-3 col-lg-3 text-right">Amount</th>
                                         </tr>
                                     </thead>
-
                                 </table>
                                 <table  id="ledger-transaction-left-list" class="width100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
@@ -472,6 +471,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <pagination *ngIf="bankTransactionsResponse?.totalItems > bankTransactionsResponse?.count" [totalItems]="bankTransactionsResponse?.totalItems" [itemsPerPage]="bankTransactionsResponse?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="bankTransactionsResponse.page" (pageChanged)="bankTransactionPageChanged($event)" [boundaryLinks]="true"></pagination>
                         </div>
                         <table class="w-100">
                             <tr>
