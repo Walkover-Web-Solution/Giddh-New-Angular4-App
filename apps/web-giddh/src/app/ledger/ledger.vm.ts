@@ -18,7 +18,6 @@ import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 export class LedgerVM {
-    public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
     public activeAccount: AccountResponse | AccountResponseV2;
     public currencies: ICurrencyResponse[] = [];

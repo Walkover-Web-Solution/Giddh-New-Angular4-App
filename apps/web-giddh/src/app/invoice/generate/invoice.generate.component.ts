@@ -74,7 +74,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('accountUniqueNameSearch', {static: true}) public accountUniqueNameSearch: ElementRef;
     @Input() public selectedVoucher: string = 'invoice';
 
-    public accounts$: Observable<IOption[]>;
     public moment = moment;
     public showFromDatePicker: boolean = false;
     public showToDatePicker: boolean = false;
@@ -161,7 +160,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
     private universalDate: Date[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     private isBulkInvoiceGenerated$: Observable<boolean>;
     public isUniversalDateApplicable: boolean = false;
     private isBulkInvoiceGeneratedWithoutErr$: Observable<boolean>;
@@ -220,7 +218,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         // set initial values
         this.ledgerSearchRequest.page = 1;
         this.ledgerSearchRequest.count = 20;
-        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
         this.isBulkInvoiceGenerated$ = this.store.pipe(select(p => p.invoice.isBulkInvoiceGenerated), takeUntil(this.destroyed$));
         this.isBulkInvoiceGeneratedWithoutErr$ = this.store.pipe(select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
@@ -234,16 +231,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        // Get accounts
-        this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
-            let accounts: IOption[] = [];
-            _.forEach(data, (item) => {
-                if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-                    accounts.push({ label: item.name, value: item.uniqueName });
-                }
-            });
-            this.accounts$ = observableOf(orderBy(accounts, 'label'));
-        });
 
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

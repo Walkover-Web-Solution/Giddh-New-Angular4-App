@@ -359,6 +359,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
                             this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            if (!this.activeCompanyForDb) {
+                                this.activeCompanyForDb = new CompAidataModel();
+                            }
                             this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
                             this.activeCompanyForDb.uniqueName = this.currentBranch ? this.currentBranch.uniqueName : ''
                         }
