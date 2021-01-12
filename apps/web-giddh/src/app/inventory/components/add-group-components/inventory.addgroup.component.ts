@@ -166,7 +166,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             });
 
             this.taxTempArray = [];
-            if (account.taxes.length) {
+            if (account && account.taxes && account.taxes.length) {
                 this.mapSavedTaxes(account.taxes);
             }
         });

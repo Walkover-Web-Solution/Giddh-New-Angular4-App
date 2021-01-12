@@ -45,7 +45,7 @@
                                             <sh-select id="country"
                                                 [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
                                                 [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
-                                                [(ngModel)]="company.country" class="pull-left select-caret" [required]='true'
+                                                [(ngModel)]="company.country" class="pull-left select-caret" [required]='true' [isRequired]="true"
                                                 (selected)="selectCountry($event)" [defaultValue]="selectedCountry"
                                                 style="width: 100%">
                                             </sh-select>
@@ -54,7 +54,7 @@
                                     <div class="col-sm-6 mr-b3 ">
                                         <label>Currency <sup>*</sup></label>
                                         <div class="custom-select select-caret position-relative">
-                                            <sh-select name="baseCurrency" [options]="currencySource$ | async" required
+                                            <sh-select name="baseCurrency" [options]="currencySource$ | async" required [isRequired]="true"
                                                 [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
                                                 [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
                                                 [defaultValue]="company.baseCurrency"></sh-select>
@@ -66,7 +66,7 @@
                             <span>
                                 <label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
                                 <div class="d-flex welcome-select ">
-                                    <sh-select class="pull-left select-caret" required
+                                    <sh-select class="pull-left select-caret" required [isRequired]="true"
                                         name="phoneCode" [placeholder]="+91"
                                         [options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
                                         [defaultValue]="company.phoneCode">

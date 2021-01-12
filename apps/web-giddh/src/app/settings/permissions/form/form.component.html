@@ -18,7 +18,7 @@
                                             <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
                                         </select> -->
                         <sh-select placeholder="Select role" formControlName="roleUniqueName"
-                            [forceClearReactive]="permissionRoleClear$ | async" [options]="allRoles"></sh-select>
+                            [forceClearReactive]="permissionRoleClear$ | async" [options]="allRoles" [isRequired]="true"></sh-select>
                     </div>
                 </div>
                 <div class="col-xl-2 col-md-6 col-sm-4 pr-0">

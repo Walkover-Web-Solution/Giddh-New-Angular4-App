@@ -37,7 +37,7 @@
                         <span>
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
                             <div class="custom-select position-relative">
-                                <sh-select id="country" [options]="countrySource$ | async" required
+                                <sh-select id="country" [options]="countrySource$ | async" required [isRequired]="true"
                                     [isFilterEnabled]="true"
                                     [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
                                     name="country" [(ngModel)]="createNewCompanyPreparedObj.country"
@@ -51,7 +51,7 @@
                     <div class="col-6 mr-b2 ">
                         <label for="">Currency<sup class="text-danger">*</sup></label>
                         <div class="custom-select select-caret position-relative">
-                            <sh-select name="baseCurrency" [options]="currencySource$ | async" required
+                            <sh-select name="baseCurrency" [options]="currencySource$ | async" required [isRequired]="true"
                                 [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null"
                                 [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
                                 [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
@@ -128,7 +128,7 @@
                             <div>
                                 <label>State<sup class="text-danger">*</sup></label><br>
                                 <div>
-                                    <sh-select #states [options]="statesSource$ | async" required
+                                    <sh-select #states [options]="statesSource$ | async" required [isRequired]="true"
                                         [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" name="state"
                                         [(ngModel)]="companyProfileObj.state" class="width-100"
                                         [defaultValue]="companyProfileObj.selectedState"></sh-select>
