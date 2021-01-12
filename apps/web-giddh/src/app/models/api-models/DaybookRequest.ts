@@ -1,7 +1,7 @@
 export class DaybookQueryRequest {
 	public q: string = '';
 	public page: number = 0;
-	public count: number = 20;
+	public count: number = 50;
 	public from: string = '';
 	public to: string = '';
 	public format: 'pdf' | 'xlsx' = 'pdf';

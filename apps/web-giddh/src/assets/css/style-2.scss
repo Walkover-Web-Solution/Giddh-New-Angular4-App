@@ -854,7 +854,6 @@ ul.sub-list {
     display: block !important;
     width: 100%;
 }
-
 /* file upload css start */
 
 .input-upload .input-group-btn {
@@ -9654,6 +9653,12 @@ button#more-btn-inventory, #more-btn-inventory-mobile{
     font-size: 24px;
     top:56px !important;
 }
+.transaction-list-sh-select input{
+    min-height: 49px;
+    height: 49px;
+    border: 0 none !important;
+}
+/* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
     right: -40px !important;
@@ -9770,6 +9775,13 @@ input.mat-input-element{
         margin-left: -15px;
         margin-bottom: 15px;
         width: 101%;
+    }
+    .change-address-dropdown li {
+        border-bottom: 1px solid $very-light-gray;
+        padding-bottom: 4px;
+    }
+    .change-address-dropdown li:last-child {
+        border: none;
     }
     /* responsive  starts here*/
 
@@ -11233,6 +11245,6 @@ input.mat-input-element{
         min-height: 60px;
     }
 
-.delete-icon-opacity {
-    opacity: 0.5;
-}
+    .delete-icon-opacity {
+        opacity: 0.5;
+    }

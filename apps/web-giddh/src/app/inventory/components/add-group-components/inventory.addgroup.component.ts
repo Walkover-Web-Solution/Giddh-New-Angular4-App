@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take, takeUntil, map } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
@@ -14,6 +14,7 @@ import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFu
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { TaxResponse } from '../../../models/api-models/Company';
 
 @Component({
     selector: 'inventory-add-group',
@@ -43,6 +44,10 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public manageInProcess$: Observable<any>;
     public canDeleteGroup: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will hold temporary tax list */
+    public taxTempArray: any[] = [];
+    /** Observable for company taxes */
+    public companyTaxesList$: Observable<TaxResponse[]>;
 
     /**
      * TypeScript public modifiers
@@ -63,6 +68,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
             }
         });
+        this.companyTaxesList$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -80,8 +86,10 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             hsnNumber: [''],
             sacNumber: [''],
             parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
-            isSubGroup: [false]
+            isSubGroup: [false],
+            taxes: [[]]
         });
+        this.taxTempArray = [];
 
         // enable disable parentGroup select
         this.addGroupForm.controls['isSubGroup'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(s => {
@@ -149,6 +157,18 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             } else {
                 this.canDeleteGroup = true;
             }
+
+            this.companyTaxesList$.subscribe((tax) => {
+                _.forEach(tax, (o) => {
+                    o.isChecked = false;
+                    o.isDisabled = false;
+                });
+            });
+
+            this.taxTempArray = [];
+            if (account.taxes.length) {
+                this.mapSavedTaxes(account.taxes);
+            }
         });
 
         // reset add form and get all groups data
@@ -158,7 +178,14 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                     this.addGroupForm.reset();
                 }
                 this.getParentGroupData();
-                // this.router.navigate(['/pages', 'inventory', 'add-group']);
+                this.taxTempArray = [];
+                this.companyTaxesList$.subscribe((taxes) => {
+                    _.forEach(taxes, (o) => {
+                        o.isChecked = false;
+                        o.isDisabled = false;
+                    });
+                });
+                this.addGroupForm.get('taxes').patchValue('');
             }
         });
 
@@ -309,7 +336,131 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     // close pane
     public closeAsidePane() {
         this.addGroupForm.reset();
+
+        this.companyTaxesList$.pipe(map((item) => {
+            return item.map(tax => {
+                if (tax) {
+                    tax.isChecked = false;
+                    tax.isDisabled = false;
+                }
+                return tax;
+            });
+        }), takeUntil(this.destroyed$)).subscribe(res => {
+            return res;
+        });
+
+        this.taxTempArray = [];
         this.closeAsideEvent.emit();
     }
 
+    /**
+     * This will check/uncheck tax in list
+     *
+     * @param {*} e
+     * @param {*} tax
+     * @memberof InventoryAddGroupComponent
+     */
+    public selectTax(event: any, tax: any): void {
+        if (tax.taxType !== 'gstcess') {
+            let index = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === tax.taxType);
+            if (index > -1 && event.target.checked) {
+                this.companyTaxesList$.subscribe((taxes) => {
+                    _.forEach(taxes, (companyTax) => {
+                        if (companyTax.taxType === tax.taxType) {
+                            companyTax.isChecked = false;
+                            companyTax.isDisabled = true;
+                        }
+                        if (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay') {
+                            if (companyTax.taxType === 'tcsrc' || companyTax.taxType === 'tdsrc' || companyTax.taxType === 'tcspay' || companyTax.taxType === 'tdspay') {
+                                companyTax.isChecked = false;
+                                companyTax.isDisabled = true;
+                            }
+                        }
+                    });
+                });
+            }
+
+            if (index < 0 && event.target.checked) {
+                this.companyTaxesList$.subscribe((taxes) => {
+                    _.forEach(taxes, (companyTax) => {
+                        if (companyTax.taxType === tax.taxType) {
+                            companyTax.isChecked = false;
+                            companyTax.isDisabled = true;
+                        }
+
+                        if (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay') {
+                            if (companyTax.taxType === 'tcsrc' || companyTax.taxType === 'tdsrc' || companyTax.taxType === 'tcspay' || companyTax.taxType === 'tdspay') {
+                                companyTax.isChecked = false;
+                                companyTax.isDisabled = true;
+                            }
+                        }
+                        if (companyTax.uniqueName === tax.uniqueName) {
+                            tax.isChecked = true;
+                            tax.isDisabled = false;
+                            this.taxTempArray.push(tax);
+                        }
+                    });
+                });
+            } else if (index > -1 && event.target.checked) {
+                tax.isChecked = true;
+                tax.isDisabled = false;
+                this.taxTempArray = this.taxTempArray.filter(ele => {
+                    return tax.taxType !== ele.taxType;
+                });
+                this.taxTempArray.push(tax);
+            } else {
+                let idx = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp.uniqueName === tax.uniqueName);
+                this.taxTempArray.splice(idx, 1);
+                tax.isChecked = false;
+                this.companyTaxesList$.subscribe((taxes) => {
+                    _.forEach(taxes, (companyTax) => {
+                        if (companyTax.taxType === tax.taxType) {
+                            companyTax.isDisabled = false;
+                        }
+                        if (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay') {
+                            if (companyTax.taxType === 'tcsrc' || companyTax.taxType === 'tdsrc' || companyTax.taxType === 'tcspay' || companyTax.taxType === 'tdspay') {
+                                companyTax.isDisabled = false;
+                            }
+                        }
+                    });
+                });
+            }
+        } else {
+            if (event.target.checked) {
+                this.taxTempArray.push(tax);
+                tax.isChecked = true;
+            } else {
+                let idx = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp.uniqueName === tax.uniqueName);
+                this.taxTempArray.splice(idx, 1);
+                tax.isChecked = false;
+            }
+        }
+
+        this.addGroupForm.get('taxes').patchValue(this.taxTempArray.map(taxTemp => taxTemp.uniqueName));
+    }
+
+    /**
+     * This will map the saved taxes
+     *
+     * @param {*} taxes
+     * @memberof InventoryAddGroupComponent
+     */
+    public mapSavedTaxes(taxes): void {
+        let taxToMap = [];
+        let event: any = { target: { checked: true } };
+        
+        this.companyTaxesList$.subscribe(companyTax => {
+            _.filter(companyTax, (tax) => {
+                _.find(taxes, (unq) => {
+                    if (unq === tax.uniqueName) {
+                        return taxToMap.push(tax);
+                    }
+                });
+            });
+        });
+        
+        taxToMap.map((tax, index) => {
+            this.selectTax(event, tax);
+        });
+    }
 }
