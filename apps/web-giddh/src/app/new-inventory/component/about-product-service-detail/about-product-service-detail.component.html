@@ -4,7 +4,7 @@
             <div class="col-10 col-md-6">
                 <div class="group-detail d-flex w-100 align-items-center">
                     <div class="group-thumbnail mr-15">
-                        <img src="../../../../assets/images/Login-Page-Image.png" alt="group-icon">
+                        <img src="{{imgPath}}Login-Page-Image.png" alt="group-icon">
                     </div>
                     <div class="group-name">
                         <a href="javascript:void(0);" [routerLink]="['pages/new-inventory/create-new-inventory']"></a>
@@ -54,7 +54,7 @@
             </div>
         </div>
     </div>
-    <tabset class="custom-tabs">
+    <tabset class="custom-tabs product-service-page-tab">
         <tab heading="About Item">
             <div class="">
                 <div class="select-physical-product">
@@ -75,12 +75,12 @@
                             </span>
                         </div>
                         <div class="right-img-div">
-                            <img src="../../../../assets/images/create-group-vector.svg">
+                            <img src="{{imgPath}}create-group-vector.svg">
                         </div>
                     </div>
                 </div>
                 <!-- product content start -->
-                <div *ngIf="!productContent" class="product-detail-content">
+                <div *ngIf="productContent" class="product-detail-content">
                     <div class="row">
                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                             <form>
@@ -120,7 +120,7 @@
                         </div>
                     </div>
                     <div class="other-group mt-3">
-                        <tabset class="custom-tabs">
+                        <tabset class="custom-tabs product-service-page-tab">
                             <tab heading="Account">
                                 <form>
                                     <div class="row">
@@ -380,7 +380,7 @@
                         </div>
                     </div>
                     <div class="other-group mt-3">
-                        <tabset class="custom-tabs">
+                        <tabset class="custom-tabs product-service-page-tab">
                             <tab heading="Account">
                                 <form>
                                     <div class="row">
@@ -543,7 +543,7 @@
                 <!-- service content end -->
 
                 <!-- combo content start -->
-                <div class="combo-detail-content">
+                <div class="combo-detail-content" hidden>
                     <form>
                         <div class="row">
                             <div class="col-md-8 col-lg-8 col-xl-6 col-12">
@@ -579,7 +579,7 @@
                             <tbody>
                                 <tr>
                                     <td width="3%">
-                                        <img src="../../../../assets/images/add-image.svg" width="60" height="60">
+                                        <img src="{{imgPath}}add-image.svg" width="60" height="60">
                                     </td>
                                     <td width="20%"><input type="text" class="form-control" value="Product Name/Service" readonly></td>
                                     <td width="20%"><input type="text" class="form-control" value="Unit" readonly></td>

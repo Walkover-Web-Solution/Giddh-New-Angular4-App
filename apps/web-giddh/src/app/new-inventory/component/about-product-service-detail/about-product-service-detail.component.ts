@@ -14,6 +14,8 @@ import { ReplaySubject } from 'rxjs';
 export class AboutProductServiceDetailComponent implements OnInit {
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = true;
+    /* this will store image path*/
+    public imgPath: string = '';
 
     public productContent: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -21,14 +23,19 @@ export class AboutProductServiceDetailComponent implements OnInit {
         private _breakPointObservar: BreakpointObserver,) {
 
     }
-
     public ngOnInit() {
+        /* added image path */
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
         /* added break point of mobile screen size  */
         this._breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
-
+    }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

@@ -10,7 +10,11 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 
 export class CreateNewGroupComponent implements OnInit {
 
-    public ngOnInit() {
+    /* this will store image path*/
+    public imgPath: string = '';
 
+    public ngOnInit() {
+        /* added image path */
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }

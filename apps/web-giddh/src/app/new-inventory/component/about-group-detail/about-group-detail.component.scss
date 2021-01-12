@@ -21,13 +21,6 @@
         }
     }
 }
-.custom-tabs::ng-deep .nav-tabs{
-    position: static !important;
-    padding-left: 15px !important;
-    margin-left: -15px;
-    margin-bottom: 15px;
-    width: 101%;
-}
 .create-group-footer{
     background-color: $whisper-color;
     height: 60px;
@@ -113,11 +106,6 @@
         }
     }
 }
-    .custom-tabs::ng-deep .nav-tabs{
-        padding-left: 0 !important;
-        margin-left: 0;
-        margin-top:5px;
-    }
     ul#more-inventory-dropdown{
         right: 0 !important;
         left: auto !important;

@@ -8,7 +8,11 @@ import { SharedModule } from '../../../shared/shared.module'
 })
 
 export class InventoryCreateGroupComponent implements OnInit {
-    public ngOnInit() {
+    /* this will store image path*/
+    public imgPath: string = '';
 
+    public ngOnInit() {
+        /* added image path */
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }

@@ -49,6 +49,13 @@ export class NewInventoryComponent implements OnInit {
     public dateFieldPosition: any = { x: 0, y: 0 };
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+
+    constructor(
+        private generalService: GeneralService,
+        private modalService: BsModalService,
+        private _breakPointObservar: BreakpointObserver
+    ) { }
+
     /*datepicker funcation*/
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -170,13 +177,6 @@ export class NewInventoryComponent implements OnInit {
             this.asideInventorySidebarMenuState = "out";
         }
     }
-
-    constructor(
-        private generalService: GeneralService,
-        private modalService: BsModalService,
-        private _breakPointObservar: BreakpointObserver
-    ) { }
-
     /* advance serach modal */
     openModal(inventoryAdvanceSearch: TemplateRef<any>) {
         this.modalRef = this.modalService.show(inventoryAdvanceSearch,
@@ -190,5 +190,9 @@ export class NewInventoryComponent implements OnInit {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
+    }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

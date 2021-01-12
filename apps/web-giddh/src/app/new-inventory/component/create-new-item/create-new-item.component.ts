@@ -9,8 +9,12 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 
 export class CreateNewItemComponent implements OnInit {
+    /* this will store image path*/
+    public imgPath: string = '';
+
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     public ngOnInit() {
-
+        /* added image path */
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }

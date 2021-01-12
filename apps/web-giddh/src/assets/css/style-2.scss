@@ -9654,7 +9654,6 @@ button#more-btn-inventory, #more-btn-inventory-mobile{
     font-size: 24px;
     top:56px !important;
 }
-/* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
     right: -40px !important;
@@ -9761,7 +9760,18 @@ input.mat-input-element{
     .delete-modal-overlay {
         z-index: 9992; /*for delete custom zIndex modal*/
     }
-    /* responsive */
+    .custom-tabs.combo-page-tab .nav-tabs,
+    .custom-tabs.about-group-tab .nav-tabs,
+    .custom-tabs.product-service-page-tab .nav-tabs,
+    .custom-tabs.create-inventory-tab .nav-tabs,
+    .custom-tabs.create-item-tab .nav-tabs{
+        position: static !important;
+        padding-left: 15px !important;
+        margin-left: -15px;
+        margin-bottom: 15px;
+        width: 101%;
+    }
+    /* responsive  starts here*/
 
     @media (max-width: 1440px) {
         .font-xxlarge {
@@ -10181,7 +10191,20 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
-
+    .custom-tabs.combo-page-tab .nav-tabs,
+    .custom-tabs.about-group-tab .nav-tabs,
+    .custom-tabs.product-service-page-tab .nav-tabs,
+    .custom-tabscreate-inventory-tab .nav-tabs{
+        padding-left: 0 !important;
+        margin-left: 0;
+        margin-top:5px;
+    }
+    .custom-tabs.create-item-tab .nav-tabs{
+        display: inline-block;
+        white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
     .sub-detail-sidebar.fixed-sidebar-top{
         top: 100px;
     }

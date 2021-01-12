@@ -35,8 +35,16 @@ export class AboutGroupDetailComponent implements OnInit {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /* this will store image path*/
+    public imgPath: string = '';
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+
+    constructor(
+        private generalService: GeneralService, private modalService: BsModalService,
+        private _breakPointObservar: BreakpointObserver,) {
+    }
 
     /*datepicker funcation*/
     public showGiddhDatepicker(element: any): void {
@@ -81,17 +89,18 @@ export class AboutGroupDetailComponent implements OnInit {
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
-    constructor(
-        private generalService: GeneralService, private modalService: BsModalService,
-        private _breakPointObservar: BreakpointObserver, ) {
-
-    }
-
     public ngOnInit() {
+        /* added image path */
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
         this._breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
+    }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

@@ -13,7 +13,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
     selector: 'new-inventory-advance-search',
     templateUrl: './new-inventory-advance-search.component.html',
     styleUrls: ['./new-inventory-advance-search.component.scss'],
-
 })
 
 export class NewInventoryAdavanceSearch implements OnInit {
@@ -93,5 +92,9 @@ export class NewInventoryAdavanceSearch implements OnInit {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
+    }
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

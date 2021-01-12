@@ -14,9 +14,16 @@ export class AdjustGroupComponent implements OnInit {
     public asideMenuState: string = 'out';
     /* This will store modal reference */
     public modalRef: BsModalRef;
+    /* this will store image path*/
+    public imgPath: string = '';
 
     /* sh-select view child */
     @ViewChildren('selectAccount') public selectAccount: ShSelectComponent;
+
+    constructor(
+        private generalService: GeneralService,
+        private modalService: BsModalService
+    ) { }
 
     /* Aside pane toggle fixed class */
     public toggleBodyClass(): void {
@@ -35,12 +42,6 @@ export class AdjustGroupComponent implements OnInit {
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
-
-    constructor(
-        private generalService: GeneralService,
-        private modalService: BsModalService
-    ){ }
-
     openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template,
             Object.assign({}, { class: 'modal-xl' })
@@ -48,6 +49,7 @@ export class AdjustGroupComponent implements OnInit {
     }
 
     public ngOnInit() {
-
+        /* added image path */
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }

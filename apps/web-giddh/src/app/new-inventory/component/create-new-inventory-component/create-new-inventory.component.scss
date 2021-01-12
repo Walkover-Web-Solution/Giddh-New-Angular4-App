@@ -96,13 +96,6 @@
         min-height: 63vh;
     }
 }
-.custom-tabs::ng-deep .nav-tabs{
-    position: static !important;
-    padding-left: 15px !important;
-    margin-left: -12px;
-    margin-bottom: 15px;
-    width: 101%;
-}
 .inventory-footer{
     background-color: $whisper-color;
     z-index: 3;

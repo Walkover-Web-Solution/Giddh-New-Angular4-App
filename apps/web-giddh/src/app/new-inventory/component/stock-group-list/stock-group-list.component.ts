@@ -9,7 +9,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
     selector: 'stock-group-list',
     templateUrl: './stock-group-list.component.html',
     styleUrls: ['./stock-group-list.component.scss'],
-
 })
 
 export class StockGroupListComponent implements OnInit {
@@ -86,13 +85,6 @@ export class StockGroupListComponent implements OnInit {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            // if ((this.daybookQueryRequest.from !== this.fromDate) || (this.daybookQueryRequest.to !== this.toDate)) {
-            //     this.showLoader = true;
-            //     this.daybookQueryRequest.from = this.fromDate;
-            //     this.daybookQueryRequest.to = this.toDate;
-            //     this.daybookQueryRequest.page = 0;
-            //     this.go();
-            // }
         }
     }
 

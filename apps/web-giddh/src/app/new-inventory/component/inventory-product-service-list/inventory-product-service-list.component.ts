@@ -9,10 +9,14 @@ import { Router } from '@angular/router';
 })
 
 export class ProductServiceListComponent implements OnInit {
+    /* this will store image path*/
+    public imgPath: string = '';
+
     constructor(private _router: Router) {
 
     }
     public ngOnInit() {
-
+        /* added image path */
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }

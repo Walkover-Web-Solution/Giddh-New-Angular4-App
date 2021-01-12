@@ -37,13 +37,6 @@
     }
 
 }
-.custom-tabs::ng-deep .nav-tabs{
-    position: static !important;
-    padding-left: 15px !important;
-    margin-left: -12px;
-    margin-bottom: 15px;
-    width: 101%;
-}
 .combo-table{
     max-width: 1000px;
     width: 100%;
@@ -95,11 +88,6 @@
     }
     .select-product-type{
         padding-bottom: 10px;
-    }
-    .custom-tabs::ng-deep .nav-tabs{
-        padding-left: 0 !important;
-        margin-left: 0;
-        margin-top:5px;
     }
     ul#more-inventory-dropdown{
         right: 0 !important;

@@ -8,7 +8,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
     selector: 'adjust-inventory-list',
     templateUrl: './adjust-inventory-list.component.html',
     styleUrls: ['./adjust-inventory-list.component.scss'],
-
 })
 
 export class AdjustInventoryComponent implements OnInit {
@@ -28,9 +27,16 @@ export class AdjustInventoryComponent implements OnInit {
     public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+
+    constructor(
+        private generalService: GeneralService,
+        private modalService: BsModalService
+    ) { }
 
     /*datepicker funcation*/
     public showGiddhDatepicker(element: any): void {
@@ -75,10 +81,6 @@ export class AdjustInventoryComponent implements OnInit {
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
-
-    /* Aside pane state*/
-    public asideMenuState: string = 'out';
-
     /* Aside pane toggle fixed class */
     public toggleBodyClass(): void {
         if (this.asideMenuState === 'in') {
@@ -87,7 +89,6 @@ export class AdjustInventoryComponent implements OnInit {
             document.querySelector('body').classList.remove('fixed');
         }
     }
-
     /* Create combo aside pane open function */
     public adjustInventory(event?): void {
         if (event) {
@@ -96,12 +97,6 @@ export class AdjustInventoryComponent implements OnInit {
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
-
-
-    constructor(
-        private generalService: GeneralService,
-        private modalService: BsModalService
-    ){ }
     public ngOnInit() {
 
     }

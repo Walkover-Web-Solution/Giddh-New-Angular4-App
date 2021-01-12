@@ -16,10 +16,8 @@ export class InventoryGroupListSidebar  implements OnInit {
         if (document.getElementsByClassName("right-side-content")) {
             document.querySelector('body').classList.toggle('hide-sub-sidebar');
         }
-
     }
     @HostListener('window:scroll', [])
-
     onWindowScroll() {
         if (document.body.scrollTop > 10 ||
             document.documentElement.scrollTop > 10) {

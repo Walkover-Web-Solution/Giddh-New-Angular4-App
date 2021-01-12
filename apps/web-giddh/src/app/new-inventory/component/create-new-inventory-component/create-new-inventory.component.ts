@@ -10,8 +10,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 export class CreateNewInventoryComponent implements OnInit {
     /* add readonly if bulk edit is true */
     public editBulk: boolean = false;
+    /* this will store image path*/
+    public imgPath: string = '';
 
     public ngOnInit() {
-
+        /* added image path */
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }
