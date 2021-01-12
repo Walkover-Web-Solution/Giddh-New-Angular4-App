@@ -34,7 +34,7 @@
                                                 [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true"
                                                 (noResultsClicked)="addNewAccount()" [multiple]="false"
                                                 [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
-                                                (keyup)="resetVendor($event)" (onClear)="resetVendor(null)">
+                                                (keyup)="resetVendor($event)" (onClear)="resetVendor(null)" [isOpen]="!isUpdateMode && !purchaseOrder.account.uniqueName">
 
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item flex-column border-none">

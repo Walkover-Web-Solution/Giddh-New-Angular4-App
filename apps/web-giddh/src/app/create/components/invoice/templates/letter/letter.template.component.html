@@ -115,7 +115,7 @@
 /> -->
                                     <sh-select class="sh-form_control" formControlName="countryCode"
                                         [options]="countrySource"
-                                        [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }">
+                                        [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }" [isRequired]="true">
                                     </sh-select>
                                 </div>
 
