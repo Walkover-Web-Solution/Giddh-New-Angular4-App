@@ -64,7 +64,7 @@
                     <button type="button" class="btn btn-default expand-btn-hide-desktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :'Expand All'}}
                     </button>
                     <button type="button" class="btn btn-default export-btn pull-right"
-                        (click)="exportDaybook()">Export</button>
+                        (click)="exportDaybook()" [disabled]="!((daybookData$ | async)?.entries?.length > 0)">Export</button>
                 </div>
             </div>
         </div>
