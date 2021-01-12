@@ -120,9 +120,9 @@
                                         <tbody class="bdrL">
                                             <tr class="ledger-row bdrB row mr-0 ml-0"
                                                 v-if="legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'DEBIT'">
-                                                <td class="col-3 bdrR"></td>
-                                                <td class="col-6 bdrR">To Balance B/F</td>
-                                                <td class="col-3 text-right">
+                                                <td class="col-3"></td>
+                                                <td class="col-6 bdrL">To Balance B/F</td>
+                                                <td class="col-3 text-right bdrL">
                                                     <!-- | number: '1.2-2'  -->
                                                     <span v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'"
                                                         class="">{{ legderBalanceData.forwardedBalance.amount | currency }}</span>
@@ -236,11 +236,11 @@
                                                 <th class="text-right col-3 bdrL bdrR">Amount</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="bdrL">
+                                        <tbody>
                                             <tr class="ledger-row row mr-0 ml-0 bdrB"
                                             v-if="legderBalanceData.forwardedBalance && legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                 <td class="col-3"></td>
-                                                <td class="col-6 bdrR">By Balance B/F</td>
+                                                <td class="col-6 bdrL">By Balance B/F</td>
                                                 <td class="col-3 text-right bdrL bdrR">
                                                     <span v-if="legderBalanceData.forwardedBalance.type === 'CREDIT'">
                                                         <!-- | number: '1.2-2' -->
