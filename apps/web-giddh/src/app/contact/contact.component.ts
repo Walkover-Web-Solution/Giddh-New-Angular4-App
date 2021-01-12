@@ -98,8 +98,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
     public cashFreeAvailableBalance: number;
     public payoutForm: CashfreeClass;
-    public bankAccounts$: Observable<IOption[]>;
-    public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
     public payoutObj: CashfreeClass = new CashfreeClass();
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
     public moment = moment;
@@ -275,7 +273,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-        this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
                 this.dueAmountReportRequest.page = data.page;
@@ -365,22 +362,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.toggleAccountAsidePane();
                     this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
-            }
-        });
-
-        this.flattenAccountsStream$.subscribe(data => {
-
-            if (data) {
-                let accounts: IOption[] = [];
-                let bankAccounts: IOption[] = [];
-                forEach(data, (item) => {
-                    accounts.push({ label: item.name, value: item.uniqueName });
-                    let findBankIndx = (item.parentGroups) ? item.parentGroups.findIndex((grp) => grp && grp.uniqueName === 'bankaccounts') : -1;
-                    if (findBankIndx !== -1) {
-                        bankAccounts.push({ label: item.name, value: item.uniqueName });
-                    }
-                });
-                this.bankAccounts$ = observableOf(accounts);
             }
         });
 
