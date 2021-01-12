@@ -4166,14 +4166,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                     let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                    taxableValue = (rawAmount + entry.taxSum);
+                    taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
                 }
                 entry.otherTaxType = 'tcs';
             } else {
                 taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 entry.otherTaxType = 'tds';
             }
-
 
             totalTaxes += tax.taxDetail[0].taxValue;
 
@@ -4389,7 +4388,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + entry.taxSum);
+                        taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
                     }
 
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
