@@ -12,7 +12,7 @@ import { LoginActions } from '../actions/login.action';
 import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommandKRequest } from '../models/api-models/Common';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { BsDropdownConfig, BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
@@ -156,9 +156,9 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public openMobileSidebar(): void {
         document.querySelector('body').classList.add('mobile-sidebar-open');
-        setTimeout(() => {
+        // setTimeout(() => {
             this.sideNavOpen = true;
-        }, 100);
+        // }, 100);
     }
 
     /**
@@ -166,7 +166,10 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      *
      * @memberof MobileHomeComponent
      */
-    public closeMobileSidebar(): void {
+    public closeMobileSidebar(mobileSideNav: BsDropdownDirective): void {
+        if (mobileSideNav) {
+            mobileSideNav.hide();
+        }
         this.sideNavOpen = false;
         document.querySelector('body').classList.remove('mobile-sidebar-open');
     }

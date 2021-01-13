@@ -932,12 +932,16 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     /**
-     * Hide's modal
+     * Hide modal
      *
+     * @param {boolean} isNoteCreatedSuccessfully True, if new note was created successfully, load the inventory report
      * @memberof InventoryStockReportComponent
      */
-    public hideModal(): void {
+    public hideModal(isNoteCreatedSuccessfully?: boolean): void {
         this.modalRef.hide();
+        if (isNoteCreatedSuccessfully) {
+            this.getStockReport(true);
+        }
     }
 
     /**
