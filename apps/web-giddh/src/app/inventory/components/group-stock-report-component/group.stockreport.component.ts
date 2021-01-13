@@ -814,8 +814,17 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         );
     }
 
-    hideModal() {
+    /**
+     * Hide modal
+     *
+     * @param {boolean} isNoteCreatedSuccessfully True, if new note was created successfully, load the inventory report
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public hideModal(isNoteCreatedSuccessfully?: boolean): void {
         this.modalRef.hide();
+        if (isNoteCreatedSuccessfully) {
+            this.getGroupReport(true);
+        }
     }
 
     public openBranchTransferPopup(event) {
