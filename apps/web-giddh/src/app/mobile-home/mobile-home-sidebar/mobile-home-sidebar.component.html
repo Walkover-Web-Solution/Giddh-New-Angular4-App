@@ -1,4 +1,4 @@
-<div class="mobile-home-sidebar-wrapper" (clickOutside)="closeModel()">
+<div class="mobile-home-sidebar-wrapper" [exclude]="'.company-name-alice'" (clickOutside)="closeModel()">
     <div class="sidebar-header">
         <p class="company-name-alice">{{companyInitials}}</p>
         <div class="close-btn cursor-pointer" (click)="closeMobileSidebar.emit(true)"><i class="icon-cross"></i></div>
@@ -26,7 +26,8 @@
                 <a href="javascript:;" [routerLink]="['/pages/mobile-search-company']">Switch Company</a>
             </li>
             <li>
-                <a href="javascript:;" [routerLink]="['/pages/mobile-search-branch']">Switch Branch</a>
+                <a *ngIf="!currentBranch" href="javascript:;" [routerLink]="['/pages/mobile-search-branch']">Switch Branch</a>
+                <a *ngIf="currentBranch" href="javascript:;" [routerLink]="['/pages/mobile-search-branch']">{{currentBranch?.alias}}</a>
             </li>
             <li>
                 <a href="javascript:;" hidden>User Profile</a>
