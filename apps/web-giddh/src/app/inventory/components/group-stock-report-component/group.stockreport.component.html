@@ -366,7 +366,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody *ngIf="groupStockReport && groupStockReport.count > 0">
+                <tbody *ngIf="!groupStockReportInProcess && groupStockReport && groupStockReport.count > 0">
                     <tr *ngFor="let txn of groupStockReport.stockReport">
                         <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
                             <td class="bd-rb bd-rr" colspan="2" data-title="Product Name">

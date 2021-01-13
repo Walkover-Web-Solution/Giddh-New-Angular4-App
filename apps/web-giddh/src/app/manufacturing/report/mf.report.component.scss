@@ -23,6 +23,23 @@
 .manufacture-table.giddh-table tbody > tr > td:first-child{
     white-space: nowrap !important;
 }
+.custom-datepicker{
+    input{
+        width: 100% !important;
+        max-width: 100%;
+        padding-left: 40px !important;
+        text-align: left;
+    }
+}
+@media(max-width:1440px){
+    .datepicker-flex, .linked-entities{
+        flex: 0 0 23.666667%;
+        max-width: 23.666667%;
+    }
+    .linked-entities sh-select::ng-deep input{
+        padding-right: 6px !important;
+    }
+}
 @media(max-width:991px){
     .manufacturing-form .form-group{
         width: 100%;
@@ -30,8 +47,16 @@
     .d-none-sm{
         display: none !important;
     }
+    .datepicker-flex, .linked-entities{
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
 }
 @media(max-width:767px){
+     .datepicker-flex, .linked-entities{
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
     .top-bar {
         .section-title{
             display: block !important;
