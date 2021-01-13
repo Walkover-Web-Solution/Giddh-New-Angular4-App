@@ -31,6 +31,16 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Inventory > Manufacturing', uniqueName: '/pages/inventory/manufacturing', hasTabs: true },
     { type: 'MENU', name: 'Inventory > Report', uniqueName: '/pages/inventory/report', hasTabs: true },
 
+    { type: 'MENU', name: 'New Inventory', uniqueName: '/pages/new-inventory', hasTabs: true },
+    { type: 'MENU', name: 'New Inventory > Group Detail', uniqueName: '/pages/new-inventory/about-group-detail', hasTabs: false },
+    { type: 'MENU', name: 'New Inventory > About Product Detail', uniqueName: '/pages/new-inventory/about-product-service-detail', hasTabs: false },
+    { type: 'MENU', name: 'New Inventory > Create New inventory', uniqueName: '/pages/new-inventory/create-new-inventory', hasTabs: true },
+    { type: 'MENU', name: 'New Inventory > About Combo Detail', uniqueName: '/pages/new-inventory/about-combo-detail', hasTabs: false },
+    { type: 'MENU', name: 'New Inventory > Create Custom Field', uniqueName: '/pages/new-inventory/create-custom-field', hasTabs: false },
+
+
+
+
     { type: 'MENU', name: 'Manufacturing', uniqueName: '/pages/manufacturing/report', hasTabs: false },
     { type: 'MENU', name: 'Search', uniqueName: '/pages/search', hasTabs: false },
     { type: 'MENU', name: 'Permissions', uniqueName: '/pages/permissions/list', hasTabs: false },
