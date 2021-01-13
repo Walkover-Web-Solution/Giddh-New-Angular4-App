@@ -1058,7 +1058,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
 
-            let getRequest = {accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: PAGINATION_LIMIT, page: this.bankTransactionsResponse.page}
+            let getRequest = {accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: 500, page: this.bankTransactionsResponse.page}
             this._ledgerService.GetBankTranscationsForLedger(getRequest).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
@@ -1068,7 +1068,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankTransactionsResponse.count = res.body.count;
                         this.bankTransactionsResponse.page = res.body.page;
 
-                        this.lc.getReadyBankTransactionsForUI(res.body.items, (this.generalService.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
+                        this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.generalService.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                     }
                 }
             });
