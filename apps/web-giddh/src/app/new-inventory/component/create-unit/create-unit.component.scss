@@ -10,7 +10,7 @@
     max-width: 760px;
     z-index: 99999;
 }
- #close {
+#close {
     position: absolute;
     left: auto;
     right: 10px;
@@ -60,8 +60,8 @@
     text-align: center;
     margin: 0 auto;
 }
-.aside-body{
-    padding:15px;
+.aside-body {
+    padding: 15px;
 }
 
 .aside-pane-form {
@@ -73,8 +73,8 @@
     scroll-behavior: smooth;
     position: relative;
 }
-.header-create-unit{
-    .form-header{
+.header-create-unit {
+    .form-header {
         display: flex;
     }
 }

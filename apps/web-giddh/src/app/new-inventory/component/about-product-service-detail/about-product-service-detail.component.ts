@@ -20,7 +20,7 @@ export class AboutProductServiceDetailComponent implements OnInit {
     public productContent: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
-        private _breakPointObservar: BreakpointObserver,) {
+        private breakPointObservar: BreakpointObserver) {
 
     }
     public ngOnInit() {
@@ -28,7 +28,7 @@ export class AboutProductServiceDetailComponent implements OnInit {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         /* added break point of mobile screen size  */
-        this._breakPointObservar.observe([
+        this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;

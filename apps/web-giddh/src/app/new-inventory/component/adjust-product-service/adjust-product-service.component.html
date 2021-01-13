@@ -7,22 +7,24 @@
             <form>
                 <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                     <div class="row mb-15">
-                        <div class="col-sm-4 col-lg-4"><label>Mode of Adjustment <span class="red-text">*</span></label></div>
+                        <div class="col-sm-4 col-lg-4"><label>Mode of Adjustment <span class="red-text">*</span></label>
+                        </div>
                         <div class="col-sm-8 col-lg-6">
                             <span class="p-0 mr-3">
-                                <input id="mode-of-quantity" class="radio-custom cp ml-0" type="radio" name="modeOfadjustment"
-                                     [value]="modeTypeQuantity">
+                                <input id="mode-of-quantity" class="radio-custom cp ml-0" type="radio"
+                                    name="modeOfadjustment" [value]="modeTypeQuantity">
                                 <label for="mode-of-quantity" class="radio-custom-label">Quantity</label>
                             </span>
                             <span class="p-0 mr-3">
-                                <input id="mode-of-value" class="radio-custom cp ml-0" type="radio" name="modeOfadjustment"
-                                    [value]="modeTypeValue">
+                                <input id="mode-of-value" class="radio-custom cp ml-0" type="radio"
+                                    name="modeOfadjustment" [value]="modeTypeValue">
                                 <label for="mode-of-value" class="radio-custom-label">Value</label>
                             </span>
                         </div>
                     </div>
                     <div class="row mb-15">
-                        <div class="col-sm-4 col-lg-4"><label>Reference No. <span class="red-text">*</span></label></div>
+                        <div class="col-sm-4 col-lg-4"><label>Reference No. <span class="red-text">*</span></label>
+                        </div>
                         <div class="col-sm-8 col-lg-6"><input type="text" id="reference-no" class="form-control"
                                 placeholder="Enter Reference Number">
                         </div>
@@ -73,12 +75,14 @@
                                     <span>
                                         <img src="{{imgPath}}Login-Page-Image.png" width="36" height="36">
                                     </span>
-                                    <sh-select id="select-group-product-service" placeholder="Select Name" class="ml-15 w-100"></sh-select>
+                                    <sh-select id="select-group-product-service" placeholder="Select Name"
+                                        class="ml-15 w-100"></sh-select>
                                 </div>
                                 <textarea placeholder="Add Description" class="form-control"></textarea>
                             </td>
                             <td>
-                                <input type="text" id="percentage" class="form-control mb-2" value="Percentage" disabled>
+                                <input type="text" id="percentage" class="form-control mb-2" value="Percentage"
+                                    disabled>
                                 <input type="text" id="percent-value" value="0%" class="form-control">
                             </td>
                             <td>
@@ -116,13 +120,15 @@
                                     <span>
                                         <img src="{{imgPath}}Login-Page-Image.png" width="36" height="36">
                                     </span>
-                                    <sh-select id="select-group-product-service" placeholder="Select Name" class="ml-15 w-100">
+                                    <sh-select id="select-group-product-service" placeholder="Select Name"
+                                        class="ml-15 w-100">
                                     </sh-select>
                                 </div>
                                 <textarea placeholder="Add Description" class="form-control"></textarea>
                             </td>
                             <td>
-                                <input type="text" id="percentage" class="form-control mb-2" value="Percentage" disabled>
+                                <input type="text" id="percentage" class="form-control mb-2" value="Percentage"
+                                    disabled>
                                 <input type="text" id="percent-value" value="0%" class="form-control">
                             </td>
                             <td>
@@ -139,7 +145,8 @@
                 </table>
             </div>
             <div class="add-line-bulk-item font-14">
-                <a href="javascript:void(0)">+ Add New Line</a> | <a href="javascript:void(0)" (click)="openModal(template)">+ Add Bulk Entries</a>
+                <a href="javascript:void(0)">+ Add New Line</a> | <a href="javascript:void(0)"
+                    (click)="openModal(template)">+ Add Bulk Entries</a>
             </div>
         </div>
     </div>
@@ -149,7 +156,8 @@
         <div class="d-flex">
             <div class="button-group">
                 <button id="adjust-clear-btn" class="btn btn-primary minwidth-100 bdr-radius-50"> Clear </button>
-                <button id="convert-btn" class="btn btn-success minwidth-100 bdr-radius-50" disabled> Convert to Adjust </button>
+                <button id="convert-btn" class="btn btn-success minwidth-100 bdr-radius-50" disabled> Convert to Adjust
+                </button>
             </div>
         </div>
     </div>

@@ -17,8 +17,8 @@
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
                     <div class="download-sheet" *ngIf="!isMobileScreen">
                         <div class="btn-group" dropdown>
-                            <button id="download-sheet" dropdownToggle type="button" class="btn btn-download dropdown-toggle"
-                                aria-controls="download-inventory-sheet">
+                            <button id="download-sheet" dropdownToggle type="button"
+                                class="btn btn-download dropdown-toggle" aria-controls="download-inventory-sheet">
                                 <i class="icon-download"></i>
                             </button>
                             <ul id="download-inventory-sheet" *dropdownMenu class="dropdown-menu" role="menu"
@@ -29,26 +29,33 @@
                         </div>
                     </div>
                     <div class="btn-group" dropdown>
-                        <button id="more-btn-inventory" *ngIf="!isMobileScreen" dropdownToggle type="button" class="btn btn-primary dropdown-toggle bdr-radius-50"
+                        <button id="more-btn-inventory" *ngIf="!isMobileScreen" dropdownToggle type="button"
+                            class="btn btn-primary dropdown-toggle bdr-radius-50"
                             aria-controls="more-inventory-dropdown">
                             More <span class="caret"></span>
                         </button>
                         <i class="icon-dots-three-vertical pd" *ngIf="isMobileScreen" dropdownToggle></i>
                         <ul id="more-inventory-dropdown" *dropdownMenu class="dropdown-menu" role="menu"
                             aria-labelledby="more-btn-inventory">
-                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);" [routerLink]="['/pages/new-inventory/adjust-inventory']">Adjust Product or service</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);"
+                                    [routerLink]="['/pages/new-inventory/adjust-inventory']">Adjust Product or
+                                    service</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
                             <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
                             <li class="divider dropdown-divider" *ngIf="isMobileScreen"></li>
-                            <li role="menuitem"><a class="dropdown-item" *ngIf="isMobileScreen" href="#"> Download CSV</a></li>
-                            <li role="menuitem"><a class="dropdown-item" *ngIf="isMobileScreen" href="#"> Download XLS</a></li>
+                            <li role="menuitem"><a class="dropdown-item" *ngIf="isMobileScreen" href="#"> Download
+                                    CSV</a></li>
+                            <li role="menuitem"><a class="dropdown-item" *ngIf="isMobileScreen" href="#"> Download
+                                    XLS</a></li>
                             <li class="divider dropdown-divider" *ngIf="isMobileScreen"></li>
-                            <li role="menuitem"><a class="dropdown-item text-primary" *ngIf="isMobileScreen" href="javascript:void(0);">+ Add
+                            <li role="menuitem"><a class="dropdown-item text-primary" *ngIf="isMobileScreen"
+                                    href="javascript:void(0);">+ Add
                                     Inventory</a></li>
 
                         </ul>
                     </div>
-                    <button id="create-inventory-btn" class="btn btn-sky-blue bdr-radius-50" *ngIf="!isMobileScreen" [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
+                    <button id="create-inventory-btn" class="btn btn-sky-blue bdr-radius-50" *ngIf="!isMobileScreen"
+                        [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
                     <i class="icon-cross pd cursor-pointer" [routerLink]="['/pages/new-inventory']"></i>
                 </div>
             </div>
@@ -58,7 +65,8 @@
         <tab heading="About Item">
             <div class="">
                 <div class="select-physical-product">
-                    <p class="text-gray font-14">Select if its a physical good or a service or a combo of more than 1 product.</p>
+                    <p class="text-gray font-14">Select if its a physical good or a service or a combo of more than 1
+                        product.</p>
                     <div class="select-product-type mt-1">
                         <div class="radio-btn-wrapper mt-15">
                             <span class="mr-15">
@@ -89,7 +97,8 @@
                                         <label>Product Name <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input id="product-name" class="form-control" type="text" value="Product Dummy Name Furniture" readonly>
+                                        <input id="product-name" class="form-control" type="text"
+                                            value="Product Dummy Name Furniture" readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-15">
@@ -97,7 +106,8 @@
                                         <label>Product Unit <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input id="product-unit" class="form-control" type="text" value="Kilo Gram" readonly>
+                                        <input id="product-unit" class="form-control" type="text" value="Kilo Gram"
+                                            readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-15">
@@ -131,7 +141,8 @@
                                                             class="icon-info text-gray"></i></label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input id="inventory-account" class="form-control" type="text" value="" readonly>
+                                                    <input id="inventory-account" class="form-control" type="text"
+                                                        value="" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -142,7 +153,8 @@
                                                             class="icon-info text-gray"></i></label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input id="low-stock-report" class="form-control" type="text" value="" readonly>
+                                                    <input id="low-stock-report" class="form-control" type="text"
+                                                        value="" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -152,7 +164,8 @@
                                                     <label>Opening Qty <span class="red-text"></span></label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input id="opening-quantity" class="form-control" type="text" value="" readonly>
+                                                    <input id="opening-quantity" class="form-control" type="text"
+                                                        value="" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -162,7 +175,8 @@
                                                     <label>Amount <span class="red-text"></span></label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input id="amount" class="form-control" type="text" value="200" readonly>
+                                                    <input id="amount" class="form-control" type="text" value="200"
+                                                        readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -172,7 +186,8 @@
                                                     <label>Rate <span class="red-text"></span></label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input id="rate" class="form-control" type="text" value="Auto Calculate" readonly>
+                                                    <input id="rate" class="form-control" type="text"
+                                                        value="Auto Calculate" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -183,7 +198,8 @@
                                 <p class="mb-15 font-14" hidden>
                                     <span>
                                         <input type="checkbox" checked class="checkbox-custom" name="product-service"
-                                            id="product-service" /> <label for="product-service" class="checkbox-custom-label">Is the
+                                            id="product-service" /> <label for="product-service"
+                                            class="checkbox-custom-label">Is the
                                             Product/Service a manufactured entity?</label>
                                     </span>
                                 </p>
@@ -193,11 +209,13 @@
                                             <div class="row">
                                                 <div class="col-sm-6 col-lg-4 mb-15">
                                                     <label>Output Qty <span class="red-text">*</span></label>
-                                                    <input type="text" id="output-qty" class="form-control" placeholder="Enter" readonly>
+                                                    <input type="text" id="output-qty" class="form-control"
+                                                        placeholder="Enter" readonly>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6 mb-15">
                                                     <label>Stock Unit<span class="red-text">*</span></label>
-                                                    <input type="text" id="stock-unit" class="form-control" placeholder="Amount" readonly>
+                                                    <input type="text" id="stock-unit" class="form-control"
+                                                        placeholder="Amount" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -205,18 +223,18 @@
                                             <div class="row">
                                                 <div class="col-sm-6 col-lg-4 mb-15">
                                                     <label>Input Stock Name<span class="red-text">*</span></label>
-                                                    <input type="text" id="select-stock-nme" class="form-control" placeholder="Select Stock"
-                                                        readonly>
+                                                    <input type="text" id="select-stock-nme" class="form-control"
+                                                        placeholder="Select Stock" readonly>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-4 mb-15">
                                                     <label>Stock Qty.<span class="red-text">*</span></label>
-                                                    <input type="text" id="select-stock-qty" class="form-control" placeholder="Qty."
-                                                        readonly>
+                                                    <input type="text" id="select-stock-qty" class="form-control"
+                                                        placeholder="Qty." readonly>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-4 mb-15">
                                                     <label>Stock Unit<span class="red-text">*</span></label>
-                                                    <input type="text" id="select-stock-unit" class="form-control" placeholder="Select Unit"
-                                                        readonly>
+                                                    <input type="text" id="select-stock-unit" class="form-control"
+                                                        placeholder="Select Unit" readonly>
                                                 </div>
 
                                             </div>
@@ -225,21 +243,24 @@
                                 </form>
                                 <p class="mb-15 font-14" hidden>
                                     <span>
-                                        <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label for="stock"
-                                            class="checkbox-custom-label">Continue selling when out of stock?</label>
+                                        <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label
+                                            for="stock" class="checkbox-custom-label">Continue selling when out of
+                                            stock?</label>
                                     </span>
                                 </p>
                                 <p class="mb-15 font-14" hidden>
                                     <span>
-                                        <input type="checkbox" class="checkbox-custom" name="return-policy" id="return-policy" /> <label
-                                            for="return-policy" class="checkbox-custom-label">Is this stock eligible for return
+                                        <input type="checkbox" class="checkbox-custom" name="return-policy"
+                                            id="return-policy" /> <label for="return-policy"
+                                            class="checkbox-custom-label">Is this stock eligible for return
                                             policy?</label>
                                     </span>
                                 </p>
                                 <p class="mb-15 font-14">
                                     <span>
-                                        <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" /> <label
-                                            for="variant" class="checkbox-custom-label">Variant? This product has multiple options like size
+                                        <input type="checkbox" checked class="checkbox-custom" name="variant"
+                                            id="variant" /> <label for="variant" class="checkbox-custom-label">Variant?
+                                            This product has multiple options like size
                                             or colours etc..</label>
                                     </span>
                                 </p>
@@ -252,13 +273,14 @@
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label>Option 1</label>
-                                                            <input type="text" class="form-control" placeholder="Size" id="select-option"
-                                                                readonly>
+                                                            <input type="text" class="form-control" placeholder="Size"
+                                                                id="select-option" readonly>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Category</label>
-                                                            <textare type="text" class="form-control" placeholder="xs, x, m"
-                                                                id="select-category" readonly></textare>
+                                                            <textare type="text" class="form-control"
+                                                                placeholder="xs, x, m" id="select-category" readonly>
+                                                            </textare>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -266,8 +288,9 @@
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label class="d-block">&nbsp;</label>
-                                                            <input type="text" class="form-control" placeholder="Ex: Size, Color"
-                                                                id="select-size-color" readonly>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Ex: Size, Color" id="select-size-color"
+                                                                readonly>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label class="d-block">&nbsp;</label>
@@ -291,7 +314,8 @@
                                                     <label>Stock Display Name</label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input type="text" class="form-control" id="stock-display-name" readonly>
+                                                    <input type="text" class="form-control" id="stock-display-name"
+                                                        readonly>
                                                 </div>
                                             </div>
                                             <div class="row mb-15">
@@ -348,8 +372,8 @@
                                         <label>Service Name <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input id="service-name" class="form-control" type="text" value="Product Dummy Name Furniture"
-                                            readonly>
+                                        <input id="service-name" class="form-control" type="text"
+                                            value="Product Dummy Name Furniture" readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-15">
@@ -357,7 +381,8 @@
                                         <label>Service Unit <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input id="service-unit" class="form-control" type="text" value="Kilo Gram" readonly>
+                                        <input id="service-unit" class="form-control" type="text" value="Kilo Gram"
+                                            readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-15">
@@ -365,7 +390,8 @@
                                         <label>Under Group</label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input id="service-under-group" class="form-control" type="text" value="" readonly>
+                                        <input id="service-under-group" class="form-control" type="text" value=""
+                                            readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-15">
@@ -373,7 +399,8 @@
                                         <label>Unique Name <i class="icon-info text-gray"></i></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input id="service-unique-name" class="form-control" type="text" value="" readonly>
+                                        <input id="service-unique-name" class="form-control" type="text" value=""
+                                            readonly>
                                     </div>
                                 </div>
                             </form>
@@ -391,7 +418,8 @@
                                                         <i class="icon-info text-gray"></i></label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input id="service-inventory-account" class="form-control" type="text" value="" readonly>
+                                                    <input id="service-inventory-account" class="form-control"
+                                                        type="text" value="" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -402,7 +430,8 @@
                                                             class="icon-info text-gray"></i></label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input id="service-low-stock-report" class="form-control" type="text" value="" readonly>
+                                                    <input id="service-low-stock-report" class="form-control"
+                                                        type="text" value="" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -413,7 +442,9 @@
                                 <p class="mb-15 font-14" hidden>
                                     <span>
                                         <input type="checkbox" checked class="checkbox-custom" name="product-service"
-                                            id="product-service" /> <label for="product-service" class="checkbox-custom-label">Variant? This product has multiple options like size or colours etc..?</label>
+                                            id="product-service" /> <label for="product-service"
+                                            class="checkbox-custom-label">Variant? This product has multiple options
+                                            like size or colours etc..?</label>
                                     </span>
                                 </p>
                                 <form hidden>
@@ -422,11 +453,13 @@
                                             <div class="row">
                                                 <div class="col-sm-6 col-lg-4 mb-15">
                                                     <label>Output Qty <span class="red-text">*</span></label>
-                                                    <input type="text" id="output-qty" class="form-control" placeholder="Enter" readonly>
+                                                    <input type="text" id="output-qty" class="form-control"
+                                                        placeholder="Enter" readonly>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6 mb-15">
                                                     <label>Stock Unit<span class="red-text">*</span></label>
-                                                    <input type="text" id="stock-unit" class="form-control" placeholder="Amount" readonly>
+                                                    <input type="text" id="stock-unit" class="form-control"
+                                                        placeholder="Amount" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -434,18 +467,18 @@
                                             <div class="row">
                                                 <div class="col-sm-6 col-lg-4 mb-15">
                                                     <label>Input Stock Name<span class="red-text">*</span></label>
-                                                    <input type="text" id="select-stock-nme" class="form-control" placeholder="Select Stock"
-                                                        readonly>
+                                                    <input type="text" id="select-stock-nme" class="form-control"
+                                                        placeholder="Select Stock" readonly>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-4 mb-15">
                                                     <label>Stock Qty.<span class="red-text">*</span></label>
-                                                    <input type="text" id="select-stock-qty" class="form-control" placeholder="Qty."
-                                                        readonly>
+                                                    <input type="text" id="select-stock-qty" class="form-control"
+                                                        placeholder="Qty." readonly>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-4 mb-15">
                                                     <label>Stock Unit<span class="red-text">*</span></label>
-                                                    <input type="text" id="select-stock-unit" class="form-control" placeholder="Select Unit"
-                                                        readonly>
+                                                    <input type="text" id="select-stock-unit" class="form-control"
+                                                        placeholder="Select Unit" readonly>
                                                 </div>
 
                                             </div>
@@ -454,21 +487,24 @@
                                 </form>
                                 <p class="mb-15 font-14" hidden>
                                     <span>
-                                        <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label for="stock"
-                                            class="checkbox-custom-label">Continue selling when out of stock?</label>
+                                        <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label
+                                            for="stock" class="checkbox-custom-label">Continue selling when out of
+                                            stock?</label>
                                     </span>
                                 </p>
                                 <p class="mb-15 font-14" hidden>
                                     <span>
-                                        <input type="checkbox" class="checkbox-custom" name="return-policy" id="return-policy" /> <label
-                                            for="return-policy" class="checkbox-custom-label">Is this stock eligible for return
+                                        <input type="checkbox" class="checkbox-custom" name="return-policy"
+                                            id="return-policy" /> <label for="return-policy"
+                                            class="checkbox-custom-label">Is this stock eligible for return
                                             policy?</label>
                                     </span>
                                 </p>
                                 <p class="mb-15 font-14">
                                     <span>
-                                        <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" /> <label
-                                            for="variant" class="checkbox-custom-label">Variant? This product has multiple options like size
+                                        <input type="checkbox" checked class="checkbox-custom" name="variant"
+                                            id="variant" /> <label for="variant" class="checkbox-custom-label">Variant?
+                                            This product has multiple options like size
                                             or colours etc..</label>
                                     </span>
                                 </p>
@@ -481,13 +517,14 @@
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label>Option 1</label>
-                                                            <input type="text" class="form-control" placeholder="Size" id="select-option"
-                                                                readonly>
+                                                            <input type="text" class="form-control" placeholder="Size"
+                                                                id="select-option" readonly>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Category</label>
-                                                            <textare type="text" class="form-control" placeholder="xs, x, m"
-                                                                id="select-category" readonly></textare>
+                                                            <textare type="text" class="form-control"
+                                                                placeholder="xs, x, m" id="select-category" readonly>
+                                                            </textare>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -495,8 +532,9 @@
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-4">
                                                             <label class="d-block">&nbsp;</label>
-                                                            <input type="text" class="form-control" placeholder="Ex: Size, Color"
-                                                                id="select-size-color" readonly>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Ex: Size, Color" id="select-size-color"
+                                                                readonly>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label class="d-block">&nbsp;</label>
@@ -520,7 +558,8 @@
                                                     <label>SAC Code</label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input id="service-sac-code" class="form-control" type="text" readonly>
+                                                    <input id="service-sac-code" class="form-control" type="text"
+                                                        readonly>
                                                 </div>
                                             </div>
                                             <div class="row mb-15">
@@ -528,7 +567,8 @@
                                                     <label>Custom Field</label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input id="custom-field-code" class="form-control" type="text" readonly>
+                                                    <input id="custom-field-code" class="form-control" type="text"
+                                                        readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -552,7 +592,8 @@
                                         <label>Combo Name<span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6">
-                                        <input id="combo-name" class="form-control" type="text" value="Product and Furniture" readonly>
+                                        <input id="combo-name" class="form-control" type="text"
+                                            value="Product and Furniture" readonly>
                                     </div>
                                 </div>
                                 <div class="row mb-15">
@@ -581,7 +622,8 @@
                                     <td width="3%">
                                         <img src="{{imgPath}}add-image.svg" width="60" height="60">
                                     </td>
-                                    <td width="20%"><input type="text" class="form-control" value="Product Name/Service" readonly></td>
+                                    <td width="20%"><input type="text" class="form-control" value="Product Name/Service"
+                                            readonly></td>
                                     <td width="20%"><input type="text" class="form-control" value="Unit" readonly></td>
                                     <td width="16%"><input type="text" class="form-control" value="2" readonly></td>
                                     <td width="20%">0.00</td>

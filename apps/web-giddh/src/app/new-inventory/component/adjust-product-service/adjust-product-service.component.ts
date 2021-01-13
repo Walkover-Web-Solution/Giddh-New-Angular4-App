@@ -19,7 +19,7 @@ export class AdjustProductServiceComponent implements OnInit {
 
     constructor(
         private modalService: BsModalService
-    ){ }
+    ) { }
 
     openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template,

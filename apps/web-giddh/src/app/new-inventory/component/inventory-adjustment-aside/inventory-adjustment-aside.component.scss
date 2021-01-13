@@ -10,7 +10,7 @@
     max-width: 800px;
     z-index: 99999;
 }
- #close {
+#close {
     position: absolute;
     left: auto;
     right: 10px;
@@ -60,8 +60,8 @@
     text-align: center;
     margin: 0 auto;
 }
-.aside-body{
-    padding:15px;
+.aside-body {
+    padding: 15px;
 }
 
 .aside-pane-form {
@@ -73,19 +73,19 @@
     scroll-behavior: smooth;
     position: relative;
 }
-.existing-reason{
+.existing-reason {
     border-top: 1px solid $gainsboro;
     padding-top: 30px;
-    h4{
-        font-family: 'opensans-semibold';
+    h4 {
+        font-family: "opensans-semibold";
         margin-bottom: 10px;
     }
-   ul{
+    ul {
         list-style: none;
         font-size: 14px;
         line-height: 30px;
         color: $nero;
-   }
+    }
 }
 @media (max-width: 768px) {
     :host {
@@ -102,9 +102,10 @@
     :host .aside-pane {
         max-width: 370px;
     }
-    .combo-table th, .combo-table td{
+    .combo-table th,
+    .combo-table td {
         min-width: 160px;
-        &:first-child{
+        &:first-child {
             min-width: 80px;
         }
     }

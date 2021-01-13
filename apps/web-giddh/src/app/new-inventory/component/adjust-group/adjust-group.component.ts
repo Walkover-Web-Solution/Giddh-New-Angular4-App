@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, TemplateRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, TemplateRef } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';

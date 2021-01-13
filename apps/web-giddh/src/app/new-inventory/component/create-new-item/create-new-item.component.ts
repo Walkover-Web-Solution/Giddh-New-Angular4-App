@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module'
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 @Component({

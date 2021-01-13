@@ -99,13 +99,13 @@ export class NewInventoryComponent implements OnInit {
         }
     }
     /* show/hide funcation search input field */
-    public searhcGroup(){
+    public searhcGroup() {
         this.inputFullWidth = !this.inputFullWidth
     }
-    public focusOnInput(){
+    public focusOnInput() {
 
     }
-    public expandDateRang(){
+    public expandDateRang() {
         this.dateRangFullWidth = !this.dateRangFullWidth
     }
 

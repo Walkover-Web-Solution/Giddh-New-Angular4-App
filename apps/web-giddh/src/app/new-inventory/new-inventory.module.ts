@@ -61,7 +61,7 @@ import { InventorySidebarComponent } from './component/inventory-sidebar/invento
         NewInventoryAdavanceSearch,
         InventorySidebarComponent
     ],
-    imports:[
+    imports: [
         NewInventoryRoutingModule,
         SharedModule,
         TabsModule.forRoot(),

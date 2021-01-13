@@ -1,6 +1,6 @@
 @import "../../../../assets/css/color.scss";
 
-.sub-detail-sidebar{
+.sub-detail-sidebar {
     min-height: 100vh;
     background-color: $white;
     max-height: 100%;
@@ -13,33 +13,31 @@
     height: 400px;
     h4.product-name {
         font-size: 16px;
-        font-family: 'opensans-semibold';
+        font-family: "opensans-semibold";
         padding: 10px 15px;
         background-color: $lavender;
     }
-    ul{
+    ul {
         list-style: none;
-        &.sub-group{
-                li{
-                    a{
-                        padding-left:12px;
-                        display: flex;
-                        width: 100%;
-                    }
+        &.sub-group {
+            li {
+                a {
+                    padding-left: 12px;
+                    display: flex;
+                    width: 100%;
                 }
+            }
         }
-        li{
+        li {
             padding: 6px 15px;
             font-size: 14px;
-            a{
+            a {
                 color: $gray;
             }
-
         }
-
     }
 }
-.sidebar-handle{
+.sidebar-handle {
     width: 36px;
     height: 30px;
     border: 1px solid $gainsboro;
@@ -55,19 +53,19 @@
     cursor: pointer;
     z-index: 9;
 }
-@media(max-width:1019px){
-    .sidebar-handle{
+@media (max-width: 1019px) {
+    .sidebar-handle {
         left: 227px;
         bottom: 180px;
     }
 }
-@media(max-width:767px){
-    .sub-detail-sidebar{
+@media (max-width: 767px) {
+    .sub-detail-sidebar {
         z-index: 10;
         height: 100vh;
-        box-shadow: 0 0 6px rgba(0,0,0,0.1);
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     }
-    .sidebar-handle{
+    .sidebar-handle {
         z-index: 10;
     }
 }

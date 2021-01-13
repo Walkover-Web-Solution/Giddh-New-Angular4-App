@@ -18,7 +18,7 @@ import { ReplaySubject } from 'rxjs';
 export class InventorySidebarComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('searchField', {static: true}) public searchField: ElementRef;
+    @ViewChild('searchField', { static: true }) public searchField: ElementRef;
 
     public imgPath: string = '';
 
@@ -51,7 +51,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public goToPreviousPage(): void {
-        if(this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
+        if (this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
             this.router.navigateByUrl(this.generalService.getSessionStorage("previousPage"));
         } else {
             this.router.navigate(['/pages/home']);
@@ -65,12 +65,12 @@ export class InventorySidebarComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public closeAsidePaneIfMobile(event?): void {
-        if(this.isMobileScreen && event && event.target.className !== "icon-bar") {
+        if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
         }
     }
 
-    public ngOnInit(){
+    public ngOnInit() {
 
 
     }

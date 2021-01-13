@@ -10,7 +10,7 @@
     max-width: 760px;
     z-index: 99999;
 }
- #close {
+#close {
     position: absolute;
     left: auto;
     right: 10px;
@@ -60,20 +60,20 @@
     text-align: center;
     margin: 0 auto;
 }
-.aside-body{
+.aside-body {
     padding: 40px 10px;
     height: calc(100% - 61px);
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.create-product-wrapper{
-    .create-one-item{
+.create-product-wrapper {
+    .create-one-item {
         padding: 15px 0 0;
-        &:hover{
+        &:hover {
             background-color: $lavender;
         }
-        .wrapper-create-item{
+        .wrapper-create-item {
             border-bottom: 1px solid $gainsboro;
             display: flex;
             margin: 0 45px 0;
@@ -86,27 +86,26 @@
                 background-color: $white;
                 border-radius: 50%;
             }
-            .create-item{
-                    max-width: 80%;
-                    margin-left: 15px;
-                    width: 100%;
-                h4{
+            .create-item {
+                max-width: 80%;
+                margin-left: 15px;
+                width: 100%;
+                h4 {
                     font-size: 16px;
-                    font-family: 'opensans-semibold';
+                    font-family: "opensans-semibold";
                     margin-bottom: 20px;
                 }
-                p{
+                p {
                     font-size: 14px;
                 }
             }
         }
-        &:last-child{
-             .wrapper-create-item{
-                  border-bottom:none;
-             }
+        &:last-child {
+            .wrapper-create-item {
+                border-bottom: none;
+            }
         }
     }
-
 }
 
 @media (max-width: 768px) {
@@ -124,9 +123,9 @@
     :host .aside-pane {
         max-width: 370px;
     }
-    .create-product-wrapper{
-        .create-one-item{
-            .wrapper-create-item{
+    .create-product-wrapper {
+        .create-one-item {
+            .wrapper-create-item {
                 border-bottom: 1px solid $gainsboro;
                 display: flex;
                 margin: 0;
@@ -136,7 +135,6 @@
                     width: 40px;
                     height: 40px;
                 }
-
             }
         }
     }

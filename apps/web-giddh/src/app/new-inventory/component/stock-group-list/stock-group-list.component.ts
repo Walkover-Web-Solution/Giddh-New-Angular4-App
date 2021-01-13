@@ -35,7 +35,7 @@ export class StockGroupListComponent implements OnInit {
 
     constructor(
         private generalService: GeneralService,
-        private modalService: BsModalService,) {
+        private modalService: BsModalService) {
 
     }
     /**

@@ -13,7 +13,7 @@ export class AsideAdjustInventoryComponent implements OnInit {
     public createGroupaside: boolean = true;
 
     /*back to create new aside pane*/
-    public backToMainAside(){
+    public backToMainAside() {
         this.hideCreateFieldData = !this.hideCreateFieldData
     }
 

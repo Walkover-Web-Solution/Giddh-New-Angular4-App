@@ -2,7 +2,7 @@
 .inventory-header {
     padding-top: 20px;
     justify-content: space-between;
-    i{
+    i {
         width: 36px;
         height: 36px;
         display: flex;
@@ -13,99 +13,100 @@
         background-color: $white;
         cursor: pointer;
     }
-    .input-group{
+    .input-group {
         width: 36px;
-        &.full-width-input-group{
-            border:none;
+        &.full-width-input-group {
+            border: none;
             width: 228px;
-            .icon-search1{
+            .icon-search1 {
                 border: none;
             }
-             .icon-search1{
+            .icon-search1 {
                 border-right: 1px solid $gainsboro;
-             }
-        }
-            &.full-width-search-group{
-                width: 228px;
-                .icon-search1.pos-abs {
-
-                        z-index: 4;
-                    }
-
             }
+        }
+        &.full-width-search-group {
+            width: 228px;
+            .icon-search1.pos-abs {
+                z-index: 4;
+            }
+        }
     }
 
-    input, sh-select{
+    input,
+    sh-select {
         min-width: 228px;
         text-align: left;
-        &.search-group, &.giddh-datepicker{
+        &.search-group,
+        &.giddh-datepicker {
             min-width: 0;
             width: 0 !important;
         }
-        &.search-group.full-width, &.giddh-datepicker.full-width{
+        &.search-group.full-width,
+        &.giddh-datepicker.full-width {
             min-width: 228px;
             width: 228px !important;
             padding-left: 40px !important;
         }
-
     }
-    .button-group{
-            button{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 38px;
-                height: 36px;
-                padding: 0;
-                margin: 0;
-                border: none;
-                i{
-                    vertical-align: top;
-                    font-size: 18px;
-                    color: $gray;
-                }
+    .button-group {
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 38px;
+            height: 36px;
+            padding: 0;
+            margin: 0;
+            border: none;
+            i {
+                vertical-align: top;
+                font-size: 18px;
+                color: $gray;
             }
         }
+    }
 }
-input, sh-select::ng-deep input{
+input,
+sh-select::ng-deep input {
     border-radius: 50px !important;
 }
-button{
+button {
     border-radius: 50px !important;
 }
-button#more-btn-inventory{
+button#more-btn-inventory {
     min-width: 90px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 50px !important;
 }
-@media(max-width:1270px) and (min-width:768px){
-    .inventory-header{
+@media (max-width: 1270px) and (min-width: 768px) {
+    .inventory-header {
         position: relative;
         flex-direction: column;
-        .inventory-right-btn{
+        .inventory-right-btn {
             justify-content: flex-end;
             margin-top: 15px;
         }
-        .advance-search-btn{
+        .advance-search-btn {
             position: absolute;
             top: 70px;
         }
     }
 }
-@media(max-width:767px){
-    #more-btn-inventory{
+@media (max-width: 767px) {
+    #more-btn-inventory {
         margin-right: 0 !important;
     }
 }
-@media(max-width:360px){
-    .advance-search-btn{
+@media (max-width: 360px) {
+    .advance-search-btn {
         position: absolute;
         top: 72px;
         left: 15px;
     }
-    button#more-btn-inventory-mobile{
+    button#more-btn-inventory-mobile {
         margin-left: 45px;
     }
 }

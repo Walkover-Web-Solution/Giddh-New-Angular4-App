@@ -16,10 +16,13 @@
                                 <p class="font-14 mb-1">Select if its a physical good or a service.</p>
                                 <div class="select-type">
                                     <span class="mr-15">
-                                        <input type="radio" class="radio-custom" name="product-type"  id="product-type"/> <label for="product-type" class="radio-custom-label">Product</label>
-                                     </span>
+                                        <input type="radio" class="radio-custom" name="product-type"
+                                            id="product-type" /> <label for="product-type"
+                                            class="radio-custom-label">Product</label>
+                                    </span>
                                     <span>
-                                        <input type="radio" class="radio-custom" name="service-type" id="service-type" /> <label for="service-type"
+                                        <input type="radio" class="radio-custom" name="service-type"
+                                            id="service-type" /> <label for="service-type"
                                             class="radio-custom-label">Service</label>
                                     </span>
                                 </div>
@@ -33,19 +36,23 @@
                                 <div class="row mb-15">
                                     <div class="col-sm-4 mb-15">
                                         <label>Product Name <span class="red-text">*</span></label>
-                                        <input id="product-name" class="form-control" type="text" placeholder="Enter Product Name">
+                                        <input id="product-name" class="form-control" type="text"
+                                            placeholder="Enter Product Name">
                                     </div>
                                     <div class="col-sm-4 mb-15">
                                         <label>Unique Name <span class="red-text">*</span></label>
-                                        <input id="unique-name" class="form-control" type="text" placeholder="Enter Unique Name">
+                                        <input id="unique-name" class="form-control" type="text"
+                                            placeholder="Enter Unique Name">
                                     </div>
                                     <div class="col-sm-4 mb-15">
                                         <label>Product Unit <span class="red-text">*</span></label>
                                         <input id="product-unit" class="form-control" type="text" placeholder="Nos.">
                                     </div>
                                     <div class="col-sm-4 mb-15">
-                                        <label class="w-100 d-flex align-items-center justify-content-between">Under Group <i class="icon-info text-gray pull-right"></i></label>
-                                        <input id="under-product" class="form-control" type="text" placeholder="Select Product">
+                                        <label class="w-100 d-flex align-items-center justify-content-between">Under
+                                            Group <i class="icon-info text-gray pull-right"></i></label>
+                                        <input id="under-product" class="form-control" type="text"
+                                            placeholder="Select Product">
                                     </div>
                                 </div>
 
@@ -58,58 +65,75 @@
                                             <div class="row">
                                                 <div class="col-sm-4 mb-15">
                                                     <label>Opening Qty</label>
-                                                    <input type="text" id="opening-qty" class="form-control" placeholder="Enter Qty">
+                                                    <input type="text" id="opening-qty" class="form-control"
+                                                        placeholder="Enter Qty">
                                                 </div>
                                                 <div class="col-sm-4 mb-15">
                                                     <label>Amount</label>
-                                                    <input type="text" id="amount" class="form-control" placeholder="Amount">
+                                                    <input type="text" id="amount" class="form-control"
+                                                        placeholder="Amount">
                                                 </div>
                                                 <div class="col-sm-4 mb-15">
                                                     <label>Rate</label>
-                                                    <input type="text" id="rate" class="form-control" disabled placeholder="Auto Calculate">
+                                                    <input type="text" id="rate" class="form-control" disabled
+                                                        placeholder="Auto Calculate">
                                                 </div>
                                                 <div class="col-sm-4 mb-15">
-                                                    <label class="w-100 d-flex justify-content-between align-items-center">
+                                                    <label
+                                                        class="w-100 d-flex justify-content-between align-items-center">
                                                         <span>Amount Group
                                                             <span class="red-text">*</span>
                                                         </span>
                                                         <i class="icon-info text-gray"> </i>
                                                     </label>
-                                                    <input type="text" id="amount-group" class="form-control" placeholder="Current Assets">
+                                                    <input type="text" id="amount-group" class="form-control"
+                                                        placeholder="Current Assets">
                                                 </div>
                                                 <div class="col-sm-4 mb-15">
-                                                    <label class="w-100 d-flex justify-content-between align-items-center">Low stock alert
+                                                    <label
+                                                        class="w-100 d-flex justify-content-between align-items-center">Low
+                                                        stock alert
                                                         <i class="icon-info text-gray"> </i></label>
-                                                    <input type="text" id="low-stock-alert" class="form-control" placeholder="Enter Qty">
+                                                    <input type="text" id="low-stock-alert" class="form-control"
+                                                        placeholder="Enter Qty">
                                                 </div>
                                             </div>
                                         </form>
                                         <div class="sales-purchase-details mt-5">
-                                            <p class="mb-15"><input type="checkbox" id="check-product-sale" checked>Is the Product/Service eligible for Sale or Purchase?</p>
+                                            <p class="mb-15"><input type="checkbox" id="check-product-sale" checked>Is
+                                                the Product/Service eligible for Sale or Purchase?</p>
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="purchase-information">
                                                         <div class="select-puchase-info mb-15">
-                                                            <input type="checkbox" id="purchase-info"> <span>Purchase Information</span>
+                                                            <input type="checkbox" id="purchase-info"> <span>Purchase
+                                                                Information</span>
                                                         </div>
                                                         <form>
                                                             <div class="mb-15">
                                                                 <label>Linked Account/s</label>
-                                                                <input type="text" id="linked-account" class="form-control" placeholder="All Accounts Selected">
+                                                                <input type="text" id="linked-account"
+                                                                    class="form-control"
+                                                                    placeholder="All Accounts Selected">
                                                             </div>
                                                             <div class="mb-15">
                                                                 <label>Applicable Tax</label>
-                                                                <input type="text" id="applicable-tax" class="form-control" placeholder="Select Tax">
-                                                                <p class="mt-1 font-14"><input type="checkbox" id="tax-price">Price Inclusive of Tax ?</p>
+                                                                <input type="text" id="applicable-tax"
+                                                                    class="form-control" placeholder="Select Tax">
+                                                                <p class="mt-1 font-14"><input type="checkbox"
+                                                                        id="tax-price">Price Inclusive of Tax ?</p>
                                                             </div>
                                                             <div class="d-flex align-items-center unit-rate-fields">
                                                                 <div class="unit mr-15 mb-15">
                                                                     <label>Unit</label>
-                                                                    <input type="text" class="form-control" id="select-unit" placeholder="Select Unit">
+                                                                    <input type="text" class="form-control"
+                                                                        id="select-unit" placeholder="Select Unit">
                                                                 </div>
                                                                 <div class="rate mr-15 mb-15">
                                                                     <label>Rate</label>
-                                                                    <input type="text" id="rate-field" class="form-control" id="rate" placeholder="Rate">
+                                                                    <input type="text" id="rate-field"
+                                                                        class="form-control" id="rate"
+                                                                        placeholder="Rate">
                                                                 </div>
                                                                 <div class="mb-15">
                                                                     <label class="d-block">&nbsp;</label>
@@ -122,26 +146,34 @@
                                                 <div class="col-sm-6">
                                                     <div class="purchase-information">
                                                         <div class="select-puchase-info mb-15">
-                                                            <input type="checkbox" id="sales-info"> <span>Sales Information</span>
+                                                            <input type="checkbox" id="sales-info"> <span>Sales
+                                                                Information</span>
                                                         </div>
                                                         <form>
                                                             <div class="mb-15">
                                                                 <label>Linked Account/s</label>
-                                                                <input type="text" id="sales-linked-account" class="form-control" placeholder="All Accounts Selected">
+                                                                <input type="text" id="sales-linked-account"
+                                                                    class="form-control"
+                                                                    placeholder="All Accounts Selected">
                                                             </div>
                                                             <div class="mb-15">
                                                                 <label>Applicable Tax</label>
-                                                                <input type="text" id="sales-applicable-tax" class="form-control" placeholder="Select Tax">
-                                                                <p class="mt-1 font-14"><input type="checkbox" id="tax-price">Price Inclusive of Tax ?</p>
+                                                                <input type="text" id="sales-applicable-tax"
+                                                                    class="form-control" placeholder="Select Tax">
+                                                                <p class="mt-1 font-14"><input type="checkbox"
+                                                                        id="tax-price">Price Inclusive of Tax ?</p>
                                                             </div>
                                                             <div class="d-flex align-items-center unit-rate-fields">
                                                                 <div class="unit mr-15 mb-15">
                                                                     <label>Unit</label>
-                                                                    <input type="text" class="form-control" id="sales-select-unit" placeholder="Select Unit">
+                                                                    <input type="text" class="form-control"
+                                                                        id="sales-select-unit"
+                                                                        placeholder="Select Unit">
                                                                 </div>
                                                                 <div class="rate mr-15 mb-15">
                                                                     <label>Rate</label>
-                                                                    <input type="text" class="form-control" id="sales-rate" placeholder="Rate">
+                                                                    <input type="text" class="form-control"
+                                                                        id="sales-rate" placeholder="Rate">
                                                                 </div>
                                                                 <div class="mb-15">
                                                                     <label class="d-block">&nbsp;</label>
@@ -159,35 +191,42 @@
                                     <div>
                                         <p class="mb-15">
                                             <span>
-                                                <input type="checkbox" class="checkbox-custom" name="product-service" id="product-service" /> <label for="product-service"
-                                                    class="checkbox-custom-label">Is the Product/Service a manufactured entity?</label>
+                                                <input type="checkbox" class="checkbox-custom" name="product-service"
+                                                    id="product-service" /> <label for="product-service"
+                                                    class="checkbox-custom-label">Is the Product/Service a manufactured
+                                                    entity?</label>
                                             </span>
                                         </p>
                                         <div class="product-manufacturing">
                                             <p class="product-made-by">Chair(Made with)</p>
-                                           <form>
+                                            <form>
                                                 <div class="row">
                                                     <div class="col-sm-4 mb-15">
                                                         <label>Output Qty <span class="red-text">*</span></label>
-                                                        <input type="text" id="output-qty" class="form-control" placeholder="Enter">
+                                                        <input type="text" id="output-qty" class="form-control"
+                                                            placeholder="Enter">
                                                     </div>
                                                     <div class="col-sm-4 mb-15">
                                                         <label>Stock Unit<span class="red-text">*</span></label>
-                                                        <input type="text" id="stock-unit" class="form-control" placeholder="Amount">
+                                                        <input type="text" id="stock-unit" class="form-control"
+                                                            placeholder="Amount">
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-4 mb-15">
                                                         <label>Input Stock Name<span class="red-text">*</span></label>
-                                                        <input type="text" id="select-stock-nme" class="form-control" placeholder="Select Stock">
+                                                        <input type="text" id="select-stock-nme" class="form-control"
+                                                            placeholder="Select Stock">
                                                     </div>
                                                     <div class="col-sm-4 mb-15">
                                                         <label>Stock Qty.<span class="red-text">*</span></label>
-                                                        <input type="text" id="select-stock-qty" class="form-control" placeholder="Qty.">
+                                                        <input type="text" id="select-stock-qty" class="form-control"
+                                                            placeholder="Qty.">
                                                     </div>
                                                     <div class="col-sm-3 mb-15">
                                                         <label>Stock Unit<span class="red-text">*</span></label>
-                                                        <input type="text" id="select-stock-unit" class="form-control" placeholder="Select Unit">
+                                                        <input type="text" id="select-stock-unit" class="form-control"
+                                                            placeholder="Select Unit">
                                                     </div>
                                                     <div class="mb-15">
                                                         <label class="d-block">&nbsp;</label>
@@ -198,20 +237,26 @@
                                         </div>
                                         <p class="mb-15">
                                             <span>
-                                                <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label
-                                                    for="stock" class="checkbox-custom-label">Continue selling when out of stock?</label>
+                                                <input type="checkbox" class="checkbox-custom" name="stock"
+                                                    id="stock" /> <label for="stock"
+                                                    class="checkbox-custom-label">Continue selling when out of
+                                                    stock?</label>
                                             </span>
                                         </p>
                                         <p class="mb-15">
                                             <span>
-                                                <input type="checkbox" class="checkbox-custom" name="return-policy" id="return-policy" /> <label
-                                                    for="return-policy" class="checkbox-custom-label">Is this stock eligible for return policy?</label>
+                                                <input type="checkbox" class="checkbox-custom" name="return-policy"
+                                                    id="return-policy" /> <label for="return-policy"
+                                                    class="checkbox-custom-label">Is this stock eligible for return
+                                                    policy?</label>
                                             </span>
                                         </p>
                                         <p class="mb-15">
                                             <span>
-                                                <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" /> <label
-                                                    for="variant" class="checkbox-custom-label">Variant? This product has multiple options like size or colours etc..</label>
+                                                <input type="checkbox" checked class="checkbox-custom" name="variant"
+                                                    id="variant" /> <label for="variant"
+                                                    class="checkbox-custom-label">Variant? This product has multiple
+                                                    options like size or colours etc..</label>
                                             </span>
                                         </p>
                                         <!-- this div wil be visible if uper checkbox checked -->
@@ -221,19 +266,23 @@
                                                     <div class="row mb-15">
                                                         <div class="col-sm-4">
                                                             <label>Option 1</label>
-                                                            <input type="text" class="form-control" placeholder="Size" id="select-option">
+                                                            <input type="text" class="form-control" placeholder="Size"
+                                                                id="select-option">
                                                         </div>
                                                         <div class="col-sm-8">
                                                             <label>Category</label>
-                                                            <textare type="text" class="form-control" placeholder="xs, x, m" id="select-category"></textare>
+                                                            <textare type="text" class="form-control"
+                                                                placeholder="xs, x, m" id="select-category"></textare>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-15">
                                                         <div class="col-sm-4">
-                                                            <input type="text" class="form-control" placeholder="Ex: Size, Color" id="select-size-color">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Ex: Size, Color" id="select-size-color">
                                                         </div>
                                                         <div class="col-sm-8">
-                                                            <input type="text" class="form-control" placeholder="Separate options with a comma">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Separate options with a comma">
                                                         </div>
                                                     </div>
                                                     <div class="add-another-option cursor-pointer mb-15 pd">
@@ -249,15 +298,18 @@
                                     <div class="row">
                                         <div class="col-sm-4 mb-15">
                                             <label>Stock Display Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter" id="stock-display-name">
+                                            <input type="text" class="form-control" placeholder="Enter"
+                                                id="stock-display-name">
                                         </div>
                                         <div class="col-sm-4 mb-15">
                                             <label>HSN Code</label>
-                                            <input id="hsn-code" class="form-control" type="text" placeholder="Enter Code">
+                                            <input id="hsn-code" class="form-control" type="text"
+                                                placeholder="Enter Code">
                                         </div>
                                         <div class="col-sm-4 mb-15">
                                             <label>SAC Code</label>
-                                            <input id="sac-code" class="form-control" type="text" placeholder="Enter Code">
+                                            <input id="sac-code" class="form-control" type="text"
+                                                placeholder="Enter Code">
                                         </div>
                                         <div class="col-sm-4 mb-15">
                                             <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
@@ -265,14 +317,16 @@
                                         </div>
                                         <div class="col-sm-4 mb-15">
                                             <label>Custom Field</label>
-                                            <input id="expiry-code" class="form-control" type="text" placeholder="Enter Code">
+                                            <input id="expiry-code" class="form-control" type="text"
+                                                placeholder="Enter Code">
                                         </div>
                                     </div>
                                 </tab>
                             </tabset>
                             <div class="button-group mt-5">
                                 <button id="clear-btn" class="btn btn-primary bdr-radius-50 minwidth-100">Clear</button>
-                                <button id="create-btn" class="btn btn-success bdr-radius-50 minwidth-100">Create</button>
+                                <button id="create-btn"
+                                    class="btn btn-success bdr-radius-50 minwidth-100">Create</button>
                             </div>
                         </div>
                     </div>

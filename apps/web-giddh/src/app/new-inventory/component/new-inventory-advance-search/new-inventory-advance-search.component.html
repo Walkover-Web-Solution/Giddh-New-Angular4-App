@@ -14,8 +14,9 @@
                 <div class="col-lg-8">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
-                        <input type="text" id="select-date" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2" placeholder="Enter Date"/>
+                        <input type="text" id="select-date" name="selectedDateRange"
+                            [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker border-radius-2" placeholder="Enter Date" />
                     </div>
                 </div>
             </div>
@@ -49,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-15"  *ngIf="isMobileScreen">
+            <div class="row mb-15" *ngIf="isMobileScreen">
                 <div class="col-lg-4">
                     <label>Search Group</label>
                 </div>

@@ -3,7 +3,8 @@
     <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/new-inventory']"></i>
     <div class="select-physical-product">
         <div class="px-3 mt-2">
-            <p class="text-gray font-14">Select if its a physical good or a service or a combo of more than 1 product.</p>
+            <p class="text-gray font-14">Select if its a physical good or a service or a combo of more than 1 product.
+            </p>
             <div class="select-product-type mt-1">
                 <div class="radio-btn-wrapper mt-15">
                     <span class="p-0 mr-3">
@@ -12,15 +13,18 @@
                         <label for="product-option" class="radio-custom-label">Product</label>
                     </span>
                     <span class="p-0 mr-3">
-                        <input id="service-option" class="radio-custom cp ml-0" type="radio" name="selectCreateOption" [value]="serviceValue">
+                        <input id="service-option" class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
+                            [value]="serviceValue">
                         <label for="service-option" class="radio-custom-label">Service</label>
                     </span>
                     <span class="p-0 mr-3">
-                        <input id="combo-option" class="radio-custom cp ml-0" type="radio" name="selectCreateOption" [value]="comboValue">
+                        <input id="combo-option" class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
+                            [value]="comboValue">
                         <label for="combo-option" class="radio-custom-label">Combo</label>
                     </span>
                     <span class="p-0 mr-3">
-                        <input id="bulk-creation-option" class="radio-custom cp ml-0" type="radio" name="selectCreateOption" [value]="bulkCreationValue">
+                        <input id="bulk-creation-option" class="radio-custom cp ml-0" type="radio"
+                            name="selectCreateOption" [value]="bulkCreationValue">
                         <label for="bulk-creation-option" class="radio-custom-label">Bulk Creation</label>
                     </span>
                 </div>
@@ -40,8 +44,8 @@
                                         <label>Product Name <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input id="product-name" class="form-control" type="text" value="Product Dummy Name Furniture"
-                                        >
+                                        <input id="product-name" class="form-control" type="text"
+                                            value="Product Dummy Name Furniture">
                                     </div>
                                 </div>
                                 <div class="row mb-15">
@@ -76,8 +80,8 @@
                                 <i class="icon-add-image"></i>
                             </div>
                         </div>
+                    </div>
                 </div>
-            </div>
             </div>
             <div class="other-group mt-3">
                 <tabset class="custom-tabs create-inventory-tab">
@@ -91,10 +95,12 @@
                                                 <div class="col-12 col-xl-12">
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <label>Inventory Account <span class="red-text"></span> <i class="icon-info text-gray"></i></label>
+                                                            <label>Inventory Account <span class="red-text"></span> <i
+                                                                    class="icon-info text-gray"></i></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="inventory-account" class="form-control" type="text" value="">
+                                                            <input id="inventory-account" class="form-control"
+                                                                type="text" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,7 +110,8 @@
                                                             <label>Opening Qty <span class="red-text"></span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="opening-quantity" class="form-control" type="text" value="">
+                                                            <input id="opening-quantity" class="form-control"
+                                                                type="text" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -114,7 +121,8 @@
                                                             <label>Rate <span class="red-text"></span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="rate" class="form-control" type="text" value="Auto Calculate">
+                                                            <input id="rate" class="form-control" type="text"
+                                                                value="Auto Calculate">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -125,10 +133,12 @@
                                                 <div class="col-12 col-xl-12">
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <label>Low stock alert <span class="red-text"></span> <i class="icon-info text-gray"></i></label>
+                                                            <label>Low stock alert <span class="red-text"></span> <i
+                                                                    class="icon-info text-gray"></i></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="low-stock-report" class="form-control" type="text" value="">
+                                                            <input id="low-stock-report" class="form-control"
+                                                                type="text" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -139,7 +149,8 @@
                                                             <label>Amount <span class="red-text"></span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="amount" class="form-control" type="text" value="200">
+                                                            <input id="amount" class="form-control" type="text"
+                                                                value="200">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -165,7 +176,8 @@
                                                             <label>Output Qty<span class="red-text">*</span> </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="stock-output-qty" class="form-control" type="text" placeholder="Enter Qty">
+                                                            <input id="stock-output-qty" class="form-control"
+                                                                type="text" placeholder="Enter Qty">
                                                         </div>
                                                     </div>
                                                     <div class="row mb-15">
@@ -173,7 +185,8 @@
                                                             <label>Stock Unit <span class="red-text">*</span> </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <sh-select id="stock-output-unit" placeholder="Enter Qty"></sh-select>
+                                                            <sh-select id="stock-output-unit" placeholder="Enter Qty">
+                                                            </sh-select>
                                                         </div>
                                                     </div>
 
@@ -192,8 +205,10 @@
                                                     <label>&nbsp;</label>
                                                 </div>
                                                 <div class="qty-unit col-sm-6 col-lg-6 col-xl-4">
-                                                    <input type="text" id="enter-qty" class="form-control" placeholder="Enter Qty">
-                                                    <sh-select id="select-stock-unit" placeholder="Select Unit"></sh-select>
+                                                    <input type="text" id="enter-qty" class="form-control"
+                                                        placeholder="Enter Qty">
+                                                    <sh-select id="select-stock-unit" placeholder="Select Unit">
+                                                    </sh-select>
                                                     <i class="icon-plus pd cp"></i>
                                                 </div>
                                             </div>
@@ -210,7 +225,8 @@
                                         <div class="col-xl-6 col-12">
                                             <div class="purchase-information">
                                                 <div class="select-puchase-info mb-15">
-                                                    <input id="purchase-info-check" type="checkbox" checked > <span>Purchase Information</span>
+                                                    <input id="purchase-info-check" type="checkbox" checked>
+                                                    <span>Purchase Information</span>
                                                 </div>
                                                 <form>
                                                     <div class="row">
@@ -218,27 +234,39 @@
                                                             <label>Linked Account/s </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 pl-0 mb-15">
-                                                            <textarea type="text" id="linked-account" class="form-control" placeholder="All Accounts Selected"></textarea>
+                                                            <textarea type="text" id="linked-account"
+                                                                class="form-control"
+                                                                placeholder="All Accounts Selected"></textarea>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Applicable Tax </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 pl-0 mb-15">
-                                                            <sh-select id="applicable-tax" placeholder="Select Tax"></sh-select>
-                                                            <p class="mt-1 font-14"><input id="purchase-price-tax" type="checkbox">Price Inclusive of Tax ?</p>
+                                                            <sh-select id="applicable-tax" placeholder="Select Tax">
+                                                            </sh-select>
+                                                            <p class="mt-1 font-14"><input id="purchase-price-tax"
+                                                                    type="checkbox">Price Inclusive of Tax ?</p>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <label>Unit & Rate  </label>
+                                                            <label>Unit & Rate </label>
                                                         </div>
                                                         <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
                                                             <div class="row add-new-field mb-15">
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control" id="select-unit" placeholder="Select Unit"></div>
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control" id="rate" placeholder="Rate"></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="select-unit"
+                                                                        placeholder="Select Unit"></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="rate"
+                                                                        placeholder="Rate"></div>
                                                                 <i class="icon-plus pd cursor-pointer"></i>
                                                             </div>
                                                             <div class="row add-new-field">
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control" id="select-unit" placeholder="Select Unit"></div>
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control" id="rate" placeholder="Rate"></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="select-unit"
+                                                                        placeholder="Select Unit"></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="rate"
+                                                                        placeholder="Rate"></div>
                                                                 <i class="icon-cross pd cursor-pointer"></i>
                                                             </div>
 
@@ -250,7 +278,8 @@
                                         <div class="col-xl-6 col-12 pl-5">
                                             <div class="sales-information">
                                                 <div class="select-puchase-info mb-15">
-                                                    <input id="sales-info-check" type="checkbox"> <span>Sales Information</span>
+                                                    <input id="sales-info-check" type="checkbox"> <span>Sales
+                                                        Information</span>
                                                 </div>
                                                 <form>
                                                     <!-- input field will disabled if sales info unchecked -->
@@ -259,29 +288,39 @@
                                                             <label>Linked Account/s </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 pl-0 mb-15">
-                                                            <textarea type="text" id="sales-linked-account" class="form-control" placeholder="All Accounts Selected" disabled></textarea>
+                                                            <textarea type="text" id="sales-linked-account"
+                                                                class="form-control" placeholder="All Accounts Selected"
+                                                                disabled></textarea>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Applicable Tax </label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 pl-0 mb-15">
-                                                        <sh-select id="sales-applicable-tax" placeholder="Select Tax" disabled></sh-select>
-                                                            <p class="mt-1 font-14"><input id="sales-price-tax" type="checkbox">Price Inclusive of Tax ?</p>
+                                                            <sh-select id="sales-applicable-tax"
+                                                                placeholder="Select Tax" disabled></sh-select>
+                                                            <p class="mt-1 font-14"><input id="sales-price-tax"
+                                                                    type="checkbox">Price Inclusive of Tax ?</p>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Unit & Rate </label>
                                                         </div>
                                                         <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
                                                             <div class="row add-new-field mb-15">
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control" id="sales-select-unit"
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="sales-select-unit"
                                                                         placeholder="Select Unit" disabled></div>
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control" id="sales-rate" placeholder="Rate" disabled></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="sales-rate"
+                                                                        placeholder="Rate" disabled></div>
 
                                                             </div>
                                                             <div class="row add-new-field">
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control" id="sales-select-unit"
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="sales-select-unit"
                                                                         placeholder="Select Unit" disabled></div>
-                                                                <div class="col-sm-6 col-6"><input type="text" class="form-control" id="sales-rate" placeholder="Rate" disabled></div>
+                                                                <div class="col-sm-6 col-6"><input type="text"
+                                                                        class="form-control" id="sales-rate"
+                                                                        placeholder="Rate" disabled></div>
 
                                                             </div>
 
@@ -299,7 +338,8 @@
                         <p class="mb-15 font-14" hidden>
                             <span>
                                 <input type="checkbox" checked class="checkbox-custom" name="product-service"
-                                    id="product-service" /> <label for="product-service" class="checkbox-custom-label">Is the
+                                    id="product-service" /> <label for="product-service"
+                                    class="checkbox-custom-label">Is the
                                     Product/Service a manufactured entity?</label>
                             </span>
                         </p>
@@ -319,58 +359,65 @@
                                             <label>Stock Unit<span class="red-text">*</span></label>
                                         </div>
                                         <div class="col-sm-6 col-lg-6 mb-15">
-                                            <input type="text" id="stock-unit" class="form-control" placeholder="Amount">
+                                            <input type="text" id="stock-unit" class="form-control"
+                                                placeholder="Amount">
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="col-sm-6">
 
-                                        <div class="row">
-                                            <div class="col-sm-6 col-lg-6 mb-15">
-                                                <label>Input Stock Name<span class="red-text">*</span></label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6 mb-15">
-                                                <input type="text" id="select-stock-nme" class="form-control" placeholder="Select Stock">
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                            <label>Input Stock Name<span class="red-text">*</span></label>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-6 col-lg-6 mb-15">
-                                                <label>Stock Qty.<span class="red-text">*</span></label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6 mb-15">
-                                                <input type="text" id="select-stock-qty" class="form-control" placeholder="Qty.">
-                                            </div>
+                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                            <input type="text" id="select-stock-nme" class="form-control"
+                                                placeholder="Select Stock">
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-6 col-lg-6 mb-15">
-                                                <label>Stock Unit<span class="red-text">*</span></label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6 mb-15">
-                                                <input type="text" id="select-stock-unit" class="form-control" placeholder="Select Unit">
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                            <label>Stock Qty.<span class="red-text">*</span></label>
                                         </div>
+                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                            <input type="text" id="select-stock-qty" class="form-control"
+                                                placeholder="Qty.">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                            <label>Stock Unit<span class="red-text">*</span></label>
+                                        </div>
+                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                            <input type="text" id="select-stock-unit" class="form-control"
+                                                placeholder="Select Unit">
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
                         </form>
                         <p class="mb-15 font-14">
                             <span>
-                                <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label for="stock"
-                                    class="checkbox-custom-label">Continue selling when out of stock?</label>
+                                <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label
+                                    for="stock" class="checkbox-custom-label">Continue selling when out of
+                                    stock?</label>
                             </span>
                         </p>
                         <p class="mb-15 font-14">
                             <span>
-                                <input type="checkbox" class="checkbox-custom" name="return-policy" id="return-policy" /> <label
-                                    for="return-policy" class="checkbox-custom-label">Is this stock eligible for return
+                                <input type="checkbox" class="checkbox-custom" name="return-policy"
+                                    id="return-policy" /> <label for="return-policy" class="checkbox-custom-label">Is
+                                    this stock eligible for return
                                     policy?</label>
                             </span>
                         </p>
                         <p class="mb-15 font-14">
                             <span>
-                                <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" /> <label
-                                    for="variant" class="checkbox-custom-label">Variant? This product has multiple options like
+                                <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" />
+                                <label for="variant" class="checkbox-custom-label">Variant? This product has multiple
+                                    options like
                                     size
                                     or colours etc..</label>
                             </span>
@@ -395,15 +442,18 @@
                                             </div>
                                             <div class="row mb-15">
                                                 <div class="col-sm-6 col-lg-4">
-                                                    <input type="text" class="form-control" placeholder="Ex: Size, Color" id="select-size-color">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Ex: Size, Color" id="select-size-color">
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input type="text" class="form-control" placeholder="Separate options with a comma">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Separate options with a comma">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="javascript:void(0)" class="text-primary mb-15 d-block cp">+ another option</a>
+                                    <a href="javascript:void(0)" class="text-primary mb-15 d-block cp">+ another
+                                        option</a>
                                 </form>
                             </div>
                         </div>
@@ -473,7 +523,8 @@
                                         <label>Service Name <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input id="service-name" class="form-control" type="text" value="Service Dummy Name Furniture">
+                                        <input id="service-name" class="form-control" type="text"
+                                            value="Service Dummy Name Furniture">
                                     </div>
                                 </div>
                                 <div class="row mb-15">
@@ -481,7 +532,8 @@
                                         <label>Service Unit <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <sh-select id="select-service-unit" type="text" placeholder="select Unit"></sh-select>
+                                        <sh-select id="select-service-unit" type="text" placeholder="select Unit">
+                                        </sh-select>
 
                                     </div>
                                 </div>
@@ -490,7 +542,8 @@
                                         <label>Under Group</label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <sh-select id="select-service-under-group" type="text" placeholder="select Group"></sh-select>
+                                        <sh-select id="select-service-under-group" type="text"
+                                            placeholder="select Group"></sh-select>
                                     </div>
                                 </div>
                                 <div class="row mb-15">
@@ -528,24 +581,27 @@
                                                                     class="icon-info text-gray"></i></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="service-inventory-account" class="form-control" type="text" value="">
+                                                            <input id="service-inventory-account" class="form-control"
+                                                                type="text" value="">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-xl-12">
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <label>Low stock alert <span class="red-text"></span> <i class="icon-info text-gray"></i></label>
+                                                            <label>Low stock alert <span class="red-text"></span> <i
+                                                                    class="icon-info text-gray"></i></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
-                                                            <input id="low-stock-report" class="form-control" type="text" value="">
+                                                            <input id="low-stock-report" class="form-control"
+                                                                type="text" value="">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    </div>
+                                </div>
 
                                 <!-- hidden for service content -->
                                 <div hidden class="col-xl-6 col-lg-12 pl-5">
@@ -588,7 +644,8 @@
                                                     <label>Stock Unit <span class="red-text">*</span> </label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <sh-select id="stock-output-unit" placeholder="Enter Qty"></sh-select>
+                                                    <sh-select id="stock-output-unit" placeholder="Enter Qty">
+                                                    </sh-select>
                                                 </div>
                                             </div>
 
@@ -601,13 +658,15 @@
                                             <label>Input Stock Details</label>
                                         </div>
                                         <div class="col-lg-6 col-sm-6 col-xl-4">
-                                            <input type="text" id="input-stock-detail" class="form-control" placeholder="Stock Name">
+                                            <input type="text" id="input-stock-detail" class="form-control"
+                                                placeholder="Stock Name">
                                         </div>
                                         <div class="col-lg-6 col-sm-6 col-xl-4 show-on-mobile">
                                             <label>&nbsp;</label>
                                         </div>
                                         <div class="qty-unit col-sm-6 col-lg-6 col-xl-4">
-                                            <input type="text" id="enter-qty" class="form-control" placeholder="Enter Qty">
+                                            <input type="text" id="enter-qty" class="form-control"
+                                                placeholder="Enter Qty">
                                             <sh-select id="select-stock-unit" placeholder="Select Unit"></sh-select>
                                             <i class="icon-plus pd cp"></i>
                                         </div>
@@ -647,17 +706,19 @@
                                                 </div>
                                                 <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
                                                     <div class="row add-new-field mb-15">
-                                                        <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                id="select-unit" placeholder="Select Unit"></div>
-                                                        <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                id="rate" placeholder="Rate"></div>
+                                                        <div class="col-sm-6 col-6"><input type="text"
+                                                                class="form-control" id="select-unit"
+                                                                placeholder="Select Unit"></div>
+                                                        <div class="col-sm-6 col-6"><input type="text"
+                                                                class="form-control" id="rate" placeholder="Rate"></div>
                                                         <i class="icon-plus pd cursor-pointer"></i>
                                                     </div>
                                                     <div class="row add-new-field">
-                                                        <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                id="select-unit" placeholder="Select Unit"></div>
-                                                        <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                id="rate" placeholder="Rate"></div>
+                                                        <div class="col-sm-6 col-6"><input type="text"
+                                                                class="form-control" id="select-unit"
+                                                                placeholder="Select Unit"></div>
+                                                        <div class="col-sm-6 col-6"><input type="text"
+                                                                class="form-control" id="rate" placeholder="Rate"></div>
                                                         <i class="icon-cross pd cursor-pointer"></i>
                                                     </div>
 
@@ -685,9 +746,11 @@
                                                     <label>Applicable Tax </label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6 pl-0 mb-15">
-                                                    <sh-select id="sales-applicable-tax" placeholder="Select Tax" disabled>
+                                                    <sh-select id="sales-applicable-tax" placeholder="Select Tax"
+                                                        disabled>
                                                     </sh-select>
-                                                    <p class="mt-1"><input id="sales-price-tax" type="checkbox">Price Inclusive
+                                                    <p class="mt-1"><input id="sales-price-tax" type="checkbox">Price
+                                                        Inclusive
                                                         of Tax ?</p>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
@@ -695,17 +758,21 @@
                                                 </div>
                                                 <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
                                                     <div class="row add-new-field mb-15">
-                                                        <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                id="sales-select-unit" placeholder="Select Unit" disabled></div>
-                                                        <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                id="sales-rate" placeholder="Rate" disabled></div>
+                                                        <div class="col-sm-6 col-6"><input type="text"
+                                                                class="form-control" id="sales-select-unit"
+                                                                placeholder="Select Unit" disabled></div>
+                                                        <div class="col-sm-6 col-6"><input type="text"
+                                                                class="form-control" id="sales-rate" placeholder="Rate"
+                                                                disabled></div>
 
                                                     </div>
                                                     <div class="row add-new-field">
-                                                        <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                id="sales-select-unit" placeholder="Select Unit" disabled></div>
-                                                        <div class="col-sm-6 col-6"><input type="text" class="form-control"
-                                                                id="sales-rate" placeholder="Rate" disabled></div>
+                                                        <div class="col-sm-6 col-6"><input type="text"
+                                                                class="form-control" id="sales-select-unit"
+                                                                placeholder="Select Unit" disabled></div>
+                                                        <div class="col-sm-6 col-6"><input type="text"
+                                                                class="form-control" id="sales-rate" placeholder="Rate"
+                                                                disabled></div>
 
                                                     </div>
 
@@ -722,7 +789,8 @@
                         <p class="mb-15 font-14" hidden>
                             <span>
                                 <input type="checkbox" checked class="checkbox-custom" name="product-service"
-                                    id="product-service" /> <label for="product-service" class="checkbox-custom-label">Is the
+                                    id="product-service" /> <label for="product-service"
+                                    class="checkbox-custom-label">Is the
                                     Product/Service a manufactured entity?</label>
                             </span>
                         </p>
@@ -739,7 +807,8 @@
                                                             <label>Output Qty <span class="red-text">*</span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-15">
-                                                            <input type="text" id="output-qty" class="form-control" placeholder="Enter">
+                                                            <input type="text" id="output-qty" class="form-control"
+                                                                placeholder="Enter">
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -747,7 +816,8 @@
                                                             <label>Stock Unit<span class="red-text">*</span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-15">
-                                                            <input type="text" id="stock-unit" class="form-control" placeholder="Amount">
+                                                            <input type="text" id="stock-unit" class="form-control"
+                                                                placeholder="Amount">
                                                         </div>
                                                     </div>
 
@@ -756,11 +826,12 @@
 
                                                     <div class="row">
                                                         <div class="col-sm-6 col-lg-6 mb-15">
-                                                            <label>Input Stock Name<span class="red-text">*</span></label>
+                                                            <label>Input Stock Name<span
+                                                                    class="red-text">*</span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-15">
-                                                            <input type="text" id="select-stock-nme" class="form-control"
-                                                                placeholder="Select Stock">
+                                                            <input type="text" id="select-stock-nme"
+                                                                class="form-control" placeholder="Select Stock">
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -768,7 +839,8 @@
                                                             <label>Stock Qty.<span class="red-text">*</span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-15">
-                                                            <input type="text" id="select-stock-qty" class="form-control" placeholder="Qty.">
+                                                            <input type="text" id="select-stock-qty"
+                                                                class="form-control" placeholder="Qty.">
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -776,13 +848,13 @@
                                                             <label>Stock Unit<span class="red-text">*</span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-15">
-                                                            <input type="text" id="select-stock-unit" class="form-control"
-                                                                placeholder="Select Unit">
+                                                            <input type="text" id="select-stock-unit"
+                                                                class="form-control" placeholder="Select Unit">
                                                         </div>
                                                     </div>
 
                                                 </div>
-                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -791,22 +863,25 @@
                         <!-- hidden for service content -->
                         <p hidden class="mb-15 font-14">
                             <span>
-                                <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label for="stock"
-                                    class="checkbox-custom-label">Continue selling when out of stock?</label>
+                                <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label
+                                    for="stock" class="checkbox-custom-label">Continue selling when out of
+                                    stock?</label>
                             </span>
                         </p>
                         <!-- hidden for service content -->
-                        <p  hidden class="mb-15 font-14">
+                        <p hidden class="mb-15 font-14">
                             <span>
-                                <input type="checkbox" class="checkbox-custom" name="return-policy" id="return-policy" /> <label
-                                    for="return-policy" class="checkbox-custom-label">Is this stock eligible for return
+                                <input type="checkbox" class="checkbox-custom" name="return-policy"
+                                    id="return-policy" /> <label for="return-policy" class="checkbox-custom-label">Is
+                                    this stock eligible for return
                                     policy?</label>
                             </span>
                         </p>
                         <p class="mb-15 font-14">
                             <span>
-                                <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" /> <label
-                                    for="variant" class="checkbox-custom-label">Variant? This product has multiple options like
+                                <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" />
+                                <label for="variant" class="checkbox-custom-label">Variant? This product has multiple
+                                    options like
                                     size
                                     or colours etc..</label>
                             </span>
@@ -827,13 +902,15 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Category</label>
-                                                            <textarea type="text" class="form-control" placeholder="xs, x, m"
+                                                            <textarea type="text" class="form-control"
+                                                                placeholder="xs, x, m"
                                                                 id="service-select-category"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-15">
                                                         <div class="col-sm-6 col-lg-6 mb-15">
-                                                            <input type="text" class="form-control" placeholder="Ex: Size, Color"
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Ex: Size, Color"
                                                                 id="service-select-size-color">
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
@@ -845,7 +922,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="javascript:void(0)" class="text-primary mb-15 d-block cp">+ another option</a>
+                                    <a href="javascript:void(0)" class="text-primary mb-15 d-block cp">+ another
+                                        option</a>
                                 </form>
                             </div>
                         </div>
@@ -861,7 +939,8 @@
                                                     <label>SAC Code</label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
-                                                    <input type="text" class="form-control" placeholder="Enter Code" id="service-sac-code">
+                                                    <input type="text" class="form-control" placeholder="Enter Code"
+                                                        id="service-sac-code">
                                                 </div>
                                             </div>
                                             <div class="row mb-15">
@@ -883,37 +962,38 @@
         </div>
         <!-- combo content start -->
         <div class="combo-detail-content" hidden>
-                <div class="mb-15">
-                    <div class="col-xl-8 col-lg-12">
-                        <div class="row flex-column-reverse flex-md-row">
-                            <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                                <form>
-                                    <div class="row mb-15">
-                                        <div class="col-sm-12 col-md-4 col-lg-6">
-                                            <label>Combo Name<span class="red-text">*</span></label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6">
-                                            <input id="combo-name" class="form-control" type="text" placeholder="Emter Name">
-                                        </div>
+            <div class="mb-15">
+                <div class="col-xl-8 col-lg-12">
+                    <div class="row flex-column-reverse flex-md-row">
+                        <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                            <form>
+                                <div class="row mb-15">
+                                    <div class="col-sm-12 col-md-4 col-lg-6">
+                                        <label>Combo Name<span class="red-text">*</span></label>
                                     </div>
-                                    <div class="row mb-15">
-                                        <div class="col-sm-12 col-md-4 col-lg-6">
-                                            <label>Unit<span class="red-text">*</span></label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6">
-                                        <sh-select id="select-combo-unit" placeholder="Select Unit"></sh-select>
-                                        </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <input id="combo-name" class="form-control" type="text"
+                                            placeholder="Emter Name">
                                     </div>
-                                </form>
-                            </div>
-                            <div class="col-md-4 col-lg-4 col-xl-6 col-12">
-                                <div class="add-image">
-                                    <img src="{{imgPath}}add-image.svg" width="90px" height="90px">
                                 </div>
+                                <div class="row mb-15">
+                                    <div class="col-sm-12 col-md-4 col-lg-6">
+                                        <label>Unit<span class="red-text">*</span></label>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <sh-select id="select-combo-unit" placeholder="Select Unit"></sh-select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-xl-6 col-12">
+                            <div class="add-image">
+                                <img src="{{imgPath}}add-image.svg" width="90px" height="90px">
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             <div class="bg-white px-3 py-3">
                 <div class="table-responsive">
                     <table class="table combo-table font-14">
@@ -930,8 +1010,10 @@
                                 <td width="3%">
                                     <img src="{{imgPath}}add-image.svg" width="60" height="60">
                                 </td>
-                                <td width="20%"><input id="select-product" type="text" class="form-control" placeholder="Product Name/Service"></td>
-                                <td width="20%"><input id="unit-field" type="text" class="form-control" placeholder="Unit"></td>
+                                <td width="20%"><input id="select-product" type="text" class="form-control"
+                                        placeholder="Product Name/Service"></td>
+                                <td width="20%"><input id="unit-field" type="text" class="form-control"
+                                        placeholder="Unit"></td>
                                 <td width="16%"><input id="value-field" type="text" class="form-control" value="2"></td>
                                 <td width="20%">0.00</td>
                                 <td width="20%" class="relative">0.00
@@ -944,7 +1026,8 @@
                                 <td width="3%">
                                     <img src="{{imgPath}}add-image.svg" width="60" height="60">
                                 </td>
-                                <td width="20%"><input type="text" class="form-control" placeholder="Enter Stock Name"></td>
+                                <td width="20%"><input type="text" class="form-control" placeholder="Enter Stock Name">
+                                </td>
                                 <td width="20%"><input type="text" class="form-control" placeholder="Unit"></td>
                                 <td width="16%"><input type="text" class="form-control" value="2"></td>
                                 <td width="20%">0.00</td>
@@ -967,12 +1050,13 @@
         <div class="bulk-create-content" hidden>
             <div class="container-fluid">
                 <div class="bulk-create-head mb-15 d-flex">
-                    <div class="button-group relative" dropdown placement="top left"  [autoClose]="false">
+                    <div class="button-group relative" dropdown placement="top left" [autoClose]="false">
                         <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
                             aria-controls="dropdown-basic">
                             <i class="icon-options"></i>
                         </button>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" aria-labelledby="button-basic">
+                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu"
+                            aria-labelledby="button-basic">
                             <li role="menuitem">
                                 <a class="dropdown-item pl-1" href="javascript:void(0);">
                                     <span class="d-block">
@@ -1048,7 +1132,7 @@
                                     <span class="d-block">
                                         <input id="check-bar-code" class="checkbox-custom" type="checkbox">
                                         <label for="check-bar-code" class="checkbox-custom-label pl-0">
-                                        Barcode
+                                            Barcode
                                         </label>
                                     </span>
                                 </a>
@@ -1108,7 +1192,8 @@
                                     <input type="text" class="from-control" id="stock-name-field" [readonly]="editBulk">
                                 </td>
                                 <td data-title="Unique Name">
-                                    <input type="text" placeholder="Enter" class="from-control" id="stock-unique-name" [readonly]="editBulk">
+                                    <input type="text" placeholder="Enter" class="from-control" id="stock-unique-name"
+                                        [readonly]="editBulk">
                                 </td>
                                 <td data-title="Inventory Type">
                                     <sh-select placeholder="Select" [readonly]="editBulk"></sh-select>
@@ -1128,8 +1213,11 @@
                                 <td data-title="Opening Qty">
                                     <sh-select placeholder="Select"></sh-select>
                                 </td>
-                                <td data-title="Opening Amount"><input type="text" placeholder="Enter" class="from-control" id="opening-amount"></td>
-                                <td data-title="Purchase Account Name"><sh-select placeholder="Select" id="purchase-account-name"></sh-select></td>
+                                <td data-title="Opening Amount"><input type="text" placeholder="Enter"
+                                        class="from-control" id="opening-amount"></td>
+                                <td data-title="Purchase Account Name">
+                                    <sh-select placeholder="Select" id="purchase-account-name"></sh-select>
+                                </td>
                                 <td data-title="Linked Tax">
                                     <sh-select placeholder="Select" id="purchase-linked-tax"></sh-select>
                                 </td>
@@ -1162,7 +1250,7 @@
                                 </td>
                                 <td data-title="Expiry Date">
                                     <!-- <input type="text" placeholder="Enter" class="from-control" id="expiry-date"> -->
-                                    <giddh-datepicker name="invoiceLockDate" ></giddh-datepicker>
+                                    <giddh-datepicker name="invoiceLockDate"></giddh-datepicker>
                                 </td>
                             </tr>
 
@@ -1171,7 +1259,8 @@
                 </div>
                 <div class="add-new-rows my-3">
                     <i class="icon-plus text-primary pd cursor-pointer mr-1"></i>
-                    <span class="d-flex align-items-center"><input class="form-control mr-1" id="fill-number" placeholder="0">
+                    <span class="d-flex align-items-center"><input class="form-control mr-1" id="fill-number"
+                            placeholder="0">
                         <span class="font-14">More rows at bottom</span>
                     </span>
                 </div>
@@ -1185,7 +1274,8 @@
         <div class="d-flex">
             <div class="button-group">
                 <button id="clear-btn" class="btn btn-primary minwidth-100 bdr-radius-50"> Clear </button>
-                <button id="create-new-btn" class="btn btn-success minwidth-100 bdr-radius-50" disabled> Create New </button>
+                <button id="create-new-btn" class="btn btn-success minwidth-100 bdr-radius-50" disabled> Create New
+                </button>
             </div>
         </div>
     </div>

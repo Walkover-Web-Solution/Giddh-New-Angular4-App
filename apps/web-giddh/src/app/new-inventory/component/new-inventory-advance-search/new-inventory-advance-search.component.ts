@@ -83,7 +83,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
         }
     }
     constructor(private _breakPointObservar: BreakpointObserver,
-        private generalService: GeneralService, private modalService: BsModalService){
+        private generalService: GeneralService, private modalService: BsModalService) {
 
     }
     public ngOnInit() {

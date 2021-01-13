@@ -10,7 +10,7 @@
     max-width: 760px;
     z-index: 99999;
 }
- #close {
+#close {
     position: absolute;
     left: auto;
     right: 10px;
@@ -60,60 +60,59 @@
     text-align: center;
     margin: 0 auto;
 }
-.header-create-group{
-    .form-header{
+.header-create-group {
+    .form-header {
         display: flex;
     }
 }
-.create-group-aside-body{
+.create-group-aside-body {
     padding: 15px 15px 0;
-        label{
-            font-size: 14px;
+    label {
+        font-size: 14px;
+    }
+    .create-group-block {
+        .create-group-top {
+            padding-bottom: 15px;
+            img {
+                width: 80px;
+            }
+            .select-type {
+                display: flex;
+                align-items: center;
+            }
         }
-    .create-group-block{
-
-    .create-group-top{
-        padding-bottom: 15px;
-        img{
-            width: 80px;
+        .bg-white {
+            height: 100vh;
         }
-        .select-type{
-            display: flex;
-            align-items: center;
+        .wrapper-contain {
+            .other-group {
+                margin-top: 20px;
+                margin-bottom: 70px;
+            }
         }
     }
-    .bg-white{
-        height: 100vh;
-    }
-    .wrapper-contain{
-        .other-group {
-            margin-top: 20px;
-            margin-bottom: 70px;
-        }
-        }
-    }
-    .sales-purchase-details{
+    .sales-purchase-details {
         .select-puchase-info {
             background-color: $whisper-color;
             padding: 6px 10px;
-            font-family: 'opensans-semibold';
+            font-family: "opensans-semibold";
         }
-        .icon-plus{
+        .icon-plus {
             color: $primary;
         }
     }
-    .add-another-option{
+    .add-another-option {
         color: $primary;
     }
-    .icon-plus{
+    .icon-plus {
         color: $primary;
     }
     p.product-made-by {
-        font-family: 'opensans-semibold';
+        font-family: "opensans-semibold";
         position: relative;
         margin-bottom: 15px;
         padding-top: 5px;
-        &:after{
+        &:after {
             position: absolute;
             content: "";
             width: 80%;
@@ -121,7 +120,6 @@
             border: 1px solid $gainsboro;
             top: 17px;
             left: 21%;
-
         }
     }
 }
@@ -140,32 +138,33 @@
     :host .aside-pane {
         max-width: 370px;
     }
-    .create-group-aside-body{
-        .create-group-block{
-             .bg-white{
+    .create-group-aside-body {
+        .create-group-block {
+            .bg-white {
                 height: auto;
-                .sales-purchase-details{
+                .sales-purchase-details {
                     margin-top: 0 !important;
-                    .select-puchase-info{
+                    .select-puchase-info {
                         font-size: 14px;
                     }
                 }
-             }
-            .create-group-top{
-                img{
+            }
+            .create-group-top {
+                img {
                     width: 40px;
                 }
             }
-            .unit-rate-fields{
+            .unit-rate-fields {
                 flex-direction: column;
                 justify-content: flex-start;
                 text-align: left;
                 align-items: flex-start !important;
-                .unit, .rate{
+                .unit,
+                .rate {
                     margin-right: 0 !important;
                     width: 100%;
                 }
-                label.d-block{
+                label.d-block {
                     display: none !important;
                 }
             }

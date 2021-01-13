@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import {  takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 @Component({
     selector: 'about-group-detail',
@@ -43,7 +43,7 @@ export class AboutGroupDetailComponent implements OnInit {
 
     constructor(
         private generalService: GeneralService, private modalService: BsModalService,
-        private _breakPointObservar: BreakpointObserver,) {
+        private breakPointObservar: BreakpointObserver) {
     }
 
     /*datepicker funcation*/
@@ -93,7 +93,7 @@ export class AboutGroupDetailComponent implements OnInit {
         /* added image path */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-        this._breakPointObservar.observe([
+        this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;

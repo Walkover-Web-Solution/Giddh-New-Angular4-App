@@ -1,68 +1,69 @@
 @import "../../../../assets/css/color.scss";
 
-.adjust-group-page{
-    .icon-cross{
+.adjust-group-page {
+    .icon-cross {
         position: absolute;
         right: 10px;
         top: 3px;
         padding: 10px;
         z-index: 10;
     }
-    .adjust-field-wrapper{
+    .adjust-field-wrapper {
         min-height: 73vh;
-        .add-icon-delete{
+        .add-icon-delete {
             position: relative;
-            i{
+            i {
                 position: absolute;
                 right: -40px;
                 top: 0px;
                 cursor: pointer;
                 padding: 10px;
-                &.icon-plus{
+                &.icon-plus {
                     color: $primary;
                 }
-                &.icon-trash{
+                &.icon-trash {
                     color: $gray;
                 }
             }
         }
-        .custom-datepicker{
-            input
-            {
+        .custom-datepicker {
+            input {
                 width: 100% !important;
                 max-width: 100%;
                 text-align: left;
                 padding-left: 35px !important;
             }
         }
-        textarea{
+        textarea {
             min-height: 90px;
         }
-        .vector-image{
+        .vector-image {
             position: absolute;
             right: 15px;
             top: 0;
         }
-        .giddh-table{
+        .giddh-table {
             max-width: 1000px;
             width: 100%;
-            textarea{
+            textarea {
                 min-height: 65px;
             }
         }
-        .giddh-table tr, .giddh-table td, .giddh-table th{
+        .giddh-table tr,
+        .giddh-table td,
+        .giddh-table th {
             border: 1px solid $gainsboro;
             vertical-align: top !important;
         }
-        .add-line-bulk-item{
+        .add-line-bulk-item {
             color: $gray;
-            a{
+            a {
                 color: $deep-sky-blue;
             }
         }
     }
 }
-.inventory-footer{
+.inventory-footer {
     background-color: $whisper-color;
     z-index: 3;
     width: calc(100% - 215px);
@@ -76,25 +77,26 @@
     width: 100%;
     padding-left: 15px;
 }
-@media(max-width:767px){
-    .adjust-group-page{
-        .adjust-field-wrapper{
-             .giddh-table td, .giddh-table th{
-                    min-width: 160px;
-                    &:first-child{
-                        min-width: auto;
-                    }
-                    &:nth-child(2){
-                        min-width: 230px;
-                    }
+@media (max-width: 767px) {
+    .adjust-group-page {
+        .adjust-field-wrapper {
+            .giddh-table td,
+            .giddh-table th {
+                min-width: 160px;
+                &:first-child {
+                    min-width: auto;
+                }
+                &:nth-child(2) {
+                    min-width: 230px;
                 }
             }
-        form{
-            p{
+        }
+        form {
+            p {
                 margin-right: 40px !important;
             }
         }
-        .icon-cross{
+        .icon-cross {
             position: absolute;
             right: -20px;
             top: -10px;
@@ -102,14 +104,14 @@
         }
     }
 }
-@media(max-width:575px){
-   .adjust-group-page{
-        .adjust-field-wrapper{
-            .add-icon-delete{
-                    width: calc(100% - 30px);
+@media (max-width: 575px) {
+    .adjust-group-page {
+        .adjust-field-wrapper {
+            .add-icon-delete {
+                width: calc(100% - 30px);
             }
         }
-        .icon-cross{
+        .icon-cross {
             right: 0;
         }
     }
