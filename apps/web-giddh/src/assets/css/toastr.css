@@ -101,7 +101,7 @@ button.toast-close-button {
     overflow: hidden;
     margin: 0 0 6px;
     padding: 15px 15px 15px 50px;
-    width: 300px;
+    width: 310px;
     -moz-border-radius: 3px 3px 3px 3px;
     -webkit-border-radius: 3px 3px 3px 3px;
     border-radius: 3px 3px 3px 3px;
@@ -175,6 +175,9 @@ button.toast-close-button {
     height: 4px;
     background-color: #000000;
     opacity: 0.4;
+}
+.toast-error .toast-title{
+    font-size: 13px;
 }
 /*Responsive Design*/
 @media all and (max-width: 240px) {
