@@ -292,7 +292,7 @@
                                         <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                             <ng-container *ngFor="let txn of item.transactions;">
                                                 <ng-container *ngIf="txn.type === 'DEBIT'">
-                                                    <tr class="ledger-row row" [ngClass]="{'compoundEntry': txn.id === lc.selectedBankTxnUniqueName}">
+                                                    <tr class="ledger-row row" (mouseenter)="txn.showDropdown = true;" (mouseleave)="txn.showDropdown = false;" [ngClass]="{'compoundEntry': txn.id === lc.selectedBankTxnUniqueName}">
                                                         <td class="col-3 col-md-3 col-lg-3">
                                                             <div class="d-flex align-items-center">
                                                                 <span class="pl-05 checkbox-span">
@@ -306,8 +306,8 @@
                                                         </td>
                                                         <td class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger">
                                                             <div class="w-100" *ngIf="txn.type === 'DEBIT'" (click)="showBankLedgerPopup(txn, item);">
-                                                                <span>{{txn.particular ? (txn.particular | json) : 'Select Accounts'}}</span>
-                                                                <!-- <sh-select class="transaction-list-sh-select" [options]="searchResults" [(ngModel)]="txn.particular" [isPaginationEnabled]="true"
+                                                                <span [ngClass]="{'account-placeholder': true, 'account-placeholder-text': txn.selectedAccount && txn.selectedAccount.name}" *ngIf="!txn.showDropdown">{{txn.selectedAccount ? (txn.selectedAccount.name) : 'Select Accounts'}}</span>
+                                                                <sh-select *ngIf="txn.showDropdown" class="transaction-list-sh-select" [options]="searchResults" [(ngModel)]="txn.particular" [isPaginationEnabled]="true"
                                                                     (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                                     [notFoundMsg]="noResultsFoundLabel"
                                                                     [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
@@ -338,7 +338,7 @@
                                                                             </a>
                                                                         </ng-container>
                                                                     </ng-template>
-                                                                </sh-select> -->
+                                                                </sh-select>
                                                                 <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
                                                                     <li>Create New Account</li>
                                                                 </ul>
@@ -383,7 +383,7 @@
                                         <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                             <ng-container *ngFor="let txn of item.transactions;">
                                                 <ng-container *ngIf="txn.type === 'CREDIT'">
-                                                    <tr class="ledger-row row">
+                                                    <tr class="ledger-row row" (mouseenter)="txn.showDropdown = true;" (mouseleave)="txn.showDropdown = false;">
                                                         <td class="col-3 col-md-3 col-lg-3">
                                                             <div class="d-flex align-items-center">
                                                                 <span class="pl-05 checkbox-span">
@@ -395,10 +395,10 @@
                                                                 </span>
                                                             </div>
                                                         </td>
-                                                        <td class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
+                                                        <td class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger">
                                                             <div class="w-100" *ngIf="txn.type === 'CREDIT'" (click)="showBankLedgerPopup(txn, item);">
-                                                                <span>{{txn.particular ? (txn.particular | json) : 'Select Accounts'}}</span>
-                                                                <!-- <sh-select class="transaction-list-sh-select" [options]="searchResults" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
+                                                                <span [ngClass]="{'account-placeholder': true, 'account-placeholder-text': txn.selectedAccount && txn.selectedAccount.name}" *ngIf="!txn.showDropdown">{{txn.selectedAccount ? (txn.selectedAccount.name) : 'Select Accounts'}}</span>
+                                                                <sh-select *ngIf="txn.showDropdown" class="transaction-list-sh-select" [options]="searchResults" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                                                                     [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
                                                                     (dynamicSearchedQuery)="onSearchQueryChanged($event)" [notFoundMsg]="noResultsFoundLabel"
                                                                     [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
@@ -429,7 +429,7 @@
                                                                             </a>
                                                                         </ng-container>
                                                                     </ng-template>
-                                                                </sh-select> -->
+                                                                </sh-select>
                                                                 <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
                                                                     <li>Create New Account</li>
                                                                 </ul>

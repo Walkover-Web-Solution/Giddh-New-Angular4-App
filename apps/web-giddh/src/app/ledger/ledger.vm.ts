@@ -414,6 +414,7 @@ export class TransactionVM {
     public advanceReceiptAmount?: number = 0;
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
+    public showDropdown?: boolean = false;
 }
 
 export interface IInventory {
