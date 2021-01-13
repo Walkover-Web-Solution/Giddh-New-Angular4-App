@@ -177,6 +177,9 @@ button.toast-close-button {
     background-color: #000000;
     opacity: 0.4;
 }
+.toast-error .toast-title{
+    font-size: 13px;
+}
 /*Responsive Design*/
 @media all and (max-width: 240px) {
     #toast-container .toast.div {
@@ -215,10 +218,4 @@ button.toast-close-button {
 }
 .toast-title {
     word-break: break-word;
-}
-.toast-error .toast-title{
-    font-size: 13px;
-}
-.toast-error .toast-close-button{
-        top: 0;
 }
