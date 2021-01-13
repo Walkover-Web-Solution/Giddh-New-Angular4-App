@@ -35,7 +35,7 @@ import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST, reassi
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { RESTRICTED_BRANCH_ROUTES, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -272,6 +272,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if(!event.url.includes("/pages/settings") && !event.url.includes("/pages/user-details") && this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.removeSessionStorage("previousPage");
                 }
+                if (this.subBranchDropdown) {
+                    this.subBranchDropdown.hide();
+                }
                 this.addClassInBodyIfPageHasTabs();
             }
             if (event instanceof NavigationEnd) {
@@ -359,6 +362,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
                             this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            if (!this.activeCompanyForDb) {
+                                this.activeCompanyForDb = new CompAidataModel();
+                            }
                             this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
                             this.activeCompanyForDb.uniqueName = this.currentBranch ? this.currentBranch.uniqueName : ''
                         }

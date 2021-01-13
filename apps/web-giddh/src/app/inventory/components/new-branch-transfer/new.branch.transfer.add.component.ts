@@ -55,7 +55,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public branchTransferMode: string;
     @Input() public editBranchTransferUniqueName: string;
-    @Output() public hideModal: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public hideModal: EventEmitter<boolean> = new EventEmitter(false);
     @ViewChild('productSkuCode', {static: true}) public productSkuCode;
     @ViewChild('productHsnNumber', {static: true}) public productHsnNumber;
     @ViewChild('generateTransporterForm', {static: true}) public generateNewTransporterForm: NgForm;
@@ -194,8 +194,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.destroyed$.complete();
     }
 
-    public closeBranchTransferPopup(): void {
-        this.hideModal.emit();
+    public closeBranchTransferPopup(isNoteCreatedSuccessfully?: boolean): void {
+        this.hideModal.emit(isNoteCreatedSuccessfully);
     }
 
     public toggleBodyClass(): void {
@@ -1003,7 +1003,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         } else {
                             this._toasty.successToast("Delivery Challan has been updated successfully.", "Success");
                         }
-                        this.closeBranchTransferPopup();
+                        this.closeBranchTransferPopup(true);
                         this._router.navigate(['/pages', 'inventory', 'report']);
                     } else {
                         this._toasty.errorToast(res.message, res.code);
@@ -1025,7 +1025,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         } else {
                             this._toasty.successToast("Delivery Challan has been saved successfully.", "Success");
                         }
-                        this.closeBranchTransferPopup();
+                        this.closeBranchTransferPopup(true);
                         this._router.navigate(['/pages', 'inventory', 'report']);
                     } else {
                         this._toasty.errorToast(res.message, res.code);
@@ -1369,6 +1369,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             setTimeout(() => {
                 if (this.defaultSource) {
                     this.defaultSource.show('');
+                } else if (this.sourceWarehouse) {
+                    // Delivery challan, focus on source warehouse instead
+                    this.sourceWarehouse.show('');
                 }
             }, 100);
         }
