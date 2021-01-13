@@ -820,7 +820,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * @param {boolean} isNoteCreatedSuccessfully True, if new note was created successfully, load the inventory report
      * @memberof InventoryGroupStockReportComponent
      */
-    hideModal(isNoteCreatedSuccessfully?: boolean) {
+    public hideModal(isNoteCreatedSuccessfully?: boolean): void {
         this.modalRef.hide();
         if (isNoteCreatedSuccessfully) {
             this.getGroupReport(true);
