@@ -83,7 +83,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: #efefef;
+    background: $lavender;
 }
 
 .account-detail-custom-title {
@@ -251,8 +251,8 @@ tr.aging-table-top td {
 .btn-primary:active,
 .open>.dropdown-toggle.btn-primary {
     color: $night-rider;
-    background-color: $whisper-color;
-    border-color: $whisper-color;
+    background-color: $lavender;
+    border-color: $lavender;
     box-shadow: none !important;
 }
 

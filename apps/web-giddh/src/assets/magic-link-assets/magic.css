@@ -721,7 +721,7 @@ body {
 
 .attachment-medium{
     max-width: 100%; 
-    height: auto;
+    height: auto !important;
 }
 
 .ledger-footer-1:nth-child(2){
