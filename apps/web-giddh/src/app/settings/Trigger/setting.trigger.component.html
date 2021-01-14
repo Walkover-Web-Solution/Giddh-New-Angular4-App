@@ -15,7 +15,9 @@
                 </div>
                 <div class="form-group col-lg-4 col-md-6 col-xs-12">
                     <label>Select Entity</label><br>
-                    <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async" [options]="entityOptions$ | async" name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName" [placeholder]="'Select Entity'" [ItemHeight]="33">
+                    <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async" [options]="entityOptions$ | async" name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName" [placeholder]="'Select Entity'" [ItemHeight]="33"
+                    [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                        (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)">
                     </sh-select>
                 </div>
                 <div class="form-group col-lg-4 col-md-6 col-xs-12">
