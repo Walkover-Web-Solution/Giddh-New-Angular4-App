@@ -141,7 +141,7 @@ body.ununresponsive {
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
     background: #221f1f none repeat scroll 0 0;
-    border: 7px solid $bright-red;
+    border: 7px solid $red;
     border-radius: 50%;
     box-shadow: 0 -10px 0 14px $white inset;
     box-sizing: border-box;
@@ -194,7 +194,7 @@ button.close {
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
-    color: $dull-orange;
+    color: $light-maroon;
     text-shadow: none;
     opacity: 1;
 }
@@ -204,7 +204,7 @@ button.close {
 } */
 
 .email {
-    background: $cerulean;
+    background: $deep-sky-blue-hover
 }
 
 /************* end login page *************/
@@ -324,13 +324,13 @@ small {
 
 .login-option,
 .login-option a {
-    color: $royal-blue;
+    color: $primary;
     margin-top: 55px;
     font-weight: 500;
 }
 
 .login-option a {
-    border-bottom: 2px dotted $royal-blue;
+    border-bottom: 2px dotted $primary;
 }
 
 .slide-content h1 {
@@ -400,7 +400,7 @@ small {
 }
 
 .hash-tag {
-    color: $red-shade;
+    color: $red;
 }
 
 .blockquote-ico {

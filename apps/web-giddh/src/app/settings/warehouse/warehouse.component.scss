@@ -68,7 +68,7 @@
     .btn-group .btn {
         background-color: transparent;
         padding: 0;
-        color: $gray-44;
+        color: $gray;
         margin-right: 0;
         font-size: 20px;
         position: relative;
@@ -121,7 +121,7 @@ span.set-as-default {
     white-space: initial;
     width: 100%;
 }
-.about-warehaouse {
+.about-warehouse {
     margin: 0 0 15px;
     display: flex;
     flex-direction: column;
@@ -130,7 +130,7 @@ span.set-as-default {
     }
 }
 .gray-text {
-    color: $aluminum;
+    color: $gray;
     font-size: 12px;
 }
 .set-as-default i.icon-favorite-selected {

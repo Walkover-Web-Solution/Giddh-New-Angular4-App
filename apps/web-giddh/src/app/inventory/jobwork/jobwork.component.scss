@@ -23,7 +23,7 @@
 :host ::ng-deep .fb-1-container .date-range-picker {
     min-width: 140px;
     font-weight: bolder;
-    border-bottom: 1px dotted $gray-44;
+    border-bottom: 1px dotted $gray;
     padding-bottom: 2px !important;
 }
 .flex-fill {
@@ -79,10 +79,10 @@
 /* class name same as what we are getting data */
 
 .Inward.Note {
-    color: $dark-green;
+    color: $light-green;
 }
 .Outward.Note {
-    color: $electric-blue;
+    color: $primary;
 }
 .Transfer.Note {
     color: $dark-gray;

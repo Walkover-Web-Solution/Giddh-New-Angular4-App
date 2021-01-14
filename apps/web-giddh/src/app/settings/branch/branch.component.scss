@@ -102,7 +102,7 @@
     label {
         font-family: "opensans-semibold";
         margin-bottom: 10px;
-        color: $extra-dark-gray;
+        color: $night-rider;
     }
     .total-amount {
         width: 70%;
@@ -289,9 +289,9 @@
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    color: $extra-dark-gray;
-    background-color: $lavender-dark;
-    border-color: $lavender-dark;
+    color: $night-rider;
+    background-color: $lavender;
+    border-color: $lavender;
     box-shadow: none !important;
 }
 

@@ -489,7 +489,7 @@ body {
     background: #fff;
 }
 
-.transBg {
+.transparent-bg {
     background: 0 0;
 }
 
@@ -721,7 +721,7 @@ body {
 
 .attachment-medium{
     max-width: 100%;
-    height: auto;
+    height: auto !important;
 }
 
 .ledger-footer-1.float-right{

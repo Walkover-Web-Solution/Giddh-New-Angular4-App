@@ -66,7 +66,18 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
           -webkit-user-select: none;
           -ms-user-select: none;
           user-select: none;
-      }
+	  }
+	  
+	  .fa-percent{
+		top: 9px;
+		right: 6px;
+		color: #acb0b9;
+	  }
+	  .discount-name-detail{
+		list-style: none;
+		overflow: auto;
+		max-height: 100px;
+	  }
   `]
 })
 

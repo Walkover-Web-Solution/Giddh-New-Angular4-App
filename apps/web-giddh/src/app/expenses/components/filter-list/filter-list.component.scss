@@ -11,7 +11,7 @@
 }
 
 .filter-list .inner-filter-list li:hover {
-    background: $gray-94;
+    background: $whisper-light;
     transition: 0.5s all ease;
 }
 
@@ -35,5 +35,5 @@
 }
 
 .filter-list .activeItem {
-    background-color: $gray-94;
+    background-color: $whisper-light;
 }

@@ -693,7 +693,7 @@
                             <input type="text" [disabled]="true" placeholder="Tax" [value]="totalTax"
                                 class="form-control text-right" decimalDigitsDirective [DecimalPlaces]="2" />
 
-                            <!-- <sales-tax-list class="salesTax" [showTaxPopup]="false" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+                            <!-- <sales-tax-list class="sales-tax" [showTaxPopup]="false" (selectedTaxEvent)="selectedTaxEvent($event)" (closeOtherPopupEvent)="closeDiscountPopup()" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
                             </sales-tax-list> -->
                         </td>
                         <td *ngIf="transaction.category !== 'income'">&nbsp;</td>

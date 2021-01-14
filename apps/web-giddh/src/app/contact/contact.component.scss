@@ -83,7 +83,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: $dark-white-smoke;
+    background: $lavender;
 }
 
 .account-detail-custom-title {
@@ -97,7 +97,7 @@
 }
 
 .custom-detail h4 {
-    color: $gray-44;
+    color: $dark-gray;
     margin-top: 7px;
     font-size: 14px !important;
     font-family: opensans-regular !important;
@@ -115,7 +115,7 @@ ul.list-unstyled li a {
     width: 257px;
     border: 1px solid $pink-swan;
     border-radius: 4px;
-    box-shadow: 0 7px 24px $black-shadow;
+    box-shadow: 0 7px 24px $black-russian;
     top: -2px;
 }
 
@@ -250,8 +250,8 @@ tr.aging-table-top td {
 .btn-primary:active,
 .open>.dropdown-toggle.btn-primary {
     color: $night-rider;
-    background-color: $lavender-dark;
-    border-color: $lavender-dark;
+    background-color: $lavender;
+    border-color: $lavender;
     box-shadow: none !important;
 }
 
@@ -284,8 +284,8 @@ i.icon-options:hover {
 
 .search-field input {
     width: 235px;
-    background-color: $solitude-dark !important;
-    border-color: $solitude-dark !important;
+    background-color: $gray-90 !important;
+    border-color: $gray-90 !important;
 }
 
 .search-field input:focus {

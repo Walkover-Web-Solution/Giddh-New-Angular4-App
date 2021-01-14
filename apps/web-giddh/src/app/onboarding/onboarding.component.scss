@@ -8,7 +8,7 @@
     }
 
     .welcome-container hr {
-        border: 0.5px solid $gray-44;
+        border: 0.5px solid $gray;
         background: transparent;
         width: 98%;
         margin: auto;
@@ -51,7 +51,7 @@
         background: $white;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         padding: 9px 15px;
-        color: $cerulean;
+        color: $deep-sky-blue-hover;
         font-size: 16px;
         margin-top: 15px;
         display: block;
@@ -61,7 +61,7 @@
     .manage-invoice li a i {
         margin-right: 20px;
         font-size: 23px;
-        color: $matterhorn;
+        color: $davy-grey;
     }
 
     .manage-invoice li a:hover {
@@ -82,23 +82,23 @@
     }
 
     p {
-        color: $spun-pearl;
+        color: $pink-swan;
     }
 
     .right-section span {
         font-size: 14px;
-        color: $spun-pearl;
+        color: $silver;
         display: block;
     }
 
     .btn-default {
-        background: $whisper-new;
+        background: $whisper;
         color: $success-green;
         padding: 8px 16px;
     }
 
     .text-dark {
-        color: $gray-44;
+        color: $gray;
         font-size: 20px;
     }
 
@@ -109,12 +109,12 @@
     .your-account span {
         display: block;
         font-size: 16px;
-        color: $gray-red;
+        color: $nobel;
         margin-bottom: 10px;
     }
 
     .your-account p {
-        color: $dark-gray-red;
+        color: $nero;
         font-size: 16px;
     }
 
@@ -122,7 +122,7 @@
         color: $success-green !important;
     }
 
-    .importData-blocks .d-inline-flex {
+    .import-data-blocks .d-inline-flex {
         display: inline-flex;
         width: 130px;
         height: 100px;
@@ -136,17 +136,17 @@
         flex-direction: column;
     }
 
-    .importData-blocks {
+    .import-data-blocks {
         padding-top: 30px;
         padding-bottom: 40px;
     }
 
-    .importData-blocks img {
+    .import-data-blocks img {
         width: 60px;
     }
 
-    .importData-blocks a p {
-        color: $electric-blue;
+    .import-data-blocks a p {
+        color: $primary;
     }
 
     .right-section {
@@ -199,7 +199,7 @@
         position: absolute;
         top: 4px;
         right: 10px;
-        color: $gray-black !important;
+        color: $night-rider !important;
         cursor: pointer;
         font-weight: bold;
         text-decoration: none !important;
@@ -251,7 +251,7 @@
     }
 
     #talk_sales>li.active>a:after {
-        background: $extra-dark-orange;
+        background: #e34b26;
         position: absolute;
         bottom: -14px;
         content: "";
@@ -322,7 +322,7 @@
 
     #sFSection-V6Lc {
         font-family: Roboto;
-        background: $selago;
+        background: $lavender;
     }
 
     .talktosale-superform .sFSection .sFformfield {
@@ -334,7 +334,7 @@
 
     .sFSection .sFformfield {
         padding: 40px;
-        background: $gray-98;
+        background:  $whisper-color;
         border: 1px solid $gainsboro;
     }
 
@@ -398,7 +398,7 @@
     #sFform-xZyf input,
     #sFform-xZyf textarea,
     #sFform-xZyf select {
-        border: 1px solid $bright-grey !important;
+        border: 1px solid #525265 !important;
         background: transparent !important;
         width: 230px !important;
     }
@@ -408,11 +408,11 @@
     }
 
     #sFformfield-xZyf label {
-        color: $light-grayish-navy-blue !important;
+        color: #73737f !important;
     }
 
     #sFSection-Jkvq .sFsubmit.btn-primary {
-        background: $deep-green !important;
+        background: #28ab00 !important;
         font-size: 14px;
     }
 

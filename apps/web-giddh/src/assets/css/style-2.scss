@@ -754,11 +754,6 @@ input {
     margin-top: 27px;
 }
 
-.hover-orange:hover {
-    color: $lavender-blue !important;
-    /* font-family: ''opensans-semibold''; */
-}
-
 .company-list button.btn-link {
     font-size: 13px;
     color: $chetwode-blue !important;
@@ -894,7 +889,7 @@ ul.sub-list {
 }
 .tab-integraton .nav-tabs > li.active a {
     background: $white !important;
-    box-shadow: 0 6px 7px #cacaca;
+    box-shadow: 0 6px 7px $very-light-gray;
     border: 1px solid $midnight-express !important;
     color: $night-rider !important;
     border-radius: 3px;
@@ -937,7 +932,7 @@ ul.sub-list {
 
 .customer-right table tr td {
     padding: 15px;
-    color: $gray-44;
+    color: $gray;
 }
 
 .customer-right table tr td h3 {
@@ -1127,7 +1122,7 @@ ul.sub-list {
     border: 1px solid $gainsboro;
     padding: 5px;
     text-align: center;
-    color: $gray-44;
+    color: $gray;
     /* font-size: 14px; */
 }
 
@@ -1226,7 +1221,7 @@ ul.sub-list {
 }
 
 .advance-search p small {
-    color: $extra-silver;
+    color: $silver;
 }
 
 .advance-search p {
@@ -1765,7 +1760,7 @@ input:-moz-placeholder {
 }
 
 .sidebar {
-    background: $whisper-new;
+    background: $whisper;
 }
 
 .account-accordion a {
@@ -1827,7 +1822,7 @@ header .navbar {
 
 .thead-background1 th {
     background: $white;
-    color: $dark-liver;
+    color: $matterhorn;
     padding: 11px !important;
     font-weight: 400;
 }
@@ -1983,9 +1978,9 @@ fieldset[disabled] .btn-primary:hover {
 }
 
 #actionPane .btn-default {
-    background: $whisper-new;
+    background: $gray-90;
     color: $night-rider;
-    border-color: $whisper-new;
+    border-color: $gray-90;
 }
 
 /*btn end*/
@@ -2000,12 +1995,12 @@ fieldset[disabled] .btn-primary:hover {
     border-right: 1px solid $gainsboro;
 }
 
-.t-h-bg2 th {
+.thead-background2 th {
     padding: 7px !important;
 }
 
-.compoundEntry td,
-.compoundEntry td .form-control {
+.compound-entry td,
+.compound-entry td .form-control {
     border: 0;
 }
 
@@ -2527,7 +2522,7 @@ input[type="checkbox"]:checked:after {
     overflow: hidden;
     padding: 0;
     background: $white;
-    border-color: #fbc2a8 !important;
+    border-color: $skin-tone !important;
 }
 
 .thumbnail:hover {
@@ -2792,7 +2787,7 @@ input[type="checkbox"]:checked:after {
 
 .campanien-list ul > li > a {
     display: block;
-    color: $aubergine;
+    color: $nero;
     padding: 10px 20px;
 }
 
@@ -2837,7 +2832,7 @@ li.no-click {
 
 .subscription_modal .modal-content {
     border-radius: 0px;
-    box-shadow: 0 5px 15px $black-russian-light;
+    box-shadow: 0 5px 15px $black-russian;
 }
 
 .subscription_modal .modal-content .close {
@@ -3084,7 +3079,7 @@ li.no-click {
 }
 
 .daterangepicker .input-mini.active {
-    border: 1px solid #f7b995;
+    border: 1px solid $skin-tone;
     border-radius: 4px;
 }
 
@@ -3105,11 +3100,11 @@ li.no-click {
     right: 11px;
     top: 22px;
     font-size: 8px;
-    color: $matterhorn;
+    color: $davy-grey
 }
 
 .ranges li {
-    color: $matterhorn !important;
+    color: $davy-grey !important;
 }
 
 .ranges li.active,
@@ -3206,7 +3201,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .datePickr .dropdown-menu {
-    box-shadow: 0 3px 28px 0 $black-russian-light;
+    box-shadow: 0 3px 28px 0 $black-russian;
     color: $dark-gray;
     border: 1px solid $gainsboro;
 }
@@ -3236,7 +3231,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .uncfr .form-control {
-    background: #f7edcd !important;
+    background: $floral-white !important;
 }
 
 .active.end-date.in-range.available,
@@ -3269,8 +3264,8 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .upload-btn {
-    background: $romance;
-    border: 1px solid $grandis;
+    background: $floral-white;
+    border: 1px solid $floral-white;
     padding: 6px;
     border-radius: 2px;
     float: right;
@@ -3358,7 +3353,7 @@ footer > div > a:last-child {
     transform: translateY(-50%);
     right: 10px;
     z-index: 99;
-    color: $matterhorn;
+    color: $davy-grey;
 }
 
 .stock-grp-list li:first-child {
@@ -3393,13 +3388,13 @@ footer > div > a:last-child {
     box-shadow: none !important;
 }
 
-.form_title {
+.form-title {
     padding: 12px 20px;
-    background: $matterhorn;
+    background: $davy-grey;
     color: $white;
 }
 
-.form_title label {
+.form-title label {
     font-weight: 400;
 }
 
@@ -3438,8 +3433,8 @@ a.btn.btn-xs.btn-link.pull-right {
     color: $success-green;
 }
 
-.dlet {
-    color: #f15757;
+.delete {
+    color: $bitter-sweet;
 }
 
 .table_theme {
@@ -3452,14 +3447,14 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .table_theme > thead > tr > th {
-    background: $romance;
+    background: $floral-white;
     font-weight: 400;
 }
 
 .table_theme > tbody > tr > td,
 .table_theme > thead > tr > th {
     padding: 12px 20px;
-    color: $matterhorn;
+    color: $davy-grey;
 }
 
 .stkRprtTbl > tfoot > tr > td,
@@ -3538,7 +3533,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #linkedStock .table_theme tbody tr td:nth-child(1):before {
     position: absolute;
     width: 22px;
-    background: $matterhorn;
+    background: $davy-grey;
     height: 1px;
     content: " ";
     left: 0;
@@ -3690,7 +3685,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .pop-panel .form-control {
-    background: #f9f7f2;
+    background: $floral-white;
     border-color: $gainsboro;
 }
 
@@ -3827,7 +3822,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #select_view {
     background: $gainsboro !important;
     border-color: $gainsboro !important;
-    color: $dark-liver;
+    color: $matterhorn;
 }
 
 #share-modal .input-group .input-group-btn:last-child > .btn {
@@ -3987,7 +3982,7 @@ input[type=radio]:checked:after {
     position: absolute;
     right: 4px;
     font-size: 16px;
-    color: $dark-liver;
+    color: $matterhorn;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
@@ -4147,8 +4142,8 @@ select.form-control {
     border: 1px solid $gainsboro;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px $black-russian-light;
-    box-shadow: 0 6px 12px $black-russian-light;
+    -webkit-box-shadow: 0 6px 12px $black-russian;
+    box-shadow: 0 6px 12px $black-russian;
     z-index: 1001;
 }
 
@@ -4331,7 +4326,7 @@ label {
 }
 
 .col-wrapper:nth-child(1) .isParent {
-    background: $whisper-new !important;
+    background: $whisper !important;
 }
 
 .col-wrapper:last-child ul li a.isParent {
@@ -4523,7 +4518,7 @@ label {
 }
 
 .tax_group small {
-    color: #afa9a9;
+    color: $wistful;
     font-size: 14px;
 }
 
@@ -4590,7 +4585,7 @@ label {
 }
 
 .accmerge li > a > span {
-    color: #949494;
+    color: $nobel;
     padding-left: 20px;
     font-weight: 500;
     float: right;
@@ -4605,7 +4600,7 @@ label {
 }
 
 #getGroupModal hr {
-    border-color: #c7c7c7;
+    border-color: $gainsboro;
 }
 
 /*#getGroupModal small {
@@ -4659,7 +4654,7 @@ label {
     right: 2px;
     z-index: 9;
     top: 8px;
-    color: #8e9292;
+    color: $gray;
 }
 
 #getGroupModal .search-loading {
@@ -4742,7 +4737,7 @@ label {
 
 #manufacture .form-theme tbody tr td {
     padding: 7px 0;
-    color: $matterhorn;
+    color: $davy-grey;
 }
 
 #manufacture select showGiddhDatepicker {
@@ -4916,7 +4911,7 @@ label {
 }
 
 #setupWizardModal .nav-justified > li > a {
-    color: grey;
+    color: $gray;
     text-decoration: none;
     text-transform: uppercase;
     font-weight: 700;
@@ -4925,7 +4920,7 @@ label {
 }
 
 .steps-indicator li.active a:before {
-    background-color: grey;
+    background-color: $gray;
 }
 
 .steps-indicator li a:before {
@@ -4940,7 +4935,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: $whisper;
     content: "";
     top: -15px;
 }
@@ -4968,7 +4963,7 @@ label {
 
 .steps-indicator li a:before,
 .steps-indicator:before {
-    background-color: $whisper-new;
+    background-color: $whisper;
     content: "";
 }
 
@@ -5154,7 +5149,7 @@ label {
 
 #single-role tbody tr td:first-child,
 #single-role thead tr th:first-child {
-    border-right: 1px solid #c2cdd3;
+    border-right: 1px solid $gainsboro;
 }
 
 #single-role .lead {
@@ -5167,7 +5162,7 @@ label {
 }
 
 #single-role .panel-body {
-    background: #f1f1f2;
+    background: $white-smoke;
 }
 
 #single-role .panel-body tbody tr:nth-child(1) td {
@@ -5188,7 +5183,7 @@ label {
 /*************************************************** Dashboard CSS  ****************************************************/
 
 #dashboard .panel-default {
-    color: $dark-liver;
+    color: $matterhorn;
     border-color: $gainsboro;
 }
 
@@ -5291,7 +5286,7 @@ a {
 }
 
 .ledger-row td .select2-container .select2-search__field {
-    background: $romance !important;
+    background: $floral-white !important;
 }
 
 /* .ledger-panel .dropdown-container .dropdown-menu li {
@@ -5322,7 +5317,7 @@ a {
 }
 
 .sticky-footer {
-    background: $dark-gray;
+    background: $matterhorn;
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -5519,7 +5514,7 @@ a {
     text-align: center;
     height: 30px;
     line-height: 30px;
-    color: $gainsboro;
+    color: $silver;
 }
 
 .logo-tool ul li:hover {
@@ -5843,7 +5838,7 @@ input[type="checkbox"][disabled]:after {
 .welcome-header h2 {
     font-size: 26px;
     font-family: "opensans-regular";
-    color: #535353;
+    color: $davy-grey;
 }
 
 .table-container section div:last-child {
@@ -5851,11 +5846,11 @@ input[type="checkbox"][disabled]:after {
 }
 
 .success {
-    color: #3fab63;
+    color: $success-green;
 }
 
 .danger {
-    color: #ef5350;
+    color: $red;
 }
 
 .table-container thead tr th:first-child {
@@ -5893,7 +5888,7 @@ input[type="checkbox"][disabled]:after {
     background: $white;
     top: -1px;
     right: -2px;
-    border: 1px solid $nobel;
+    border: 1px solid $gainsboro;
     border-radius: 50%;
 }
 
@@ -5944,7 +5939,7 @@ input[type="checkbox"][disabled]:after {
 
 #verifyMobile .phoneNum ng-select > div > div.single > div.toggle {
     line-height: 46px;
-    color: $dark-liver;
+    color: $matterhorn;
     height: 44px;
 }
 
@@ -6099,7 +6094,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .welcome-header:after {
     position: absolute !important;
     width: 98%;
-    background: #b3b3b3;
+    background: $silver;
     height: 1px;
     margin: 0 auto;
     padding: 0;
@@ -6162,7 +6157,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .welcome-header h2 {
     font-size: 26px;
     font-family: "opensans-regular";
-    color: #535353;
+    color: $davy-grey;
     position: relative;
 }
 
@@ -6187,13 +6182,13 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 /**end new modal design**/
 
 .col-wrapper .btn-link {
-    color: #10aae0 !important;
+    color: $deep-sky-blue-hover !important;
 }
 
 .form-group sup {
     font-size: 14px;
     top: 0;
-    color: red;
+    color: $red;
 }
 
 .btn-share,
@@ -6238,7 +6233,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .square-switch input[type="checkbox"]:checked ~ label {
-    background: #28ab00;
+    background: $light-green;
     color: $white;
 }
 
@@ -6303,7 +6298,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
-    color: $dark-liver;
+    color: $matterhorn;
     text-overflow: ellipsis;
     /* // overflow: hidden; */
     white-space: nowrap;
@@ -6323,7 +6318,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
-    color: $dark-liver;
+    color: $matterhorn;
     text-overflow: ellipsis;
     /* overflow: hidden; */
     white-space: nowrap;
@@ -6429,7 +6424,7 @@ table td[class*=col-]:last-child {
 
 .thead-background1 th {
     background: $solitude;
-    color: $dark-liver;
+    color: $matterhorn;
     border-right: 1px solid $gainsboro;
     padding: 11px !important;
     font-weight: 400;
@@ -6878,7 +6873,7 @@ panel.sFthanks.fieldset {
 
 .tbpl-dropdown .caret {
     transform: rotate(180deg);
-    border-top: 7px dashed $autumn-fog;
+    border-top: 7px dashed $gainsboro;
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     position: absolute;
@@ -6938,7 +6933,7 @@ GST filing
 
 .tax-engine .column.list-column {
     display: block;
-    border-right: 1px solid $whisper;
+    border-right: 1px solid $gainsboro;
 }
 
 .tax-engine .column {
@@ -7133,7 +7128,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .dropdown-menu li .help-text,
 .tax-engine .modal-header .help-text,
 .tax-engine .text-muted {
-    color: $dark-gray;
+    color: $gray;
 }
 
 .space {
@@ -7204,7 +7199,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .transactions-overview
 .gstr-transactions-summary
 .transactions-table {
-    border: 1px solid $whisper;
+    border: 1px solid $gainsboro;
 }
 
 .tax-engine .table.transactions-table,
@@ -7256,7 +7251,7 @@ th:first-child {
 
 .tax-engine .table thead > tr > th {
     border-bottom: 1px solid $gainsboro;
-    color: $dark-gray;
+    color: $gray;
 }
 
 .tax-engine .table.transactions-table tbody > tr > td {
@@ -7268,7 +7263,7 @@ th:first-child {
 
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: $snow;
+    background-color: $gray-95;
 }
 
 .tax-engine .table tbody > tr > td,
@@ -7289,7 +7284,7 @@ th:first-child {
 > tr:not(.secondary-row)
 + tr.secondary-row
 > td {
-    border-top: 1px solid $whisper;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine
@@ -7303,7 +7298,7 @@ th:first-child {
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
     background-color: $white;
-    border-right: 1px solid $whisper;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
     padding: 13px;
 }
@@ -7350,7 +7345,7 @@ th:first-child {
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a,
 .tax-engine .sub-filter-nav-bandnew ul > li.active > a {
-    color: $gray;
+    color: $night-rider;
     font-weight: 600;
 }
 
@@ -7410,7 +7405,7 @@ th:first-child {
 }
 
 .tax-engine .transactions-list .filter-band {
-    background-color: $alice-blue-dark;
+    background-color: $gray-95;
     padding: 20px;
     height: 66px;
 }
@@ -7514,7 +7509,7 @@ th:first-child {
 
 .tax-engine .transactions-overview .transaction-info:hover {
     border: 1px solid $gainsboro;
-    box-shadow: 0 0 20px 3px $snow;
+    box-shadow: 0 0 20px 3px $gray-95;
 }
 
 .tax-engine .transactions-overview .transaction-info {
@@ -7564,7 +7559,7 @@ th:first-child {
 }
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a {
-    color: $gray;
+    color: $night-rider;
     font-weight: 600;
     border: 0;
 }
@@ -7574,7 +7569,7 @@ th:first-child {
 }
 
 .tax-engine .table.reconciliations-table {
-    border-bottom: 1px solid $whisper;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .tax-engine .table-fixed {
@@ -7582,7 +7577,7 @@ th:first-child {
 }
 
 .zi-table {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid $whisper-light;
     table-layout: fixed;
 }
 
@@ -7616,7 +7611,7 @@ th:first-child {
 }
 
 .zi-table.table-hover tbody tr:hover td {
-    background-color: $gray-98;
+    background-color: $whisper-color;
     cursor: pointer;
 }
 
@@ -7629,7 +7624,7 @@ th:first-child {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid $whisper-light;
 }
 
 .tax-engine .details .details-info,
@@ -7647,7 +7642,7 @@ th:first-child {
 }
 
 .tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
-    border-right: 1px solid $whisper;
+    border-right: 1px solid $gainsboro;
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown {
@@ -7687,7 +7682,7 @@ tbody
 }
 
 .zi-table.table thead > tr > th {
-    color: $oxford-blue;
+    color: $muzli;
     background: $white;
     font-weight: 700;
     font-size: 14px;
@@ -7711,7 +7706,7 @@ tbody
 
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: $snow;
+    background-color: $gray-95;
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
@@ -7768,7 +7763,7 @@ tbody
 
 .tax-engine .gstr-transactions-summary .table > tbody > tr.row-hover:hover {
     cursor: pointer;
-    background-color: $gray-98;
+    background-color: $whisper-color;
 }
 
 .tax-engine
@@ -7830,7 +7825,7 @@ app-header {
 }
 
 .text-warning {
-    color: $orange-peel;
+    color: $bright-yellow;
 }
 
 .heightVH-100 {
@@ -7895,7 +7890,7 @@ app-header {
 
 .sticky-footer-sale-amount .totalSale h3 {
     font-size: 20px;
-    color: $aluminum;
+    color: $gray;
     padding-right: 13px;
 }
 
@@ -8052,7 +8047,7 @@ div#getGroupModal {
     padding: 0 15px;
 }
 
-.billing-address.disabled .stateField .form-control {
+.billing-address.disabled .state-field .form-control {
     background: transparent !important;
 }
 
@@ -8168,7 +8163,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     width: 0px;
     height: 0px;
     display: block;
-    border-top: 5px solid $gray-75;
+    border-top: 5px solid $gainsboro;
     border-bottom: 5px solid transparent;
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
@@ -8178,7 +8173,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 }
 
 .welcome-header hr {
-    border-top-color: $heather;
+    border-top-color: $silver;
 }
 
 .btn-group-voucher-type label {
@@ -8227,7 +8222,7 @@ span.red-text {
 }
 
 .welcome-header hr {
-    border-top-color: $heather;
+    border-top-color: $silver;
 }
 
 .no-select {
@@ -8474,7 +8469,7 @@ ul.dropdown-menu p.lead.pd {
 .btn-lg.btn-primary:hover {
     background: $chetwode-blue;
     color: $white;
-    box-shadow: 0px 4px 4px -3px $dim-gray;
+    box-shadow: 0px 4px 4px -3px $wistful;
     border-radius: 0px;
     border-color: $chetwode-blue;
 }
@@ -9660,7 +9655,6 @@ ul.dropdown-menu.action-dropdown {
 .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button{
     width: 26px;
     height: 26px;
-    margin-right: 6px
 }
 .mat-form-field-appearance-fill:not(.mat-form-field-disabled) .mat-form-field-flex:hover~.mat-form-field-underline .mat-form-field-ripple{
     opacity: 0 !important;
@@ -10754,11 +10748,6 @@ input.mat-input-element{
         .form-bg {
             width: 100%;
         }
-        /* .col-wrapper:nth-child(1) {
-                         position: relative;
-                         height: auto;
-                         width: 100%;
-                        } */
         .grp-col {
             float: none !important;
             width: 100% !important;

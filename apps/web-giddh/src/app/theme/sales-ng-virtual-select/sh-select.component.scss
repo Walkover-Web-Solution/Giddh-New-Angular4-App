@@ -83,7 +83,7 @@ i.close.icon.clear:hover::after {
 }
 
 .sh-select-disabled {
-    background-color: $gainsboro-dark;
+    background-color: $whisper;
     color: $bay-of-many;
     cursor: not-allowed;
 }
@@ -136,16 +136,16 @@ i.close.icon.clear:hover::after {
     border: 0;
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
-    color: $silver-shade !important;
+    color: $nobel !important;
 }
 .header .bdr > input[type="text"]::-moz-placeholder {
-    color: $silver-shade !important;
+    color: $nobel !important;
 }
 .header .bdr > input[type="text"]:-ms-input-placeholder {
-    color: $silver-shade !important;
+    color: $nobel !important;
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
-    color: $silver-shade !important;
+    color: $nobel !important;
 }
 
 .toggle {
@@ -175,7 +175,7 @@ button.form-control:focus {
     box-shadow: none !important;
     border-radius: 0 !important;
     font-size: 20px;
-    color: $vulcan;
+    color: $night-rider;
 }
 
 .toggle:hover {
