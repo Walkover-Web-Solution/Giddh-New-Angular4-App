@@ -2,7 +2,8 @@
     <div class="header-create-group">
         <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="form-header">
-            <div class="back-button mr-15 p-05" (click)="backToMainAside()"><i class="icon-back-arrow"></i></div>
+            <div class="back-button mr-15 p-05"><i class="icon-back-arrow"></i></div>
+            <!-- funcation of back to main aside (click)="backToMainAside()" -->
             <h3>Create Item</h3>
         </div>
     </div>
@@ -271,8 +272,8 @@
                                                         </div>
                                                         <div class="col-sm-8">
                                                             <label>Category</label>
-                                                            <textare type="text" class="form-control"
-                                                                placeholder="xs, x, m" id="select-category"></textare>
+                                                            <textarea type="text" class="form-control"
+                                                                placeholder="xs, x, m" id="select-category"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-15">

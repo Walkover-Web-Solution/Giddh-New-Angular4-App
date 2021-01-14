@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module'
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 @Component({
@@ -9,6 +9,13 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 
 export class CreateNewItemComponent implements OnInit {
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    public closeAsidePane(event?) {
+        this.closeAsideEvent.emit();
+    }
     /* this will store image path*/
     public imgPath: string = '';
 

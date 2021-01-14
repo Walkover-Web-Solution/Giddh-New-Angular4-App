@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChildren, EventEmitter, Output  } from '@angular/core';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
@@ -9,6 +9,13 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 })
 
 export class CreateComboComponent implements OnInit {
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    public closeAsidePane(event?) {
+        this.closeAsideEvent.emit();
+    }
     /* this will store image path*/
     public imgPath: string = '';
 
