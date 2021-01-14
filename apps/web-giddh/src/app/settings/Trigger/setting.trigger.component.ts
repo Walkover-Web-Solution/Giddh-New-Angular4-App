@@ -13,6 +13,7 @@ import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
 import { IForceClear } from '../../models/api-models/Sales';
 import { SettingsTriggersActions } from '../../actions/settings/triggers/settings.triggers.actions';
+import { SearchService } from '../../services/search.service';
 
 const entityType = [
     { label: 'Group', value: 'group' },
@@ -80,12 +81,32 @@ export class SettingTriggerComponent implements OnInit {
     public forceClearEntityList$: Observable<IForceClear> = observableOf({ status: false });
     public forceClearFilterList$: Observable<IForceClear> = observableOf({ status: false });
     public entityOptions$: Observable<IOption[]>;
+
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details (required only for passing
+     * default search pagination details to Update ledger component) */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
         private _accountService: AccountService,
         private _settingsTriggersActions: SettingsTriggersActions,
+        private searchService: SearchService,
         private _toaster: ToasterService
     ) {
         for (let i = 1; i <= 31; i++) {
@@ -107,13 +128,7 @@ export class SettingTriggerComponent implements OnInit {
             }
         });
 
-        this.getFlattenAccounts('');
-
-        this.store.pipe(select((state: AppState) => state.general.addAndManageClosed), takeUntil(this.destroyed$)).subscribe((bool) => {
-            if (bool) {
-                this.getFlattenAccounts('');
-            }
-        });
+        this.loadDefaultAccountsSuggestions();
 
         this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$)).subscribe((groups) => {
             if (groups) {
@@ -212,23 +227,6 @@ export class SettingTriggerComponent implements OnInit {
         this.availableTriggers = taxes;
     }
 
-	/**
-	 *
-	 */
-    public getFlattenAccounts(value) {
-        let query = value || '';
-        // get flattern accounts
-        this._accountService.getFlattenAccounts(query, '').pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let accounts: IOption[] = [];
-                data.body.results.map(d => {
-                    accounts.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
-                });
-                this.accounts = accounts;
-            }
-        });
-    }
-
     public customAccountFilter(term: string, item: IOption) {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
     }
@@ -272,6 +270,108 @@ export class SettingTriggerComponent implements OnInit {
             { label: 'Amount Greater Than', value: 'amountGreaterThan' },
             { label: 'Amount Less Than', value: 'amountSmallerThan' },
         ];
+    }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof SettingTriggerComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccount(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} - (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.entityOptions$ = observableOf(this.accounts);
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof SettingTriggerComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                this.accountsSearchResultsPaginationData.query ? true : false,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} - (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default account search suggestion when ledger module is loaded and
+     * when ledger is changed
+     *
+     * @private
+     * @memberof SettingTriggerComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, false, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} - (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
     }
 
 }
