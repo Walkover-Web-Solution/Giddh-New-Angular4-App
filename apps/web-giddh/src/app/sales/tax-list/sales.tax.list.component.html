@@ -2,7 +2,7 @@
     <a id="tax" (click)="toggleTaxPopup(true)" class="clearfix">
         <div class="multi-select adjust">
             <input type="number" id="sales-tax-box" (blur)="taxInputBlur($event)" (focus)="toggleTaxPopup(true)" readonly name="sum"
-                class="form-control cursor-pointer taxInput" [(ngModel)]="taxSum" />
+                class="form-control cursor-pointer tax-input" [(ngModel)]="taxSum" />
             <span class="caret"></span>
         </div>
     </a>

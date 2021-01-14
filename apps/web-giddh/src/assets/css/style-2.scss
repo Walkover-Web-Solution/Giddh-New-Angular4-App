@@ -661,11 +661,6 @@ input {
     margin-top: 27px;
 }
 
-.hover-orange:hover {
-    color: #bdc3ff !important;
-    /* font-family: ''opensans-semibold''; */
-}
-
 .company-list button.btn-link {
     font-size: 13px;
     color: $chetwode-blue !important;
@@ -1456,15 +1451,15 @@ modal-container.modal {
 }
 
 .dot-warning {
-    background: #fed46a;
+    background: $grandis;
 }
 
 .dot-primary {
-    background: #4693f1;
+    background: $cornflower-blue;
 }
 
 .dot-success {
-    background: #2daa4a;
+    background: $success-green;
 }
 
 .pt-85 {
@@ -1919,7 +1914,7 @@ fieldset[disabled] .btn-primary:hover {
     border-right: 1px solid $gainsboro;
 }
 
-.t-h-bg2 th {
+.thead-background1 th {
     padding: 7px !important;
 }
 
@@ -2360,8 +2355,8 @@ input[type="checkbox"]:checked:after {
 .btn-success:disabled,
 .btn-success:disabled:hover {
     color: rgba(255, 255, 255, 0.51);
-    border: 1px solid #81d4d4;
-    background: #81d4d4;
+    border: 1px solid $success-green-disable;
+    background: $success-green-disable;
 }
 .btn-warning{
     color: $white !important;
@@ -2449,7 +2444,7 @@ input[type="checkbox"]:checked:after {
     overflow: hidden;
     padding: 0;
     background: $white;
-    border-color: #fbc2a8 !important;
+    border-color: $skin-tone !important;
 }
 
 .thumbnail:hover {
@@ -2715,7 +2710,7 @@ input[type="checkbox"]:checked:after {
 
 .campanien-list ul > li > a {
     display: block;
-    color: #231f20;
+    color: $nero;
     padding: 10px 20px;
 }
 
@@ -3009,7 +3004,7 @@ li.no-click {
 }
 
 .daterangepicker .input-mini.active {
-    border: 1px solid #f7b995;
+    border: 1px solid $skin-tone;
     border-radius: 4px;
 }
 
@@ -3161,7 +3156,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .uncfr .form-control {
-    background: #f7edcd !important;
+    background: $floral-white !important;
 }
 
 .active.end-date.in-range.available,
@@ -3194,8 +3189,8 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .upload-btn {
-    background: #f3f0e6;
-    border: 1px solid #f7de8a;
+    background: $floral-white;
+    border: 1px solid $floral-white;
     padding: 6px;
     border-radius: 2px;
     float: right;
@@ -3364,8 +3359,8 @@ a.btn.btn-xs.btn-link.pull-right {
     color: $success-green;
 }
 
-.dlet {
-    color: #f15757;
+.delete {
+    color: $bitter-sweet;
 }
 
 .table_theme {
@@ -3617,16 +3612,16 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .pop-panel .form-control {
-    background: #f9f7f2;
+    background: $floral-white;
     border-color: $gainsboro;
 }
 
 .pop-panel label {
-    color: rgba(0, 0, 0, 0.8);
+    color: $nero;
 }
 
 .inWords {
-    color: rgba(0, 0, 0, 0.8);
+    color: $nero;
     text-align: right;
     text-transform: capitalize;
 }
@@ -4451,7 +4446,7 @@ label {
 }
 
 .tax_group small {
-    color: $dim-gray;
+    color: $wistful;
     font-size: 14px;
 }
 
@@ -4587,7 +4582,7 @@ label {
     right: 2px;
     z-index: 9;
     top: 8px;
-    color: #8e9292;
+    color: $gray;
 }
 
 #getGroupModal .search-loading {
@@ -5221,7 +5216,7 @@ label {
 }
 
 .ledger-row td .select2-container .select2-search__field {
-    background: #f3f0e6 !important;
+    background: $floral-white !important;
 }
 
 /* .ledger-panel .dropdown-container .dropdown-menu li {
@@ -5419,7 +5414,7 @@ label {
     width: 100%;
     object-fit: contain;
     border-radius: 4px;
-    border: 1px solid $whisper-color;
+    border: 1px solid $gainsboro;
 }
 
 .logo-preview {
@@ -5544,7 +5539,7 @@ input[type="checkbox"][disabled] {
     line-height: 1.5;
     border-radius: 3px;
     background: $whisper-light;
-    border: 1px solid $light-gray;
+    border: 1px solid $gainsboro;
 }
 
 .dashboard-filter label {
@@ -5559,13 +5554,13 @@ input[type="checkbox"][disabled] {
 
 .input-group-btn .btn-default {
     background: $whisper-light;
-    border: 1px solid $light-gray;
+    border: 1px solid $gainsboro;
     color: $charcoal;
 }
 
 .input-group-btn .btn-default:hover {
     background: $whisper-light;
-    border: 1px solid $light-gray;
+    border: 1px solid $gainsboro;
     box-shadow: none;
     outline: 0;
 }
@@ -5789,7 +5784,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container thead tr th:first-child {
-    border-left: 6px solid $whisper-color;
+    border-left: 6px solid $gainsboro;
 }
 
 .table-container .account {
@@ -5978,7 +5973,7 @@ table input[type="number"] {
     text-align: right;
 }
 
-.taxInput {
+.tax-input {
     padding-right: 25px !important;
 }
 
@@ -5993,7 +5988,7 @@ typeahead-container .dropdown-menu li.active > a,
 typeahead-container .dropdown-menu li:hover > a,
 typeahead-container .dropdown-menu > .active > a:hover,
 typeahead-container .dropdown-menu li.active > a > a:hover {
-    background-color: rgb(244, 245, 248);
+    background-color: $solitude;
 }
 
 .has-item {
@@ -6170,7 +6165,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .square-switch input[type="checkbox"]:checked ~ label {
-    background: #28ab00;
+    background: $light-green;
     color: $white;
 }
 
@@ -6201,7 +6196,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .user-list {
     padding: 15px 0;
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     overflow: hidden;
 }
 
@@ -6232,8 +6227,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px !important;
-    border-bottom: 1px solid $very-light-gray;
-    border-right: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
     color: $matterhorn;
     text-overflow: ellipsis;
@@ -6252,8 +6247,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid $very-light-gray;
-    border-right: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
+    border-right: 1px solid $gainsboro;
     font-size: 13px;
     color: $matterhorn;
     text-overflow: ellipsis;
@@ -6368,7 +6363,7 @@ table td[class*=col-]:last-child {
 }
 
 .ledger-book {
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     clear: both;
     /* // overflow: hidden; */
     position: relative;
@@ -6796,7 +6791,7 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li {
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .tbpl-dropdown > li:last-child {
@@ -6840,7 +6835,7 @@ panel.sFthanks.fieldset {
 
 .unit_action .btn {
     margin-right: 0;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
     opacity: 0.5;
 }
 
@@ -7114,7 +7109,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine .transactions-overview .gstr-transactions-summary {
@@ -7211,7 +7206,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid $gainsboro;
 }
 
 .tax-engine
@@ -7444,7 +7439,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine .transactions-overview .transaction-info:hover {
-    border: 1px solid $whisper-light;
+    border: 1px solid $gainsboro;
     box-shadow: 0 0 20px 3px $gray-95;
 }
 
@@ -7487,7 +7482,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-style: italic;
     padding: 14px 25px;
     font-size: 13px;
-    color: $primary;
+    color: $curious-blue;
 }
 
 .tax-engine .sub-filter-nav-band > ul > li .count {
@@ -7614,11 +7609,11 @@ perfect-scrollbar > .ps > .ps-overlay {
 }*/
 
 .tax-engine .reconciliation-accepted {
-    color: #39c296;
+    color: $bright-green;
 }
 
 .zi-table.table thead > tr > th {
-    color: #263035;
+    color: $muzli;
     background: $white;
     font-weight: 700;
     font-size: 14px;
@@ -7660,7 +7655,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .header-band {
     width: 100%;
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid $gainsboro;
     padding: 5px 0;
     margin-bottom: 15px;
 }
@@ -7761,7 +7756,7 @@ app-header {
 }
 
 .text-warning {
-    color: #ffa000;
+    color: $bright-yellow;
 }
 
 .heightVH-100 {
@@ -7799,7 +7794,7 @@ app-header {
 }
 
 #form-place .dropdown-menu .dropdown-item:hover {
-    background-color: rgb(244, 245, 248);
+    background-color: $solitude;
 }
 
 /* sticky footer css merged */
@@ -7983,7 +7978,7 @@ div#getGroupModal {
     padding: 0 15px;
 }
 
-.billing-address.disabled .stateField .form-control {
+.billing-address.disabled .state-field .form-control {
     background: transparent !important;
 }
 
@@ -8177,7 +8172,7 @@ span.red-text {
 }
 
 .icon-btn .btn-xs {
-    border: 1px solid $light-gray;
+    border: 1px solid $gainsboro;
     background-color: $whisper-light;
 }
 
@@ -8284,19 +8279,19 @@ span.red-text {
 }
 
 .ratio-chart-block:first-child span.pie-text_center {
-    color: #2681ef;
+    color: $primary;
 }
 
 .ratio-chart-block:nth-child(2) span.pie-text_center {
-    color: #edaf12;
+    color: $vivid-orange;
 }
 
 .ratio-chart-block:nth-child(3) span.pie-text_center {
-    color: #f74074;
+    color: $violet-red;
 }
 
 .ratio-chart-block:nth-child(4) span.pie-text_center {
-    color: #27a264;
+    color: $java;
 }
 
 .dashboard-container input[type="checkbox"]:checked:after {
@@ -9086,7 +9081,7 @@ ngx-daterangepicker-material {
             justify-content: space-between;
             padding-top: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid $whisper-color;
+            border-bottom: 1px solid $gainsboro;
             margin-bottom: 15px;
             span {
                 padding: 5px 10px;
@@ -9577,7 +9572,6 @@ ul.dropdown-menu.action-dropdown {
 .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button{
     width: 26px;
     height: 26px;
-    margin-right: 6px
 }
 .mat-form-field-appearance-fill:not(.mat-form-field-disabled) .mat-form-field-flex:hover~.mat-form-field-underline .mat-form-field-ripple{
     opacity: 0 !important;
@@ -10205,7 +10199,7 @@ input.mat-input-element{
         display: none;
     }
     .card-table tbody tr {
-        border-bottom: 1px solid #e0e0e0;
+        border-bottom: 1px solid $gainsboro;
     }
     .card-table,
     .card-table tbody,
@@ -10669,11 +10663,6 @@ input.mat-input-element{
     .form-bg {
         width: 100%;
     }
-    /* .col-wrapper:nth-child(1) {
-                     position: relative;
-                     height: auto;
-                     width: 100%;
-                    } */
     .grp-col {
         float: none !important;
         width: 100% !important;

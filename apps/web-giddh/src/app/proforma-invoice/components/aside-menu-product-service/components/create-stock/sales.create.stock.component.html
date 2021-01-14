@@ -283,7 +283,7 @@
                                             <div class="pull-right unit-add">
                                                 <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
                                                 <button class="btn-link btn" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i
-                                                        class="icon-cross dlet"></i></button>
+                                                        class="icon-cross delete"></i></button>
                                             </div>
                                         </div>
 
@@ -341,7 +341,7 @@
                                             <div class="pull-right unit-add">
                                                 <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
                                                 <button class="btn-link btn mr-0" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i
-                                                        class="icon-cross dlet"></i></button>
+                                                        class="icon-cross delete"></i></button>
                                             </div>
                                         </div>
 
@@ -434,7 +434,7 @@
                                                         *ngIf="l" [disabled]="disableStockButton"><i
                                                             class="icon-plus add-row"></i></button>
                                                     <button class="btn-link" (click)="removeItemInLinkedStocks(i)"
-                                                        *ngIf="!l"><i class="icon-cross dlet"></i></button>
+                                                        *ngIf="!l"><i class="icon-cross delete"></i></button>
                                                 </td>
                                             </tr>
                                         </ng-container>

@@ -372,7 +372,7 @@ ng-select.splSales {
     font-weight: 100;
 }
 
-.sales-tax .taxInput {
+.sales-tax .tax-input {
     text-align: right;
 }
 
@@ -415,7 +415,7 @@ textarea:focus {
 
 .balance-due {
     display: block;
-    color: $gray;
+    color: $dark-gray;
     line-height: 1.2rem;
     font-size: 14px;
     font-weight: 500;
@@ -753,11 +753,11 @@ a.copy-invoice img {
     margin-bottom: 0 !important;
 }
 
-.entryDate label {
+.entry-date label {
     font-size: 12px;
 }
 
-.entryDate input {
+.entry-date input {
     border: none;
     display: inline-block;
     width: 80px;
@@ -766,7 +766,7 @@ a.copy-invoice img {
     font-size: 12px;
 }
 
-.entryDate input:focus {
+.entry-date input:focus {
     background-color: transparent;
 }
 
@@ -779,7 +779,7 @@ a.copy-invoice img {
     font-size: 12px;
 }
 
-.entryDate {
+.entry-date {
     font-size: 12px;
 }
 
@@ -877,7 +877,7 @@ span.edit-icon {
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: $very-light-gray;
+    color: $silver;
 }
 
 .hsn-code-dropdown a {
@@ -1020,11 +1020,11 @@ section.static-invoice-table {
     min-width: 40px;
 }
 
-.firstTable tr:nth-child(3) td {
+.first-table tr:nth-child(3) td {
     margin-top: 140px;
     padding-top: 70px !important;
 }
-.firstTable .wrap-billing-address {
+.first-table .wrap-billing-address {
     padding-bottom: 15px;
     padding-top: 80px;
 }
@@ -1069,7 +1069,7 @@ section.sales-invoiceBGwhite {
 .attention-to {
     padding-top: 15px;
 }
-.otherTaxsinput {
+.other-taxes-input {
     width: 80% !important;
     margin-left: 5px !important;
 }
@@ -1094,6 +1094,15 @@ section.sales-invoiceBGwhite {
 }
 .hsn-code-dropdown .btn-group {
     display: block;
+}
+
+.scroll-bar-form{
+    max-height: 740px !important;
+    min-height: 740px !important;
+}
+
+.sh-drop{
+    width:48.5% !important;
 }
 // media query
 @media (min-width: 768px) {
@@ -1151,7 +1160,7 @@ section.sales-invoiceBGwhite {
     .sales-invoice-content .col-md-9 {
         width: 100%;
     }
-    .balncDue {
+    .balance-due {
         position: absolute;
         right: 0px;
         top: 100px;

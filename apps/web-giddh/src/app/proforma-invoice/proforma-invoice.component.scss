@@ -365,7 +365,7 @@ ng-select.splSales {
     font-weight: 100;
 }
 
-.sales-tax .taxInput {
+.sales-tax .tax-input {
     text-align: right;
 }
 
@@ -1177,7 +1177,7 @@ section.new-table {
     line-height: 2.4;
     border-bottom: 1px solid $gainsboro;
     padding-left: 6px;
-    border-bottom-color: rgb(214, 214, 214);
+    border-bottom-color: $gainsboro;
 }
 
 .loader-class {
