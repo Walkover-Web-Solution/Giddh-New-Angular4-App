@@ -22,15 +22,15 @@
                                             </h4>
                                         </div>
                                         <div class="col-7 p-0">
-                                            <h4 class="text-orange text-right">
+                                            <h4 class="text-purple text-right">
                                                 <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
-                                                    <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems | giddhCurrency}}</span>
+                                                    <span class="text-purple" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems | giddhCurrency}}</span>
                                                 </div>
                                                 <div class="" *ngIf="GroupStockReportRequest.branchDetails!=='allEntity'">
-                                                    <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems | giddhCurrency}}</span>
+                                                    <span class="text-purple" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems | giddhCurrency}}</span>
                                                 </div>
                                                 <div class="mt-1">
-                                                    <span class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
+                                                    <span class="text-purple d-block">{{groupStockReport.profit | giddhCurrency}}
                                                     </span>
                                                 </div>
                                             </h4>
@@ -94,8 +94,8 @@
                                     <div class="flex-col">
                                         <div class="cont d-flex justify-content-between pt-1">
                                             <h4 class="text-light">Closing Value</h4>
-                                            <h2 class="text-orange">{{groupStockReport.closingBalance.amount | giddhCurrency}}</h2>
-                                            <h4 class="text-orange" *ngIf="groupStockReport.closingBalance.quantity">
+                                            <h2 class="text-purple">{{groupStockReport.closingBalance.amount | giddhCurrency}}</h2>
+                                            <h4 class="text-purple" *ngIf="groupStockReport.closingBalance.quantity">
                                                 ({{groupStockReport.closingBalance.quantity | giddhCurrency}} {{groupStockReport.closingBalance.stockUnit}})
                                             </h4>
                                         </div>
@@ -480,15 +480,15 @@
                                     </h4>
                                 </div>
                                 <div class="col-8 p-0">
-                                    <h4 class="text-orange text-left">
+                                    <h4 class="text-purple text-left">
                                         <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
-                                            <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems  | giddhCurrency}}</span>
+                                            <span class="text-purple" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems  | giddhCurrency}}</span>
                                         </div>
                                         <div class="" *ngIf="GroupStockReportRequest.branchDetails!=='allEntity'">
-                                            <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems  | giddhCurrency}}</span>
+                                            <span class="text-purple" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems  | giddhCurrency}}</span>
                                         </div>
                                         <div class="mt-1">
-                                            <span class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
+                                            <span class="text-purple d-block">{{groupStockReport.profit | giddhCurrency}}
                                                 ({{dateRangePickerCmp?.nativeElement?.value | replaceHyphens}})</span>
                                         </div>
                                     </h4>
@@ -552,8 +552,8 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Closing Value</h4>
-                                    <h2 class="text-orange">{{groupStockReport.closingBalance.amount | giddhCurrency}}</h2>
-                                    <h4 class="text-orange" *ngIf="groupStockReport.closingBalance.quantity">
+                                    <h2 class="text-purple">{{groupStockReport.closingBalance.amount | giddhCurrency}}</h2>
+                                    <h4 class="text-purple" *ngIf="groupStockReport.closingBalance.quantity">
                                         ({{groupStockReport.closingBalance.quantity | giddhCurrency}} {{groupStockReport.closingBalance.stockUnit}})
                                     </h4>
                                 </div>

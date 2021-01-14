@@ -6,7 +6,9 @@
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact shalinee..)
 */
-
+:focus {
+    outline: none !important;
+}
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,
 .basic > tfoot > tr > td,
@@ -53,7 +55,11 @@
 .basic {
     background: $white;
 }
+
 @media (max-width: 768px) {
+    .text-left-sm{
+        text-align: left !important;
+    }
     .on-mobile-view tbody tr {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
         background: $white;
@@ -1340,7 +1346,7 @@ ul.sub-list {
     white-space: nowrap;
 }
 
-.text-orange {
+.text-purple {
     color: $chetwode-blue;
 }
 
@@ -1655,7 +1661,7 @@ modal-container.modal {
     font-size: 17px;
     color: $gray;
     height: 36px;
-    width: 32px;
+    width: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -9590,6 +9596,42 @@ span#HW_badge_cont:nth-child(3) {
         right:  7px !important;
     }
 }
+.inventory-footer, .create-group-footer, .stock-group-footer{
+    left: 0;
+}
+.menu_open .inventory-footer, .menu_open .create-group-footer, .menu_open .stock-group-footer{
+    left: 215px;
+    width: 100%;
+}
+.bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
+ .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
+    border: none !important;
+    padding: 0 11px !important;
+}
+.bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
+      padding: 0 !important;
+}
+.hide-sub-sidebar .right-side-content {
+    padding-left: 0 !important;
+}
+.hide-sub-sidebar .sidebar-handle{
+    left: 210px !important;
+}
+
+.sub-detail-sidebar.fixed-sidebar-top {
+    top: 70px;
+}
+button#more-btn-inventory, #more-btn-inventory-mobile{
+    min-width: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 50px !important;
+
+}
+.menu_open .inventory-sidebar{
+ left: 0 !important;
+}
 .mobile-setting-sidebar {
     overflow-y: hidden;
 }
@@ -9630,6 +9672,10 @@ ul.dropdown-menu.action-dropdown {
     width: 100%;
     display: inline-block;
 
+}
+.mat-form-field-suffix{
+    right: 0;
+    position: absolute !important;
 }
 .mat-form-field-appearance-fill .mat-form-field-flex{
     height: 36px;
@@ -9686,6 +9732,14 @@ input.mat-input-element{
         overflow: hidden;
     }
 }
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button{
+    width: 36px !important;
+    height: 36px !important;
+    margin-right: 0;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
 /*material datepicker css end*/
     .master-custom-tabs.custom-tabs {
         .nav-tabs {
@@ -9705,7 +9759,25 @@ input.mat-input-element{
     .delete-modal-overlay {
         z-index: 9992; /*for delete custom zIndex modal*/
     }
-    /* responsive */
+    .custom-tabs.combo-page-tab .nav-tabs,
+    .custom-tabs.about-group-tab .nav-tabs,
+    .custom-tabs.product-service-page-tab .nav-tabs,
+    .custom-tabs.create-inventory-tab .nav-tabs,
+    .custom-tabs.create-item-tab .nav-tabs{
+        position: static !important;
+        padding-left: 15px !important;
+        margin-left: -15px;
+        margin-bottom: 15px;
+        width: 101%;
+    }
+    .change-address-dropdown li {
+        border-bottom: 1px solid $very-light-gray;
+        padding-bottom: 4px;
+    }
+    .change-address-dropdown li:last-child {
+        border: none;
+    }
+    /* responsive  starts here*/
 
     @media (max-width: 1440px) {
         .font-xxlarge {
@@ -9813,6 +9885,12 @@ input.mat-input-element{
             }
         }
     }
+
+@media(max-width:1019px){
+    .hide-sub-sidebar .sidebar-handle{
+        left: 0 !important;
+    }
+}
 
     @media (max-width: 991px) {
         .setting-tab-data li.nav-item {
@@ -9950,6 +10028,15 @@ input.mat-input-element{
     }
 
   @media (max-width: 768px) {
+          .bulk-create-table sh-select input, .bulk-create-table .mat-form-field-wrapper input,
+          .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex{
+                border: 1px solid $gainsboro !important;
+                padding: 0 11px !important;
+            }
+          .bulk-create-table .mat-form-field-wrapper input {
+                border: none !important;
+                padding: 0 !important;
+          }
         ul.dropdown-menu.action-dropdown {
             left: auto;
             right: 0 !important;
@@ -10110,6 +10197,29 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
+    .custom-tabs.combo-page-tab .nav-tabs,
+    .custom-tabs.about-group-tab .nav-tabs,
+    .custom-tabs.product-service-page-tab .nav-tabs,
+    .custom-tabscreate-inventory-tab .nav-tabs{
+        padding-left: 0 !important;
+        margin-left: 0;
+        margin-top:5px;
+    }
+    .custom-tabs.create-item-tab .nav-tabs{
+        display: inline-block;
+        white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+    .sub-detail-sidebar.fixed-sidebar-top{
+        top: 100px;
+    }
+    .new-inventory-page .custom-tabs .nav.nav-tabs{
+        white-space: nowrap;
+        overflow-y: hidden;
+        display: inline-block;
+        overflow-x: scroll;
+    }
     .invoice-control .nav.nav-tabs {
         margin-bottom: 15px;
         padding: 0 0px 0 15px !important;
@@ -10489,7 +10599,7 @@ input.mat-input-element{
         }
 
         .padding-top-fixed-mobile {
-            padding-top: 95px;
+            padding-top: 90px;
         }
         ngx-daterangepicker-material {
             position: fixed;
@@ -10742,6 +10852,9 @@ input.mat-input-element{
     }
 
     @media (max-width: 1024px) {
+        .dropdown-menu > li > a{
+            padding: 7px 10px;
+        }
         .sm-d-block {
             display: block;
         }
@@ -11123,11 +11236,4 @@ input.mat-input-element{
 
     .delete-icon-opacity {
         opacity: 0.5;
-    }
-    .change-address-dropdown li {
-        border-bottom: 1px solid $very-light-gray;
-        padding-bottom: 4px;
-    }
-    .change-address-dropdown li:last-child {
-        border: none;
     }
