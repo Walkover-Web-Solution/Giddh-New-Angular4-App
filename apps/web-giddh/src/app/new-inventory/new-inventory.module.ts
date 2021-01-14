@@ -31,6 +31,12 @@ import { InventoryAdjustmentBulkEntryComponent } from './component/inventory-adj
 import { CreateNewInventoryComponent } from './component/create-new-inventory-component/create-new-inventory.component';
 import { NewInventoryAdavanceSearch } from './component/new-inventory-advance-search/new-inventory-advance-search.component';
 import { InventorySidebarComponent } from './component/inventory-sidebar/inventory-sidebar.component';
+import { InventoryDashboardComponent } from './component/inventory-dashboard/inventory-dashboard.component';
+import { InventoryActivityComponent } from './component/inventory-dashboard/inventory-activity/inventory-activity.component';
+import { DashboardItemProductDetail } from './component/inventory-dashboard/dashboard-item-product-detail/dashboard-item-product-detail.component';
+import { DashboardSellingProduct } from './component/inventory-dashboard/dashboard-selling-product/dashboard-selling-product.component';
+import { DashboardProfitStockList } from './component/inventory-dashboard/dashboard-profit-stocklist/dashboard-profit-stocklist.component';
+
 @NgModule({
     declarations: [
         NewInventoryComponent,
@@ -59,7 +65,12 @@ import { InventorySidebarComponent } from './component/inventory-sidebar/invento
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
         NewInventoryAdavanceSearch,
-        InventorySidebarComponent
+        InventorySidebarComponent,
+        InventoryDashboardComponent,
+        InventoryActivityComponent,
+        DashboardItemProductDetail,
+        DashboardSellingProduct,
+        DashboardProfitStockList
     ],
     imports:[
         NewInventoryRoutingModule,
@@ -95,7 +106,12 @@ import { InventorySidebarComponent } from './component/inventory-sidebar/invento
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
         NewInventoryAdavanceSearch,
-        InventorySidebarComponent
+        InventorySidebarComponent,
+        InventoryDashboardComponent,
+        InventoryActivityComponent,
+        DashboardItemProductDetail,
+        DashboardSellingProduct,
+        DashboardProfitStockList
     ]
 })
 export class NewInventoryModule { }
