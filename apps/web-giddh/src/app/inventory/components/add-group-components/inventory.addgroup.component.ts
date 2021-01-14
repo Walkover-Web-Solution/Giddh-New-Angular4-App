@@ -166,7 +166,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             });
 
             this.taxTempArray = [];
-            if (account && account.taxes && account.taxes.length) {
+            if (!this.addGroup && account && account.taxes && account.taxes.length) {
                 this.mapSavedTaxes(account.taxes);
             }
         });
@@ -176,16 +176,17 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             if (d) {
                 if (this.addGroup) {
                     this.addGroupForm.reset();
-                }
-                this.getParentGroupData();
-                this.taxTempArray = [];
-                this.companyTaxesList$.subscribe((taxes) => {
-                    _.forEach(taxes, (o) => {
-                        o.isChecked = false;
-                        o.isDisabled = false;
+
+                    this.getParentGroupData();
+                    this.taxTempArray = [];
+                    this.companyTaxesList$.subscribe((taxes) => {
+                        _.forEach(taxes, (o) => {
+                            o.isChecked = false;
+                            o.isDisabled = false;
+                        });
                     });
-                });
-                this.addGroupForm.get('taxes').patchValue('');
+                    this.addGroupForm.get('taxes').patchValue('');
+                }
             }
         });
 

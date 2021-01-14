@@ -371,7 +371,7 @@
                                 <h4 class="text-light text-left">Profit/Loss</h4>
                             </div>
                             <div class="col-12 p-0">
-                                <h4 class="text-orange text-left">&nbsp;{{stockReport.profit | giddhCurrency}} ({{selectedDateRangeUi | replaceHyphens}})</h4>
+                                <h4 class="text-purple text-left">&nbsp;{{stockReport.profit | giddhCurrency}} ({{selectedDateRangeUi | replaceHyphens}})</h4>
                             </div>
                         </div>
                     </div>
@@ -381,7 +381,7 @@
                                 <h4 class="text-light">Transaction Count</h4>
                             </div>
                             <div class="col-2 p-0">
-                                <h4 class="text-orange text-left">
+                                <h4 class="text-purple text-left">
                                     {{(stockReport.inwardBalance.transactionCount + stockReport.outwardBalance.transactionCount) | giddhCurrency}}
                                 </h4>
                             </div>
@@ -436,7 +436,7 @@
                         <div class="flex-col">
                             <div class="cont">
                                 <h4 class="text-light">Closing Stock </h4>
-                                <h2 class="text-orange">{{stockReport.closingBalance.amount | giddhCurrency}}</h2>
+                                <h2 class="text-purple">{{stockReport.closingBalance.amount | giddhCurrency}}</h2>
                                 <h4>({{stockReport.closingBalance.quantity | giddhCurrency}} {{stockReport.closingBalance.stockUnit}})
                                 </h4>
                             </div>
@@ -525,7 +525,7 @@
 <ng-template #template>
     <div class="recept-modal">
         <div class="modal-body">
-            <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode">
+            <new-branch-transfer (hideModal)="hideModal($event)" [branchTransferMode]="branchTransferMode">
             </new-branch-transfer>
         </div>
     </div>

@@ -247,8 +247,7 @@
                                 </a>
                             </span>
                             <span>
-                                <i class="icon-branch-icon pull-right branch-icon-tooltip"  containerClass="branch-ho-tooltip" *ngIf="branch.parentBranch" tooltip="Branch"></i>
-                                <i class="icon-branch-icon pull-right branch-icon-tooltip"  containerClass="branch-ho-tooltip" *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
+                                <i class="icon-branch-icon pull-right branch-icon-tooltip"  containerClass="branch-ho-tooltip" tooltip="Branch"></i>
                             </span>
                         </a>
 
@@ -736,6 +735,9 @@
     <perfect-scrollbar [scrollIndicators]="true">
         <aside-setting [ngClass]="{'setting-sidebar': isMobileSidebar}" (closeAsideEvent)="toggleSidebarPane(false, false)"></aside-setting>
     </perfect-scrollbar>
+</div>
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'" (clickOutside)="closeSettingPaneOnOutsideClick()">
+    <inventory-sidebar class="inventory-sidebar" [ngClass]="{'inventory-sidebar': isMobileSidebar}" (closeAsideEvent)="toggleSidebarPane(false, false)"></inventory-sidebar>
 </div>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">

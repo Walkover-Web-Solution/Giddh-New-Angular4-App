@@ -22,7 +22,9 @@ import { AppLoginSuccessComponent } from "./app-login-success/app-login-success"
 import { MobileHomeComponent } from "./mobile-home/mobile-home.component";
 import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
-import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component'
+import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
+import { InventoryCreateGroupComponent } from './new-inventory/component/create-group/create-group.component';
+
 export const ROUTES: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404', component: NotFoundComponent },
@@ -66,6 +68,7 @@ export const ROUTES: Routes = [
     { path: 'select-plan', component: SelectPlanComponent },
     { path: 'billing-detail', component: BillingDetailComponent },
     { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
+    //{ path: 'new-inventory/create-group', component: InventoryCreateGroupComponent },
     {
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
@@ -82,6 +85,8 @@ export const ROUTES: Routes = [
             },
             { path: 'about', loadChildren: () => import('./about/about.module').then(module => module.AboutModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule), canActivate: [NeedsAuthorization] },
+            {path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule),canActivate: [NeedsAuthorization]},
+
             { path: 'inventory-in-out', loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule), canActivate: [NeedsAuthorization] },
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./tb-pl-bs/tb-pl-bs.module').then(module => module.TBPlBsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
@@ -101,6 +106,7 @@ export const ROUTES: Routes = [
             { path: 'company-import-export', loadChildren: () => import('./companyImportExport/companyImportExport.module').then(module => module.CompanyImportExportModule) },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'proforma-invoice', loadChildren: () => import('./proforma-invoice/proforma-invoice.module').then(module => module.ProformaInvoiceModule), canActivate: [NeedsAuthorization] },
+            { path: 'create-group', component: InventoryCreateGroupComponent, canActivate: [NeedsAuthorization] },
             { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
             { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
