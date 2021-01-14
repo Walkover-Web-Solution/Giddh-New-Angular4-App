@@ -1,0 +1,20 @@
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+    <inventory-sidebar class="inventory-sidebar"></inventory-sidebar>
+</div>
+<div class="relative new-inventory-page absolute-tab">
+    <hamburger-menu [pageHeading]="'Dashboard'"></hamburger-menu>
+</div>
+<div class="container-fluid pt-15">
+    <inventory-activity></inventory-activity>
+    <div class="row">
+        <div class="col-xl-5">
+            <dashboard-item-detail></dashboard-item-detail>
+        </div>
+        <div class="col-xl-7">
+            <dashboard-selling-product></dashboard-selling-product>
+        </div>
+        <div class="col-xl-12">
+            <dashboard-profit-stocklist></dashboard-profit-stocklist>
+        </div>
+    </div>
+</div>

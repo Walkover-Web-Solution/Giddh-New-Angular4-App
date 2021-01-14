@@ -10,7 +10,8 @@ import { CreateCustomFieldComponent } from "./component/create-custom-field/crea
 import { AdjustInventoryComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { AdjustGroupComponent } from "./component/adjust-group/adjust-group.component";
 import { AdjustProductServiceComponent } from "./component/adjust-product-service/adjust-product-service.component";
-import { CreateNewInventoryComponent } from "./component/create-new-inventory-component/create-new-inventory.component"
+import { CreateNewInventoryComponent } from "./component/create-new-inventory-component/create-new-inventory.component";
+import { InventoryDashboardComponent } from "./component/inventory-dashboard/inventory-dashboard.component";
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -58,6 +59,10 @@ import { CreateNewInventoryComponent } from "./component/create-new-inventory-co
             {
                 path: "create-new-inventory",
                 component: CreateNewInventoryComponent,
+            },
+            {
+                path: "inventory-dashboard",
+                component: InventoryDashboardComponent,
             }
 
         ])
