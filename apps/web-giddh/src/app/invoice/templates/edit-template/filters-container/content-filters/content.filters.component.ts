@@ -326,10 +326,12 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public changeDisableQuantity(): void {
         let template = _.cloneDeep(this.customTemplate);
-        if (!template.sections.table.data.quantity.display) {
-            template.sections.table.data.totalQuantity.display = false;
-        } else {
-            template.sections.table.data.totalQuantity.display = true;
+        if(template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
+            if (!template.sections.table.data.quantity.display) {
+                template.sections.table.data.totalQuantity.display = false;
+            } else {
+                template.sections.table.data.totalQuantity.display = true;
+            }
         }
         this._invoiceUiDataService.setCustomTemplate(template);
     }

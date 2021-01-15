@@ -120,7 +120,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
-                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                    this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : '') + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
