@@ -545,6 +545,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[0];
+                    this.formatAdjustments();
                     if (this.vm.selectedLedger && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
                         this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
                         this.getInvoiceListsForCreditNote();
@@ -1263,8 +1264,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public deleteTrxEntry() {
-        let uniqueName = this.vm.selectedLedger.particular.uniqueName;
-        this.store.dispatch(this._ledgerAction.deleteTrxEntry(uniqueName, this.entryUniqueName));
+        let uniqueName = (this.vm.selectedLedger && this.vm.selectedLedger.particular) ? this.vm.selectedLedger.particular.uniqueName : undefined;
+        if(uniqueName) {
+            this.store.dispatch(this._ledgerAction.deleteTrxEntry(uniqueName, this.entryUniqueName));
+        }
         this.hideDeleteEntryModal();
     }
 
@@ -2127,7 +2130,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (adjustments) {
                 adjustments.forEach(adjustment => {
                     adjustment.adjustmentAmount = adjustment.balanceDue;
-                    // delete adjustment.balanceDue;
+                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
 
                 this.vm.selectedLedger.voucherAdjustments = {
@@ -2281,5 +2284,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.searchResults = [...this.defaultSuggestions];
             this.noResultsFoundLabel = SearchResultText.NotFound;
         });
+    }
+
+    /**
+     * Formats the adjustments to add '-' to voucher number if it is not found
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private formatAdjustments(): void {
+        if (this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
+            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
+                if (!adjustment.voucherNumber) {
+                    adjustment.voucherNumber = '-';
+                }
+            });
+        }
     }
 }

@@ -22,14 +22,14 @@ describe('This is TrialBalance Search Test', () => {
     })
 
     afterEach(()=>{
-        let allAccountName = ['cash', 'uitest', "invoiceaccount"];
+        let allAccountName = ['cash', 'uitest', 'invoiceaccount','vendoraccount'];
         allAccountName.forEach((accName) => {
             cy.deleteAllLedgersAPI(accName)
         })
     })
 
     beforeEach(()=>{
-        let allAccountName = ['cash', 'uitest', "invoiceaccount"];
+        let allAccountName = ['cash', 'uitest', 'invoiceaccount','vendoraccount'];
         allAccountName.forEach((accName) => {
             cy.deleteAllLedgersAPI(accName)
         })

@@ -406,7 +406,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if(this.taxListForStock && this.taxListForStock.length > 0) {
             this.taxListForStock.forEach(tl => {
-                let tax = companyTaxes.find(f => f.uniqueName === tl);
+                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f.uniqueName === tl) : undefined;
                 if (tax) {
                     switch (tax.taxType) {
                         case 'tcsrc':
@@ -1332,7 +1332,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if(adjustments && adjustments.length > 0) {
                 adjustments.forEach(adjustment => {
                     adjustment.adjustmentAmount = adjustment.balanceDue;
-                    // delete adjustment.balanceDue;
+                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
             }
             this.currentTxn.voucherAdjustments = {

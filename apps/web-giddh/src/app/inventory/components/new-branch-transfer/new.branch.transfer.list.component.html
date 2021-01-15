@@ -121,7 +121,7 @@
                         <th width="10%">Action</th>
                     </tr>
                 </thead>
-                <tbody *ngIf="branchTransferResponse.items && branchTransferResponse.items.length > 0">
+                <tbody *ngIf="!isLoading && branchTransferResponse.items && branchTransferResponse.items.length > 0">
                     <tr *ngFor="let item of branchTransferResponse.items; let i = index;">
                         <td data-title="#">{{ (branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1)) + (i+1) }}
                         </td>
@@ -135,7 +135,7 @@
                         <td *ngIf="currentOrganizationType !== 'BRANCH'" data-title="Receiver">{{ item.receiver }}</td>
                         <td data-title="From Warehouse">{{ item.fromWarehouse }}</td>
                         <td data-title="To Warehouse">{{ item.toWarehouse }}</td>
-                        <td data-title="Total Amount" class="text-right">{{activeCompany.baseCurrencySymbol}}
+                        <td data-title="Total Amount" class="text-right">{{activeCompany?.baseCurrencySymbol}}
                             {{ item.totalAmount | giddhCurrency }}</td>
                         <td data-title="Action">
                             <div class="btn-group" container="body" dropdown [autoClose]="true">
@@ -171,8 +171,14 @@
                 <tbody class="on-mobile-view no-records" *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
                         <td *ngIf="!isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11" align="center">No records found.</td>
-                        <td *ngIf="isLoading" colspan="8">
-
+                        <td *ngIf="isLoading" [attr.colspan]="currentOrganizationType === 'BRANCH' ? 9 : 11">
+                            <div class="no-data mt-0 loader-main">
+                                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                                <div class="spinner2">
+                                    <div class="cube1"></div>
+                                    <div class="cube2"></div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
