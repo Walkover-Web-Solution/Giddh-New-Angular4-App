@@ -1858,7 +1858,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + entry.taxSum);
+                        taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
                     }
                     entry.otherTaxType = 'tcs';
                 } else {
@@ -2274,8 +2274,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             salesEntryClass.voucherType = entry.voucherType;
             salesEntryClass.uniqueName = entry.uniqueName;
             salesEntryClass.description = entry.description;
+            let calculationMethod = (entry.otherTaxModal && entry.otherTaxModal.tcsCalculationMethod) ? entry.otherTaxModal.tcsCalculationMethod : "";
             entry.taxList.forEach(t => {
-                salesEntryClass.taxes.push({ uniqueName: t });
+                salesEntryClass.taxes.push({ uniqueName: t, calculationMethod: calculationMethod });
             });
             entry.transactions.forEach(transaction => {
                 let transactionClassMul = new TransactionClassMulticurrency();
