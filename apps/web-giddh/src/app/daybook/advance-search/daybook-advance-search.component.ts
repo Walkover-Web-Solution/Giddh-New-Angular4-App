@@ -709,7 +709,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             this.defaultStockSuggestions = response.map(result => {
                 return {
                     value: result.uniqueName,
-                    label: result.name
+                    label: `${result.name} (${result.uniqueName})`
                 }
             }) || [];
             this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
