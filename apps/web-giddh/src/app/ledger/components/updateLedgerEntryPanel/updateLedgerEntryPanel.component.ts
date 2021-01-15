@@ -1554,7 +1554,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.forceClear$ = observableOf({ status: true });
                 }
                 let invoiceSelected;
-                const selectedInvoice = (this.vm.selectedLedger.invoiceLinkingRequest && this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices) ? this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0] : false;
+                const selectedInvoice = (this.vm.selectedLedger && this.vm.selectedLedger.invoiceLinkingRequest && this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices) ? this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0] : false;
                 if (selectedInvoice) {
                     selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                     invoiceSelected = {
@@ -1617,16 +1617,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.value && event.additional) {
-            this.vm.selectedLedger.invoiceLinkingRequest = {
-                linkedInvoices: [
-                    {
-                        invoiceUniqueName: event.value,
-                        voucherType: event.additional.voucherType
-                    }
-                ]
+            if(this.vm.selectedLedger) {
+                this.vm.selectedLedger.invoiceLinkingRequest = {
+                    linkedInvoices: [
+                        {
+                            invoiceUniqueName: event.value,
+                            voucherType: event.additional.voucherType
+                        }
+                    ]
+                }
             }
         } else {
-            this.vm.selectedLedger.invoiceLinkingRequest = null;
+            if(this.vm.selectedLedger) {
+                this.vm.selectedLedger.invoiceLinkingRequest = null;
+            }
         }
     }
 
