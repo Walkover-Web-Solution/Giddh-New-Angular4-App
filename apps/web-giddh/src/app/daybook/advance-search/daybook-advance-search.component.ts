@@ -128,7 +128,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public defaultAccountSuggestions: Array<IOption> = [];
     /** True, if API call should be prevented on default scroll caused by scroll in list */
     public preventDefaultScrollApiCall: boolean = false;
-    /** Stores the default search results pagination details */
+    /** Stores the default search results pagination details for account dropdown */
     public defaultAccountPaginationData = {
         page: 0,
         totalPages: 0,
@@ -136,23 +136,23 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     };
     /** Stores the value of accounts */
     public accounts: IOption[];
-    /** Stores the search results pagination details */
+    /** Stores the search results pagination details for stock dropdown */
     public stocksSearchResultsPaginationData = {
         page: 0,
         totalPages: 0,
         query: ''
     };
-    /** Default search suggestion list to be shown for search */
+    /** Default search suggestion list to be shown for search for stock dropdown */
     public defaultStockSuggestions: Array<IOption> = [];
-    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    /** True, if API call should be prevented on default scroll caused by scroll in list for stock dropdown */
     public preventDefaultStockScrollApiCall: boolean = false;
-    /** Stores the default search results pagination details */
+    /** Stores the default search results pagination details for stock dropdown */
     public defaultStockPaginationData = {
         page: 0,
         totalPages: 0,
         query: ''
     };
-    /** Stores the value of accounts */
+    /** Stores the value of stocks */
     public stocks: IOption[];
 
 	constructor(
