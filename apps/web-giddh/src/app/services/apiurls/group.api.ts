@@ -14,5 +14,6 @@ export const GROUP_API = {
 	FLATTEN_GROUP_WITH_ACCOUNTS: 'company/:companyUniqueName/flatten-groups-with-accounts?q=:q&page=:page&count=:count&showEmptyGroups=:showEmptyGroups',
 	FLATTEN_GROUPS_ACCOUNTS: 'company/:companyUniqueName/groups/flatten-groups-accounts?q=:q&page=:page&count=:count&showEmptyGroups=:showEmptyGroups', // get call
 	TAX_HIERARCHY: 'company/:companyUniqueName/groups/:groupUniqueName/tax-hierarchy', // get call
-    CREATE_COMPANY_CUSTOM_FIELD: 'company/:companyUniqueName/custom-fields'
+    CREATE_COMPANY_CUSTOM_FIELD: 'company/:companyUniqueName/custom-fields',
+    SEARCH_GROUPS: 'company/:companyUniqueName/group-search'
 };

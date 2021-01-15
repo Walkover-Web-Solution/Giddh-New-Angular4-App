@@ -246,6 +246,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isImportStatementVisible: boolean = false;
     /** This will hold bank transactions api response */
     public bankTransactionsResponse: any = {count: 0, totalItems: 0, totalPages: 0, page: 1};
+    /** Set to true the first time advance search modal is opened, done
+     * to prevent the API call only when the advance search filter is opened
+     * by user and not when the user visits the page
+     */
+    public isAdvanceSearchOpened: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1716,7 +1721,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public onOpenAdvanceSearch(): void {
-        this.advanceSearchComp.loadComponent();
+        if (!this.isAdvanceSearchOpened) {
+            this.isAdvanceSearchOpened = true;
+        } else {
+            this.advanceSearchComp.loadComponent();
+        }
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                 page: 0,
