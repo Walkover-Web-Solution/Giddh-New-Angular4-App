@@ -157,7 +157,7 @@ svg.icon.icon-sm {
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: $grimmys-gray;
+    color: $gray;
 }
 
 .space {
@@ -303,7 +303,7 @@ address {
 
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: $snow;
+    background-color: $gray-95;
 }
 
 .table tbody > tr > td,
@@ -366,7 +366,7 @@ address {
 
 .tax-engine .nav-band .nav-tabs {
     white-space: nowrap;
-    background-color: $lynx-white;
+    background-color: $white-smoke;
 }
 
 .tax-engine .sub-filter-nav-band ul > li,
@@ -394,7 +394,7 @@ address {
 
 .tax-engine .sub-filter-nav-band ul > li.active > a,
 .tax-engine .sub-filter-nav-bandnew ul > li.active > a {
-    color: $extra-dark-gray;
+    color: $night-rider;
     font-weight: 600;
 }
 
@@ -453,7 +453,7 @@ svg.icon.icon-xs {
 }
 
 .tax-engine .transactions-list .filter-band {
-    background-color: $alice-blue-dark;
+    background-color: $alice-blue;
     padding: 20px;
     height: 66px;
 }
@@ -553,7 +553,7 @@ svg.icon.icon-sm {
 
 .tax-engine .transactions-overview .transaction-info:hover {
     border: 1px solid $gainsboro;
-    box-shadow: 0 0 20px 3px $snow;
+    box-shadow: 0 0 20px 3px $gray-95;
 }
 
 .tax-engine .transactions-overview .transaction-info {
@@ -634,7 +634,7 @@ svg.icon.icon-sm {
 }
 
 .tax-engine .sub-filter-nav-band ul > li.active > a {
-    color: $gray-black;
+    color: $night-rider;
     font-weight: 600;
 }
 
@@ -693,7 +693,7 @@ tax-engine .table.reconciliations-table thead > tr > th {
 }
 
 .zi-table.table-hover tbody tr:hover td {
-    background-color: $snow;
+    background-color: $white-smoke;
     cursor: pointer;
 }
 
@@ -764,7 +764,7 @@ tax-engine .table.reconciliations-table thead > tr > th {
 }
 
 .zi-table.table thead > tr > th {
-    color: $oxford-blue;
+    color: $muzli;
     background: $white;
     font-weight: 700;
     font-size: 12px;
@@ -783,12 +783,12 @@ tax-engine .table.reconciliations-table thead > tr > th {
 }
 
 .tax-engine .sub-filter-nav-band ul > li.active > a .count {
-    color: $extra-dark-gray;
+    color: $night-rider;
 }
 
 .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: $snow;
+    background-color: $gray-95;
 }
 
 .table-striped > tbody > tr:nth-child(even) > td,

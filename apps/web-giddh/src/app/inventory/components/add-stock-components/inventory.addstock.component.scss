@@ -43,12 +43,12 @@
     }
     .new-custom-btn {
         font-size: 12px;
-        color: $cobalt-blue;
+        color: $primary;
         padding-top: 30px;
         cursor: pointer;
     }
     .text-danger {
-        color: $extra-bright-red;
+        color: $red;
     }
 }
 
@@ -85,7 +85,7 @@ tr.fsstock td {
 }
 .aside-pane-form {
     background-color: $white;
-    box-shadow: 0 3px 6px $black-russian-light;
+    box-shadow: 0 3px 6px $black-russian;
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;

@@ -365,7 +365,7 @@ ng-select.splSales {
     font-weight: 100;
 }
 
-.salesTax .taxInput {
+.sales-tax .tax-input {
     text-align: right;
 }
 
@@ -405,7 +405,7 @@ textarea:focus {
 
 .balance-due {
     display: block;
-    color: $comet;
+    color: $dark-gray;
     line-height: 1.2rem;
     font-size: 14px;
     font-weight: 500;
@@ -521,7 +521,7 @@ textarea:focus {
 
 #deposit-dropdown .caret,
 #deposit-dropdown-normal .caret {
-    border-top: 7px dashed $ghost;
+    border-top: 7px dashed $gainsboro;
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     right: -15px;
@@ -589,7 +589,7 @@ textarea:focus {
 }
 
 .modal-invoice-footer .btn:hover {
-    background: $dark-green;
+    background: $success-green;
     color: $white;
 }
 
@@ -602,7 +602,7 @@ textarea:focus {
 }
 
 .modal-invoice-footer ul > li > input:checked + label {
-    background: $dark-green;
+    background: $success-green;
     color: $white;
 }
 
@@ -612,12 +612,12 @@ textarea:focus {
 }
 
 .other-options {
-    color: $dark-gray;
+    color: $dim-gray;
     padding-top: 5px;
 }
 
 .other-options a {
-    color: $electric-blue;
+    color: $primary;
     font-size: 12px;
 }
 
@@ -677,7 +677,7 @@ input.form-control.selectedVal.cp.bottom-border-only.ng-star-inserted {
 }
 
 .change-label {
-    color: $electric-blue;
+    color: $primary;
 }
 
 .wrap-invoiceNumberDetails .form-group {
@@ -794,7 +794,7 @@ a.copyInvoice img {
     display: block;
 }
 
-.entryDate {
+.entry-date {
     font-size: 12px;
 }
 
@@ -807,7 +807,7 @@ a.copyInvoice img {
 .add-bulk-items {
     font-size: 12px;
     padding-bottom: 0;
-    color: $electric-blue;
+    color: $primary;
 }
 
 .otherDetailTable th,
@@ -890,7 +890,7 @@ span.edit-icon {
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: $light-silver;
+    color: $silver;
 }
 
 .hsn-code-dropdown a {
@@ -907,7 +907,7 @@ span.edit-icon {
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success,
 .bulk-item-btn-group button.btn.btn-sm.btn-success {
-    background-color: $dark-green;
+    background-color: $success-green;
     color: $white;
 }
 
@@ -919,13 +919,13 @@ span.edit-icon {
 }
 
 .update-text {
-    color: $electric-blue;
+    color: $primary;
     padding: 0 5px;
 }
 
 .select-account-label {
     font-size: 14px;
-    color: $extra-light-gray;
+    color: $silver;
     padding-bottom: 3px;
 }
 
@@ -1060,7 +1060,7 @@ section.newtable {
 }
 
 .add-bulk-button{
-    color: $light-silver
+    color: $silver
 }
 
 .textarea-height{
@@ -1169,11 +1169,11 @@ section.newtable {
     width: 100%;
 }
 
-.saveCard-data {
+.save-card-data {
     position: absolute;
     top: 11px;
     right: 40px;
-    color: $electric-blue;
+    color: $primary;
 }
 
 .sales-country-label {
@@ -1270,7 +1270,7 @@ section.newtable {
 }
 
 .add-bulk-item-modal .input-group-btn .fa {
-    color: $light-silver;
+    color: $silver;
 }
 
 .add-bulk-item-modal .single-selected-stock {
@@ -1287,7 +1287,7 @@ section.newtable {
     color: $white;
 }
 
-.table-custom-invoice .salesTax .dropdown-menu-right li label {
+.table-custom-invoice .sales-tax .dropdown-menu-right li label {
     padding-left: 10px;
 }
 

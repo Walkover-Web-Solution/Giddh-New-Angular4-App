@@ -327,8 +327,7 @@ address {
 }
 .tax-engine .nav-band .nav-tabs {
     white-space: nowrap;
-
-    background-color: $lynx-white;
+    background-color: $white-smoke;
 }
 .tax-engine{
     .sub-filter-nav-band{
@@ -355,7 +354,7 @@ address {
     margin: auto;
 }
 .tax-engine .sub-filter-nav-band ul > li.active > a {
-    color: $gray-black;
+    color: $night-rider;
     font-weight: 600;
 }
 #subtabs {
@@ -363,7 +362,7 @@ address {
 }
 .tax-engine .gstr-transactions-summary .gstr-summary-title {
     margin: 0 0 6px;
-    color: $grimmys-gray;
+    color: $gray;
 }
 .gstr-transactions-summary p {
     margin-bottom: 10px;
@@ -402,7 +401,7 @@ svg.icon.icon-xs {
     display: block;
 }
 .tax-engine .transactions-list .filter-band {
-    background-color: $alice-blue-dark;
+    background-color: $alice-blue;
     padding: 20px;
     height: 66px;
 }
@@ -480,17 +479,17 @@ svg.icon.icon-sm {
 }
 .table-striped > tbody > tr:hover {
     cursor: pointer;
-    background-color: $snow !important;
+    background-color: $alice-blue-light !important;
 }
 .table-striped > tbody > tr:nth-child(odd) {
-    background-color: $snow;
+    background-color: $alice-blue-light;
 }
 
 .table-striped > tbody > tr:nth-child(even) {
     background-color: $white;
 }
 .zi-table.table-hover tbody tr:hover td {
-    background-color: $snow;
+    background-color: $alice-blue-light;
     cursor: pointer;
 }
 .table-hover > tbody > tr:hover > td,
@@ -519,14 +518,14 @@ svg.icon.icon-sm {
 
 
 .return-detail-col{
-    background-color: $extra-dark-alice-blue;
+    background-color: $whisper;
     width: 50%;
 }
 
 .failed-transaction{
     padding: 10px 25px;
     margin: 5px auto;
-    border-left: 1px solid $light-grey;
+    border-left: 1px solid $gainsboro;
 }
 
 .zi-table-child{

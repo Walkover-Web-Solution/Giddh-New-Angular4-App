@@ -94,7 +94,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .text-muted {
-    color: $grimmys-gray;
+    color: $gray;
 }
 
 .return-content .content-graph {
@@ -324,12 +324,12 @@ hr {
 
 .notify label.font-xs.text-muted strong {
     font-weight: 600;
-    color: $grimmys-gray !important;
+    color: $gray !important;
 }
 
 .font-normal {
     font-size: 13px;
-    color: $grimmys-gray;
+    color: $gray;
 }
 
 .return-body .notification .faq-list {
@@ -338,12 +338,12 @@ hr {
 
 .return-body .notification .faq-list li {
     padding: 6px 10px;
-    color: #428bca;
+    color: $curious-blue;
     font-size: 13px;
 }
 
 .return-body .notification .faq-list li a:hover {
-    color: #005bd0;
+    color: $faux-true;
 }
 
 #c-tab ::ng-deep .nav-tabs > li.active > a,

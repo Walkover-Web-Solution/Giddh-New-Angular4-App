@@ -80,23 +80,23 @@
     height: 50px !important;
 }
 
-.click-dropdwon ul {
+.click-dropdown ul {
     list-style: none;
     position: absolute;
     left: -114px;
     background-color: $white;
     width: 131px;
-    box-shadow: 0px 4px 7px $gray-75;
+    box-shadow: 0px 4px 7px $silver;
     border-radius: 3px;
     z-index: 100;
     border: 1px solid $gainsboro;
 }
 
-.click-dropdwon {
+.click-dropdown {
     position: relative;
 }
 
-.click-dropdwon ul li {
+.click-dropdown ul li {
     padding: 3px 6px;
     margin-bottom: 4px;
 
@@ -104,15 +104,15 @@
     cursor: pointer;
 }
 
-.click-dropdwon ul li:hover {
+.click-dropdown ul li:hover {
     background-color: $gainsboro;
 }
 
-.click-dropdwon ul li:hover a {
-    color: $orange-red;
+.click-dropdown ul li:hover a {
+    color: orangered;
 }
 
-.click-dropdwon ul li a {
+.click-dropdown ul li a {
     color: $black;
 }
 
@@ -121,7 +121,7 @@
     cursor: pointer;
 }
 
-.click-dropdwon .dropdown-btn {
+.click-dropdown .dropdown-btn {
     display: none;
 }
 

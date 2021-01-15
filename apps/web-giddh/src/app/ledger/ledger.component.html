@@ -509,7 +509,7 @@
                             </tr>
                             <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate]; let i = index">
                                 <td class="pl-15 pr-15 relative"
-                                    [ngClass]="{'compoundEntry': transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
+                                    [ngClass]="{'compound-entry': transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
                                     tooltip="{{transactions.description}}"
                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
                                     (mouseout)="selectedTrxWhileHovering = ''">
@@ -648,7 +648,7 @@
                         <tr vr-item tabindex="-1" class="ledger-row row"
                             *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index;"
                             (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
-                            [ngClass]="{'compoundEntry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
+                            [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                             tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
                             (mouseout)="selectedTrxWhileHovering = ''">
 
@@ -916,7 +916,7 @@
                         <tr class="ledger-row row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions; let i = index"
                             (dblclick)="showUpdateLedgerModal(txn)" vr-item tabindex="-1"
                             (keydown.enter)="showUpdateLedgerModal(txn)"
-                            [ngClass]="{'compoundEntry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
+                            [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                             tooltip="{{txn.description}}" data-toggle="tooltip"
                             (mouseover)="entryHovered(txn.entryUniqueName)" (mouseout)="selectedTrxWhileHovering = ''">
 

@@ -95,10 +95,10 @@
 .total-footer {
     background-color: $white;
     display: flex;
-    .footitem {
+    .foot-item {
         padding: 41px;
         h2 {
-            color: $aluminum;
+            color: $wistful;
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -108,34 +108,27 @@
     }
 }
 
-.Journal_Voucher {
-    color: $light-silver-gray;
+.journal-voucher {
+    color: $silver;
 }
 
-.Purchase {
-    color: $electric-blue;
+.purchase {
+    color: $primary;
 }
-.Sales {
-    color: $dark-green;
+.sales {
+    color: $success-green;
 }
 
 /* class name same as what we are getting data */
 
-.PURCHASE {
-    color: $electric-blue;
-}
-.SALES {
-    color: $dark-green;
-}
-
-.JOURNAL {
+.journal {
     color: $hint-of-cyan;
 }
-.CREDIT {
-    color: $dark-navy-blue;
+.credit {
+    color: $faux-true;
 }
-.DEBIT {
-    color: $bright-orange;
+.debit {
+    color: $orange;
 }
 .modal-content {
     border-radius: 0px;
@@ -213,7 +206,7 @@
     }
 }
 button[aria-expanded="true"] i {
-    color: $gray-68;
+    color: $dim-gray;
 }
 /* voucher type DDL */
 
@@ -256,7 +249,7 @@ button[aria-expanded="true"] i {
         }
         .operators {
             font-size: 39px;
-            color: $aluminum;
+            color: $wistful;
         }
         h2 {
             font-size: 18px;
@@ -282,7 +275,7 @@ button[aria-expanded="true"] i {
     background: $white;
 }
 .btn-link-2 {
-    color: $electric-blue;
+    color: $primary;
 }
 .mb-100 {
     margin-bottom: 100px;

@@ -3,11 +3,11 @@
     box-shadow: none;
 
     .running {
-        color: $blue-shade;
+        color: $deep-sky-blue-hover;
     }
 
     .panel-heading {
-        background: $whisper-new;
+        background: $gray-90;
     }
 
     .panel-footer {
@@ -16,7 +16,7 @@
     }
 
     .panel-body {
-        color: $gray-44;
+        color: $gray;
         background: transparent;
         padding: 15px 0px 0px 0px;
 
@@ -28,8 +28,8 @@
         }
 
         .progress-bar {
-            background: $dark-silver;
-            border: 1px solid $dark-silver;
+            background: $silver;
+            border: 1px solid $silver;
             box-shadow: none;
         }
 
@@ -58,7 +58,7 @@
     }
 
     .text-success {
-        color: $strong-green;
+        color: $success-green;
     }
 }
 @media(max-width:991px){
