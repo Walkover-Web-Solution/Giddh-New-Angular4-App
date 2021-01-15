@@ -44,7 +44,8 @@
                                 <div class="col-6 col-sm-6">
                                     <div class="form-group">
                                         <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('particulars')" [forceClearReactive]="forceClearParticulars$ | async" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"
-                                            [ItemHeight]="33"></sh-select>
+                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                        (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)" [ItemHeight]="33"></sh-select>
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +141,9 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'" [ItemHeight]="33"></sh-select>
+                                                <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'" [ItemHeight]="33"
+                                                [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                                (scrollEnd)="handleStockScrollEnd()" (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"></sh-select>
                                             </div>
                                         </div>
                                     </div>
