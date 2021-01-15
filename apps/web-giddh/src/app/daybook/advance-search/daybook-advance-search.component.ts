@@ -6,13 +6,12 @@ import { Store, select } from '@ngrx/store';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
-import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import {IForceClear} from "../../models/api-models/Sales";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../services/general.service';
 import { SearchService } from '../../services/search.service';
@@ -587,7 +586,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             const requestObject = {
                 q: encodeURIComponent(query),
                 page,
-                count: 20
+                count: API_COUNT_LIMIT
             }
             this.inventoryService.GetStocks(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
