@@ -396,7 +396,7 @@
     #sFform-xZyf input,
     #sFform-xZyf textarea,
     #sFform-xZyf select {
-        border: 1px solid #525265 !important;
+        border: 1px solid $gainsboro !important;
         background: transparent !important;
         width: 230px !important;
     }
@@ -406,11 +406,11 @@
     }
 
     #sFformfield-xZyf label {
-        color: #73737f !important;
+        color: $gray !important;
     }
 
     #sFSection-Jkvq .sFsubmit.btn-primary {
-        background: #28ab00 !important;
+        background: $light-green !important;
         font-size: 14px;
     }
 
