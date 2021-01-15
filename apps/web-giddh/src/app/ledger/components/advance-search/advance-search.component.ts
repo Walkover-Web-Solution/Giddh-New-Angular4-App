@@ -25,7 +25,7 @@ import { GeneralService } from '../../../services/general.service';
 import { GroupService } from '../../../services/group.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { IOption } from '../../../theme/ng-select/option.interface';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
 
@@ -687,7 +687,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: 20
+                count: API_COUNT_LIMIT
             }
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
@@ -744,7 +744,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: 20
+                count: API_COUNT_LIMIT
             }
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);

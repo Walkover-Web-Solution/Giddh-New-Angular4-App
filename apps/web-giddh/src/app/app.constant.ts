@@ -64,6 +64,8 @@ export enum OnBoardingType {
 
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
+/** API default count limit */
+export const API_COUNT_LIMIT = 20;
 
 /** SubVoucher type */
 export enum SubVoucher {
