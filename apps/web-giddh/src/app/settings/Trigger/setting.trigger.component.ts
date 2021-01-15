@@ -92,8 +92,7 @@ export class SettingTriggerComponent implements OnInit {
     public defaultAccountSuggestions: Array<IOption> = [];
     /** True, if API call should be prevented on default scroll caused by scroll in list */
     public preventDefaultScrollApiCall: boolean = false;
-    /** Stores the default search results pagination details (required only for passing
-     * default search pagination details to Update ledger component) */
+    /** Stores the default search results pagination details */
     public defaultAccountPaginationData = {
         page: 0,
         totalPages: 0,
@@ -290,7 +289,7 @@ export class SettingTriggerComponent implements OnInit {
                 q: encodeURIComponent(query),
                 page
             }
-            this.searchService.searchAccount(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -354,8 +353,7 @@ export class SettingTriggerComponent implements OnInit {
     }
 
     /**
-     * Loads the default account search suggestion when ledger module is loaded and
-     * when ledger is changed
+     * Loads the default account search suggestion when module is loaded
      *
      * @private
      * @memberof SettingTriggerComponent
