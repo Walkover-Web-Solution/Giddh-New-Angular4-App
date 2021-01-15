@@ -5,11 +5,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as moment from 'moment';
-import { createSelector } from 'reselect';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { DayBookRequestModel } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import {IForceClear} from "../../models/api-models/Sales";
@@ -17,6 +15,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../services/general.service';
+import { SearchService } from '../../services/search.service';
+import { InventoryService } from '../../services/inventory.service';
 
 const COMPARISON_FILTER = [
     { label: 'Greater Than', value: 'greaterThan' },
@@ -118,40 +118,61 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
 
-	constructor(private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _accountService: AccountService, private generalService: GeneralService, private modalService: BsModalService) {
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of accounts */
+    public accounts: IOption[];
+    /** Stores the search results pagination details */
+    public stocksSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultStockSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultStockScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultStockPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of accounts */
+    public stocks: IOption[];
+
+	constructor(
+        private inventoryService: InventoryService,
+        private store: Store<AppState>,
+        private fb: FormBuilder,
+        private generalService: GeneralService,
+        private modalService: BsModalService,
+        private searchService: SearchService,
+    ) {
         this.initializeDaybookAdvanceSearchForm();
 		this.setVoucherTypes();
 		this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-		this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
     }
 
-    public ngOnInit() {
-
-        this.store.dispatch(this.inventoryAction.GetStock());
-        // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
-
-        this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let accounts: IOption[] = [];
-                data.body.results.map(d => {
-                    accounts.push({ label: d.name, value: d.uniqueName });
-                });
-                this.accounts$ = observableOf(accounts);
-            }
-        });
-
-		this.stockListDropDown$ = this.store.pipe(select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
-			let data = _.cloneDeep(allStocks);
-			if (data && data.results) {
-				let units = data.results;
-
-				return units.map(unit => {
-					return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
-				});
-			}
-		})), takeUntil(this.destroyed$));
-         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+	public ngOnInit() {
+        this.loadDefaultAccountsSuggestions();
+        this.loadDefaultStocksSuggestions();
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });
 	}
@@ -451,7 +472,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * To show the datepicker
      *
      * @param {*} element
-     * @memberof TbPlBsFilterComponent
+     * @memberof DaybookAdvanceSearchModelComponent
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -466,7 +487,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /**
      * This will hide the datepicker
      *
-     * @memberof TbPlBsFilterComponent
+     * @memberof DaybookAdvanceSearchModelComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -476,7 +497,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof TbPlBsFilterComponent
+     * @memberof DaybookAdvanceSearchModelComponent
      */
     public dateSelectedCallback(value?: any): void {
         if(value && value.event === "cancel") {
@@ -494,5 +515,206 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         }
+    }
+
+    /**
+     * Search query change handler for account
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accounts$ = observableOf(this.accounts);
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Search query change handler for stock
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.stocksSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultStockScrollApiCall &&
+            (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject = {
+                q: encodeURIComponent(query),
+                page,
+                count: 20
+            }
+            this.inventoryService.GetStocks(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.stocks = searchResults;
+                    } else {
+                        this.stocks = [
+                            ...this.stocks,
+                            ...searchResults
+                        ];
+                    }
+                    this.stockListDropDown$ = observableOf(this.stocks);
+                    this.stocksSearchResultsPaginationData.page = data.body.page;
+                    this.stocksSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.stocks = [...this.defaultStockSuggestions];
+            this.stocksSearchResultsPaginationData.page = this.defaultStockPaginationData.page;
+            this.stocksSearchResultsPaginationData.totalPages = this.defaultStockPaginationData.totalPages;
+            this.preventDefaultStockScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultStockScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for account dropdown
+     *
+     * @returns null
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Scroll end handler  for stock dropdown
+     *
+     * @returns null
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    public handleStockScrollEnd(): void {
+        if (this.stocksSearchResultsPaginationData.page < this.stocksSearchResultsPaginationData.totalPages) {
+            this.onStockSearchQueryChanged(
+                this.stocksSearchResultsPaginationData.query,
+                this.stocksSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.stocksSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultStockSuggestions = this.defaultStockSuggestions.concat(...results);
+                        this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
+                        this.defaultStockPaginationData.totalPages = this.stocksSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
+    }
+
+    /**
+     * Loads the default stock list for advance search
+     *
+     * @private
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    private loadDefaultStocksSuggestions(): void {
+        this.onStockSearchQueryChanged('', 1, (response) => {
+            this.defaultStockSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
+            this.defaultStockPaginationData.totalPages = this.stocksSearchResultsPaginationData.totalPages;
+            this.stocks = [...this.defaultStockSuggestions];
+        });
     }
 }
