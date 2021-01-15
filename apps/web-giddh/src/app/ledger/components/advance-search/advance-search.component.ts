@@ -13,22 +13,17 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { select, Store } from '@ngrx/store';
-import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as moment from 'moment';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { ILedgerAdvanceSearchRequest } from '../../../models/api-models/Ledger';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 import { GeneralService } from '../../../services/general.service';
 import { GroupService } from '../../../services/group.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
@@ -56,7 +51,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public bsRangeValue: string[];
     @Input() public advanceSearchRequest: AdvanceSearchRequest;
     @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
-    public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
     public advanceSearchForm: FormGroup;
     public showOtherDetails: boolean = false;
@@ -93,32 +87,76 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public groups: IOption[] = [];
     public groupUniqueNames: any[] = [];
 
-    constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private modalService: BsModalService, private generalService: GeneralService) {
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the list of accounts */
+    public accounts: IOption[];
+    /** Stores the search results pagination details for stock dropdown */
+    public stocksSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for stock dropdown */
+    public defaultStockSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for stock dropdown */
+    public preventDefaultStockScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for stock dropdown */
+    public defaultStockPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of stocks */
+    public stocks: IOption[];
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of groups */
+    public searchedGroups: IOption[];
+
+    constructor(
+        private _groupService: GroupService,
+        private inventoryService: InventoryService,
+        private fb: FormBuilder,
+        private modalService: BsModalService,
+        private generalService: GeneralService,
+        private searchService: SearchService,
+    ) {
         this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.flattenAccountListStream$.subscribe(data => {
-            if (data) {
-                let accounts: IOption[] = [];
-                data.map(d => {
-                    accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
-                });
-                this.accounts$ = observableOf(accounts);
-            }
-        });
-
-        this.stockListDropDown$ = this.store.pipe(select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
-            let data = _.cloneDeep(allStocks);
-            if (data && data.results) {
-                let units = data.results;
-
-                return units.map(unit => {
-                    return { label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
-                });
-            }
-        })), takeUntil(this.destroyed$));
+        this.loadDefaultAccountsSuggestions();
+        this.loadDefaultStocksSuggestions();
+        this.loadDefaultGroupsSuggestions();
 
         if(!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
@@ -181,27 +219,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public loadComponent(): void {
-        this.store.dispatch(this.inventoryAction.GetStock(undefined, this.advanceSearchRequest.branchUniqueName));
-        // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
-
-        // Get groups with accounts
-        this._groupService.GetFlattenGroupsAccounts(undefined, undefined, undefined, undefined, this.advanceSearchRequest.branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data && data.status === 'success' && data.body && data.body.results ) {
-                let groups: IOption[] = [];
-                data.body.results.map(d => {
-                    groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
-                });
-                this.groups$ = observableOf(groups);
-
-                setTimeout(() => {
-                    if(this.groupUniqueNames && this.groupUniqueNames.length > 0) {
-                        this.advanceSearchForm.get('groupUniqueNames').patchValue(this.groupUniqueNames);
-                    }
-                }, 500);
-            }
-        });
+        this.loadDefaultAccountsSuggestions();
+        this.loadDefaultStocksSuggestions();
+        this.loadDefaultGroupsSuggestions();
     }
-
     public resetAdvanceSearchModal() {
         this.advanceSearchRequest.dataToSend.bsRangeValue = [moment().toDate(), moment().subtract(30, 'days').toDate()];
         if (this.dropDowns) {
