@@ -30,7 +30,9 @@ import { GroupService } from '../../../services/group.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { SearchService } from '../../../services/search.service';
+import { InventoryService } from '../../../services/inventory.service';
 
 const COMPARISON_FILTER = [
     { label: 'Greater Than', value: 'greaterThan' },
@@ -562,4 +564,317 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }
         }
     }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AdvanceSearchModelComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            if (this.advanceSearchRequest.branchUniqueName) {
+                requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
+            }
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accounts$ = observableOf(this.accounts);
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof AdvanceSearchModelComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                this.accountsSearchResultsPaginationData.query ? true : false,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} - (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Search query change handler for stock
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AdvanceSearchModelComponent
+     */
+    public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.stocksSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultStockScrollApiCall &&
+            (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT
+            }
+            if (this.advanceSearchRequest.branchUniqueName) {
+                requestObject.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
+            }
+            this.inventoryService.GetStocks(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.stocks = searchResults;
+                    } else {
+                        this.stocks = [
+                            ...this.stocks,
+                            ...searchResults
+                        ];
+                    }
+                    this.stockListDropDown$ = observableOf(this.stocks);
+                    this.stocksSearchResultsPaginationData.page = data.body.page;
+                    this.stocksSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.stocks = [...this.defaultStockSuggestions];
+            this.stocksSearchResultsPaginationData.page = this.defaultStockPaginationData.page;
+            this.stocksSearchResultsPaginationData.totalPages = this.defaultStockPaginationData.totalPages;
+            this.preventDefaultStockScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultStockScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AdvanceSearchModelComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT
+            }
+            if (this.advanceSearchRequest.branchUniqueName) {
+                requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
+            }
+            this._groupService.searchGroups(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.searchedGroups = searchResults;
+                    } else {
+                        this.searchedGroups = [
+                            ...this.searchedGroups,
+                            ...searchResults
+                        ];
+                    }
+                    this.groups$ = observableOf(this.searchedGroups);
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for stock dropdown
+     *
+     * @returns null
+     * @memberof AdvanceSearchModelComponent
+     */
+    public handleStockScrollEnd(): void {
+        if (this.stocksSearchResultsPaginationData.page < this.stocksSearchResultsPaginationData.totalPages) {
+            this.onStockSearchQueryChanged(
+                this.stocksSearchResultsPaginationData.query,
+                this.stocksSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.stocksSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultStockSuggestions = this.defaultStockSuggestions.concat(...results);
+                        this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
+                        this.defaultStockPaginationData.totalPages = this.stocksSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof AdvanceSearchModelComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default stock list for advance search
+     *
+     * @private
+     * @memberof AdvanceSearchModelComponent
+     */
+    private loadDefaultStocksSuggestions(): void {
+        this.onStockSearchQueryChanged('', 1, (response) => {
+            this.defaultStockSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
+            this.defaultStockPaginationData.totalPages = this.stocksSearchResultsPaginationData.totalPages;
+            this.stocks = [...this.defaultStockSuggestions];
+        });
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof AdvanceSearchModelComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+        });
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof AdvanceSearchModelComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, false, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
+    }
+
 }
