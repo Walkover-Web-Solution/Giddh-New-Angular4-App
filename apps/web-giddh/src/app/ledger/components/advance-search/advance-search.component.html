@@ -33,7 +33,9 @@
                     </div>
                     <div class="col-sm-7">
                         <div class="form-group">
-                            <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'accountUniqueNames')"  formControlName="accountUniqueNames" [isFilterEnabled]="true" [multiple]="true" [placeholder]=" 'Select Accounts'"></sh-select>
+                            <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'accountUniqueNames')"  formControlName="accountUniqueNames" [isFilterEnabled]="true" [multiple]="true" [placeholder]=" 'Select Accounts'"
+                            [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                            (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
                         </div>
                     </div>
                 </div>
@@ -48,7 +50,8 @@
                     <div class="col-sm-7">
                         <div class="form-group">
                             <sh-select [options]="groups$ | async" name="groups" (onClear)="onDDClear( 'groupUniqueNames')" formControlName="groupUniqueNames" [isFilterEnabled]="true" [multiple]="true" [placeholder]="
-                                    'Select Groups'"></sh-select>
+                            'Select Groups'" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                            (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"></sh-select>
                         </div>
                     </div>
                 </div>
@@ -78,7 +81,8 @@
                             <div class="col-sm-9 col-8 col-9">
                                 <div class="form-group">
                                     <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'particulars')" formControlName="particulars" [isFilterEnabled]="true" [multiple]="true
-                                " [placeholder]=" 'Select Accounts'"></sh-select>
+                                " [placeholder]=" 'Select Accounts'" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
                                 </div>
                             </div>
                         </div>
@@ -192,7 +196,8 @@
                                     <div class="col-sm-9 col-8">
                                         <div class="form-group">
                                             <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear( 'inventory')" formControlName="inventories" [isFilterEnabled]="true" [multiple]="true
-                                " [placeholder]=" 'Select Accounts'"></sh-select>
+                                            " [placeholder]=" 'Select Accounts'" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                            (scrollEnd)="handleStockScrollEnd()" (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"></sh-select>
                                         </div>
                                     </div>
                                 </div>
