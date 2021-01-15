@@ -36,8 +36,11 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	public isAccountNameAvailable$: Observable<boolean>;
 	public createAccountInProcess$: Observable<boolean>;
 	public updateAccountInProcess$: Observable<boolean>;
-	public showBankDetail: boolean = false;
-	public isDebtorCreditor: boolean = true;
+    public showBankDetail: boolean = false;
+    /** this will hold if it's debtor/creditor */
+    @Input() public isDebtorCreditor: boolean = true;
+    /** this will hold if it's bank account */
+    @Input() public isBankAccount: boolean = true;
 
 
 	// private below
