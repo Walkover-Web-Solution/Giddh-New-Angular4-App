@@ -89,7 +89,7 @@
 
                         <tbody class="ledger-main">
                             <tr class="debit-blank-row row"
-                                *ngFor="let txn of vm.selectedLedger.transactions; let i = index; ">
+                                *ngFor="let txn of vm.selectedLedger.transactions; let i = index; trackBy: trackByFunction">
                                 <ng-container *ngIf="txn.type === 'DEBIT'">
 
                                     <td class="col-3" data-title="Date">
@@ -115,7 +115,7 @@
                                                     [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                     [class.disabled-ledger]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                     [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                                                    [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
+                                                    [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel" [doNotResetSelectedValues]="doNotResetSelectedValues"
                                                     (onHide)="handleSuggestionHide()"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="searchResults" #dbtSelect
@@ -124,7 +124,6 @@
                                                     (selected)="selectAccount($event,txn, dbtSelect)"
                                                     [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
                                                     [ItemHeight]="67" (onShow)="dbs.hide()"
-                                                    [useInBuiltFilterForFlattenAc]="true"
                                                     [defaultValue]="txn.particular.name"
                                                     [placeholder]="'To Select Accounts'">
 
@@ -300,7 +299,7 @@
                                                     [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                     [class.disabled-ledger]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                                     [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                                                    [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
+                                                    [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel" [doNotResetSelectedValues]="doNotResetSelectedValues"
                                                     (onHide)="handleSuggestionHide()"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="searchResults" #crdSelect
@@ -309,7 +308,6 @@
                                                     [fixedValue]="txn.particular.name"
                                                     (onShow)="cbs.hide()" [showClear]="false"
                                                     [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
-                                                    [useInBuiltFilterForFlattenAc]="true"
                                                     [defaultValue]="txn.particular.name"
                                                     [placeholder]="'By Select Accounts'">
 
