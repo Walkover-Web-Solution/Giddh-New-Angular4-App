@@ -28,7 +28,7 @@ import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
-import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
+import { cloneDeep, filter, last, orderBy, uniqBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
@@ -249,6 +249,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public currentCompanyBranches$: Observable<any>;
     /** Stores the current branches */
     public branches: Array<any>;
+    /** True, when default suggestions are loaded successfully */
+    public doNotResetSelectedValues: boolean;
 
     constructor(
         private _accountService: AccountService,
@@ -294,6 +296,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.condition2 = !this.condition;
         this.Shown = !this.Shown;
         this.isHide = !this.isHide;
+    }
+
+    /** Track by function for items */
+    public trackByFunction(index: number, item: ILedgerTransactionItem): any {
+        return item.particular.uniqueName;
     }
 
     public ngOnInit() {
@@ -723,7 +730,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     });
                     // this.vm.flatternAccountList4Select = observableOf(orderBy(initialAccounts, 'label'));
                     initialAccounts.push(...this.defaultSuggestions);
-                    this.searchResults = orderBy(initialAccounts, 'label');
+                    this.searchResults = orderBy(uniqBy(initialAccounts, 'value'), 'label');
                     this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
                     // check if entry allows to show discount and taxes box
@@ -757,6 +764,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                     this.vm.generatePanelAmount();
                     this.activeAccountSubject.next(this.activeAccount);
+                    setTimeout(() => {
+                        this.doNotResetSelectedValues = true;
+                    }, 200);
                 }
             });
 
@@ -1872,12 +1882,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }) || [];
                     this.noResultsFoundLabel = SearchResultText.NotFound;
                     if (page === 1) {
-                        this.searchResults = searchResults;
+                        this.searchResults = uniqBy(searchResults, 'value');
                     } else {
-                        this.searchResults = [
-                            ...this.searchResults,
-                            ...searchResults
-                        ];
+                        const uniqueResults = uniqBy([...this.searchResults,
+                            ...searchResults], 'value');
+                        this.searchResults = uniqueResults;
                     }
                     this.searchResultsPaginationData.page = data.body.page;
                     this.searchResultsPaginationData.totalPages = data.body.totalPages;
