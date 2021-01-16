@@ -1137,7 +1137,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             templateUniqueName: null,
                             number: ''
                         };
-                        
+
                         let tempObj;
                         let voucherDate = this.invFormData.voucherDetails.voucherDate;
                         let dueDate = this.invFormData.voucherDetails.dueDate;
@@ -4879,6 +4879,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this._cdr.detectChanges();
                     if (this.isPurchaseInvoice && this.isUpdateMode) {
                         // TODO: Remove this code once purchase invoice supports multicurrency
+                        this.calculateSubTotal();
+                        this.calculateTotalDiscount();
+                        this.calculateTotalTaxSum();
+                        this.calculateGrandTotal();
+                        this.calculateBalanceDue();
+                    }
+                    if (from !== to && !this.isPurchaseInvoice) {
+                        // Multi currency case
+                        this.updateStockEntries();
                         this.calculateSubTotal();
                         this.calculateTotalDiscount();
                         this.calculateTotalTaxSum();
