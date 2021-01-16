@@ -249,8 +249,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public currentCompanyBranches$: Observable<any>;
     /** Stores the current branches */
     public branches: Array<any>;
-    /** True, when default suggestions are loaded successfully */
-    public doNotResetSelectedValues: boolean;
 
     constructor(
         private _accountService: AccountService,
@@ -699,7 +697,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 }];
                             }
                             initialAccounts.push({
-                                label: `${t.particular.name}(${t.inventory.stock.uniqueName})`,
+                                label: `${t.particular.name} (${t.inventory.stock.uniqueName})`,
                                 value: `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`,
                                 additional: {
                                     stock: {
@@ -764,9 +762,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                     this.vm.generatePanelAmount();
                     this.activeAccountSubject.next(this.activeAccount);
-                    setTimeout(() => {
-                        this.doNotResetSelectedValues = true;
-                    }, 200);
                 }
             });
 
