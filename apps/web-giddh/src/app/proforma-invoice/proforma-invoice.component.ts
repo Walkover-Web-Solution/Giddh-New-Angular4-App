@@ -4897,6 +4897,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.calculateGrandTotal();
                         this.calculateBalanceDue();
                     }
+                    if (from !== to && !this.isPurchaseInvoice) {
+                        // Multi currency case
+                        this.updateStockEntries();
+                        this.calculateSubTotal();
+                        this.calculateTotalDiscount();
+                        this.calculateTotalTaxSum();
+                        this.calculateGrandTotal();
+                        this.calculateBalanceDue();
+                    }
                 }
             }, (error => {
 
@@ -6748,7 +6757,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public selectAddress(data: any, address: any, isCompanyAddress: false): void {
         if(data && address) {
             data.address[0] = address.address;
-            
+
             if(!data.state) {
                 data.state = {};
             }
