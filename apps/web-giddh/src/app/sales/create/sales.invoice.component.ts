@@ -2139,7 +2139,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                     let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                    taxableValue = (rawAmount + entry.taxSum);
+                    taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
                 }
                 entry.otherTaxType = 'tcs';
                 entry.tdsTaxList = [];
