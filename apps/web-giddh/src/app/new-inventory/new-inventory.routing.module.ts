@@ -12,6 +12,7 @@ import { AdjustGroupComponent } from "./component/adjust-group/adjust-group.comp
 import { AdjustProductServiceComponent } from "./component/adjust-product-service/adjust-product-service.component";
 import { CreateNewInventoryComponent } from "./component/create-new-inventory-component/create-new-inventory.component";
 import { InventoryDashboardComponent } from "./component/inventory-dashboard/inventory-dashboard.component";
+import { DashboardSellingReport } from "./component/inventory-dashboard/dashboard-selling-report/dashboard-selling-report.component";
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -63,6 +64,10 @@ import { InventoryDashboardComponent } from "./component/inventory-dashboard/inv
             {
                 path: "inventory-dashboard",
                 component: InventoryDashboardComponent,
+            },
+            {
+                path: "top-selling-report",
+                component: DashboardSellingReport,
             }
 
         ])

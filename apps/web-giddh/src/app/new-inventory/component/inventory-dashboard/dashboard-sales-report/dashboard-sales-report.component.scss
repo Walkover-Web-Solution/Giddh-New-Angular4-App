@@ -1,7 +1,6 @@
 @import "../../../../../assets/css/color.scss";
-
-.profitable-stock-block {
-    .profit-stock-head {
+.purchase-report-block{
+    .purchase-report-head {
         h4{
             font-family: 'opensans-semibold';
         }
@@ -23,16 +22,16 @@
         align-items: center;
         flex-direction: column;
     }
-    .profitable-stock-container{
+    .purchase-report-container{
         border-top: 1px solid $gainsboro;
         .table-wrapper{
             width: 80%;
-            .profit-stock-table{
-                border-right: none;
+            .purchase-report-table{
                 font-size: 14px;
                 th{
                     border-bottom: 1px solid $gainsboro !important;
                     border-top: none !important;
+                    min-width: 150px;
                 }
                 tr{
                     td{
@@ -46,39 +45,30 @@
                 }
             }
         }
-        .star-stock-wrapper{
+        .purchase-summary-wrapper{
             width: 20%;
-            padding-left: 15px;
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            text-align: center;
-            border-left: 1px solid $gainsboro;
+            border-right: 1px solid $gainsboro;
+            .about-purchase-report{
+                .text-blue{
+                    font-size: 20px;
+                }
+            }
         }
     }
 }
 @media(max-width:768px){
-    .profitable-stock-block{
-        .profitable-stock-container{
-            flex-direction: column;
+    .purchase-report-block{
+        .purchase-report-container{
+            flex-direction: column-reverse;
             border-top: none;
             .table-wrapper{
                 width: 100%;
-                .profit-stock-table{
-                    td{
-                        span{
-                            display: block;
-                            margin-left: 0 !important;
-                            margin-top: 5px;
-                        }
-                    }
-                }
             }
-            .star-stock-wrapper{
+            .purchase-summary-wrapper{
                 width: 100%;
                 border-right: none;
-                .about-product-stock{
-                    .product-stock-qty{
+                .about-purchase-report{
+                    .purchase-qty{
                         margin-top: 0 !important;
                         margin-bottom: 20px;
                     }
@@ -88,8 +78,8 @@
     }
 }
 @media(max-width:575px){
-    .profitable-stock-block {
-        .profit-stock-head {
+    .purchase-report-block {
+        .purchase-report-head {
             .custom-datepicker{
                 margin-top: 15px;
             }

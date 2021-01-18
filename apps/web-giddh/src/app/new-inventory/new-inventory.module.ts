@@ -36,6 +36,9 @@ import { InventoryActivityComponent } from './component/inventory-dashboard/inve
 import { DashboardItemProductDetail } from './component/inventory-dashboard/dashboard-item-product-detail/dashboard-item-product-detail.component';
 import { DashboardSellingProduct } from './component/inventory-dashboard/dashboard-selling-product/dashboard-selling-product.component';
 import { DashboardProfitStockList } from './component/inventory-dashboard/dashboard-profit-stocklist/dashboard-profit-stocklist.component';
+import { DashboardPurchaseReport } from './component/inventory-dashboard/dashboard-purchase-report/dashboard-purchase-report.component';
+import { DashboardSalesReport } from './component/inventory-dashboard/dashboard-sales-report/dashboard-sales-report.component';
+import { DashboardSellingReport } from './component/inventory-dashboard/dashboard-selling-report/dashboard-selling-report.component';
 
 @NgModule({
     declarations: [
@@ -70,7 +73,10 @@ import { DashboardProfitStockList } from './component/inventory-dashboard/dashbo
         InventoryActivityComponent,
         DashboardItemProductDetail,
         DashboardSellingProduct,
-        DashboardProfitStockList
+        DashboardProfitStockList,
+        DashboardPurchaseReport,
+        DashboardSalesReport,
+        DashboardSellingReport
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -111,7 +117,10 @@ import { DashboardProfitStockList } from './component/inventory-dashboard/dashbo
         InventoryActivityComponent,
         DashboardItemProductDetail,
         DashboardSellingProduct,
-        DashboardProfitStockList
+        DashboardProfitStockList,
+        DashboardPurchaseReport,
+        DashboardSalesReport,
+        DashboardSellingReport
     ]
 })
 export class NewInventoryModule { }

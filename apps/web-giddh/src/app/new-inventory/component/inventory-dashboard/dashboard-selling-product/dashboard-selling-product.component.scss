@@ -4,6 +4,9 @@
     .box{
         min-height: 325px;
     }
+    .top-selling-btn{
+        font-family: 'opensans-semibold';
+    }
     .selling-container{
         .no-data-contain {
             min-height: 200px;
@@ -78,4 +81,10 @@
         }
     }
 }
+}
+
+@media(max-width:575px){
+    .selling-product-block{
+
+    }
 }

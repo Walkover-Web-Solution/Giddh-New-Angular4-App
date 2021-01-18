@@ -9658,6 +9658,10 @@ button#more-btn-inventory, #more-btn-inventory-mobile{
     height: 49px;
     border: 0 none !important;
 }
+.inventory-dashboard .box{
+    border: 1px solid $gainsboro;
+    border-radius: 2px;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;

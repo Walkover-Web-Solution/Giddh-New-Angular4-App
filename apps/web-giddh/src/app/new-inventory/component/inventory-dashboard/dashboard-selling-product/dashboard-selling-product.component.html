@@ -2,7 +2,7 @@
     <div class="box">
         <div class="top-selling-heading d-flex justify-content-between">
             <div class="btn-group" dropdown>
-                <button id="button-basic" dropdownToggle type="button" class="btn font-16 no-btn dropdown-toggle p-0"
+                <button id="button-basic" dropdownToggle type="button" class="btn font-16 top-selling-btn no-btn dropdown-toggle p-0 mr-0"
                     aria-controls="dropdown-basic">
                     Top 5 Selling <span class="caret"></span>
                 </button>
@@ -27,7 +27,7 @@
                         </ul>
                     </div>
                 </span>
-                <span class="expand-selling-icon text-gray d-flex"><i class="icon-expand"></i></span>
+                <span class="expand-selling-icon text-gray d-flex cursor-pointer" [routerLink]="['/pages/new-inventory/top-selling-report']"><i class="icon-expand"></i></span>
             </div>
         </div>
         <div class="selling-container">
