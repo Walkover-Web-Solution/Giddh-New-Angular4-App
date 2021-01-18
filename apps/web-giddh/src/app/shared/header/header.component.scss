@@ -583,13 +583,13 @@ span.icon-support.dropdown-toggle {
     list-style-type: none;
 }
 
-.primary-header .company-name-fyear {
+.primary-header .company-name-finance-year {
     display: inline-block;
     padding-left: 15px;
     width: 90%;
 }
 
-.primary-header .company-name-fyear span {
+.primary-header .company-name-finance-year span {
     display: block;
     vertical-align: middle;
 }
@@ -627,7 +627,7 @@ ul.sub-list {
     word-break: break-all;
 }
 
-.nav-left-bar .company-name-fyear {
+.nav-left-bar .company-name-finance-year {
     display: inline;
     padding-left: 0;
     /*float: right;
@@ -765,7 +765,7 @@ ul.sub-list {
         left: 0 !important;
         color: $night-rider;
         .company-name-finance-year{
-            .ellp{
+            .text-ellipsis {
                 white-space: normal;
             }
         }
@@ -1090,7 +1090,7 @@ ul.sub-list {
         display: inline-flex !important;
         align-items: center;
     }
-    .nav-left-bar .company-name-fyear {
+    .nav-left-bar .company-name-finance-year {
         width: 200px;
         float: left;
     }
