@@ -30,6 +30,7 @@ import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interf
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
+import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 @Component({
@@ -51,10 +52,40 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public showBankDetail: boolean = false;
     @Input() public showVirtualAccount: boolean = false;
     @Input() public isDebtorCreditor: boolean = true;
+    /** True when this component is used in ledger, required as ledger skips the
+     * top level hierarchy groups for creation of new account
+     */
+    @Input() public isLedgerModule: boolean;
+    /** True, if new service is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isServiceCreation is true, then directly 'selectedGroupUniqueName' will be
+     * used to fetch groups
+    */
+   @Input() public isServiceCreation: boolean;
+   /** True, if new customer/vendor account is created through this component.
+    * Used to differentiate between new customer/vendor creation and service creation
+    * as they both need the groups to be shown in a particular category,
+    * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+    * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+    * 'sundrycreditors'.
+    * If a new service is created, then if the service is created in Invoice then it will have
+    * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+    * So if isCustomerCreation is true, then directly 'selectedGrpUniqueName' will be
+    * used to fetch groups
+   */
+   @Input() public isCustomerCreation: boolean;
+    /** True, if the module doesn't depend on flatten APIs */
+    @Input() public isFlattenRemoved: boolean;
     /** True if bank category account is selected */
     @Input() public isBankAccount: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
-    @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
+    @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
     /** Tabs instance */
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
@@ -99,6 +130,23 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public disableCurrencySelection: boolean = false;
     /** This will hold active parent group */
     public activeParentGroup: string = "";
+
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
 
     constructor(
         private _fb: FormBuilder,
@@ -284,32 +332,36 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public getAccount() {
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map((m: any) => ({value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups}));
-                this.flatGroupsOptions = items;
-                if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
-                    let selectedGroupDetails;
+        if (this.isLedgerModule || this.isFlattenRemoved) {
+            this.loadDefaultGroupsSuggestions();
+        } else {
+            this.flattenGroups$.subscribe(flattenGroups => {
+                if (flattenGroups) {
+                    let items: IOption[] = flattenGroups.filter(grps => {
+                        return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+                    }).map((m: any) => ({value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups}));
+                    this.flatGroupsOptions = items;
+                    if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
+                        let selectedGroupDetails;
 
-                    this.flatGroupsOptions.forEach(res => {
-                        if (res.value === this.activeGroupUniqueName) {
-                            selectedGroupDetails = res;
-                        }
-                    })
-                    if (selectedGroupDetails) {
-                        if (selectedGroupDetails.additional) {
-                            let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
-                            if (parentGroup) {
-                                this.isParentDebtorCreditor(parentGroup.uniqueName);
+                        this.flatGroupsOptions.forEach(res => {
+                            if (res.value === this.activeGroupUniqueName) {
+                                selectedGroupDetails = res;
+                            }
+                        })
+                        if (selectedGroupDetails) {
+                            if (selectedGroupDetails.additional) {
+                                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
+                                if (parentGroup) {
+                                    this.isParentDebtorCreditor(parentGroup.uniqueName);
+                                }
                             }
                         }
+                        this.toggleStateRequired();
                     }
-                    this.toggleStateRequired();
                 }
-            }
-        });
+            });
+        }
     }
 
     public setCountryByCompany(company: CompanyResponse) {
@@ -677,7 +729,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             //     this.isParentDebtorCreditor(parent[1].uniqueName);
             // }
             this.isParentDebtorCreditor(this.activeGroupUniqueName);
-            this.isGroupSelected.emit(event.value);
+            this.isGroupSelected.emit(event);
             this.toggleStateRequired();
         }
     }
