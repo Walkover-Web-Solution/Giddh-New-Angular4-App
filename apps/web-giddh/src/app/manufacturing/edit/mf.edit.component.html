@@ -119,7 +119,7 @@
                                 <tr *ngIf="toggleAddLinkedStocks" class="new-row">
                                     <td colspan="2">
                                         <span class="hr"></span>
-                                        <sh-select [forceClearReactive]="needForceClearProductList$ | async" placeholder="--Select--" [options]="allStocksDropDown$ | async" name="linkedStocks.stockUniqueName" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel" (selected)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
+                                        <sh-select [forceClearReactive]="needForceClearProductList$ | async" placeholder="--Select--" [options]="allStocksDropDown$ | async" name="linkedStocks.stockUniqueName" [(ngModel)]="linkedStocks.stockUniqueName" required [isRequired]="true" #linkedStockList="ngModel" (selected)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
                                             [ItemHeight]="33"></sh-select>
                                     </td>
                                     <td>

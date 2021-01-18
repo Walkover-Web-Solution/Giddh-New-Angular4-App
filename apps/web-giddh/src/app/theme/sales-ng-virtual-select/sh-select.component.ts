@@ -56,6 +56,8 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public salesShSelectPading: number = 0;
     @Input() public tabIndex: number = 0;
     @Input() public fixedValue: string = "";
+    /** True if field is required */
+    @Input() public isRequired: boolean = false;
 
     @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
     @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
@@ -72,7 +74,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Output() public noResultsClicked = new EventEmitter<null>();
     @Output() public viewInitEvent = new EventEmitter<any>();
     public rows: IOption[] = [];
-    public isOpen: boolean;
+    @Input() public isOpen: boolean;
     public filter: string = '';
     public filteredData: IOption[] = [];
     /** Keys. **/
@@ -390,6 +392,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
 
     public ngAfterViewInit() {
         this.viewInitEvent.emit(true);
+        this.openDropdown();
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -410,9 +413,17 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
                 this.writeValue(this.filter);
             }
         }
+
         if ('options' in changes) {
             if (changes.options && changes.options.currentValue) {
                 this.refreshList();
+            }
+        }
+
+        if('isOpen' in changes) {
+            if(changes.isOpen && changes.isOpen.currentValue && changes.isOpen.currentValue !== changes.isOpen.previousValue) {
+                this.isOpen = changes.isOpen.currentValue;
+                this.openDropdown();
             }
         }
     }
@@ -535,6 +546,19 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
                 this.dynamicSearchedQuery.emit(query);
             });
         }
+    }
+
+    /**
+     * This will open the dropdown
+     *
+     * @memberof SalesShSelectComponent
+     */
+    public openDropdown(): void {
+        setTimeout(() => {
+            if(this.isOpen && this.inputFilter) {
+                (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
+            }
+        }, 300);
     }
 }
 
