@@ -1182,7 +1182,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 requestObject.group = this.activeGroupUniqueName;
                 // Include the parent group provided in 'group' param in fetched results
                 // The result will include this group and its children
-                // requestObject.includeSearchedGroup = true;
+                requestObject.includeSearchedGroup = true;
             }
             this.groupService.searchGroups(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
