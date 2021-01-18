@@ -459,7 +459,7 @@
                                                 <ng-container *ngIf="index===0">
                                                     <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approver Name"></i></div></label>
                                                 </ng-container>
-                                                <div class="custom-select select-caret position-relative">
+                                                <div class="custom-select select-caret pos-rel">
                                                     <sh-select [options]="typeOTPList" formControlName="otpType" (selected)="selectedOtpType($event,index, false)" required [isRequired]="true" name="otpType">
                                                     </sh-select>
                                                 </div>
@@ -469,7 +469,7 @@
                                                     <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
 
                                                 </ng-container>
-                                                <div class="custom-select select-caret position-relative" *ngIf="item.get('otpType').value !=='BANK'">
+                                                <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value !=='BANK'">
                                                     <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [customSorting]="customApproverNameListSorting" [multiple]="false" [isRequired]="true">
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
@@ -561,7 +561,7 @@
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="item.maxBankLimit ==='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
-                                        <div class="custom-select select-caret position-relative">
+                                        <div class="custom-select select-caret pos-rel">
                                             <sh-select [options]="amountUpToList" autocomplete="off" required [(ngModel)]="item.maxBankLimit" name="maxBankLimit{{parentIndex}}{{index}}" [disabled]="isBankUpdateInEdit !== parentIndex" (selected)="selectedMaxOrCustom(index, true, parentIndex);" (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)" [isRequired]="true">
                                             </sh-select>
                                         </div>
@@ -587,7 +587,7 @@
                                         <ng-container *ngIf="index===0">
                                             <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in approver Name"></i></div></label>
                                         </ng-container>
-                                        <div class="custom-select select-caret position-relative">
+                                        <div class="custom-select select-caret pos-rel">
                                             <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (ngModelChange)="selectedOtpType($event, index, true, parentIndex)" [disabled]="isBankUpdateInEdit !== parentIndex" required name="otpType{{parentIndex}}{{index}}" [isRequired]="true">
                                             </sh-select>
                                         </div>
@@ -832,7 +832,7 @@
                                         <ng-container *ngIf="index===0">
                                             <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approver Name"></i></div></label>
                                         </ng-container>
-                                        <div class="custom-select select-caret position-relative">
+                                        <div class="custom-select select-caret pos-rel">
                                             <sh-select [options]="typeOTPList" formControlName="otpType" (selected)="selectedOtpType($event,index, false)" required name="otpType" [isRequired]="true">
                                             </sh-select>
                                         </div>
@@ -842,7 +842,7 @@
                                             <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
 
                                         </ng-container>
-                                        <div class="custom-select select-caret position-relative" *ngIf="item.get('otpType').value !=='BANK'">
+                                        <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value !=='BANK'">
                                             <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [customSorting]="customApproverNameListSorting" [multiple]="false" [isRequired]="true">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">

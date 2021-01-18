@@ -53,7 +53,7 @@
                                     </div>
                                     <div class="col-sm-6 mrB3 ">
                                         <label>Currency <sup>*</sup></label>
-                                        <div class="custom-select select-caret position-relative">
+                                        <div class="custom-select select-caret pos-rel">
                                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required [isRequired]="true"
                                                 [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
                                                 [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
@@ -66,7 +66,7 @@
                             <span>
                                 <label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
                                 <div class="d-flex welcome-select ">
-                                    <sh-select class="pull-left select-caret" required [isRequired]="true"
+                                    <sh-select class="pull-left select-caret" required style="width: 85px;margin-right: 28px;" [isRequired]="true"
                                         name="phoneCode" [placeholder]="+91"
                                         [options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
                                         [defaultValue]="company.phoneCode">
