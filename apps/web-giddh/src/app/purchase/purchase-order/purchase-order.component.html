@@ -102,7 +102,7 @@
             <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false">
                 <tr (mouseenter)="showSelectAllItemCheckbox = true">
                     <th class="min-wid-check" width="3%">
-                        <div class="mh18-img">
+                        <div class="check-img">
                             <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
                             <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
@@ -183,7 +183,7 @@
                 <tr *ngFor="let item of purchaseOrders.items; let i = index;" (mouseenter)="hoveredItem = item.uniqueName">
                     <td data-title="#">
                         <span *ngIf="hoveredItem !== item.uniqueName && !item.isSelected && selectedItem !== item.uniqueName">{{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}</span>
-                        <div class="mh18-img" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
+                        <div class="check-img" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
                             <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                 (click)="toggleItem(item, true)" />
                             <img *ngIf="item.isSelected" src="assets/images/checked.png"
