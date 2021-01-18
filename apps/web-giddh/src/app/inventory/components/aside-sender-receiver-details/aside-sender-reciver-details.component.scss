@@ -102,6 +102,10 @@ form.gstin-form {
     display: block;
 }
 
+.mobile-contact{
+    width: 60px; 
+    margin-right: 10px;
+}
 :host {
     position: fixed;
     left: auto;
@@ -146,9 +150,4 @@ form.gstin-form {
 }
 .aside-pane {
     padding: 0;
-}
-
-.mobile-contact{
-    width: 60px; 
-    margin-right: 10px;
 }
