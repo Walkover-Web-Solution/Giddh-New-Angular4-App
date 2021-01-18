@@ -360,7 +360,8 @@ export class SettingTriggerComponent implements OnInit {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                count: API_COUNT_LIMIT
+                count: API_COUNT_LIMIT,
+                onlyTop: true
             }
             this.groupService.searchGroups(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
