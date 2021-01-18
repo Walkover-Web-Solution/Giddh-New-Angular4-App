@@ -235,8 +235,24 @@
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                                         <div class="form-group">
-                                                            <label class="pb-0">Billing Address</label>
-
+                                                            <div class="d-flex align-items-center pb-1">
+                                                                <span class="pb-0 pr-15">Billing Address</span>
+                                                                <span>
+                                                                    <div class="btn-group btn-block change-address-dropdown" dropdown #billingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="billingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1">
+                                                                        <a dropdownToggle type="button" class="dropdown-toggle"> Change</a>
+                                                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                                                                            <li role="menuitem" *ngFor="let address of accountAddressList">
+                                                                                <a class="dropdown-item" (click)="selectAddress(invFormData.accountDetails.billingDetails, address)">
+                                                                                    {{address.address}} {{address.state?.name}}
+                                                                                    <span class="d-block">
+                                                                                    {{ address.gstNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.gstNumber : "" }}
+                                                                                    </span>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </span>
+                                                            </div>
                                                             <div class="billing-address clearfix">
                                                                 <textarea name="billingDetails.address"
                                                                     class="form-control"
@@ -294,16 +310,32 @@
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                                         <div class="form-group p-0 width100">
-                                                            <label class="pb-0">
-                                                                <input type="checkbox" autocomplete="None"
-                                                                    (change)="autoFillShippingDetails()"
-                                                                    name="autoFillShipping"
-                                                                    [(ngModel)]="autoFillShipping"> Shipping Address
-                                                                Same as
-                                                                Billing
-                                                                Address
-                                                            </label>
+                                                            <div class="d-flex align-items-center pb-1">
+                                                                <span class="pb-0 pr-15">
+                                                                    <input type="checkbox" autocomplete="None"
+                                                                        (change)="autoFillShippingDetails()"
+                                                                        name="autoFillShipping"
+                                                                        [(ngModel)]="autoFillShipping"> Shipping Address
+                                                                    Same as
+                                                                    Billing
+                                                                    Address
+                                                                </span>
+                                                                <span>
+                                                                    <div class="btn-group btn-block change-address-dropdown" dropdown #shippingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="shippingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1 && !autoFillShipping">
+                                                                        <a dropdownToggle type="button" class="dropdown-toggle"> Change</a>
+                                                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                                                                            <li role="menuitem" *ngFor="let address of accountAddressList">
+                                                                                <a class="dropdown-item" (click)="selectAddress(invFormData.accountDetails.shippingDetails, address)">
+                                                                                    {{address.address}} {{address.state?.name}}
 
+                                                                                    <span class="d-block">{{ address.gstNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.gstNumber : "" }}
+                                                                                    </span>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </span>
+                                                            </div>
                                                             <div class="billing-address"
                                                                 [ngClass]="{'disabled': autoFillShipping}">
 
@@ -495,7 +527,22 @@
                                                 <!-- region billing address -->
                                                 <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                     <div class="form-group">
-                                                        <label>Billing Address</label>
+                                                        <div class="d-flex align-items-center pb-1">
+                                                            <span class="pr-15">Billing Address</span>
+                                                            <span>
+                                                                <div class="btn-group btn-block change-address-dropdown" dropdown #companyBillingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="companyBillingAddressDropDownWeb.hide()" *ngIf="companyAddressList?.length > 1">
+                                                                    <a dropdownToggle type="button" class="dropdown-toggle"> Change</a>
+                                                                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+                                                                        <li role="menuitem" *ngFor="let address of companyAddressList">
+                                                                            <a class="dropdown-item" (click)="selectAddress(purchaseBillCompany.billingDetails, address, true)">
+                                                                                {{address.address}} {{address.stateName}}
+                                                                                <span class="d-block">{{ address.taxNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.taxNumber : "" }}</span>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </span>
+                                                        </div>
                                                         <div class="billing-address clearfix">
                                                             <textarea name="companyBillingDetailsAddress"
                                                                 (keyup)="autoFillCompanyShippingDetails()"
@@ -540,13 +587,15 @@
                                                 <div class="col-sm-12 col-xl-6 col-md-10  bill-add">
 
                                                     <div class="form-group p-0 width100">
-                                                        <label>
-                                                            <input type="checkbox" autocomplete="None"
-                                                                name="autoFillCompanyShipping"
-                                                                [(ngModel)]="autoFillCompanyShipping"
-                                                                (change)="autoFillCompanyShippingDetails()"> Shipping Address
-                                                            Same as Billing Address
-                                                        </label>
+                                                        <div class="d-flex align-items-center pb-1">
+                                                            <span class="pr-15">
+                                                                <input type="checkbox" autocomplete="None"
+                                                                    name="autoFillCompanyShipping"
+                                                                    [(ngModel)]="autoFillCompanyShipping"
+                                                                    (change)="autoFillCompanyShippingDetails()"> Shipping Address
+                                                                Same as Billing Address
+                                                            </span>
+                                                        </div>
                                                         <div
                                                             [ngClass]="{'billing-address': true, 'disabled': autoFillCompanyShipping}">
                                                             <textarea name="companyShippingDetailsAddress"
