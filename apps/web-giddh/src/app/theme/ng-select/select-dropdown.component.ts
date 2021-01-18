@@ -43,7 +43,15 @@ export class SelectDropdownComponent
 	/** Event handlers. **/
 
 	public ngOnInit() {
-		this.optionsReset();
+        this.optionsReset();
+        this.scrollListener = this.renderer.listen(this.optionsList?.nativeElement, 'scroll', () => {
+            if (this.isPaginationEnabled) {
+                // Scrolled to bottom
+                if ((this.optionsList?.nativeElement?.scrollHeight - this.optionsList?.nativeElement?.scrollTop) === this.optionsList?.nativeElement?.clientHeight) {
+                    this.scrollEnd.emit();
+                }
+            }
+        });
 	}
 
 	public ngOnChanges(changes: any) {
