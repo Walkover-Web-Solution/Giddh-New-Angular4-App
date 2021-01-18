@@ -15,7 +15,7 @@
                             <div class="relative">
                                 <img *ngIf="(isGetAllIntegratedBankInProgress$ | async)" class="dropdown-loader" src="assets/images/loader.gif" alt="">
                                 <sh-select [options]="selectIntegratedBankList" [disabled]="isPayClicked" #selectBankEle [multiple]="false" [ItemHeight]="33" [fixedValue]="selectedBankName" [isFilterEnabled]="true" class="text-left" [(ngModel)]="selectedBankUniqueName" name="selectedBankUniqueName"
-                                    required placeholder="Select Bank" (click)="setBankName($event, selectBankEle);" (selected)="selectBank($event);" [multiple]="false">
+                                    required [isRequired]="true" placeholder="Select Bank" (click)="setBankName($event, selectBankEle);" (selected)="selectBank($event);" [multiple]="false">
                                     <ng-template #optionTemplate let-option="option">
                                         <a href="javascript:void(0)" class="list-item">
                                             <div class="item">{{option?.label}}</div>

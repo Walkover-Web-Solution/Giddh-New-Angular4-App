@@ -147,7 +147,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public getVatReport() {
+    public getVatReport(event?: any) {
+        if(event && event.value) {
+            this.taxNumber = event.value;
+        }
+
         if (this.taxNumber) {
             let vatReportRequest = new VatReportRequest();
             vatReportRequest.from = this.fromDate;
