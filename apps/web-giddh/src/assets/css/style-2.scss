@@ -723,12 +723,12 @@ ul.sub-list {
 
 /* file upload css end */
 
-.tab-integraton .nav-tabs {
+.tab-integration .nav-tabs {
     padding: 40px;
     border-bottom: 0px;
 }
 
-.tab-integraton .nav-tabs > li > a {
+.tab-integration .nav-tabs > li > a {
     width: 120px;
     height: 120px !important;
     background: $white;
@@ -740,10 +740,10 @@ ul.sub-list {
     font-size: 18px;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
-.tab-integraton .nav-tabs > li > a:hover{
+.tab-integration .nav-tabs > li > a:hover{
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
-.tab-integraton .nav-tabs > li.active a {
+.tab-integration .nav-tabs > li.active a {
     background: $white !important;
     box-shadow: 0 6px 7px $very-light-gray;
     border: 1px solid $midnight-express !important;
@@ -752,18 +752,18 @@ ul.sub-list {
     /* display: block; */
 }
 
-.tab-integraton .nav-tabs > li.active a span {
+.tab-integration .nav-tabs > li.active a span {
     opacity: 1;
 }
 
-.tab-integraton .nav-tabs > li > a > span {
+.tab-integration .nav-tabs > li > a > span {
     font-size: 30px;
     color: $midnight-express;
     opacity: 0.4;
     margin-bottom: 6px;
 }
 
-.tab-integraton .nav-tabs > li {
+.tab-integration .nav-tabs > li {
     margin-right: 25px;
 }
 
@@ -9632,19 +9632,19 @@ input.mat-input-element{
         float: left;
         margin-bottom: 0px;
     }
-    #setting-tab .tab-integraton .nav.nav-tabs {
+    #setting-tab .tab-integration .nav.nav-tabs {
         overflow: auto;
         white-space: initial;
         width: 100%;
         margin: 0 auto;
         display: block;
     }
-    #setting-tab .tab-integraton .nav-tabs > li {
+    #setting-tab .tab-integration .nav-tabs > li {
         width: 100px;
         margin-bottom: 20px;
         margin-right: 10px;
     }
-    #setting-tab .tab-integraton .nav-tabs > li > a {
+    #setting-tab .tab-integration .nav-tabs > li > a {
         width: 90px;
         height: 90px !important;
         font-size: 14px;
@@ -9652,15 +9652,15 @@ input.mat-input-element{
     .groups-buttons {
         height: auto;
     }
-    #setting-tab-wrapper .tab-integraton .nav-tabs {
+    #setting-tab-wrapper .tab-integration .nav-tabs {
         display: inline-block;
         width: 100%;
         white-space: nowrap;
     }
-    #setting-tab-wrapper .purchase-setting-tab.tab-integraton .nav-tabs{
+    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs{
             display: inline-flex;
         }
-    #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
+    #setting-tab-wrapper .tab-integration .nav-tabs > li > a {
         width: 90px;
         height: 90px;
         font-size: 14px;
@@ -9822,20 +9822,20 @@ input.mat-input-element{
         left: auto;
         right: 0 !important;
     }
-    #setting-tab .tab-integraton .nav-tabs {
+    #setting-tab .tab-integration .nav-tabs {
         padding-top: 0 !important;
     }
-    #setting-tab .tab-integraton .nav-tabs > li > a {
+    #setting-tab .tab-integration .nav-tabs > li > a {
         width: 70px;
         height: 70px !important;
     }
-    .tab-integraton .nav-tabs > li > a > span {
+    .tab-integration .nav-tabs > li > a > span {
         font-size: 22px;
     }
-    .tab-integraton .nav-tabs > li > a span:first-child {
+    .tab-integration .nav-tabs > li > a span:first-child {
         display: none;
     }
-    #setting-tab .tab-integraton .nav-tabs > li {
+    #setting-tab .tab-integration .nav-tabs > li {
         width: 70px;
         margin-bottom: 15px;
     }
@@ -9999,7 +9999,7 @@ input.mat-input-element{
         margin-bottom: 15px;
         padding: 0 0px 0 15px !important;
     }
-    #setting-tab .tab-integraton .nav-tabs > li {
+    #setting-tab .tab-integration .nav-tabs > li {
         margin-top: 0 !important;
     }
     .hamburger-menu-icon{
@@ -10564,7 +10564,7 @@ input.mat-input-element{
     .welcome-header:after {
         bottom: 0;
     }
-    #setting-tab-wrapper .tab-integraton .nav-tabs {
+    #setting-tab-wrapper .tab-integration .nav-tabs {
         overflow-y: hidden;
     }
 }

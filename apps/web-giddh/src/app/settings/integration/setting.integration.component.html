@@ -1,5 +1,5 @@
 <div class="clearfix">
-    <tabset [ngClass]="{'tab-integraton': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
+    <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
         <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
             <ng-template tabHeading>
                 <span class="icon-chat2"></span> SMS
