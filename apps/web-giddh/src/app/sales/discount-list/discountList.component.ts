@@ -13,7 +13,7 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
 	templateUrl: 'discountList.component.html',
 	styles: [`
       .dropdown-menu > li > a.btn-link {
-          color: $deep-sky-blue-hover;
+          color: #10aae0;
       }
 
       :host .dropdown-menu {
