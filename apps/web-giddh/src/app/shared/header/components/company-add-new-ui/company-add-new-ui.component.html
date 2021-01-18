@@ -41,15 +41,15 @@
 							<span>
 								<label for="country" class="d-block">Country<sup>*</sup></label>
 								<sh-select [disabled]="createBranch ? 'disabled' : null"  id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
-									name="country" [(ngModel)]="company.country" class="pull-left select-caret w-100"
-									[required]='true' [isRequired]="true" (selected)="selectCountry($event)"
+									name="country" [(ngModel)]="company.country" class="pull-left select-caret"
+                                [required]='true' [isRequired]="true" (selected)="selectCountry($event)" style="width: 100%"
 									[defaultValue]="selectedCountry">
 								</sh-select>
 							</span>
 						</div>
 						<div class="col-xs-6 col-sm-6 mrB3 ">
 							<label for="">Currency <sup>*</sup></label>
-							<div class="custom-select select-caret position-relative">
+							<div class="custom-select select-caret pos-rel">
 								<sh-select [disabled]="createBranch ? 'disabled' : null" name="baseCurrency" [options]="currencySource$ | async" required [isRequired]="true"
 									[isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
 									[defaultValue]="company.baseCurrency"></sh-select>
