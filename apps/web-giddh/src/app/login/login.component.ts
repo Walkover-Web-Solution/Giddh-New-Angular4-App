@@ -90,6 +90,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     //Button to hide linkedIn button till functionality is available
     public showLinkedInButton = false;
+    /** Modal config */
+    public modalConfig: {
+        backdrop: 'static'
+    };
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,

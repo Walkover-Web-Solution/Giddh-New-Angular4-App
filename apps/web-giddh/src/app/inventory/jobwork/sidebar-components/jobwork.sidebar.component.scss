@@ -1,6 +1,6 @@
 @import "../../../../assets/css/color.scss";
 .parent-Group > ul > li ul li div {
-    color: $dark-gray;
+    color: $gray;
 }
 .btn-group.show {
     display: inline-block !important;
@@ -9,7 +9,7 @@
     margin-left: 8px;
     margin-top: -3px;
     background: none;
-    color: $gray-44;
+    color: $gray;
     padding: 6px;
     margin-right: 0px !important;
 }
@@ -51,10 +51,10 @@ span.caret {
     display: inline-block;
 }
 .btn-link-2 {
-    color: $electric-blue;
+    color: $primary;
 }
 .no-data-box {
-    border-top: 1px solid $gray-88 !important;
+    border-top: 1px solid $whisper !important;
 }
 
 .text-light-2{

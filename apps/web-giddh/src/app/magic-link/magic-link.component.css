@@ -78,8 +78,8 @@ table th[class*="col-"] {
     padding: 8px;
 }
 
-.compoundEntry td,
-.compoundEntry td .form-control {
+.compound-entry td,
+.compound-entry td .form-control {
     background: #fddfa4 !important;
     border-left: 1px solid #ccc;
 }

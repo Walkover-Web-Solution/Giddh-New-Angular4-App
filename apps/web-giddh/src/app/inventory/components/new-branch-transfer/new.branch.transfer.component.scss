@@ -79,28 +79,28 @@ tfoot td .table-sec.form-group {
 #table-recipt #tfoot tr td {
     border: none !important;
 }
-.copyReciptNote {
+.copy-receipt-note {
     position: absolute;
     right: -60%;
     top: 9px;
     font-size: 12px;
-    color: $electric-blue;
+    color: $primary;
     z-index: 9;
 }
-.senderDetails,
-.senderRecivers,
+.sender-details,
+.sender-receivers,
 .multiple-receivers {
     font-size: 12px;
-    color: $electric-blue;
+    color: $primary;
     margin-top: 7px;
     cursor: pointer;
 }
-.rightTotalAmount {
+.right-total-amount {
     text-align: right;
     color: $nero;
 }
 
-.rightTotalAmount h3 {
+.right-total-amount h3 {
     font-size: 26px;
     font-family: opensans-semibold;
 }
@@ -118,11 +118,11 @@ tfoot td .table-sec.form-group {
     padding: 20px 0;
 }
 .btn-success-text {
-    background-color: $whisper-new;
-    color: $deep-green;
+    background-color: $whisper;
+    color: $success-green;
 }
 .btn-danger:hover {
-    background-color: $whisper-new;
+    background-color: $whisper;
 }
 
 .hsn-code-dropdown {
@@ -157,7 +157,7 @@ tfoot td .table-sec.form-group {
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: $light-silver;
+    color: $silver;
 }
 
 .hsn-code-dropdown a {
@@ -174,7 +174,7 @@ tfoot td .table-sec.form-group {
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success,
 .bulk-item-btn-group button.btn.btn-sm.btn-success {
-    background-color: $deep-green;
+    background-color: $success-green;
     color: $white;
 }
 .skuCode,
@@ -373,7 +373,7 @@ tfoot td .table-sec.form-group {
 }
 
 .aside-right .list-icon-group input:checked + label {
-    border: 1px solid $vivid-orange;
+    border: 1px solid $orange;
     border-radius: 0px;
 }
 

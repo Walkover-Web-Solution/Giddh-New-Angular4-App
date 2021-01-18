@@ -193,7 +193,7 @@ svg.icon.icon-xxlg {
 
 .tax-engine .gstr3b-header .sel-tab li a {
     padding: 0 10px;
-    color: $gray-black;
+    color: $night-rider;
 }
 
 svg.icon.icon-xxlg {
@@ -268,7 +268,7 @@ address {
 
 .btn-link:focus,
 .btn-link:hover {
-    color: $lochmara;
+    color: $curious-blue;
     background-color: transparent;
     text-decoration: none;
 }
@@ -279,7 +279,7 @@ table {
 }
 
 .gstr-3b-report tr:hover {
-    background-color: $hint-of-red;
+    background-color: $gray-95;
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
@@ -290,13 +290,13 @@ table {
 
 .gstr3-subheading,
 .vat-summary thead > tr {
-    background-color: $hint-of-red;
+    background-color: $gray-95;
 }
 
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: $grimmys-gray;
+    color: $gray;
 }
 
 *,
@@ -397,8 +397,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
     color: $white;
-    background-color: $light-red;
-    border-color: $light-red;
+    background-color: $bitter-sweet;
+    border-color: $bitter-sweet;
 }
 
 .btn,
@@ -409,8 +409,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 
 .btn-primary {
     color: $white;
-    background-color: $dark-red;
-    border-color: $dark-red;
+    background-color: $cinnabar-orange;
+    border-color: $cinnabar-orange;
 }
 
 .btn {
@@ -437,7 +437,7 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 }
 
 .tax-engine .gstr3-points .point {
-    background-color: $vivid-blue;
+    background-color: $primary;
     color: $white;
     width: 22px;
     height: 22px;
@@ -464,7 +464,7 @@ tax-engine .caret-right {
 }
 
 .tax-engine .gstr3-points a .caret-right {
-    color: $autumn-fog;
+    color: $silver;
 }
 
 .gstr3-filing-procedure > div {

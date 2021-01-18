@@ -186,7 +186,7 @@ input {
     color: $gray;
     font-size: 18px;
     margin: 0px !important;
-    box-shadow: 0px 2px 6px $black-russian-light;
+    box-shadow: 0px 2px 6px $black-russian;
 }
 .ledger-stat .row {
     display: flex;
@@ -296,7 +296,7 @@ input {
     width: 100%;
     margin-bottom: 16px;
     background: $white;
-    box-shadow: 0 0 6px $black-russian-light;
+    box-shadow: 0 0 6px $black-russian;
 }
 .Width600 {
     position: absolute;
@@ -633,7 +633,7 @@ sh-select:focus {
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
-                border-bottom: 1px solid $gray-82;
+                border-bottom: 1px solid $gainsboro;
                 font-size: 14px;
             }
             .second-row {
@@ -885,7 +885,7 @@ sh-select:focus {
         left: 0;
         bottom: 0;
         position: relative;
-        box-shadow: 0px 2px 6px $black-russian-light;
+        box-shadow: 0px 2px 6px $black-russian;
         margin-top: 0;
         padding-top: 20px;
         padding-bottom: 20px;
@@ -1175,7 +1175,7 @@ sh-select:focus {
         }
     }
 }
-.icon-upload-icon {
+.icon-upload {
     font-size: 16px;
 }
 .account-placeholder {

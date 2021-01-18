@@ -191,7 +191,7 @@
                     <div class="d-flex">
                         <a href="javascript:void(0)" id="upload" class="icomoon-ico d-flex align-items-center"
                             [tooltip]="'Import Statement'" [placement]="'top'" (click)="showUploadBankStatementModal()">
-                            <i class="icon-upload-icon lh-0"></i>
+                            <i class="icon-upload lh-0"></i>
                         </a>
                         <a href="javascript:void(0)" id="share" class="icomoon-ico d-flex align-items-center"
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
@@ -309,7 +309,7 @@
                                                                     [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                     [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
                                                                     [enableDynamicSearch]="true" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
-                                                                    [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [showClear]="false"
+                                                                    [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [showClear]="false"
                                                                     [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                                     <ng-template #optionTemplate let-option="option">
                                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -400,7 +400,7 @@
                                                                     [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                     [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
                                                                     [enableDynamicSearch]="true" [placeholder]="'Select Accounts'" [notFoundLink]="true"
-                                                                    (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="67" [showClear]="false"
+                                                                    (noResultsClicked)="toggleAsidePane()" [multiple]="false" [ItemHeight]="67" [showClear]="false"
                                                                     [useInBuiltFilterForFlattenAc]="true">
                                                                     <ng-template #optionTemplate let-option="option">
                                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -458,7 +458,11 @@
                             </div>
                         </div>
                     </div>
-                    <pagination *ngIf="bankTransactionsResponse?.totalItems > bankTransactionsResponse?.count" [totalItems]="bankTransactionsResponse?.totalItems" [itemsPerPage]="bankTransactionsResponse?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="bankTransactionsResponse.page" (pageChanged)="bankTransactionPageChanged($event)" [boundaryLinks]="true"></pagination>
+                    <div class="text-center mr-t2 page-count position-absolute">
+                        <span class="grey ng-binding">{{ bankTransactionsResponse?.totalItems }} transactions, </span>
+                        <span class="black ng-binding">{{ bankTransactionsResponse?.totalPages }} pages</span>
+                        <pagination *ngIf="bankTransactionsResponse?.totalPages > 1" [totalItems]="(bankTransactionsResponse?.countPerPage)*(bankTransactionsResponse?.totalPages)" [itemsPerPage]="bankTransactionsResponse?.countPerPage" [maxSize]="5" class="pagination-sm" [(ngModel)]="bankTransactionsResponse.page" (pageChanged)="bankTransactionPageChanged($event)" [boundaryLinks]="true"></pagination>
+                    </div>
                     <table class="w-100">
                         <tr>
                             <td colspan="12" class="py-2 px-3 font-14">
@@ -509,7 +513,7 @@
                             </tr>
                             <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate]; let i = index">
                                 <td class="pl-15 pr-15 relative"
-                                    [ngClass]="{'compoundEntry': transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
+                                    [ngClass]="{'compound-entry': transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
                                     tooltip="{{transactions.description}}"
                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
                                     (mouseout)="selectedTrxWhileHovering = ''">
@@ -648,7 +652,7 @@
                         <tr vr-item tabindex="-1" class="ledger-row row"
                             *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index;"
                             (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
-                            [ngClass]="{'compoundEntry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
+                            [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                             tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
                             (mouseout)="selectedTrxWhileHovering = ''">
 
@@ -916,7 +920,7 @@
                         <tr class="ledger-row row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions; let i = index"
                             (dblclick)="showUpdateLedgerModal(txn)" vr-item tabindex="-1"
                             (keydown.enter)="showUpdateLedgerModal(txn)"
-                            [ngClass]="{'compoundEntry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
+                            [ngClass]="{'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                             tooltip="{{txn.description}}" data-toggle="tooltip"
                             (mouseover)="entryHovered(txn.entryUniqueName)" (mouseout)="selectedTrxWhileHovering = ''">
 
@@ -1433,21 +1437,13 @@
     </div>
 </div>
 
-<!--quick account popup -->
-<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
-        </div>
-    </div>
-</div>
 <!-- modal sections -->
 
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog">
     <div class="modal-dialog modal-xl advanceSearchModal">
         <div class="modal-content">
-            <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest"
+            <advance-search-model *ngIf="isAdvanceSearchOpened" #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest"
                 (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
         </div>
     </div>

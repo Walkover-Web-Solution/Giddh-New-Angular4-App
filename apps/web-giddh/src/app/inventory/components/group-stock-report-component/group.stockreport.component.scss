@@ -168,10 +168,10 @@ tfoot {
 .total-footer {
     background-color: $white;
     display: flex;
-    .footitem {
+    .foot-item {
         padding: 41px;
         h2 {
-            color: $aluminum;
+            color: $wistful;
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -248,7 +248,7 @@ tfoot {
         }
         .operators {
             font-size: 39px;
-            color: $aluminum;
+            color: $wistful;
         }
         h2 {
             font-size: 18px;
@@ -296,7 +296,7 @@ tfoot {
 }
 
 .btn-link-2 {
-    color: $electric-blue;
+    color: $vivid-blue;
 }
 
 .mb-100 {

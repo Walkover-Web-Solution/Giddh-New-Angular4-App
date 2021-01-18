@@ -228,7 +228,7 @@
                                         <div class="pull-right unit-add">
                                             <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
                                             <button class="btn-link btn" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i
-                                                    class="icon-cross dlet"></i></button>
+                                                    class="icon-cross delete"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -270,7 +270,7 @@
                                         </div>
                                         <div class="pull-right unit-add">
                                             <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
-                                            <button class="btn-link btn" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i class="icon-cross dlet"></i></button>
+                                            <button class="btn-link btn" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i class="icon-cross delete"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -339,7 +339,7 @@
                                             <td>
                                                 <button class="btn-link btn" (click)="addItemInLinkedStocks(list, i, i)" *ngIf="l" [disabled]="disableStockButton"><i
                                                         class="icon-plus add-row"></i></button>
-                                                <button class="btn-link btn" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i class="icon-cross dlet"></i></button>
+                                                <button class="btn-link btn" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i class="icon-cross delete"></i></button>
                                             </td>
                                         </tr>
                                     </ng-container>

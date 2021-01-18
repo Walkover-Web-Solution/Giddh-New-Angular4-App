@@ -43,7 +43,7 @@
 }
 .aside-pane-form {
     background-color: $white;
-    box-shadow: 0px 3px 6px $black-russian-light;
+    box-shadow: 0px 3px 6px $black-russian;
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -52,7 +52,7 @@
     margin-top: 15px;
 }
 .auth-state{
-    border-bottom: 1px solid $eclipse;
+    border-bottom: 1px solid $night-rider;
 }
 
 @media (max-width: 768px) {

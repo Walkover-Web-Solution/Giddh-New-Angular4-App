@@ -54,7 +54,7 @@
 }
 
 .invoice-sidebar .invoice-number-date span.invoice-number {
-    color: $electric-blue;
+    color: $primary;
 }
 
 .invoice-sidebar .invoice-number-date span.invoice-date {
@@ -71,16 +71,16 @@
 
 .invoice-sidebar .single-invoice-detail {
     padding: 10px 15px;
-    border-bottom: 1px solid $gray-87;
+    border-bottom: 1px solid $gainsboro;
     list-style: none;
 }
 
 .invoice-sidebar .single-invoice-detail:hover {
-    background-color: $gray-94;
+    background-color: $gray-95;
 }
 
 .invoice-sidebar .single-invoice-detail.activeItem {
-    background-color: $gray-94;
+    background-color: $gray-95;
 }
 
 .invoice-sidebar .single-invoice-detail:last-child {
@@ -124,7 +124,7 @@
 }
 
 .invoice-detail-header .edit-change-status .edit-link {
-    color: $electric-blue;
+    color: $primary;
     padding-right: 10px;
     font-size: 16px;
 }
@@ -136,10 +136,10 @@
 .invoice-detail-header .edit-change-status .edit-action-btn-groups {
     display: flex;
     background-color: $white;
-    border: 1px solid $cerebellum-gray;
+    border: 1px solid $gainsboro;
     margin-right: 10px;
     span {
-        border-left: 1px solid $cerebellum-gray;
+        border-left: 1px solid $gainsboro;
         padding: 5px;
         height: 30px;
         width: 30px;
@@ -185,7 +185,7 @@
 }
 
 .single-payment-detail a {
-    color: $electric-blue;
+    color: $primary;
 }
 
 .payment-detail p.payment-content {
@@ -256,7 +256,7 @@
 }
 
 .single-payment-detail {
-    color: $electric-blue;
+    color: $primary;
 }
 
 .payment-log-div li {
@@ -279,8 +279,8 @@
 }
 
 .payment-log-div .activeLog span.small-circle {
-    background-color: $electric-blue;
-    border-color: $electric-blue;
+    background-color: $primary;
+    border-color: $primary;
 }
 
 .payment-log-div .about-payment-log {
@@ -288,7 +288,7 @@
 }
 
 .payment-log-div .activeLog .about-payment-log {
-    color: $electric-blue;
+    color: $primary;
 }
 
 .payment-log-div ul {
@@ -300,7 +300,7 @@
     content: "";
     height: calc(100% - 30px);
     width: 1px;
-    border-left: 1px dashed $dark-gray;
+    border-left: 1px dashed $gainsboro;
     top: 16px;
     left: 4.5px;
 }
@@ -453,7 +453,7 @@ span.close-modal.cp.pull-right {
 
 label.labeled {
     border: 1px solid $gainsboro;
-    color: $extra-dark-gray;
+    color: $night-rider;
     padding: 5px 10px;
     border-radius: 3px;
     margin: 0 10px 0 0;
@@ -519,7 +519,7 @@ label.labeled {
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
         .send-email-modal-header {
-            background-color: $light-gray-extra;
+            background-color: $whisper;
             padding: 8px 10px;
             border-bottom: 1px solid $gainsboro;
             span {
@@ -535,7 +535,7 @@ label.labeled {
         margin-bottom: 7px;
     }
     .btn-success {
-        background: $deep-green;
+        background: $success-green;
         color: $white;
     }
     .aqua-color {
@@ -599,7 +599,7 @@ label.labeled {
 }
 
 .select-file {
-    color: $leave-green;
+    color: $success-green;
 }
 
 .file-upload-panel {
@@ -1163,7 +1163,7 @@ strong {
         top: 3px;
     }
     .invoice-sidebar li.activeItem .invoice-number-date span.invoice-date:before {
-        background-color: $gray-94;
+        background-color: $gray-95;
     }
     .invoice-preview-sidebar {
         padding-right: 15px;

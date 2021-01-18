@@ -283,6 +283,28 @@ export class GroupService {
     }
 
     /**
+     * Search groups API call
+     *
+     * @param {*} params Params (q:- query, page:- pagination, removeTop:- If true, will remove the top hierarchy of groups)
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof GroupService
+     */
+    public searchGroups(params: any): Observable<any> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${GROUP_API.SEARCH_GROUPS}`.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                if (params[key] !== undefined) {
+                    contextPath += `${delimiter}${key}=${params[key]}`
+                }
+            });
+        }
+        return this._http.get(contextPath)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
+
+    /**
      * returns an URL after doing errands
      * @param cStr [company uniquename]
      * @param gStr [group uniquename]

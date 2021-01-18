@@ -31,8 +31,8 @@
 @import "../../../../../../web-giddh/src/assets/css/color.scss";
 .btn-warning {
     color: $white;
-    background-color: $warning;
-    border-color: $warning;
+    background-color: $bright-yellow;
+    border-color: $bright-yellow;
 }
 
 .more-btn-dropdown {
@@ -92,7 +92,7 @@
 }
 @media (max-width: 414px) {
     .template-grid {
-        background: $gray-98;
+        background: $gray-95;
         max-width: 100%;
     }
 }

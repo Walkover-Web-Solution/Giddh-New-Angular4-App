@@ -17,7 +17,7 @@
 input.green-checkbox[type="checkbox"]:after {
     left: -3px !important;
     border: 0px solid transparent !important;
-    background-color: $whisper-new;
+    background-color: $whisper;
     border-radius: 27px !important;
 }
 input.green-checkbox[type="checkbox"]:before {
@@ -33,7 +33,7 @@ input.green-checkbox[type="checkbox"]:checked:after {
     background-color: $success-green !important;
 }
 .group-card {
-    border: 1px solid $gray-74;
+    border: 1px solid $silver;
     padding: 0 13px;
     border-radius: 4px;
     margin: 15px 0;
@@ -52,7 +52,7 @@ input.green-checkbox[type="checkbox"]:checked:after {
 }
 
 .success-label{
-    color: $faux-islamic !important;
+    color: $success-green !important;
 }
 
 @media (max-width: 1140px){

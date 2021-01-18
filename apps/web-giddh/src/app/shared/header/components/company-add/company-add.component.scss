@@ -25,7 +25,7 @@
     height: 1px;
     margin: 0.5rem 0;
     overflow: hidden;
-    background-color: $bright-gray;
+    background-color: $whisper-light;
 }
 
 ::ng-deep .dropdown-item {
@@ -34,7 +34,7 @@
     padding: 3px 7px;
     clear: both;
     font-weight: normal;
-    color: $cinder;
+    color: $night-rider;
     text-align: inherit;
     white-space: nowrap;
     background: none;
@@ -44,9 +44,9 @@
 
 ::ng-deep .dropdown-item:focus,
 .dropdown-item:hover {
-    color: $black-pearl;
+    color: $night-rider;
     text-decoration: none;
-    background-color: $ghost-white-light;
+    background-color: $white-smoke;
 }
 
 ::ng-deep .dropdown-item.active,
@@ -56,7 +56,7 @@
 
 ::ng-deep .dropdown-item.disabled,
 .dropdown-item:disabled {
-    color: $mid-gray;
+    color: $dark-gray;
     cursor: not-allowed;
     background-color: transparent;
 }
@@ -72,7 +72,7 @@
 
 #createCompForm p {
     font-size: 14px;
-    color: $extra-pink-swan;
+    color: $silver;
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;

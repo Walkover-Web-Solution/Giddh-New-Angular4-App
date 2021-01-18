@@ -47,7 +47,7 @@
 
 .account-search .form-control:focus {
     border-color: $gainsboro !important;
-    color: $dark-pink-swan;
+    color: $pink-swan;
 }
 
 .account-search {
@@ -232,7 +232,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header .divider {
-    border-bottom: 1px solid $vulcan;
+    border-bottom: 1px solid $night-rider;
     padding: 4px 0;
     height: 0;
     margin-bottom: 4px;
@@ -315,7 +315,7 @@ a[vr-item]:focus {
 
 .left-fixed-header > h6 > i:hover {
     color: $white;
-    background: $dark-blue;
+    background: $rich-blue;
 }
 
 .nav-tabs {
@@ -371,7 +371,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     text-align: right;
     position: relative;
-    color: $quick-silver;
+    color: $dim-gray;
     top: 6px;
 }
 
@@ -382,7 +382,7 @@ a[vr-item]:focus {
 .sub-menu > li > a {
     display: block;
     padding: 8px 20px;
-    color: $dark-pink-swan;
+    color: $pink-swan;
 }
 
 .left-fixed-header > li > a > i {
@@ -540,7 +540,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .other a {
-    color: $extra-dark-gray;
+    color: $night-rider;
     text-transform: uppercase;
 }
 .show-more-opt {
@@ -677,7 +677,7 @@ ul.sub-list {
     transition: 2s linear;
 }
 .head-nav {
-    background: $light-white-smoke;
+    background: $white-smoke;
     border-bottom: 1px solid $gainsboro;
     margin-bottom: 5px;
 }

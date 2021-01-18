@@ -66,6 +66,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public showSearchSuggestion: boolean = true;
     /** True if field is required */
     @Input() public isRequired: boolean = false;
+    /** True, if selected values should not be reset when options change */
+    @Input() public doNotResetSelectedValues: boolean = false;
 
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
@@ -121,7 +123,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() set options(val: IOption[]) {
         this._options = val;
         this.updateRows(val);
-        this.selectedValues = [this.filter];
+        if (!this.doNotResetSelectedValues) {
+            this.selectedValues = [this.filter];
+        }
     }
 
     get selectedValues(): any[] {
@@ -137,7 +141,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             val = [val];
         }
         if (val.length > 0 && this.rows) {
-            this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+            if (this.doNotResetSelectedValues) {
+                this._selectedValues = this._selectedValues.filter(selected => val.indexOf(selected.value) > -1);
+            } else {
+                this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+            }
         } else {
             this._selectedValues = val;
         }
@@ -470,7 +478,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     public ngOnInit() {
-        //
+        this.selectedValues = [];
     }
 
     /**

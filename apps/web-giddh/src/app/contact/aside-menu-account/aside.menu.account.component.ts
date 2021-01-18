@@ -48,7 +48,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public updateAccountInProcess$: Observable<boolean>;
     public updateAccountIsSuccess$: Observable<boolean>;
     public deleteAccountSuccess$: Observable<boolean>;
-    public groupList$: Observable<GroupsWithAccountsResponse[]>;
     public accountDetails: any = '';
     public breadcrumbUniquePath: string[] = [];
     private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
@@ -73,7 +72,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.updateAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountInProcess), takeUntil(this.destroyed$));
         this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.deleteAccountSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.isDeleteAccSuccess)).pipe(takeUntil(this.destroyed$));
-        this.groupList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
     }
 
@@ -136,9 +134,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     public isGroupSelected(event) {
         if (event) {
-            this.activeGroupUniqueName = event;
+            this.activeGroupUniqueName = event.value;
             // in case of sundrycreditors or sundrydebtors no need to show address tab
-            if (event === 'sundrycreditors' || event === 'sundrydebtors') {
+            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
                 this.isDebtorCreditor = true;
             }
         }

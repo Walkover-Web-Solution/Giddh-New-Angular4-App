@@ -6,10 +6,8 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { GroupService } from '../../services/group.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { GroupResponse } from '../../models/api-models/Group';
 
 @Component({
 	selector: 'generic-aside-menu-account',
@@ -36,16 +34,41 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	public isAccountNameAvailable$: Observable<boolean>;
 	public createAccountInProcess$: Observable<boolean>;
 	public updateAccountInProcess$: Observable<boolean>;
-	public showBankDetail: boolean = false;
-	public isDebtorCreditor: boolean = true;
-
+    public showBankDetail: boolean = false;
+    /** this will hold if it's debtor/creditor */
+    @Input() public isDebtorCreditor: boolean = true;
+    /** this will hold if it's bank account */
+    @Input() public isBankAccount: boolean = true;
+    /** True, if new service is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isServiceCreation is true, then directly 'activeGroupUniqueName' will be
+     * used to fetch groups
+    */
+    @Input() public isServiceCreation: boolean;
+    /** True, if new customer/vendor account is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isCustomerCreation is true, then directly 'activeGroupUniqueName' will be
+     * used to fetch groups
+    */
+    @Input() public isCustomerCreation: boolean;
 
 	// private below
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(
 		private store: Store<AppState>,
-		private groupService: GroupService,
 		private accountsAction: AccountsAction
 	) {
 		// account-add component's property
@@ -90,44 +113,29 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	}
 	public isGroupSelected(event) {
 		if (event) {
-			this.activeGroupUniqueName = event;
+			this.activeGroupUniqueName = event.value;
 		}
 	}
 
 	public ngOnChanges(s: SimpleChanges) {
 
 		if ('selectedGrpUniqueName' in s && s.selectedGrpUniqueName.currentValue !== s.selectedGrpUniqueName.previousValue) {
-			this.getGroups(s.selectedGrpUniqueName.currentValue);
+            this.isCustomerCreation = true;
+            this.activeGroupUniqueName = s.selectedGrpUniqueName.currentValue;
+            this.flatAccountWGroupsList$ = of(null);
+            this.flatAccountWGroupsList = undefined;
         }
-        
+
         if('selectedGroupUniqueName' in s && s.selectedGroupUniqueName.currentValue !== s.selectedGroupUniqueName.previousValue) {
             // get groups list
-            this.groupService.GetGroupsWithAccounts('').subscribe((res: any) => {
-                let result: IOption[] = [];
-                this.flatAccountWGroupsList$ = of([]);
-                if (res.status === 'success' && res.body.length > 0) {
-                    if (this.selectedGroupUniqueName === 'purchase') {
-                        let revenueGrp = _.find(res.body, { uniqueName: 'operatingcost' });
-                        let flatGrps = this.groupService.flattenGroup([revenueGrp], []);
-                        if (flatGrps && flatGrps.length) {
-                            flatGrps.filter(fgroup => fgroup.uniqueName !== 'operatingcost').forEach((grp: GroupResponse) => {
-                                result.push({ label: grp.name, value: grp.uniqueName });
-                            });
-                        }
-                    } else {
-                        let revenueGrp = _.find(res.body, { uniqueName: 'revenuefromoperations' });
-                        let flatGrps = this.groupService.flattenGroup([revenueGrp], []);
-                        if (flatGrps && flatGrps.length) {
-                            flatGrps.filter(fgroup => fgroup.uniqueName !== 'revenuefromoperations').forEach((grp: GroupResponse) => {
-                                result.push({ label: grp.name, value: grp.uniqueName });
-                            });
-                        }
-                    }
-                }
-                this.flatAccountWGroupsList$ = of(result);
-                this.flatAccountWGroupsList = result;
-                this.activeGroupUniqueName = this.selectedGroupUniqueName;
-            });
+            this.isServiceCreation = true;
+            this.flatAccountWGroupsList$ = of(null);
+            this.flatAccountWGroupsList = undefined;
+            if (this.selectedGroupUniqueName === 'purchase') {
+                this.activeGroupUniqueName = 'operatingcost';
+            } else {
+                this.activeGroupUniqueName = 'revenuefromoperations';
+            }
         }
 
 		if ('selectedAccountUniqueName' in s) {

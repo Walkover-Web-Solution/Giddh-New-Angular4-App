@@ -287,7 +287,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public depositAmount: number = 0;
     public depositAmountAfterUpdate: number = 0;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
     public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public calculatedRoundOff: number = 0;
@@ -653,7 +652,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
         this.newlyCreatedStockAc$ = this.store.pipe(select(p => p.sales.newlyCreatedStockAc), takeUntil(this.destroyed$));
-        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
         this.selectedAccountDetails$ = this.store.pipe(select(p => p.sales.acDtl), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
@@ -3725,8 +3723,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesEntryClass.uniqueName = entry.uniqueName;
                 salesEntryClass.description = entry.description;
                 salesEntryClass.date = entry.entryDate;
+                let calculationMethod = (entry.otherTaxModal && entry.otherTaxModal.tcsCalculationMethod) ? entry.otherTaxModal.tcsCalculationMethod : "";
                 entry.taxList.forEach(t => {
-                    salesEntryClass.taxes.push({uniqueName: t});
+                    salesEntryClass.taxes.push({uniqueName: t, calculationMethod: calculationMethod});
                 });
                 entry.transactions.forEach(tr => {
                     let transactionClassMul = new TransactionClassMulticurrency();
@@ -4169,7 +4168,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-            if (!modal.appliedOtherTax.name && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
+            if ((!modal.appliedOtherTax || !modal.appliedOtherTax.name) && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
                 entry.otherTaxModal.appliedOtherTax.name = tax.name;
             }
             if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
@@ -4890,6 +4889,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this._cdr.detectChanges();
                     if (this.isPurchaseInvoice && this.isUpdateMode) {
                         // TODO: Remove this code once purchase invoice supports multicurrency
+                        this.calculateSubTotal();
+                        this.calculateTotalDiscount();
+                        this.calculateTotalTaxSum();
+                        this.calculateGrandTotal();
+                        this.calculateBalanceDue();
+                    }
+                    if (from !== to && !this.isPurchaseInvoice) {
+                        // Multi currency case
+                        this.updateStockEntries();
                         this.calculateSubTotal();
                         this.calculateTotalDiscount();
                         this.calculateTotalTaxSum();
@@ -6749,7 +6757,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public selectAddress(data: any, address: any, isCompanyAddress: false): void {
         if(data && address) {
             data.address[0] = address.address;
-            
+
             if(!data.state) {
                 data.state = {};
             }
