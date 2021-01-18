@@ -2,19 +2,19 @@
     <div *ngIf="organizationType === 'BRANCH'" class="row">
         <div class="col-md-12">
             <div class="border-bottom font-14">
-                <p class="pb-15"> All the information will save in <strong>{{profileData?.companyName}}</strong></p>
+                <p class="pd-b15"> All the information will save in <strong>{{profileData?.companyName}}</strong></p>
                 <!-- branch profile element start -->
                 <div class="other-detail-section">
-                    <div class="mb-15">
+                    <div class="mr-b15">
                         <label>Number System</label> <span>{{numberSystem}}</span>
                     </div>
-                    <!-- <div class="mb-15">
+                    <!-- <div class="mr-b15">
                         <label>Date Format</label> <span>DD/MM/YYYY (15/09/2020)</span>
                     </div>
-                    <div class="mb-15">
+                    <div class="mr-b15">
                         <label>Number System</label> <span>(GMT 5:30) India Standard Time (Asia/Calcutta)</span>
                     </div> -->
-                    <div class="mb-15">
+                    <div class="mr-b15">
                         <label>Inventory Type</label> <span>{{profileData?.manageInventory ? 'Product' : 'Service'}}</span>
                     </div>
                 </div>

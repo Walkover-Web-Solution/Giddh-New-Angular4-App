@@ -406,7 +406,7 @@ aside-menu-account .container-fluid {
     padding: 10px;
 }
 
-.pd15 {
+.pd-15 {
     padding: 15px;
 }
 
@@ -510,7 +510,7 @@ aside-menu-account .container-fluid {
     margin: 10px;
 }
 
-.mr15 {
+.mr-15 {
     margin: 15px;
 }
 
@@ -550,16 +550,8 @@ aside-menu-account .container-fluid {
     margin-bottom: 10px !important;
 }
 
-.mrB15 {
-    margin-bottom: 15px;
-}
-
 .mr-l1 {
     margin-left: 10px;
-}
-
-.mrL15 {
-    margin-left: 15px;
 }
 
 .mr-r1 {
@@ -652,6 +644,10 @@ aside-menu-account .container-fluid {
 
 .dark-grey-bg{
     background: $davy-grey !important;
+}
+
+.bg-grey{
+    background: $whisper-color;
 }
 
 .pa {
@@ -2953,7 +2949,7 @@ ul.pills li {
 
 .thead-background1 th,
 .thead-background1 td {
-    background: $gray-90;
+    background: $whisper;
 }
 
 .thead-background3 th,
@@ -4963,7 +4959,7 @@ perfect-scrollbar.ps-show-active
 }
 
 .basic thead tr th {
-    background: $gray-90;
+    background: $whisper;
     color: $nero;
     border: 0;
     font-family: "" opensans-semibold "";

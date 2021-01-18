@@ -1,5 +1,5 @@
 <section class="receipt-note" autocomplete="off">
-    <div class="receipt-note-header d-flex pl-15 pr-15">
+    <div class="receipt-note-header d-flex pd-l15 pd-r15">
         <h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
         <h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</h3>
         <div class="close-receipt pointer" (click)="closeBranchTransferPopup()">
@@ -7,15 +7,15 @@
         </div>
     </div>
     <div class="receipt-note-content">
-        <div class="receipt-note-radio-btn pr-15 pl-15 mb-15" *ngIf="!editBranchTransferUniqueName">
-            <span class="p-0 mr-3">
+        <div class="receipt-note-radio-btn pd-r15 pd-l15 mr-b15" *ngIf="!editBranchTransferUniqueName">
+            <span class="p-0 mr-r3">
                 <input id="multipleProducts" class="radio-custom cp ml-0" type="radio" [ngClass]="{'radio-theme': 1 === 1, 'transfer-type-checked': transferType === 'products'}"
                 name="transferType"
                 (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'products'">
                 <label for="multipleProducts" class="radio-custom-label">Multiple Products</label>
             </span>
 
-            <span class="p-0 mr-3">
+            <span class="p-0 mr-r3">
                 <input id="multipleSenders" class="radio-custom cp ml-0" type="radio" [ngClass]="{'radio-theme': 1 === 1, 'transfer-type-checked': transferType === 'senders'}"
                 name="transferType" type="radio"
                 (click)="changeTransferType();" [(ngModel)]="transferType" [value]="'senders'">
@@ -28,7 +28,7 @@
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
         <div class="multiple-products-wrapper">
             <form #newBranchTransferForm="ngForm" novalidate="">
-                <div class="multiple-products row clearfix pl-15 pr-15">
+                <div class="multiple-products row clearfix pd-l15 pd-r15">
                     <div class="col-lg-6 col-md-8" *ngIf="branchTransferMode === 'deliverynote'">
                         <div class="row mr-b2">
                             <div class="col-xl-3 col-lg-4">
@@ -596,7 +596,7 @@
         <div class="form-header">
             <h3 class="aside-title">Manage Transporter</h3>
         </div>
-        <button type="button" class="mt-05" id="close" (click)="toggleTransporterModel()"><i
+        <button type="button" class="mr-t05" id="close" (click)="toggleTransporterModel()"><i
                 class="icon-cross"></i></button>
         <form #generateTransporterForm="ngForm" autocomplete="off">
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">

@@ -8,25 +8,7 @@ import { take, takeUntil } from 'rxjs/operators';
 @Component({
     selector: 'discount-control-component',
     templateUrl: './discount-control-component.html',
-    styles: [`
-    /*.multi-select input.form-control {
-       background-image: unset !important;
-    }*/
-
-    .multi-select .caret {
-      display: block !important;
-    }
-    .fa-percent{
-        top: 9px;
-        right: 6px;
-        color: #acb0b9;
-    }
-    .discount-name-ul{
-        list-style: none;
-        overflow: auto;
-        max-height: 100px;
-    }
-  `]
+    styleUrls: ['./discount-control-component.scss']
 })
 
 export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {

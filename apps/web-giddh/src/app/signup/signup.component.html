@@ -24,7 +24,7 @@
                                         *ngIf="loginUsing === 'email'">
                                         <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix">
 
-                                            <input class="form-control mb-1" formControlName="email" type="email"
+                                            <input class="form-control mr-b1" formControlName="email" type="email"
                                                 placeholder="Email address" required>
                                             <button [disabled]="!emailVerifyForm.controls['email'].valid"
                                                 [ladda]="isLoginWithEmailInProcess$ | async"
@@ -34,7 +34,7 @@
 
                                         </div>
                                         <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix">
-                                            <input class="form-control mb-1" formControlName="token" type="text"
+                                            <input class="form-control mr-b1" formControlName="token" type="text"
                                                 placeholder="Enter verification code here" required>
                                             <div class="clearfix mr-b2">
                                                 <button [disabled]="!emailVerifyForm.controls['token'].valid"
@@ -62,7 +62,7 @@
                                         *ngIf="loginUsing === 'userName'"
                                         [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
                                         <div class="clearfix form-group">
-                                            <input class="form-control mb-1" type="text" formControlName="email"
+                                            <input class="form-control mr-b1" type="text" formControlName="email"
                                                 placeholder="Email Id" />
                                             <input class="form-control" type="password"
                                                 (ngModelChange)="validatePwd($event)" formControlName="password"
@@ -86,8 +86,8 @@
                                     <form class="" *ngIf="isSignupWithPasswordSuccess$ | async" id="signupVerifyForm"
                                         [formGroup]="signupVerifyForm" autocomplete="off">
                                         <div class="clearfix">
-                                            <!-- <input class="form-control mb-1" formControlName="email" type="text" placeholder="Email Id" required> -->
-                                            <input class="form-control mb-1" formControlName="verificationCode"
+                                            <!-- <input class="form-control mr-b1" formControlName="email" type="text" placeholder="Email Id" required> -->
+                                            <input class="form-control mr-b1" formControlName="verificationCode"
                                                 type="text" placeholder="Enter verification code here" required>
                                             <div class="clearfix mr-b2">
                                                 <button

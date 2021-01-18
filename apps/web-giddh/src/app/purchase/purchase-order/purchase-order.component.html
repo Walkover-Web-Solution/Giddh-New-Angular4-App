@@ -1,4 +1,4 @@
-<div class="container-fluid pt-15" *ngIf="!purchaseOrderUniqueName">
+<div class="container-fluid pd-t15" *ngIf="!purchaseOrderUniqueName">
     <div class="d-flex justify-content-between purchase-order-header">
         <div class="d-flex date-advance-search">
             <form #invoiceForm="ngForm" novalidate class="form-inline">
@@ -98,7 +98,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table class="table basic mt-15 table-bordered giddh-table on-mobile-view">
+        <table class="table basic mr-t15 table-bordered giddh-table on-mobile-view">
             <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false">
                 <tr (mouseenter)="showSelectAllItemCheckbox = true">
                     <th class="min-wid-check" width="3%">
@@ -263,7 +263,7 @@
                 <div class="d-flex flex-column">
                     <p class="mb-3">Choose a field from the dropdown and update with new information.</p>
                     <div class="d-flex justify-content-between mb-3 modal-form">
-                        <sh-select class="mr-15" name="bulkUpdate" [(ngModel)]="bulkUpdateGetParams.action" [options]="bulkUpdateFields" [ItemHeight]="33"></sh-select>
+                        <sh-select class="mr-r15" name="bulkUpdate" [(ngModel)]="bulkUpdateGetParams.action" [options]="bulkUpdateFields" [ItemHeight]="33"></sh-select>
                         <div class="select-date" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate' || bulkUpdateGetParams.action === 'warehouse'">
                             <div class="input-group">
                                 <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDate" [(ngModel)]="bulkUpdatePostParams.purchaseDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'purchasedate'">

@@ -2,7 +2,7 @@
     <!-- page Title -->
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
     <div class="clearfix">
-        <div class="mt-15 justify-content-between pr-3" [ngClass]="{'d-flex' : currentCompanyBranches?.length > 2}">
+        <div class="mr-t15 justify-content-between pr-3" [ngClass]="{'d-flex' : currentCompanyBranches?.length > 2}">
             <div *ngIf="currentCompanyBranches?.length > 2" class="form-group col-lg-2 col-md-6 linked-entities">
                 <label class="d-block pb-1">Entity</label>
                 <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
@@ -38,7 +38,7 @@
     <!-- form -->
     <div class="col-xs-12 col-sm-12">
         <div class="mf-stock-search-request-form clearfix">
-            <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-15 mb-05 manufacturing-form" (submit)="getReports()"
+            <form #mfStockSearchRequestForm="ngForm" class="mt-0 col-12 pl-0 pr-0 mr-t15 mr-b05 manufacturing-form" (submit)="getReports()"
                 autocomplete="off">
                 <div class="row">
                     <div class="form-group col-xl-2 col-lg-2 col-md-6">
