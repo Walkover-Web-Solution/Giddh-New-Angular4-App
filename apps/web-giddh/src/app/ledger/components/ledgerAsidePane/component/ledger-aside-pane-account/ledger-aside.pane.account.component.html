@@ -8,7 +8,7 @@
         <div class="aside-pane-form">
             <div>
                 <account-add-new-details [activeGroupUniqueName]="activeGroupUniqueName"
-                    [flatGroupsOptions]="flattenGroupsArray" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
+                    [isLedgerModule]="true" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
                     (isGroupSelected)="isGroupSelected($event)" [isAccountNameAvailable$]="isAccountNameAvailable$"
                     [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$"
                     (submitClicked)="addNewAcSubmit($event)" [isGstEnabledAcc]="isGstEnabledAcc"

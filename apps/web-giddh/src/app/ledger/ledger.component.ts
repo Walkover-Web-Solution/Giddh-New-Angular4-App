@@ -7,7 +7,6 @@ import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_F
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
-import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -30,11 +29,9 @@ import { cloneDeep, filter, find, orderBy, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
-import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal, VoucherTypeEnum } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
-import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { GeneralService } from '../services/general.service';
@@ -74,7 +71,6 @@ import { UploadBankStatementComponent } from './components/upload-bank-statement
 })
 export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('updateledgercomponent', {static: true}) public updateledgercomponent: ElementViewContainerRef;
-    @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
     @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
     @ViewChild('sharLedger', {static: true}) public sharLedger: ShareLedgerComponent;
     @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
@@ -96,7 +92,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('exportLedgerModal', {static: true}) public exportLedgerModal: ModalDirective;
     @ViewChild('shareLedgerModal', {static: true}) public shareLedgerModal: ModalDirective;
     @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
-    @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
     @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
     @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
@@ -1503,15 +1498,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
     }
 
-    public showQuickAccountModal() {
-        this.loadQuickAccountComponent();
-        this.quickAccountModal.show();
-    }
-
-    public hideQuickAccountModal() {
-        this.quickAccountModal.hide();
-    }
-
     public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
         let activeAccount: AccountResponse | AccountResponseV2;
         this.lc.activeAccount$.pipe(take(1)).subscribe(a => activeAccount = a);
@@ -1593,23 +1579,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         componentInstance.showQuickAccountModalFromUpdateLedger.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.showQuickAccountModal();
+            this.toggleAsidePane();
         });
-    }
-
-    public loadQuickAccountComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
-        let viewContainerRef = this.quickAccountComponent.viewContainerRef;
-        viewContainerRef.remove();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        let componentInstance = componentRef.instance as QuickAccountComponent;
-        componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideQuickAccountModal();
-            componentInstance.newAccountForm.reset();
-            componentInstance.destroyed$.next(true);
-            componentInstance.destroyed$.complete();
-        });
-
     }
 
     /**
