@@ -7,7 +7,7 @@
     <div class="row">
         <div class="form-group col-12">
             <label class="mr-b1">Select Group</label>
-            <div class="ng-select-wrap liq">
+            <div class="ng-select-wrap select-list">
                 <ng-select placeholder="Sales Group" filterPlaceholder="Type to search..." name="flatAccountWGroupsList"
                     [(ngModel)]="activeGroupUniqueName" [options]="flatAccountWGroupsList$ | async" style="width:100%">
                     <ng-template #optionTemplate let-option="option">
