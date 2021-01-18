@@ -20,7 +20,8 @@
         </div>
         <div class="row">
             <div class="col-lg-3 col-md-8 col-sm-12 col-12 mb-15 clear-both">
-                <sh-select [options]="flatGroupsOptions" [placeholder]="'Group *'" name="group" (selected)="selectGroup($event);" [forceClearReactive]="forceClear$ | async"></sh-select>
+                <sh-select [options]="flatGroupsOptions" [placeholder]="'Group *'" name="group" (selected)="selectGroup($event);" [forceClearReactive]="forceClear$ | async"
+                [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"></sh-select>
             </div>
         </div>
         <div class="row">

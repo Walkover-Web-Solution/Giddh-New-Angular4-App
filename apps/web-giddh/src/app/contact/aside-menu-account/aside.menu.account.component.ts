@@ -8,13 +8,8 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { AccountAddNewDetailsComponent } from '../../shared/header/components';
-
-const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 
 @Component({
     selector: 'aside-menu-account',
@@ -50,7 +45,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public deleteAccountSuccess$: Observable<boolean>;
     public accountDetails: any = '';
     public breadcrumbUniquePath: string[] = [];
-    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -59,7 +53,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
         private _groupWithAccountsAction: GroupWithAccountsAction,
-        private _generalActions: GeneralActions
     ) {
         // account-add component's property
         this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
@@ -72,11 +65,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.updateAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountInProcess), takeUntil(this.destroyed$));
         this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.deleteAccountSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.isDeleteAccSuccess)).pipe(takeUntil(this.destroyed$));
-        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._generalActions.getFlattenGroupsReq());
         if (this.isUpdateAccount && this.activeAccountDetails) {
             this.accountDetails = this.activeAccountDetails;
             this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
@@ -108,14 +99,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                         this.showVirtualAccount = false;
                     }
                 });
-            }
-        });
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || (grps && grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName));
-                }).map((m: any) => ({ value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups }));
-                this.flatGroupsOptions = items;
             }
         });
 
