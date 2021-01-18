@@ -20,7 +20,7 @@
                     </select>
                     <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                 </div>
-                <div class="form-group" *ngIf="newRoleObj.isFresh">
+                <div class="form-group select-page position-relative" *ngIf="newRoleObj.isFresh">
                     <div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">
                         <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
                             {{ dropdownHeading}} <span class="select_drop pull-right mr-t1"><i
