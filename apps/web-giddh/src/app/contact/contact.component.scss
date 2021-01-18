@@ -284,8 +284,8 @@ i.icon-options:hover {
 
 .search-field input {
     width: 235px;
-    background-color: $gray-90 !important;
-    border-color: $gray-90 !important;
+    background-color: $whisper !important;
+    border-color: $whisper !important;
 }
 
 .search-field input:focus {
@@ -437,7 +437,7 @@ button.btn.btn-filter span.icon-cross {
     .aging-table>tbody>tr input[type="checkbox"] {
         top: 2px;
     }
-    .customer-right-wrap h4.mb-1.pd-r2 {
+    .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 0;
     }
     tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
@@ -560,7 +560,7 @@ button.btn.btn-filter span.icon-cross {
             }
         }
     }
-    .customer-right-wrap h4.mb-1.pd-r2 {
+    .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 10px;
     }
     .customer-right {

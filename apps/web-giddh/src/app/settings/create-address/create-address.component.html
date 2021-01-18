@@ -107,10 +107,10 @@
                                                             <span class="default-entity">
                                                                 <i (click)="setDefault(option, $event)"
                                                                     *ngIf="!option.isDefault"
-                                                                    class="icon-no-selected mr-05"></i>
+                                                                    class="icon-no-selected mr-r05"></i>
                                                                 <i (click)="setDefault(option, $event)"
                                                                     *ngIf="option.isDefault"
-                                                                    class="icon-favorite-selected mr-05"></i>
+                                                                    class="icon-favorite-selected mr-r05"></i>
                                                             </span>
                                                         </a>
                                                     </ng-container>
@@ -178,10 +178,10 @@
                                                             <span class="default-entity">
                                                                 <i (click)="setDefault(option, $event)"
                                                                     *ngIf="!option.isDefault"
-                                                                    class="icon-no-selected mr-05"></i>
+                                                                    class="icon-no-selected mr-r05"></i>
                                                                 <i (click)="setDefault(option, $event)"
                                                                     *ngIf="option.isDefault"
-                                                                    class="icon-favorite-selected mr-05"></i>
+                                                                    class="icon-favorite-selected mr-r05"></i>
                                                             </span>
                                                         </a>
                                                     </ng-container>
@@ -251,7 +251,7 @@
 
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 text-left">
-                                <div class="mt-5 pl-05 pr-05">
+                                <div class="mt-5 pd-l05 pd-r05">
                                     <button [ladda]="showLoader" [disabled]="addressForm?.invalid" type="submit"
                                         class="btn btn-success">
                                         <ng-container

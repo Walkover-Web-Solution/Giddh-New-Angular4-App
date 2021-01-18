@@ -2,7 +2,7 @@
     <div>
         <div>
             <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline flex-row flex-nowrap">
-                <div class="form-group mr-15">
+                <div class="form-group mr-r15">
                     <div class="linked-entities" *ngIf="currentCompanyBranches?.length > 2">
                         <label class="d-block">Select Entity</label>
                         <div class="form-group">
@@ -30,14 +30,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group mr-15">
+                <div class="form-group mr-r15">
                     <label class="d-block">Select Groups</label>
                     <input [typeahead]="dataSource" type="text" [(ngModel)]="groupName"
                         (typeaheadOnSelect)="OnSelectGroup($event)" (typeaheadOnBlur)="OnSelectGroup($event)"
                         typeaheadOptionField="name" (typeaheadNoResults)="changeTypeaheadNoResults($event)" required
                         class="form-control" name="city" autocomplete="off" maxlength="50" placeholder="Search Groups">
                 </div>
-                <div class="form-group mr-15">
+                <div class="form-group mr-r15">
                     <label>From - To</label>
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i><img src="assets/images/custom-calender.svg"></i>

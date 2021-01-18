@@ -19,7 +19,7 @@
                                 <tbody>
                                     <tr>
                                         <td class="text-right width-70">
-                                            <label class="mr-05 font-12">Qty</label>
+                                            <label class="mr-r05 font-12">Qty</label>
                                             <input id="ledger-quantity" type="text" name="" class="form-control text-right"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields || isReadOnly ? 'disabled' : null"
                                                 (change)="changeQuantity($event.target.value)"
@@ -181,7 +181,7 @@
                 </div>
             </div>
             <div class="col-md-8 col-12" [ngClass]="{'offset-md-4' : !(currentTxn?.selectedAccount?.stock)}">
-                <div class="text-right mb-1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
+                <div class="text-right mr-b1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <input [disabled]="isReadOnly" id="ledger-other-tax" type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
@@ -361,7 +361,7 @@
                             </td>
                             <td (click)="isReadOnly ? '' : handleVoucherAdjustment()"
                                 class="cp pd-r1 pt-2" *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount">
-                                <span class="text-gray advance-receipt-edit ml-05">
+                                <span class="text-gray advance-receipt-edit mr-l05">
                                     <i class="icon-edit-pencil"></i>
                                     Adjusted Amt.: {{currentTxn?.voucherAdjustments?.totalAdjustmentAmount}}</span>
                             </td>
@@ -465,7 +465,7 @@
 
             <div class="clearfix w-100">
 
-                <div class="pull-left pl-15">
+                <div class="pull-left pd-l15">
 
                     <ul class="list-inline font-14" *ngIf="isLedgerAccountAllowsMultiCurrency">
                         <li>
@@ -492,13 +492,13 @@
                     <input [disabled]="isReadOnly" type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
                         ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput
                         (click)="onUploadOutput()">
-                    <label class="upload-div pr-15"
+                    <label class="upload-div pd-r15"
                         [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
 
                         <label for="invoiceFile" class="cp font-16">
                             <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i> Attach file</label>
                     </label>
-                    <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger?.attachedFile?.length > 0">
+                    <div class="file_attached clearfix text-right pd-r15" *ngIf="blankLedger?.attachedFile?.length > 0">
                         <span>{{ blankLedger.attachedFileName }}</span>
                         <label class="remove cp text-danger pl-1"
                             (click)="showDeleteAttachedFileModal()">(remove)</label>
@@ -591,7 +591,7 @@
     </div>
 </ng-template>
 <ng-template #touristSchemeTemplate>
-    <div class="row font-14 mb-1" *ngIf="isTouristSchemeApplicable">
+    <div class="row font-14 mr-b1" *ngIf="isTouristSchemeApplicable">
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
