@@ -64,6 +64,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public borderConfiguration: BorderConfiguration;
     /** True, if search suggesstion should not be displayed */
     @Input() public showSearchSuggestion: boolean = true;
+    /** True if field is required */
+    @Input() public isRequired: boolean = false;
 
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
