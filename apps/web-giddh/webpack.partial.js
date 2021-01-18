@@ -16,6 +16,7 @@ module.exports = {
             'STAGING_ENV': JSON.stringify(false),
             'TEST_ENV': JSON.stringify(false),
             'LOCAL_ENV': JSON.stringify(true),
+
             'process.env.ENV': 'development',
             'process.env.NODE_ENV': 'development',
             'process.env.isElectron': JSON.stringify(false),
@@ -28,3 +29,4 @@ module.exports = {
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ]
 }
+

@@ -9653,6 +9653,10 @@ button#more-btn-inventory, #more-btn-inventory-mobile{
     height: 49px;
     border: 0 none !important;
 }
+.inventory-dashboard .box{
+    border: 1px solid $gainsboro;
+    border-radius: 2px;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -9759,11 +9763,29 @@ input.mat-input-element{
     .delete-modal-overlay {
         z-index: 9992; /*for delete custom zIndex modal*/
     }
+    .custom-tabs.location-data-tabs .nav-tabs {
+        background-color: transparent;
+        li.active{
+             a{
+                border-bottom: 4px solid $midnight-blue !important;
+                color: $midnight-blue !important;
+             }
+        }
+        li{
+            a{
+                &:hover{
+                    color: $midnight-blue !important;
+                }
+            }
+        }
+    }
+
     .custom-tabs.combo-page-tab .nav-tabs,
     .custom-tabs.about-group-tab .nav-tabs,
     .custom-tabs.product-service-page-tab .nav-tabs,
     .custom-tabs.create-inventory-tab .nav-tabs,
-    .custom-tabs.create-item-tab .nav-tabs{
+    .custom-tabs.create-item-tab .nav-tabs,
+    .custom-tabs.location-data-tabs .nav-tabs{
         position: static !important;
         padding-left: 15px !important;
         margin-left: -15px;
@@ -10201,14 +10223,6 @@ input.mat-input-element{
     }
 }
 @media (max-width: 767px) {
-    .custom-tabs.combo-page-tab .nav-tabs,
-    .custom-tabs.about-group-tab .nav-tabs,
-    .custom-tabs.product-service-page-tab .nav-tabs,
-    .custom-tabscreate-inventory-tab .nav-tabs{
-        padding-left: 0 !important;
-        margin-left: 0;
-        margin-top:5px;
-    }
     .custom-tabs.create-item-tab .nav-tabs{
         display: inline-block;
         white-space: nowrap;
@@ -10269,6 +10283,16 @@ input.mat-input-element{
     }
     .sticky-footer {
         position: relative;
+    }
+    .custom-tabs.combo-page-tab .nav-tabs,
+    .custom-tabs.about-group-tab .nav-tabs,
+    .custom-tabs.product-service-page-tab .nav-tabs,
+    .custom-tabs.create-inventory-tab .nav-tabs,
+    .custom-tabs.location-data-tabs .nav-tabs{
+        padding-left: 0 !important;
+        margin-left: 0;
+        margin-top:5px;
+        position: static !important;
     }
 }
     @media (max-width: 1199px) {
