@@ -461,7 +461,7 @@
                     <div class="text-center mr-t2 page-count position-absolute">
                         <span class="grey ng-binding">{{ bankTransactionsResponse?.totalItems }} transactions, </span>
                         <span class="black ng-binding">{{ bankTransactionsResponse?.totalPages }} pages</span>
-                        <pagination *ngIf="bankTransactionsResponse?.totalPages > 1" [totalItems]="(bankTransactionsResponse?.countPerPage)*(bankTransactionsResponse?.totalPages)" [itemsPerPage]="bankTransactionsResponse?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="bankTransactionsResponse.page" (pageChanged)="bankTransactionPageChanged($event)" [boundaryLinks]="true"></pagination>
+                        <pagination *ngIf="bankTransactionsResponse?.totalPages > 1" [totalItems]="(bankTransactionsResponse?.countPerPage)*(bankTransactionsResponse?.totalPages)" [itemsPerPage]="bankTransactionsResponse?.countPerPage" [maxSize]="5" class="pagination-sm" [(ngModel)]="bankTransactionsResponse.page" (pageChanged)="bankTransactionPageChanged($event)" [boundaryLinks]="true"></pagination>
                     </div>
                     <table class="w-100">
                         <tr>
