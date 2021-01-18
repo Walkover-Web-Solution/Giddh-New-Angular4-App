@@ -27,7 +27,7 @@
                 <label>Linked Accounts</label>
                 <sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
                     [(ngModel)]="createRequest.accountUniqueName" [placeholder]="'Select Discount'"
-                    [showNotFoundLinkAsDefault]="true" [options]="accounts$" [ItemHeight]="'max-content'"
+                    [showNotFoundLinkAsDefault]="true" [options]="accounts" [ItemHeight]="'max-content'"
                     (noResultsClicked)="toggleAccountAsidePane($event)" class="select-linked-accounts">
                 </sh-select>
             </div>
@@ -93,6 +93,7 @@
 </div>
 
 <!-- open account aside -->
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <aside-menu-account *ngIf="accountAsideMenuState === 'in'" [class]="accountAsideMenuState"
 	[@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
 	[activeGroupUniqueName]="'discount'"></aside-menu-account>
