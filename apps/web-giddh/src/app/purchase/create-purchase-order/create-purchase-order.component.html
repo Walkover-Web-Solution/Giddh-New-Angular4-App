@@ -15,7 +15,7 @@
                     <div class="inner-container">
                         <!-- region customer section -->
                         <div class="clearfix">
-                            <div class="row mb-1">
+                            <div class="row mr-b1">
                                 <!-- region customer name -->
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Vendor Name<span class="red-text">*</span></label>
@@ -44,7 +44,7 @@
                                                 </ng-template>
 
                                                 <ng-template #notFoundLinkTemplate>
-                                                    <a href="javascript:void(0)" class="list-item pl-05 pr-05 d-flex justify-content-between w-100 border-none"
+                                                    <a href="javascript:void(0)" class="list-item pd-l05 pd-r05 d-flex justify-content-between w-100 border-none"
                                                         [keyboardShortcut]="'alt+c'">
                                                         <div class="item">{{ vendorNotFoundText }}</div>
                                                         <div class="item">Alt+C</div>
@@ -71,7 +71,7 @@
                                 </div>
                                 <!-- endregion -->
                             </div>
-                            <div class="row mb-1 delivery-from-field">
+                            <div class="row mr-b1 delivery-from-field">
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Deliver From<span class="red-text">*</span></label>
                                 </div>
@@ -87,7 +87,7 @@
 
                                                     <div class="form-group">
                                                         <div class="d-flex align-items-center pb-1">
-                                                            <span class="pr-15">Billing Address</span>
+                                                            <span class="pd-r15">Billing Address</span>
                                                             <span>
                                                                 <div class="btn-group btn-block" dropdown #billingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="billingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1">
                                                                     <a dropdownToggle type="button" class="dropdown-toggle">Change</a>
@@ -151,7 +151,7 @@
 
                                                     <div class="form-group p0 width-100">
                                                         <div class="d-flex align-items-center pb-1">
-                                                            <span class="pr-15">
+                                                            <span class="pd-r15">
                                                             <input type="checkbox" autocomplete="None"
                                                                 name="autoFillVendorShipping"
                                                                 [(ngModel)]="autoFillVendorShipping"
@@ -263,7 +263,7 @@
 
                                             <div class="form-group">
                                                <div class="d-flex align-items-center pb-1">
-                                                    <span class="pr-15">Billing Address</span>
+                                                    <span class="pd-r15">Billing Address</span>
                                                     <span>
                                                     <div class="btn-group btn-block" container="body" dropdown #companyBillingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="companyBillingAddressDropDownWeb.hide()" *ngIf="companyAddressList?.length > 1">
                                                         <a dropdownToggle type="button" class="dropdown-toggle">Change</a>
@@ -322,7 +322,7 @@
 
                                             <div class="form-group p0 width-100">
                                                 <div class="d-flex align-items-center pb-1">
-                                                    <span class="pr-15">
+                                                    <span class="pd-r15">
                                                         <input type="checkbox" autocomplete="None"
                                                             name="autoFillCompanyShipping"
                                                             [(ngModel)]="autoFillCompanyShipping"
@@ -1475,7 +1475,7 @@
                                             <span>
 
                                                 <div class="d-flex align-items-center">
-                                                    <span class="mr-05">
+                                                    <span class="mr-r05">
                                                         <a href="javascript:;"
                                                             (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
                                                             <img src="assets/images/edit-pencilicon.svg">

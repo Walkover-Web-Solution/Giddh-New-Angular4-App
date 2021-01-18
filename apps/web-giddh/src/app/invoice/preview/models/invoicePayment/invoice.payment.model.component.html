@@ -78,7 +78,7 @@
 
             <!-- switch currency on click-->
             <div class="clearfix" *ngIf="isMulticurrencyAccount">
-                <div class="switch-currency mb-1" *ngIf="!showSwitchedCurr">
+                <div class="switch-currency mr-b1" *ngIf="!showSwitchedCurr">
                     <span class="text-light d-inline-block pr-1">Base Currency</span>
 
                     <span class="left-currency middle">1 {{accountCurrency}}</span>
@@ -104,7 +104,7 @@
                 </div>
 
 
-                <div class="switch-currency mb-1" *ngIf="showSwitchedCurr">
+                <div class="switch-currency mr-b1" *ngIf="showSwitchedCurr">
                     <span class="text-light d-inline-block pr-1">Base Currency</span>
                     <span class="left-currency middle">1 {{companyCurrencyName}}</span>
                     <img class="switch-icon middle mr-1 ml-1" src="assets/images/switch-icon.svg" alt="switch-icon"

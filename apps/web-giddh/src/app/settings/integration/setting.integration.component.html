@@ -1,5 +1,5 @@
 <div class="clearfix">
-    <tabset [ngClass]="{'tab-integraton': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
+    <tabset [ngClass]="{'tab-integration': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
         <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
             <ng-template tabHeading>
                 <span class="icon-chat2"></span> SMS
@@ -443,13 +443,13 @@
                                                 <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                                 </ng-container>
                                                 <div class="d-flex">
-                                                    <div class="mr-05 custom-select cust select-caret position-relative">
+                                                    <div class="mr-r05 custom-select cust select-caret position-relative">
 
                                                         <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustomField(  index, false, null , $event);checkFormValidations(addBankForm.value)" name="maxBankLimit">
 
                                                         </sh-select>
                                                     </div>
-                                                    <div class="ml-05">
+                                                    <div class="mr-l05">
                                                         <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index, true)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
                                                             maxlength="10" formControlName="amount" name="amount" placeholder="Amount">
                                                     </div>
@@ -496,7 +496,7 @@
                                             </div>
                                             <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
                                                 <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
-                                                <div class="mt-1 xs-pl-15">
+                                                <div class="mt-1 xs-pd-l15">
                                                     <i (click)="removeUserAmountRangesForm(index);checkFormValidations(addBankForm.value)" class="icon-trash cursor-pointer"></i>
                                                 </div>
                                             </div>
@@ -572,12 +572,12 @@
                                         </ng-container>
                                         <div class="d-flex">
 
-                                            <div class="mr-05 custom-select select-caret position-relative width-100">
+                                            <div class="mr-r05 custom-select select-caret position-relative width-100">
                                                 <sh-select [options]="amountUpToList" autocomplete="off" [required]="item.maxBankLimit !== 'max'" [disabled]="isBankUpdateInEdit !== parentIndex" [fixedValue]="'Custom'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom(index, true, parentIndex);"
                                                     (ngModelChange)="maxLimitOrCustomChanged($event, index , true, parentIndex)" name="maxBankLimit{{parentIndex}}{{index}}">
                                                 </sh-select>
                                             </div>
-                                            <div class="ml-05  width-100">
+                                            <div class="mr-l05  width-100">
                                                 <input type="text" class="form-control" #amountUpdateElement [required]="item.maxBankLimit !== 'max'" decimalDigitsDirective [disabled]="isBankUpdateInEdit !== parentIndex" [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountUpdateElement, true, parentIndex );preventZero(item.amount,index, parentIndex, true )"
                                                     maxlength="10" name="amount{{parentIndex}}{{index}}" placeholder="Amount">
                                             </div>
@@ -606,7 +606,7 @@
                                     </div>
                                     <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0" *ngIf="isBankUpdateInEdit === parentIndex">
                                         <ng-container *ngIf="index===0"> <label class="d-flex hidden-1359">&nbsp;</label></ng-container>
-                                        <div class="mt-1 xs-pl-15">
+                                        <div class="mt-1 xs-pd-l15">
                                             <i (click)="deleteAmountRangeRow(item, parentIndex+1)" class="icon-trash cursor-pointer"></i>
                                         </div>
                                     </div>
@@ -688,11 +688,11 @@
                                     <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                         <br></ng-container>
                                     <div class="d-flex">
-                                        <div class="mr-05 custom-select cust select-caret position-relative">
+                                        <div class="mr-r05 custom-select cust select-caret position-relative">
                                             <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)" name="maxBankLimit{{index}}">
                                             </sh-select>
                                         </div>
-                                        <div class="ml-05">
+                                        <div class="mr-l05">
                                             <input type="text" class="form-control" [maxlength]="maxLimit" #amountElement [required]="item.maxBankLimit !=='max'" decimalDigitsDirective [(ngModel)]="item.amount" (blur)="changeAmount(item, index, amountElement, false );" name="amount{{index}}" placeholder="Amount">
                                         </div>
                                     </div>
@@ -737,7 +737,7 @@
                                 </div>
                                 <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
                                     <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
-                                    <div class="mt-1 xs-pl-15">
+                                    <div class="mt-1 xs-pd-l15">
                                         <i (click)="deleteAmountRangeRow(item)" class="icon-trash cursor-pointer"></i>
                                     </div>
                                 </div>
@@ -816,13 +816,13 @@
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
                                         <div class="d-flex">
-                                            <div class="mr-05 custom-select cust select-caret position-relative">
+                                            <div class="mr-r05 custom-select cust select-caret position-relative">
 
                                                 <sh-select [options]="amountUpToList" formControlName="maxBankLimit" (selected)="selectedMaxOrCustomField(  index, false, null , $event)" name="maxBankLimit">
 
                                                 </sh-select>
                                             </div>
-                                            <div class="ml-05">
+                                            <div class="mr-l05">
                                                 <input type="text" class="form-control" [ngClass]="{'error-box': checkIsAmountRepeat(addBankForm.get('userAmountRanges').value,item.get('amount').value,index, false)}" #amountElement decimalDigitsDirective (blur)="preventZero(item.get('amount').value, index, null, false)"
                                                     maxlength="10" [mask]="inputMaskFormat" formControlName="amount" name="amount" placeholder="Amount">
                                             </div>
@@ -869,7 +869,7 @@
                                     </div>
                                     <div class="form-group plus-cross-btn col-sm-1 col-md-1 pl-0 pr-0">
                                         <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
-                                        <div class="mt-1 xs-pl-15">
+                                        <div class="mt-1 xs-pd-l15">
                                             <i (click)="removeUserAmountRangesForm(index)" class="icon-trash cursor-pointer"></i>
                                         </div>
                                     </div>

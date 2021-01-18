@@ -64,8 +64,8 @@
 }
 .search-field input {
     width: 235px;
-    background-color: $gray-90 !important;
-    border-color: $gray-90 !important;
+    background-color: $whisper !important;
+    border-color: $whisper !important;
 }
 .search-field input:focus {
     background-color: $white !important;
@@ -118,7 +118,7 @@ tr.aging-table-top td {
 }
 
 @media (max-width: 768px) {
-    .customer-right-wrap h4.mb-1.pd-r2 {
+    .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 0;
     }
     .contact-main .table-aging-report {
@@ -208,7 +208,7 @@ tr.aging-table-top td {
             }
         }
     }
-    .customer-right-wrap h4.mb-1.pd-r2 {
+    .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 10px;
         padding-left: 15px;
     }
