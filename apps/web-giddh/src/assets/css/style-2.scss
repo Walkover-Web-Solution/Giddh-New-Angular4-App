@@ -9657,7 +9657,7 @@ button#more-btn-inventory, #more-btn-inventory-mobile{
     border: 1px solid $gainsboro;
     border-radius: 2px;
 }
-/* responsive */
+
 ul.dropdown-menu.action-dropdown {
     left: auto;
     right: -40px !important;
@@ -9802,6 +9802,9 @@ input.mat-input-element{
     }
     .change-address-dropdown li:last-child {
         border: none;
+    }
+    .custom-select{
+        background-image: none !important;
     }
     /* responsive  starts here*/
 
