@@ -67,7 +67,7 @@
 
             <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
 
-                <div class="clearfix wrapper-customer-table pt-15">
+                <div class="clearfix wrapper-customer-table pd-t15">
                     <!-- region customer and address section -->
                     <div class="customer-invoice-table">
 
@@ -141,7 +141,7 @@
                                                         </ng-template>
 
                                                         <ng-template #notFoundLinkTemplate>
-                                                            <a href="javascript:void(0)" class="list-item pl-05 pr-05 border-none d-flex justify-content-between w-100"
+                                                            <a href="javascript:void(0)" class="list-item pd-l05 pd-r05 border-none d-flex justify-content-between w-100"
                                                                 [keyboardShortcut]="'alt+c'">
                                                                 <div class="item">{{ customerNotFoundText }}</div>
                                                                 <div class="item">Alt+C</div>
@@ -236,7 +236,7 @@
 
                                                         <div class="form-group">
                                                             <div class="d-flex align-items-center pb-1">
-                                                                <span class="pb-0 pr-15">Billing Address</span>
+                                                                <span class="pb-0 pd-r15">Billing Address</span>
                                                                 <span>
                                                                     <div class="btn-group btn-block change-address-dropdown" dropdown #billingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="billingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1">
                                                                         <a dropdownToggle type="button" class="dropdown-toggle"> Change</a>
@@ -311,7 +311,7 @@
 
                                                         <div class="form-group p-0 width100">
                                                             <div class="d-flex align-items-center pb-1">
-                                                                <span class="pb-0 pr-15">
+                                                                <span class="pb-0 pd-r15">
                                                                     <input type="checkbox" autocomplete="None"
                                                                         (change)="autoFillShippingDetails()"
                                                                         name="autoFillShipping"
@@ -528,7 +528,7 @@
                                                 <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                     <div class="form-group">
                                                         <div class="d-flex align-items-center pb-1">
-                                                            <span class="pr-15">Billing Address</span>
+                                                            <span class="pd-r15">Billing Address</span>
                                                             <span>
                                                                 <div class="btn-group btn-block change-address-dropdown" dropdown #companyBillingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="companyBillingAddressDropDownWeb.hide()" *ngIf="companyAddressList?.length > 1">
                                                                     <a dropdownToggle type="button" class="dropdown-toggle"> Change</a>
@@ -588,7 +588,7 @@
 
                                                     <div class="form-group p-0 width100">
                                                         <div class="d-flex align-items-center pb-1">
-                                                            <span class="pr-15">
+                                                            <span class="pd-r15">
                                                                 <input type="checkbox" autocomplete="None"
                                                                     name="autoFillCompanyShipping"
                                                                     [(ngModel)]="autoFillCompanyShipping"
@@ -717,7 +717,7 @@
                                         <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice"
                                             class="cp for-mobile-screen remove-invoice"
                                             (click)="removeSelectedInvoice()">
-                                            <span class="remove-invoice-icon mr-05">×</span>
+                                            <span class="remove-invoice-icon mr-r05">×</span>
                                             <span class="remove-invoice-label">Remove</span>
                                         </div>
                                     </div>
@@ -725,7 +725,7 @@
                                         <div class="form-inline flex-row flex-nowrap">
                                             <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice"
                                                 class="cp remove-invoice" (click)="removeSelectedInvoice()">
-                                                <span class="remove-invoice-icon mr-05">×</span>
+                                                <span class="remove-invoice-icon mr-r05">×</span>
                                                 <span class="remove-invoice-label">Remove</span>
                                             </div>
                                             <div class="form-group">
@@ -1683,7 +1683,7 @@
                                                                         class="clearfix payment-mode deposit-payment-mode">
 
                                                                         <div class="pull-right balance-due-text">
-                                                                            <div class="clearfix mb-1 text-left">
+                                                                            <div class="clearfix mr-b1 text-left">
                                                                                 <span class="p-0 mr-2 d-inline-block">
                                                                                     <input class="radio-custom cp ml-0"
                                                                                         name="advanceReceipt"
@@ -2962,7 +2962,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <div class="mb-1">
+                    <div class="mr-b1">
                         <sh-select class="text-left dropdown-arrow" name="adjustmentVoucher" [(ngModel)]="tempDateParams.adjustmentVoucher" [placeholder]="'Select Voucher'" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33">
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
@@ -2977,23 +2977,23 @@
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <div class="mb-1">
+                    <div class="mr-b1">
                         <input id="name" type="text" class="form-control" placeholder="Enter Amount" [(ngModel)]="tempDateParams.Amount">
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <div class="mb-1">
+                    <div class="mr-b1">
                         <input id="name" type="text" class="form-control" placeholder="00.00" [(ngModel)]="tempDateParams.Tax" readonly disabled>
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <a href="javascript:void(0)" class="font-22 text-light pt-05 d-inline-block"><i
+                    <a href="javascript:void(0)" class="font-22 text-light pd-t05 d-inline-block"><i
                             class="icon-trash"></i></a>
                 </div>
             </div>
             <p><a href="javascript:void(0)" class="font-14"><span class="font-16">+</span> Add New Line</a></p>
             <div class="clearfix">
-                <div class="clearfix mb-1 mt-2 row">
+                <div class="clearfix mr-b1 mt-2 row">
                     <div class="col-md-2 col-sm-3 col-xs-5">
                         <span class="d-inline-block font-14">Tax Deducted?</span>
                     </div>

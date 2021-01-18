@@ -2,11 +2,11 @@
 <div class="reverse-table-report">
     <div class="container-fluid">
 
-        <div class="mt-15 mb-15 input-grp-date-range-picker d-flex">
+        <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex">
             <!-- Invoice filter section -->
             <div class="mr-r1 d-flex w-100">
                 <div class="d-flex">
-                    <div class="input-group linked-entities mr-15" *ngIf="currentCompanyBranches?.length > 2">
+                    <div class="input-group linked-entities mr-r15" *ngIf="currentCompanyBranches?.length > 2">
                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                             [ItemHeight]="33" class="entity-dropdown" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
                             placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
@@ -39,7 +39,7 @@
                     </div>
 
                 </div>
-                <div class="clear-filter ml-15 align-items-center d-flex justify-content-center" *ngIf="showClearFilter">
+                <div class="clear-filter mr-l15 align-items-center d-flex justify-content-center" *ngIf="showClearFilter">
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span> Clear
                         Filter</button>
                 </div>

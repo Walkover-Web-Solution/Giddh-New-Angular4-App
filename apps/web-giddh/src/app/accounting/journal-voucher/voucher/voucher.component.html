@@ -45,13 +45,13 @@
                                         (keydown.Tab)="validateAccount(transaction, $event, i)"
                                         (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
                                     <span *ngIf="transaction.selectedAccount.account && transaction.currentBalance !== ''"
-                                        class="current-balance d-block mb-05">
+                                        class="current-balance d-block mr-b05">
                                         Current Balance: {{transaction.currentBalance | giddhCurrency}}
                                         {{transaction.selectedAccount.type === 'DEBIT' ? 'Dr.' : 'Cr.'}}
                                     </span>
                                     <div
                                         *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
-                                        <div class="debtor-details-form pb-1 pt-05"
+                                        <div class="debtor-details-form pb-1 pd-t05"
                                             *ngFor="let entry of receiptEntries; let i = index;">
                                             <div class="form-fields">
                                                 <div class="single-field relative">
