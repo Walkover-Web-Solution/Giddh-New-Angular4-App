@@ -309,7 +309,7 @@
                                                                     [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                     [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
                                                                     [enableDynamicSearch]="true" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
-                                                                    [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [showClear]="false"
+                                                                    [notFoundLink]="true" (noResultsClicked)="toggleAsidePane()" [showClear]="false"
                                                                     [multiple]="false" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true">
                                                                     <ng-template #optionTemplate let-option="option">
                                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -400,7 +400,7 @@
                                                                     [showSearchSuggestion]="!(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)"
                                                                     [readonlyInput]="currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2"
                                                                     [enableDynamicSearch]="true" [placeholder]="'Select Accounts'" [notFoundLink]="true"
-                                                                    (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [ItemHeight]="67" [showClear]="false"
+                                                                    (noResultsClicked)="toggleAsidePane()" [multiple]="false" [ItemHeight]="67" [showClear]="false"
                                                                     [useInBuiltFilterForFlattenAc]="true">
                                                                     <ng-template #optionTemplate let-option="option">
                                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -1437,14 +1437,6 @@
     </div>
 </div>
 
-<!--quick account popup -->
-<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
-        </div>
-    </div>
-</div>
 <!-- modal sections -->
 
 <!-- Advance search popup -->

@@ -92,7 +92,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
         = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
-    @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
+    @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
@@ -964,7 +964,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (parent[1]) {
                 this.isParentDebtorCreditor(parent[1].uniqueName);
             }
-            this.isGroupSelected.emit(event.value);
+            this.isGroupSelected.emit(event);
         }
     }
 
