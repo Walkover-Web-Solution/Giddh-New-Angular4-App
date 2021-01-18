@@ -35,7 +35,7 @@
                     <div class="col-6 mr-b2 ">
                         <span>
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
-                            <div class="custom-select position-relative">
+                            <div class="custom-select pos-rel">
                                 <sh-select id="country" [options]="countrySource$ | async" required [isRequired]="true"
                                     [isFilterEnabled]="true"
                                     [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
@@ -49,7 +49,7 @@
                     </div>
                     <div class="col-6 mr-b2 ">
                         <label for="">Currency<sup class="text-danger">*</sup></label>
-                        <div class="custom-select select-caret position-relative">
+                        <div class="custom-select select-caret pos-rel">
                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required [isRequired]="true"
                                 [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null"
                                 [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
