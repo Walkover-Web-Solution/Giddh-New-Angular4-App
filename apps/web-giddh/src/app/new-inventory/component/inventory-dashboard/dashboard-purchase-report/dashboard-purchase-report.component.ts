@@ -54,7 +54,7 @@ export class DashboardPurchaseReport implements OnInit {
     /**
      * This will hide the datepicker
      *
-     * @memberof DaybookComponent
+     * @memberof DashboardPurchaseReport
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -64,7 +64,7 @@ export class DashboardPurchaseReport implements OnInit {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof DaybookComponent
+     * @memberof DashboardPurchaseReport
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {

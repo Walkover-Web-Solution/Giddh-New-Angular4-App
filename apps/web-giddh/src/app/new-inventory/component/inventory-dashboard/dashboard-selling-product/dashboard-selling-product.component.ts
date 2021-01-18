@@ -5,17 +5,14 @@ import { BsDropdownModule } from 'ngx-bootstrap';
     selector: 'dashboard-selling-product',
     templateUrl: './dashboard-selling-product.component.html',
     styleUrls: ['./dashboard-selling-product.component.scss'],
-
 })
 
 export class DashboardSellingProduct implements OnInit {
     /* this will store image path*/
     public imgPath: string = '';
 
-
     public ngOnInit() {
         /* added image path */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
-
 }

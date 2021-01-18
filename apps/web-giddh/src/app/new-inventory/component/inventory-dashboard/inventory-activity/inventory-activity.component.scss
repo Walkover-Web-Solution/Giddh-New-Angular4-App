@@ -1,134 +1,134 @@
 @import "../../../../../assets/css/color.scss";
-.activity-block{
-    h4{
-        font-family: 'opensans-semibold';
+.activity-block {
+    h4 {
+        font-family: "opensans-semibold";
     }
-    .custom-datepicker{
+    .custom-datepicker {
         min-width: 230px;
-        input
-        {
+        input {
             width: 100% !important;
             max-width: 100%;
             text-align: left;
             padding-left: 40px !important;
         }
     }
-    .left-active-data, .right-active-data{
-        .activity-box{
+    .left-active-data,
+    .right-active-data {
+        .activity-box {
             width: 25%;
-            padding:26px 20px;
+            padding: 26px 20px;
             justify-content: center;
             align-items: center;
             display: flex;
             flex-direction: column;
             text-align: center;
-            &.packed{
+            &.packed {
                 background-color: $chardon;
-                p{
-                    &.value{
+                p {
+                    &.value {
                         color: $cinnabar-orange;
                         font-size: 20px;
                     }
                 }
             }
-            &.shipped{
+            &.shipped {
                 background-color: $foam;
-                p{
-                   &.value{
-                    color: $teal;
-                    font-size: 20px;
+                p {
+                    &.value {
+                        color: $teal;
+                        font-size: 20px;
+                    }
                 }
-                }
-
             }
-            &.delivered{
+            &.delivered {
                 background-color: $blue-romance;
-                p{
-                    &.value{
-                    color: $success-green;
-                    font-size: 20px;
-                }
+                p {
+                    &.value {
+                        color: $success-green;
+                        font-size: 20px;
+                    }
                 }
             }
-            &.received{
+            &.received {
                 background-color: $amour;
-                p{
-                    &.value{
-                    color: $bright-pink;
-                    font-size: 20px;
-                }
-                }
-            }
-            &.stock-qty{
-                background-color: $inventory-solitude;
-                p{
-                    &.value{
-                    color: $denim;
-                    font-size: 20px;
-                }
+                p {
+                    &.value {
+                        color: $bright-pink;
+                        font-size: 20px;
+                    }
                 }
             }
-            &.job-work-contract{
+            &.stock-qty {
                 background-color: $inventory-solitude;
-                p{
-                    &.value{
-                    color: $denim;
-                    font-size: 20px;
+                p {
+                    &.value {
+                        color: $denim;
+                        font-size: 20px;
+                    }
                 }
+            }
+            &.job-work-contract {
+                background-color: $inventory-solitude;
+                p {
+                    &.value {
+                        color: $denim;
+                        font-size: 20px;
+                    }
                 }
             }
         }
     }
-    .right-active-data{
+    .right-active-data {
         position: relative;
-        &:after{
+        &:after {
             position: absolute;
             content: "";
             width: 1px;
             height: 100%;
-            background-color: #d9d9d9;
+            background-color: $gainsboro;
             left: -27px;
         }
-        .activity-box{
+        .activity-box {
             width: 50%;
         }
     }
 }
 /*responsive*/
 
-@media(max-width:991px){
-     .activity-block{
-        .left-active-data{
+@media (max-width: 991px) {
+    .activity-block {
+        .left-active-data {
             margin-bottom: 15px;
-            .activity-box.received{
-                margin-right:0 !important;
+            .activity-box.received {
+                margin-right: 0 !important;
             }
         }
     }
 }
-@media(max-width:767px){
-    .activity-block{
-        .left-active-data{
+@media (max-width: 767px) {
+    .activity-block {
+        .left-active-data {
             margin-bottom: 0;
             flex-wrap: wrap;
-            .activity-box{
+            .activity-box {
                 width: 47% !important;
                 margin-bottom: 15px;
-                &:nth-child(2n){
+                &:nth-child(2n) {
                     margin-right: 0 !important;
                 }
             }
         }
     }
 }
-@media (max-width:575px){
-    .activity-block{
-        .custom-datepicker{
+@media (max-width: 575px) {
+    .activity-block {
+        .custom-datepicker {
             margin-top: 15px;
         }
-        .left-active-data, .right-active-data{
+        .left-active-data,
+        .right-active-data {
             flex-wrap: wrap;
-            .activity-box{
+            .activity-box {
                 width: 100% !important;
                 margin-bottom: 15px;
                 margin-right: 0 !important;

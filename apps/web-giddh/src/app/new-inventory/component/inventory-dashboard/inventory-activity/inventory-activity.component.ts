@@ -9,7 +9,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
     selector: 'inventory-activity',
     templateUrl: './inventory-activity.component.html',
     styleUrls: ['./inventory-activity.component.scss'],
-
 })
 
 export class InventoryActivityComponent implements OnInit {
@@ -81,7 +80,7 @@ export class InventoryActivityComponent implements OnInit {
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
-    public ngOnInit(){
+    public ngOnInit() {
 
     }
 }

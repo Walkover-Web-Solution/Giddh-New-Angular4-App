@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 @Component({
     selector: 'inventory-dashboard',
     templateUrl: './inventory-dashboard.component.html',
     styleUrls: ['./inventory-dashboard.component.scss'],
-
 })
 
 export class InventoryDashboardComponent implements OnInit {
 
-    constructor(private _router: Router) {
-
+    constructor() {
     }
 
     /* This will hold the value out/in to open/close setting sidebar popup */
