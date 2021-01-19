@@ -3,29 +3,14 @@ import { Injectable } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./httpWrapper.service";
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 export class LocaleService {
-    public _commonData: Subject<any> = new Subject();
-
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService) {
-        this.getLocale('', 'en').subscribe(response => {
-            this._commonData.next(response);
-        });
-    }
-
-    /**
-     * This will return the common json file data
-     *
-     * @readonly
-     * @type {*}
-     * @memberof LocaleService
-     */
-    get commonData(): any {
-        return this._commonData.asObservable();
+        
     }
 
     /**

@@ -17,11 +17,13 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { InvoiceModule } from '../invoice/invoice.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
+import { TranslateDirective } from '../theme/translate/translate.directive';
 
 @NgModule({
     declarations: [
         VatReportComponent,
-        VatReportTransactionsComponent
+        VatReportTransactionsComponent,
+        TranslateDirective
     ],
     providers: [
 
