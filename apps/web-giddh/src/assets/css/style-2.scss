@@ -9492,7 +9492,7 @@ span#HW_badge_cont:nth-child(3) {
 .change-address-dropdown li:last-child {
     border: none;
 }
-/* responsive */
+
 ul.dropdown-menu.action-dropdown {
     left: auto;
     right: -40px !important;
@@ -9585,7 +9585,12 @@ input.mat-input-element{
 .delete-modal-overlay {
     z-index: 9992; /*for delete custom zIndex modal*/
 }
-/* responsive */
+.custom-select{
+    background-image: none !important;
+}
+
+/* responsive  starts here */
+
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
@@ -9669,6 +9674,7 @@ input.mat-input-element{
         .right-bar {
         width: 100% !important;
     }
+}
     @media(max-width:1191px) and (min-width:1024px){
         .recurring-form-wrapper{
             .recurring-form{
@@ -9691,7 +9697,6 @@ input.mat-input-element{
             }
         }
     }
-}
 @media (max-width: 991px) {
     .setting-tab-data li.nav-item {
         display: inline-block;
