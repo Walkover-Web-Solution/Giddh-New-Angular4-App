@@ -323,6 +323,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public tcsTdsIndex: number = 0;
     /** This will hold if order date is manually changed */
     public isOrderDateChanged: boolean = false;
+    /** This will hold account addresses */
+    public accountAddressList: any[] = [];
+    /** This will hold company addresses */
+    public companyAddressList: any[] = [];
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService, private settingsBranchAction: SettingsBranchActions) {
         this.getInvoiceSettings();
@@ -385,6 +389,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.selectedCompany = activeCompany;
+                this.companyAddressList = activeCompany.addresses;
                 if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
                     this.showLoaderUntilDataPrefilled = true;
                     this.purchaseOrderUniqueName = this.urlParams['purchaseOrderUniqueName'];
@@ -615,6 +620,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }
 
             if (accountDetails.addresses && accountDetails.addresses.length > 0) {
+                this.accountAddressList = accountDetails.addresses;
+
                 accountDetails.addresses.forEach(defaultAddress => {
                     if (defaultAddress && defaultAddress.isDefault) {
                         this.purchaseOrder.account.billingDetails.address = [];
@@ -1851,7 +1858,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + entry.taxSum);
+                        taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
                     }
                     entry.otherTaxType = 'tcs';
                 } else {
@@ -2267,8 +2274,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             salesEntryClass.voucherType = entry.voucherType;
             salesEntryClass.uniqueName = entry.uniqueName;
             salesEntryClass.description = entry.description;
+            let calculationMethod = (entry.otherTaxModal && entry.otherTaxModal.tcsCalculationMethod) ? entry.otherTaxModal.tcsCalculationMethod : "";
             entry.taxList.forEach(t => {
-                salesEntryClass.taxes.push({ uniqueName: t });
+                salesEntryClass.taxes.push({ uniqueName: t, calculationMethod: calculationMethod });
             });
             entry.transactions.forEach(transaction => {
                 let transactionClassMul = new TransactionClassMulticurrency();
@@ -2595,8 +2603,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     this.autoFillCompanyShipping = isEqual(this.purchaseOrder.company.billingDetails, this.purchaseOrder.company.shippingDetails);
 
-                    this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
-                    this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
+                    if(this.isUpdateMode) {
+                        this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
+                        this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
+                    } else {
+                        this.purchaseOrder.voucherDetails.voucherDate = this.universalDate || new Date();
+                        this.assignDueDate();
+                    }
 
                     this.purchaseOrder.number = this.purchaseOrderDetails.number;
                 } else {
@@ -3001,6 +3014,33 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.assignDueDate();
             }, 200);
+        }
+    }
+
+    /**
+     * This will fill the selected address
+     *
+     * @param {*} data
+     * @param {*} address
+     * @param {false} isCompanyAddress
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public selectAddress(data: any, address: any, isCompanyAddress: false): void {
+        if(data && address) {
+            data.address[0] = address.address;
+
+            if(!data.state) {
+                data.state = {};
+            }
+
+            data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
+            data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
+
+            if(isCompanyAddress) {
+                this.autoFillShippingDetails('company');
+            } else {
+                this.autoFillShippingDetails('vendor');
+            }
         }
     }
 }

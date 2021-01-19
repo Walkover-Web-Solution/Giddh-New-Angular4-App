@@ -1,4 +1,4 @@
-<div class="container-fluid pt-15" *ngIf="!purchaseOrderUniqueName">
+<div class="container-fluid pd-t15" *ngIf="!purchaseOrderUniqueName">
     <div class="d-flex justify-content-between purchase-order-header">
         <div class="d-flex date-advance-search">
             <form #invoiceForm="ngForm" novalidate class="form-inline">
@@ -98,11 +98,11 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table class="table basic mt-15 table-bordered giddh-table on-mobile-view">
-            <thead class="t-h-bg1" (mouseleave)="showSelectAllItemCheckbox = false">
+        <table class="table basic mr-t15 table-bordered giddh-table on-mobile-view">
+            <thead class="thead-background1" (mouseleave)="showSelectAllItemCheckbox = false">
                 <tr (mouseenter)="showSelectAllItemCheckbox = true">
                     <th class="min-wid-check" width="3%">
-                        <div class="mh18-img">
+                        <div class="check-image">
                             <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
                             <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
@@ -183,7 +183,7 @@
                 <tr *ngFor="let item of purchaseOrders.items; let i = index;" (mouseenter)="hoveredItem = item.uniqueName">
                     <td data-title="#">
                         <span *ngIf="hoveredItem !== item.uniqueName && !item.isSelected && selectedItem !== item.uniqueName">{{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}</span>
-                        <div class="mh18-img" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
+                        <div class="check-img" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
                             <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                 (click)="toggleItem(item, true)" />
                             <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -263,7 +263,7 @@
                 <div class="d-flex flex-column">
                     <p class="mb-3">Choose a field from the dropdown and update with new information.</p>
                     <div class="d-flex justify-content-between mb-3 modal-form">
-                        <sh-select class="mr-15" name="bulkUpdate" [(ngModel)]="bulkUpdateGetParams.action" [options]="bulkUpdateFields" [ItemHeight]="33"></sh-select>
+                        <sh-select class="mr-r15" name="bulkUpdate" [(ngModel)]="bulkUpdateGetParams.action" [options]="bulkUpdateFields" [ItemHeight]="33"></sh-select>
                         <div class="select-date" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate' || bulkUpdateGetParams.action === 'warehouse'">
                             <div class="input-group">
                                 <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDate" [(ngModel)]="bulkUpdatePostParams.purchaseDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'purchasedate'">
@@ -306,17 +306,17 @@
 <ng-template #sortTemplate let-column="column">
     <div class="icon-sort-asc" *ngIf="purchaseOrderGetRequest.sortBy !== column"
         (click)="sortPurchaseOrders('asc', column)"
-        [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
+        [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
     </div>
     <div class="icon-sort-asc"
         *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'"
         (click)="sortPurchaseOrders('desc', column)"
-        [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
+        [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
     </div>
     <div class="icon-sort-dsc"
         *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'"
         (click)="sortPurchaseOrders('asc', column)"
-        [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
+        [ngClass]="{'active-text-color': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
     </div>
 </ng-template>
 <div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">

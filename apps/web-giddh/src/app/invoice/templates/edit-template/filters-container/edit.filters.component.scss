@@ -1,8 +1,10 @@
+@import "../../../../../assets/css/color.scss";
+
 .active-tab {
-    background: #313a97 !important;
-    color: #fff !important;   
+    background: $jacksons-purple !important;
+    color: $white !important;   
 }
 .inactive-tab {
-    background: #fff !important;
-    color: #313a97 !important;   
+    background: $white !important;
+    color: $jacksons-purple !important;   
 }
