@@ -35,7 +35,7 @@
                     <sh-select name="accountUniqueName" [options]="paymentModes$ | async"
                         [(ngModel)]="paymentActionFormObj.accountUniqueName" (selected)="onSelectPaymentMode($event)"
                         [placeholder]="'Select Account'" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
-                        [useInBuiltFilterForIOptionTypeItems]="true" class="text-left" required>
+                        [useInBuiltFilterForIOptionTypeItems]="true" class="text-left" required [isRequired]="true">
 
                         <ng-template #optionTemplate1 let-option="option">
                             <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
