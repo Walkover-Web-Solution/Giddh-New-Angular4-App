@@ -1,4 +1,4 @@
-<div *ngIf="!isCreateAndSwitchCompanyInProcess" id="main" class="welcome_outer">
+<div *ngIf="!isCreateAndSwitchCompanyInProcess" id="main" class="welcome-outer">
 
     <div class="welcome-header">
         <h2>Welcome To Giddh! </h2>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="form-group">
                             <label>State <span class="red-text">*</span></label>
-                            <sh-select #states [options]="statesSource$ | async" required [isFilterEnabled]="true"
+                            <sh-select #states [options]="statesSource$ | async" required [isRequired]="true" [isFilterEnabled]="true"
                                 [disabled]="disableState" [defaultValue]="selectedState"
                                 [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode"
                                 style="width:100%"></sh-select>
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div class="col-sm-6 col-xs-12">
-                <div class="proffesional-plan">
+                <div class="professional-plan">
                     <p class="plan-title"> {{selectedPlans?.planDetails?.name}} <span class="grey-text"> (Current Plan)
                         </span></p>
 

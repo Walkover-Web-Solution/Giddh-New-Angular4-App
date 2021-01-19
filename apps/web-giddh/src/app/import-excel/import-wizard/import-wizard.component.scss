@@ -1,6 +1,8 @@
-.steps_wizard {
+@import "../../../assets/css/color.scss";
+
+.steps-wizard {
     padding: 30px 70px;
-    background: #fff;
+    background: $white;
     text-align: center;
     display: flex;
     justify-content: space-between;
@@ -20,12 +22,12 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid #dcdcdc;
+            border: 2px solid $gainsboro;
             border-radius: 100%;
             transition: background-color 1s;
-            background-color: #ffffff;
+            background-color: $white;
             position: relative;
-            color: #969696;
+            color: $opium;
             line-height: 100%;
             align-items: center;
             display: flex;
@@ -34,14 +36,14 @@
     }
 }
 
-.steps_wizard li.active > label {
-    color: #fff;
+.steps-wizard li.active > label {
+    color: $white;
 }
 
-.steps_wizard:before {
+.steps-wizard:before {
     content: " ";
     position: absolute;
-    border-top: 2px solid #ddd;
+    border-top: 2px solid $gainsboro;
     right: 0;
     left: 0;
     top: 40%;

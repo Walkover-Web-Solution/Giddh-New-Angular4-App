@@ -1,4 +1,5 @@
 @import "../../../assets/css/color.scss";
+
 .dropdown-menu > li > a {
     padding: 2px 10px;
 }
@@ -34,7 +35,7 @@
     background: transparent;
     min-height: 210px;
 }
-.paginationWrapper {
+.pagination-wrapper {
     width: 100%;
 }
 .customer-right table {
@@ -53,8 +54,8 @@
     font-size: 18px;
     margin-left: 10px;
     border-radius: 2px;
-    color: #1a237e;
-    background: #fff;
+    color: $midnight-blue;
+    background: $white;
 }
 
 .search-field {
@@ -63,11 +64,11 @@
 }
 .search-field input {
     width: 235px;
-    background-color: #e6e7e8 !important;
-    border-color: #e6e7e8 !important;
+    background-color: $whisper !important;
+    border-color: $whisper !important;
 }
 .search-field input:focus {
-    background-color: #fff !important;
+    background-color: $white !important;
     border-color: $midnight-express !important;
 }
 span.input-addon {
@@ -75,7 +76,7 @@ span.input-addon {
     right: 0px;
     padding: 4px 9px;
     background-color: $chetwode-blue;
-    color: #fff;
+    color: $white;
     font-size: 18px;
     border-radius: 2px;
     top: 0;
@@ -105,6 +106,10 @@ tr.aging-table-top td {
     }
 }
 
+.name-width{
+    width: 210px; 
+}
+
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {
@@ -113,7 +118,7 @@ tr.aging-table-top td {
 }
 
 @media (max-width: 768px) {
-    .customer-right-wrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 0;
     }
     .contact-main .table-aging-report {
@@ -121,12 +126,12 @@ tr.aging-table-top td {
     }
     .customer-right table tr td {
         padding: 0px 15px;
-        color: #707070;
+        color: $dark-gray;
     }
     .result-total {
         position: fixed;
         bottom: 0;
-        background-color: #fff;
+        background-color: $white;
         text-align: left;
         float: none;
         width: 100%;
@@ -179,7 +184,7 @@ tr.aging-table-top td {
     .result-total {
         position: relative;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         margin-bottom: 0px;
     }
     .wrap-searching-aging .max250 {
@@ -203,7 +208,7 @@ tr.aging-table-top td {
             }
         }
     }
-    .customer-right-wrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 10px;
         padding-left: 15px;
     }
@@ -233,12 +238,12 @@ tr.aging-table-top td {
     }
     .customer-right table tr td {
         padding: 0px 5px;
-        color: #707070;
+        color: $dark-gray;
         width: 100%;
         display: block;
     }
     .customer-right {
-        background: #fff;
+        background: $white;
         padding: 0;
         float: none;
     }
