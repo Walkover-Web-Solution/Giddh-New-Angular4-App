@@ -164,6 +164,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                 // }
             }
         });
+        if (this.taxRenderData?.length) {
+            this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+        }
     }
 
     public toggleTaxPopup(action: boolean) {
@@ -238,6 +241,11 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                 }
             }
         }
+        setTimeout(() => {
+            if (this.taxRenderData?.length) {
+                this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+            }
+        });
 
         this.taxAmountSumEvent.emit(this.sum);
         this.selectedTaxEvent.emit(this.selectedTaxes);
