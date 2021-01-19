@@ -8,7 +8,7 @@ import { Action, Store } from '@ngrx/store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
-import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { LocaleService } from '../services/locale.service';
 
 @Injectable()
 
@@ -26,6 +26,8 @@ export class CommonActions {
     public static GET_PARTY_TYPE_RESPONSE = "GET_PARTY_TYPEResponse";
     public static RESET_COUNTRY = 'ResetCountry';
     public static ACCOUNT_UPDATED = 'AccountUpdated';
+    public static SET_COMMON_LOCALE_DATA = 'SetCommonLocaleData';
+    public static GET_COMMON_LOCALE_DATA = 'GetCommonLocaleData';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -57,7 +59,13 @@ export class CommonActions {
             switchMap((action: CustomActions) => this._commonService.GetPartyType()),
             map(response => this.GetPartyTypeResponse(response))));
 
-    constructor(private action$: Actions, private _commonService: CommonService, private store: Store<AppState>, private _generalService: GeneralService) {
+    public getCommonLocaleData$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CommonActions.GET_COMMON_LOCALE_DATA),
+            switchMap((action: CustomActions) => this.localeService.getLocale('', action.payload)),
+            map(response => this.setCommonLocaleData(response))));
+
+    constructor(private action$: Actions, private _commonService: CommonService, private localeService: LocaleService) {
 
     }
 
@@ -151,6 +159,34 @@ export class CommonActions {
         return {
             type: CommonActions.ACCOUNT_UPDATED,
             payload: event
+        }
+    }
+
+    /**
+     * This will get the common locale data from api
+     *
+     * @param {string} language
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public getCommonLocaleData(language: string): CustomActions {
+        return {
+            type: CommonActions.GET_COMMON_LOCALE_DATA,
+            payload: language
+        }
+    }
+
+    /**
+     * This will set the common locale data in store
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public setCommonLocaleData(data: any): CustomActions {
+        return {
+            type: CommonActions.SET_COMMON_LOCALE_DATA,
+            payload: data
         }
     }
 }

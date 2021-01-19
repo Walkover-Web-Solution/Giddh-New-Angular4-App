@@ -1,12 +1,14 @@
-import { Directive, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Directive, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { LocaleService } from '../../services/locale.service';
-import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { AppState } from '../../store';
+import { Store, select } from '@ngrx/store';
+import { take } from 'rxjs/operators';
 
 @Directive({
     selector: '[appTranslate]'
 })
-export class TranslateDirective implements OnInit, OnDestroy {
+
+export class TranslateDirective implements OnInit {
     /* Taking input the file name */
     @Input() file: string;
     /* This will make sure if required common data */
@@ -20,10 +22,7 @@ export class TranslateDirective implements OnInit, OnDestroy {
     /* Initializing the current language */
     private currentLanguage: string = "en";
 
-    /** Subject to unsubscribe from all listeners */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    constructor(private localeService: LocaleService) {
+    constructor(private localeService: LocaleService, private store: Store<AppState>) {
         
     }
 
@@ -34,16 +33,6 @@ export class TranslateDirective implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.getLocale();
-    }
-
-    /**
-     * This will release the memory
-     *
-     * @memberof TranslateDirective
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 
     /**
@@ -60,7 +49,7 @@ export class TranslateDirective implements OnInit, OnDestroy {
         }
 
         if(this.requireCommonData) {
-            this.localeService.commonData.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
                 this.commonLocaleData.emit(response);
             });
         }

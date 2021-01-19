@@ -491,6 +491,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.store.dispatch(this.commonActions.getCommonLocaleData('en'));
         this.getCurrentCompanyData();
         this._breakpointObserver.observe([
             '(max-width: 767px)'
