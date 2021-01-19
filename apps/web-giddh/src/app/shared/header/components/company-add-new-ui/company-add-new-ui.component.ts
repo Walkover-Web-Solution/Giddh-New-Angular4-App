@@ -1,5 +1,5 @@
 import {take, takeUntil, distinctUntilChanged} from 'rxjs/operators';
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import {VerifyMobileActions} from '../../../../actions/verifyMobile.actions';
 import {CompanyActions} from '../../../../actions/company.actions';
@@ -38,6 +38,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
     @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
     @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
+    /** Mobile number instance */
+    @ViewChild('mobileNoEl', {static: false}) public mobileNoEl: ElementRef;
     @Input() public createBranch: boolean = false;
     /** True if update mode is enabled */
     @Input() public isUpdateMode: boolean = false;
@@ -312,9 +314,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         }
     }
 
-    public isValidMobileNumber(ele: HTMLInputElement) {
-        if (ele.value) {
-            this.checkMobileNo(ele);
+    public isValidMobileNumber() {
+        if (this.mobileNoEl?.nativeElement?.value) {
+            this.checkMobileNo(this.mobileNoEl.nativeElement);
         }
     }
 
@@ -329,6 +331,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     this.isMobileNumberValid = false;
                     this._toaster.errorToast('Invalid Contact number');
                     ele.classList.add('error-box');
+                    this.companyForm.form.controls['contactNo'].setErrors({invalid: true});
                 }
             } else {
                 // branch on-boarding is carried out where no mobile field is there
@@ -338,6 +341,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             this.isMobileNumberValid = false;
             this._toaster.errorToast('Invalid Contact number');
             ele.classList.add('error-box');
+            this.companyForm.form.controls['contactNo'].setErrors({invalid: true});
         }
     }
 
