@@ -90,7 +90,7 @@
 
                         <tbody class="ledger-main">
                             <tr class="debit-blank-row row"
-                                *ngFor="let txn of vm.selectedLedger.transactions; let i = index; ">
+                                *ngFor="let txn of vm.selectedLedger.transactions; let i = index; trackBy: trackByFunction">
                                 <ng-container *ngIf="txn.type === 'DEBIT'">
 
                                     <td class="col-3" data-title="Date">
@@ -124,7 +124,6 @@
                                                     (selected)="selectAccount($event,txn, dbtSelect)"
                                                     [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
                                                     [ItemHeight]="67" (onShow)="dbs.hide()"
-                                                    [useInBuiltFilterForFlattenAc]="true"
                                                     [fixedValue]="txn.particular.name"
                                                     [defaultValue]="txn.particular.name"
                                                     [placeholder]="'To Select Accounts'">
@@ -310,7 +309,6 @@
                                                     [fixedValue]="txn.particular.name"
                                                     (onShow)="cbs.hide()" [showClear]="false"
                                                     [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
-                                                    [useInBuiltFilterForFlattenAc]="true"
                                                     [defaultValue]="txn.particular.name"
                                                     [fixedValue]="txn.particular.name"
                                                     [placeholder]="'By Select Accounts'">
