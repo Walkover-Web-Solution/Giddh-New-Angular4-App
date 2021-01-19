@@ -1148,7 +1148,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             templateUniqueName: null,
                             number: ''
                         };
-                        
+
                         let tempObj;
                         let voucherDate = this.invFormData.voucherDetails.voucherDate;
                         let dueDate = this.invFormData.voucherDetails.dueDate;
@@ -1938,6 +1938,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (item && item.currency && item.currency !== this.companyCurrency) {
             this.getCurrencyRate(this.companyCurrency, item.currency,
                 moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+        } else {
+            this.originalExchangeRate = 1;
+            this.exchangeRate = 1;
+            this.recalculateEntriesTotal();
         }
 
         if (this.isSalesInvoice && this.isMulticurrencyAccount) {
@@ -4897,6 +4901,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.calculateGrandTotal();
                         this.calculateBalanceDue();
                     }
+                    if (from !== to && !this.isPurchaseInvoice) {
+                        // Multi currency case
+                        this.recalculateEntriesTotal();
+                    }
                 }
             }, (error => {
 
@@ -6762,5 +6770,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.autoFillShippingDetails();
             }
         }
+    }
+
+    /**
+     * Recalculates the entries total value
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private recalculateEntriesTotal(): void {
+        this.updateStockEntries();
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this.calculateGrandTotal();
+        this.calculateBalanceDue();
     }
 }
