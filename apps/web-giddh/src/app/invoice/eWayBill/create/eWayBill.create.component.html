@@ -13,7 +13,7 @@
 
                     <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
                         <sh-select class=" input " #subgrp [options]="SubsupplyTypesList"
-                            (selected)="subTypeElementSelected($event)" required placeholder="select type"
+                            (selected)="subTypeElementSelected($event)" required [isRequired]="true" placeholder="select type"
                             [isFilterEnabled]="true" name="subSupplyType"
                             [(ngModel)]="generateEwayBillform.subSupplyType" [ItemHeight]="33"></sh-select>
 
@@ -27,7 +27,7 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
 
                         <!-- <input type="text " placeholder="Mention Number " class="form-control input " /> -->
-                        <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType" required
+                        <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType" required [isRequired]="true"
                             placeholder="select type" [isFilterEnabled]="true" name="docType"
                             [(ngModel)]="generateEwayBillform.docType" [ItemHeight]="33"></sh-select>
 

@@ -17,7 +17,7 @@
                                     [placeholder]="'Select unit'" (selected)="setUnitName($event?.label)"
                                     [ItemHeight]="33" (onClear)="clearUnit()" [forceClearReactive]="forceClear$ | async"
                                     [doNotReset]="true" (noOptionsFound)="noUnitFound(unitName)"
-                                    [notFoundMsg]="'Type to create custom unit'">
+                                    [notFoundMsg]="'Type to create custom unit'" [isRequired]="true">
                                 </sh-select>
                                 <input placeholder="Unit name" type="text" class="form-control" name="name"
                                     [(ngModel)]="customUnitObj.name" required *ngIf="country != 'india'"
