@@ -193,6 +193,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 this.taxRenderData.push(taxObj);
             }
         });
+        if (this.taxRenderData?.length) {
+            this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+        }
     }
 
     public trackByFn(index) {
@@ -272,7 +275,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 }
             }
         }
-
+        setTimeout(() => {
+            if (this.taxRenderData?.length) {
+                this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+            }
+        });
         this.taxAmountSumEvent.emit(this.taxSum);
         this.selectedTaxEvent.emit(this.selectedTaxes);
 
