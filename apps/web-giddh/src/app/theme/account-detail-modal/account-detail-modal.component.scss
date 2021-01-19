@@ -6,10 +6,10 @@
     right: auto;
     z-index: 1;
     margin: 0;
-    background: white;
+    background: $white;
     width: 50%;
     padding: 1px;
-    box-shadow: 1px 0 9px grey;
+    box-shadow: 1px 0 9px $gray;
 }
 
 .account-detail-modal-header-div {
@@ -26,7 +26,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: #efefef;
+    background: $lavender;
     white-space: initial;
 }
 
@@ -41,15 +41,15 @@
 }
 
 .custom-detail h4 {
-    color: #707070;
+    color: $gray;
     margin-top: 7px;
     font-size: 14px !important;
-    font-family: opensans-regular !important;
+    font-family: 'opensans-regular' !important;
 }
 
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid #c7c7c7;
+    border-top: 1px solid $gainsboro;
 }
 
 ul.list-unstyled li {
@@ -57,18 +57,18 @@ ul.list-unstyled li {
 }
 
 ul.list-unstyled li a {
-    color: black;
+    color: $black;
 }
 
-.p-modal-tolltip {
+.p-modal-tooltip {
     display: block;
     position: absolute;
-    background-color: white;
+    background-color: $white;
     z-index: 1000;
     width: 257px;
-    border: 1px solid #b4afaf;
+    border: 1px solid $gainsboro;
     border-radius: 4px;
-    box-shadow: 0 7px 24px #00000038;
+    box-shadow: 0 7px 24px $black-russian;
 }
 
 .model-position {

@@ -2,7 +2,7 @@ class GlobalSearchPage {
 
     typeGlobalSearch(searchValue) {
         cy.get('.search-element').clear({force:true})
-        cy.get('.search-element').type(searchValue, {delay:500, force:true})
+        cy.get('.search-element').type(searchValue, {delay:700, force:true})
     }
 
     getGlobalSearch(timeOut) {

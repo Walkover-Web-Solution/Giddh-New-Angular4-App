@@ -225,6 +225,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public date: any;
     public taxableValue: number;
     public total?: number;
+    public convertedTotal?: number;
     public fakeAccForSelect2?: string;
     public isStockTxn?: boolean;
     public stockDetails?: any;

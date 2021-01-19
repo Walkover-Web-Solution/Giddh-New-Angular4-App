@@ -9,6 +9,7 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { GroupResponse } from '../../models/api-models/Group';
 
 @Component({
 	selector: 'generic-aside-menu-account',
@@ -17,7 +18,9 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 })
 export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
 
-	@Input() public selectedGrpUniqueName: string;
+    @Input() public selectedGrpUniqueName: string;
+    /** This will hold group unique name */
+    @Input() public selectedGroupUniqueName: string;
 	@Input() public selectedAccountUniqueName: string;
 	@Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 	@Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
@@ -33,8 +36,11 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	public isAccountNameAvailable$: Observable<boolean>;
 	public createAccountInProcess$: Observable<boolean>;
 	public updateAccountInProcess$: Observable<boolean>;
-	public showBankDetail: boolean = false;
-	public isDebtorCreditor: boolean = true;
+    public showBankDetail: boolean = false;
+    /** this will hold if it's debtor/creditor */
+    @Input() public isDebtorCreditor: boolean = true;
+    /** this will hold if it's bank account */
+    @Input() public isBankAccount: boolean = true;
 
 
 	// private below
@@ -95,7 +101,37 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 
 		if ('selectedGrpUniqueName' in s && s.selectedGrpUniqueName.currentValue !== s.selectedGrpUniqueName.previousValue) {
 			this.getGroups(s.selectedGrpUniqueName.currentValue);
-		}
+        }
+        
+        if('selectedGroupUniqueName' in s && s.selectedGroupUniqueName.currentValue !== s.selectedGroupUniqueName.previousValue) {
+            // get groups list
+            this.groupService.GetGroupsWithAccounts('').subscribe((res: any) => {
+                let result: IOption[] = [];
+                this.flatAccountWGroupsList$ = of([]);
+                if (res.status === 'success' && res.body.length > 0) {
+                    if (this.selectedGroupUniqueName === 'purchase') {
+                        let revenueGrp = _.find(res.body, { uniqueName: 'operatingcost' });
+                        let flatGrps = this.groupService.flattenGroup([revenueGrp], []);
+                        if (flatGrps && flatGrps.length) {
+                            flatGrps.filter(fgroup => fgroup.uniqueName !== 'operatingcost').forEach((grp: GroupResponse) => {
+                                result.push({ label: grp.name, value: grp.uniqueName });
+                            });
+                        }
+                    } else {
+                        let revenueGrp = _.find(res.body, { uniqueName: 'revenuefromoperations' });
+                        let flatGrps = this.groupService.flattenGroup([revenueGrp], []);
+                        if (flatGrps && flatGrps.length) {
+                            flatGrps.filter(fgroup => fgroup.uniqueName !== 'revenuefromoperations').forEach((grp: GroupResponse) => {
+                                result.push({ label: grp.name, value: grp.uniqueName });
+                            });
+                        }
+                    }
+                }
+                this.flatAccountWGroupsList$ = of(result);
+                this.flatAccountWGroupsList = result;
+                this.activeGroupUniqueName = this.selectedGroupUniqueName;
+            });
+        }
 
 		if ('selectedAccountUniqueName' in s) {
 			let value = s.selectedAccountUniqueName;

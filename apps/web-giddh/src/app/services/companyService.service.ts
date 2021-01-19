@@ -273,6 +273,8 @@ export class CompanyService {
             .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
             .replace(':to', encodeURIComponent(request.params.to))
+            .replace(':sortBy', encodeURIComponent(request.params.sortBy))
+            .replace(':sort', encodeURIComponent(request.params.sort))
             , request.data).pipe(map((res) => {
                 return res;
             }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));
@@ -285,7 +287,9 @@ export class CompanyService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
-            .replace(':to', encodeURIComponent(request.params.to));
+            .replace(':to', encodeURIComponent(request.params.to))
+            .replace(':sortBy', encodeURIComponent(request.params.sortBy))
+            .replace(':sort', encodeURIComponent(request.params.sort));
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
@@ -304,6 +308,8 @@ export class CompanyService {
             .replace(':groupUniqueName', encodeURIComponent(request.params.groupUniqueName))
             .replace(':from', encodeURIComponent(request.params.from))
             .replace(':to', encodeURIComponent(request.params.to))
+            .replace(':sortBy', encodeURIComponent(request.params.sortBy))
+            .replace(':sort', encodeURIComponent(request.params.sort))
             , request.data).pipe(map((res) => {
                 return res;
             }), catchError((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e)));

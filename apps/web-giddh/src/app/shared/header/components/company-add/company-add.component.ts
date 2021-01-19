@@ -24,7 +24,7 @@ import {GeneralService} from '../../../../services/general.service';
 @Component({
     selector: 'company-add',
     templateUrl: './company-add.component.html',
-    styleUrls: ['./company-add.component.css']
+    styleUrls: ['./company-add.component.scss']
 })
 export class CompanyAddComponent implements OnInit, OnDestroy {
     @ViewChild('wizard', {static: true}) public wizard: WizardComponent;

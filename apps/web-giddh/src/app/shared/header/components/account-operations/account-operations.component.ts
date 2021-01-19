@@ -1,5 +1,4 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { take, takeUntil } from 'rxjs/operators';
 import { ShareGroupModalComponent } from './../share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './../share-account-modal/share-account-modal.component';
@@ -30,12 +29,9 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import { createSelector } from 'reselect';
 import { DaybookQueryRequest } from '../../../../models/api-models/DaybookRequest';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import { ApplyDiscountRequest } from '../../../../models/api-models/ApplyDiscount';
 import { SettingsDiscountActions } from '../../../../actions/settings/discount/settings.discount.action';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import { DbService } from "../../../../services/db.service";
-import { Router } from "@angular/router";
 
 @Component({
     selector: 'account-operations',
@@ -421,7 +417,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeAccount$.pipe(take(1)).subscribe(p => {
             activeAccount = p;
             if (!this.showBankDetail) {
-                if (p.parentGroups) {
+                if (p && p.parentGroups) {
                     p.parentGroups.forEach(grp => {
                         this.showBankDetail = grp.uniqueName === "sundrycreditors" ? true : false;
                         return;
