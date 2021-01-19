@@ -3,13 +3,13 @@
         <div class="panel-heading clearfix">
             <strong>Bank Accounts</strong>
         </div>
-        <div class="card-body pos-rel">
-            <div class="banke-detailsBlock">
+        <div class="card-body position-relative">
+            <div class="bank-details-block">
                 <perfect-scrollbar [scrollIndicators]="true" *ngIf="bankAccounts.length > 0">
                     <div class="wrap-single-bank-detail">
-                        <div class="single-bank-detatil" *ngFor="let bankaccount of bankAccounts;">
-                            <p class="bank-name "> {{bankaccount.name}} </p>
-                            <p class="bankBalnc">
+                        <div class="single-bank-detail" *ngFor="let bankaccount of bankAccounts;">
+                            <p class="bank-name"> {{bankaccount.name}} </p>
+                            <p class="bank-balance">
                                 <span>In Giddh </span>
                                 <span>{{activeCompany.baseCurrencySymbol}}
                                     {{bankaccount.closingBalance.amount | giddhCurrency}}
@@ -19,12 +19,12 @@
                         </div>
                     </div>
                 </perfect-scrollbar>
-                <div class="addBankDetails" *ngIf="bankAccounts.length === 0">
+                <div class="add-bank-details" *ngIf="bankAccounts.length === 0">
                     <p>Yet to add Bank Details</p>
-                    <a class="connectBnk" [routerLink]="['/pages/settings/linked-accounts']">Connect Bank</a>
+                    <a class="connect-bank" [routerLink]="['/pages/settings/linked-accounts']">Connect Bank</a>
                 </div>
             </div>
-            <a class="connectBnk" *ngIf="bankAccounts.length > 0"
+            <a class="connect-bank" *ngIf="bankAccounts.length > 0"
                 [routerLink]="['/pages/settings/linked-accounts']">Connect Bank</a>
         </div>
     </div>

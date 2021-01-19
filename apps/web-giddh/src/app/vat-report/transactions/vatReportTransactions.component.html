@@ -2,7 +2,7 @@
     <hamburger-menu [pageHeading]="'VAT Report'"></hamburger-menu>
     <div class="container-fluid">
 
-        <div class="clearfix pt-15">
+        <div class="clearfix pd-t15">
             <a (click)="navigateToPreviousPage()" class="cursor-pointer fond-inline-block mr-2"><i class="fa fa-angle-left font-20 middle"></i> Back</a> <span *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">{{vatReportTransactions.results[0].description}}</span>
         </div>
         <div class="invoice-preview table-responsive">
@@ -39,7 +39,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="paginationWrapper" *ngIf="vatReportTransactions.totalPages > 1">
+        <div class="pagination-wrapper" *ngIf="vatReportTransactions.totalPages > 1">
             <pagination [totalItems]="vatReportTransactions.totalPages" [(ngModel)]="vatReportTransactions.page"
                 [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
                 (pageChanged)="pageChanged($event)"></pagination>

@@ -9,7 +9,7 @@ import { EditFiltersContainersComponent } from '../../filters-container/edit.fil
 @Component({
     selector: 'invoice-template-modal',
     templateUrl: './template-modal.component.html',
-    styleUrls: ['./template-modal.component.css']
+    styleUrls: ['./template-modal.component.scss']
 })
 
 export class InvoiceTemplateModalComponent implements OnChanges {

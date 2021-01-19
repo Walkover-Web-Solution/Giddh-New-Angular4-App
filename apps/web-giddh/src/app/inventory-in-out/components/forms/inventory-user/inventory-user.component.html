@@ -1,11 +1,11 @@
 <div class="form-header">
     <h2 class="">Create Account</h2>
 </div>
-<div class="form_body witBg clearfix margin-child-label">
-    <div class="form_bg clearfix">
+<div class="form-body white-bg clearfix margin-child-label">
+    <div class="clearfix">
         <form [formGroup]="form" autocomplete="off" class="form-group">
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-6">
                     <label>Name</label>
                     <input type="text" formControlName="name" class="form-control" />
                 </div>
@@ -13,19 +13,19 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-12 text-left mr-t1">
+                <div class="col-12 text-left mr-t1">
                     <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
                     <button class="btn btn-success" [ladda]="isLoading" (click)="save()">Save</button>
                 </div>
             </div>
 
             <!-- <div class="row">
-  <div class="col-lg-3 form-group mrR1">
+  <div class="col-lg-3 form-group mr-r1">
     <label class="d-block">&nbsp;</label>
     <button class="btn btn-sm" (click)="onCancel.emit($event)">Cancel</button>
   </div>
 
-  <div class="col-lg-3 form-group mrR1">
+  <div class="col-lg-3 form-group mr-r1">
     <label class="d-block">&nbsp;</label>
     <button class="btn btn-success btn-sm" [ladda]="isLoading" (click)="save()">Save</button>
   </div>

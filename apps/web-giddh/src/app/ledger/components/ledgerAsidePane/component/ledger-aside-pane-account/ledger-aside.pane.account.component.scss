@@ -1,3 +1,5 @@
+@import "../../../../../../assets/css/color.scss";
+
 :host {
     position: fixed;
     left: auto;
@@ -21,7 +23,7 @@
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: #fff;
+    color: $white;
 }
 
 :host .container-fluid {
@@ -37,8 +39,8 @@
     padding: 0 15px;
 }
 .aside-pane-form {
-    background-color: #fff;
-    box-shadow: 0px 3px 6px #0000001a;
+    background-color: $white;
+    box-shadow: 0px 3px 6px $black-russian;
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -92,7 +94,7 @@
     flex-grow: 1;
 }
 
-.vmiddle {
+.vertical-align-middle  {
     position: absolute;
     top: 50%;
     bottom: 0;

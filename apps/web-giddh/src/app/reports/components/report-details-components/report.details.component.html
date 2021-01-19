@@ -9,7 +9,7 @@
     </div>
 
 
-<div class="container-fluid font-14 pt-15">
+<div class="container-fluid font-14 pd-t15">
     <div class="select-financial-year">
         <div *ngIf="currentCompanyBranches?.length > 2" class="xs-mb-1 inner-button linked-entities">
             <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
@@ -25,7 +25,7 @@
                             </span>
                             <span class="entity-details">
                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                <div class="item-unq giddh-limit single-line-clamp">
+                                <div class="item-unique giddh-limit single-line-clamp">
                                     {{ option.name || '-' }}
                                 </div>
                             </span>
@@ -57,7 +57,7 @@
                     <li role="menuitem" dropdown placement="right" container="body">
                         <a dropdownToggle class="dropdown-item dropdown-toggle cursor-pointer" (click)="false">Weekly
                             <span class="caret"></span></a>
-                        <ul class="dropdown-menu reportDropdown" role="menu">
+                        <ul class="dropdown-menu report-dropdown" role="menu">
                             <li role="menuitem" *ngFor="let month of monthNames"><a
                                     (click)="populateRecords('weekly', month)" class="dropdown-item">{{month |
                                     slice:0:3}}</a></li>
@@ -68,7 +68,7 @@
             </div>
         </div>
     </div>
-    <div class="row font-12 mb-15">
+    <div class="row font-12 mr-b15">
         <div class="col-xl-2  col-lg-4 col-xs-10">
 
         </div>

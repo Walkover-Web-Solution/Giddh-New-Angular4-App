@@ -1,7 +1,7 @@
 <ng-container *ngIf="warehouses">
     <div class="warehouse-card-view">
         <div class="row">
-            <div class="mb-15 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
+            <div class="mr-b15 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
                 <div class="search-container">
                     <div class="search-warehouse-box">
                         <input #searchWarehouse type="text" [(ngModel)]="searchWarehouseQuery" class="form-control"
@@ -63,19 +63,19 @@
                                 TODO: Integrate below code once the API is ready
                             -->
                         <!--
-                                <div class="clearfix about-warehaouse">
+                                <div class="clearfix about-warehouse">
                                     <label>Linked with:</label>
                                     <p>{{warehouse.uniqueName}}</p>
                                 </div>
                             -->
 
                         <!--
-                                <div class="clearfix about-warehaouse">
+                                <div class="clearfix about-warehouse">
                                     <label>Inventory Value:</label>
                                     <p>22,000/-</p>
                                 </div>
                             -->
-                        <div class="clearfix about-warehaouse">
+                        <div class="clearfix about-warehouse">
                             <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
                                 <div class="parent-branch pt-1 pb-1">Linked Address:</div>
                                 <div>
@@ -101,9 +101,9 @@
                                 <div class="linked-details">
                                     <label>Linked Entity/ies:</label>
                                     <ul>
-                                        <li><i class="icon-company-HO mr-05"></i>Alias Company Name</li>
-                                        <li><i class="icon-branch-icon mr-05"></i>Alias Branch Name</li>
-                                        <li><i class="icon-branch-icon mr-05"></i>Alias Branch 3 Name</li>
+                                        <li><i class="icon-company-HO mr-r05"></i>Alias Company Name</li>
+                                        <li><i class="icon-branch-icon mr-r05"></i>Alias Branch Name</li>
+                                        <li><i class="icon-branch-icon mr-r05"></i>Alias Branch 3 Name</li>
                                     </ul>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                 <div class="linked-details">
                                     <label>Sub - Location:</label>
                                     <ul>
-                                        <li><i class="icon-warehouse-icon mr-05"></i>Floor 1, Floor 2, Floor 3</li>
+                                        <li><i class="icon-warehouse-icon mr-r05"></i>Floor 1, Floor 2, Floor 3</li>
                                     </ul>
                                 </div>
                             </div> -->
@@ -136,7 +136,7 @@
 
 <!-- Warehouse on boarding modal (Step 1) -->
 <div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
-    tabindex="-1" class="modal fade openPoup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
+    tabindex="-1" class="modal fade open-popup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
