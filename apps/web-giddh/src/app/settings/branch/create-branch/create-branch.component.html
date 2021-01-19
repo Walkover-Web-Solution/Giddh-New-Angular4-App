@@ -1,16 +1,16 @@
 <div class="container-fluid">
-    <div class="create-branch-page mb-15">
-        <div class="create-branch-under mb-15">
+    <div class="create-branch-page mr-b15">
+        <div class="create-branch-under mr-b15">
             <div class="row">
                 <div class="col-lg-10 col-sm-10">
                     <div class="branch-under-company">
-                        <p class="heading mt-15 mb-15">Create Branch under:</p>
+                        <p class="heading mr-t15 mr-b15">Create Branch under:</p>
                         <div class="branch-company-name">
-                            <div class="label-wrapper mb-15">
+                            <div class="label-wrapper mr-b15">
                                 <label>Company:</label>
                                 <span>{{companyDetails?.name}} ({{companyDetails?.businessType}})</span>
                             </div>
-                            <div class="label-wrapper mb-15">
+                            <div class="label-wrapper mr-b15">
                                 <label>Country & Currency:</label>
                                 <span><img
                                         src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{companyDetails?.country?.countryCode}}.svg">
@@ -68,16 +68,16 @@
                                                 [value]="option.value"></span>&nbsp;
                                         <span class="entity-details">
                                             <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                            <div class="item-unq">
+                                            <div class="item-unique">
                                                 <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
                                                     {{ option.taxNumber }}</p>
                                             </div>
                                         </span>
                                         <span class="default-entity">
                                             <i (click)="setDefault(option, $event)" *ngIf="!option.isDefault"
-                                                class="icon-no-selected mr-05"></i>
+                                                class="icon-no-selected mr-r05"></i>
                                             <i (click)="setDefault(option, $event)" *ngIf="option.isDefault"
-                                                class="icon-favorite-selected mr-05"></i>
+                                                class="icon-favorite-selected mr-r05"></i>
                                         </span>
                                     </a>
                                 </ng-container>
@@ -85,7 +85,7 @@
                             <ng-template #notFoundLinkTemplate>
                                 <a href="javascript:void(0)" [keyboardShortcut]="'alt+c'"
                                     (onShortcutPress)="handleShortcutPress()"
-                                    class="list-item pl-05 pr-05 border-none d-flex justify-content-between w-100"
+                                    class="list-item pd-l05 pd-r05 border-none d-flex justify-content-between w-100"
                                     [keyboardShortcut]="'alt+c'">
                                     <div class="item">+Add Address</div>
                                     <div class="item">Alt+C</div>
@@ -125,11 +125,11 @@
                         Sub - Location
                     </label>
                     <div class="d-flex flex-column sub-location-input">
-                        <div class="d-flex align-item-center flex-row mb-15">
+                        <div class="d-flex align-item-center flex-row mr-b15">
                             <input type="text" class="form-control" placeholder="Enter Name">
                             <i class="icon-trash"></i>
                         </div>
-                        <div class="d-flex align-item-center flex-row mb-15">
+                        <div class="d-flex align-item-center flex-row mr-b15">
                             <input type="text" class="form-control" placeholder="Enter Name">
                             <i class="icon-plus"></i>
                         </div>
@@ -138,7 +138,7 @@
             </div>
             <div class="footer-btn row">
                 <div class="button-group">
-                    <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-15">Clear</button>
+                    <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-r15">Clear</button>
                     <button type="submit" [disabled]="branchForm?.invalid" class="btn btn-success">Create
                         Branch</button>
                 </div>

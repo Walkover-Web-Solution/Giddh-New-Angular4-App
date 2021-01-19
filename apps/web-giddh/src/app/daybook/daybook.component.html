@@ -6,8 +6,8 @@
     </div>
 </div>
 
-<section class="container nopad"></section>
-<!-- <div class="top-bar col-xs-12 bdrB">
+<section class="container p-0"></section>
+<!-- <div class="top-bar col-xs-12 bd-rb">
   <h1 class="section-title">DayBook</h1>
 </div> -->
 <div class="container-fluid">
@@ -15,12 +15,13 @@
 </div>
 
 <ng-container *ngIf="!showLoader">
-<div class="transactions-page pt-15 pos-rel clearfix">
+<div class="transactions-page pd-t15 position-relative clearfix">
 
     <!-- ledger header -->
     <div class="col-md-12">
-        <div class="">
-            <div class="form-group mr-15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+        <div>
+
+            <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
                 <div class="form-group">
                     <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                         [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
@@ -37,7 +38,7 @@
                                     </span>
                                     <span class="entity-details">
                                         <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                        <div class="item-unq giddh-limit single-line-clamp">
+                                        <div class="item-unique giddh-limit single-line-clamp">
                                             {{ option.name || '-' }}
                                         </div>
                                     </span>
@@ -55,12 +56,10 @@
                 <div class="form-group cursor-pointer">
 
 
-                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
+                    <div class="advance-icon align-items-center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
                         <span class="icon-advance-filter"></span>
                     </div>
 
-                    <!-- <button class="btn-link pdL0" (click)="onOpenAdvanceSearch()">Advance Search</button> -->
-                    <!-- <button type="button" class="btn btn-success" (click)="go()">GO</button> -->
 
                 </div>
                 <div class="form-group expand-collapse-btn">
@@ -76,7 +75,7 @@
                     </button>
                 </div>
                 <div class="expand-export">
-                    <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :'Expand All'}}
+                    <button type="button" class="btn btn-default expand-btn-hide-desktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :'Expand All'}}
                     </button>
                     <button type="button" class="btn btn-default export-btn pull-right"
                         (click)="exportDaybook()" [disabled]="!((daybookData$ | async)?.entries?.length > 0)">Export</button>
@@ -90,15 +89,13 @@
 </div>
 
 <div class="container-fluid">
-    <div class="box clearfix mt-15">
-        <div class="text-center mr-b2 transctionReport">
-            <!-- <h2 class="account_Name fs20 primary_clr">{{companyName | uppercase}}</h2>
-      <br /> -->
+    <div class="box clearfix mr-t15">
+        <div class="text-center mr-b2 transaction-report">
             <p>Transaction Report</p>
             <p>{{daybookQueryRequest.from }} - {{ daybookQueryRequest.to}}</p>
         </div>
 
-        <div class=" clearfix trial-balance table-responsive">
+        <div class="clearfix trial-balance table-responsive">
 
             <table class="tb-head table-bordered table basic on-mobile-view">
                 <thead>
@@ -106,18 +103,18 @@
                         <th>Date</th>
                         <th>Particular</th>
                         <th>Vch. Name</th>
-                        <th class=" text-right">Vch. No.</th>
-                        <th class=" text-right">Debit Amt</th>
-                        <th class=" text-right">Credit Amt</th>
+                        <th class="text-right">Vch. No.</th>
+                        <th class="text-right">Debit Amt</th>
+                        <th class="text-right">Credit Amt</th>
 
                         <ng-container *ngIf="isEntryExpanded">
                             <th>Product/Service
                             </th>
-                            <th class=" text-right">Qty.
+                            <th class="text-right">Qty.
                             </th>
                             <th>Unit
                             </th>
-                            <th class=" text-right">Rate
+                            <th class="text-right">Rate
                             </th>
                             <th>HSN/SAC
                             </th>
@@ -142,10 +139,10 @@
                     </tr>
                     <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                         <tr *ngFor="let details of entry.otherTransactions">
-                            <td class="hideTD"></td>
+                            <td class="hide-td"></td>
                             <td data-title="Particular">{{ details.particular.name }}</td>
-                            <td class="hideTD"></td>
-                            <td class="hideTD"></td>
+                            <td class="hide-td"></td>
+                            <td class="hide-td"></td>
                             <td class="text-right" data-title="Debit Amt">
                                 <span *ngIf="details.type === 'DEBIT'">{{ details.amount || 0 |giddhCurrency}}</span>
                                 <span *ngIf="details.type !== 'DEBIT'">-</span>

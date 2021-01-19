@@ -1,4 +1,4 @@
-<div class="menu" *ngIf="isOpen && _rows" style="background-color: white">
+<div class="menu white-bg" *ngIf="isOpen && _rows">
     <!--virtual-->
     <virtual-scroll #v [items]="_rows" (update)="viewPortItems = $event"
         [childHeight]="viewPortItems?.length === 0?41:undefined" [selectedValues]="selectedValues"
@@ -15,7 +15,7 @@
             [class.hilighted]="row.isHilighted" (mousedown)="toggleSelected(row)" [style.height.px]="ItemHeight">
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
-                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                <a href="javascript:void(0)" class="list-item">
                     <div class="item">{{row.label}}</div>
                 </a>
             </ng-container>

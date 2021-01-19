@@ -54,7 +54,7 @@ const CustomShortcode = [
 @Component({
 	selector: 'account-as-invoice',
 	templateUrl: './invoice.component.html',
-	styleUrls: ['./invoice.component.scss', '../../accounting.component.css'],
+	styleUrls: ['./invoice.component.scss', '../../accounting.component.scss'],
 	animations: [
 		trigger('slideInOut', [
 			state('in', style({

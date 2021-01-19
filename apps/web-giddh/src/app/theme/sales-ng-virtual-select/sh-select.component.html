@@ -9,7 +9,7 @@
             <ng-container *ngIf="selectedValues?.length">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
-                    <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)"
+                    <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)"
                         (click)="clearSingleSelection($event, sl)">&times;</span>
                 </span>
             </ng-container>
@@ -42,7 +42,7 @@
                         *ngIf="showLabelOnly">{{selectedValues[0]?.label}}</button>
                     <input autocomplete="disabled" type="text" *ngIf="!showLabelOnly" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
                         (input)="openListIfNotOpened($event)" (click)="selectText($event);" type="text"
-                        value="{{selectedValues[0].label}}" class="form-control selectedVal cp" [attr.style]="borderConfiguration?.style" />
+                        value="{{selectedValues[0].label}}" class="form-control selected-val cp" [attr.style]="borderConfiguration?.style" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">

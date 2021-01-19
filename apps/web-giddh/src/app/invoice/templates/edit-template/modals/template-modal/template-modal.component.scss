@@ -1,4 +1,6 @@
-.templateEditor {
+@import "../../../../../../assets/css/color.scss";
+
+.template-editor {
     width: 30%;
     float: left;
     /* overflow: auto; */
@@ -13,16 +15,16 @@
 }
 
 #email-template {
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: $white;
+    border: 1px solid $gainsboro;
 }
 
 #email-template .form-control {
     min-height: 45px;
     border: 0;
     border-radius: 0 !important;
-    color: #000;
-    border-bottom: 1px solid #ddd;
+    color: $black;
+    border-bottom: 1px solid $gainsboro;
     background: transparent !important;
 }
 
@@ -32,7 +34,7 @@
     text-align: left;
     border: 0;
     border-radius: 0;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $gainsboro;
 }
 
 #email-body {
@@ -44,7 +46,7 @@
         width: 75%;
         padding-left: 15px;
     }
-    .templateEditor {
+    .template-editor {
         width: 25%;
     }
 }
