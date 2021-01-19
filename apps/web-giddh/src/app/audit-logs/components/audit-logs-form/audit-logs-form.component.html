@@ -15,12 +15,14 @@
 
     <div class="clearfix form-field" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='ENTRY' || auditLogFormVM.selectedEntity ==='LEDGER'">
         <label>Account</label>
-        <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedAccountUniqueName" [forceClearReactive]="forceClearAccount$ | async"></sh-select>
+        <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+        (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)" [(ngModel)]="auditLogFormVM.selectedAccountUniqueName" [forceClearReactive]="forceClearAccount$ | async"></sh-select>
     </div>
 
     <div class="clearfix form-field" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='GROUP'">
         <label>Group</label>
-        <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedGroupUniqueName" [forceClearReactive]="forceClearGroup$ | async"></sh-select>
+        <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+        (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)" [(ngModel)]="auditLogFormVM.selectedGroupUniqueName" [forceClearReactive]="forceClearGroup$ | async"></sh-select>
     </div>
 
 
