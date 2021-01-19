@@ -282,7 +282,7 @@
                                         </tr>
                                     </thead>
                                 </table>
-                                <table  id="ledger-transaction-left-list" class="width100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
+                                <table  id="ledger-transaction-left-list" class="width-100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
                                         <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                             <ng-container *ngFor="let txn of item.transactions;">
@@ -373,7 +373,7 @@
                                         </tr>
                                     </thead>
                                 </table>
-                                <table id="ledger-transaction-right-list" class="width100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
+                                <table id="ledger-transaction-right-list" class="width-100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
                                         <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                             <ng-container *ngFor="let txn of item.transactions;">
@@ -582,7 +582,7 @@
                 [ngClass]="{'bd-rr': (lc.transactionData$ | async)?.debitTransactions?.length >= (lc.transactionData$ | async)?.creditTransactions?.length}">
 
                 <!-- region debit transaction header-->
-                <table class="width100 h-table table-head hidden-xs">
+                <table class="width-100 h-table table-head hidden-xs">
                     <thead>
                         <tr class="thead-background1 row">
                             <th class="col-xs-3 col-md-3 col-lg-3" width="25%">
@@ -596,7 +596,7 @@
                 <!-- endregion -->
 
 
-                <table class="width100 h-table">
+                <table class="width-100 h-table">
                     <tbody>
                         <!-- region debit transaction if forwardedBalance -->
                         <tr class="ledger-row row" container="body" vr-item tabindex="-1"
@@ -707,15 +707,15 @@
                 </table>
 
                 <!-- region blank ledger-->
-                <table class="width100 h-table" no-tree (click)="$event.stopPropagation();" id="blank-ledger-container"
+                <table class="width-100 h-table" no-tree (click)="$event.stopPropagation();" id="blank-ledger-container"
                     (clickOutside)="hideNewLedgerEntryPopup($event)">
                     <tbody>
 
                         <tr *ngFor="let txn of lc.blankLedger.transactions; let i = index">
 
-                            <td class="width100 no-left-border" *ngIf="txn.type === 'DEBIT'">
+                            <td class="width-100 no-left-border" *ngIf="txn.type === 'DEBIT'">
 
-                                <table class="width100">
+                                <table class="width-100">
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row row" container="body">
 
@@ -850,7 +850,7 @@
                 (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
                 [ngClass]="{'bd-rl': (lc.transactionData$ | async)?.debitTransactions?.length < (lc.transactionData$ | async)?.creditTransactions?.length}">
                 <!-- region credit transaction header-->
-                <table class="width100 h-table hidden-xs">
+                <table class="width-100 h-table hidden-xs">
                     <thead>
                         <tr class="thead-background1 row">
                             <th class="col-xs-3 col-md-3 col-lg-3" width="25%">
@@ -863,7 +863,7 @@
                 </table>
                 <!-- endregion -->
 
-                <table class="width100 h-table">
+                <table class="width-100 h-table">
                     <tbody>
 
                         <!-- region credit transaction if forwardedBalance -->
@@ -980,15 +980,15 @@
                 </table>
 
                 <!-- region blank ledger-->
-                <table class="width100" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
+                <table class="width-100" no-tree (clickOutside)="hideNewLedgerEntryPopup($event)"
                     (click)="$event.stopPropagation()">
                     <tbody>
 
                         <tr *ngFor="let txn of lc.blankLedger.transactions; let i = index">
 
-                            <td class="width100" *ngIf="txn.type === 'CREDIT'">
+                            <td class="width-100" *ngIf="txn.type === 'CREDIT'">
 
-                                <table class="width100 h-table">
+                                <table class="width-100 h-table">
                                     <tbody class="ledger-main">
                                         <tr class="ledger-row row" container="body">
 
