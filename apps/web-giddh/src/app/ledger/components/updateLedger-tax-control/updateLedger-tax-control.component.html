@@ -14,7 +14,7 @@
         <ul class="dropdown-menu pd update-ledger-tax-dropdown" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}"
             (click)="$event.stopPropagation()">
             <li *ngFor="let tax of taxRenderData;trackBy: trackByFn; let i = index">
-                <label class="checkbox overflow-hidden width100 p0 m0 custom-item bd-rb px-1 py-1 mb-05"
+                <label class="checkbox overflow-hidden width-100 p-0 m-0 custom-item bd-rb px-1 py-1 mr-b05"
                     (click)="$event.stopPropagation()" [ngClass]="{'disabled-label': tax.isDisabled}">
                     <input class="pull-left" id="{{ 'update-ledger-tax-checkbox-' + i }}" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled"
                         (change)="change()" (click)="$event.stopPropagation()" />

@@ -27,8 +27,8 @@
                                 <strong
                                     *ngIf="(!fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label) || (fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label)">{{fieldsAndVisibility.header.formNameTaxInvoice?.label}}</strong>
                             </h4>
-                            <p class="mt-05" *ngIf="showGstComposition && fieldsAndVisibility.header.gstComposition?.display">{{(fieldsAndVisibility.header.gstComposition?.label) ? fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition Scheme"}}</p>
-                            <p class="mt-05">
+                            <p class="mr-t05" *ngIf="showGstComposition && fieldsAndVisibility.header.gstComposition?.display">{{(fieldsAndVisibility.header.gstComposition?.label) ? fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition Scheme"}}</p>
+                            <p class="mr-t05">
                                 <ng-container *ngIf="voucherType==='sales'">
                                     <span *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
                                     : 'Number'}}: 20170911-1</span>
@@ -85,7 +85,7 @@
                 <tr>
                     <td colspan="2">
                         <figure>
-                            <p class="pt-05 pb-05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                            <p class="pd-t05 pd-b05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
                                 <strong>Attention to: </strong> Alok Gangrade</p>
                         </figure>
                     </td>

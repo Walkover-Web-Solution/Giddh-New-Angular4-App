@@ -15,7 +15,7 @@
                                     <span class="company-name text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                                     </span>
 
-                                    <div class="company-name-fyear" placement="bottom">
+                                    <div class="company-name-finance-year" placement="bottom">
                                         <span class=" text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name)}}
                                         </span>
 
@@ -185,8 +185,8 @@
                 </div>
                 <div class="col-sm-9">
                     <div class="pull-right right-details">
-                        <ul class="nav universal-date mr-15" *ngIf="(selectedCompany | async)">
-                            <li class="border-none pr-15" [ngClass]="{'notification': !isMobileScreen, 'mr-0':isTodaysDateSelected}">
+                        <ul class="nav universal-date mr-r15" *ngIf="(selectedCompany | async)">
+                            <li class="border-none pd-r15" [ngClass]="{'notification': !isMobileScreen, 'mr-0':isTodaysDateSelected}">
                                 <!-- <img src="{{imgPath}}notification.svg"> -->
                                 <i class="icon-notification"></i>
                             </li>
@@ -204,7 +204,7 @@
                             <i class="icon-plus"></i> Master
                         </button>
                         <div class="btn-group cursor-pointer d-inline-block help-setting-icons " dropdown>
-                            <span class="mr-15" (click)="toggleSidebarPane(true, false)">
+                            <span class="mr-r15" (click)="toggleSidebarPane(true, false)">
                                 <i class="icon-header-setting"></i>
                             </span>
                             <span (click)="toggleHelpSupportPane(true)">
@@ -232,7 +232,7 @@
                     <span class="icon-arrow-down"></span>
                 </a>
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                    <div class="input-group mb-1" container="body">
+                    <div class="input-group mr-b1" container="body">
                         <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
                             class="form-control" placeholder="Search Branch here" autocomplete="off" />
                         <span (click)="loadCompanyBranches()"  tooltip="Refresh" placement="left" class="input-group-addon">
@@ -277,7 +277,7 @@
                     <div class="company-text d-flex">
                         <span class="company-name text-ellipsis pd-r1 alice">{{companyInitials}}</span>
 
-                        <div class="company-name-fyear" placement="bottom">
+                        <div class="company-name-finance-year" placement="bottom">
                             <span class=" text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name)}}
                             </span>
 
@@ -455,10 +455,10 @@
                     </ul>
                     <div class="d-flex align-items-center" *ngIf="(selectedCompany | async)">
                         <span [ngClass]="{'notification': isMobileScreen}">
-                            <!-- <img src="{{imgPath}}notification.svg" class="mr-15"> -->
-                            <i class="icon-notification mr-15"></i>
+                            <!-- <img src="{{imgPath}}notification.svg" class="mr-r15"> -->
+                            <i class="icon-notification mr-r15"></i>
                         </span>
-                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-r15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
                             <i class="icon-plus"></i>
                         </button>
                         <div class="btn-group cursor-pointer d-inline-flex help-setting-icons" dropdown>
@@ -485,7 +485,7 @@
                     </ul>
                 </div>
                 <div class="button-back-head">
-                    <button *ngIf="shouldShowBackButton" (click)="navigateToPreviousRoute()" class="btn btn-primary mr-15">Back</button>
+                    <button *ngIf="shouldShowBackButton" (click)="navigateToPreviousRoute()" class="btn btn-primary mr-r15">Back</button>
                 </div>
             </div>
         </nav>
@@ -624,7 +624,7 @@
 
     <li>
         <div class="company-text head-nav">
-            <div class="company-name-fyear" placement="bottom">
+            <div class="company-name-finance-year" placement="bottom">
                 <span class=" text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name)}}
                 </span>
 
