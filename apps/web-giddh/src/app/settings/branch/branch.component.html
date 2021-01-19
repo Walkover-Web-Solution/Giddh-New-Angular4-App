@@ -1,6 +1,6 @@
 <div class="clearfix">
     <div class="date-advance-search row">
-        <div class="col-sm-12 mb-15 branch-header d-flex justify-content-between">
+        <div class="col-sm-12 mr-b15 branch-header d-flex justify-content-between">
         <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
             <div class="mr-1 branch-header-content w-100">
                 <!-- <div class="btn-group advance-icon" dropdown>
@@ -67,7 +67,7 @@
     </div>
     </div>
     <!-- <div class="row select-branch">
-        <div class="col-12 d-flex mb-15 align-items-center">
+        <div class="col-12 d-flex mr-b15 align-items-center">
                 <div class="form-group mb-0">
                     <div class="checkbox">
                             <label for="selectAll">
@@ -161,7 +161,7 @@
                                         <a href="javascript:;" *ngIf="isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = false;">
                                             <i class="icon-collapse"></i> Collapse</a>
 
-                                        <div class="ml-15 active-status">
+                                        <div class="mr-l15 active-status">
                                             <span class="status-bullet d-flex align-items-center">Active</span>
                                         </div> -->
 
@@ -211,10 +211,10 @@
                                         <ng-container *ngIf="address">
                                             <i (click)="setDefault(address, branch, 'address')"
                                                 *ngIf="!address?.isDefault"
-                                                class="cursor-pointer icon-no-selected mr-05"></i>
+                                                class="cursor-pointer icon-no-selected mr-r05"></i>
                                             <i (click)="setDefault(address, branch, 'address')"
                                                 *ngIf="address?.isDefault"
-                                                class="cursor-pointer icon-favorite-selected mr-05"></i>
+                                                class="cursor-pointer icon-favorite-selected mr-r05"></i>
                                             <label class="cursor-pointer" [popover]="popTemplate"
                                                 popoverTitle="{{address?.name}}" placement="right" popover
                                                 triggers="mouseenter:mouseleave">{{address?.name}}</label>
@@ -235,10 +235,10 @@
                                         <ng-container *ngIf="warehouse">
                                             <i (click)="setDefault(warehouse, branch, 'warehouse')"
                                                 *ngIf="!warehouse?.isDefault"
-                                                class="cursor-pointer icon-no-selected mr-05"></i>
+                                                class="cursor-pointer icon-no-selected mr-r05"></i>
                                             <i (click)="setDefault(warehouse, branch, 'warehouse')"
                                                 *ngIf="warehouse?.isDefault"
-                                                class="cursor-pointer icon-favorite-selected mr-05"></i>
+                                                class="cursor-pointer icon-favorite-selected mr-r05"></i>
                                             <label class="cursor-pointer">{{warehouse?.name}}</label>
                                         </ng-container>
                                     </div>

@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="top-bar aging-top-bar clearfix">
         <div class="aging-form-inline">
-            <div class="form-group mr-15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+            <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
                 <div class="form-group">
                     <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                         [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
@@ -72,7 +72,7 @@
         <div>
             <div class="customer-right-wrap">
                 <div class="text-right total-result xs-left pl-2 pr-2">
-                    <h4 class="mb-1 pr-1">Result Total </h4>
+                    <h4 class="mr-b1 pr-1">Result Total </h4>
                 </div>
                 <div class="bg-white customer-right clearfix w-100">
                     <table class="text-right w-auto float-right">

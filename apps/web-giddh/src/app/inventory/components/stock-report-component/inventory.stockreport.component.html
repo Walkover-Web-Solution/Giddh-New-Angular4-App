@@ -3,7 +3,7 @@
         <div class="pr d-flex mb-2 inventory-branch-dropdown justify-content-between">
             <!-- enable branch selection after implimentation from api-->
             <div class="d-flex">
-                <div class="mr-15 sh-select-dropdown">
+                <div class="mr-r15 sh-select-dropdown">
                     <div class="select-style middle">
                         <sh-select placeholder="Select Branch" formControlName="selectedEntity" (selected)="selectEntity($event)" [(ngModel)]="selectedEntity" [options]="entities$ | async" [ItemHeight]="33"></sh-select>
                         <!-- html dropdown <select class="form-control" formControlName="selectedEntity" [(ngModel)]="selectedEntity"
@@ -51,10 +51,10 @@
             <div>
 
                 <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-15" (click)="editStock()" tooltip="Edit Stock">
+                    <button class="btn-link icon-btn mr-r15" (click)="editStock()" tooltip="Edit Stock">
                         <i class="icon-edit-pencil"></i>
                     </button>
-                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mr-t05 cp mr-15 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
+                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mr-t05 cp mr-r15 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
                         <i class="icon-download strong"></i>
                     </button>
                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu" aria-labelledby="button-alignment">
