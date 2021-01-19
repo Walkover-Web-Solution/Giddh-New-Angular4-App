@@ -61,14 +61,16 @@
 <div class="clearfix mt-15">
     <label>Select Account</label>
     <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'"
-        [customFilter]="genralCustomFilter" [(ngModel)]="vm.selectedAccountUnq"></sh-select>
+        [(ngModel)]="vm.selectedAccountUnq" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+        (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
     <!--<select2 [data]="vm.accounts$ | async" [options]="vm.options" [value]="vm.selectedAccountUnq" (valueChanged)="selectAccount($event)"></select2>-->
 </div>
 
 <div class="clearfix mt-15">
     <label>Select Group</label>
     <sh-select [options]="vm.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'"
-        [customFilter]="genralCustomFilter" [(ngModel)]="vm.selectedGroupUnq"></sh-select>
+        [(ngModel)]="vm.selectedGroupUnq" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+        (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"></sh-select>
     <!--<select2 [data]="vm.groups$ | async" [options]="vm.options" [value]="vm.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>-->
 </div>
 
