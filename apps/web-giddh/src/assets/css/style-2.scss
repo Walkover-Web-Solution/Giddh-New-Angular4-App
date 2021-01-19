@@ -9958,15 +9958,14 @@ input.mat-input-element{
     z-index: 9992; /*for delete custom zIndex modal*/
 }
 .custom-select{
-        background-image: none !important;
-    }
+    background-image: none !important;
+}
 /* responsive  starts here */
-    @media (max-width: 1440px) {
-        .font-xxlarge {
-            font-size: 20px;
-        }
+@media (max-width: 1440px) {
+    .font-xxlarge {
+        font-size: 20px;
     }
-
+}
 @media (max-width: 1024px) {
     /* bs-datepicker-container{
             position: absolute !important;
