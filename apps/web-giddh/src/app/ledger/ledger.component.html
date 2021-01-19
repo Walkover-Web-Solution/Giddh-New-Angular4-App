@@ -288,7 +288,7 @@
                                         </tr>
                                     </thead>
                                 </table>
-                                <table  id="ledger-transaction-left-list" class="width100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
+                                <table  id="ledger-transaction-left-list" class="width-100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
                                         <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                             <ng-container *ngFor="let txn of item.transactions;">
@@ -379,7 +379,7 @@
                                         </tr>
                                     </thead>
                                 </table>
-                                <table id="ledger-transaction-right-list" class="width100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
+                                <table id="ledger-transaction-right-list" class="width-100" (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
                                         <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                             <ng-container *ngFor="let txn of item.transactions;">
