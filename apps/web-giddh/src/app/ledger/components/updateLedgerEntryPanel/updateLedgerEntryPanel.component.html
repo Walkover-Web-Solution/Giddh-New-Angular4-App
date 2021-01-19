@@ -69,7 +69,7 @@
                 <!-- region debit transaction -->
                 <div class="left-col-new bd-rr" [ngClass]="Shown ? 'active' : ''">
                     <!-- region debit transaction header -->
-                    <table class="width100 card-table">
+                    <table class="width-100 card-table">
 
                         <thead class="hidden-xs">
                             <tr class="thead-background1 row">
@@ -259,7 +259,7 @@
                 <div class="right-col-new" [ngClass]="isHide ? 'active' : 'right-col-new'">
 
                     <!-- region credit transaction header -->
-                    <table class="width100 card-table">
+                    <table class="width-100 card-table">
                         <thead class="xs-hidden">
                             <tr class="thead-background1 row">
                                 <th class="col-3 bd-r-top-none">
@@ -428,7 +428,7 @@
         <!-- endregion -->
 
         <!-- region new entry -->
-        <div class="entrypanel width100 pt-2">
+        <div class="entrypanel width-100 pt-2">
             <!-- reverse charge transction start -->
             <div *ngIf="shouldShowRcmEntry" class="pd-b1 mt-b1 tourist-scheme-wrapper">
                 <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
@@ -450,7 +450,7 @@
             <!-- region amount and discount container -->
             <div class="clearfix">
                 <ng-container *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields">
-                    <div class="width100 total-detail-table"
+                    <div class="width-100 total-detail-table"
                         [ngClass]="{'add-multicurrency': vm.isMultiCurrencyAvailable}">
                         <!-- <div *ngIf="vm.stockTrxEntry" class="table-amount">
                           <table>
@@ -839,7 +839,7 @@
                 </div>
 
                 <div class="col-md-6 font-14 pt-1 bl-1 remove-border-left-onmo">
-                    <table class="width100">
+                    <table class="width-100">
                         <tbody>
                             <tr>
                                 <td class="primary-color" (click)="getInvoiveLists(); toggleMoreDetail()">
@@ -897,7 +897,7 @@
                                                     <i class="fa fa-caret-down"></i>
                                                 </span>
                                             </button>
-                                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100"
+                                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width-100"
                                                 role="menu">
                                                 <li *ngIf="invoiceList.length==0">No results found</li>
                                                 <li *ngFor="let invoice of invoiceList">
