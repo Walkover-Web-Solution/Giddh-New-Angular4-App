@@ -29,6 +29,7 @@ import { CustomActions } from '../customActions';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { userLoginStateEnum } from '../../models/user-login-state';
+import { CommonActions } from '../../actions/common.actions';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -89,6 +90,7 @@ export interface SessionState {
     currentOrganizationDetails: Organization;
     activeCompany: any;
     companyUser: any;
+    commonLocaleData: any;
 }
 
 /**
@@ -148,7 +150,8 @@ const sessionInitialState: SessionState = {
     registerReportFilters: null,
     currentOrganizationDetails: null,
     activeCompany: null,
-    companyUser: null
+    companyUser: null,
+    commonLocaleData: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -802,6 +805,12 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 activeCompany: action.payload
             });
         }
+        case CommonActions.SET_COMMON_LOCALE_DATA: {
+            return Object.assign({}, state, {
+                commonLocaleData: action.payload
+            });
+        }
+
         default:
             return state;
     }
