@@ -1,4 +1,6 @@
-    .welcome-header {
+@import "../../assets/css/color.scss";
+
+.welcome-header {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -6,7 +8,7 @@
     }
 
     .welcome-container hr {
-        border: 0.5px solid #707070;
+        border: 0.5px solid $gray;
         background: transparent;
         width: 98%;
         margin: auto;
@@ -16,15 +18,15 @@
         margin-top: 35px;
     }
 
-    .borderbtm {
+    .border-btm {
         font-size: 16px;
         font-family: "" opensans-semibold "";
-        border-bottom: 1px solid #cccccc;
+        border-bottom: 1px solid $gainsboro;
         padding: 7px 0;
         margin-bottom: 10px;
     }
 
-    .manage_invoice {
+    .manage-invoice {
         list-style: none;
     }
 
@@ -45,24 +47,24 @@
         padding-top: 0;
     }
 
-    .manage_invoice li a {
-        background: #fff;
+    .manage-invoice li a {
+        background: $white;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         padding: 9px 15px;
-        color: #10aae0;
+        color: $deep-sky-blue-hover;
         font-size: 16px;
         margin-top: 15px;
         display: block;
         max-width: 356px;
     }
 
-    .manage_invoice li a i {
+    .manage-invoice li a i {
         margin-right: 20px;
         font-size: 23px;
-        color: #535353;
+        color: $davy-grey;
     }
 
-    .manage_invoice li a:hover {
+    .manage-invoice li a:hover {
         text-decoration: none;
     }
 
@@ -71,32 +73,32 @@
     }
 
     .btn-sync {
-        color: #125446;
+        color: $deep-green-cyan;
         margin-top: 12px;
-        background: #c9e6ca;
+        background: $granny-apple;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.16);
         font-size: 16px;
         font-family: "opensans-regular";
     }
 
     p {
-        color: #b1b1b3;
+        color: $pink-swan;
     }
 
-    .right_section span {
+    .right-section span {
         font-size: 14px;
-        color: #b2b2b4;
+        color: $silver;
         display: block;
     }
 
     .btn-default {
-        background: #e6e6e6;
-        color: #2fab4a;
+        background: $whisper;
+        color: $success-green;
         padding: 8px 16px;
     }
 
     .text-dark {
-        color: #707070;
+        color: $gray;
         font-size: 20px;
     }
 
@@ -107,24 +109,24 @@
     .your-account span {
         display: block;
         font-size: 16px;
-        color: #9b9b9b;
+        color: $nobel;
         margin-bottom: 10px;
     }
 
     .your-account p {
-        color: #2c2c2c;
+        color: $nero;
         font-size: 16px;
     }
 
     .your-account p.success-text {
-        color: #2fab4a !important;
+        color: $success-green !important;
     }
 
-    .importData-blocks .d-inline-flex {
+    .import-data-blocks .d-inline-flex {
         display: inline-flex;
         width: 130px;
         height: 100px;
-        background-color: #fff;
+        background-color: $white;
         margin-right: 11px;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         text-align: center;
@@ -134,20 +136,20 @@
         flex-direction: column;
     }
 
-    .importData-blocks {
+    .import-data-blocks {
         padding-top: 30px;
         padding-bottom: 40px;
     }
 
-    .importData-blocks img {
+    .import-data-blocks img {
         width: 60px;
     }
 
-    .importData-blocks a p {
-        color: #0c8fe6;
+    .import-data-blocks a p {
+        color: $primary;
     }
 
-    .right_section {
+    .right-section {
         background: none !important;
     }
 
@@ -173,14 +175,14 @@
         padding: 0;
         border-bottom: none;
         padding: 15px;
-        border-bottom: 1px solid #e5e5e5;
-        background: #ececec;
+        border-bottom: 1px solid $gainsboro;
+        background: $whisper-light;
     }
 
     .custom-dialog .modal-header h3 {
         font-family: "CambriaBold";
         font-size: 20px;
-        color: #333333 !important;
+        color: $night-rider !important;
         margin-bottom: 15px;
     }
 
@@ -197,7 +199,7 @@
         position: absolute;
         top: 4px;
         right: 10px;
-        color: #222 !important;
+        color: $night-rider !important;
         cursor: pointer;
         font-weight: bold;
         text-decoration: none !important;
@@ -206,7 +208,7 @@
 
     #talk_sales {
         padding-bottom: 2px;
-        border-bottom: 1px solid #c3c3c3;
+        border-bottom: 1px solid $gainsboro;
         margin-bottom: 0;
     }
 
@@ -235,7 +237,7 @@
     }
 
     #talk_sales>li>a {
-        color: #333;
+        color: $night-rider;
         font-family: "CambriaBold";
         padding-left: 28px !important;
         line-height: 35px;
@@ -269,7 +271,7 @@
     }
 
     .tab-content-modal {
-        background: #fff;
+        background: $white;
         padding: 20px;
         margin-top: 0;
         margin-bottom: 0;
@@ -320,7 +322,7 @@
 
     #sFSection-V6Lc {
         font-family: Roboto;
-        background: #fefdfe;
+        background: $lavender;
     }
 
     .talktosale-superform .sFSection .sFformfield {
@@ -332,8 +334,8 @@
 
     .sFSection .sFformfield {
         padding: 40px;
-        background: #fafafa;
-        border: 1px solid #ccc;
+        background: $whisper-color;
+        border: 1px solid $gainsboro;
     }
 
     .sFSection .fieldset {
@@ -359,7 +361,7 @@
 
     .talktosale-superform .sFSection .sFformfield label {
         font-size: 15px !important;
-        color: #333 !important;
+        color: $night-rider !important;
         line-height: 26px !important;
     }
 
@@ -396,7 +398,7 @@
     #sFform-xZyf input,
     #sFform-xZyf textarea,
     #sFform-xZyf select {
-        border: 1px solid #525265 !important;
+        border: 1px solid $gainsboro !important;
         background: transparent !important;
         width: 230px !important;
     }
@@ -406,11 +408,11 @@
     }
 
     #sFformfield-xZyf label {
-        color: #73737f !important;
+        color: $gray !important;
     }
 
     #sFSection-Jkvq .sFsubmit.btn-primary {
-        background: #28ab00 !important;
+        background: $light-green !important;
         font-size: 14px;
     }
 
@@ -448,9 +450,8 @@
         top: 15px;
         right: 15px;
         background: none;
-        color: red;
         border: 0px;
-        color: #fff;
+        color: $white;
         cursor: pointer;
         font-size: 20px;
         z-index: 9999;

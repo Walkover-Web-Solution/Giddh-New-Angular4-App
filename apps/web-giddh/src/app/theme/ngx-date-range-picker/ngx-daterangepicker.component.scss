@@ -627,7 +627,7 @@ $input-height: 3rem !default;
     /* ranges */
     .show-ranges {
         .drp-calendar.left {
-            border-left: 1px solid $gainsboro-light;
+            border-left: 1px solid $gainsboro;
         }
     }
     .ranges {
@@ -688,7 +688,7 @@ $input-height: 3rem !default;
                             }
                         }
                         &.active {
-                            background-color: $whisper-color !important;
+                            background-color: $gainsboro !important;
                             border-left: 3px solid $midnight-blue !important;
                             font-family: 'opensans-semibold';
                             color: $midnight-blue;

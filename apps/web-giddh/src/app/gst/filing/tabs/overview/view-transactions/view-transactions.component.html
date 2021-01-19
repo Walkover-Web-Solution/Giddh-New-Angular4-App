@@ -13,7 +13,7 @@
                 </div>
                 <div class="filter-row">
                     <div class="name">Transaction Type:</div>
-                    <div class="btn-group filter" dropdown *ngIf="selectedGst === 'gstr1'" style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === 'gstr1'">
                         <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.entityType}} <span class="caret"></span>
                         </button>
@@ -22,7 +22,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="btn-group filter" dropdown *ngIf="selectedGst === 'gstr2'" style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === 'gstr2'">
                         <button id="button-basic2" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.entityType}} <span class="caret"></span>
                         </button>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="filter-row" *ngIf="(filterParam.entityType !== 'invoices' && filterParam.entityType !== 'advance-receipt') && selectedGst === 'gstr1'">
                     <div class="name">{{selectedFilter?.entityType}} Type:</div>
-                    <div class="btn-group filter" dropdown style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown>
                         <button id="button-basic3" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.type}} <span class="caret"></span>
                         </button>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="filter-row" *ngIf="filterParam.entityType === 'invoices' && selectedGst === 'gstr1'">
                     <div class="name">{{selectedFilter?.entityType}} Type:</div>
-                    <div class="btn-group filter" dropdown style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown>
                         <button id="button-basic4" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.type}} <span class="caret"></span>
                         </button>
@@ -60,7 +60,7 @@
                 <div class="filter-row" *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == 'gstr2'">
                     <div class="name">{{selectedFilter?.entityType}} Type:</div>
 
-                    <div class="btn-group filter" dropdown style="display: inline-block !important;">
+                    <div class="btn-group filter d-inline-block" dropdown>
                         <button id="button-basic5" dropdownToggle type="button" class="btn btn-primary dropdown-toggle" aria-controls="dropdown-basic">
                             {{selectedFilter?.type}} <span class="caret"></span>
                         </button>
