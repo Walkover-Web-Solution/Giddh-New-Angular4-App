@@ -2665,11 +2665,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if(trx.amount) {
             let transactionAmount = trx.amount.toString();
 
-            if(this.invFormData.accountDetails.currencySymbol) {
+            if(this.invFormData.accountDetails.currencySymbol && transactionAmount) {
                 transactionAmount = transactionAmount.replace(this.invFormData.accountDetails.currencySymbol, "");
             }
 
-            if(this.selectedSuffixForCurrency) {
+            if(this.selectedSuffixForCurrency && transactionAmount) {
                 transactionAmount = transactionAmount.replace(this.selectedSuffixForCurrency, "");
             }
 

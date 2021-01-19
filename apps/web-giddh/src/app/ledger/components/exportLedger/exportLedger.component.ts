@@ -106,7 +106,7 @@ export class ExportLedgerComponent implements OnInit {
         this._toaster.clearAllToaster();
         let data = this.emailData;
         const sendData = new MailLedgerRequest();
-        data = data.replace(RegExp(' ', 'g'), '');
+        data = (data) ? data.replace(RegExp(' ', 'g'), '') : "";
         const cdata = data.split(',');
 
         if(cdata && cdata.length > 0) {

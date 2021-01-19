@@ -199,7 +199,7 @@ export class AgingReportComponent implements OnInit {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
-                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
                 }
             } else {
                 if (this.generalService.companyUniqueName) {

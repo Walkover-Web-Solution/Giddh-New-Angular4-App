@@ -279,7 +279,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public addNewGroup() {
         let stockRequest = new StockGroupRequest();
         let uniqueNameField = this.addGroupForm.get('uniqueName');
-        uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
+        if(uniqueNameField && uniqueNameField.value) {
+            uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
+        }
         stockRequest = this.addGroupForm.value as StockGroupRequest;
         if (this.addGroupForm.value.isSubGroup && this.selectedGroup) {
             stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
@@ -300,7 +302,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let uniqueNameField = this.addGroupForm.get('uniqueName');
 
         this.activeGroup$.pipe(take(1)).subscribe(a => activeGroup = a);
-        uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
+        if(uniqueNameField && uniqueNameField.value) {
+            uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
+        }
 
         stockRequest = this.addGroupForm.value as StockGroupRequest;
         if (this.addGroupForm.value.isSubGroup) {
