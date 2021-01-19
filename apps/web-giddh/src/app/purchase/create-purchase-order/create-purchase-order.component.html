@@ -34,7 +34,7 @@
                                                 [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true"
                                                 (noResultsClicked)="addNewAccount()" [multiple]="false"
                                                 [ItemHeight]="67" [notFoundLinkText]="'Add Vendor'"
-                                                (keyup)="resetVendor($event)" (onClear)="resetVendor(null)">
+                                                (keyup)="resetVendor($event)" (onClear)="resetVendor(null)" [isOpen]="!isUpdateMode && !purchaseOrder.account.uniqueName">
 
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item flex-column border-none">
@@ -86,46 +86,61 @@
                                                 <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                                     <div class="form-group">
-                                                        <label>Billing Address</label>
-
-                                                        <div class="billing-address clearfix">
-                                                            <textarea name="vendorBillingDetailsAddress"
-                                                                (keyup)="autoFillShippingDetails('vendor')"
-                                                                [(ngModel)]="purchaseOrder.account.billingDetails.address[0]"
-                                                                class="form-control" rows="3" autocomplete="off"
-                                                                autofocus="off" aria-autocomplete="none"></textarea>
-
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-6">
-                                                                    <label class="sales-country-label">
-                                                                        {{vendorCountry}}
-                                                                    </label>
+                                                        <div class="d-flex align-items-center pb-1">
+                                                            <span class="pr-15">Billing Address</span>
+                                                            <span>
+                                                                <div class="btn-group btn-block" dropdown #billingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="billingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1">
+                                                                    <a dropdownToggle type="button" class="dropdown-toggle">Change</a>
+                                                                    <ul *dropdownMenu class="dropdown-menu change-address-dropdown dropdown-menu-right" role="menu">
+                                                                        <li role="menuitem" *ngFor="let address of accountAddressList">
+                                                                            <a class="dropdown-item" (click)="selectAddress(purchaseOrder.account.billingDetails, address)">
+                                                                                {{address.address}} {{address.state?.name}}
+                                                                                <span class="d-block">{{ address.gstNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.gstNumber : "" }}
+                                                                                </span>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
                                                                 </div>
-
-                                                                <div class="col-sm-12 col-md-6" #vendorBillingState>
-                                                                    <sales-sh-select [placeholder]="'State'"
-                                                                        class="select-border-bottom"
-                                                                        (selected)="fillShippingBillingDetails($event, true, 'vendor'); autoFillShippingDetails('vendor')"
-                                                                        #vendorStatesBilling [showBottomBorderOnly]="true"
-                                                                        [options]="statesSource"
-                                                                        name="vendorBillingDetailsStateCode"
-                                                                        [(ngModel)]="purchaseOrder.account.billingDetails.state.code">
-                                                                    </sales-sh-select>
-                                                                </div>
-
-                                                                <div class="col-sm-12"
-                                                                    *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
-                                                                    <input maxLength="15" autocomplete="None"
-                                                                        type="text" name="vendorBillingDetailsTax"
-                                                                        [(ngModel)]="purchaseOrder.account.billingDetails.gstNumber"
-                                                                        class="form-control input-custom"
-                                                                        (blur)="autoFillShippingDetails('vendor')"
-                                                                        (change)="getStateCode('billingDetails', vendorStatesBilling, 'vendor')"
-                                                                        placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
-                                                                </div>
-                                                            </div>
-
+                                                            </span>
                                                         </div>
+                                                            <div class="billing-address clearfix">
+                                                                <textarea name="vendorBillingDetailsAddress"
+                                                                    (keyup)="autoFillShippingDetails('vendor')"
+                                                                    [(ngModel)]="purchaseOrder.account.billingDetails.address[0]"
+                                                                    class="form-control" rows="3" autocomplete="off"
+                                                                    autofocus="off" aria-autocomplete="none"></textarea>
+
+                                                                <div class="row">
+                                                                    <div class="col-sm-12 col-md-6">
+                                                                        <label class="sales-country-label">
+                                                                            {{vendorCountry}}
+                                                                        </label>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12 col-md-6" #vendorBillingState>
+                                                                        <sales-sh-select [placeholder]="'State'"
+                                                                            class="select-border-bottom"
+                                                                            (selected)="fillShippingBillingDetails($event, true, 'vendor'); autoFillShippingDetails('vendor')"
+                                                                            #vendorStatesBilling [showBottomBorderOnly]="true"
+                                                                            [options]="statesSource"
+                                                                            name="vendorBillingDetailsStateCode"
+                                                                            [(ngModel)]="purchaseOrder.account.billingDetails.state.code">
+                                                                        </sales-sh-select>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12"
+                                                                        *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
+                                                                        <input maxLength="15" autocomplete="None"
+                                                                            type="text" name="vendorBillingDetailsTax"
+                                                                            [(ngModel)]="purchaseOrder.account.billingDetails.gstNumber"
+                                                                            class="form-control input-custom"
+                                                                            (blur)="autoFillShippingDetails('vendor')"
+                                                                            (change)="getStateCode('billingDetails', vendorStatesBilling, 'vendor')"
+                                                                            placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
                                                     </div>
 
                                                 </div>
@@ -135,15 +150,28 @@
                                                 <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                                     <div class="form-group p0 width100">
-                                                        <label>
+                                                        <div class="d-flex align-items-center pb-1">
+                                                            <span class="pr-15">
                                                             <input type="checkbox" autocomplete="None"
                                                                 name="autoFillVendorShipping"
                                                                 [(ngModel)]="autoFillVendorShipping"
                                                                 (change)="autoFillShippingDetails('vendor')"> Shipping
                                                             Address
                                                             Same as Billing Address
-                                                        </label>
-
+                                                            </span>
+                                                            <span>
+                                                                <div class="btn-group btn-block" dropdown #shippingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="shippingAddressDropDownWeb.hide()" *ngIf="accountAddressList?.length > 1 && !autoFillVendorShipping">
+                                                                    <a dropdownToggle type="button" class="dropdown-toggle">Change</a>
+                                                                    <ul *dropdownMenu class="dropdown-menu change-address-dropdown dropdown-menu-right" role="menu">
+                                                                        <li role="menuitem" *ngFor="let address of accountAddressList">
+                                                                            <a class="dropdown-item" (click)="selectAddress(purchaseOrder.account.shippingDetails, address)">
+                                                                                {{address.address}} {{address.state?.name}} {{ address.gstNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.gstNumber : "" }}
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </span>
+                                                        </div>
                                                         <div
                                                             [ngClass]="{'billing-address': true, 'disabled': autoFillVendorShipping}">
                                                             <textarea name="vendorShippingDetailsAddress"
@@ -234,8 +262,21 @@
                                         <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                             <div class="form-group">
-                                                <label>Billing Address</label>
-
+                                               <div class="d-flex align-items-center pb-1">
+                                                    <span class="pr-15">Billing Address</span>
+                                                    <span>
+                                                    <div class="btn-group btn-block" container="body" dropdown #companyBillingAddressDropDownWeb="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="companyBillingAddressDropDownWeb.hide()" *ngIf="companyAddressList?.length > 1">
+                                                        <a dropdownToggle type="button" class="dropdown-toggle">Change</a>
+                                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-right change-address-dropdown" role="menu">
+                                                            <li role="menuitem" *ngFor="let address of companyAddressList">
+                                                                <a class="dropdown-item" (click)="selectAddress(purchaseOrder.company.billingDetails, address, true)">
+                                                                    {{address.address}} {{address.state?.name}} {{ address.taxNumber ? (showGSTINNo ? 'GSTIN: ' : 'TRN: ') + address.taxNumber : "" }}
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </span>
+                                            </div>
                                                 <div class="billing-address clearfix">
                                                     <textarea name="companyBillingDetailsAddress"
                                                         (keyup)="autoFillShippingDetails('company')"
@@ -280,13 +321,15 @@
                                         <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                             <div class="form-group p0 width100">
-                                                <label>
-                                                    <input type="checkbox" autocomplete="None"
-                                                        name="autoFillCompanyShipping"
-                                                        [(ngModel)]="autoFillCompanyShipping"
-                                                        (change)="autoFillShippingDetails('company')"> Shipping Address
-                                                    Same as Billing Address
-                                                </label>
+                                                <div class="d-flex align-items-center pb-1">
+                                                    <span class="pr-15">
+                                                        <input type="checkbox" autocomplete="None"
+                                                            name="autoFillCompanyShipping"
+                                                            [(ngModel)]="autoFillCompanyShipping"
+                                                            (change)="autoFillShippingDetails('company')"> Shipping Address
+                                                        Same as Billing Address
+                                                    </span>
+                                                </div>
                                                 <div
                                                     [ngClass]="{'billing-address': true, 'disabled': autoFillCompanyShipping}">
                                                     <textarea name="companyShippingDetailsAddress"

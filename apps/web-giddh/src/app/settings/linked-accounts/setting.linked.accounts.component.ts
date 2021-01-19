@@ -171,10 +171,12 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                 case 'DeleteAddedBank':
                     let deleteWithAccountId = true;
                     if (this.selectedBank.status !== 'ALREADY_ADDED') {
-                        accountId = this.selectedAccount.providerAccount.providerAccountId;
+                        accountId = (this.selectedAccount && this.selectedAccount.providerAccount) ? this.selectedAccount.providerAccount.providerAccountId : 0;
                         deleteWithAccountId = false;
                     }
-                    this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId, deleteWithAccountId));
+                    if(accountId) {
+                        this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(accountId, deleteWithAccountId));
+                    }
                     break;
                 case 'UpdateDate':
                     this.store.dispatch(this.settingsLinkedAccountsActions.UpdateDate(this.dateToUpdate, accountId));
@@ -215,7 +217,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     public onRefreshToken(account, isUpdateAccount) {
         if (isUpdateAccount) {
-            if (!this.providerAccountId) {
+            if (!this.providerAccountId && account) {
                 this.providerAccountId = account.providerAccountId;
                 delete account['providerAccountId'];
             }
@@ -223,7 +225,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(this.providerAccountId, account));
             return;
         }
-        this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.providerAccount.providerAccountId, {}));
+        if(account && account.providerAccount) {
+            this.store.dispatch(this.settingsLinkedAccountsActions.RefreshBankAccount(account.providerAccount.providerAccountId, {}));
+        }
     }
 
     public onAccountSelect(account, data) {

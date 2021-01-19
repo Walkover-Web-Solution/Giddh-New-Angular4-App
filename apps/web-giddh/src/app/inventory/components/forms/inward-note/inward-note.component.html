@@ -31,7 +31,7 @@
                 <div class="col-xs-6 form-group" *ngIf="mode === 'sender'">
                     <label>Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                        [disabled]="stock.disabled" formControlName="stock" (selected)="stockChanged($event)">
+                        [disabled]="stock.disabled" formControlName="stock" (selected)="stockChanged($event)" [isRequired]="true">
                     </sh-select>
                     <!-- <span *ngIf="stock.invalid">
               <span *ngIf="stock?.errors && stock?.errors['required']" class="text-danger">Please select Product.</span>
@@ -41,7 +41,7 @@
                 <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
                     <label>Sender <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
-                        formControlName="inventoryUser" (selected)="userChanged($event)"></sh-select>
+                        formControlName="inventoryUser" (selected)="userChanged($event)" [isRequired]="true"></sh-select>
                     <!-- <span *ngIf="inventoryUser.invalid">
               <span *ngIf="inventoryUser?.errors && inventoryUser?.errors['required']"
                     class="text-danger">Please select Sender.</span>
@@ -75,7 +75,7 @@
                     <div class="col-xs-4 form-group" *ngIf="mode === 'sender'">
                         <!-- <label class="mr-b1">Sender</label> -->
                         <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Sender'"
-                            (selected)="userChanged($event,i)" formControlName="inventoryUser" [ItemHeight]="'33'">
+                            (selected)="userChanged($event,i)" formControlName="inventoryUser" [ItemHeight]="'33'" [isRequired]="true">
                         </sh-select>
                         <!-- <span [hidden]="!item.get('inventoryUser')?.errors?.required"
                   class="text-danger">Please select Sender.</span> -->
@@ -83,13 +83,13 @@
                     <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
                         <!-- <label class="mr-b1">Product Name</label> -->
                         <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
-                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"></sh-select>
+                            (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock" [isRequired]="true"></sh-select>
                         <!-- <span [hidden]="!item.get('stock')?.errors?.required" class="text-danger">Please select Product.</span> -->
                     </div>
 
                     <div class="col-xs-4 form-group">
                         <sh-select [options]="stockUnitsOptions" [placeholder]="'Choose unit'"
-                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33"></sh-select>
+                            formControlName="stockUnit" [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
                         <!-- <span [hidden]="!item.get('stockUnit')?.errors?.required" class="text-danger">Please select Unit.</span> -->
                     </div>
 
@@ -159,7 +159,7 @@
 
                                     <div class="col-xs-5 form-group">
                                         <sh-select [options]="stockUnitsOptions" formControlName="manufacturingUnitCode"
-                                            [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33"></sh-select>
+                                            [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
                                     </div>
 
                                     <div class="col-xs-3" style="display: flex;align-items: center;height: 30px"

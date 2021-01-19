@@ -207,6 +207,10 @@
                             <div class="customer-right  clearfix" style="width: 100%;">
                                 <table class="text-right">
                                     <tr>
+                                        <td *ngIf="showFieldFilter.openingBalance">
+                                            <p>Opening</p>
+                                            <h3><span *ngIf="activeTab === 'customer' && openingBalance?.type === 'CREDIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span><span *ngIf="activeTab === 'vendor' && openingBalance?.type === 'DEBIT' && formatAmountInCurrency(openingBalance?.amount) > 0">-</span> {{openingBalance?.amount | giddhCurrency}}/-</h3>
+                                        </td>
                                         <td>
                                             <p *ngIf="activeTab === 'vendor'">Purchase</p>
                                             <p *ngIf="activeTab === 'customer'">Sales</p>
@@ -218,21 +222,15 @@
                                             <h3>{{totalReceipts | giddhCurrency}}/-</h3>
                                         </td>
                                         <td>
-                                            <p>Due</p>
-                                            <h3>{{totalDue | giddhCurrency}}/-</h3>
+                                            <p>Closing</p>
+                                            <h3>{{closingBalance | giddhCurrency}}/-</h3>
                                         </td>
-
                                     </tr>
-
                                 </table>
                             </div>
-
                         </div>
                     </div>
-
                 </div>
-
-
             </div>
         </div>
     </tab>
@@ -783,7 +781,7 @@
                         </td>
                         <td class="word-wrap" *ngIf="showFieldFilter.gstin  && shouldShowTaxFilter" data-title="GSTIN">
                             {{account.gstIn || '-' }}</td>
-                        <td class="word-wrap" *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name}}
+                        <td class="word-wrap" *ngIf="showFieldFilter.state " data-title="State">{{account?.state?.name || '-' }}
                         </td>
                         <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title="Comment">
                             <ng-container *ngIf='updateCommentIdx != idx'>

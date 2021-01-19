@@ -383,7 +383,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
                 if (this.multiple) {
                     this.updatePosition();
                     this.optionList.highlight();
-                    if (this.isOpen) {
+                    if (this.isOpen && this.dropdown) {
                         this.dropdown.moveHighlightedIntoView();
                     }
                 }
@@ -518,13 +518,17 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
                 this.selectHighlightedOption();
             } else if (key === this.KEYS.UP) {
                 this.optionList.highlightPreviousOption();
-                this.dropdown.moveHighlightedIntoView();
+                if(this.dropdown) {
+                    this.dropdown.moveHighlightedIntoView();
+                }
                 if (!this.filterEnabled) {
                     event.preventDefault();
                 }
             } else if (key === this.KEYS.DOWN) {
                 this.optionList.highlightNextOption();
-                this.dropdown.moveHighlightedIntoView();
+                if(this.dropdown) {
+                    this.dropdown.moveHighlightedIntoView();
+                }
                 if (!this.filterEnabled) {
                     event.preventDefault();
                 }

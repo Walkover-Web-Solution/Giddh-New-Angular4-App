@@ -289,6 +289,19 @@ span.icon-advance-filter {
 .select-all-proformas-on-mobile-view{
     display: none;
 }
+
+.btn-wrapper-more{
+    height: 30px;
+}
+.min-width-check{
+    min-width:50px !important;
+}
+.invoice-table.on-mobile-view {
+    td{
+        white-space: normal !important;
+        word-break: break-word !important;
+    }
+}
 // responsive
 @media(max-width:991px){
     .invoice-preview-sidebar{
@@ -296,6 +309,11 @@ span.icon-advance-filter {
     }
 }
 @media (max-width: 768px) {
+    .invoice-table.on-mobile-view {
+    td{
+        width: 100%;
+    }
+}
     .select-all-proformas-on-mobile-view{
         display: flex;
         align-items: center;

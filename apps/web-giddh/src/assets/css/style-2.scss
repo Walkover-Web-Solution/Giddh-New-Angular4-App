@@ -2939,7 +2939,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .contact-main {
-    min-height: 650px;
+    min-height: 560px;
 }
 
 .hide-header .nav.nav-tabs {
@@ -9008,6 +9008,16 @@ highcharts-chart .highcharts-container{
     flex-shrink: 1 !important;
 }
 
+highcharts-chart{
+    .highcharts-container{
+        .highcharts-title{
+                width: 62px !important;
+                white-space: normal !important;
+                text-align: center;
+            }
+    }
+}
+
 #incomeChart #highcharts-ufrwew1-29 {
     display: block;
     width: 100%;
@@ -9826,6 +9836,33 @@ span#HW_badge_cont:nth-child(3) {
         right:  7px !important;
     }
 }
+.mobile-setting-sidebar {
+    overflow-y: hidden;
+}
+.select-linked-accounts sh-select-menu .menu {
+    max-height: 250px;
+}
+.ratio-chart-block .highcharts-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    white-space: normal !important;
+    word-break: break-all;
+    font-size: 24px;
+    top:56px !important;
+}
+.change-address-dropdown a {
+    color: $deep-sky-blue;
+    font-size: 12px;
+}
+.change-address-dropdown li {
+    border-bottom: 1px solid $very-light-gray;
+    padding-bottom: 4px;
+}
+.change-address-dropdown li:last-child {
+    border: none;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -10011,17 +10048,10 @@ input.mat-input-element{
             sh-select{
                 div{
                     width: 100%;
-                    input{
-                        min-width: 100%;
+                    .mat-form-field{
                         max-width: 100%;
+                        min-width: 100%;
                     }
-                }
-            }
-            giddh-datepicker{
-                width: 100%;
-                .mat-form-field{
-                    max-width: 100%;
-                    min-width: 100%;
                 }
             }
         }
@@ -11288,9 +11318,8 @@ input.mat-input-element{
 }
 
 .giddh-datepicker-modal {
-    margin: 0 !important;
-}
-
+        margin: 0 !important;
+    }
 body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
@@ -11309,6 +11338,18 @@ body.prevent-body-scroll {
         display: none!important;
     }
 }
+/*media query for height resolution*/
+@media(max-height:999px){
+    .contact-main {
+        min-height: calc(100vh - 420px);
+    }
+}
+@media(min-height:300px) and (max-height:730px){
+   .linked-address sh-select-menu .total-padding {
+        height: 257px !important;
+    }
+}
+
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }

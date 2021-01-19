@@ -326,16 +326,16 @@
                         </div>
                     </td> -->
 
-                    <td data-title="#">
+                    <td width="4%" data-title="#">
                         <div class="justify-content-sm d-flex justify-content-center">{{ i + 1}}</div>
                     </td>
 
-                    <td data-title="Invoice Number">
+                    <td width="20%" data-title="Invoice Number">
                         <a *ngIf="!isMobileScreen" class="cp btn-link-2"
                             (click)="col.status !== 'inactive' && openUpdatePanel(col)">{{ col.voucherNumber || '-'  }}</a>
                         <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || '-'  }}</a>
                     </td>
-                    <td data-title="Customer Name">{{ col.customerName || '-' }}</td>
+                    <td width="20%" data-title="Customer Name">{{ col.customerName || '-' }}</td>
                     <td data-title="Interval">{{ col.duration || '-'  }}</td>
                     <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-'  }}</td>
                     <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-'  }}</td>

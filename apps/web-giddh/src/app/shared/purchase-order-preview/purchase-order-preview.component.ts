@@ -66,9 +66,11 @@ export class PurchaseOrderPreviewModalComponent implements OnInit {
         this.purchaseOrderService.getPdf(getRequest).subscribe(response => {
             if (response) {
                 let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
-                this.pdfViewer.pdfSrc = blob;
-                this.pdfViewer.showSpinner = true;
-                this.pdfViewer.refresh();
+                if(this.pdfViewer) {
+                    this.pdfViewer.pdfSrc = blob;
+                    this.pdfViewer.showSpinner = true;
+                    this.pdfViewer.refresh();
+                }
                 this.pdfPreviewLoaded = true;
             } else {
                 this.pdfPreviewHasError = true;
