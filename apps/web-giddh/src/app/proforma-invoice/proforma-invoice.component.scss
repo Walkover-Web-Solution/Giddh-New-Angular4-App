@@ -1634,9 +1634,27 @@ span.eligible-ITC {
         min-height: 100px;
     }
 }
-.pending-sales-page {
-    padding-left: 15px;
-    border-bottom: none !important;
+.bill-add{
+    label{
+    min-width: 110px;
+
+}
+}
+.change-address-dropdown{
+    ul{
+        margin-top: 22px;
+        min-width: 240px;
+        left: 0 !important;
+        right: auto !important;
+        max-height: 200px;
+        overflow-y: auto;
+        li{
+            a{
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+    }
 }
 /* resposnvie */
 @media(max-width:1199px){
@@ -1821,7 +1839,7 @@ span.eligible-ITC {
     .wrap-billing-address .bill-add {
         width: 100%;
         max-width: 100%;
-        padding-right: 30px !important;
+        padding-right: 30px !important
     }
     .sp-rupees {
         font-size: 20px;
@@ -1837,6 +1855,18 @@ span.eligible-ITC {
 }
 
 @media (max-width: 575px) {
+.change-address-dropdown{
+    ul{
+        left: auto !important;
+        right: 0 !important;
+        li{
+            a{
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+    }
+}
     #actionPane .btn-group.dropup {
         display: block;
         margin-top: 5px;

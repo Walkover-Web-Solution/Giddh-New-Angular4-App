@@ -1,7 +1,9 @@
+import { PAGINATION_LIMIT } from '../../app.constant';
+
 export class DaybookQueryRequest {
 	public q: string = '';
 	public page: number = 0;
-	public count: number = 20;
+	public count: number = PAGINATION_LIMIT;
 	public from: string = '';
 	public to: string = '';
 	public format: 'pdf' | 'xlsx' = 'pdf';
