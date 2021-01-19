@@ -236,11 +236,19 @@ export class LedgerVM {
         }
 
         if (data) {
-            data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
-            data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+            if(data.balanceText && data.balanceText.cr) {
+                data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+            }
+            if(data.balanceText && data.balanceText.dr) {
+                data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+            }
 
-            data.text.dr = data.text.dr.replace('<accountName>', accountName);
-            data.text.cr = data.text.cr.replace('<accountName>', accountName);
+            if(data.text && data.text.dr) {
+                data.text.dr = data.text.dr.replace('<accountName>', accountName);
+            }
+            if(data.text && data.text.cr) {
+                data.text.cr = data.text.cr.replace('<accountName>', accountName);
+            }
             this.ledgerUnderStandingObj = _.cloneDeep(data);
         }
     }
