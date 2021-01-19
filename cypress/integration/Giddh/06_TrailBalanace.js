@@ -40,7 +40,7 @@ describe('This is TrialBalance Search Test', () => {
             if (response.status === 201){
                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
             }
-            cy.searchOnTrialBalance('uitest', '199.99')
+            cy.searchOnTrialBalance('uitest', '199')
         })
     });
 
