@@ -1,7 +1,6 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -19,6 +18,7 @@ import { TBPlBsActions } from "../../../actions/tl-pl.actions";
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
     selector: 'profit-loss',
@@ -27,6 +27,7 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
+    @Input() public refresh: boolean = false;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
@@ -38,7 +39,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /* Selected range label */
@@ -47,10 +48,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public fromDate: string;
     /* Selected to date */
     public toDate: string;
-    @Input() public refresh: boolean = false;
     public imgPath: string = '';
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
     public profitLossChart: typeof Highcharts = Highcharts;
     public chartOptions: Highcharts.Options;
@@ -70,33 +68,20 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe,
-        private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
-                    }
-                });
-            }
-        });
         // img path
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
             }
         });
+
         // listen for universal date
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
@@ -294,7 +279,11 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     * @param {*} value
     * @memberof ProfitLossComponent
     */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

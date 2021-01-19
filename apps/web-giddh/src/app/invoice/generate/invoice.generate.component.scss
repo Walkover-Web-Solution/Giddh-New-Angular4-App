@@ -18,7 +18,7 @@ table {
     border: none;
 } */
 
-.mh18_img img {
+.check-image img {
     max-height: 20px;
     cursor: pointer;
 }
@@ -53,7 +53,7 @@ tfoot {
 
 .td-search-box div i {
     margin-top: 3px;
-    color: #8080808c;
+    color: $olive;
     padding-right: 8px;
     cursor: pointer;
 }
@@ -86,7 +86,7 @@ tfoot {
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $whisper;
 }
 
 .dropdown-menu {
@@ -132,8 +132,11 @@ tfoot {
     margin-bottom: 0;
 }
 
-.invoice-genrate-container {
+.invoice-generate-container {
     padding: 0 15px;
+    .btn-dropdown-dr-cr{
+        height: 44px;
+    }
 }
 
 .input-group {
@@ -188,13 +191,17 @@ tfoot {
 
 button.btn.btn-filter {
     background: $whisper-color;
-    border: 1px solid $whisper-color;
+    border: 1px solid $gainsboro;
     font-size: 14px;
     color: $midnight-blue;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    padding: 7px 10px !important;
+    padding: 8px 10px !important;
+}
+
+button.btn.btn-filter span.icon-cross {
+    margin-right: 5px;
 }
 
 .pending-table-description {
@@ -265,6 +272,21 @@ span.close-modal.cp.pull-right {
             border-right: none !important;
         }
     }
+}
+
+.width-auto{
+    width:auto;
+}
+
+.filter-width{
+    width: 85%;
+}
+
+.pending-advance-search{
+    flex: 1 1 auto !important;
+        div#dp-parent {
+            margin-right:8px;
+        }
 }
 // responsive
 @media (max-width: 1023px) {
@@ -374,9 +396,9 @@ span.close-modal.cp.pull-right {
     }
     .form-inline .d-flex,
     .form-inline .form-group {
-        margin: 0 !important;
+        margin: 0;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         margin-top: 20px;
         border: none;
         background-color: transparent;
@@ -403,9 +425,6 @@ span.close-modal.cp.pull-right {
 }
 
 @media (max-width: 767px) {
-    .invoice-genrate-container {
-        padding-top: 55px;
-    }
     .form-inline .form-group {
         display: flex;
         flex-direction: row;
@@ -452,6 +471,13 @@ span.close-modal.cp.pull-right {
             width: 100% !important;
         }
     }
+
+    button.btn.btn-filter {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
 }
 
 @media (max-width: 375px) {
@@ -463,6 +489,9 @@ span.close-modal.cp.pull-right {
     div#dp-parent {
         margin-bottom: 0;
         width: 100%;
+    }
+    .flex-none{
+        flex: none;
     }
 }
 

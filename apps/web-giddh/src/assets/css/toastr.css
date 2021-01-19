@@ -101,7 +101,7 @@ button.toast-close-button {
     overflow: hidden;
     margin: 0 0 6px;
     padding: 15px 15px 15px 50px;
-    width: 300px;
+    width: 310px;
     -moz-border-radius: 3px 3px 3px 3px;
     -webkit-border-radius: 3px 3px 3px 3px;
     border-radius: 3px 3px 3px 3px;
@@ -118,6 +118,8 @@ button.toast-close-button {
     text-align: left;
     align-items: flex-start;
     animation: none !important;
+    white-space: normal;
+    word-break: break-word;
 }
 #toast-container .toast:hover {
     -moz-box-shadow: 0 0 12px #000000;
@@ -174,6 +176,9 @@ button.toast-close-button {
     background-color: #000000;
     opacity: 0.4;
 }
+.toast-error .toast-title{
+    font-size: 13px;
+}
 /*Responsive Design*/
 @media all and (max-width: 240px) {
     #toast-container .toast.div {
@@ -202,6 +207,12 @@ button.toast-close-button {
     #toast-container .toast.div {
         padding: 15px 15px 15px 50px;
         width: 25em;
+    }
+}
+@media all and (max-width: 480px) {
+    #toast-container .toast-close-button {
+        right: 10px !important;
+        top: -0.2em;
     }
 }
 .toast-title {

@@ -1,11 +1,11 @@
 <div class="flex-container" *ngIf="!((isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async))">
     <div class="login-box">
         <div class="row mx-0">
-            <div class="col-md-6 col-lg-6 col-sm-6 col-12 px-0">
+            <div class="col-md-6 col-lg-6 col-sm-12 col-12 px-0">
                 <div class="login-left">
                 </div>
             </div>
-            <div class="col-md-6 col-lg-6 col-sm-6 col-12 px-0">
+            <div class="col-md-6 col-lg-6 col-sm-12 col-12 px-0">
                 <div class="login-right d-flex align-items-center">
                     <div class="giddh-login">
                         <div class="giddh-login-inner">
@@ -24,7 +24,7 @@
                                         *ngIf="loginUsing === 'email'">
                                         <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix">
 
-                                            <input class="form-control mb-1" formControlName="email" type="email"
+                                            <input class="form-control mr-b1" formControlName="email" type="email"
                                                 placeholder="Email address" required>
                                             <button [disabled]="!emailVerifyForm.controls['email'].valid"
                                                 [ladda]="isLoginWithEmailInProcess$ | async"
@@ -34,7 +34,7 @@
 
                                         </div>
                                         <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix">
-                                            <input class="form-control mb-1" formControlName="token" type="text"
+                                            <input class="form-control mr-b1" formControlName="token" type="text"
                                                 placeholder="Enter verification code here" required>
                                             <div class="clearfix mr-b2">
                                                 <button [disabled]="!emailVerifyForm.controls['token'].valid"
@@ -57,12 +57,12 @@
 
 
                                     <!-- login with userName form -->
-                                    <form class="pos-rel" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
+                                    <form class="position-relative" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
                                         (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
                                         [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">
                                         <div class="clearfix form-group">
-                                            <input class="form-control mb-1" type="text" formControlName="email"
+                                            <input class="form-control mr-b1" type="text" formControlName="email"
                                                 placeholder="Email Id" />
                                             <input class="form-control" type="password"
                                                 (ngModelChange)="validatePwd($event)" formControlName="password"
@@ -86,8 +86,8 @@
                                     <form class="" *ngIf="isSignupWithPasswordSuccess$ | async" id="signupVerifyForm"
                                         [formGroup]="signupVerifyForm" autocomplete="off">
                                         <div class="clearfix">
-                                            <!-- <input class="form-control mb-1" formControlName="email" type="text" placeholder="Email Id" required> -->
-                                            <input class="form-control mb-1" formControlName="verificationCode"
+                                            <!-- <input class="form-control mr-b1" formControlName="email" type="text" placeholder="Email Id" required> -->
+                                            <input class="form-control mr-b1" formControlName="verificationCode"
                                                 type="text" placeholder="Enter verification code here" required>
                                             <div class="clearfix mr-b2">
                                                 <button
@@ -141,7 +141,7 @@
 <div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
 
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
@@ -187,7 +187,7 @@
 <div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
@@ -231,7 +231,7 @@
 <div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal"

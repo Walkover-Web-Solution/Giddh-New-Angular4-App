@@ -54,7 +54,6 @@ import { InventoryComponent } from './inventory.component';
 import { InventoryRoutingModule } from './inventory.routing.module';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
-
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -138,7 +137,7 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         DigitsOnlyModule,
         NgxMaskModule.forRoot(),
         ProformaInvoiceModule,
-        GiddhRoundOffPipeModule
+        GiddhRoundOffPipeModule,
     ],
     entryComponents: [PaginationComponent]
 })

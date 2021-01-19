@@ -1,8 +1,8 @@
 <div class="reverse-table-report" *ngIf="!isLoading">
     <div class="container-fluid">
-        <div class="invoice-preview  table-responsive">
+        <div class="invoice-preview table-responsive">
             <table class="table basic giddh-table on-mobile-view">
-                <thead class="t-h-bg1">
+                <thead class="thead-background1">
                     <tr>
                         <th class="text-center">#</th>
                         <th>Date
@@ -45,7 +45,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of reportResponseResult; let itemIndexOfElement = index;">
-                        <td data-title="S. No" class="text-center">{{ itemIndexOfElement + 1 }} </td>
+                        <td data-title="#" class="text-center">{{ itemIndexOfElement + 1 }} </td>
                         <td data-title="Date" class="text-center">{{ item.date }} </td>
                         <td data-title="Particulars" class="text-center">{{ item.baseAccount }} </td>
                         <td data-title="Address" class="text-center">{{ item.address }} </td>
@@ -76,7 +76,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="paginationWrapper" *ngIf="reportResponse && reportResponse?.totalPages > 1">
+        <div class="pagination-wrapper" *ngIf="reportResponse && reportResponse?.totalPages > 1">
             <pagination [totalItems]="reportResponse.totalItems" [(ngModel)]="reportResponse.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>

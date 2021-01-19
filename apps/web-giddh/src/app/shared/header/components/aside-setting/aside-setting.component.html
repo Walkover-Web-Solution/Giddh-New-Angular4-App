@@ -1,16 +1,16 @@
 
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
-        <div class="aside-help-header">
+        <div class="aside-help-header relative">
             <h2>Settings</h2>
             <div id="close" class="cursor-pointer" (click)="closeAsidePane($event)"><i class="icon-cross"></i></div>
-        </div>
-        <div class="help-aside-body">
             <div class="search-field relative">
-                <i class="icon-search pos-abs"></i>
+                <i class="icon-search position-absolute"></i>
                 <input type="text" class="form-control" name="search" #searchField [(ngModel)]="search"
                     (ngModelChange)="searchMenu($event)" placeholder="Search Settings">
             </div>
-            <div class="back-to-main-slider">
+        </div>
+        <div class="help-aside-body">
+            <div class="back-to-main-slider" [ngClass]="{'setting-close-icon' : isMobileScreen }">
                 <a href="javascript:;">
                     <span *ngIf="!isMobileScreen" (click)="goToPreviousPage()">
                         <i class="icon-back-arrow"></i>
@@ -25,7 +25,7 @@
             <div class="setting-items">
                 <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs;">
                     <li *ngFor="let tab of section;">
-                        <a class="d-block" [routerLink]="[tab.link]" (click)="closeAsidePane($event)">
+                        <a class="d-block clearfix" [routerLink]="[tab.link]" (click)="closeAsidePane($event)">
                             <span [innerHTML]="tab.icon"></span>
                             <span>{{tab.label}}</span>
                         </a>

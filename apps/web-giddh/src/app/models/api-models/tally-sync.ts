@@ -19,6 +19,14 @@ export class TallySyncData {
     public totalTallyGroups: number;
     public status: string;
     public id: number;
+    public type?: any;
+    public dateString?: any;
+    public groupsPercent?: any;
+    public groupsErrorPercent?: any;
+    public accountsPercent?: any;
+    public accountsErrorPercent?: any;
+    public entriesPercent?: any;
+    public entriesErrorPercent?: any;
 }
 
 export class Company {

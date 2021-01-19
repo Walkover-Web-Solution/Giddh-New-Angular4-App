@@ -16,6 +16,10 @@
     cursor: pointer;
 }
 
+.linked-entities {
+    width: 200px;
+}
+
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
     line-height: 0.5;
     height: 8px;
@@ -28,8 +32,9 @@
     max-width: 1170px;
     width: 100%;
     background: transparent;
+    min-height: 210px;
 }
-.paginationWrapper {
+.pagination-wrapper {
     width: 100%;
 }
 .customer-right table {
@@ -48,8 +53,8 @@
     font-size: 18px;
     margin-left: 10px;
     border-radius: 2px;
-    color: #1a237e;
-    background: #fff;
+    color: $midnight-blue;
+    background: $white;
 }
 
 .search-field {
@@ -58,11 +63,11 @@
 }
 .search-field input {
     width: 235px;
-    background-color: #e6e7e8 !important;
-    border-color: #e6e7e8 !important;
+    background-color: $whisper !important;
+    border-color: $whisper !important;
 }
 .search-field input:focus {
-    background-color: #fff !important;
+    background-color: $white !important;
     border-color: $midnight-express !important;
 }
 span.input-addon {
@@ -70,7 +75,7 @@ span.input-addon {
     right: 0px;
     padding: 4px 9px;
     background-color: $chetwode-blue;
-    color: #fff;
+    color: $white;
     font-size: 18px;
     border-radius: 2px;
     top: 0;
@@ -84,6 +89,22 @@ tr.aging-table-top td {
 .aging-table-top + tr > th {
     border-bottom: none !important;
 }
+.refresh-btn{
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $white;
+    border: 1px solid $gainsboro;
+    margin-left: 10px !important;
+}
+.customer-right-wrap{
+    .customer-right, .total-result{
+        padding-right: 90px !important;
+    }
+}
+
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {
@@ -92,7 +113,7 @@ tr.aging-table-top td {
 }
 
 @media (max-width: 768px) {
-    .customer-right-wrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 0;
     }
     .contact-main .table-aging-report {
@@ -100,12 +121,12 @@ tr.aging-table-top td {
     }
     .customer-right table tr td {
         padding: 0px 15px;
-        color: #707070;
+        color: $gray;
     }
     .result-total {
         position: fixed;
         bottom: 0;
-        background-color: #fff;
+        background-color: $white;
         text-align: left;
         float: none;
         width: 100%;
@@ -118,13 +139,47 @@ tr.aging-table-top td {
     }
 }
 @media (max-width: 767px) {
+    .customer-right-wrap{
+        padding-left: 15px;
+        .text-right{
+            text-align: left!important;
+            padding-left: 5px!important;
+        }
+        .customer-right{
+            background: $white;
+            padding: 0;
+            float: none;
+            table{
+                float: none!important;
+                width: 100%!important;
+                tr{
+                    td{
+                        margin-bottom: 5px;
+                        padding: 0 5px;
+                        color: $gray;
+                        width: 100%;
+                        display: flex;
+                        p{
+                            font-size: 14px;
+                            margin-bottom: 2px;
+                            float: left;
+                            width: 110px;
+                        }
+                        h3{
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+    }
     span.input-addon {
         top: 0;
     }
     .result-total {
         position: relative;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         margin-bottom: 0px;
     }
     .wrap-searching-aging .max250 {
@@ -148,10 +203,11 @@ tr.aging-table-top td {
             }
         }
     }
-}
-@media (max-width: 575px) {
-    .customer-right-wrap h4.mb-1.pdR2 {
+    .customer-right-wrap h4.mr-b1.pd-r2 {
         margin-bottom: 10px;
+        padding-left: 15px;
+    }
+    .customer-right-wrap{
         padding-left: 15px;
     }
     .customer-right table {
@@ -177,12 +233,12 @@ tr.aging-table-top td {
     }
     .customer-right table tr td {
         padding: 0px 5px;
-        color: #707070;
+        color: $gray;
         width: 100%;
         display: block;
     }
     .customer-right {
-        background: #fff;
+        background: $white;
         padding: 0;
         float: none;
     }
@@ -199,6 +255,8 @@ tr.aging-table-top td {
     .customer-right table tr td h3 {
         font-size: 14px;
     }
+}
+@media (max-width: 575px) {
     .top-aging-table-top {
         padding: 8px 3px !important;
         font-size: 14px;
@@ -206,11 +264,11 @@ tr.aging-table-top td {
 }
 @media (max-width: 575px) {
     .wrap-searching-aging .max250 {
-        max-width: calc(100% - 30px);
+        max-width: 250px;
         width: 100%;
     }
     .wrap-searching-aging .max250.default-width {
-        max-width: calc(100% - 90px);
+        max-width: 250px;
         width: 100%;
     }
     .wrap-searching-aging .max250 input {
@@ -219,6 +277,7 @@ tr.aging-table-top td {
     .wrap-searching-aging {
         float: none !important;
         justify-content: space-between;
+        margin-bottom: 15px;
     }
     .btn-group.plus-btn {
         float: none;

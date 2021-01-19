@@ -1,0 +1,52 @@
+@import "../../../../../../assets/css/color.scss";
+
+.template-editor {
+    width: 30%;
+    float: left;
+    /* overflow: auto; */
+}
+
+.invoice-preview {
+    width: 9in;
+    float: right;
+    overflow: auto;
+    max-height: calc(100vh - 108px);
+    /* margin-bottom: 70px; */
+}
+
+#email-template {
+    background-color: $white;
+    border: 1px solid $gainsboro;
+}
+
+#email-template .form-control {
+    min-height: 45px;
+    border: 0;
+    border-radius: 0 !important;
+    color: $black;
+    border-bottom: 1px solid $gainsboro;
+    background: transparent !important;
+}
+
+#email-template .input-group-addon:first-child {
+    min-width: 80px;
+    background: transparent;
+    text-align: left;
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid $gainsboro;
+}
+
+#email-body {
+    min-height: 400px;
+}
+
+@media (max-width: 1266px) {
+    .invoice-preview {
+        width: 75%;
+        padding-left: 15px;
+    }
+    .template-editor {
+        width: 25%;
+    }
+}

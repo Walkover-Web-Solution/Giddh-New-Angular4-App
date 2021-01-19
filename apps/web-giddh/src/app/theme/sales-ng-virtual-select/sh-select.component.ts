@@ -3,7 +3,7 @@
  */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IOption } from './sh-options.interface';
+import { BorderConfiguration, IOption } from './sh-options.interface';
 import { SalesShSelectMenuComponent } from './sh-select-menu.component';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
@@ -41,8 +41,10 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
     @Input() public ItemHeight: number = 41;
-    @Input() public NoFoundMsgHeight: number = 30;
-    @Input() public NoFoundLinkHeight: number = 30;
+    /** Border configuration for showing border around sh-select  */
+    @Input() public borderConfiguration: BorderConfiguration;
+    @Input() public NoFoundMsgHeight: number = 35;
+    @Input() public NoFoundLinkHeight: number = 35;
     @Input() public dropdownMinHeight: number = 35;
     @Input() public customFilter: (term: string, options: IOption) => boolean;
     @Input() public customSorting: (a: IOption, b: IOption) => number;
@@ -54,6 +56,8 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public salesShSelectPading: number = 0;
     @Input() public tabIndex: number = 0;
     @Input() public fixedValue: string = "";
+    /** True if field is required */
+    @Input() public isRequired: boolean = false;
 
     @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
     @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
@@ -63,12 +67,14 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any[]> = new EventEmitter<any[]>();
+    /** Emits rest of the values when single selection is cleared */
+    @Output() public clearSingleItem: EventEmitter<any> = new EventEmitter<any>();
     @Output() public selected = new EventEmitter<any>();
     @Output() public noOptionsFound = new EventEmitter<boolean>();
     @Output() public noResultsClicked = new EventEmitter<null>();
     @Output() public viewInitEvent = new EventEmitter<any>();
     public rows: IOption[] = [];
-    public isOpen: boolean;
+    @Input() public isOpen: boolean;
     public filter: string = '';
     public filteredData: IOption[] = [];
     /** Keys. **/
@@ -386,6 +392,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
 
     public ngAfterViewInit() {
         this.viewInitEvent.emit(true);
+        this.openDropdown();
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -406,9 +413,17 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
                 this.writeValue(this.filter);
             }
         }
+
         if ('options' in changes) {
             if (changes.options && changes.options.currentValue) {
                 this.refreshList();
+            }
+        }
+
+        if('isOpen' in changes) {
+            if(changes.isOpen && changes.isOpen.currentValue && changes.isOpen.currentValue !== changes.isOpen.previousValue) {
+                this.isOpen = changes.isOpen.currentValue;
+                this.openDropdown();
             }
         }
     }
@@ -437,6 +452,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
         this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+        this.clearSingleItem.emit(this.selectedValues);
         this.onChange();
     }
 
@@ -530,6 +546,19 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
                 this.dynamicSearchedQuery.emit(query);
             });
         }
+    }
+
+    /**
+     * This will open the dropdown
+     *
+     * @memberof SalesShSelectComponent
+     */
+    public openDropdown(): void {
+        setTimeout(() => {
+            if(this.isOpen && this.inputFilter) {
+                (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
+            }
+        }, 300);
     }
 }
 

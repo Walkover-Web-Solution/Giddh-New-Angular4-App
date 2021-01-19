@@ -6,7 +6,6 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { GroupService } from '../../services/group.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 
@@ -17,7 +16,9 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 })
 export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {
 
-	@Input() public selectedGrpUniqueName: string;
+    @Input() public selectedGrpUniqueName: string;
+    /** This will hold group unique name */
+    @Input() public selectedGroupUniqueName: string;
 	@Input() public selectedAccountUniqueName: string;
 	@Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 	@Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
@@ -33,16 +34,41 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	public isAccountNameAvailable$: Observable<boolean>;
 	public createAccountInProcess$: Observable<boolean>;
 	public updateAccountInProcess$: Observable<boolean>;
-	public showBankDetail: boolean = false;
-	public isDebtorCreditor: boolean = true;
-
+    public showBankDetail: boolean = false;
+    /** this will hold if it's debtor/creditor */
+    @Input() public isDebtorCreditor: boolean = true;
+    /** this will hold if it's bank account */
+    @Input() public isBankAccount: boolean = true;
+    /** True, if new service is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isServiceCreation is true, then directly 'activeGroupUniqueName' will be
+     * used to fetch groups
+    */
+    @Input() public isServiceCreation: boolean;
+    /** True, if new customer/vendor account is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isCustomerCreation is true, then directly 'activeGroupUniqueName' will be
+     * used to fetch groups
+    */
+    @Input() public isCustomerCreation: boolean;
 
 	// private below
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(
 		private store: Store<AppState>,
-		private groupService: GroupService,
 		private accountsAction: AccountsAction
 	) {
 		// account-add component's property
@@ -87,15 +113,30 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	}
 	public isGroupSelected(event) {
 		if (event) {
-			this.activeGroupUniqueName = event;
+			this.activeGroupUniqueName = event.value;
 		}
 	}
 
 	public ngOnChanges(s: SimpleChanges) {
 
 		if ('selectedGrpUniqueName' in s && s.selectedGrpUniqueName.currentValue !== s.selectedGrpUniqueName.previousValue) {
-			this.getGroups(s.selectedGrpUniqueName.currentValue);
-		}
+            this.isCustomerCreation = true;
+            this.activeGroupUniqueName = s.selectedGrpUniqueName.currentValue;
+            this.flatAccountWGroupsList$ = of(null);
+            this.flatAccountWGroupsList = undefined;
+        }
+
+        if('selectedGroupUniqueName' in s && s.selectedGroupUniqueName.currentValue !== s.selectedGroupUniqueName.previousValue) {
+            // get groups list
+            this.isServiceCreation = true;
+            this.flatAccountWGroupsList$ = of(null);
+            this.flatAccountWGroupsList = undefined;
+            if (this.selectedGroupUniqueName === 'purchase') {
+                this.activeGroupUniqueName = 'operatingcost';
+            } else {
+                this.activeGroupUniqueName = 'revenuefromoperations';
+            }
+        }
 
 		if ('selectedAccountUniqueName' in s) {
 			let value = s.selectedAccountUniqueName;

@@ -4,13 +4,14 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment/moment';
 import { ReplaySubject, Observable } from 'rxjs';
 import { CashFlowStatementService } from '../../../services/cashflowstatement.service';
 import { GeneralService } from '../../../services/general.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from "file-saver";
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
     selector: 'cash-flow-statement-component',
@@ -30,7 +31,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Moment object */
     public moment = moment;
     /* Selected from date */
@@ -43,8 +44,6 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /* Active company details */
     public activeCompany: any;
-    /* Active company unique name */
-    public activeCompanyUniqueName$: Observable<string>;
     /* Api request object */
     public downloadRequest = {
         from: '',
@@ -59,8 +58,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private store: Store<AppState>, private cashFlowStatementService: CashFlowStatementService, private generalService: GeneralService, private toaster: ToasterService) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
-        this.universalDate$ = this.store.select(state => state.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     /**
@@ -72,7 +70,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         /* Observer to detect device based on screen width */
         this.breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 
@@ -89,26 +87,12 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
             }
         });
 
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
-            }
-        });
-
         /* This will get the company details */
-        this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
-            this.downloadRequest.companyUniqueName = activeCompanyUniqueName;
-
-            this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-                if (companies) {
-                    companies.forEach(company => {
-                        if (company.uniqueName === activeCompanyUniqueName) {
-                            this.activeCompany = company;
-                        }
-                    });
-                }
-            });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.downloadRequest.companyUniqueName = activeCompany.uniqueName;
+                this.activeCompany = activeCompany;
+            }
         });
     }
 
@@ -152,7 +136,11 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof CashFlowStatementComponent
      */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

@@ -43,7 +43,7 @@
 .tax-engine {
     background: none;
 }
-.advanceSearchByDate .btn-group > .dropdown-menu {
+.advance-search-by-date .btn-group > .dropdown-menu {
     margin-top: 0;
 }
 .month-picker {
@@ -57,7 +57,7 @@
         }
     }
 }
-.advanceSearchByDate.date-advance-search {
+.advance-search-by-date.date-advance-search {
     width: 280px;
 }
 
@@ -83,6 +83,12 @@
     right: -160px;
     top: 0;
     pointer-events: none;
+}
+.tax-heading {
+    max-width: 10%;
+}
+.tax-dropdown {
+    max-width: 30%;
 }
 @media(max-width:575px){
     .month-picker {

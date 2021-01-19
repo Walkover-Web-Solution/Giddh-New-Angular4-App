@@ -5,7 +5,7 @@
 .width-170 {
     width: 170px;
 }
-.radio_theme:before {
+.radio-theme:before {
     content: " ";
     width: 14px;
     height: 14px;
@@ -13,12 +13,12 @@
     right: 0;
 }
 
-.radio_theme {
+.radio-theme {
     height: 14px;
     width: 14px;
 }
 
-.radio_theme:checked:after {
+.radio-theme:checked:after {
     content: " ";
     left: 4px;
     bottom: 4px;
@@ -33,6 +33,7 @@
     text-align: left;
     border: 1px solid $gainsboro;
     padding-left: 7px !important;
+    background: $white;
 }
 .btn.dropdown-toggle .caret {
     position: absolute;
@@ -89,9 +90,41 @@ ul#dropdown-nested li .caret {
         margin-right: 15px;
     }
 }
+.report-breadcrum{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 7px 0px 10px 36px !important;
+    border-bottom: 1px solid $gainsboro;
+    .nav-report{
+        li{
+            font-family: 'opensans-semibold';
+            font-size: 20px;
+            a{
+                color: $midnight-blue;
+            }
+        }
+    }
+}
 @media (max-width: 767px) {
     .xs-pr-0 {
         padding-right: 0px !important;
+    }
+    .report-breadcrum{
+        position: static !important;
+        padding-left: 15px !important;
+        padding-top: 0 !important;
+        .nav-report{
+            li{
+                font-size: 16px;
+            }
+        }
+        .custom-month-select{
+            .btn{
+                font-size: 16px;
+            }
+        }
     }
 }
 @media(max-width:575px){

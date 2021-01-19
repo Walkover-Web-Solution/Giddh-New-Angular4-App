@@ -5,41 +5,58 @@
 
             <div class="col-xl-9 col-lg-12 col-md-12">
 
-                <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-selectYear"
+                <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-select-year"
                     name="fromToDateForm" novalidate>
-                    <!-- this code is commented for , need to remove this dropdown but for funcationality I am not removing this
-                        will remove it after universal datepicker added
-                    -->
-                    <div class="form-group mr-15" *ngIf="showLabels">
+                    <div class="form-group mr-r15 linked-entities" *ngIf="showLabels && currentCompanyBranches?.length > 2">
                         <div class="form-group">
-                            <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)"
+                            <sh-select [options]="currentCompanyBranches" formControlName="branchUniqueName" class="company-branch-dropdown"
+                                [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
+                                [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                                <ng-template #optionTemplate let-option="option">
+                                    <ng-container>
+                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                            <span class="entity-icon">
+                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany" tooltip="Branch"></i>
+                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
+                                            </span>
+                                            <span class="entity-details">
+                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                <div class="item-unique giddh-limit single-line-clamp">
+                                                    {{ option.name || '-' }}
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </ng-container>
+                                </ng-template>
+                            </sh-select>
+                        </div>
+                    </div>
+                    <div class="form-group mr-r15" *ngIf="showLabels">
+                        <div class="form-group">
+                            <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)" class="company-branch-dropdown"
                                 formControlName="selectedDateOption" [isFilterEnabled]="true"
                                 [placeholder]="'Select Option'" [showClear]="false" [ItemHeight]="33" width="100%">
                             </sh-select>
                         </div>
                     </div>
-                    <div class="form-group mr-15" *ngIf="filterForm.get('selectedDateOption').value == '0'">
+                    <div class="form-group mr-r15" *ngIf="filterForm.get('selectedDateOption').value == '0'">
                         <div class="form-group">
                             <sh-select [options]="financialOptions" formControlName="selectedFinancialYearOption"
                                 [isFilterEnabled]="true" [placeholder]="'Select Option'" [showClear]="false"
                                 (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
                         </div>
                     </div>
-                    <div class="form-group relative mr-15 datepicker-field" *ngIf="filterForm.get('selectedDateOption').value == '1'">
-                        <span class="input-wrapper">
-                            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                                   (applyDaterangepicker)="selectedDate($event)"
-                                   class="form-control date-range-picker daterange_picker_tb-pl-bs mr-15 giddh-datepicker" /></span>
-
-
+                    <div class="form-group relative mr-r15 datepicker-field" *ngIf="filterForm.get('selectedDateOption').value == '1'">
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon"></i>
+                            <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
+                        </div>
                     </div>
-
-
 
 
                     <div class="form-group" *ngIf="!(showLoader)">
 
-                        <div class="form-group pull-left mr-15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
+                        <div class="form-group pull-left mr-r15 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
 
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
                             <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
@@ -52,13 +69,13 @@
 
                         <div class="form-group pull-left">
 
-                            <a class="cp expanIcon" (click)="emitExpand()" data-placement="top" tooltip="Expand All"
+                            <a class="cp expand-icon" (click)="emitExpand()" data-placement="top" tooltip="Expand All"
                                 *ngIf="!expand">
 
                                 <span class="icon-expandIcon"></span>
                             </a>
 
-                            <a class="cp expanIcon" (click)="emitExpand()" data-placement="top" tooltip="Collapse All"
+                            <a class="cp expand-icon" (click)="emitExpand()" data-placement="top" tooltip="Collapse All"
                                 *ngIf="expand">
 
                                 <span class="icon-collapse"></span>
@@ -73,7 +90,7 @@
             <div class="col-xl-3 col-lg-12 col-md-12 download-data-icon">
 
                 <a (click)="refreshData()" tooltip="Reload data">
-                    <span class="icon-refrsh"></span>
+                    <span class="icon-refresh"></span>
                 </a>
 
                 <div class="ml-1">
@@ -83,13 +100,13 @@
                         class="pull-right">
                     </tb-export-csv>
 
-                    <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right mr-15">
+                    <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right mr-r15">
                     </tb-export-xls>
 
 
                     <tb-export-pdf *ngIf="tbExportPdf" [trialBalanceRequest]="filterForm.value"
                         [selectedCompany]="selectedCompany" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
-                        class="pull-right mr-15"></tb-export-pdf>
+                        class="pull-right mr-r15"></tb-export-pdf>
 
                     <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value"
                         [filters]="filterForm.value" class="pull-right"></pl-export-xls>
@@ -163,3 +180,12 @@
 
 </div>
 <!-- create tag modal -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                                    [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                                    [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

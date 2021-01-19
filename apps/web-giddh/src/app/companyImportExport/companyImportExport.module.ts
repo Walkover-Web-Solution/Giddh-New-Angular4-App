@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { LaddaModule } from 'angular2-ladda';
-
+import { SharedModule } from './../shared/shared.module';
 @NgModule({
     imports: [
         CompanyImportExportRoutingModule,
@@ -17,7 +17,8 @@ import { LaddaModule } from 'angular2-ladda';
         FormsModule,
         CommonModule,
         Daterangepicker,
-        LaddaModule
+        LaddaModule,
+        SharedModule
     ],
     exports: [],
     declarations: [

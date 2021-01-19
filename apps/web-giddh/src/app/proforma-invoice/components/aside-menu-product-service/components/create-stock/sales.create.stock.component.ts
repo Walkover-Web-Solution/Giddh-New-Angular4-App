@@ -1,17 +1,14 @@
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../../../store';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../../../actions/inventory/sidebar.actions';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../../../shared/helpers';
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../../../actions/inventory/inventory.actions';
 import * as  _ from '../../../../../lodash-optimized';
-import { AccountService } from '../../../../../services/account.service';
 import { CustomStockUnitAction } from '../../../../../actions/inventory/customStockUnit.actions';
 import { IUnitRateItem } from '../../../../../models/interfaces/stocksItem.interface';
 import { uniqueNameInvalidStringReplace } from '../../../../../shared/helpers/helperFunctions';
@@ -22,10 +19,10 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../../../models/interfa
 import { IForceClear } from '../../../../../models/api-models/Sales';
 import { TaxResponse } from '../../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../../actions/company.actions';
-import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../../../../inventory/inv.view.service';
 import { GeneralActions } from '../../../../../actions/general/general.actions';
 import { INVALID_STOCK_ERROR_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
+import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 
 @Component({
     selector: 'sales-create-stock',
@@ -48,20 +45,20 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
-    @ViewChild('uniqueName', {static: true}) public uniqueName: ElementRef;
-    @ViewChild('stockName', {static: true}) public stockName: ElementRef;
+    @ViewChild('uniqueName', {static: false}) public uniqueName: ElementRef;
+    @ViewChild('stockName', {static: false}) public stockName: ElementRef;
 
-    @ViewChild('purchaseAccountUniqueName', {static: true}) public purchaseAccountUniqueName: any;
-    @ViewChild('purchaseStockUnitCode', {static: true}) public purchaseStockUnitCode: any;
-    @ViewChild('purchaseRate', {static: true}) public purchaseRate: ElementRef;
+    @ViewChild('purchaseAccountUniqueName', {static: false}) public purchaseAccountUniqueName: any;
+    @ViewChild('purchaseStockUnitCode', {static: false}) public purchaseStockUnitCode: any;
+    @ViewChild('purchaseRate', {static: false}) public purchaseRate: ElementRef;
 
-    @ViewChild('salesAccountUniqueName', {static: true}) public salesAccountUniqueName: any;
-    @ViewChild('salesStockUnitCode', {static: true}) public salesStockUnitCode: any;
-    @ViewChild('salesRate', {static: true}) public salesRate: ElementRef;
+    @ViewChild('salesAccountUniqueName', {static: false}) public salesAccountUniqueName: any;
+    @ViewChild('salesStockUnitCode', {static: false}) public salesStockUnitCode: any;
+    @ViewChild('salesRate', {static: false}) public salesRate: ElementRef;
 
-    @ViewChild('manufacturingQuantity', {static: true}) public manufacturingQuantity: ElementRef;
-    @ViewChild('manufacturingStockUniqueName', {static: true}) public manufacturingStockUniqueName: any;
-    @ViewChild('manufacturingStockUnitCode', {static: true}) public manufacturingStockUnitCode; any;
+    @ViewChild('manufacturingQuantity', {static: false}) public manufacturingQuantity: ElementRef;
+    @ViewChild('manufacturingStockUniqueName', {static: false}) public manufacturingStockUniqueName: any;
+    @ViewChild('manufacturingStockUnitCode', {static: false}) public manufacturingStockUnitCode; any;
 
     public groupUniqueName: string;
     public stockUniqueName: string;
@@ -92,8 +89,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public addNewStock: boolean = false;
     public manageInProcess$: Observable<any>;
     public companyTaxesList$: Observable<TaxResponse[]>;
-    public isManageInventory$: Observable<boolean>;
-    public invoiceSetting$: Observable<any>;
     public customFieldsArray: any[] = [];
     public taxTempArray: any[] = [];
     public editSKUlabel: boolean = false;
@@ -103,26 +98,35 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public customField2: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-        private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
-        private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invoiceActions: InvoiceActions,
-        private invViewService: InvViewService, private cdr: ChangeDetectorRef, private _generalActions: GeneralActions) {
-        this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).pipe(takeUntil(this.destroyed$));
-        this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).pipe(takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeStock$ = this.store.select(s => s.inventory.activeStock).pipe(takeUntil(this.destroyed$));
-        this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-        this.isStockAddInProcess$ = this.store.select(s => s.inventory.isStockAddInProcess).pipe(takeUntil(this.destroyed$));
-        this.isStockUpdateInProcess$ = this.store.select(s => s.inventory.isStockUpdateInProcess).pipe(takeUntil(this.destroyed$));
-        this.isStockDeleteInProcess$ = this.store.select(s => s.inventory.isStockDeleteInProcess).pipe(takeUntil(this.destroyed$));
-        this.showLoadingForStockEditInProcess$ = this.store.select(s => s.inventory.showLoadingForStockEditInProcess).pipe(takeUntil(this.destroyed$));
-        this.createGroupSuccess$ = this.store.select(s => s.inventory.createGroupSuccess).pipe(takeUntil(this.destroyed$));
-        this.manageInProcess$ = this.store.select(s => s.inventory.inventoryAsideState).pipe(takeUntil(this.destroyed$));
+    constructor(
+        private store: Store<AppState>,
+        private sideBarAction: SidebarAction,
+        private _fb: FormBuilder,
+        private inventoryAction: InventoryAction,
+        private salesService: SalesService,
+        private customStockActions: CustomStockUnitAction,
+        private _toasty: ToasterService,
+        private _inventoryService: InventoryService,
+        private companyActions: CompanyActions,
+        private invViewService: InvViewService,
+        private cdr: ChangeDetectorRef,
+        private _generalActions: GeneralActions
+    ) {
+        this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
+        this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(s => s.inventory.activeGroup), takeUntil(this.destroyed$));
+        this.activeStock$ = this.store.pipe(select(s => s.inventory.activeStock), takeUntil(this.destroyed$));
+        this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
+        this.isStockAddInProcess$ = this.store.pipe(select(s => s.inventory.isStockAddInProcess), takeUntil(this.destroyed$));
+        this.isStockUpdateInProcess$ = this.store.pipe(select(s => s.inventory.isStockUpdateInProcess), takeUntil(this.destroyed$));
+        this.isStockDeleteInProcess$ = this.store.pipe(select(s => s.inventory.isStockDeleteInProcess), takeUntil(this.destroyed$));
+        this.showLoadingForStockEditInProcess$ = this.store.pipe(select(s => s.inventory.showLoadingForStockEditInProcess), takeUntil(this.destroyed$));
+        this.createGroupSuccess$ = this.store.pipe(select(s => s.inventory.createGroupSuccess), takeUntil(this.destroyed$));
+        this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
-        this.companyTaxesList$ = this.store.select(p => p.company.taxes).pipe(takeUntil(this.destroyed$));
-        this.invoiceSetting$ = this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$));
+        this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
 
-        this.store.select(state => state.inventory.stockUnits).pipe(takeUntil(this.destroyed$)).subscribe(p => {
+        this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
                 let units = p;
                 let unitArr = units.map(unit => {
@@ -161,7 +165,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             }
         });
 
-        this.stockListDropDown$ = this.store.select(p => {
+        this.stockListDropDown$ = this.store.pipe(select(p => {
             if (p.inventory.stocksList) {
                 if (p.inventory.stocksList.results) {
                     let units = p.inventory.stocksList.results;
@@ -171,7 +175,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                     });
                 }
             }
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
 
         // add stock form
         this.addStockForm = this._fb.group({
@@ -216,7 +220,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.taxTempArray = [];
 
         // subscribe isFsStock for disabling manufacturingDetails
-        this.addStockForm.controls['isFsStock'].valueChanges.subscribe((v) => {
+        this.addStockForm.controls['isFsStock'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((v) => {
             const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
             if (v) {
                 manufacturingDetailsContorl.enable();
@@ -226,7 +230,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
 
         // subscribe enablePurchase checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enablePurchase'].valueChanges.subscribe((a) => {
+        this.addStockForm.controls['enablePurchase'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
             if (a) {
                 purchaseUnitRatesControls.enable();
@@ -236,7 +240,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
 
         // subscribe enableSales checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enableSales'].valueChanges.subscribe((a) => {
+        this.addStockForm.controls['enableSales'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
             if (a) {
                 saleUnitRatesControls.enable();
@@ -246,7 +250,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
 
         // get purchase accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['purchases'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -257,7 +261,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
 
         // get sales accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['sales'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let salesAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -373,7 +377,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             if (s) {
                 this.resetStockForm();
                 this.addStockForm.get('taxes').patchValue('');
-                this.store.dispatch(this._generalActions.getFlattenAccount());
                 this.store.dispatch(this.inventoryAction.resetCreateStockFlags());
                 this.closeAsidePane();
             }
@@ -403,12 +406,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.manageInProcess$.subscribe(s => {
             if (!s.isOpen) {
                 this.addStockForm.reset();
-            }
-        });
-
-        this.invoiceSetting$.subscribe(a => {
-            if (a && a.companyInventorySettings) {
-                this.isManageInventory$ = of(a.companyInventorySettings.manageInventory);
             }
         });
     }
@@ -734,7 +731,9 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public submit() {
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
-        uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        if(uniqueName.value) {
+            uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        }
         this.addStockForm.get('uniqueName').enable();
 
         let formObj = _.cloneDeep(this.addStockForm.value);

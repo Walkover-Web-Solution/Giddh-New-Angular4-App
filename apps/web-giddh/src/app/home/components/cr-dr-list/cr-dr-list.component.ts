@@ -3,13 +3,12 @@ import { Observable, ReplaySubject, of } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
-import { take, takeUntil } from "rxjs/operators";
-import { createSelector } from "reselect";
+import { takeUntil } from "rxjs/operators";
 import * as moment from 'moment/moment';
-import { CompanyResponse } from "../../../models/api-models/Company";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
     selector: 'cr-dr-list',
@@ -34,7 +33,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public moment = moment;
     public toDate: string;
     public fromDate: string;
@@ -42,8 +41,6 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public drAccounts: any[] = [];
     public showRecords: number = 5;
     public dueDate: any;
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any = {};
     /* This will store the dates returned by api */
     public apiFromDate: string;
@@ -59,29 +56,14 @@ export class CrDrComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private _contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService,
-        private generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.companies$ = this.store.pipe(select(p => p.session.companies), takeUntil(this.destroyed$));
+    constructor(private store: Store<AppState>, private _contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
     }
 
     public ngOnInit() {
-
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
-            }
-        });
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                // this.datePickerOptions = {
-                //     ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                //     endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
-                //     chosenLabel: universalDate[2]
-                // };
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -93,15 +75,9 @@ export class CrDrComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.activeCompany = activeCompany;
-                    }
-                });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
             }
         });
     }
@@ -127,12 +103,6 @@ export class CrDrComponent implements OnInit, OnDestroy {
 
                     this.apiFromDate = this.apiFromDate.split("-").reverse().join("-");
                     this.apiToDate = this.apiToDate.split("-").reverse().join("-");
-
-                    // this.datePickerOptions = {
-                    //     ...this.datePickerOptions, startDate: moment(this.apiFromDate, GIDDH_DATE_FORMAT).toDate(),
-                    //     endDate: moment(this.apiToDate, GIDDH_DATE_FORMAT).toDate(),
-                    //     chosenLabel: "Custom range"
-                    // };
 
                     this.selectedDateRange = { startDate: moment(this.apiFromDate), endDate: moment(this.apiToDate) };
                     this.selectedDateRangeUi = moment(this.apiFromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.apiToDate).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -204,7 +174,11 @@ export class CrDrComponent implements OnInit, OnDestroy {
     * @param {*} value
     * @memberof ProfitLossComponent
     */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

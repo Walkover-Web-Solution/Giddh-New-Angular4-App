@@ -43,6 +43,7 @@ export class ExpenseService {
         let url = this.createQueryString(this.config.apiUrl + EXPENSE_API.GET, {
             page: request.page, count: request.count, sort: request.sort, sortBy: request.sortBy
         });
+
         return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
             map((res) => {
                 let data: BaseResponse<PettyCashReportResponse, any> = res;
@@ -82,10 +83,10 @@ export class ExpenseService {
     private createQueryString(str, model) {
         let url = str + '?';
         if ((model.page)) {
-            url = url + 'page=' + model.page + '&';
+            url = url + 'page=' + model.page;
         }
         if ((model.count)) {
-            url = url + 'count=' + model.count;
+            url = url + '&count=' + model.count;
         }
 
         if ((model.type)) {

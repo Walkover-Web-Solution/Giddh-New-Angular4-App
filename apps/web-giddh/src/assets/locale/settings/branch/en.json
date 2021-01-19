@@ -6,6 +6,7 @@
     "total_sales" : "Total Sales",
     "total_expenses" : "Total Expenses",
     "total_taxes" : "Total Taxes",
+    "action": "Action",
     "contact" : "Contact",
     "address" : "Address",
     "add_branch_under" : "Add branch under",
@@ -16,5 +17,14 @@
     "select_branch" : "Select Branch",
     "selected" : "selected",
     "table_view" : "Table View",
-    "card_view" : "Card View"
+    "card_view" : "Card View",
+    "clear_filter": "Clear Filter",
+    "search_branch": "Search Branch",
+    "reset_search": "Reset Search",
+    "create_branch": "Create Branch",
+    "branch_not_found": "No branch found within given criteria.",
+    "edit_branch": "Edit",
+    "parent_entity": "Parent Entity",
+    "linked_addresses": "Linked Address:",
+    "linked_warehouse": "Linked Warehouse:"
 }

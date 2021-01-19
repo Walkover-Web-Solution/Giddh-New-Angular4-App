@@ -1,8 +1,7 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { CompanyResponse } from '../../../models/api-models/Company';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -23,8 +22,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public requestInFlight: boolean = false;
     public revenueChart: typeof Highcharts = Highcharts;
     public chartOptions: Highcharts.Options;
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public revenueGraphTypes: any[] = [];
     public activeGraphType: any;
     public graphParams: any = {
@@ -55,9 +52,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private _generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
         this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(moment(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
 
@@ -73,15 +67,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.activeCompany = activeCompany;
-                    }
-                });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
             }
         });
     }
@@ -102,7 +90,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
                         this.graphParams.type = this.activeGraphType['type'];
                     }
-                    this.revenueGraphTypes.push({ uniqueName: res[key].uniqueName, type: res[key].type });
+                    this.revenueGraphTypes.push({ uniqueName: res[key].uniqueName, type: res[key].type, displayName: res[key].displayName });
                 });
 
                 this.getRevenueGraphData();

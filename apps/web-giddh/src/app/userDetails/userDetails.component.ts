@@ -21,6 +21,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { CurrentPage } from '../models/api-models/Common';
 import { API_POSTMAN_DOC_URL } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 @Component({
     selector: 'user-details',
@@ -80,7 +81,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(private store: Store<AppState>,
         private _toasty: ToasterService,
-        private _loginAction: LoginActions,
         private _loginService: AuthenticationService,
         private loginAction: LoginActions,
         private _companyService: CompanyService,
@@ -89,29 +89,31 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private _sessionAction: SessionActions,
         public _route: ActivatedRoute,
         private breakPointObservar: BreakpointObserver,
-        private generalActions: GeneralActions) {
-        this.contactNo$ = this.store.select(s => {
+        private generalActions: GeneralActions, private settingsProfileActions: SettingsProfileActions) {
+        this.contactNo$ = this.store.pipe(select(s => {
             if (s.session.user) {
                 return s.session.user.user.contactNo;
             }
-        }).pipe(takeUntil(this.destroyed$));
-        this.countryCode$ = this.store.select(s => {
+        }), takeUntil(this.destroyed$));
+        this.countryCode$ = this.store.pipe(select(s => {
             if (s.session.user) {
                 return s.session.user.countryCode;
             }
-        }).pipe(takeUntil(this.destroyed$));
-        this.isAddNewMobileNoInProcess$ = this.store.select(s => s.login.isAddNewMobileNoInProcess).pipe(takeUntil(this.destroyed$));
-        this.isAddNewMobileNoSuccess$ = this.store.select(s => s.login.isAddNewMobileNoSuccess).pipe(takeUntil(this.destroyed$));
-        this.isVerifyAddNewMobileNoInProcess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoInProcess).pipe(takeUntil(this.destroyed$));
-        this.isVerifyAddNewMobileNoSuccess$ = this.store.select(s => s.login.isVerifyAddNewMobileNoSuccess).pipe(takeUntil(this.destroyed$));
-        this.userSessionResponse$ = this.store.select(s => s.userLoggedInSessions.Usersession).pipe(takeUntil(this.destroyed$));
-        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
+        /** To reset isUpdateCompanyInProgress in case of subscription module */
+        this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
+        this.isAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.userSessionResponse$ = this.store.pipe(select(s => s.userLoggedInSessions.Usersession), takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
 
-        this.authenticateTwoWay$ = this.store.select(s => {
+        this.authenticateTwoWay$ = this.store.pipe(select(s => {
             if (s.session.user) {
                 return s.session.user.user.authenticateTwoWay;
             }
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -180,24 +182,21 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 this._toasty.errorToast(a.message, a.status);
             }
         });
-        this.store.select(s => s.subscriptions.companies)
-            .pipe(takeUntil(this.destroyed$))
+        this.store.pipe(select(s => s.subscriptions.companies), takeUntil(this.destroyed$))
             .subscribe(s => this.companies = s);
-        this.store.select(s => s.subscriptions.companyTransactions)
-            .pipe(takeUntil(this.destroyed$))
+        this.store.pipe(select(s => s.subscriptions.companyTransactions), takeUntil(this.destroyed$))
             .subscribe(s => this.companyTransactions = s);
-        this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
-            let companyUniqueName: string;
-            if (session.companyUniqueName) {
-                companyUniqueName = cloneDeep(session.companyUniqueName);
+
+        this.store.pipe(select(s => s.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
+            if (user) {
+                this.user = cloneDeep(user.user);
+                this.userSessionId = _.cloneDeep(user.session.id);
             }
-            if (session.companies && session.companies.length) {
-                let companies = cloneDeep(session.companies);
-                this.selectedCompany = companies.find((company) => company.uniqueName === companyUniqueName);
-            }
-            if (session.user) {
-                this.user = cloneDeep(session.user.user);
-                this.userSessionId = _.cloneDeep(session.user.session.id);
+        });
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.selectedCompany = activeCompany;
             }
         });
 
@@ -224,6 +223,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.selectTab(val.tabIndex);
             }
         });
+        
+        if(document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
+            document.getElementsByClassName('nav-item')[3].addEventListener('click', (event) => {
+                this.onTabChanged("subscription");
+            });
+        }
     }
 
     public addNumber(no: string) {
@@ -233,7 +238,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             const request: SignupWithMobile = new SignupWithMobile();
             request.countryCode = Number(this.countryCode) || 91;
             request.mobileNumber = this.phoneNumber;
-            this.store.dispatch(this._loginAction.AddNewMobileNo(request));
+            this.store.dispatch(this.loginAction.AddNewMobileNo(request));
         } else {
             if(this.localeData && this.localeData.mobile_number) {
                 this._toasty.errorToast(this.localeData.mobile_number.mobile_number_validation_error);
@@ -246,7 +251,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         request.countryCode = Number(this.countryCode) || 91;
         request.mobileNumber = this.phoneNumber;
         request.oneTimePassword = this.oneTimePassword;
-        this.store.dispatch(this._loginAction.VerifyAddNewMobileNo(request));
+        this.store.dispatch(this.loginAction.VerifyAddNewMobileNo(request));
     }
 
     public changeTwoWayAuth() {
@@ -270,7 +275,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public selectTab(id: number) {
-        if(this.staticTabs) {
+        if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
             this.staticTabs.tabs[id].active = true;
         }
     }

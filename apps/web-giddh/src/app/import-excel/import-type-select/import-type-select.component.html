@@ -1,5 +1,7 @@
-<div class="col-xs-12">
-    <div class="pt-2 mt-2">
+<hamburger-menu  [pageHeading]="'Import Data'"></hamburger-menu>
+<div class="row">
+<div class="col-12">
+    <div class="pd-t2 mt-2">
         <div class="text-center mr-t2 mr-b2">
             <h1 class="lead">Have data in CSV or Excel files?</h1>
             <h4>It’s easy to import from your computer</h4>
@@ -7,9 +9,9 @@
                 [routerLink]="['/pages','import', 'report', 'import-report']">Previous Imports</a>
         </div>
         <!--Buttons-->
-        <ul class="import-type mr-b2 mr-t4 pdT4">
+        <ul class="import-type mr-b2 mr-t4 pd-t4">
 
-            <li>
+            <li *ngIf="!isBranch">
                 <a class="text-link-2" [routerLink]="['/pages','import','group']">
                     <img src="assets/images/new/group-import.svg" />
                     <h2>Groups</h2>
@@ -17,28 +19,28 @@
 
             </li>
 
-            <li>
+            <li *ngIf="!isBranch">
                 <a class="text-link-2" [routerLink]="['/pages','import','account']">
                     <img src="assets/images/new/acc-import.svg" />
                     <h2>Accounts</h2>
                 </a>
             </li>
 
-            <li>
+            <li *ngIf="!isBranch">
                 <a class="text-link-2" [routerLink]="['/pages','import','stock']">
                     <img src="assets/images/new/Inventory-13.svg" />
                     <h2>Inventory</h2>
                 </a>
             </li>
 
-            <li>
+            <li *ngIf="isBranch || branches?.length === 1">
                 <a class="text-link-2" [routerLink]="['/pages','import','entries']">
                     <img src="assets/images/new/entries-import.svg" />
                     <h2>Entries</h2>
                 </a>
             </li>
 
-            <li>
+            <li *ngIf="!isBranch">
                 <a class="text-link-2" [routerLink]="['/pages','import','trial-balance']">
                     <img src="assets/images/new/tb-import.svg" />
                     <h2>Trial Balance</h2>
@@ -48,4 +50,5 @@
 
         </ul>
     </div>
+</div>
 </div>

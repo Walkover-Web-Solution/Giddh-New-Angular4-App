@@ -1,0 +1,140 @@
+@import "../../../../../../assets/css/color.scss";
+
+.swatch ul {
+    max-width: 260px;
+}
+
+.swatch ul li,
+.template-view li {
+    cursor: pointer;
+}
+
+.swatch ul li:nth-child(1) {
+    background: $silver;
+}
+
+.swatch ul li:nth-child(2) {
+    background: $dark-gray;
+}
+
+.swatch ul li:nth-child(3) {
+    background: $black;
+}
+
+.swatch ul li:nth-child(4) {
+    background: $cinnabar-orange;
+}
+
+.swatch ul li:nth-child(5) {
+    background: $grayish-blue;
+}
+
+.swatch ul li:nth-child(6) {
+    background: $charcoal;
+}
+
+.swatch ul li:nth-child(7) {
+    background: $bud-green;
+}
+
+.swatch ul li:nth-child(8) {
+    background: $eastern-blue;
+}
+
+.swatch ul li:nth-child(9) {
+    background: $cloud-burst;
+}
+
+.swatch ul li:nth-child(10) {
+    background: $atlantis;
+}
+
+.swatch ul li:nth-child(11) {
+    background: $green;
+}
+
+.swatch ul li:nth-child(12) {
+    background: $sherpa-blue;
+}
+
+.swatch ul li:nth-child(13) {
+    background: $bright-yellow;
+}
+
+.swatch ul li:nth-child(14) {
+    background: $burgundy;
+}
+
+.swatch ul li:nth-child(15) {
+    background: $dull-pink;
+}
+
+.swatch ul li:nth-child(16) {
+    background: $bright-pink;
+}
+
+.swatch ul li:nth-child(17) {
+    background: $deep-pink;
+}
+
+.swatch ul li:nth-child(18) {
+    background: $dark-magenta;
+}
+
+.upload-button {
+    width: 100px !important;
+    background: $white;
+    display: table-cell;
+    text-align: center;
+    height: 100px;
+    vertical-align: middle;
+    border: 4px dashed $nobel;
+    cursor: pointer;
+}
+
+.upload-button input[type="file"] {
+    display: none;
+}
+
+.start-upload-btn {
+    float: right;
+    position: relative;
+    transform: translateY(100%);
+    margin-left: 20px;
+}
+
+.logo-tool {
+    float: left;
+}
+
+.logo-tool ul li {
+    margin-right: 5px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.swatch {
+    float: left;
+    margin-bottom: 20px;
+}
+
+.font-selector .form-control {
+    margin: 0 !important;
+}
+
+#logoImage {
+    padding: 4px;
+}
+
+
+
+@media (min-width:1024px) and (max-width:1266px){
+    .start-upload-btn {
+        float: none;
+        position: relative;
+        transform: none;
+        margin-left: 0px;
+        top: 115px;
+        left: -100px;
+    }
+}

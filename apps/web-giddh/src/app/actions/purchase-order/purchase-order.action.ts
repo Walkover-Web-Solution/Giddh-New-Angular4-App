@@ -15,4 +15,15 @@ export class PurchaseOrderActions {
     public setPurchaseOrderFilters(model: any): CustomActions {
         return { type: PURCHASE_ORDER_ACTIONS.SET_FILTERS, payload: model };
     }
+
+    /**
+     * This will set the purchase order preview search
+     *
+     * @param {*} model
+     * @returns {CustomActions}
+     * @memberof PurchaseOrderActions
+     */
+    public serPurchaseOrderPreviewSearch(model: any): CustomActions {
+        return { type: PURCHASE_ORDER_ACTIONS.PO_PREVIEW_SEARCH, payload: model };
+    }
 }

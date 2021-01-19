@@ -17,6 +17,8 @@ import { ReplaySubject } from 'rxjs';
 import { DbService } from '../services/db.service';
 import { NAVIGATION_ITEM_LIST } from '../models/defaultMenus';
 import { find } from '../lodash-optimized';
+import { OrganizationType } from '../models/user-login-state';
+import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     selector: 'all-modules',
@@ -50,38 +52,23 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @memberof AllModulesComponent
      */
     public ngOnInit(): void {
-        // commenting for later use if required
-        // this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
-        //     companies = companies || [];
-        //     this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompanyForDb = new CompAidataModel();
+                this.activeCompanyForDb.name = activeCompany.name;
+                this.activeCompanyForDb.uniqueName = activeCompany.uniqueName;
 
-        //     if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
-        //         this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
-        //     }
-        // });
-        this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (!companies) {
-                return;
+                // if(activeCompany && activeCompany.createdBy && activeCompany.createdBy.email) {
+                //     this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(activeCompany.createdBy.email);
+                // }
             }
-            if (companies.length === 0) {
-                return;
-            }
-            let selectedCmp = companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === this.generalService.companyUniqueName;
-                } else {
-                    return false;
-                }
-            });
-            if (!selectedCmp) {
-                return;
-            }
-            this.activeCompanyForDb = new CompAidataModel();
-            this.activeCompanyForDb.name = selectedCmp.name;
-            this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
         });
 
         this.getSharedAllModules();
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "All Modules";
+        currentPageObj.url = "";
+        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 
     /**
@@ -115,11 +102,11 @@ export class AllModulesComponent implements OnInit, OnDestroy {
         let viewContainerRef = this.addmanage.viewContainerRef;
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.subscribe((a) => {
+        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideManageGroupsModal();
             viewContainerRef.remove();
         });
-        this.manageGroupsAccountsModal.onShown.subscribe((a => {
+        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
             (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
             (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
         }));
@@ -131,7 +118,7 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @memberof AllModulesComponent
      */
     public hideManageGroupsModal(): void {
-        this.store.select(company => company.session.lastState).pipe(take(1)).subscribe((state: string) => {
+        this.store.pipe(select(company => company.session.lastState), take(1)).subscribe((state: string) => {
             if (state && (state.indexOf('ledger/') > -1 || state.indexOf('settings') > -1)) {
                 this.store.dispatch(this.generalActions.addAndManageClosed());
             }
@@ -265,7 +252,12 @@ export class AllModulesComponent implements OnInit, OnDestroy {
     private doEntryInDb(entity: string, item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null): void {
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen);
+            let branches = [];
+            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+                branches = response || [];
+            });
+            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
+                this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
         }
     }
 }

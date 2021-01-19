@@ -9,8 +9,8 @@
                 </div>
                 <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
                 <div class="aside-pane-form">
-                    <section class="form_body witBg clearfix mrBChldLbl">
-                        <div class="form_bg clearfix">
+                    <section class="form-body white-bg clearfix margin-child-label">
+                        <div class="clearfix">
                             <div class="row">
                                 <div class="form-group col-5 col-sm-5">
                                     <label>Under Group</label>
@@ -51,11 +51,11 @@
                             <!-- other details -->
                             <div class="row">
                                 <div class="col-12 col-sm-12">
-                                    <div class="form-group toggle-btn mrB"
+                                    <div class="form-group toggle-btn mr-b05"
                                         (click)="showOtherDetails = !showOtherDetails">
                                         <label class="cp">
-                                            <i class="fa cp" aria-hidden="true"
-                                                [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other
+                                            <i class="cp collapse-icons" aria-hidden="true"
+                                                [ngClass]="{'icon-minus': showOtherDetails, 'icon-plus': !showOtherDetails}"></i>Other
                                             Details
                                         </label>
                                     </div>
@@ -74,7 +74,7 @@
                                     </div>
 
 
-                                    <div class="form-group col-4 col-sm-4" [hidden]="!(isManageInventory$ | async)">
+                                    <div class="form-group col-4 col-sm-4">
                                         <label>HSN Code</label>
                                         <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
                                             formControlName="hsnNumber" />
@@ -156,7 +156,7 @@
                                 </div>
 
                                 <div class="row sku-row">
-                                    <div class="form-group col-4 col-sm-4" [hidden]="(isManageInventory$ | async)">
+                                    <div class="form-group col-4 col-sm-4">
                                         <label>SAC Code</label>
                                         <input type="text" class="form-control" maxlength="10" decimalDigitsDirective
                                             formControlName="sacNumber" />
@@ -231,8 +231,7 @@
 
                             </ng-container>
                         </div>
-
-                        <div class="pdL pdR pdT row">
+                        <div class="pd-l05 pd-r05 pd-t05 row">
                             <div class="col-6 col-sm-6">
                                 <div class="checkbox">
                                     <label class="" for="enablePurchase">
@@ -280,10 +279,10 @@
                                                     [DecimalPlaces]="4" formControlName="rate"
                                                     (blur)="enableSales.focus()" #purchaseRate />
                                             </div>
-                                            <div class="pull-right unit_add">
-                                                <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add_row"></i></button>
+                                            <div class="pull-right unit-add">
+                                                <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
                                                 <button class="btn-link btn" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i
-                                                        class="icon-cross dlet"></i></button>
+                                                        class="icon-cross delete"></i></button>
                                             </div>
                                         </div>
 
@@ -338,10 +337,10 @@
                                                     [DecimalPlaces]="4" formControlName="rate"
                                                     (blur)="isFsStock.focus()" #salesRate />
                                             </div>
-                                            <div class="pull-right unit_add">
-                                                <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add_row"></i></button>
+                                            <div class="pull-right unit-add">
+                                                <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add-row"></i></button>
                                                 <button class="btn-link btn mr-0" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i
-                                                        class="icon-cross dlet"></i></button>
+                                                        class="icon-cross delete"></i></button>
                                             </div>
                                         </div>
 
@@ -352,11 +351,11 @@
                         </div>
 
 
-                        <div class="mr-t1 pdL pdR row">
+                        <div class="mr-t1 pd-l05 pd-r05 row">
                             <div class="col-12 col-sm-12">
                                 <div class="checkbox">
                                     <label class="" for="isFsStock">
-                                        <input type="checkbox" class="focusBorder" formControlName="isFsStock"
+                                        <input #isFsStock type="checkbox" class="focusBorder" formControlName="isFsStock"
                                             id="isFsStock" #isFinishedStock [disabled]="" name="isFsStock"
                                             (change)="showManufacturingQuantitySection()"> Is
                                         it a finished stock? (Manufacturing/Combo)</label>
@@ -365,11 +364,11 @@
                         </div>
 
 
-                        <section class="mr-t2 mrB3 col-12 col-sm-12 row" *ngIf="addStockForm.value.isFsStock">
-                            <div class="pdL pdR">
-                                <h1 class="section-head bdrB"><strong>{{addStockForm.controls['name'].value}} (Made
+                        <section class="mr-t2 mr-b3 col-12 col-sm-12 row" *ngIf="addStockForm.value.isFsStock">
+                            <div class="pd-l05 pd-r05">
+                                <h1 class="section-head bd-rb"><strong>{{addStockForm.controls['name'].value}} (Made
                                         with)</strong></h1>
-                                <table class="noHover  width100">
+                                <table class="no-hover  width100">
                                     <tbody formGroupName="manufacturingDetails">
                                         <tr class="output_row">
                                             <td class="form-group">
@@ -397,7 +396,7 @@
                                             </td>
                                             <!-- <td colspan="1">&nbsp;</td> -->
                                         </tr>
-                                        <tr class="noHover  table_label" style="border-color:#ccc;">
+                                        <tr class="no-hover  table_label" style="border-color:#ccc;">
                                             <td [style.width.px]="200"><strong>Input Stock Name</strong></td>
                                             <td><strong>Stock Qty</strong></td>
                                             <td><strong>Stock Unit</strong></td>
@@ -432,9 +431,9 @@
                                                 <td>
                                                     <button class="btn-link btn mr-0" (click)="addItemInLinkedStocks(list, i, i)"
                                                         *ngIf="l" [disabled]="disableStockButton"><i
-                                                            class="icon-plus add_row"></i></button>
+                                                            class="icon-plus add-row"></i></button>
                                                     <button class="btn-link" (click)="removeItemInLinkedStocks(i)"
-                                                        *ngIf="!l"><i class="icon-cross dlet"></i></button>
+                                                        *ngIf="!l"><i class="icon-cross delete"></i></button>
                                                 </td>
                                             </tr>
                                         </ng-container>
@@ -444,7 +443,7 @@
                         </section>
 
                         <div class="col-12 col-sm-12 text-left">
-                            <div class="mr-t1 pdL pdR row">
+                            <div class="mr-t1 pd-l05 pd-r05 row">
 
                                 <button type="submit" *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success"

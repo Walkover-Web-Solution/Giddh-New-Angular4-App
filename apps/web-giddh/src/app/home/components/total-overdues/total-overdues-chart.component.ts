@@ -1,4 +1,4 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -12,6 +12,7 @@ import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/cu
 import * as _ from "../../../lodash-optimized";
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
     selector: 'toal-overdues-chart',
@@ -30,7 +31,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /* Selected range label */
@@ -41,8 +42,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public toDate: string;
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
-    public companies$: Observable<CompanyResponse[]>;
-    public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
     public totaloverDueChart: typeof Highcharts = Highcharts;
     public chartOptions: Highcharts.Options;
@@ -65,26 +64,19 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
-        this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
-        this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.companies$.subscribe(c => {
-            if (c) {
-                let activeCompany: CompanyResponse;
-                this.activeCompanyUniqueName$.pipe(take(1)).subscribe(a => {
-                    activeCompany = c.find(p => p.uniqueName === a);
-                    if (activeCompany) {
-                        this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
-                        this.amountSettings.balanceDecimalPlaces = activeCompany.balanceDecimalPlaces;
-                    }
-                });
-            }
-        });
         // img path
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+                this.amountSettings.balanceDecimalPlaces = activeCompany.balanceDecimalPlaces;
+            }
+        });
 
         // listen for universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
@@ -92,12 +84,6 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                 let dates = [];
                 dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
                 this.getFilterDate(dates);
-            }
-        });
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
             }
         });
 
@@ -297,7 +283,11 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
        * @param {*} value
        * @memberof TotalOverduesChartComponent
        */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

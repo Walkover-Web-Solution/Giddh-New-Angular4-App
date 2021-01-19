@@ -5,3 +5,7 @@
 .push-gstin .nav.nav-tabs > li:last-child {
     float: right;
 }
+.tax-engine .transactions-list .filter-band .back-button svg.back-button-icon{
+    position: relative;
+    top: 3px;
+}

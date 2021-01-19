@@ -1,5 +1,5 @@
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -12,8 +12,12 @@ import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.a
 import { createSelector } from 'reselect';
 import { Observable, ReplaySubject } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { GeneralService } from '../../../services/general.service';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
     selector: 'tb-pl-bs-filter',  // <home></home>
@@ -21,7 +25,8 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
     styleUrls: [`./tb-pl-bs-filter.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
+
+export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
     public selectedDateOption: string = '0';
     public filterForm: FormGroup;
@@ -30,46 +35,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     public accountSearchControl: FormControl = new FormControl();
     public tags$: Observable<TagRequest[]>;
     public selectedTag: string;
-    public datePickerOptions: any = {
-        hideOnEsc: true,
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
-            ],
-            'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
-            ],
-            'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
-            ],
-            'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
-            ],
-            'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
-            ],
-            'This Financial Year to Date': [
-                moment().startOf('year'),
-                moment()
-            ]
-        },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
-    };
     @Input() public tbExportPdf: boolean = false;
     @Input() public tbExportXLS: boolean = false;
     @Input() public tbExportCsv: boolean = false;
@@ -90,6 +55,14 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     public dateOptions: IOption[] = [{label: 'Date Range', value: '1'}, {label: 'Financial Year', value: '0'}];
     public imgPath: string;
     public universalDateICurrent: boolean = false;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
 
     @Input() public showLoader: boolean = true;
 
@@ -99,18 +72,44 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
     public universalDate$: Observable<any>;
     public newTagForm: FormGroup;
+     /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Moment object */
+    public moment = moment;
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private _selectedCompany: CompanyResponse;
 
     constructor(private fb: FormBuilder,
                 private cd: ChangeDetectorRef,
                 private store: Store<AppState>,
-                private _settingsTagActions: SettingsTagActions) {
+                private _settingsTagActions: SettingsTagActions,
+                private generalService: GeneralService,
+                private modalService: BsModalService,
+                private settingsBranchAction: SettingsBranchActions) {
         this.filterForm = this.fb.group({
             from: [''],
             to: [''],
             fy: [''],
             selectedDateOption: ['1'],
+            branchUniqueName: [],
             selectedFinancialYearOption: [''],
             refresh: [false],
             tagName: ['']
@@ -122,8 +121,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         this.store.dispatch(this._settingsTagActions.GetALLTags());
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
-
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     public get selectedCompany() {
@@ -142,13 +140,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
-            this.datePickerOptions = {
-                ...this.datePickerOptions, startDate: moment(value.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY'),
-                endDate: moment(value.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY')
-            };
-
-            // this.assignStartAndEndDateForDateRangePicker(value.activeFinancialYear.financialYearStarts, value.activeFinancialYear.financialYearEnds);
-
             this.filterForm.patchValue({
                 to: value.activeFinancialYear.financialYearEnds,
                 from: value.activeFinancialYear.financialYearStarts,
@@ -157,28 +148,21 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        // if (changes['needToReCalculate']) {
-        //   this.calculateTotal();
-        // }
-    }
-
     public ngOnInit() {
 
         this.imgPath = (isElectron|| isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
-        //
         if (!this.showLabels) {
             this.filterForm.patchValue({selectedDateOption: '0'});
         }
         this.accountSearchControl.valueChanges.pipe(
-            debounceTime(700))
+            debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
                 this.search = newValue;
                 this.seachChange.emit(this.search);
                 this.cd.detectChanges();
             });
 
-        this.tags$ = this.store.select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
+        this.tags$ = this.store.pipe(select(createSelector([(state: AppState) => state.settings.tags], (tags) => {
             if (tags && tags.length) {
                 _.map(tags, (tag) => {
                     tag.value = tag.name;
@@ -186,7 +170,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 });
                 return _.orderBy(tags, 'name');
             }
-        })).pipe(takeUntil(this.destroyed$));
+        })), takeUntil(this.destroyed$));
 
         this.universalDate$.subscribe((a) => {
             if (a) {
@@ -196,14 +180,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                     this.setCurrentFY();
                 } else {
                     this.universalDateICurrent = false;
-                    this.datePickerOptions = { ...this.datePickerOptions, startDate: date[0], endDate: date[1], chosenLabel: date[2] };
-
                     // assign dates
                     // this.assignStartAndEndDateForDateRangePicker(date[0], date[1]);
 
                     this.filterForm.patchValue({
-                        from: moment(a[0]).format('DD-MM-YYYY'),
-                        to: moment(a[1]).format('DD-MM-YYYY')
+                        from: moment(a[0]).format(GIDDH_DATE_FORMAT),
+                        to: moment(a[1]).format(GIDDH_DATE_FORMAT)
                     });
                 }
 
@@ -217,40 +199,80 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 if (!this.cd['destroyed']) {
                     this.cd.detectChanges();
                 }
+                /** To set local datepicker */
+                let universalDate = _.cloneDeep(a);
+                this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
+                this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.filterData();
             }
         });
-
+        this.store.pipe(
+            select(state => state.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                    this.filterForm.get('branchUniqueName').setValue(this.currentBranch.uniqueName);
+                    this.filterForm.updateValueAndValidity();
+                    this.cd.detectChanges();
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
     }
 
     public setCurrentFY() {
         // set financial years based on company financial year
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-
-            return companies.find(cmp => {
-                if (cmp && cmp.uniqueName) {
-                    return cmp.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
-            if (selectedCmp && this.universalDateICurrent) {
-                let activeFinancialYear = selectedCmp.activeFinancialYear;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany && this.universalDateICurrent) {
+                let activeFinancialYear = activeCompany.activeFinancialYear;
                 if (activeFinancialYear) {
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions,
-                        startDate: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'), endDate: moment(), chosenLabel: undefined
-                    };
+                    // commented for later use
+                    // this.datePickerOptions = {
+                    //     ...this.datePickerOptions,
+                    //     startDate: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day'), endDate: moment(), chosenLabel: undefined
+                    // };
 
                     // assign dates
-                    // this.assignStartAndEndDateForDateRangePicker(activeFinancialYear.financialYearStarts, null);
                     this.filterForm.patchValue({
-                        from: moment(activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day').format('DD-MM-YYYY'),
-                        to: moment().format('DD-MM-YYYY')
+                        from: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day').format(GIDDH_DATE_FORMAT),
+                        to: moment().format(GIDDH_DATE_FORMAT)
                     });
                 }
             }
@@ -258,7 +280,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnDestroy() {
-        //
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public selectDateOption(v: IOption) {
@@ -266,8 +289,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectedDate(value: any) {
-        this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format('DD-MM-YYYY'));
-        this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format('DD-MM-YYYY'));
+        this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format(GIDDH_DATE_FORMAT));
+        this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format(GIDDH_DATE_FORMAT));
         this.filterData();
     }
 
@@ -351,11 +374,25 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 this.selectFinancialYearOption(this.financialOptions[0]);
             } else {
                 this.filterForm.patchValue({
-                    from: moment(this.datePickerOptions.startDate).format('DD-MM-YYYY'),
-                    to: moment(this.datePickerOptions.endDate).format('DD-MM-YYYY')
+                    from: moment(this.datePickerOption.startDate).format(GIDDH_DATE_FORMAT),
+                    to: moment(this.datePickerOption.endDate).format(GIDDH_DATE_FORMAT)
                 });
             }
         }
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof TbPlBsFilterComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.expand = false;
+        setTimeout(() => {
+            this.expandAll.emit(this.expand);
+        }, 10);
+        this.onPropertyChanged.emit(this.filterForm.value);
     }
 
     /**
@@ -370,5 +407,58 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
             startDate: moment(from, GIDDH_DATE_FORMAT),
             endDate: moment(to, GIDDH_DATE_FORMAT)
         });
+    }
+
+    /**
+     * To show the datepicker
+     *
+     * @param {*} element
+     * @memberof TbPlBsFilterComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof TbPlBsFilterComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof TbPlBsFilterComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.filterForm.controls['from'].setValue(this.fromDate);
+            this.filterForm.controls['to'].setValue(this.toDate);
+            this.filterData();
+        }
     }
 }

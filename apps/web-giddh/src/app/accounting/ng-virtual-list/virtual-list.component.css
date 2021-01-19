@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 :host {
     display: block;
     position: relative;
@@ -107,11 +109,11 @@ i.close.icon.clear:hover::after {
     line-height: 30px;
     border-radius: 4px;
     background-color: #f4f5f8;
-    margin: 0px 0 4px 4px;
+    margin: 8px 0 5px 8px;
     /* color: white; */
 }
 
-.chipClosebtn {
+.chip-close-btn {
     padding-left: 10px;
     font-weight: 500;
     float: right;
@@ -120,7 +122,7 @@ i.close.icon.clear:hover::after {
     opacity: 0.6;
 }
 
-.chipClosebtn:hover {
+.chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
     color: black;

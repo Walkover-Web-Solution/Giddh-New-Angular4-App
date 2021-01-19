@@ -1,18 +1,18 @@
 import { take } from 'rxjs/operators';
-import { Component, DoCheck, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { ISection } from '../../../../../models/api-models/Invoice';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { EditFiltersContainersComponent } from '../../filters-container/edit.filters.component';
 
 @Component({
     selector: 'invoice-template-modal',
     templateUrl: './template-modal.component.html',
-    styleUrls: ['./template-modal.component.css']
+    styleUrls: ['./template-modal.component.scss']
 })
 
-export class InvoiceTemplateModalComponent implements DoCheck, OnChanges {
+export class InvoiceTemplateModalComponent implements OnChanges {
     @Input() public templateId: string;
     @Input() public templateSections: ISection;
     @Input() public editMode: string;
@@ -27,23 +27,15 @@ export class InvoiceTemplateModalComponent implements DoCheck, OnChanges {
         let companies = null;
         let defaultTemplate = null;
 
-        this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
             companyUniqueName = ss.companyUniqueName;
             companies = ss.companies;
         });
 
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
         });
         this.invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
-    }
-
-    public ngDoCheck() {
-        // let obj = this.invoiceUiDataService.getEmailSettingObj();
-        // if (obj)  {
-        //   this.emailObject = obj;
-        //   this.isEmailTabSelected = obj.isEmailTabSelected;
-        // }
     }
 
     /**

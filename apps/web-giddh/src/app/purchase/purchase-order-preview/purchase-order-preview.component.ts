@@ -1,8 +1,8 @@
-import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { takeUntil, debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
@@ -16,6 +16,7 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
+import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -30,8 +31,10 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @Input() public companyUniqueName: any;
     /* Taking input of purchase order unique name */
     @Input() public purchaseOrderUniqueName: any;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    @Input() public isCompany: boolean;
     /* Search element */
-    @ViewChild('searchElement') public searchElement: ElementRef;
+    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
     /* Instance of PDF viewer*/
@@ -78,8 +81,10 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public pdfPreviewHasError: boolean = false;
     /** Stores the BLOB of attached document */
     private attachedDocumentBlob: Blob;
+    /** This will hold the search value */
+    public poSearch: any = "";
 
-    constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions, private invoiceActions: InvoiceActions) {
+    constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private purchaseOrderActions: PurchaseOrderActions) {
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
     }
@@ -94,18 +99,17 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
 
         if (this.purchaseOrders && this.purchaseOrders.items) {
             this.filteredData = this.purchaseOrders.items;
+
+            if(this.poSearch) {
+                this.filterPo(this.poSearch);
+            }
         }
 
-        this.store.pipe(select(state => {
-            if (!state.session.companies) {
-                return;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.selectedCompany = activeCompany;
             }
-            state.session.companies.forEach(cmp => {
-                if (cmp.uniqueName === state.session.companyUniqueName) {
-                    this.selectedCompany = cmp;
-                }
-            });
-        }), takeUntil(this.destroyed$)).subscribe();
+        });
 
         this.store.pipe(select(state => state.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -125,6 +129,23 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 }
             }
         });
+
+        this.store.pipe(select(state => state.purchaseOrder.poSearch), takeUntil(this.destroyed$)).subscribe(res => {
+            if(res) {
+                this.poSearch = res;
+                if(this.searchElement && this.searchElement.nativeElement) {
+                    this.searchElement.nativeElement.value = this.poSearch;
+                }
+            }
+        });
+
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationStart) {
+                if(!event.url.includes('/purchase-order/edit')) {
+                    this.store.dispatch(this.purchaseOrderActions.serPurchaseOrderPreviewSearch(null));
+                }
+            }
+        });
     }
 
     /**
@@ -136,6 +157,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.purchaseOrders && changes.purchaseOrders.currentValue && changes.purchaseOrders.currentValue.items) {
             this.filteredData = changes.purchaseOrders.currentValue.items;
+            if(this.poSearch) {
+                this.filterPo(this.poSearch);
+            }
         }
 
         if (changes.purchaseOrderUniqueName && changes.purchaseOrderUniqueName.currentValue && changes.purchaseOrderUniqueName.currentValue !== this.purchaseOrder.uniqueName) {
@@ -159,12 +183,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 takeUntil(this.destroyed$)
             )
             .subscribe((term => {
-                this.filteredData = this.purchaseOrders.items.filter(item => {
-                    return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
-                        item.vendor.name.toLowerCase().includes(term.toLowerCase()) ||
-                        item.voucherDate.includes(term) ||
-                        item.grandTotal.amountForAccount.toString().includes(term);
-                });
+                this.filterPo(term);
+                this.store.dispatch(this.purchaseOrderActions.serPurchaseOrderPreviewSearch(term));
             }))
     }
 
@@ -426,9 +446,11 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             if (response && response.status === "success" && response.body) {
                 let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                 this.attachedDocumentBlob = blob;
-                this.pdfViewer.pdfSrc = blob;
-                this.pdfViewer.showSpinner = true;
-                this.pdfViewer.refresh();
+                if(this.pdfViewer) {
+                    this.pdfViewer.pdfSrc = blob;
+                    this.pdfViewer.showSpinner = true;
+                    this.pdfViewer.refresh();
+                }
                 this.pdfPreviewLoaded = true;
             } else {
                 this.pdfPreviewHasError = true;
@@ -485,5 +507,21 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             printWindow.focus();
             printWindow.print();
         }
+    }
+
+    /**
+     * This will filter the purchase orders
+     *
+     * @param {*} term
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public filterPo(term): void {
+        this.poSearch = term;
+        this.filteredData = this.purchaseOrders.items.filter(item => {
+            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
+                item.vendor.name.toLowerCase().includes(term.toLowerCase()) ||
+                item.voucherDate.includes(term) ||
+                item.grandTotal.amountForAccount.toString().includes(term);
+        });
     }
 }

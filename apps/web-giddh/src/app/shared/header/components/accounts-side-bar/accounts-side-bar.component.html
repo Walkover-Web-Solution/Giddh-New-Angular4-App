@@ -1,4 +1,4 @@
-<div class="accounts-side-bar greyBg wrapAcList" ng-click="$event.stopPropagation()">
+<div class="accounts-side-bar grey-bg wrapAcList" ng-click="$event.stopPropagation()">
     <div *ngIf="flyAccounts" style="height: 100%" class="wrapAcList" id="grp_acc_wrapper">
         <div class="pd-1 wrapAcList" *ngIf="(isFlyAccountInProcess$ | async)">
             Loading Accounts...
@@ -20,26 +20,26 @@
                 <span></span>
             </div>
             <ng-container *ngIf="showAccountList && Items">
-                <!-- <ul class="ul_0 acntAccordion wrapAcList"
+                <!-- <ul class="ul_0 account-accordion wrapAcList"
                     *vsFor="Items; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
 
                     <ng-container *ngFor="let item of _items;let i = index">
 
-                        <li *ngIf="item.isGroup" class="mainLiAclist parent-Group">
+                        <li *ngIf="item.isGroup" class="main-account-list parent-Group">
                             <div class="title  LIB{{item.UniqueName}}"
                                 (click)="toggleGroup(item,i + _startIndex,$event)"
                                 [ngClass]="{'active' : item.isOpen || item.UniqueName === selectedGroupUname}">
-                                <a class="ellp max250">{{item.Name}} ({{item.UniqueName}})</a>
+                                <a class="text-ellipsis max250">{{item.Name}} ({{item.UniqueName}})</a>
                             </div>
                         </li>
                         <li *ngIf="!item.isGroup" class="inrPrnt cp accountli">
                             <a>
                                 <div class="clearfix" tooltip="{{item.UniqueName}}" container="body">
                                     <strong>
-                                        <span class="ellp max250" (click)="flyAccounts = false" *ngIf="isRouter"
+                                        <span class="text-ellipsis max250" (click)="flyAccounts = false" *ngIf="isRouter"
                                             [routerLink]="['/ledger',item.UniqueName]">{{item.Name}}
                                             ({{item.UniqueName}})</span>
-                                        <span class="ellp max250"
+                                        <span class="text-ellipsis max250"
                                             (mousedown)="flyAccounts = true;onSelectItem.emit(item)" *ngIf="!isRouter"
                                             [innerHTML]="item.Name+' ' + '(' + item.UniqueName + ')'"></span>
                                     </strong>

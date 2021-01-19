@@ -5,17 +5,11 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountRequestV2, AccountResponseV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { GroupService } from '../../services/group.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { AccountAddNewDetailsComponent } from '../../shared/header/components';
-
-const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 
 @Component({
     selector: 'aside-menu-account',
@@ -49,38 +43,31 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public updateAccountInProcess$: Observable<boolean>;
     public updateAccountIsSuccess$: Observable<boolean>;
     public deleteAccountSuccess$: Observable<boolean>;
-    public groupList$: Observable<GroupsWithAccountsResponse[]>;
     public accountDetails: any = '';
     public breadcrumbUniquePath: string[] = [];
-    private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
-        private groupService: GroupService,
         private accountsAction: AccountsAction,
         private _groupWithAccountsAction: GroupWithAccountsAction,
-        private _generalActions: GeneralActions
     ) {
         // account-add component's property
-        this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).pipe(takeUntil(this.destroyed$));
-        this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).pipe(takeUntil(this.destroyed$));
-        this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).pipe(takeUntil(this.destroyed$));
+        this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
+        this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
+        this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
 
-        this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
-        this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.virtualAccountEnable$ = this.store.select(state => state.invoice.settings).pipe(takeUntil(this.destroyed$));
-        this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).pipe(takeUntil(this.destroyed$));
-        this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.virtualAccountEnable$ = this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$));
+        this.updateAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountInProcess), takeUntil(this.destroyed$));
+        this.updateAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$));
         this.deleteAccountSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.isDeleteAccSuccess)).pipe(takeUntil(this.destroyed$));
-        this.groupList$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-        this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._generalActions.getFlattenGroupsReq());
         if (this.isUpdateAccount && this.activeAccountDetails) {
             this.accountDetails = this.activeAccountDetails;
             this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(this.activeAccountDetails.name));
@@ -114,14 +101,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map((m: any) => ({ value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups }));
-                this.flatGroupsOptions = items;
-            }
-        });
 
         this.deleteAccountSuccess$.subscribe(res => {
             if (res) {
@@ -138,9 +117,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     public isGroupSelected(event) {
         if (event) {
-            this.activeGroupUniqueName = event;
+            this.activeGroupUniqueName = event.value;
             // in case of sundrycreditors or sundrydebtors no need to show address tab
-            if (event === 'sundrycreditors' || event === 'sundrydebtors') {
+            if (event.value === 'sundrycreditors' || event.value === 'sundrydebtors') {
                 this.isDebtorCreditor = true;
             }
         }
@@ -198,7 +177,9 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 uniqueName: listItem.uniqueName
             });
             listItem = Object.assign({}, listItem, {parentGroups: []});
-            listItem.parentGroups = newParents;
+            if(listItem) {
+                listItem.parentGroups = newParents;
+            }
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(_.omit(listItem, 'groups'));

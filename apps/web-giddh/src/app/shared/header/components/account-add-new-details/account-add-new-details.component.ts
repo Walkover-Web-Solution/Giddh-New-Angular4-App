@@ -1,5 +1,4 @@
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {
     AfterViewInit,
@@ -16,14 +15,11 @@ import {
 } from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {digitsOnly} from '../../../helpers';
-import {AccountsAction} from '../../../../actions/accounts.actions';
 import {AppState} from '../../../../store';
 import {select, Store} from '@ngrx/store';
 import {AccountRequestV2, CustomFieldsData} from '../../../../models/api-models/Account';
-import {CompanyService} from '../../../../services/companyService.service';
 import {ToasterService} from '../../../../services/toaster.service';
 import {CompanyResponse, StateList, StatesRequest} from '../../../../models/api-models/Company';
-import {CompanyActions} from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import {IOption} from '../../../../theme/ng-virtual-select/sh-options.interface';
 import {ShSelectComponent} from '../../../../theme/ng-virtual-select/sh-select.component';
@@ -33,9 +29,10 @@ import {CommonActions} from '../../../../actions/common.actions';
 import {GeneralActions} from "../../../../actions/general/general.actions";
 import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
-import * as googleLibphonenumber from 'google-libphonenumber';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
+import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 @Component({
     selector: 'account-add-new-details',
@@ -56,9 +53,43 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public showBankDetail: boolean = false;
     @Input() public showVirtualAccount: boolean = false;
     @Input() public isDebtorCreditor: boolean = true;
+    /** True when this component is used in ledger, required as ledger skips the
+     * top level hierarchy groups for creation of new account
+     */
+    @Input() public isLedgerModule: boolean;
+    /** True, if new service is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isServiceCreation is true, then directly 'selectedGroupUniqueName' will be
+     * used to fetch groups
+    */
+   @Input() public isServiceCreation: boolean;
+   /** True, if new customer/vendor account is created through this component.
+    * Used to differentiate between new customer/vendor creation and service creation
+    * as they both need the groups to be shown in a particular category,
+    * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+    * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+    * 'sundrycreditors'.
+    * If a new service is created, then if the service is created in Invoice then it will have
+    * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+    * So if isCustomerCreation is true, then directly 'selectedGrpUniqueName' will be
+    * used to fetch groups
+   */
+   @Input() public isCustomerCreation: boolean;
+    /** True, if the module doesn't depend on flatten APIs */
+    @Input() public isFlattenRemoved: boolean;
+    /** True if bank category account is selected */
+    @Input() public isBankAccount: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
-    @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
+    @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
+    /** Tabs instance */
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
 
     public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public showOtherDetails: boolean = false;
@@ -66,11 +97,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public stateList: StateList[] = [];
     public states: any[] = [];
     public statesSource$: Observable<IOption[]> = observableOf([]);
-    public companiesList$: Observable<CompanyResponse[]>;
     public activeCompany: CompanyResponse;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
-    public isMultipleCurrency: boolean = false;
     public companyCurrency: string;
     public isIndia: boolean = false;
     public companyCountry: string = '';
@@ -98,20 +127,37 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public companyCustomFields: any[] = [];
     /** Observable for selected active group  */
     private activeGroup$: Observable<any>;
+    /** This will handle if we need to disable currency selection */
+    public disableCurrencySelection: boolean = false;
+    /** This will hold active parent group */
+    public activeParentGroup: string = "";
+
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
 
     constructor(
         private _fb: FormBuilder,
         private store: Store<AppState>,
-        private accountsAction: AccountsAction,
-        private _companyService: CompanyService,
         private _toaster: ToasterService,
-        private companyActions: CompanyActions,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
         private changeDetectorRef: ChangeDetectorRef,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction) {
-        this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup),takeUntil(this.destroyed$));
         this.getCountry();
@@ -136,6 +182,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }
+
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
@@ -151,7 +198,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
         this.getCompanyCustomField();
 
-        this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
+        this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
@@ -166,7 +213,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         // get country code value change
-        this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
+        this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
 
             if (a) {
                 const addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -193,7 +240,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         // get openingblance value changes
-        this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
+        this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
             if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
                 this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
@@ -205,16 +252,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
         //     }
         // });
-        this.store.pipe(select(appState => appState.session.companyUniqueName), distinctUntilChanged()).subscribe(uniqueName => {
-            if (uniqueName) {
-                this.companiesList$.pipe(take(1)).subscribe(companies => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === uniqueName);
-                    if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
-                        this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
-                    }
-                    this.companyCurrency = _.clone(this.activeCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(this.activeCompany.isMultipleCurrency);
-                });
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if(activeCompany) {
+                this.activeCompany = activeCompany;
+                if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
+                    this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
+                }
+                this.companyCurrency = _.clone(this.activeCompany.baseCurrency);
             }
         });
 
@@ -279,7 +323,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             this.isDebtorCreditor = true;
         }
-
     }
 
     public isShowBankDetails(accountType: string) {
@@ -291,32 +334,36 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public getAccount() {
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map((m: any) => ({value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups}));
-                this.flatGroupsOptions = items;
-                if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
-                    let selectedGroupDetails;
+        if (this.isLedgerModule || this.isFlattenRemoved) {
+            this.loadDefaultGroupsSuggestions();
+        } else {
+            this.flattenGroups$.subscribe(flattenGroups => {
+                if (flattenGroups) {
+                    let items: IOption[] = flattenGroups.filter(grps => {
+                        return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+                    }).map((m: any) => ({value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups}));
+                    this.flatGroupsOptions = items;
+                    if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
+                        let selectedGroupDetails;
 
-                    this.flatGroupsOptions.forEach(res => {
-                        if (res.value === this.activeGroupUniqueName) {
-                            selectedGroupDetails = res;
-                        }
-                    })
-                    if (selectedGroupDetails) {
-                        if (selectedGroupDetails.additional) {
-                            let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
-                            if (parentGroup) {
-                                this.isParentDebtorCreditor(parentGroup.uniqueName);
+                        this.flatGroupsOptions.forEach(res => {
+                            if (res.value === this.activeGroupUniqueName) {
+                                selectedGroupDetails = res;
+                            }
+                        })
+                        if (selectedGroupDetails) {
+                            if (selectedGroupDetails.additional) {
+                                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
+                                if (parentGroup) {
+                                    this.isParentDebtorCreditor(parentGroup.uniqueName);
+                                }
                             }
                         }
+                        this.toggleStateRequired();
                     }
-                    this.toggleStateRequired();
                 }
-            }
-        });
+            });
+        }
     }
 
     public setCountryByCompany(company: CompanyResponse) {
@@ -354,7 +401,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             openingBalance: [''],
             mobileNo: [''],
             mobileCode: [''],
-            email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+            email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
             description: [''],
@@ -377,7 +424,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 })
             ]),
-            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: ['',Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });
@@ -570,7 +617,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
-        if (this.stateList && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
+        if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
                 accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
@@ -649,14 +696,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public selectCountry(event: IOption) {
-        if (event) {
+        if (event && event.value) {
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
-            let currencyCode = this.countryCurrency[event.value];
-            this.addAccountForm.get('currency').setValue(currencyCode);
+            if(!this.disableCurrencyIfSundryCreditor()) {
+                let currencyCode = this.countryCurrency[event.value];
+                this.addAccountForm.get('currency').setValue(currencyCode);
+            }
             this.getStates(event.value);
             this.toggleStateRequired();
             this.resetGstStateForm();
@@ -682,16 +731,22 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             // if (parent[1]) {
             //     this.isParentDebtorCreditor(parent[1].uniqueName);
             // }
-            this.isGroupSelected.emit(event.value);
+            this.isParentDebtorCreditor(this.activeGroupUniqueName);
+            this.isGroupSelected.emit(event);
             this.toggleStateRequired();
         }
     }
 
     public isParentDebtorCreditor(activeParentgroup: string) {
+        this.activeParentGroup = activeParentgroup;
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
+
+            if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                this.staticTabs.tabs[0].active = true;
+            }
 
             if (accountAddress.controls.length === 0) {
                 this.addBlankGstForm();
@@ -700,10 +755,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addBlankGstForm();
             }
 
-        } else {
+        } else if (activeParentgroup === 'bankaccounts') {
+            this.isBankAccount = true;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
+        } else {
+            this.isBankAccount = false;
+            this.isDebtorCreditor = false;
+            this.showBankDetail = false;
+            this.addAccountForm.get('addresses').reset();
+
+            if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                this.staticTabs.tabs[0].active = false;
+            }
         }
     }
 
@@ -743,8 +808,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({label: res[key].code, value: res[key].code});
-
                 });
+
                 this.currencySource$ = observableOf(this.currencies);
                 setTimeout(() => {
                     // Timeout is used as value were not updated in form
@@ -1056,5 +1121,150 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectedBooleanCustomField(isChecked: string, index: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         customField.controls[index].get('value').setValue(isChecked);
+    }
+
+    /**
+     * This will disable currency field if selected group or parent group is sundry creditor
+     *
+     * @param {string} [groupName]
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public get disableCurrency(): boolean {
+        return this.disableCurrencyIfSundryCreditor();
+    }
+
+    /**
+     * This will disable currency field if selected group or parent group is sundry creditor
+     *
+     * @returns {boolean}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public disableCurrencyIfSundryCreditor(): boolean {
+        let groupName = (this.addAccountForm && this.addAccountForm.get('activeGroupUniqueName')) ? this.addAccountForm.get('activeGroupUniqueName').value : "";
+        if(groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") {
+            this.addAccountForm.get('currency').setValue(this.companyCurrency);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT,
+            }
+            if (this.isLedgerModule) {
+                // Remove the top hierarchy of groups
+                requestObject.removeTop = true;
+            }
+            if (this.isServiceCreation) {
+                // Group requires the group uniquename whose child groups will be fetched from API
+                // The result will not include this group but will only include its children
+                requestObject.group = this.activeGroupUniqueName;
+            }
+            if (this.isCustomerCreation) {
+                // Group requires the group uniquename whose child groups will be fetched from API
+                requestObject.group = this.activeGroupUniqueName;
+                // Include the parent group provided in 'group' param in fetched results
+                // The result will include this group and its children
+                requestObject.includeSearchedGroup = true;
+            }
+            this.groupService.searchGroups(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name}`,
+                            additional: result.parentGroups
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.flatGroupsOptions = searchResults;
+                    } else {
+                        this.flatGroupsOptions = [
+                            ...this.flatGroupsOptions,
+                            ...searchResults
+                        ];
+                    }
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name}`,
+                                additional: result.parentGroups
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name}`,
+                    additional: result.parentGroups
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+        });
     }
 }

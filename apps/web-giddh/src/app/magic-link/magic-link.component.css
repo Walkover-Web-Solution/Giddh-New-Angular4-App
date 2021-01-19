@@ -78,8 +78,8 @@ table th[class*="col-"] {
     padding: 8px;
 }
 
-.compoundEntry td,
-.compoundEntry td .form-control {
+.compound-entry td,
+.compound-entry td .form-control {
     background: #fddfa4 !important;
     border-left: 1px solid #ccc;
 }
@@ -141,8 +141,8 @@ table th[class*="col-"] {
 
 /*footer style start*/
 
-#contact p.mrT3,
-.mrT3 {
+#contact p.mr-t3,
+.mr-t3 {
     margin-top: 30px;
 }
 

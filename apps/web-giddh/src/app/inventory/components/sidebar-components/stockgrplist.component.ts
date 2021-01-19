@@ -3,9 +3,8 @@ import { StockDetailResponse, StockGroupResponse } from '../../../models/api-mod
 import { AppState } from '../../../store/roots';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InvViewService } from '../../inv.view.service';
@@ -27,12 +26,12 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
     public activeStockUniqueName$: Observable<string>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
+    constructor(private store: Store<AppState>, private sideBarAction: SidebarAction,
         private inventoryAction: InventoryAction, private invViewService: InvViewService, ) {
-        this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
-        this.activeGroupUniqueName$ = this.store.select(p => p.inventory.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
-        this.activeStockUniqueName$ = this.store.select(p => p.inventory.activeStockUniqueName);
+        this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
+        this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
+        this.activeGroupUniqueName$ = this.store.pipe(select(p => p.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
+        this.activeStockUniqueName$ = this.store.pipe(select(p => p.inventory.activeStockUniqueName), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -58,20 +57,12 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
         this.invViewService.setActiveView('group', grp.name, null, grp.uniqueName, grp.isOpen);
         this.invViewService.setActiveGroupUniqueName(grp.uniqueName);
         e.stopPropagation();
-        //this.store.dispatch(this.sideBarAction.ShowBranchScreen(false));
+
         if (grp.isOpen) {
             this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
         } else {
             this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp.uniqueName));
         }
-        // this.store.dispatch(this.inventoryAction.resetActiveStock());
-        // if (grp.isOpen) {
-        //   this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
-        //   this.store.dispatch(this.inventoryAction.resetActiveStock());
-        // } else {
-        //   // this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp.uniqueName));
-        //   this.store.dispatch(this.inventoryAction.resetActiveStock());
-        // }
     }
 
     public goToManageGroup(grp) {

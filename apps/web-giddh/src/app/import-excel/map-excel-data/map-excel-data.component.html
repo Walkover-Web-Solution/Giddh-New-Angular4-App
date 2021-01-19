@@ -1,32 +1,36 @@
 <!-- Map Field start-->
 <div class="row">
-    <div class="col-sm-8">
-        <div class="mapFields">
-            <strong>The best match to each field on the selected file have been auto-selected.</strong>
+    <div class="col-lg-8 col-md-12">
+        <div class="map-fields">
 
-            <div class="w-58pr">
-
+            <div class="left-bar-width ">
+                <div class="row">
+                    <div class="col-lg-12 col-md-9 col-sm-8 left-head">
+                        <strong>The best match to each field on the selected file have been auto-selected.</strong>
+                    </div>
+                </div>
+                
                 <div class="checkbox d-flex mt-1">
                     <input type="checkbox" name="isHeaderProvided" id="isHeaderProvided"
                         [(ngModel)]="importData.isHeaderProvided"> Is Header Provided ?
                 </div>
 
                 <div class="row mt-2 d-flex">
-                    <div class="col-xs-6 col-sm-6">
+                    <div class="col-12 col-md-4 col-lg-6">
                         <small class="text-light-2">Imported File Fields</small>
                     </div>
-                    <div class="col-xs-6 col-sm-6">
+                    <div class="col-12 col-md-5 col-lg-6">
                         <small class="text-light-2">Giddh Fields</small>
                     </div>
                 </div>
 
                 <div class="row mt-2 d-flex" *ngFor="let data of dataModel">
-                    <div class="col-xs-6 col-sm-6 d-flex" style="align-items:center"><label>{{data.field.columnHeader}}</label>
+                    <div class="col-12 col-md-4 col-lg-6 d-flex align-items-center"><label>{{data.field.columnHeader}}</label>
                     </div>
 
-                    <div class="col-xs-6 col-sm-6">
+                    <div class="col-12 col-md-5 col-lg-6">
 
-                        <sh-select [options]="data.options" class="pull-left mrR1" [placeholder]="'Select Field'"
+                        <sh-select [options]="data.options" class="pull-left mr-r1 select-field-width" [placeholder]="'Select Field'"
                             [(ngModel)]="data.selected" (selected)="columnSelected($event,data)"
                             (onClear)="clearSelected($event, data)" (previousChange)="clearSelected($event, data)"
                             [showClear]="true"></sh-select>
@@ -53,7 +57,7 @@
     <div>
 
         <div>
-            <p>Mandatory fields to create <span class="text-or">{{ entity | titlecase }}</span> in Giddh are:
+            <p class="right-head">Mandatory fields to create <span class="text-or">{{ entity | titlecase }}</span> in Giddh are:
                 <span>
                     <span
                         [ngStyle]="{'color': mandatoryHeadersCount === mandatoryHeadersModel.length ? '#00b503' : '#adadad'}">
@@ -65,7 +69,7 @@
 
         <div class="row mt-2 d-flex" *ngFor="let manField of mandatoryHeadersModel">
 
-            <div class="col-xs-8 col-sm-8"><label class="font-12px">{{ manField.field | titlecase}}</label></div>
+            <div class="col-xs-8 col-sm-8"><label class="font-12">{{ manField.field | titlecase}}</label></div>
 
             <div class="col-xs-4 col-sm-4">
                 <img src="{{imgPath}}checked.png" *ngIf="manField.selected" width="20" height="20" />
@@ -78,7 +82,7 @@
 
     <!-- group mapping -->
 
-    <div *ngIf="mandatoryGroupModel.length" style="margin-top: 50px">
+    <div *ngIf="mandatoryGroupModel.length" class="group-model">
 
         <div>
             <p>At least one field from each group should be selected to create <span
@@ -87,8 +91,7 @@
                     <span
                         [ngStyle]="{'color': mandatoryGroupHeadersCount === mandatoryGroupModel.length ? '#00b503' : '#adadad'}">{{ mandatoryGroupHeadersCount }}</span>/{{ mandatoryGroupModel.length }}
                     done.</span>
-                &nbsp;<span *ngIf="mandatoryGroupHeadersCount === mandatoryGroupModel.length"
-                    style="color: #00b503">Successful.</span>
+                &nbsp;<span *ngIf="mandatoryGroupHeadersCount === mandatoryGroupModel.length" class="success-label">Successful.</span>
             </p>
         </div>
 
@@ -96,7 +99,7 @@
 
             <div class="row d-flex inner-row" *ngFor="let g of grp">
 
-                <div class="col-xs-8 col-sm-8"><label class="font-12px">{{ g.field | titlecase}}</label></div>
+                <div class="col-xs-8 col-sm-8"><label class="font-12">{{ g.field | titlecase}}</label></div>
 
                 <div class="col-xs-4 col-sm-4">
                     <img src="{{imgPath}}checked.png" *ngIf="g.selected" width="20" height="20" />

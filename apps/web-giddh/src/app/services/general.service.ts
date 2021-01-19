@@ -8,6 +8,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
 import { find } from '../lodash-optimized';
+import { OrganizationType } from '../models/user-login-state';
 
 @Injectable()
 export class GeneralService {
@@ -16,6 +17,10 @@ export class GeneralService {
     // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Stores the branch unique name */
+    public currentBranchUniqueName: string;
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -58,7 +63,6 @@ export class GeneralService {
         ]
     };
 
-
     get user(): UserDetails {
         return this._user;
     }
@@ -98,7 +102,6 @@ export class GeneralService {
 
     set currencyType(currencyType: string) {
         this._currencyType = currencyType;
-
     }
 
     get createNewCompany(): CompanyCreateRequest {
@@ -174,17 +177,19 @@ export class GeneralService {
         let byteCharacters = atob(b64Data);
         let byteArrays = [];
         let offset = 0;
-        while (offset < byteCharacters.length) {
-            let slice = byteCharacters.slice(offset, offset + sliceSize);
-            let byteNumbers = new Array(slice.length);
-            let i = 0;
-            while (i < slice.length) {
-                byteNumbers[i] = slice.charCodeAt(i);
-                i++;
+        if(byteCharacters && byteCharacters.length > 0) {
+            while (offset < byteCharacters.length) {
+                let slice = byteCharacters.slice(offset, offset + sliceSize);
+                let byteNumbers = new Array(slice.length);
+                let i = 0;
+                while (i < slice.length) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                    i++;
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+                offset += sliceSize;
             }
-            let byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-            offset += sliceSize;
         }
         return new Blob(byteArrays, { type: contentType });
     }
@@ -333,12 +338,10 @@ export class GeneralService {
      * @memberof CompletedComponent
      */
     public ConvertUTCTimeToLocalTime(UTCDateString) {
+        UTCDateString = UTCDateString.replace("@", "");
         let convertdLocalTime = new Date(UTCDateString);
-
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
-
         convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
-
         return convertdLocalTime;
     }
 
@@ -452,13 +455,15 @@ export class GeneralService {
         const name = `${cookieName}=`;
         const decodedCookie = decodeURIComponent(document.cookie);
         const availableCookies = decodedCookie.split(';');
-        for (let index = 0; index < availableCookies.length; index++) {
-            let cookie = availableCookies[index];
-            while (cookie.charAt(0) === ' ') {
-                cookie = cookie.substring(1);
-            }
-            if (cookie.indexOf(name) === 0) {
-                return cookie.substring(name.length, cookie.length);
+        if(availableCookies && availableCookies.length > 0) {
+            for (let index = 0; index < availableCookies.length; index++) {
+                let cookie = availableCookies[index];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
             }
         }
         return '';
@@ -548,7 +553,7 @@ export class GeneralService {
     public getRevisionField(type: any): string {
         return type.replace(/_/g, " ");
     }
-    
+
     /**
      * Returns the account category
      *
@@ -598,5 +603,178 @@ export class GeneralService {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Stores data in session storage
+     *
+     * @param {string} name
+     * @param {*} value
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public setSessionStorage(name: string, value: any): void {
+        sessionStorage.setItem(name, value);
+    }
+
+    /**
+     * Returns data from session storage
+     *
+     * @param {string} name
+     * @returns {any}
+     * @memberof GeneralService
+     */
+    public getSessionStorage(name: string): any {
+        return sessionStorage.getItem(name);
+    }
+
+    /**
+     * Removes data from session storage
+     *
+     * @param {string} name
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public removeSessionStorage(name: string): void {
+        sessionStorage.removeItem(name);
+    }
+
+    /**
+     * This will add value in array if doesn't exists
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public addValueInArray(array: Array<string>, value: any): Array<string> {
+        let exists = false;
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item === value) {
+                    exists = true;
+                }
+            });
+        }
+
+        if (!exists) {
+            array.push(value);
+        }
+
+        return array;
+    }
+
+    /**
+     * This will check if value exists in array
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkIfValueExistsInArray(array: Array<string>, value: any): boolean {
+        let exists = false;
+
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item === value) {
+                    exists = true;
+                }
+            });
+        }
+
+        return exists;
+    }
+
+    /**
+     * This will remove value from array
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public removeValueFromArray(array: Array<string>, value: any): Array<string> {
+        let index = -1;
+        if (array && array.length > 0) {
+            let loop = 0;
+            array.forEach(item => {
+                if (item === value) {
+                    index = loop;
+                }
+                loop++;
+            });
+        }
+
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+
+        return array;
+    }
+
+    /**
+     * This will set global cookie for main domain
+     *
+     * @param {string} cookieName
+     * @param {*} cookieValue
+     * @param {number} expiryDays
+     * @memberof GeneralService
+     */
+    public setCookie(cookieName: string, cookieValue: any, expiryDays: number): void {
+        const date = new Date();
+        date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
+    }
+
+    /**
+     * Handles the voucher date change modal configuration
+     *
+     * @param {boolean} isVoucherDateSelected
+     * @returns {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getDateChangeConfiguration(isVoucherDateSelected: boolean): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: 'Yes',
+            cssClass: 'btn btn-success'
+        },
+        {
+            text: 'No',
+            cssClass: 'btn btn-danger'
+        }];
+        const headerText: string = 'Date Change Confirmation';
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return (isVoucherDateSelected) ? {
+            headerText,
+            headerCssClass,
+            messageText: `Do you want to change the entry date as well?`,
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        } : {
+                headerText,
+                headerCssClass,
+                messageText: `Do you want to change the all entries date with this date?`,
+                messageCssClass,
+                footerText: '',
+                footerCssClass,
+                buttons
+            };
+    }
+
+    /**
+     * This will return the file extension
+     *
+     * @param {string} path
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getFileExtension(path: string): string {
+        return (path && path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop() : 'null';
     }
 }

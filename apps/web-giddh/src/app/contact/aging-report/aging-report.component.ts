@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
@@ -16,6 +16,11 @@ import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Co
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { ContactAdvanceSearchComponent } from '../advanceSearch/contactAdvanceSearch.component';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GeneralService } from '../../services/general.service';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'aging-report',
@@ -58,24 +63,38 @@ export class AgingReportComponent implements OnInit {
     @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
+    /** Advance search component instance */
+    @ViewChild('agingReportAdvanceSearch', { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
     @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
+
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current company */
+    public activeCompany: any;
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
-        private _agingReportActions: AgingReportActions,
+        private agingReportActions: AgingReportActions,
         private _cdr: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
-        private componentFactoryResolver: ComponentFactoryResolver) {
-        this.agingDropDownoptions$ = this.store.select(s => s.agingreport.agingDropDownoptions).pipe(takeUntil(this.destroyed$));
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private settingsBranchAction: SettingsBranchActions,
+        private generalService: GeneralService) {
+        this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
-        this.setDueRangeOpen$ = this.store.select(s => s.agingreport.setDueRangeOpen).pipe(takeUntil(this.destroyed$));
+        this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
         this.getDueAmountreportData();
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public getDueAmountreportData() {
-        this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
+        this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
                 this.dueAmountReportRequest.page = data.page;
                 setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
@@ -99,7 +118,7 @@ export class AgingReportComponent implements OnInit {
     }
 
     public getDueReport() {
-        this.store.dispatch(this._agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest));
+        this.store.dispatch(this.agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest, this.currentBranch.uniqueName));
     }
 
     public detetcChanges() {
@@ -109,12 +128,12 @@ export class AgingReportComponent implements OnInit {
     public ngOnInit() {
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.fromDate = moment(a[0]).format('DD-MM-YYYY');
-                this.toDate = moment(a[1]).format('DD-MM-YYYY');
+                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
         let companyUniqueName = null;
-        this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'aging-report';
@@ -123,14 +142,15 @@ export class AgingReportComponent implements OnInit {
 
         this.getDueReport();
 
-        this.store.dispatch(this._agingReportActions.GetDueRange());
+        this.store.dispatch(this.agingReportActions.GetDueRange());
         this.agingDropDownoptions$.subscribe(p => {
             this.agingDropDownoptions = cloneDeep(p);
         });
 
         this.searchStr$.pipe(
             debounceTime(1000),
-            distinctUntilChanged()
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
         ).subscribe(term => {
             this.dueAmountReportRequest.q = term;
             this.getDueReport();
@@ -138,14 +158,60 @@ export class AgingReportComponent implements OnInit {
 
         this._breakpointObserver
             .observe(['(max-width: 768px)'])
+            .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isMobileScreen = state.matches;
                 this.getDueAmountreportData();
             });
+        this.store.pipe(
+            select(appState => appState.session.activeCompany), take(1)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                }
+            }
+        });
     }
 
     public openAgingDropDown() {
-        this.store.dispatch(this._agingReportActions.OpenDueRange());
+        this.store.dispatch(this.agingReportActions.OpenDueRange());
     }
 
     public hideListItems() {
@@ -172,7 +238,7 @@ export class AgingReportComponent implements OnInit {
             componentInstance.maxSize = 5;
             componentInstance.writeValue(s.page);
             componentInstance.boundaryLinks = true;
-            componentInstance.pageChanged.subscribe(e => {
+            componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
                 this.pageChangedDueReport(e);
             });
         }
@@ -183,6 +249,10 @@ export class AgingReportComponent implements OnInit {
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
         this.getDueReport();
+
+        if(this.agingReportAdvanceSearch) {
+            this.agingReportAdvanceSearch.reset();
+        }
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -241,5 +311,15 @@ export class AgingReportComponent implements OnInit {
 
     public toggleAdvanceSearchPopup() {
         this.advanceSearch.toggle();
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof AgingReportComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.getDueReport();
     }
 }

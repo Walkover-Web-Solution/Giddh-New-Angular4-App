@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body clearfix" id="export-body">
         <ng-container *ngIf="selectedBunch.companies && selectedBunch.companies.length">
-            <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
+            <perfect-scrollbar class="scroll-class" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0"
                 [scrollIndicators]="true">
                 <ul class="list-unstyled bunch_list">
                     <li *ngFor="let item of selectedBunch.companies; let i = index">

@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } 
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
@@ -39,7 +39,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
     @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
     @Output() public downloadInvoiceEvent: EventEmitter<object> = new EventEmitter();
-    @ViewChild('pdfViewer', {static: true}) public pdfViewer;
+    @ViewChild('pdfViewer', {static: false}) public pdfViewer;
 
     public showEmailTextarea: boolean = false;
     public base64StringForModel: any;
@@ -71,11 +71,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private _router: Router
     ) {
-        this.isErrOccured$ = this.store.select(p => p.invoice.invoiceDataHasError).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
-        this.voucherDetailsInProcess$ = this.store.select(p => p.receipt.voucherDetailsInProcess).pipe(takeUntil(this.destroyed$));
-        this.voucherPreview$ = this.store.select(p => p.receipt.base64Data).pipe(takeUntil(this.destroyed$));
+        this.isErrOccured$ = this.store.pipe(select(p => p.invoice.invoiceDataHasError), distinctUntilChanged(), takeUntil(this.destroyed$));
+        this.voucherDetailsInProcess$ = this.store.pipe(select(p => p.receipt.voucherDetailsInProcess), takeUntil(this.destroyed$));
+        this.voucherPreview$ = this.store.pipe(select(p => p.receipt.base64Data), distinctUntilChanged(), takeUntil(this.destroyed$));
 
-        this.voucherPreview$.pipe(distinctUntilChanged()).subscribe((o: any) => {
+        this.voucherPreview$.subscribe((o: any) => {
             if (o) {
 
                 const reader = new FileReader();
@@ -106,7 +106,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
                     this.base64Data = this.base64StringForModel;
                     const blob = b64toBlob(e.srcElement.result.split(',')[1], 'application/pdf');
-                    if (this.isElectron) {
+                    if (this.isElectron && this.pdfViewer) {
                         this.pdfViewer.pdfSrc = blob; // pdfSrc can be Blob or Uint8Array
                         this.pdfViewer.refresh();
                     }
@@ -137,7 +137,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
 
-        this.store.select(p => p.invoice.settings).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
+        this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.invoiceSettings) {
                 this.isSendSmsEnabled = o.invoiceSettings.sendInvLinkOnSms;
             } else {
@@ -145,7 +145,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.select(p => p.receipt.voucher).pipe(takeUntil(this.destroyed$)).subscribe((o: any) => {
+        this.store.pipe(select(p => p.receipt.voucher), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.voucherDetails) {
                 // this.showEditButton = o.voucherDetails.uniqueName ? true : false;
                 this.accountUniqueName = o.accountDetails.uniqueName;

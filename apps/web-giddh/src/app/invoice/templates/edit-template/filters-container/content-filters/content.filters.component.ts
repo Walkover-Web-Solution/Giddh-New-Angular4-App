@@ -17,7 +17,7 @@ import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/compan
 @Component({
     selector: 'content-selector',
     templateUrl: 'content.filters.component.html',
-    styleUrls: ['content.filters.component.css']
+    styleUrls: ['content.filters.component.scss']
 })
 
 export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
@@ -57,18 +57,18 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         let companies = null;
         let defaultTemplate = null;
 
-        this.store.select(s => s.session).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.session), take(1)).subscribe(ss => {
             this.companyUniqueName = ss.companyUniqueName;
             companies = ss.companies;
         });
 
-        this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
+        this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
         });
         this._invoiceUiDataService.initCustomTemplate(this.companyUniqueName, companies, defaultTemplate);
 
-        this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
 
         this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
             if (companies) {
@@ -94,7 +94,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
-        this._activatedRoute.params.subscribe(a => {
+        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (!a) {
                 return;
             }
@@ -326,10 +326,12 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public changeDisableQuantity(): void {
         let template = _.cloneDeep(this.customTemplate);
-        if (!template.sections.table.data.quantity.display) {
-            template.sections.table.data.totalQuantity.display = false;
-        } else {
-            template.sections.table.data.totalQuantity.display = true;
+        if(template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
+            if (!template.sections.table.data.quantity.display) {
+                template.sections.table.data.totalQuantity.display = false;
+            } else {
+                template.sections.table.data.totalQuantity.display = true;
+            }
         }
         this._invoiceUiDataService.setCustomTemplate(template);
     }

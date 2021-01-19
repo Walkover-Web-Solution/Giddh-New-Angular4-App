@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
@@ -53,8 +53,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     @Input() public selectedRowItem: any;
     @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
-    @ViewChild(UpdateLedgerEntryPanelComponent, {static: true}) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-    @ViewChild('entryAgainstAccountDropDown', {static: true}) public entryAgainstAccountDropDown: ShSelectComponent;
+    @ViewChild(UpdateLedgerEntryPanelComponent, {static: false}) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+    @ViewChild('entryAgainstAccountDropDown', {static: false}) public entryAgainstAccountDropDown: ShSelectComponent;
 
     public selectedItem: ExpenseResults;
     public rejectReason = new FormControl();
@@ -102,25 +102,23 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
     constructor(private modalService: BsModalService,
         private _toasty: ToasterService,
-        private _expenseService: ExpenseService,
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _expenceActions: ExpencesAction,
-        private expenseService: ExpenseService,
-        private _cdRf: ChangeDetectorRef
+        private expenseService: ExpenseService
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
         this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
-        this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
-        this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
+        this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.selectedPettycashEntry$ = this.store.pipe(select(p => p.expense.pettycashEntry), takeUntil(this.destroyed$));
         this.ispPettycashEntrySuccess$ = this.store.pipe(select(p => p.expense.ispPettycashEntrySuccess), takeUntil(this.destroyed$));
         this.ispPettycashEntryInprocess$ = this.store.pipe(select(p => p.expense.ispPettycashEntryInprocess), takeUntil(this.destroyed$));
 
     }
 
-    openModal(RejectionReason: TemplateRef<any>) {
+    public openModal(RejectionReason: TemplateRef<any>) {
         this.modalRef = this.modalService.show(RejectionReason, { class: 'modal-md' });
     }
 
@@ -160,7 +158,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             }
         });
 
-        this.store.pipe(select(s => s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
     }
@@ -281,6 +279,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
                 this.toggleDetailsMode.emit(true);
             } else {
                 this._toasty.errorToast(res.message);
+                this.approveEntryRequestInProcess = false;
             }
         }, (error => {
             this.approveEntryRequestInProcess = false;

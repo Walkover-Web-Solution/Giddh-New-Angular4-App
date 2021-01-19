@@ -11,6 +11,7 @@ import {
 } from '../../models/api-models/Dashboard';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 export interface HomeState {
     value?: string;
@@ -705,7 +706,7 @@ const processDataForProfitLoss = plData => {
     if (plData && plData.profitLoss) {
         _.each(plData.profitLoss.periodBalances, (nw: any) => {
             let str;
-            str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
+            str = monthArray[moment(nw.to, GIDDH_DATE_FORMAT).get('months')] + moment(nw.to, GIDDH_DATE_FORMAT).get('y');
             nwLabels.push(str);
             monthlyBalances.push(nw.monthlyBalance);
             nwSeries.push('Monthly Balances');
@@ -726,7 +727,7 @@ const processDataForNetworth = plData => {
     if (plData && plData.networth) {
         _.each(plData.networth.periodBalances, (nw: any) => {
             let str;
-            str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
+            str = monthArray[moment(nw.to, GIDDH_DATE_FORMAT).get('months')] + moment(nw.to, GIDDH_DATE_FORMAT).get('y');
             nwLabels.push(str);
             monthlyBalances.push(nw.monthlyBalance);
             nwSeries.push('Monthly Balances');

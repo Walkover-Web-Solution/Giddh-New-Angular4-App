@@ -1,15 +1,17 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
 import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse } from '../../../models/api-models/Expences';
 import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { FormControl } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import * as moment from 'moment/moment';
 
 @Component({
     selector: 'app-pending-list',
@@ -26,11 +28,11 @@ export class PendingListComponent implements OnInit, OnChanges {
     public getPettycashReportInprocess$: Observable<boolean>;
     public getPettycashReportSuccess$: Observable<boolean>;
     public universalDate$: Observable<any>;
+    /** This will hold if today is selected in universal */
+    public todaySelected: boolean = false;
     public todaySelected$: Observable<boolean> = observableOf(false);
     public from: string;
     public to: string;
-    public key: string = 'entry_date';
-    public order: string = 'asc';
     public selectedEntryForApprove: ExpenseResults;
 
     public isRowExpand: boolean = false;
@@ -58,11 +60,30 @@ export class PendingListComponent implements OnInit, OnChanges {
         private expenseService: ExpenseService,
         private _toasty: ToasterService,
         private _cdRf: ChangeDetectorRef, private _modalService: BsModalService) {
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
-        this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
-        this.pettyCashReportsResponse$ = this.store.select(p => p.expense.pettycashReport).pipe(takeUntil(this.destroyed$));
-        this.getPettycashReportInprocess$ = this.store.select(p => p.expense.getPettycashReportInprocess).pipe(takeUntil(this.destroyed$));
-        this.getPettycashReportSuccess$ = this.store.select(p => p.expense.getPettycashReportSuccess).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
+        this.pettyCashReportsResponse$ = this.store.pipe(select(p => p.expense.pettycashReport), takeUntil(this.destroyed$));
+        this.getPettycashReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashReportInprocess), takeUntil(this.destroyed$));
+        this.getPettycashReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashReportSuccess), takeUntil(this.destroyed$));
+
+        observableCombineLatest(this.universalDate$, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+			if (!Array.isArray(resp[0])) {
+				return;
+			}
+			let dateObj = resp[0];
+			this.todaySelected = resp[1];
+			if (dateObj && !this.todaySelected) {
+				let universalDate = _.cloneDeep(dateObj);
+				let from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+				let to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+				if (from && to) {
+					this.pettycashRequest.from = from;
+					this.pettycashRequest.to = to;
+					this.pettycashRequest.page = 1;
+					this.pettycashRequest.status = 'pending';
+				}
+			}
+		});
     }
 
     public ngOnInit() {
@@ -137,6 +158,8 @@ export class PendingListComponent implements OnInit, OnChanges {
 
     public getPettyCashPendingReports(SalesDetailedfilter: CommonPaginatedRequest) {
         SalesDetailedfilter.status = 'pending';
+        SalesDetailedfilter.sort = this.pettycashRequest.sort;
+        SalesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
         this.store.dispatch(this._expenceActions.GetPettycashReportRequest(SalesDetailedfilter));
     }
 
@@ -144,7 +167,6 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.isRowExpand = true;
         this.selectedRowInput.emit(item);
         this.selectedRowToggle.emit(true);
-        // this.store.dispatch(this._expenceActions.getPettycashEntryRequest(item.uniqueName));
     }
 
     public ngOnChanges(changes: SimpleChanges): void {

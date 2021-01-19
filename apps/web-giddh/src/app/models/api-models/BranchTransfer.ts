@@ -54,7 +54,8 @@ export class BranchTransferResponse {
 }
 
 export interface ILinkedStocksResult extends INameUniqueName {
-	warehouses: INameUniqueName[];
+    warehouses: INameUniqueName[];
+    isCompany?: boolean;
 }
 
 export class LinkedStocksResponse {
@@ -66,7 +67,12 @@ export class LinkedStocksResponse {
 }
 
 export class LinkedStocksVM implements INameUniqueName {
-	constructor(public name: string, public uniqueName: string, public isWareHouse: boolean = false) {
+	constructor(
+        public name: string,
+        public uniqueName: string,
+        public isWareHouse: boolean = false,
+        public alias: string = '',
+        public warehouses: Array<any> = []) {
 	}
 }
 
@@ -141,7 +147,8 @@ export class NewBranchTransferListGetRequestParams {
 	public page: any;
 	public count: any;
 	public sort: string;
-	public sortBy: string;
+    public sortBy: string;
+    public branchUniqueName: string;
 }
 
 export class NewBranchTransferListPostRequestParams {
@@ -151,7 +158,11 @@ export class NewBranchTransferListPostRequestParams {
 	public date: string;
 	public voucherNo: string;
 	public senderReceiver: string;
-	public warehouseName: string;
+    public warehouseName: string;
+    public sender?: string;
+    public receiver?: string;
+    public fromWarehouse?: string;
+    public toWarehouse?: string;
 }
 
 export class NewBranchTransferListItems {
@@ -162,6 +173,10 @@ export class NewBranchTransferListItems {
 	public warehouseName: string;
 	public totalAmount: any;
 	public uniqueName: string;
+    public sender?: string;
+    public receiver?: string;
+    public fromWarehouse?: string;
+    public toWarehouse?: string;
 }
 
 export class NewBranchTransferListResponse {

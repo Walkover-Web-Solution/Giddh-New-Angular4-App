@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CompanyResponse, ICurrencyResponse, StateDetailsResponse } from '../models/api-models/Company';
-import { Action, Store } from '@ngrx/store';
+import { CompanyResponse, ICurrencyResponse, Organization, StateDetailsResponse } from '../models/api-models/Company';
+import { Action, Store, select, createSelector } from '@ngrx/store';
 import {
     LinkedInRequestModel,
     SignupwithEmaillModel,
@@ -21,8 +21,8 @@ import { COMMON_ACTIONS } from './common.const';
 import { AppState } from '../store';
 import { Injectable, NgZone } from '@angular/core';
 import { map, switchMap, take } from 'rxjs/operators';
-import { userLoginStateEnum } from '../models/user-login-state';
-import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
+import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { DbService } from '../services/db.service';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
@@ -101,7 +101,7 @@ export class LoginActions {
     public static AutoLoginWithPasswdResponse = 'AutoLoginWithPasswdResponse';
 
 
-    public signupWithGoogle$: Observable<Action> = createEffect( ()=> this.actions$
+    public signupWithGoogle$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST),
             switchMap((action: CustomActions) =>
@@ -112,7 +112,7 @@ export class LoginActions {
             })));
 
 
-    public signupWithGoogleResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public signupWithGoogleResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE),
             map((action: CustomActions) => {
@@ -128,7 +128,7 @@ export class LoginActions {
                             type: 'EmptyAction'
                         };
                     } else {
-                        return this.LoginSuccess();
+                        return this.LoginSuccess(response);
                     }
                 } else {
                     return {
@@ -138,7 +138,7 @@ export class LoginActions {
             })));
 
 
-    public signupWithLinkedin$: Observable<Action> = createEffect( ()=> this.actions$
+    public signupWithLinkedin$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST),
             switchMap((action: CustomActions) =>
@@ -147,7 +147,7 @@ export class LoginActions {
             map(response => this.signupWithLinkedinResponse(response))));
 
 
-    public signupWithLinkedinResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public signupWithLinkedinResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE),
             map((action: CustomActions) => {
@@ -167,14 +167,14 @@ export class LoginActions {
             })));
 
 
-    public signupWithEmail$: Observable<Action> = createEffect( ()=> this.actions$
+    public signupWithEmail$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SignupWithEmailRequest),
             switchMap((action: CustomActions) => this.auth.SignupWithEmail(action.payload)),
             map(response => this.SignupWithEmailResponce(response))));
 
 
-    public signupWithEmailResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public signupWithEmailResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SignupWithEmailResponce),
             map((action: CustomActions) => {
@@ -187,7 +187,7 @@ export class LoginActions {
             })));
 
 
-    public verifyEmail$: Observable<Action> = createEffect( ()=>this.actions$
+    public verifyEmail$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.VerifyEmailRequest),
             switchMap((action: CustomActions) =>
@@ -196,7 +196,7 @@ export class LoginActions {
             map(response => this.VerifyEmailResponce(response))));
 
 
-    public verifyEmailResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public verifyEmailResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.VerifyEmailResponce),
             map((action: CustomActions) => {
@@ -209,14 +209,14 @@ export class LoginActions {
             })));
 
 
-    public signupWithMobile$: Observable<Action> = createEffect( ()=> this.actions$
+    public signupWithMobile$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SignupWithMobileRequest),
             switchMap((action: CustomActions) => this.auth.SignupWithMobile(action.payload)),
             map(response => this.SignupWithMobileResponce(response))));
 
 
-    public signupWithMobileResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public signupWithMobileResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SignupWithMobileResponce),
             map((action: CustomActions) => {
@@ -229,63 +229,12 @@ export class LoginActions {
             })));
 
 
-    public loginSuccessByURL$: Observable<Action> = createEffect( ()=> this.actions$
+    public loginSuccessByURL$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.LoginSuccessBYUrl),
             switchMap((action) => {
                 console.log("Login Init");
-                return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList());
-            }), map((results: any[]) => {
-                console.log("Login Success");
-                /* check if local storage is cleared or not for first time
-				 for application menu set up in localstorage */
-
-                let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
-                let isMenuUpdated = localStorage.getItem('isMenuUpdated');
-
-                if (!JSON.parse(isNewMenuSetted) || (JSON.parse(isNewMenuSetted) && !isMenuUpdated)) {
-                    this._dbService.clearAllData();
-                    localStorage.setItem('isNewMenuSetted', true.toString());
-                    localStorage.setItem('isMenuUpdated', true.toString());
-                }
-
-                let cmpUniqueName = '';
-                let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
-                let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-
-                if (companies.body && companies.body.length === 0) {
-                    this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-                    this.zone.run(() => {
-                        this._router.navigate(['/pages/new-user']);
-                    });
-                    return { type: 'EmptyAction' };
-                } else {
-                    if (stateDetail.body && stateDetail.status === 'success') {
-                        this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
-                        cmpUniqueName = stateDetail.body.companyUniqueName;
-                        if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
-                            return this.finalThingTodo(stateDetail, companies);
-                        } else {
-                            // old user fail safe scenerio
-                            return this.doSameStuffs(companies);
-                        }
-                    } else {
-                        /**
-                         * if user is new and signed up by shared entity
-                         * find the entity and redirect user according to terms.
-                         * shared entities [GROUP, COMPANY, ACCOUNT]
-                         */
-                        return this.doSameStuffs(companies);
-                    }
-                }
-            })));
-
-    public loginSuccess$: Observable<Action> = createEffect( ()=> this.actions$
-        .pipe(
-            ofType(LoginActions.LoginSuccess),
-            switchMap((action) => {
-                console.log("Login Init");
-                return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList());
+                return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList());
             }), map((results: any[]) => {
                 console.log("Login Success");
                 /* check if local storage is cleared or not for first time
@@ -303,7 +252,7 @@ export class LoginActions {
                 let cmpUniqueName = '';
                 let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
                 let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-                
+
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
@@ -313,6 +262,85 @@ export class LoginActions {
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
+                        this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
+                        if (stateDetail.body.branchUniqueName) {
+                            const details = {
+                                branchDetails: {
+                                    uniqueName: this._generalService.currentBranchUniqueName
+                                }
+                            };
+                            const organization: Organization = {
+                                type: OrganizationType.Branch,
+                                uniqueName: this._generalService.companyUniqueName || '',
+                                details
+                            };
+                            this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                        }
+                        cmpUniqueName = stateDetail.body.companyUniqueName;
+                        if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+                            return this.finalThingTodo(stateDetail, companies);
+                        } else {
+                            // old user fail safe scenerio
+                            return this.doSameStuffs(companies);
+                        }
+                    } else {
+                        /**
+                         * if user is new and signed up by shared entity
+                         * find the entity and redirect user according to terms.
+                         * shared entities [GROUP, COMPANY, ACCOUNT]
+                         */
+                        return this.doSameStuffs(companies);
+                    }
+                }
+            })));
+
+    public loginSuccess$: Observable<Action> = createEffect(() => this.actions$
+        .pipe(
+            ofType(LoginActions.LoginSuccess),
+            switchMap((action) => {
+                console.log("Login Init");
+                return observableZip(this._companyService.getStateDetails('', true), this._companyService.CompanyList());
+            }), map((results: any[]) => {
+                console.log("Login Success");
+                /* check if local storage is cleared or not for first time
+                 for application menu set up in localstorage */
+
+                let isNewMenuSetted = localStorage.getItem('isNewMenuSetted');
+                let isMenuUpdated = localStorage.getItem('isMenuUpdated');
+
+                if (!JSON.parse(isNewMenuSetted) || (JSON.parse(isNewMenuSetted) && !isMenuUpdated)) {
+                    this._dbService.clearAllData();
+                    localStorage.setItem('isNewMenuSetted', true.toString());
+                    localStorage.setItem('isMenuUpdated', true.toString());
+                }
+
+                let cmpUniqueName = '';
+                let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
+                let companies = results[1] as BaseResponse<CompanyResponse[], string>;
+
+                if (companies.body && companies.body.length === 0) {
+                    this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
+                    this.zone.run(() => {
+                        this._router.navigate(['/pages/new-user']);
+                    });
+                    return { type: 'EmptyAction' };
+                } else {
+                    if (stateDetail.body && stateDetail.status === 'success') {
+                        this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
+                        this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
+                        if (stateDetail.body.branchUniqueName) {
+                            const details = {
+                                branchDetails: {
+                                    uniqueName: this._generalService.currentBranchUniqueName
+                                }
+                            };
+                            const organization: Organization = {
+                                type: OrganizationType.Branch,
+                                uniqueName: this._generalService.companyUniqueName || '',
+                                details
+                            };
+                            this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                        }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
                         if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
                             return this.finalThingTodo(stateDetail, companies);
@@ -332,7 +360,7 @@ export class LoginActions {
             })));
 
 
-    public logoutSuccess$: Observable<Action> = createEffect( ()=> this.actions$
+    public logoutSuccess$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
@@ -343,6 +371,9 @@ export class LoginActions {
                         this._generalService.invokeEvent.next('logoutCordova');
                         this._router.navigate(['login']);
                     });
+                } else if (isElectron) {
+                    this._router.navigate(['/login']);
+                    window.location.reload();
                 } else {
                     window.location.href = AppUrl + 'login/';
                 }
@@ -350,7 +381,7 @@ export class LoginActions {
             })));
 
 
-    public verifyMobile$: Observable<Action> = createEffect( ()=> this.actions$
+    public verifyMobile$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.VerifyMobileRequest),
             switchMap((action: CustomActions) =>
@@ -359,7 +390,7 @@ export class LoginActions {
             map(response => this.VerifyMobileResponce(response))));
 
 
-    public verifyMobileResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public verifyMobileResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.VerifyMobileResponce),
             map((action: CustomActions) => {
@@ -368,11 +399,11 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
-                return this.LoginSuccess();
+                return this.LoginSuccess(response);
             })));
 
 
-    public verifyTwoWayAuth$: Observable<Action> = createEffect( ()=> this.actions$
+    public verifyTwoWayAuth$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.VerifyTwoWayAuthRequest),
             switchMap((action: CustomActions) =>
@@ -381,7 +412,7 @@ export class LoginActions {
             map(response => this.VerifyTwoWayAuthResponse(response))));
 
 
-    public verifyTwoWayAuthResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public verifyTwoWayAuthResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.VerifyTwoWayAuthResponse),
             map((action: CustomActions) => {
@@ -390,11 +421,11 @@ export class LoginActions {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
-                return this.LoginSuccess();
+                return this.LoginSuccess(response);
             })));
 
 
-    public GoogleElectronLogin$: Observable<Action> =createEffect( ()=> this.actions$
+    public GoogleElectronLogin$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.GoogleLoginElectron),
             switchMap((action: CustomActions) => {
@@ -413,7 +444,7 @@ export class LoginActions {
             })));
 
 
-    public LinkedInElectronLogin$: Observable<Action> = createEffect( ()=> this.actions$
+    public LinkedInElectronLogin$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.LinkedInLoginElectron),
             switchMap((action: CustomActions) => {
@@ -438,7 +469,7 @@ export class LoginActions {
             })));
 
 
-    public ClearSession$: Observable<Action> = createEffect( ()=> this.actions$
+    public ClearSession$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.ClearSession),
             switchMap((action: CustomActions) => {
@@ -448,10 +479,10 @@ export class LoginActions {
             })));
 
 
-    public CHANGE_COMPANY$: Observable<Action> = createEffect( ()=> this.actions$
+    public CHANGE_COMPANY$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(CompanyActions.CHANGE_COMPANY),
-            switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload)),
+            switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload.cmpUniqueName, action.payload.fetchLastState)),
             map(response => {
                 if ((response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) || (response.status === 'error' || response.code === 'NOT_FOUND')) {
                     let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
@@ -465,6 +496,20 @@ export class LoginActions {
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
                 if (response.body.companyUniqueName) {
+                    this._generalService.currentBranchUniqueName = response.body.branchUniqueName || '';
+                    if (response.body.branchUniqueName) {
+                        const details = {
+                            branchDetails: {
+                                uniqueName: this._generalService.currentBranchUniqueName
+                            }
+                        };
+                        const organization: Organization = {
+                            type: OrganizationType.Branch,
+                            uniqueName: this._generalService.companyUniqueName || '',
+                            details
+                        };
+                        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                    }
                     if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
                         this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
                             this.finalNavigate(response.body.lastState);
@@ -498,7 +543,7 @@ export class LoginActions {
             })));
 
 
-    public ChangeCompanyResponse$: Observable<Action> =createEffect( ()=> this.actions$
+    public ChangeCompanyResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(CompanyActions.CHANGE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
@@ -512,14 +557,14 @@ export class LoginActions {
             })));
 
 
-    public addNewMobile$: Observable<Action> = createEffect( ()=> this.actions$
+    public addNewMobile$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.AddNewMobileNo),
             switchMap((action: CustomActions) => this.auth.VerifyNumber(action.payload)),
             map(response => this.AddNewMobileNoResponce(response))));
 
 
-    public addNewMobileResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public addNewMobileResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.AddNewMobileNoResponse),
             map((action: CustomActions) => {
@@ -532,7 +577,7 @@ export class LoginActions {
             })));
 
 
-    public verifyAddNewMobile$: Observable<Action> =  createEffect( () =>this.actions$
+    public verifyAddNewMobile$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.VerifyAddNewMobileNo),
             switchMap((action: CustomActions) =>
@@ -540,7 +585,7 @@ export class LoginActions {
             ),
             map(response => this.VerifyAddNewMobileNoResponce(response))));
 
-    public verifyAddNewMobileResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public verifyAddNewMobileResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.VerifyAddNewMobileNoResponse),
             map((action: CustomActions) => {
@@ -554,14 +599,14 @@ export class LoginActions {
             })));
 
 
-    public FectchUserDetails$: Observable<Action> = createEffect( ()=>this.actions$
+    public FectchUserDetails$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.FetchUserDetails),
             switchMap((action: CustomActions) => this.auth.FetchUserDetails()),
             map(response => this.FetchUserDetailsResponse(response))));
 
 
-    public FectchUserDetailsResponse$: Observable<Action> =createEffect( ()=> this.actions$
+    public FectchUserDetailsResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.FetchUserDetailsResponse),
             map((action: CustomActions) => {
@@ -572,14 +617,14 @@ export class LoginActions {
             })));
 
 
-    public AddBalance$: Observable<Action> =createEffect( ()=> this.actions$
+    public AddBalance$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.AddBalance),
             switchMap((action: CustomActions) => this.auth.AddBalance(action.payload)),
             map(response => this.AddBalanceResponse(response))));
 
 
-    public AddBalanceResponse$: Observable<Action> = createEffect(() =>this.actions$
+    public AddBalanceResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.AddBalanceResponse),
             map((action: CustomActions) => {
@@ -590,7 +635,7 @@ export class LoginActions {
             })));
 
 
-    public ReportInvalidJSON$: Observable<Action> = createEffect( ()=> this.actions$
+    public ReportInvalidJSON$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType('REPORT_INVALID_JSON'),
             switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload)),
@@ -599,14 +644,14 @@ export class LoginActions {
             })));
 
 
-    public SignupWithPasswdRequest$: Observable<Action> = createEffect( ()=> this.actions$
+    public SignupWithPasswdRequest$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SignupWithPasswdRequest),
             switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload)),
             map(response => this.SignupWithPasswdResponse(response))));
 
 
-    public SignupWithPasswdResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public SignupWithPasswdResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SignupWithPasswdResponse),
             map((action: CustomActions) => {
@@ -622,14 +667,14 @@ export class LoginActions {
             })));
 
 
-    public LoginWithPasswdRequest$: Observable<Action> =  createEffect( ()=>this.actions$
+    public LoginWithPasswdRequest$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.LoginWithPasswdRequest),
             switchMap((action: CustomActions) => this.auth.LoginWithPassword(action.payload)),
             map(response => this.LoginWithPasswdResponse(response))));
 
 
-    public LoginWithPasswdResponse$: Observable<Action> = createEffect( ()=>this.actions$
+    public LoginWithPasswdResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.LoginWithPasswdResponse),
             map((action: CustomActions) => {
@@ -649,14 +694,14 @@ export class LoginActions {
             })));
 
 
-    public forgotPasswordRequest$: Observable<Action> = createEffect( ()=> this.actions$
+    public forgotPasswordRequest$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.forgotPasswordRequest),
             switchMap((action: CustomActions) => this.auth.forgotPassword(action.payload)),
             map(response => this.forgotPasswordResponse(response))));
 
 
-    public forgotPasswordResponse$: Observable<Action> = createEffect( ()=> this.actions$
+    public forgotPasswordResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.forgotPasswordResponse),
             map((action: CustomActions) => {
@@ -670,14 +715,14 @@ export class LoginActions {
             })));
 
 
-    public resetPasswordRequest$: Observable<Action> = createEffect( ()=>this.actions$
+    public resetPasswordRequest$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.resetPasswordRequest),
             switchMap((action: CustomActions) => this.auth.resetPassword(action.payload)),
             map(response => this.resetPasswordResponse(response))));
 
 
-    public resetPasswordResponse$: Observable<Action> =createEffect( ()=> this.actions$
+    public resetPasswordResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.resetPasswordResponse),
             map((action: CustomActions) => {
@@ -690,22 +735,25 @@ export class LoginActions {
                 return { type: 'EmptyAction' };
             })));
 
-    public renewSession$: Observable<Action> = createEffect( ()=> this.actions$
+    public renewSession$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.renewSessionRequest),
             switchMap((action: CustomActions) => this.auth.renewSession()),
             map(response => this.renewSessionResponse(response))));
 
 
-    public renewSessionResponse$: Observable<Action> =createEffect( ()=> this.actions$
+    public renewSessionResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.renewSessionResponse),
             map((action: CustomActions) => {
+                if (action.payload.status === 'success' && action.payload.body && action.payload.body.session) {
+                    this._generalService.setCookie("giddh_session_id", action.payload.body.session.id, 30);
+                }
                 return { type: 'EmptyAction' };
             })));
 
 
-    public autoLoginwithPasswordResponse$: Observable<Action> =createEffect( ()=> this.actions$
+    public autoLoginwithPasswordResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.AutoLoginWithPasswdResponse),
             map((action: CustomActions) => this.LoginSuccessByOtherUrl())));
@@ -718,11 +766,10 @@ export class LoginActions {
         private auth: AuthenticationService,
         public _toaster: ToasterService,
         private store: Store<AppState>,
-        private comapnyActions: CompanyActions,
+        private companyActions: CompanyActions,
         private _companyService: CompanyService,
         private http: HttpClient,
         private _generalService: GeneralService,
-        private _accountService: AccountService,
         private activatedRoute: ActivatedRoute,
         private _generalAction: GeneralActions,
         private _dbService: DbService,
@@ -871,8 +918,10 @@ export class LoginActions {
         };
     }
 
-    public LoginSuccess(): CustomActions {
-
+    public LoginSuccess(response?: any): CustomActions {
+        if (response && response.body && response.body.session) {
+            this._generalService.setCookie("giddh_session_id", response.body.session.id, 30);
+        }
         return {
             type: LoginActions.LoginSuccess,
             payload: null
@@ -880,7 +929,6 @@ export class LoginActions {
     }
 
     public LoginSuccessByOtherUrl(): CustomActions {
-        console.log("LOGINS");
         return {
             type: LoginActions.LoginSuccessBYUrl,
             payload: null
@@ -921,10 +969,10 @@ export class LoginActions {
         };
     }
 
-    public ChangeCompany(cmpUniqueName: string): CustomActions {
+    public ChangeCompany(cmpUniqueName: string, fetchLastState?: boolean): CustomActions {
         return {
             type: CompanyActions.CHANGE_COMPANY,
-            payload: cmpUniqueName
+            payload: { cmpUniqueName, fetchLastState }
         };
     }
 
@@ -1073,7 +1121,6 @@ export class LoginActions {
     }
 
     public userAutoLoginResponse(response): CustomActions {
-        console.log(response);
         return {
             type: LoginActions.AutoLoginWithPasswdResponse,
             payload: response
@@ -1119,8 +1166,12 @@ export class LoginActions {
     }
 
     private finalThingTodo(stateDetail: any, companies: any) {
-        this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
-        this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
+        this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
+            let request = { userUniqueName: response.user.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
+            this.store.dispatch(this.companyActions.getCompanyUser(request));
+        });
+        this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
+        this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
         this.finalNavigate(stateDetail.body.lastState);
         return { type: 'EmptyAction' };
@@ -1132,10 +1183,7 @@ export class LoginActions {
         } else {
             this._router.navigate([route], parameter);
         }
-        if (isElectron) {
-            window.location.reload();
-        }
-        if(isCordova) {
+        if (isCordova || isElectron) {
             setTimeout(() => {
                 window.location.reload();
             }, 200);

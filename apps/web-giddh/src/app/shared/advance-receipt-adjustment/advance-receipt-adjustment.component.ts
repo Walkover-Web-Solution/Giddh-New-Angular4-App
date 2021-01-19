@@ -87,7 +87,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     /** Submit modal event emitter */
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
 
-    constructor(private store: Store<AppState>, private salesService: SalesService, private toaster: ToasterService) {
+    constructor(
+        private store: Store<AppState>,
+        private salesService: SalesService,
+        private toaster: ToasterService) {
 
     }
 
@@ -153,6 +156,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                             }
                         });
                     } else {
+                        // Vouchers for new adjustment not found fill the suggestions with already adjusted vouchers
+                        if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
+                            this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
+                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                            });
+                        }
                         if (this.isVoucherModule) {
                             this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                         } else {
@@ -167,7 +177,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         if (this.isUpdateMode) {
             this.calculateBalanceDue();
         }
-        this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
+        this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
                 this.availableTdsTaxes = [];
                 obj.taxes.forEach(item => {
@@ -201,9 +211,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         //     this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
         //     return;
         // }
-        this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
-            return item.voucherNumber !== '' || item.balanceDue.amountForAccount > 0;
-        });
+        if(this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
+            this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
+                return item.voucherNumber !== '' || item.balanceDue.amountForAccount > 0;
+            });
+        }
         this.closeModelEvent.emit({
             adjustVoucherData: this.adjustVoucherForm,
             adjustPaymentData: this.adjustPayment
@@ -269,13 +281,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public getAllAdvanceReceipts(): void {
         this.adjustVoucherOptions = [];
-        this.adjustVoucherForm.adjustments.forEach(item => {
-            if (item) {
-                item.voucherDate = item.voucherDate.replace(/-/g, '/');
-                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-            }
-        });
+        if(this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
+            this.adjustVoucherForm.adjustments.forEach(item => {
+                if (item) {
+                    item.voucherDate = item.voucherDate.replace(/-/g, '/');
+                    this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                    this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                }
+            });
+        }
+
         if (this.adjustPayment && this.adjustPayment.customerUniquename && this.adjustPayment.voucherDate) {
             this.getAllAdvanceReceiptsRequest.accountUniqueName = this.adjustPayment.customerUniquename;
             this.getAllAdvanceReceiptsRequest.invoiceDate = this.adjustPayment.voucherDate;
@@ -310,11 +325,14 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public addNewBlankAdjustVoucherRow(): any {
         if (this.getBalanceDue() >= 0) {
             let isAnyBlankEntry: boolean;
-            this.adjustVoucherForm.adjustments.forEach(item => {
-                if (!item.uniqueName || !item.voucherNumber) {
-                    isAnyBlankEntry = true;
-                }
-            });
+            if(this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
+                this.adjustVoucherForm.adjustments.forEach(item => {
+                    if (!item.uniqueName || !item.voucherNumber) {
+                        isAnyBlankEntry = true;
+                    }
+                });
+            }
+
             if (isAnyBlankEntry) {
                 this.isInvalidForm = false;
                 return;
@@ -341,7 +359,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.adjustVoucherOptions.push({ value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional });
         }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
-            return item.value && item.label.trim();
+            if (item.label === '-') {
+                return item.value;
+            } else {
+                return item.value && item.label.trim();
+            }
         });
         if (this.adjustVoucherForm.adjustments.length > 1) {
             this.adjustVoucherForm.adjustments.splice(index, 1);
@@ -375,9 +397,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      */
     public changeTdsAmount(event): void {
         if (!Number(event) && this.adjustVoucherForm && this.adjustVoucherForm.tdsTaxUniqueName) {
-            this.tdsAmountBox.nativeElement.classList.add('error-box');
+            if(this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
+                this.tdsAmountBox.nativeElement.classList.add('error-box');
+            }
         } else {
-            this.tdsAmountBox.nativeElement.classList.remove('error-box');
+            if(this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
+                this.tdsAmountBox.nativeElement.classList.remove('error-box');
+            }
         }
     }
 
@@ -445,24 +471,29 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.toaster.errorToast(this.exceedDueErrorMessage);
             isValid = false;
         }
-        this.adjustVoucherForm.adjustments.map(item => {
-            if (item && item.voucherDate) {
-                if (typeof item.voucherDate === 'string') {
-                    item.voucherDate = item.voucherDate.replace(/\//g, '-');
-                }
-            }
-        });
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
+            this.adjustVoucherForm.adjustments.map(item => {
+                if (item && item.voucherDate) {
+                    if (typeof item.voucherDate === 'string') {
+                        item.voucherDate = item.voucherDate.replace(/\//g, '-');
+                    }
+                }
+            });
+
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
                 if (item.balanceDue && this.isVoucherModule) {
                     item.adjustmentAmount = item.balanceDue;
                 }
                 if (!item.voucherNumber && item.balanceDue.amountForAccount) {
                     isValid = false;
-                    form.controls[`voucherName${key}`].markAsTouched();
+                    if(form.controls[`voucherName${key}`]) {
+                        form.controls[`voucherName${key}`].markAsTouched();
+                    }
                 } else if (item.voucherNumber && !item.balanceDue.amountForAccount) {
                     isValid = false;
-                    form.controls[`amount${key}`].markAsTouched();
+                    if(form.controls[`amount${key}`]) {
+                        form.controls[`amount${key}`].markAsTouched();
+                    }
                 }
             });
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
@@ -515,9 +546,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public clickSelectVoucher(index: number, form: NgForm): any {
-        form.controls[`voucherName${index}`].markAsTouched();
+        if(form.controls[`voucherName${index}`]) {
+            form.controls[`voucherName${index}`].markAsTouched();
+        }
+
         this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
-        if (this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
+        if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
             let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index].uniqueName);
             if (selectedItem) {
                 delete selectedItem['isHilighted'];
@@ -526,7 +560,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             }
         }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
-            return item.value && item.label.trim();
+            if (item.label === '-') {
+                return item.value;
+            } else {
+                return item.value && item.label.trim();
+            }
         });
     }
 
@@ -546,7 +584,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
 
         for (let i = options.length - 1; i >= 0; i--) {
             for (let j = 0; j < adjustVoucherAdjustment.length; j++) {
-                if (options[i] && (options[i].label.trim() === adjustVoucherAdjustment[j].voucherNumber.trim())) {
+                if (options[i] && options[i].label && adjustVoucherAdjustment[j] && adjustVoucherAdjustment[j].voucherNumber &&
+                    options[i].value && adjustVoucherAdjustment[j].uniqueName &&
+                    ((options[i].label.trim() !== '-' && adjustVoucherAdjustment[j].voucherNumber.trim() !== '-' && options[i].label.trim() === adjustVoucherAdjustment[j].voucherNumber.trim()) ||
+                    (options[i].label.trim() === '-' && adjustVoucherAdjustment[j].voucherNumber.trim() === '-' && options[i].value && adjustVoucherAdjustment[j].uniqueName && options[i].value.trim() === adjustVoucherAdjustment[j].uniqueName.trim()))) {
                     options.splice(i, 1);
                 }
 
@@ -559,7 +600,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         });
 
         options = _.uniqBy(options, (item) => {
-            return item.value && item.label.trim();
+            if (item.label === '-') {
+                return item.value;
+            } else {
+                return item.value && item.label.trim();
+            }
         });
         return options;
     }
@@ -584,12 +629,20 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
 
         if (entryData && this.newAdjustVoucherOptions && this.newAdjustVoucherOptions.length) {
             selectedVoucherOptions = this.newAdjustVoucherOptions.find(item => {
-                return item.label === entryData.voucherNumber;
+                if (item.label !== '-') {
+                    return item.label === entryData.voucherNumber;
+                } else {
+                    return item.value === entryData.uniqueName;
+                }
             });
         }
         if (entryData && this.advanceReceiptAdjustmentPreUpdatedData && this.advanceReceiptAdjustmentPreUpdatedData.adjustments && this.advanceReceiptAdjustmentPreUpdatedData.adjustments.length) {
             selectedVoucherPreAdjusted = this.advanceReceiptAdjustmentPreUpdatedData.adjustments.find(item => {
-                return item.voucherNumber === entryData.voucherNumber;
+                if (item.voucherNumber !== '-') {
+                    return item.voucherNumber === entryData.voucherNumber;
+                } else {
+                    return item.uniqueName === entryData.uniqueName;
+                }
             });
         }
         if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.balanceDue && selectedVoucherPreAdjusted.balanceDue) {
@@ -698,9 +751,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     private formatAdjustmentData(adjustmentData: Array<Adjustment>): void {
         if (adjustmentData && adjustmentData.length) {
             adjustmentData.forEach(adjustment => {
-                if (adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
+                if (adjustment && adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
                     adjustment.balanceDue = adjustment.adjustmentAmount;
-                } else if (adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
+                } else if (adjustment && adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
                     adjustment.adjustmentAmount = adjustment.balanceDue;
                 }
             });

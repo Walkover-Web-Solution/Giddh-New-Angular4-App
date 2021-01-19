@@ -8,6 +8,8 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../store';
 import { createSelector } from 'reselect';
+import { GeneralService } from '../../services/general.service';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
 	// tslint:disable-next-line:component-selector
@@ -30,16 +32,26 @@ export class FilingComponent implements OnInit, OnDestroy {
 	public fileReturn: {} = { isAuthenticate: false };
 	public selectedTabId: number = null;
 	public gstFileSuccess$: Observable<boolean> = of(false);
-	public fileReturnSucces: boolean = false;
+    public fileReturnSucces: boolean = false;
+    /** True, if HSN tab needs to be opened by default (required if a user clicks on HSN data in GSTR1) */
+    public showHsn: boolean;
 
 	public gstr1OverviewDataInProgress$: Observable<boolean>;
-	public gstr2OverviewDataInProgress$: Observable<boolean>;
+    public gstr2OverviewDataInProgress$: Observable<boolean>;
+
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
 	private gstr1OverviewDataFetchedSuccessfully$: Observable<boolean>;
 	private gstr2OverviewDataFetchedSuccessfully$: Observable<boolean>;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private _cdr: ChangeDetectorRef, private _route: Router, private activatedRoute: ActivatedRoute, private store: Store<AppState>, private _gstAction: GstReconcileActions) {
+    constructor(private _cdr: ChangeDetectorRef,
+        private _route: Router,
+        private activatedRoute: ActivatedRoute,
+        private store: Store<AppState>,
+        private _gstAction: GstReconcileActions,
+        private generalService: GeneralService) {
 		this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
 		this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
 		this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -49,23 +61,11 @@ export class FilingComponent implements OnInit, OnDestroy {
 
 		this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
 
-		this.store.pipe(select(createSelector([((s: AppState) => s.session.companies), ((s: AppState) => s.session.companyUniqueName)],
-			(companies, uniqueName) => {
-				return companies.find(d => d.uniqueName === uniqueName);
-			}))
-		).subscribe(activeCompany => {
-			if (activeCompany) {
-				if (activeCompany.addresses && activeCompany.addresses.length) {
-					let defaultGst = activeCompany.addresses.find(a => a.isDefault);
-					if (defaultGst) {
-						this.activeCompanyGstNumber = defaultGst.taxNumber;
-					} else {
-						this.activeCompanyGstNumber = activeCompany.addresses[0].taxNumber;
-					}
-					this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
-				}
-			}
-		});
+		this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.activeCompanyGstNumber !== response) {
+                this.activeCompanyGstNumber = response;
+            }
+        });
 	}
 
 	public ngOnInit() {
@@ -73,7 +73,11 @@ export class FilingComponent implements OnInit, OnDestroy {
 			this.currentPeriod = {
 				from: params['from'],
 				to: params['to']
-			};
+            };
+            if (params['selectedGst']) {
+                this.activeCompanyGstNumber = params['selectedGst'];
+                this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
+            }
 			this.store.dispatch(this._gstAction.SetSelectedPeriod(this.currentPeriod));
 			this.selectedGst = params['return_type'];
 			//
@@ -81,11 +85,15 @@ export class FilingComponent implements OnInit, OnDestroy {
 			if (tab > -1) {
 				this.selectTabFromUrl(tab);
 			}
-		});
+        });
+
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
 		// get activeCompany gst number
 		this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
-			this.activeCompanyGstNumber = result;
+            if (result) {
+                this.activeCompanyGstNumber = result;
+            }
 
 			let request: GstOverViewRequest = new GstOverViewRequest();
 			request.from = this.currentPeriod.from;
@@ -117,7 +125,7 @@ export class FilingComponent implements OnInit, OnDestroy {
 		this.selectedTab = tabHeading;
 		this.isTransactionSummary = this.selectedTab !== '1. Overview';
 		this.showTaxPro = val;
-		this.fileReturnSucces = false;
+        this.fileReturnSucces = false;
 		// this._route.navigate(['pages', 'gstfiling', 'filing-return'], {queryParams: {return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: this.selectedTabId}});
 	}
 
@@ -131,5 +139,25 @@ export class FilingComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
-	}
+    }
+
+    /**
+     * Opens the HSN/SAC section of GST report
+     *
+     * @memberof FilingComponent
+     */
+    public openHsnSacSection(): void {
+        this.showHsn = true;
+        this.selectTab('', true, 'pushToGstn');
+    }
+
+    /**
+     * Handle back button
+     *
+     * @memberof FilingComponent
+     */
+    public handleBackButton(): void {
+        this.showHsn = false;
+        this.selectTab('', false, '1. Overview');
+    }
 }

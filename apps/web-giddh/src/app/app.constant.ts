@@ -64,6 +64,8 @@ export enum OnBoardingType {
 
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
+/** API default count limit */
+export const API_COUNT_LIMIT = 20;
 
 /** SubVoucher type */
 export enum SubVoucher {
@@ -163,6 +165,42 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     }
 ];
 
+export const GIDDH_DATE_RANGE_PICKER_RANGES = [
+    {
+        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.LastMonth, value: [
+            moment().subtract(1, 'month').startOf('month'),
+            moment().subtract(1, 'month').endOf('month')
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
+            moment().quarter(moment().quarter()).startOf('quarter'),
+            moment()
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
+            moment().startOf('year').subtract(9, 'year'),
+            moment()
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.LastQuarter, value: [
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.AllTime, value: [
+            moment().startOf('year').subtract(10, 'year'),
+            moment()
+        ]
+    }
+];
+
 /** File attachment types supported by Giddh */
 export const FILE_ATTACHMENT_TYPE = {
     IMAGE: ['jpg', 'jpeg', 'gif', 'png'],
@@ -197,8 +235,6 @@ export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
 
 if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
-} else if(STAGING_ENV) {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
 } else {
     DEFAULT_SIGNUP_TRIAL_PLAN = "xoh1591185630174";
 }
@@ -207,9 +243,7 @@ export let DEFAULT_POPULAR_PLAN = "";
 
 if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_POPULAR_PLAN = "Oak";
-} else if(STAGING_ENV) {
-    DEFAULT_POPULAR_PLAN = "Oak";
-}  else {
+} else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
 }
 
@@ -228,3 +262,24 @@ export enum SearchResultText {
 
 /** Types of tcs and tds taxes */
 export const TCS_TDS_TAXES_TYPES = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+
+/** Routes for which header should display back button */
+export const ROUTES_WITH_HEADER_BACK_BUTTON = [
+    '/pages/settings/create-warehouse',
+    '/pages/settings/create-branch'
+];
+
+/** Routes which are restricted when branch is switched  */
+export const RESTRICTED_BRANCH_ROUTES = [
+    '/pages/settings/branch',
+    '/pages/settings/create-branch',
+    '/pages/settings/financial-year',
+    '/pages/user-details/subscription'
+];
+
+export const SUPPORT_TEAM_NUMBERS = [
+    "+918889500411", "+918889500350", "+918889378604"
+];
+
+/** Email Validation Regex */
+export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

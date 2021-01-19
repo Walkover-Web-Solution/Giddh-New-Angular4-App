@@ -68,6 +68,7 @@ import { ReverseChargeService } from './reversecharge.service';
 import { CashFlowStatementService } from './cashflowstatement.service';
 import { PurchaseOrderService } from './purchase-order.service';
 import { LocaleService } from './locale.service';
+import { BulkVoucherExportService } from './bulkvoucherexport.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -142,7 +143,8 @@ export class ServiceModule {
                 ReverseChargeService,
                 CashFlowStatementService,
                 PurchaseOrderService,
-                LocaleService
+                LocaleService,
+                BulkVoucherExportService
             ]
         };
     }

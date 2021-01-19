@@ -3,7 +3,7 @@
  */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IOption } from './sh-options.interface';
+import { BorderConfiguration, IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
@@ -42,8 +42,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
     @Input() public ItemHeight: number = 41;
-    @Input() public NoFoundMsgHeight: number = 30;
-    @Input() public NoFoundLinkHeight: number = 30;
+    @Input() public NoFoundMsgHeight: number = 35;
+    @Input() public NoFoundLinkHeight: number = 35;
     @Input() public dropdownMinHeight: number = 35;
     @Input() public customFilter: (term: string, options: IOption) => boolean;
     @Input() public customSorting: (a: IOption, b: IOption) => number;
@@ -60,6 +60,15 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public isPaginationEnabled: boolean;
     /** True if the compoonent should be used as dynamic search component instead of static search */
     @Input() public enableDynamicSearch: boolean;
+    /** Border configuration for showing border around sh-select  */
+    @Input() public borderConfiguration: BorderConfiguration;
+    /** True, if search suggesstion should not be displayed */
+    @Input() public showSearchSuggestion: boolean = true;
+    /** True if field is required */
+    @Input() public isRequired: boolean = false;
+    /** True, if selected values should not be reset when options change */
+    @Input() public doNotResetSelectedValues: boolean = false;
+
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -77,6 +86,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>(); // emits last cleared value
+    /** Emits rest of the values when single selection is cleared */
+    @Output() public clearSingleItem: EventEmitter<any> = new EventEmitter<any>();
+
     @Output() public selected = new EventEmitter<any>();
     @Output() public previousChange = new EventEmitter<any>(); // emits when selected option changes, only applicable in single select for now
     @Output() public noOptionsFound = new EventEmitter<boolean>();
@@ -111,7 +123,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() set options(val: IOption[]) {
         this._options = val;
         this.updateRows(val);
-        this.selectedValues = [this.filter];
+        if (!this.doNotResetSelectedValues) {
+            this.selectedValues = [this.filter];
+        }
     }
 
     get selectedValues(): any[] {
@@ -127,7 +141,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             val = [val];
         }
         if (val.length > 0 && this.rows) {
-            this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+            if (this.doNotResetSelectedValues) {
+                this._selectedValues = this._selectedValues.filter(selected => val.indexOf(selected.value) > -1);
+            } else {
+                this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+            }
         } else {
             this._selectedValues = val;
         }
@@ -208,10 +226,14 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      * @memberof ShSelectComponent
      */
     public handleInputChange(inputText: string): void {
-        if (this.enableDynamicSearch) {
-            this.dynamicSearchQueryChanged.next(inputText);
+        if(inputText) {
+            if (this.enableDynamicSearch) {
+                this.dynamicSearchQueryChanged.next(inputText);
+            } else {
+                this.updateFilter(inputText);
+            }
         } else {
-            this.updateFilter(inputText);
+            this.clear(false);
         }
     }
 
@@ -340,6 +362,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                     }
                 }
                 // this.selectHighlightedOption();
+
             } else if (key === this.KEYS.UP) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
@@ -420,7 +443,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
     }
 
-    public clear() {
+    public clear(hide: boolean = true) {
         if (this.disabled) {
             return;
         }
@@ -445,13 +468,17 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
 
         this.selectedValues = [];
-        this.onChange();
+        if(hide) {
+            this.onChange();
+        }
         this.clearFilter();
-        this.hide();
+        if(hide) {
+            this.hide();
+        }
     }
 
     public ngOnInit() {
-        //
+        this.selectedValues = [];
     }
 
     /**
@@ -538,6 +565,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
         this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+        this.clearSingleItem.emit(this.selectedValues);
         this.onChange();
     }
     public openListIfNotOpened(ev) {

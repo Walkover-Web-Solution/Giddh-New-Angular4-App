@@ -19,6 +19,7 @@ import { AccountService } from '../../../../services/account.service';
 @Component({
 	selector: 'reconcile',
 	templateUrl: './reconcilation.component.html',
+	styleUrls: ['reconcilation.component.scss'],
 	providers: [
 		{
 			provide: BsDropdownConfig, useValue: { autoClose: true },
@@ -102,7 +103,8 @@ export class ReconcileComponent implements OnInit, OnDestroy {
 		request.to = this.currentPeriod.to;
 		request.page = page;
 		request.refresh = refresh;
-		request.action = action;
+        request.action = action;
+        request.gstin = this.activeCompanyGstNumber;
 		// request.count = 3;
 		this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(request));
 	}
