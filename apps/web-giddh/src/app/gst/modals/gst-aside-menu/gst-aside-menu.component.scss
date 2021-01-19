@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 :host {
     position: fixed;
     left: auto;
@@ -19,7 +21,7 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: #fff;
+    color: $white;
     font-size: 17px;
     top: 18px;
     margin-right: 0;
@@ -37,11 +39,11 @@
     max-width: 760px;
     width: 100%;
     padding: 0;
-    background: #f4f5f8;
+    background: $solitude;
 }
 .aside-pane-form {
-    background-color: #fff;
-    box-shadow: 0px 3px 6px #0000001a;
+    background-color: $white;
+    box-shadow: 0px 3px 6px $black-russian;
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -49,6 +51,11 @@
     position: relative;
     margin-top: 15px;
 }
+
+.auth-state{
+    border-bottom: 1px solid $night-rider;
+}
+
 @media (max-width: 768px) {
     :host.in , :host  {
         max-width: 600px;
