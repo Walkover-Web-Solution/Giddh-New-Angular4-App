@@ -38,7 +38,7 @@
     clear: both;
 }
 .subscription-dropdown .btn {
-    border: 1px solid #c4c0c0;
+    border: 1px solid $gainsboro;
     width: 342px;
     text-align: left;
     background: $white;
@@ -77,7 +77,7 @@
 }
 .subscription-dropdown .dropdown-menu li {
     padding: 5px 4px;
-    border-bottom: 1px solid #e6e6e6;
+    border-bottom: 1px solid $gainsboro;
     transition: 0.5s all ease;
 }
 .subscription-dropdown .dropdown-menu li.active {
@@ -95,7 +95,7 @@
 }
 .subscription-dropdown li:hover a,
 .subscription-dropdown li:hover {
-    background: #f1f1f1;
+    background: $gray-95;
 }
 .subscription-dropdown .dropdown-menu li a span {
     position: absolute;
@@ -163,17 +163,17 @@
     color: $light-green;
     font-size: 14px;
 }
-.green-dote, .red-dote, .orange-dote {
+.green-dot, .red-dot, .orange-dot {
     width: 9px;
     height: 9px;
     display: inline-block;
     border-radius: 40px;
     background-color: $light-green;
 }
-.red-dote {
+.red-dot {
     background-color: $red;
 }
-.orange-dote {
+.orange-dot {
     background-color: $orange;
 }
 .basic > tbody > tr td:first-child, .basic > thead > tr th:first-child {

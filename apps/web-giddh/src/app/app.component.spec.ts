@@ -1,6 +1,6 @@
 /// <reference types="jasmine" />
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 // Load the implementations that should be tested
 import { AppComponent } from './app.component';
 import { rootReducer } from './reducers';
@@ -11,7 +11,7 @@ xdescribe(`App`, () => {
     let fixture: ComponentFixture<AppComponent>;
 
     // async beforeEach
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [AppComponent],
             imports: [],
