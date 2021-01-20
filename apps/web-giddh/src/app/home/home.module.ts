@@ -29,7 +29,6 @@ import { TotalOverduesChartComponent } from './components/total-overdues/total-o
 import { TotalSalesComponent } from './components/total-sales/total-sales.component';
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home.routing.module';
-import { TranslateDirective } from '../theme/translate/translate.directive';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -53,8 +52,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BankAccountsComponent,
         CrDrComponent,
         TotalSalesComponent,
-        DatepickeroptionsComponent,
-        TranslateDirective
+        DatepickeroptionsComponent
     ],
     exports: [HomeComponent],
     providers: [
