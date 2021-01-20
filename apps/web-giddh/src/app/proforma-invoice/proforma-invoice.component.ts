@@ -2667,11 +2667,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if(trx.amount) {
             let transactionAmount = trx.amount.toString();
 
-            if(this.invFormData.accountDetails.currencySymbol) {
+            if(this.invFormData.accountDetails.currencySymbol && transactionAmount) {
                 transactionAmount = transactionAmount.replace(this.invFormData.accountDetails.currencySymbol, "");
             }
 
-            if(this.selectedSuffixForCurrency) {
+            if(this.selectedSuffixForCurrency && transactionAmount) {
                 transactionAmount = transactionAmount.replace(this.selectedSuffixForCurrency, "");
             }
 
@@ -4174,7 +4174,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-            if (!modal.appliedOtherTax.name && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
+            if ((!modal.appliedOtherTax || !modal.appliedOtherTax.name) && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
                 entry.otherTaxModal.appliedOtherTax.name = tax.name;
             }
             if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
