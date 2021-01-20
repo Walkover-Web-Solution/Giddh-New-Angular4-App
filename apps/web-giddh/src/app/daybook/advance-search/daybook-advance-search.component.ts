@@ -34,7 +34,10 @@ const COMPARISON_FILTER = [
 })
 
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
-
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Input() public startDate: any;
 	@Input() public endDate: any;
 	@Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
