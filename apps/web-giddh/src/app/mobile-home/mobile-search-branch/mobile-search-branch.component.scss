@@ -75,6 +75,10 @@
         max-height: calc(100vh - 245px);
         .dropdown-item {
             align-items: center;
+            &.active-branch {
+                color: $chetwode-blue !important;
+                font-weight: bold;
+            }
         }
         ul{
             list-style: none;
