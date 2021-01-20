@@ -53,17 +53,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
 
-        this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
-            if (companies) {
-                const currentCompany = companies.find(company => company.uniqueName === activeCompanyUniqueName);
-                if (currentCompany?.subscription?.country?.countryName) {
-                    this.showGstComposition = currentCompany.subscription.country.countryName === 'India';
-                } else {
-                    this.showGstComposition = false;
-                }
-            }
-        });
-
 		this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
 			defaultTemplate = ss.defaultTemplate;
 		});
@@ -71,7 +60,13 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 	}
 
 	public ngOnInit() {
-
+        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
+            if (activeCompany?.countryV2?.countryName) {
+                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
+            } else {
+                this.showGstComposition = false;
+            }
+        });
 		this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
 			if (!a) {
 				return;
