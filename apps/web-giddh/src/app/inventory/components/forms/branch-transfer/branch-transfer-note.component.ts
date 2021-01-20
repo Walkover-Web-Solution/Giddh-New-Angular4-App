@@ -408,7 +408,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     }
 
     public removeExtraChar(val) {
-        return val.replace(/[^0-9.]/g, "");
+        return (val) ? val.replace(/[^0-9.]/g, "") : "";
     }
 
     public addItemInLinkedStocks(item, i?: number, lastIdx?) {
