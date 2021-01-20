@@ -947,7 +947,7 @@ h4 {
 }
 
 #web_footer {
-    /* font-family: 'Arvo', serif; */
+    display: none;
 }
 
 .green {
