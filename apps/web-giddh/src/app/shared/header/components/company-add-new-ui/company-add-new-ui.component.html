@@ -65,7 +65,7 @@
 									</sh-select>
 									<input type="text" pattern="[0-9]*" class="form-control pull-right mr-r1" required
 										placeholder="9998899988" id="contactNo" autocomplete="off"
-										(blur)="isValidMobileNumber(mobileNoEl)" [(ngModel)]="company.contactNo"
+										(blur)="isValidMobileNumber()" [(ngModel)]="company.contactNo"
 										name="contactNo" #mobileNoEl />
 								</div>
 							</span>
