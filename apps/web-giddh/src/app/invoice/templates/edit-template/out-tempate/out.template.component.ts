@@ -50,18 +50,17 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 			companies = ss.companies;
 			this.companyUniqueName = ss.companyUniqueName;
         });
-        
+
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
 
         this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
             if (companies) {
-                companies.forEach(company => {
-                    if (company.uniqueName === activeCompanyUniqueName) {
-                        if (company.country === "India") {
-                            this.showGstComposition = true;
-                        }
-                    }
-                });
+                const currentCompany = companies.find(company => company.uniqueName === activeCompanyUniqueName);
+                if (currentCompany?.subscription?.country?.countryName) {
+                    this.showGstComposition = currentCompany.subscription.country.countryName === 'India';
+                } else {
+                    this.showGstComposition = false;
+                }
             }
         });
 
