@@ -1,5 +1,62 @@
 @import "../../assets/css/color.scss";
+.wrap-transaction-map{
+    border:1px solid $gainsboro;
+    border-bottom: none !important;
+    .ledger-book{
+        box-shadow: none;
+        .left-col-new{
+            border-right: 1px solid $gainsboro;
+        }
+        .checkbox-span{
+            height: 49px;
+            min-height: 49px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ledger-row{
+            &:hover{
+                background-color: transparent;
+            }
+        }
+    }
+}
+#ledger-transaction-left-list , #ledger-transaction-right-list {
+    td{
+        padding: 0 !important;
+        &:first-child{
+            border-bottom: none !important;
+        }
+        .d-flex.align-item-center{
+            align-items: stretch !important;
+        }
+        input, sh-select, .form-control{
+            min-height: 49px;
+            height: 49px;
+            border:0 !important;
 
+        }
+        input[type="checkbox"]{
+            min-height: 20px;
+            height: 20px;
+        }
+
+    }
+}
+ #ledger-transaction-left-list td,
+ #ledger-transaction-right-list td {
+    border-bottom: 1px solid $gainsboro;
+}
+#ledger-transaction-right-list tr, #ledger-transaction-left-list tr{
+        border-bottom: 1px solid $gainsboro;
+}
+#ledger-transaction-right-list tr td:last-child, #ledger-transaction-left-list tr td:last-child{
+    border-right: none !important;
+}
+.transaction-mapped-table thead th{
+    padding: 10px 15px !important;
+    border-bottom: 1px solid $gainsboro !important;
+}
 .form-control,
 input {
     color: $nero;
@@ -70,10 +127,10 @@ input {
             }
         }
     }
-    .row{
-        margin-left: 0;
-        margin-right: 0 ;
-    }
+    // .row{
+    //     margin-left: 0;
+    //     margin-right: 0 ;
+    // }
     .ledger-head{
         th{
             padding-left: 15px;
@@ -1118,10 +1175,18 @@ sh-select:focus {
         }
     }
 }
-
-@media (min-width:992px){
-    .download-invoice-ledger {
-        position: unset;
-        align-items: center;
-    }
+.icon-upload-icon {
+    font-size: 16px;
+}
+.account-placeholder {
+    color: $nobel;
+    padding-left: 12px;
+    font-size: 14px;
+    min-height: 49px;
+    display: flex;
+    padding-top: 14px;
+    border-bottom: 1px solid $white;
+}
+.account-placeholder-text {
+    color: $black !important;
 }

@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Eve
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
@@ -53,6 +53,7 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
+import { UploadBankStatementComponent } from './components/upload-bank-statement/upload-bank-statement.component';
 
 @Component({
     selector: 'ledger',
@@ -99,6 +100,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
     @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
+    /** upload bank statement modal instance */
+    @ViewChild('importStatementModal', {static: true}) public importStatementModal: ModalDirective;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
@@ -240,6 +243,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
     public isMoreDetailsOpened: boolean = false;
+    /** This will hold if import statement modal is visible */
+    public isImportStatementVisible: boolean = false;
+    /** This will hold bank transactions api response */
+    public bankTransactionsResponse: any = {totalItems: 0, totalPages: 0, page: 1, countPerPage: 500};
+    /** Set to true the first time advance search modal is opened, done
+     * to prevent the API call only when the advance search filter is opened
+     * by user and not when the user visits the page
+     */
+    public isAdvanceSearchOpened: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1042,21 +1054,29 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
     }
 
-    public getBankTransactions() {
-        // && this.advanceSearchRequest.from
+    /**
+     * This will get the bank transactions of the account
+     *
+     * @memberof LedgerComponent
+     */
+    public getBankTransactions(): void {
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
-            this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
+
+            let getRequest = {accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page}
+            this._ledgerService.GetBankTranscationsForLedger(getRequest).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
-                    this.lc.getReadyBankTransactionsForUI(res.body,
-                        (this.generalService.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
+                    if(res.body) {
+                        this.bankTransactionsResponse.totalItems = res.body.totalItems;
+                        this.bankTransactionsResponse.totalPages = res.body.totalPages;
+                        this.bankTransactionsResponse.page = res.body.page;
+
+                        this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.generalService.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
+                    }
                 }
             });
         }
-        // else {
-        //   this._toaster.warningToast('Something went wrong please reload page');
-        // }
     }
 
     public selectBankTxn(txn: TransactionVM) {
@@ -2339,5 +2359,53 @@ export class LedgerComponent implements OnInit, OnDestroy {
         item.isOtherTaxesApplicable = event.isOtherTaxesApplicable;
         item.otherTaxModal = event.otherTaxModal;
         item.otherTaxType = event.otherTaxType;
+    }
+
+    /**
+     * This will show the bank statement upload modal
+     *
+     * @memberof LedgerComponent
+     */
+    public showUploadBankStatementModal(): void {
+        if(this.importStatementModal) {
+            this.isImportStatementVisible = true;
+            this.importStatementModal.show();
+        }
+    }
+
+    /**
+     * This will hide the bank statement upload modal
+     *
+     * @memberof LedgerComponent
+     */
+    public hideUploadBankStatementModal(): void {
+        if(this.importStatementModal) {
+            this.importStatementModal.hide();
+        }
+    }
+
+    /**
+     * Callback for date change
+     *
+     * @param {*} item
+     * @memberof LedgerComponent
+     */
+    public onChangeEntryDate(item: any): void {
+        if (item && item.entryDate) {
+            if (typeof item.entryDate !== 'string') {
+                item.entryDate = moment(item.entryDate).format(GIDDH_DATE_FORMAT);
+            }
+        }
+    }
+
+    /**
+     * This will change bank transactions pagination page number
+     *
+     * @param {*} event
+     * @memberof LedgerComponent
+     */
+    public bankTransactionPageChanged(event: any): void {
+        this.bankTransactionsResponse.page = event.page;
+        this.getBankTransactions();
     }
 }

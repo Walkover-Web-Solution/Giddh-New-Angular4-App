@@ -35,15 +35,22 @@ export class LedgerService {
     /**
      * get bank transactions for a account
      */
-    public GetBankTranscationsForLedger(accountUniqueName: string, from: string = '') {
+    public GetBankTranscationsForLedger(getRequest: any): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + LEDGER_API.GET_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from)).pipe(map((res) => {
+        let url = this.config.apiUrl + LEDGER_API.GET_BANK_TRANSACTIONS;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequest.accountUniqueName));
+        url = url.replace(':from', getRequest.from);
+        url = url.replace(':page', getRequest.page);
+        url = url.replace(':count', getRequest.count);
+
+        return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<IELedgerResponse[], string> = res;
-            data.request = accountUniqueName;
-            data.queryString = { accountUniqueName };
+            data.request = getRequest;
+            data.queryString = { getRequest };
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<IELedgerResponse[], string>(e, { accountUniqueName })));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, { getRequest })));
     }
 
     /*
@@ -524,4 +531,27 @@ export class LedgerService {
         }),
             catchError((e) => this.errorHandler.HandleCatch<string, ReportsDetailedRequestFilter>(e, model, { accountUniqueName })));
     }
+
+    /**
+     * This will upload the statement pdf
+     *
+     * @param {*} getRequest
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public importStatement(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + LEDGER_API.IMPORT_STATEMENT
+            .replace(':companyUniqueName', encodeURIComponent(getRequest.companyUniqueName))
+			.replace(':accountUniqueName', encodeURIComponent(getRequest.accountUniqueName))
+			.replace(':entity', getRequest.entity);
+
+		const formData: FormData = new FormData();
+        formData.append('file', postRequest.file, postRequest.file.name);
+        formData.append('pdfpassword', postRequest.password);
+		return this._http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
+			let data: BaseResponse<any, string> = res;
+			return data;
+		}), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+	}
 }
