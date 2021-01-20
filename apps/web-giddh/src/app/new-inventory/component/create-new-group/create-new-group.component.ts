@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { SharedModule } from '../../../shared/shared.module'
-import { TabsModule } from 'ngx-bootstrap/tabs';
+
 @Component({
     selector: 'aside-create-new-group',
     templateUrl: './create-new-group.component.html',
@@ -14,7 +13,9 @@ export class CreateNewGroupComponent implements OnInit {
     /* store create group value */
     public createGroupaside:boolean = true;
     /*stor value of hide create field data*/
-    public hideCreateFieldData:boolean = true;
+    public hideCreateFieldData:boolean = false;
+    /* this will store hsn boolean value */
+    public isHSN: boolean = true;
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     public closeAsidePane(event?) {
@@ -26,5 +27,9 @@ export class CreateNewGroupComponent implements OnInit {
     public ngOnInit() {
         /* added image path */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+    }
+    /* It will show/hide hsn code field */
+     selectCode(isHSN) {
+        this.isHSN = isHSN;
     }
 }

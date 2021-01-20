@@ -34,7 +34,7 @@
                     </div>
                     <button class="btn btn-sky-blue bdr-radius-50" *ngIf="!isMobileScreen"
                         [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
-                    <i class="icon-cross pd cursor-pointer" [routerLink]="['/pages/new-inventory']"></i>
+                    <i class="icon-undo pd cursor-pointer" tooltip="Back" [routerLink]="['/pages/new-inventory']"></i>
                 </div>
             </div>
         </div>
@@ -63,22 +63,23 @@
                         </div>
                         <div class="row mb-15">
                             <div class="col-sm-6">
-                                <label>HSN Code</label>
+                                <span class="p-0 mr-3" (click)="selectCode(true)">
+                                    <input id="group-hsn-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
+                                    <label for="group-hsn-code-option" class="radio-custom-label">HSN</label>
+                                </span>
+                                <span class="p-0" (click)="selectCode(false)">
+                                    <input id="group-sac-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
+                                    <label for="group-sac-code-option" class="radio-custom-label">SAC</label>
+                                </span>
                             </div>
                             <div class="col-sm-6">
-                                <input id="hsn-code" class="form-control" type="text" placeholder="Enter Code">
-                            </div>
-                        </div>
-                        <div class="row mb-15">
-                            <div class="col-sm-6">
-                                <label>SAC Code</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <input id="sac-code" class="form-control" type="text" placeholder="Enter Code">
-                                <div class="mt-15 d-flex">
+                                <input *ngIf="isHSN" id="group-hsn-code" class="form-control" type="text" placeholder="Enter HSN Code">
+                                <input *ngIf="!isHSN" id="group-sac-code" class="form-control" type="text" placeholder="Enter SAC Code">
+                                <div>
                                     <input id="usb-group" type="checkbox"><span class="font-14 ml-1">Is it
                                         Sub-group?</span>
                                 </div>
+
                             </div>
                         </div>
                     </form>
@@ -97,7 +98,7 @@
                 </tabset>
             </div>
         </tab>
-        <tab heading="Sub-details">
+        <tab heading="Report">
             <div class="d-flex">
                 <inventory-group-list-sidebar></inventory-group-list-sidebar>
                 <div class="right-side-content w-100 d-flex flex-column">
@@ -166,7 +167,7 @@
 <div class="sticky-footer create-group-footer">
     <div class="footer-wrapper">
         <div class="button-group">
-            <button id="about-group-clear-btn" class="btn btn-primary bdr-radius-50 minwidth-100">Clear</button>
+            <button id="about-group-clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
             <button id="about-under-btn" class="btn btn-success disable bdr-radius-50">Update Group</button>
         </div>
     </div>

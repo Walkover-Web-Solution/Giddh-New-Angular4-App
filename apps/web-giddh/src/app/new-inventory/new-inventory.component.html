@@ -204,7 +204,7 @@
         <div class="mx-3 mb-15 d-flex justify-content-between" *ngIf="isMobileScreen">
             <div class="btn-group" dropdown>
                 <button id="more-btn-inventory-mobile" dropdownToggle type="button"
-                    class="btn btn-primary dropdown-toggle minwidth-100" aria-controls="more-inventory-dropdown-mobile">
+                    class="btn btn-primary dropdown-toggle min-width-100" aria-controls="more-inventory-dropdown-mobile">
                     More <span class="caret"></span>
                 </button>
                 <ul id="more-inventory-dropdown-mobile" *dropdownMenu class="dropdown-menu" role="menu"
@@ -245,8 +245,9 @@
 <!-- <aside-create-new-inventory *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-create-new-inventory> -->
 
 <!-- create new group aside pane -->
-<aside-create-new-group *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState"
+<aside-create-new-group *ngIf="asideMenuState === 'in'"
     (closeAsideEvent)="createGroupToggleAsidePane()"></aside-create-new-group>
+
 
 <!-- create new item(product/service) aside pane -->
 <!-- <aside-create-new-item *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createItemToggleAsidePane()"></aside-create-new-item> -->

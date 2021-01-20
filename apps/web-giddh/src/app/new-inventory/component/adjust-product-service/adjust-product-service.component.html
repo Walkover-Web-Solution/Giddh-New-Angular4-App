@@ -1,7 +1,8 @@
 <div class="relative adjust-group-page">
     <hamburger-menu [pageHeading]="'Adjust Product/Service - Dummy Product Name Furniture'"></hamburger-menu>
-    <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/new-inventory/adjust-inventory']"></i>
-
+    <!-- <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/new-inventory/adjust-inventory']"></i> -->
+    <span class="pull-right pd cursor-pointer back-to-page"
+        [routerLink]="['/pages/new-inventory/adjust-inventory']">Back</span>
     <div class="adjust-field-wrapper mt-2 relative">
         <div>
             <form>
@@ -57,12 +58,13 @@
                 <table class="table giddh-table">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Product/Service/Group</th>
-                            <th>Method</th>
-                            <th>Qty in Hand</th>
-                            <th>Change Qty</th>
-                            <th>New Qty</th>
+                            <th width="20px">#</th>
+                            <th width="220px">Product/Service/Group</th>
+                            <th width="120px">Method</th>
+                            <th width="120px">Qty in Hand</th>
+                            <th width="120px">Change Qty</th>
+                            <th width="120px">New Qty</th>
+                            <th width="100px">New Value</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,6 +96,7 @@
                             <td>
                                 <input type="text" id="new-qty" value="12,020" class="form-control">
                             </td>
+                            <td>2000</td>
                         </tr>
                     </tbody>
                 </table>
@@ -102,12 +105,13 @@
                 <table class="table giddh-table" hidden>
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Product/Service/Group</th>
-                            <th>Method</th>
-                            <th>Current Value</th>
-                            <th>Changed Value</th>
-                            <th>New Qty</th>
+                            <th width="20px">#</th>
+                            <th width="220px">Product/Service/Group</th>
+                            <th width="120px">Method</th>
+                            <th width="120px">Current Value</th>
+                            <th width="120px">Changed Value</th>
+                            <th width="120px">New Qty</th>
+                            <th width="100px">New Value</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,6 +144,7 @@
                             <td>
                                 <input type="text" id="new-qty" value="12,020" class="form-control">
                             </td>
+                            <td>2000</td>
                         </tr>
                     </tbody>
                 </table>
@@ -155,8 +160,8 @@
     <div class="inner-content-footer">
         <div class="d-flex">
             <div class="button-group">
-                <button id="adjust-clear-btn" class="btn btn-primary minwidth-100 bdr-radius-50"> Clear </button>
-                <button id="convert-btn" class="btn btn-success minwidth-100 bdr-radius-50" disabled> Convert to Adjust
+                <button id="adjust-clear-btn" class="btn btn-primary min-width-100 bdr-radius-50"> Clear </button>
+                <button id="convert-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled> Convert to Adjust
                 </button>
             </div>
         </div>

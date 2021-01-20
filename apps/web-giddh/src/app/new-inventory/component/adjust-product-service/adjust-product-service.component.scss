@@ -1,12 +1,13 @@
 @import "../../../../assets/css/color.scss";
 
 .adjust-group-page {
-    .icon-cross {
-        position: absolute;
-        right: 10px;
-        top: 3px;
+    .back-to-page {
+         position: absolute;
+        right: 5px;
+        top: 0;
         padding: 10px;
         z-index: 10;
+        color: $primary;
     }
     .adjust-field-wrapper {
         min-height: 73vh;

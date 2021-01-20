@@ -1,7 +1,7 @@
 <div class="relative adjust-group-page">
     <hamburger-menu [pageHeading]="'Adjust group'"></hamburger-menu>
-    <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/new-inventory/adjust-inventory']"></i>
-
+    <!-- <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/new-inventory/adjust-inventory']"></i> -->
+    <span class="pull-right pd cursor-pointer back-to-page" [routerLink]="['/pages/new-inventory/adjust-inventory']">Back</span>
     <div class="adjust-field-wrapper mt-2 relative">
         <div>
             <form>
@@ -109,8 +109,8 @@
     <div class="inner-content-footer">
         <div class="d-flex">
             <div class="button-group">
-                <button id="adjust-group-btn" class="btn btn-primary minwidth-100 bdr-radius-50"> Clear </button>
-                <button id="adjust-group-convert-btn" class="btn btn-success minwidth-100 bdr-radius-50" disabled>
+                <button id="adjust-group-btn" class="btn btn-primary min-width-100 bdr-radius-50"> Clear </button>
+                <button id="adjust-group-convert-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>
                     Convert to Adjust </button>
             </div>
         </div>
