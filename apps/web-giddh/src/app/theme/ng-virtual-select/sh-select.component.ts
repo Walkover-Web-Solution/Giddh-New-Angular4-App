@@ -67,8 +67,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public doNotResetSelectedValues: boolean = false;
     /** True if field is required */
     @Input() public isRequired: boolean = false;
-    /** True, if selected values should not be reset when options change */
-    @Input() public doNotResetSelectedValues: boolean = false;
 
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
