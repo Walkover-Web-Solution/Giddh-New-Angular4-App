@@ -52,7 +52,7 @@ describe('This is TrialBalance Search Test', () => {
             }
             cy.wait(2000)
             cy.navigateToTrialBalanceOptions('Profit & Loss');
-            cy.searchOnPLAndBS('.profitLoss > .clearfix > .col-4 > strong', 'Sales', '169')
+            cy.searchOnPLAndBS('.profit-loss > .clearfix > .col-4 > strong', 'Sales', '169')
         })
     });
 
