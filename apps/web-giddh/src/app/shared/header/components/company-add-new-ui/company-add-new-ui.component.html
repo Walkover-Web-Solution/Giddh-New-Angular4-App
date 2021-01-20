@@ -65,12 +65,12 @@
 									</sh-select>
 									<input type="text" pattern="[0-9]*" class="form-control pull-right mr-r1" required
 										placeholder="9998899988" id="contactNo" autocomplete="off"
-										(blur)="isValidMobileNumber(mobileNoEl)" [(ngModel)]="company.contactNo"
+										(blur)="isValidMobileNumber()" [(ngModel)]="company.contactNo"
 										name="contactNo" #mobileNoEl />
 								</div>
 							</span>
                         </div>
-                        <div *ngIf="createBranch" class="col-xs-12 mr-b3">
+                        <div *ngIf="createBranch" class="col-md-12 mr-b3">
 							<span>
 								<label for="aliasName" class="d-block">Alias<sup>*</sup></label>
 								<div class="d-flex welcome-select ">

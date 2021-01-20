@@ -3,7 +3,7 @@
         <div class="upper-form">
             <div class="row ">
                 <div class="col-sm-4">
-                    <div class="ng-select-wrap liq select-group disable-select-group">
+                    <div class="ng-select-wrap select-list select-group disable-select-group">
                         <label>Select Group<span class="red-text">*</span> </label>
                         <ng-select placeholder="Select Group" [disabled]="true" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" class="wd100">
                             <ng-template #optionTemplate let-option="option">
@@ -125,7 +125,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4" *ngIf="GSTIN_OR_TRN">
-                                    <div class="form-group mb-05">
+                                    <div class="form-group mr-b05">
                                         <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}</label>
                                         <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (blur)="checkGstNumValidation(gstNumberField);getStateCode(gst, states);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
                                         />
@@ -187,7 +187,7 @@
             </tab>
         </ng-container>
 
-        <tab heading="Contact" class="contact-from-wrap" [active]="!isDebtorCreditor" (selectTab)="tabChanged('contacts')">
+        <tab heading="Contact" class="contact-form-wrap" [active]="!isDebtorCreditor" (selectTab)="tabChanged('contacts')">
             <div class="contact-form">
                 <div class="row">
                     <div class="col-sm-6">
@@ -358,7 +358,7 @@
             <ng-container formArrayName="customFields">
                 <ng-container *ngFor="let item of companyCustomFields; let index = index;let first = first; let last = last" [formGroupName]="index">
                     <ng-container *ngFor="let customFieldsItem of addAccountForm.get('customFields')['controls']; let index = index;">
-                        <div class="row mb-15" *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value">
+                        <div class="row mr-b15" *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value">
                             <div class="col-lg-8">
                                 <div class="name-of-field">
                                     <label>{{item.key}} </label>

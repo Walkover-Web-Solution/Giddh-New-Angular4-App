@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+    <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
 </head>
 
 <body>
@@ -57,7 +57,7 @@
                                 <span class="font-16 text-color">{{legderBalanceData.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</span>
                             </div>
                         </div>
-                        <div class="col-4 font-12 pt-15">
+                        <div class="col-4 font-12 pd-t15">
                             <!-- <div class="text-center">
                                       <div>10,340 Dr.</div>
                                   </div> -->
@@ -134,7 +134,7 @@
                                             <tr v-for="ledger in ledgerData.ledgersTransactions.debitTransactions"
                                                 v-tooltip="'Total: '+ledger.amount+' '+ledger.type"
                                                 v-on:click="checkCompEntry(ledger)"
-                                                v-bind:class="{compound-entry: ledger.isCompoundEntry}">
+                                                v-bind:class="{'compound-entry': ledger.isCompoundEntry}">
                                                 <td colspan="100%" class="p-0 border-none">
                                                     <table class="w-100">
                                                         <tbody>
@@ -253,7 +253,7 @@
                                             <tr v-for="ledger in ledgerData.ledgersTransactions.creditTransactions"
                                                 v-tooltip="'Total: '+ledger.amount+' '+ledger.type"
                                                 v-on:click="checkCompEntry(ledger)"
-                                                v-bind:class="{compound-entry: ledger.isCompoundEntry}">
+                                                v-bind:class="{'compound-entry': ledger.isCompoundEntry}">
                                                 <td colspan="100%" class="p-0 border-none">
                                                     <table class="w-100">
                                                         <tbody>

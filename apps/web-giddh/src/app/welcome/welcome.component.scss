@@ -64,7 +64,7 @@
 }
 
 .btn-default:hover {
-    background: $gray-90;
+    background: $whisper;
 }
 
 ::ng-deep sh-select .header.open > input[type="text"],
@@ -119,16 +119,21 @@ fieldset[disabled] {
     cursor: pointer;
     color: $deep-sky-blue;
 }
-.custom-multi-select li {
-    background: $white-smoke;
-    color: $white;
-    margin: 4px;
-    padding: 2px 10px;
-    font-size: 14px;
-    border-radius: 3px;
-    cursor: pointer;
-    display: inline-block;
-}
+.custom-multi-select{
+    li {
+        background: $white-smoke;
+        color: $white;
+        margin: 4px;
+        padding: 2px 10px;
+        font-size: 14px;
+        border-radius: 3px;
+        cursor: pointer;
+        display: inline-block;
+        a{
+            color: $gray;
+        }
+    }
+} 
 span.same-as-head {
     font-size: 14px;
     position: relative;
@@ -144,11 +149,6 @@ span.same-as-head {
 .select-caret-contact{
     width: 90px !important;
     margin-right: 16px !important;
-}
-
-
-.custom-multi-select{
-    color: $gray;
 }
 
 .min-height-100{

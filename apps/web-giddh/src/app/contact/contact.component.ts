@@ -455,7 +455,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                         };
                     }
                     this.currentBranchData = _.cloneDeep(this.currentBranch);
-                    this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : "") + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                    this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : "") + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
                 }
             } else {
                 if (this._generalService.companyUniqueName) {

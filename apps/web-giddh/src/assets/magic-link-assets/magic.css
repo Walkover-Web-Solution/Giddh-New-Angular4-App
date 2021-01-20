@@ -187,7 +187,7 @@ body {
     padding: 10px;
 }
 
-.pd15 {
+.pd-15 {
     padding: 15px;
 }
 
@@ -296,7 +296,7 @@ body {
     padding-right: 40px;
 }
 
-.pt-15{
+.pd-t15{
     padding-top: 15px;
 }
 
@@ -316,7 +316,7 @@ body {
     margin: 10px !important;
 }
 
-.mr15 {
+.mr-r15 {
     margin: 15px;
 }
 
@@ -938,7 +938,7 @@ h4 {
 }
 
 #web_footer {
-    /* font-family: 'Arvo', serif; */
+    display: none;
 }
 
 .green {
