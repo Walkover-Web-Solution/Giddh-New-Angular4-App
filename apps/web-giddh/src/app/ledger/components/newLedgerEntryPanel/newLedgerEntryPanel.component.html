@@ -8,7 +8,7 @@
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
         <!--        tourist scheme template end-->
         <div class="basic_detail mr-b1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
-            <table class="width100 total-detail-table">
+            <table class="width-100 total-detail-table">
 
                 <tbody>
 
@@ -236,7 +236,7 @@
                 [(ngModel)]="blankLedger.description"></textarea>
         </div>
 
-        <table class="width100 mr-t05">
+        <table class="width-100 mr-t05">
             <tbody>
                 <tr>
                     <td class="primary-color pl-0" (click)="toggleMoreDetail();">
@@ -292,7 +292,7 @@
                                             </span>
                                         </button>
 
-                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width-100" role="menu">
                                             <li *ngIf="invoiceList.length==0">No results found</li>
                                             <li *ngFor="let invoice of invoiceList">
 
