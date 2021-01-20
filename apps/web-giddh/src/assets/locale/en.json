@@ -368,6 +368,7 @@
     "app_all": "All",
     "app_payment_mode": "Payment Mode",
     "app_select_account": "Select Account",
+    "app_select_accounts": "Select Accounts",
     "app_invoice_date": "Invoice Date",
     "app_invoice_number": "Invoice Number",
     "app_sku": "SKU",
@@ -375,6 +376,18 @@
     "app_cgst": "CGST",
     "app_sgst": "SGST",
     "app_particular": "Particular",
+    "app_particulars": "Particulars",
     "app_clo_bal": "Clo Bal",
-    "app_dr": "dr."
+    "app_dr": "dr.",
+    "app_pdf": "PDF",
+    "app_excel": "Excel",
+    "app_ascending": "Ascending",
+    "app_descending": "Descending",
+    "app_mini": "Mini",
+    "app_detailed": "Detailed",
+    "app_export_as": "Export As:",
+    "app_include": "Include",
+    "app_exclude": "Exclude",
+    "app_other_details": "Other Details",
+    "app_inventory": "Inventory"
 }
