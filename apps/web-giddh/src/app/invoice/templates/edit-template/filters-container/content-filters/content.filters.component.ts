@@ -69,17 +69,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
 
         this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-
-        this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
-            if (companies) {
-                const currentCompany = companies.find(company => company.uniqueName === activeCompanyUniqueName);
-                if (currentCompany?.subscription?.country?.countryName) {
-                    this.showGstComposition = currentCompany.subscription.country.countryName === 'India';
-                } else {
-                    this.showGstComposition = false;
-                }
-            }
-        });
     }
 
     /**
@@ -88,6 +77,13 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ContentFilterComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
+            if (activeCompany?.countryV2?.countryName) {
+                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
+            } else {
+                this.showGstComposition = false;
+            }
+        });
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
