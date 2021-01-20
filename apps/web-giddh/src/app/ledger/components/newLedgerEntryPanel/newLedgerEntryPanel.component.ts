@@ -36,7 +36,7 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
+import * as moment from 'moment/moment';
 import {
     CONFIRMATION_ACTIONS,
     ConfirmationModalConfiguration,
@@ -406,7 +406,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if(this.taxListForStock && this.taxListForStock.length > 0) {
             this.taxListForStock.forEach(tl => {
-                let tax = companyTaxes.find(f => f.uniqueName === tl);
+                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f.uniqueName === tl) : undefined;
                 if (tax) {
                     switch (tax.taxType) {
                         case 'tcsrc':
@@ -524,12 +524,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.totalForTax = this.currentTxn.total;
+                    this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
                 } else {
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
+                    const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
                     this.currentTxn.total = giddhRoundOff((total + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
                 }
-                this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
             } else {
                 // Amount is zero, set other parameters to zero
                 if (this.isAdvanceReceipt) {
@@ -561,7 +563,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.taxControll) {
                 this.taxControll.change();
             }
-            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
         }
 
         if (this.shouldShowRcmTaxableAmount) {
@@ -583,7 +589,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
 
             this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
-            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
 
             // calculate discount on change of price
             if (this.discountControl) {
@@ -599,7 +609,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public changeQuantity(val: string) {
         this.currentTxn.inventory.quantity = Number(val);
         this.currentTxn.amount = Number((this.currentTxn.inventory.unit.highPrecisionRate * this.currentTxn.inventory.quantity).toFixed(this.giddhBalanceDecimalPlaces));
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        if (this.currentTxn.inventory) {
+            this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+        } else {
+            this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+        }
 
         // calculate discount on change of price
         if (this.discountControl) {
@@ -659,7 +673,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
-        this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            if (this.currentTxn.inventory) {
+                this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
+            } else {
+                this.currentTxn.convertedAmount = this.calculateConversionRate(this.currentTxn.amount);
+            }
 
         if (this.discountControl) {
             this.discountControl.ledgerAmount = this.currentTxn.amount;
@@ -863,8 +881,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let o: ReconcileRequest = {};
         o.chequeNumber = (this.blankLedger.chequeNumber) ? this.blankLedger.chequeNumber : '';
         o.accountUniqueName = this.trxRequest.accountUniqueName;
-        o.from = this.trxRequest.from;
-        o.to = this.trxRequest.to;
+        o.from = (this.trxRequest.from) ? moment(this.trxRequest.from).format(GIDDH_DATE_FORMAT) : "";
+        o.to = (this.trxRequest.to) ? moment(this.trxRequest.to).format(GIDDH_DATE_FORMAT) : "";
         this._ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).subscribe((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
             if (data.status === 'success') {
@@ -1057,6 +1075,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.removeSelectedInvoice();
             this.getInvoiceListsForCreditNote.emit(event.value);
             this.blankLedger.generateInvoice = true;
+            this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
@@ -1158,8 +1177,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public exchangeRateChanged() {
         this.blankLedger.exchangeRate = Number(this.blankLedger.exchangeRateForDisplay) || 0;
-        this.amountChanged();
-        this.calculateTotal();
+        if (this.currentTxn.inventory && this.currentTxn.inventory.unit && this.currentTxn.unitRate) {
+            const stock = this.currentTxn.unitRate.find(rate => {
+                return rate.stockUnitCode === this.currentTxn.inventory.unit.code;
+            });
+            const stockRate = stock ? stock.rate : 0;
+            this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger.exchangeRate).toFixed(this.ratePrecision));
+            this.changePrice(this.currentTxn.inventory.rate);
+        } else {
+            this.amountChanged();
+            this.calculateTotal();
+        }
     }
 
     /**
@@ -1249,7 +1277,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public handleAdvanceReceiptChange(): void {
-        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? SubVoucher.AdvanceReceipt : '';
+        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? SubVoucher.AdvanceReceipt : this.isRcmEntry ? SubVoucher.ReverseCharge : '';
         this.blankLedger.generateInvoice = this.isAdvanceReceipt;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.calculateTax();
@@ -1304,7 +1332,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if(adjustments && adjustments.length > 0) {
                 adjustments.forEach(adjustment => {
                     adjustment.adjustmentAmount = adjustment.balanceDue;
-                    // delete adjustment.balanceDue;
+                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
                 });
             }
             this.currentTxn.voucherAdjustments = {
@@ -1484,7 +1512,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
             this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
-        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
+        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount.length)) {
             this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
         }
         if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {

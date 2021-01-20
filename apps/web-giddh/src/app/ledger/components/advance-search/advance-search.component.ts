@@ -313,6 +313,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         if (this.advanceSearchRequest.dataToSend && typeof this.advanceSearchRequest.dataToSend.bsRangeValue === 'string') {
             this.advanceSearchRequest.dataToSend.bsRangeValue = [this.fromDate, this.toDate];
         }
+        if (this.advanceSearchRequest.dataToSend && this.advanceSearchRequest.dataToSend.dateOnCheque) {
+            this.advanceSearchRequest.dataToSend.dateOnCheque = moment(this.advanceSearchRequest.dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
+        }
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: false });
     }
 
@@ -403,7 +406,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('includeAmount').patchValue(false);
                 this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
                 this.advanceSearchForm.get('amountLessThan').patchValue(false);
-                this.advanceSearchForm.get('amountEqualTo').patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo').patchValue(true);
                 break;
             case 'inventoryQty-greaterThan':
                 this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);

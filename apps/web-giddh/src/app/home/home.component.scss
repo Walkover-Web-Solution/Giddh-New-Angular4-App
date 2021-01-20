@@ -2,21 +2,6 @@
 // @import url('../../assets/css/color.css');
 
 @import "../../assets/css/color.scss";
-.primaryDarkBg {
-    background: #005b77;
-}
-
-.primarylightBg {
-    background: #77a1b8;
-}
-
-.defaultDarkBg {
-    background: #28283c;
-}
-
-.defaultLightBg {
-    background: #aeaec4;
-}
 
 .dashboard-option {
     padding: 0;
@@ -35,13 +20,13 @@
 }
 // new dashboard css
 .white-row {
-    background-color: #fff;
+    background-color: $white;
     padding: 9px;
     margin-bottom: 10px;
     font-size: 16px;
-    box-shadow: 1px 1px 3px #00000029;
+    box-shadow: 1px 1px 3px $black-russian;
 }
-.clickHere {
+.click-here {
     color: $chetwode-blue;
 }
 .dashboard-container {
@@ -49,12 +34,12 @@
     width: 100%;
 }
 span.icon-traingle-info {
-    color: #ff6262;
+    color: $bitter-sweet;
     font-size: 15px;
     margin-right: 10px;
 }
 span.icon-info-icon {
-    color: #999999;
+    color: $nobel;
     font-size: 18px;
     margin-right: 10px;
 }
@@ -66,8 +51,8 @@ a.dropdown-item {
 }
 
 a.dropdown-item:hover {
-    background-color: #eeeff9;
-    color: #5b64c9;
+    background-color: $lavender;
+    color: $chetwode-blue;
 }
 .dashboard-notification {
     margin-bottom: 20px;
@@ -83,15 +68,15 @@ a.dropdown-item:hover {
     background: transparent;
 }
 .form-control:focus {
-    border-color: #5b64c9 !important;
+    border-color: $chetwode-blue !important;
 }
 .form-control {
     height: 32px;
 }
-.clickHere {
+.click-here {
     cursor: pointer;
 }
-.noDataAvailable {
+.no-data-available {
     display: flex;
     height: 181px;
     justify-content: center;

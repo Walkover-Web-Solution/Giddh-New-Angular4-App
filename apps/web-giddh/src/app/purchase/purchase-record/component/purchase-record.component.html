@@ -10,7 +10,7 @@
             </tab>
             <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (selectTab)="onTabChanged('bill')"
             [id]="(activeTab == 'bill') ? 'giddh-page-heading': ''">
-                <div *ngIf="activeTab == 'bill'" class="pt-15">
+                <div *ngIf="activeTab == 'bill'" class="pd-t15">
                     <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill" (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
                 </div>
             </tab>

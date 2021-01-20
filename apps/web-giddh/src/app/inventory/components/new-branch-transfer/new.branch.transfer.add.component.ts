@@ -133,6 +133,18 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public sourceBranchAlias: string;
     /** Stores the destination branch alias */
     public destinationBranchAlias: string;
+    /* This will clear the branch value in dropdown */
+    public branchClear$: Observable<IForceClear> = observableOf({ status: false });
+    /* This will clear the source branch value in dropdown */
+    public sourceBranchClear$: Observable<IForceClear> = observableOf({ status: false });
+    /* This will clear the destination branch value in dropdown */
+    public destinationBranchClear$: Observable<IForceClear> = observableOf({ status: false });
+    /* This will clear the warehouse value in dropdown */
+    public warehouseClear$: Observable<IForceClear> = observableOf({ status: false });
+    /* This will clear the sender warehouse value in dropdown */
+    public senderWarehouseClear$: Observable<IForceClear> = observableOf({ status: false });
+    /* This will clear the destination warehouse value in dropdown */
+    public destinationWarehouseClear$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -285,6 +297,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         };
 
         this.forceClear$ = observableOf({ status: true });
+        this.branchClear$ = observableOf({ status: true });
+        this.sourceBranchClear$ = observableOf({ status: true });
+        this.destinationBranchClear$ = observableOf({ status: true });
+        this.warehouseClear$ = observableOf({ status: true });
+        this.senderWarehouseClear$ = observableOf({ status: true });
+        this.destinationWarehouseClear$ = observableOf({ status: true });
         this.activeRow = -1;
     }
 
@@ -304,6 +322,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer.sources[index].warehouse.address = "";
                         this.branchTransfer.sources[index].warehouse.stockDetails.quantity = (event.value) ? 1 : null;
                     }
+                    this.senderWarehouseClear$ = observableOf({ status: true });
                     this.resetSourceWarehouses(index);
                 }
             } else {
@@ -316,6 +335,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer.destinations[index].warehouse.address = "";
                         this.branchTransfer.destinations[index].warehouse.stockDetails.quantity = (event.value) ? 1 : null;
                     }
+                    this.destinationWarehouseClear$ = observableOf({ status: true });
                     this.resetDestinationWarehouses(index);
                 }
             }
@@ -450,7 +470,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if(data && data.length > 0) {
             data.forEach(d => {
                 if (d && !d.isCompany) {
-                    branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias));
+                    d.warehouses.forEach(warehouse => {
+                        warehouse.taxNumber = warehouse.taxNumber || '';
+                    });
+                    branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias, d.warehouses));
                     if (d.warehouses.length) {
                         this.senderWarehouses[d.uniqueName] = [];
                         this.destinationWarehouses[d.uniqueName] = [];
@@ -553,6 +576,51 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
+    /**
+     * Resets the warehouse when user clears the warehouse from the dropdown
+     *
+     * @param {string} type Type of warehouse selected ('source', 'destination')
+     * @param {number} index Index of warehouse
+     * @memberof NewBranchTransferAddComponent
+     */
+    public resetWarehouse(type: string, index: number): void {
+        if (type === "sources") {
+            if (this.branchTransfer.sources[index] && this.branchTransfer.sources[index].warehouse) {
+                this.branchTransfer.sources[index].warehouse.name = null;
+                this.branchTransfer.sources[index].warehouse.uniqueName = null;
+                this.branchTransfer.sources[index].warehouse.taxNumber = null;
+                this.branchTransfer.sources[index].warehouse.address = null;
+                if (this.branchTransfer.sources[index].warehouse.stockDetails) {
+                    this.branchTransfer.sources[index].warehouse.stockDetails.quantity = null;
+                }
+            }
+            this.resetSourceWarehouses(index, true);
+            if (this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse &&
+                this.branchTransfer.destinations[index].warehouse.uniqueName === null) {
+                // Source and destination warehouses are cleared, reset both warehouses
+                this.resetDestinationWarehouses(index, true);
+                this.branches$ = observableOf(this.branches);
+            }
+        } else {
+            if (this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse) {
+                this.branchTransfer.destinations[index].warehouse.name = null;
+                this.branchTransfer.destinations[index].warehouse.uniqueName = null;
+                this.branchTransfer.destinations[index].warehouse.taxNumber = null;
+                this.branchTransfer.destinations[index].warehouse.address = null;
+                if (this.branchTransfer.destinations[index].warehouse.stockDetails) {
+                    this.branchTransfer.destinations[index].warehouse.stockDetails.quantity = null;
+                }
+            }
+            this.resetDestinationWarehouses(index, true);
+            if (this.branchTransfer.sources[index] && this.branchTransfer.sources[index].warehouse &&
+                this.branchTransfer.sources[index].warehouse.uniqueName === null) {
+                // Source and destination warehouses are cleared, reset both warehouses
+                this.resetSourceWarehouses(index, true);
+                this.branches$ = observableOf(this.branches);
+            }
+        }
+    }
+
     public getWarehouseDetails(type, index): void {
         if (this.branchTransfer[type][index].warehouse && this.branchTransfer[type][index].warehouse.uniqueName !== null) {
             this._warehouseService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
@@ -566,6 +634,43 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer[type][index].warehouse.address = '';
                         this.branchTransfer[type][index].warehouse.taxNumber = '';
                     }
+                    let branchesWithSameTax = [];
+                    if (!this.editBranchTransferUniqueName) {
+                        /*  Find the branches which have the same tax number as the selected warehouse
+                            because the branch transfer can take place between same tax number branches for GST and VAT, for other
+                            countries taxation is not supported as of now. This will allow users to transfer between same
+                            tax warehouses. If it is delivery challan then sender's warehouse will be taken for reference and in
+                            receipt note destination's warehouse. If the sender's warehouse is changed in delivery challan then we
+                            need to show branches in receiver's name that have the warehouse with tax number equal to sender's warehouse
+                            else no branch will be displayed. Same case for receipt note, if receiver's warehouse is changed then
+                            branches that will be displayed in sender's name are those with same tax number as sender's warehouse
+                         */
+                        branchesWithSameTax = this.branches.filter(branch => {
+                            if (branch.additional && branch.additional.warehouses && branch.additional.warehouses.length) {
+                                return branch.additional.warehouses.some(warehouse => warehouse.taxNumber === this.branchTransfer[type][index].warehouse.taxNumber);
+                            }
+                            return false;
+                        });
+                        this.branches$ = observableOf(branchesWithSameTax);
+                    }
+                    if (type === "sources") {
+                        // Clear the destination branch if it is not present in branches with same tax array, as only branches with same tax should be displayed
+                        if (branchesWithSameTax && !this.editBranchTransferUniqueName && this.branchTransfer['destinations'][index] && !branchesWithSameTax.some(branch => branch.value === this.branchTransfer['destinations'][index].uniqueName)) {
+                            if (this.branchTransferMode === 'deliverynote') {
+                                this.destinationBranchClear$ = observableOf({ status: true });
+                            }
+                        }
+                        this.resetDestinationWarehouses(index);
+                    } else {
+                        // Clear the source branch if it is not present in branches with same tax array, as only branches with same tax should be displayed
+                        if (branchesWithSameTax && !this.editBranchTransferUniqueName && this.branchTransfer['sources'][index] && !branchesWithSameTax.some(branch => branch.value === this.branchTransfer['sources'][index].uniqueName)) {
+                            if (this.branchTransferMode === 'receiptnote') {
+                                this.sourceBranchClear$ = observableOf({ status: true });
+                            }
+                        }
+                        this.resetSourceWarehouses(index);
+                    }
+                    this.detectChanges();
                 }
             });
         } else {
@@ -573,15 +678,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.branchTransfer[type][index].warehouse.taxNumber = "";
             this.branchTransfer[type][index].warehouse.address = "";
         }
-
-        if (type === "sources") {
-            this.resetDestinationWarehouses(index);
-        } else {
-            this.resetSourceWarehouses(index);
-        }
     }
 
-    public resetSourceWarehouses(index) {
+    /**
+     * Resets the source warehouse in sender and destination dropdowns
+     *
+     * @param {*} index Index of the warehouse
+     * @param {boolean} [reInitializeWarehouses] True, if the warehouse dropdown needs to be reset (is true only when either sender/receiver
+     * warehouses are reset and the left sender/receiver warehouse needs to be reset)
+     * @memberof NewBranchTransferAddComponent
+     */
+    public resetSourceWarehouses(index, reInitializeWarehouses?: boolean) {
         if (this.branchTransfer.destinations && this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
             this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
             let allowWarehouse = true;
@@ -590,7 +697,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
                     allowWarehouse = true;
 
-                    if (key.uniqueName === this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                    if (key.uniqueName === this.branchTransfer.destinations[index].warehouse.uniqueName ||
+                            key.taxNumber !== (this.branchTransfer.destinations[index].warehouse.taxNumber || '')) {
                         allowWarehouse = false;
                     }
 
@@ -604,10 +712,18 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.senderWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
                 if(this.allWarehouses[this.branchTransfer.sources[index].uniqueName] && this.allWarehouses[this.branchTransfer.sources[index].uniqueName].length > 0) {
                     this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
-                        if (this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse && key.uniqueName !== this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                        if (this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse && key.uniqueName !== this.branchTransfer.destinations[index].warehouse.uniqueName &&
+                            key.taxNumber === (this.branchTransfer.destinations[index].warehouse.taxNumber || '')) {
                             this.senderWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                         }
                     });
+                    if (this.branchTransfer.sources[index].warehouse && this.branchTransfer.sources[index].warehouse.uniqueName) {
+                        setTimeout(() => {
+                            if(this.sourceWarehouse) {
+                                this.sourceWarehouse.writeValue(this.branchTransfer.sources[index].warehouse.uniqueName);
+                            }
+                        }, 100);
+                    }
                 }
             }
         } else {
@@ -618,7 +734,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.allWarehouses[this.branchTransfer.destinations[0].uniqueName].forEach(key => {
                     allowWarehouse = true;
 
-                    if (key.uniqueName === this.branchTransfer.destinations[0].warehouse.uniqueName) {
+                    if (key.uniqueName === this.branchTransfer.destinations[0].warehouse.uniqueName ||
+                        (!reInitializeWarehouses && key.taxNumber !== (this.branchTransfer.destinations[0].warehouse.taxNumber || ''))) {
                         allowWarehouse = false;
                     }
 
@@ -627,52 +744,122 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     }
                 });
             }
+            // If multiple senders case for receipt note
+            const sourceIndex = this.transferType !== 'products' ? index : 0;
+            const destinationIndex = this.transferType !== 'products' ? 0 : index;
+            if (this.branchTransfer.sources[sourceIndex] && this.branchTransfer.sources[sourceIndex].uniqueName) {
+                // Update source warehouses
+                this.senderWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName] = [];
+                if(this.allWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName] && this.allWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName].length > 0) {
+                    this.allWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName].forEach(key => {
+                        if (this.branchTransfer.destinations[destinationIndex] && this.branchTransfer.destinations[destinationIndex].warehouse && key.uniqueName !== this.branchTransfer.destinations[destinationIndex].warehouse.uniqueName &&
+                            (reInitializeWarehouses || key.taxNumber === (this.branchTransfer.destinations[destinationIndex].warehouse.taxNumber || ''))) {
+                            this.senderWarehouses[this.branchTransfer.sources[sourceIndex].uniqueName].push({ label: key.name, value: key.uniqueName });
+                        }
+                    });
+                    if (this.branchTransfer.sources[index].warehouse && this.branchTransfer.sources[index].warehouse.uniqueName) {
+                        setTimeout(() => {
+                            if(this.sourceWarehouse) {
+                                this.sourceWarehouse.writeValue(this.branchTransfer.sources[index].warehouse.uniqueName);
+                            }
+                        }, 100);
+                    }
+                }
+            }
         }
+        this.detectChanges();
     }
 
-    public resetDestinationWarehouses(index) {
+    /**
+     * Resets the destination warehouse in sender and destination dropdowns
+     *
+     * @param {*} index Index of the warehouse
+     * @param {boolean} [reInitializeWarehouses] True, if the warehouse dropdown needs to be reset (is true only when either sender/receiver
+     * warehouses are reset and the left sender/receiver warehouse needs to be reset)
+     * @memberof NewBranchTransferAddComponent
+     */
+    public resetDestinationWarehouses(index, reInitializeWarehouses?: boolean) {
         if (this.branchTransfer.sources && this.branchTransfer.sources[index] && this.branchTransfer.sources[index].warehouse.uniqueName !== null) {
             this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
             let allowWarehouse = true;
 
-            this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
-                allowWarehouse = true;
-
-                if (key.uniqueName === this.branchTransfer.sources[index].warehouse.uniqueName) {
-                    allowWarehouse = false;
-                }
-
-                if (allowWarehouse) {
-                    this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
-                }
-            });
-            if (this.branchTransfer.destinations[index].uniqueName) {
-                // Update Destination warehouses
-                this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
-                this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
-                    if (key.uniqueName !== this.branchTransfer.sources[index].warehouse.uniqueName) {
-                        this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
-                    }
-                });
-            }
-        } else {
-            if (this.allWarehouses && this.allWarehouses[this.branchTransfer.sources[0].uniqueName]) {
-                this.destinationWarehouses[this.branchTransfer.sources[0].uniqueName] = [];
-                let allowWarehouse = true;
-
-                this.allWarehouses[this.branchTransfer.sources[0].uniqueName].forEach(key => {
+            if (this.allWarehouses[this.branchTransfer.sources[index].uniqueName] && this.allWarehouses[this.branchTransfer.sources[index].uniqueName].length > 0) {
+                this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
                     allowWarehouse = true;
 
-                    if (key.uniqueName === this.branchTransfer.sources[0].warehouse.uniqueName) {
+                    if (key.uniqueName === this.branchTransfer.sources[index].warehouse.uniqueName ||
+                        key.taxNumber !== (this.branchTransfer.sources[index].warehouse.taxNumber || '')) {
                         allowWarehouse = false;
                     }
 
                     if (allowWarehouse) {
-                        this.destinationWarehouses[this.branchTransfer.sources[0].uniqueName].push({ label: key.name, value: key.uniqueName });
+                        this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                     }
                 });
             }
+            if (this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].uniqueName) {
+                // Update Destination warehouses
+                this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
+                if (this.allWarehouses[this.branchTransfer.destinations[index].uniqueName] && this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].length > 0) {
+                    this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
+                        if (key.uniqueName !== this.branchTransfer.sources[index].warehouse.uniqueName &&
+                            key.taxNumber === (this.branchTransfer.sources[index].warehouse.taxNumber || '')) {
+                            this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                        }
+                    });
+                }
+                if (this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                    setTimeout(() => {
+                        if(this.destinationWarehouse) {
+                            this.destinationWarehouse.writeValue(this.branchTransfer.destinations[index].warehouse.uniqueName);
+                        }
+                    }, 100);
+                }
+            }
+        } else {
+            if (this.allWarehouses && this.branchTransfer.sources[0] && this.allWarehouses[this.branchTransfer.sources[0].uniqueName]) {
+                this.destinationWarehouses[this.branchTransfer.sources[0].uniqueName] = [];
+                let allowWarehouse = true;
+
+                if(this.allWarehouses[this.branchTransfer.sources[0].uniqueName] && this.allWarehouses[this.branchTransfer.sources[0].uniqueName].length > 0) {
+                    this.allWarehouses[this.branchTransfer.sources[0].uniqueName].forEach(key => {
+                        allowWarehouse = true;
+
+                        if (key.uniqueName === this.branchTransfer.sources[0].warehouse.uniqueName ||
+                            (!reInitializeWarehouses && key.taxNumber !== (this.branchTransfer.sources[0].warehouse.taxNumber || ''))) {
+                            allowWarehouse = false;
+                        }
+
+                        if (allowWarehouse) {
+                            this.destinationWarehouses[this.branchTransfer.sources[0].uniqueName].push({ label: key.name, value: key.uniqueName });
+                        }
+                    });
+                }
+            }
+            // If multiple destinations case for delivery challan
+            const destinationIndex = this.transferType !== 'products' ? index : 0;
+            const sourceIndex = this.transferType !== 'products' ? 0 : index;
+            if (this.branchTransfer.destinations[destinationIndex] && this.branchTransfer.destinations[destinationIndex].uniqueName) {
+                // Update Destination warehouses
+                this.destinationWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName] = [];
+                if (this.allWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName] && this.allWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName].length > 0) {
+                    this.allWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName].forEach(key => {
+                        if (this.branchTransfer.sources[sourceIndex] && this.branchTransfer.sources[sourceIndex].warehouse && key.uniqueName !== this.branchTransfer.sources[sourceIndex].warehouse.uniqueName &&
+                            (reInitializeWarehouses || key.taxNumber === (this.branchTransfer.sources[sourceIndex].warehouse.taxNumber || ''))) {
+                            this.destinationWarehouses[this.branchTransfer.destinations[destinationIndex].uniqueName].push({ label: key.name, value: key.uniqueName });
+                        }
+                    });
+                }
+                if (this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                    setTimeout(() => {
+                        if(this.destinationWarehouse) {
+                            this.destinationWarehouse.writeValue(this.branchTransfer.destinations[index].warehouse.uniqueName);
+                        }
+                    }, 100);
+                }
+            }
         }
+        this.detectChanges();
     }
 
     public checkTaxNumberValidation(ele: HTMLInputElement): void {
@@ -827,7 +1014,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.isLoading = false;
                 if (res) {
                     if (res.status === 'success') {
-                        this.initFormFields();
                         this.tempDateParams.dateOfSupply = new Date();
                         this.tempDateParams.dispatchedDate = "";
 
@@ -1082,8 +1268,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         });
     }
 
-    public focusSelectDropdown(index: number): void {
-        if (this.allowAutoFocusInField) {
+    public focusSelectDropdown(index: number, event?: any): void {
+        if (this.allowAutoFocusInField && (!event || event.value)) {
             setTimeout(() => {
                 this.setActiveRow(index);
                 setTimeout(() => {
@@ -1093,16 +1279,28 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
-    public focusSourceWarehouse(): void {
-        if (this.allowAutoFocusInField) {
+    /**
+     * Puts focus on source warehouse
+     *
+     * @param {*} event Event of selection, used to avoid focus when event.value is null
+     * @memberof NewBranchTransferAddComponent
+     */
+    public focusSourceWarehouse(event: any): void {
+        if (this.allowAutoFocusInField && event && event.value) {
             setTimeout(() => {
                 this.sourceWarehouse.show('');
             }, 100);
         }
     }
 
-    public focusDestinationWarehouse(): void {
-        if (this.allowAutoFocusInField) {
+    /**
+     * Puts focus on destination warehouse
+     *
+     * @param {*} event Event of selection, used to avoid focus when event.value is null
+     * @memberof NewBranchTransferAddComponent
+     */
+    public focusDestinationWarehouse(event: any): void {
+        if (this.allowAutoFocusInField && event && event.value) {
             setTimeout(() => {
                 this.destinationWarehouse.show('');
             }, 100);

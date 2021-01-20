@@ -25,26 +25,26 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
           right: -110px;
           left: auto;
           top: 8px;
-      }
+	}
 
       td {
           vertical-align: middle !important;
       }
-      .customItem {
+      .custom-item {
       padding-top: 5px;
 
       }
 
-      .customItem:hover {
+      .custom-item:hover {
           background-color:#e3e4ed !important;
       }
 
-      .customItem {
+      .custom-item {
           padding: 5px;
 
       }
 
-      .customItem:hover span {
+      .custom-item:hover span {
           color:#5B64C9 !important;
       }
 
@@ -66,7 +66,17 @@ import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/Sett
           -webkit-user-select: none;
           -ms-user-select: none;
           user-select: none;
-      }
+	  }
+	  .fa-percent{
+		top: 9px;
+		right: 6px;
+		color: #acb0b9;
+	  }
+	  .discount-name-detail{
+		list-style: none;
+		overflow: auto;
+		max-height: 100px;
+	  }
   `]
 })
 
