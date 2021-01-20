@@ -134,7 +134,7 @@ export class EWayBillComponent implements OnInit {
     public selectedEway: Result;
     public states: any[] = [];
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */

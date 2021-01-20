@@ -137,7 +137,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild('mailModal', {static: false}) public mailModal: ModalDirective;
     @ViewChild('messageBox', {static: false}) public messageBox: ElementRef;
     @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: TemplateRef<any>;
 
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;

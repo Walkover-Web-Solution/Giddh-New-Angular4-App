@@ -9,6 +9,7 @@ import {
     Output,
     QueryList,
     SimpleChanges,
+    TemplateRef,
     ViewChild,
     ViewChildren,
 } from '@angular/core';
@@ -68,7 +69,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     private moment = moment;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** datepickerTemplate element reference  */
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: TemplateRef<any>;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */

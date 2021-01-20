@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthService } from 'ng2-ui-auth';
 
 @Component({
     selector: 'social-login-callback',
@@ -8,7 +7,7 @@ import { AuthService } from 'ng2-ui-auth';
   `
 })
 export class SocialLoginCallbackComponent {
-    constructor(private auth: AuthService) {
+    constructor() {
     }
 
 }

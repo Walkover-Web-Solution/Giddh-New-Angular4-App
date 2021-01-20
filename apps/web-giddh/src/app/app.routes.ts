@@ -1,21 +1,17 @@
 // import { MagicLinkComponent } from './magic-link/magic-link.component';
 import { NeedsAuthorization } from './decorators/needAuthorization';
 // import { SuccessComponent } from './settings/linked-accounts/success.component';
-import { PageComponent } from './page.component';
 import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
 import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { DummyComponent } from './dummy.component';
-import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
-import { WelcomeComponent } from './welcome/welcome.component';
-import { OnboardingComponent } from './onboarding/onboarding.component';
 import { NotFoundComponent } from './404/404-component';
 import { BrowserSupported } from './decorators/BrowserSupported';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
-import { SelectPlanComponent } from './selectPlan/selectPlan.component';
+import { SelectPlanComponent } from './select-plan/select-plan.component';
 import { BillingDetailComponent } from './billing-details/billingDetail.component';
 import { TokenVerifyComponent } from './login/token-verify.component';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
@@ -44,8 +40,8 @@ export const ROUTES: Routes = [
     { path: 'ledger', redirectTo: 'pages/ledger' },
     { path: 'dummy', component: DummyComponent },
     { path: 'browser-support', component: BrowserDetectComponent },
-    { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
-    { path: 'welcome', component: WelcomeComponent },
+    { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule), canActivate: [NewUserAuthGuard] },
+    { path: 'welcome', redirectTo: 'pages/welcome' },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
     { path: 'social-login-callback', component: SocialLoginCallbackComponent },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
@@ -63,11 +59,11 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
-    { path: 'select-plan', component: SelectPlanComponent },
+    { path: 'select-plan', loadChildren: () => import('./select-plan/select-plan.module').then(module => module.SelectPlanModule) },
     { path: 'billing-detail', component: BillingDetailComponent },
     { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
     {
-        path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
+        path: 'pages',
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
@@ -101,14 +97,14 @@ export const ROUTES: Routes = [
             { path: 'company-import-export', loadChildren: () => import('./companyImportExport/companyImportExport.module').then(module => module.CompanyImportExportModule) },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'proforma-invoice', loadChildren: () => import('./proforma-invoice/proforma-invoice.module').then(module => module.ProformaInvoiceModule), canActivate: [NeedsAuthorization] },
-            { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
-            { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
+            { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnBoardingModule), canActivate: [NeedsAuthorization] },
+            { path: 'welcome', loadChildren: () => import('./welcome/welcome.module'), canActivate: [NeedsAuthorization] },
             { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
-            { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
-            { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
-            { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
-            { path: 'mobile-search-branch', component: MobileSearchBranchComponent, canActivate: [NeedsAuthorization] },
+            { path: 'mobile-home', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule), canActivate: [NeedsAuthorization] },
+            // { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
+            // { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
+            // { path: 'mobile-search-branch', component: MobileSearchBranchComponent, canActivate: [NeedsAuthorization] },
             { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vatReport.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },

@@ -50,6 +50,7 @@ import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryP
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 
 
 // import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
@@ -109,6 +110,7 @@ import { ImportStatementComponent } from './components/import-statement/import-s
         AngularResizedEventModule,
         NgxMaskModule.forRoot(),
         SettingsServiceModule,
+        DatepickerWrapperModule,
         AdvanceReceiptAdjustmentModule,
         NgxDaterangepickerMd.forRoot()
     ],

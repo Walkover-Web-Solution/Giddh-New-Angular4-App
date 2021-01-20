@@ -26,6 +26,7 @@ import { MoveCompanyComponent } from './components/move-company/move-company.com
 import { AllFeaturesComponent } from './components/all-features/all-features.component';
 import { AddCompanyComponent } from './components/add-company/add-company.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { AsideSettingModule } from '../shared/header/components/aside-setting/aside-setting.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -63,7 +64,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ModalModule.forRoot(),
         BsDropdownModule.forRoot(),
         TooltipModule.forRoot(),
-        ScrollingModule
+        ScrollingModule,
+        AsideSettingModule
     ],
     providers: [
         {

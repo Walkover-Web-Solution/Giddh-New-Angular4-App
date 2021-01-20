@@ -15,8 +15,8 @@ import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-select-plan',
-    templateUrl: './selectPlan.component.html',
-    styleUrls: [`./selectPlan.component.scss`],
+    templateUrl: './select-plan.component.html',
+    styleUrls: [`./select-plan.component.scss`],
 })
 
 export class SelectPlanComponent implements OnInit, OnDestroy {

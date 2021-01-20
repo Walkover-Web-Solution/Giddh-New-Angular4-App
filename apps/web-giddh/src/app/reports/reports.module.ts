@@ -7,6 +7,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -90,7 +91,8 @@ import { ReportsRoutingModule } from './reports.routing.module';
         TooltipModule,
         ElementViewChildModule,
         ModalModule.forRoot(),
-        SharedModule
+        SharedModule,
+        DatepickerWrapperModule
     ]
 })
 

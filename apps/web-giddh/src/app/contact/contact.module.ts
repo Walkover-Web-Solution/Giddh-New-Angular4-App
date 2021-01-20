@@ -30,6 +30,7 @@ import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 //payemnt aside component
 
 
@@ -80,7 +81,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxDaterangepickerMd.forRoot(),
         TextMaskModule,
         NgxMaskModule.forRoot(),
-
+        DatepickerWrapperModule
     ],
     entryComponents: [
         PaginationComponent

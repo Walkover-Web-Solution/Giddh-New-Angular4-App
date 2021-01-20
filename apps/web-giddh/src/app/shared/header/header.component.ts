@@ -167,7 +167,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public forceOpenNavigation: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: TemplateRef<any>;
 
     /* This will store modal reference */
     public modalRef: BsModalRef;

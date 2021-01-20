@@ -20,8 +20,6 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfe
 
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
 import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
-import { MfReportComponent } from '../manufacturing/report/mf.report.component';
-import { CommandKModule } from '../theme/command-k/command.k.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import {
@@ -35,19 +33,13 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
-import { WelcomeComponent } from '../welcome/welcome.component';
-import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header'
 import {
-    AccountOperationsComponent,
     AccountsSideBarComponent,
     CompanyAddComponent,
     CompanyAddNewUiComponent,
-    GroupsAccountSidebarComponent,
-    ManageGroupsAccountsComponent,
 } from './header/components';
 import {
     AccountAddNewDetailsComponent,
@@ -56,7 +48,6 @@ import {
     AccountUpdateNewDetailsComponent,
 } from './header/components/account-update-new-details/account-update-new-details.component';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
-import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
 import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
 import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
@@ -67,14 +58,9 @@ import { ElementViewChildModule } from './helpers/directives/elementViewChild/el
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
-import { LayoutComponent } from './layout/layout.component';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
-import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
 import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
-import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
-import { LoaderComponent } from '../loader/loader.component';
 import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -87,6 +73,8 @@ import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
+import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
+import { AsideSettingModule } from './header/components/aside-setting/aside-setting.module';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -141,36 +129,23 @@ export class PickDateAdapter extends NativeDateAdapter {
 
 @NgModule({
     declarations: [
-        MfReportComponent,
-        LayoutComponent,
         LedgerDiscountComponent,
-        HeaderComponent,
         FooterComponent,
         FixedFooterComponent,
         AccountsSideBarComponent,
-        AsideHelpSupportComponent,
-        AsideSettingComponent,
-        ManageGroupsAccountsComponent,
         CompanyAddComponent,
         CompanyAddNewUiComponent,
-        AccountOperationsComponent,
         AccountFilterPipe,
         OnBoardingComponent,
-        GroupsAccountSidebarComponent,
         GroupAddComponent,
         GroupUpdateComponent,
         ShareGroupModalComponent,
         ShareAccountModalComponent,
-        CheckPermissionDirective,
-        ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
         AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
-        WelcomeComponent,
         ConfirmationModalComponent,
         DeleteTemplateConfirmationModelComponent,
-        DatepickerWrapperComponent,
-        LoaderComponent,
         ProformaAddBulkItemsComponent,
         GiddhDatepickerComponent,
         RevisionHistoryComponent,
@@ -212,14 +187,14 @@ export class PickDateAdapter extends NativeDateAdapter {
         TabsModule,
         CKEditorModule,
         NgxMaskModule,
-        CommandKModule,
         NgxDaterangepickerMd.forRoot(),
         ScrollingModule,
         MatDatepickerModule,
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        PdfJsViewerModule
+        PdfJsViewerModule,
+        AsideSettingModule
     ],
     exports: [
         CommonModule,
@@ -229,14 +204,11 @@ export class PickDateAdapter extends NativeDateAdapter {
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
-        LayoutComponent,
         ShSelectModule,
         LedgerDiscountComponent,
         ModalModule,
-        HeaderComponent,
         FooterComponent,
         FixedFooterComponent,
-        ManageGroupsAccountsComponent,
         ConfirmationModalComponent,
         AccountFilterPipe,
         SelectModule,
@@ -246,17 +218,13 @@ export class PickDateAdapter extends NativeDateAdapter {
         OnBoardingComponent,
         ConfirmModalModule,
         AccountsSideBarComponent,
-        AsideHelpSupportComponent,
-        AsideSettingComponent,
         TextCaseChangeModule,
         KeyboardShortutModule,
         CompanyAddNewUiComponent,
         CKEditorModule,
         AsideMenuOtherTaxes,
-        MfReportComponent,
         AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
-        WelcomeComponent,
         TabsModule,
         BsDropdownModule,
         ElementViewChildModule,
@@ -264,8 +232,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         BsDatepickerModule,
         NgxDaterangepickerMd,
         DeleteTemplateConfirmationModelComponent,
-        DatepickerWrapperComponent,
-        LoaderComponent,
+        DatepickerWrapperModule,
         ProformaAddBulkItemsComponent,
         GiddhDatepickerComponent,
         RevisionHistoryComponent,
@@ -274,11 +241,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         HamburgerMenuComponent
     ],
     entryComponents: [
-        ManageGroupsAccountsComponent,
         CompanyAddComponent,
         CompanyAddNewUiComponent,
-        AccountOperationsComponent,
-        GroupsAccountSidebarComponent,
         AccountAddNewDetailsComponent,
         OnBoardingComponent,
         AccountUpdateNewDetailsComponent

@@ -1,7 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -22,6 +21,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
+import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { ToastrModule } from 'ngx-toastr';
 
 import { environment } from '../environments/environment';
@@ -37,27 +37,21 @@ import { BrowserDetectComponent } from './browser-support/browserDetect.componen
 import { DecoratorsModule } from './decorators/decorators.module';
 import { DummyComponent } from './dummy.component';
 import { TokenVerifyComponent } from './login/token-verify.component';
-import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
-import { MobileHomeComponent } from './mobile-home/mobile-home.component';
-import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
-import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
-import { NewUserComponent } from './newUser.component';
 import { NoContentComponent } from './no-content/no-content.component';
-import { OnboardingComponent } from './onboarding/onboarding.component';
-import { PageComponent } from './page.component';
+import { PageModule } from './page/page.module';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
-import { SelectPlanComponent } from './selectPlan/selectPlan.component';
 import { ExceptionLogService } from './services/exception-log.service';
 import { GiddhHttpInterceptor } from './services/http.interceptor';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { ServiceModule } from './services/service.module';
 import { WindowRef } from './shared/helpers/window.object';
-import { SharedModule } from './shared/shared.module';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { reducers } from './store';
-import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
+import { SocialLoginModule } from './theme/ng-social-login-module/auth.module';
+import { AuthServiceConfig } from './theme/ng-social-login-module/auth.service';
+import { GoogleLoginProvider } from './theme/ng-social-login-module/providers/google-login-provider';
+import { LinkedinLoginProvider } from './theme/ng-social-login-module/providers/linkedin-login-provider';
 import { UniversalListModule } from './theme/universal-list/universal.list.module';
-import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 
 // import { SuccessComponent } from './settings/linked-accounts/success.component';
 /*
@@ -68,9 +62,37 @@ import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 // Application wide providers
 const APP_PROVIDERS = [
     ...APP_RESOLVER_PROVIDERS,
-    {provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER}
+    { provide: APP_BASE_HREF, useValue: IS_ELECTRON_WA ? './' : AppUrl + APP_FOLDER }
     // { provide: APP_BASE_HREF, useValue: './' }
 ];
+
+const getGoogleCredentials = () => {
+    if (PRODUCTION_ENV || isElectron  || isCordova) {
+        return {
+            GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com'
+        };
+    } else {
+        return {
+            GOOGLE_CLIENT_ID: '641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com'
+        };
+    }
+};
+
+const SOCIAL_CONFIG = (isElectron|| isCordova) ? null : new AuthServiceConfig([
+    {
+        id: GoogleLoginProvider.PROVIDER_ID,
+        // provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
+        provider: new GoogleLoginProvider(getGoogleCredentials().GOOGLE_CLIENT_ID)
+    },
+    {
+        id: LinkedinLoginProvider.PROVIDER_ID,
+        provider: new LinkedinLoginProvider('817roify24ig8g')
+    }
+], false);
+
+export function provideConfig() {
+    return SOCIAL_CONFIG || { id: null, providers: [] };
+}
 
 interface InternalStateType {
     [key: string]: any;
@@ -81,14 +103,14 @@ let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
     // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: IS_ELECTRON_WA ? sessionStorage : localStorage })(reducer);
-    return localStorageSync({keys: ['session', 'permission'], rehydrate: true, storage: localStorage})(reducer);
+    return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: localStorage })(reducer);
     // return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: sessionStorage })(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (!environment.production) {
     // metaReducers.push(storeFreeze);
-    CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({maxAge: 50}));
+    CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -101,7 +123,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
-        PageComponent,
         NoContentComponent,
         AppLoginSuccessComponent,
         PublicPageHandlerComponent,
@@ -111,15 +132,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BillingDetailComponent,
 
         // SuccessComponent,
-        NewUserComponent,
         BrowserDetectComponent,
-        OnboardingComponent,
         SocialLoginCallbackComponent,
-        SelectPlanComponent,
-        MobileHomeComponent,
-        MobileHomeSidebarComponent,
-        MobileSearchCompanyComponent,
-        MobileSearchBranchComponent,
+        // MobileHomeComponent,
+        // MobileHomeSidebarComponent,
+        // MobileSearchCompanyComponent,
+        // MobileSearchBranchComponent,
         // SignupComponent
     ],
     /**
@@ -129,8 +147,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BrowserModule,
         Daterangepicker,
         BrowserAnimationsModule,
-        FormsModule,
-        ReactiveFormsModule,
+        // FormsModule,
+        // ReactiveFormsModule,
         HttpClientModule,
         LaddaModule.forRoot({
             style: 'slide-left',
@@ -145,23 +163,23 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TabsModule.forRoot(),
         TooltipModule.forRoot(),
         DatepickerModule.forRoot(),
-        SharedModule.forRoot(),
         ServiceModule.forRoot(),
         ActionModule.forRoot(),
         DecoratorsModule.forRoot(),
-        ShSelectModule.forRoot(),
+        // ShSelectModule.forRoot(),
         UniversalListModule.forRoot(),
-        ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
-        StoreModule.forRoot(reducers, {metaReducers}),
+        ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
+        StoreModule.forRoot(reducers, { metaReducers }),
         PerfectScrollbarModule,
+        PageModule,
         RouterModule.forRoot(ROUTES, {
-    useHash: IS_ELECTRON_WA,
-    //preloadingStrategy: CustomPreloadingStrategy,
-    onSameUrlNavigation: 'reload',
-    preloadingStrategy: QuicklinkStrategy,
-    relativeLinkResolution: 'corrected'
-}),
+            useHash: IS_ELECTRON_WA,
+            onSameUrlNavigation: 'reload',
+            preloadingStrategy: QuicklinkStrategy,
+            relativeLinkResolution: 'corrected'
+        }),
         QuicklinkModule,
+        SocialLoginModule,
         //StoreRouterConnectingModule,
         ...CONDITIONAL_IMPORTS,
 
@@ -185,14 +203,18 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
         {
+            provide: AuthServiceConfig,
+            useFactory: provideConfig
+        },
+        {
             provide: ServiceConfig,
-            useValue: {apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _}
+            useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
         },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: GiddhHttpInterceptor,
             multi: true
-        },{
+        }, {
             provide: ErrorHandler,
             useClass: ExceptionLogService
         },

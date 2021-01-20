@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
@@ -39,6 +40,7 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         ShSelectModule,
         AuditLogsServiceModule,
         CurrencyModule,
+        DatepickerWrapperModule,
         SharedModule
     ],
 })

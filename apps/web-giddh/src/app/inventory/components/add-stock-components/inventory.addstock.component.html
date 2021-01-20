@@ -305,11 +305,11 @@
                                             <label>Stock Unit <sup>*</sup></label>
                                             <sh-select [options]="stockUnitsDropDown$ | async" formControlName="manufacturingUnitCode" [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33" [forceClearReactive]="forceClear$ | async"></sh-select>
                                         </td>
-                                        <td *ngIf="addStockForm.controls['manufacturingDetails'].controls['manufacturingQuantity'].value" colspan="2">
+                                        <td *ngIf="addStockForm.controls['manufacturingDetails'].value" colspan="2">
                                             <label class="d-block">&nbsp;</label>
                                             <span class="width100"><strong>= (
-                                                    {{addStockForm.controls['manufacturingDetails'].controls['manufacturingQuantity'].value}}
-                                                    {{addStockForm.controls['manufacturingDetails'].controls['manufacturingUnitCode'].value}}
+                                                    {{addStockForm.controls['manufacturingDetails'].value}}
+                                                    {{addStockForm.controls['manufacturingDetails'].value}}
                                                     {{addStockForm.controls['name'].value}} )</strong></span>
                                         </td>
                                         <!-- <td colspan="1">&nbsp;</td> -->

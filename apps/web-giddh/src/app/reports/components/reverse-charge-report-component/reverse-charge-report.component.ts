@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../../../models/api-models/ReverseCharge';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -58,7 +58,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */

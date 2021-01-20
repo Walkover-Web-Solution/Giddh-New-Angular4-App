@@ -4,6 +4,7 @@ import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.modu
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { PurchaseModule } from '../purchase/purchase.module';
 import { SharedModule } from '../shared/shared.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 @NgModule({
     declarations: [],
     imports: [
@@ -11,6 +12,7 @@ import { SharedModule } from '../shared/shared.module';
         ProformaInvoiceModule,
         DigitsOnlyModule,
         PurchaseModule,
+        DatepickerWrapperModule,
         SharedModule
     ],
     exports: [

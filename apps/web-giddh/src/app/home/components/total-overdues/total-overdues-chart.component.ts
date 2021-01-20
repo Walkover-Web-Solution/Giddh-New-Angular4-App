@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild, TemplateRef } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -20,7 +20,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 })
 
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: TemplateRef<any>;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */

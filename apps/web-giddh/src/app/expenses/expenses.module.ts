@@ -9,6 +9,7 @@ import { NgxUploaderModule } from 'ngx-uploader';
 
 import { LedgerModule } from '../ledger/ledger.module';
 import { SalesModule } from '../sales/sales.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
@@ -42,6 +43,7 @@ import { ExpensesRoutingModule } from './expenses.routing.module';
         SharedModule,
         ShSelectModule,
         ModalModule,
+        DatepickerWrapperModule,
         ElementViewChildModule, SalesModule
     ],
     exports: [

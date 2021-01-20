@@ -8,6 +8,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
@@ -75,7 +76,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TooltipModule.forRoot(),
         Daterangepicker,
         CurrencyModule,
-        SharedModule
+        SharedModule,
+        DatepickerWrapperModule
     ],
 })
 export class HomeModule {

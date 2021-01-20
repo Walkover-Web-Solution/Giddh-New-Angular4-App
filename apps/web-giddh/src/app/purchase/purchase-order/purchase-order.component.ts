@@ -27,7 +27,7 @@ import { OrganizationType } from '../../models/user-login-state';
 
 export class PurchaseOrderComponent implements OnInit, OnDestroy {
     /* Datepicker component */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* Input element for column search */
     @ViewChild('searchBox') public searchBox: ElementRef;
     /* Confirm box */

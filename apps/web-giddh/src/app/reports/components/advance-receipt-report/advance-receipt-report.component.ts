@@ -6,6 +6,7 @@ import {
     ElementRef,
     OnDestroy,
     OnInit,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
@@ -187,7 +188,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */

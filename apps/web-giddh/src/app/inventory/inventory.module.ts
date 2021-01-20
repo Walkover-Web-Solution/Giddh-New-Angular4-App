@@ -16,8 +16,10 @@ import { AsidePaneComponent } from '../inventory/components/aside-pane/aside-pan
 import { AsideTransferPaneComponent } from '../inventory/components/aside-transfer-pane/aside-transfer-pane.component';
 import { JobworkComponent } from '../inventory/jobwork/jobwork.component';
 import { JobworkWelcomeComponent } from '../inventory/jobwork/welcome-jobwork/welcome-jobwork.component';
+import { ManufacturingModule } from '../manufacturing/manufacturing.module';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 import { ExceptionLogService } from '../services/exception-log.service';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
@@ -138,6 +140,8 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         NgxMaskModule.forRoot(),
         ProformaInvoiceModule,
         GiddhRoundOffPipeModule,
+        DatepickerWrapperModule,
+        ManufacturingModule
     ],
     entryComponents: [PaginationComponent]
 })

@@ -13,6 +13,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 import { InvoiceRoutingModule } from '../invoice/invoice.routing.module';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import {
     GenericAsideMenuAccountModule,
 } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
@@ -80,6 +81,7 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         TaxControlModule,
         DiscountControlModule,
         ProformaInvoiceModule,
+        DatepickerWrapperModule,
         PdfJsViewerModule
     ],
     entryComponents: [],

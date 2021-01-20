@@ -3,7 +3,7 @@ import { takeUntil } from 'rxjs/operators';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
@@ -101,7 +101,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */

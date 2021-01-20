@@ -17,6 +17,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -44,7 +45,8 @@ import { SharedModule } from '../shared/shared.module';
         BsDropdownModule,
         ClickOutsideModule,
         CurrencyModule,
-        SharedModule
+        SharedModule,
+        DatepickerWrapperModule
     ]
 })
 export class SearchModule {

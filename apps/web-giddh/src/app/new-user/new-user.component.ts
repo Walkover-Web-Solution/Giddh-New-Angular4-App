@@ -1,5 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { GeneralService } from './services/general.service';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     selector: 'new-user',

@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { LaddaModule } from 'angular2-ladda';
 import { SharedModule } from './../shared/shared.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 @NgModule({
     imports: [
         CompanyImportExportRoutingModule,
@@ -18,7 +19,8 @@ import { SharedModule } from './../shared/shared.module';
         CommonModule,
         Daterangepicker,
         LaddaModule,
-        SharedModule
+        SharedModule,
+        DatepickerWrapperModule
     ],
     exports: [],
     declarations: [
