@@ -92,11 +92,8 @@
                                                                     [value]="option.value"></span>&nbsp;
                                                             <span class="entity-icon">
                                                                 <i class="icon-branch-icon pull-right"
-                                                                    *ngIf="option.entity === 'BRANCH' && !option.isHeadQuarter"
+                                                                    *ngIf="option.entity === 'BRANCH'"
                                                                     tooltip="Branch"></i>
-                                                                <i class="icon-branch-icon pull-right"
-                                                                    *ngIf="option.entity === 'BRANCH' && option.isHeadQuarter"
-                                                                    tooltip="HO Branch"></i>
                                                                 <i class="icon-warehouse-icon pull-right"
                                                                     *ngIf="option.entity === 'WAREHOUSE'"
                                                                     tooltip="Warehouse"></i>
@@ -144,7 +141,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 form-group">
                                         <label>Branch Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="50"
                                             [class.error-box]="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.invalid"
                                             type="text" formControlName="alias" class="form-control"
                                             placeholder="Enter alias">

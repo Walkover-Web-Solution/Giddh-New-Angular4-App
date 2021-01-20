@@ -82,9 +82,7 @@
                                 <div class="d-flex wrap-linked-company">
                                     <div class="d-flex flex-column linked-with w-100">
                                         <span *ngFor="let entity of address.linkedEntities" class="pb-1">
-                                            <i tooltip="HO Branch" *ngIf="entity.isHeadQuarter"
-                                                class="icon-branch-icon"></i>
-                                            <i tooltip="Branch" *ngIf="!entity.isHeadQuarter && entity.isBranch"
+                                            <i tooltip="Branch" *ngIf="entity.isBranch"
                                                 class="icon-branch-icon"></i>
                                             <i tooltip="Warehouse" *ngIf="entity.isWarehouse"
                                                 class="icon-warehouse-icon"></i>
