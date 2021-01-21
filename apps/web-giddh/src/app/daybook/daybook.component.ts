@@ -82,6 +82,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public daybookData: any = {};
     /** This will hold if today is selected in universal */
     public todaySelected: boolean = false;
+    /** Set to true the first time advance search modal is opened, done
+     * to prevent the API call only when the advance search filter is opened
+     * by user and not when the user visits the page
+     */
+    public isAdvanceSearchOpened: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -94,7 +99,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
-        this.initialRequest();
+        this.showAdvanceSearchIcon = false;
+        if (this.daybookAdvanceSearchModelComponent) {
+            this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
+            this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
+            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
+            this.searchFilterData = null;
+        }
 
         // this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
         //     if(activeCompany) {
@@ -198,6 +209,17 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public onOpenAdvanceSearch() {
+        if (!this.isAdvanceSearchOpened) {
+            this.isAdvanceSearchOpened = true;
+        }
+        if (!this.showAdvanceSearchIcon && this.daybookAdvanceSearchModelComponent) {
+            // Reset the advance search form if filters are not already applied and the user
+            // clicks on advance search
+            this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
+            this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
+            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
+            this.searchFilterData = null;
+        }
         this.advanceSearchModel.show();
     }
 
