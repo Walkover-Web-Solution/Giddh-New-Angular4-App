@@ -35,13 +35,20 @@
     width: 50px;
 }
 .percent-wrapper{
-   width: 100px;
-   padding-right: 20px !important;
+    .form-control{
+        width: 110px;
+        padding-right: 20px !important;
+    }
    .fa-percent{
        top: 9px;
        right: 6px;
        color: $gray;
    }
+}
+.value-box{
+    .form-control{
+        width: 110px;
+    }
 }
 .discount-list{
    list-style: none;
