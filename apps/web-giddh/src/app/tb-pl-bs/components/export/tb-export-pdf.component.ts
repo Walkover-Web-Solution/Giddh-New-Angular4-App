@@ -84,27 +84,11 @@ class FormatPdf implements IFormatable {
 }
 
 @Component({
-    selector: 'tb-export-pdf',  // <home></home>
-    template: `
-      <div class="btn-group" dropdown>
-        <a dropdownToggle class="cp"><img src="{{ imgPath }}"/></a>
-        <ul id="dropdown-pdf" *dropdownMenu class="dropdown-menu dropdown-menu-right tbpl-dropdown" role="menu" aria-labelledby="button-basic">
-            <span class="caret"></span>
-            <li><a (click)="downloadPdf('group-wise')" class="cp">Group Wise
-              Report</a>
-            </li>
-            <li><a (click)="downloadPdf('condensed')" class="cp">Condensed
-              Report</a>
-            </li>
-            <li><a (click)="downloadPdf('account-wise')" class="cp">Account Wise
-              Report</a>
-            </li>
-        </ul>
-      </div>
-    <!-- end form-group -->
-  `,
+    selector: 'tb-export-pdf',
+    templateUrl: './tb-export-pdf.component.html',
     providers: [RecTypePipe]
 })
+
 export class TbExportPdfComponent implements OnInit, OnDestroy {
     @Input() public trialBalanceRequest: TrialBalanceRequest;
     @Input() public selectedCompany: CompanyResponse;
@@ -117,6 +101,10 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     private exportData: ChildGroup[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private dataFormatter: DataFormatter;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private recType: RecTypePipe) {
         this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {

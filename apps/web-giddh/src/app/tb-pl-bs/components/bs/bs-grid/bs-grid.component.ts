@@ -14,6 +14,7 @@ import { ReplaySubject } from 'rxjs';
     styleUrls: [`./bs-grid.component.scss`],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
 	public noData: boolean;
 	public showClearSearch: boolean = false;
@@ -32,6 +33,10 @@ export class BsGridComponent implements OnInit, OnChanges, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
 		
