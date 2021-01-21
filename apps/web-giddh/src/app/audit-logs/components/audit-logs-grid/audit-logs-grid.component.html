@@ -16,7 +16,7 @@
         </div>
         <div>
             <label class="pull-left mr-l2">User:</label>
-            <p class="pull-left ml-05">{{log.user?.name}}</p>
+            <p class="pull-left mr-l05">{{log.user?.name}}</p>
         </div>
         <div *ngIf="log && log.groupName && log.groupName != null">
             <label class="pull-left mr-l2">Group:</label>
@@ -28,14 +28,14 @@
         </div>
         <div *ngIf="log.log && log.log?.sharedWith && log.log?.sharedWith != undefined && log.log?.sharedWith?.name.length > 0">
             <label class="pull-left mr-l2">Shared with:</label>
-            <p class="pull-left ml-05">{{log.log?.sharedWith?.name}}
+            <p class="pull-left mr-l05">{{log.log?.sharedWith?.name}}
                 <span *ngIf="log.log?.sharedWith?.email && log.log?.sharedWith?.email != null && log.log?.sharedWith?.email?.length > 0">
                     | {{log.log?.sharedWith?.email}}</span>
             </p>
         </div>
         <div *ngIf="log && log.log && log.log?.description != undefined && log.log?.description?.length > 0">
             <label class="pull-left mr-l2">Description:</label>
-            <p class="pull-left ml-05">{{log.log?.description}}</p>
+            <p class="pull-left mr-l05">{{log.log?.description}}</p>
         </div>
     </div>
 
