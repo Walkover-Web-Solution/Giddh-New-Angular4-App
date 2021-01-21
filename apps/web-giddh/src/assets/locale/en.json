@@ -71,6 +71,7 @@
     "app_collapse": "Collapse",
     "app_expand": "Expand",
     "app_export": "Export",
+    "app_import": "Import",
     "app_pages": "Pages",
     "app_go": "Go",
     "app_from": "From",
@@ -343,7 +344,7 @@
     "app_inventory_type": "Inventory Type",
     "app_product": "Product",
     "app_service": "Service",
-    "app_import": {
+    "app_import_type": {
         "groups": "Groups",
         "accounts": "Accounts",
         "inventory": "Inventory",
@@ -389,5 +390,7 @@
     "app_include": "Include",
     "app_exclude": "Exclude",
     "app_other_details": "Other Details",
-    "app_inventory": "Inventory"
+    "app_inventory": "Inventory",
+    "app_entity": "Entity",
+    "app_select_entity": "Select Entity"
 }
