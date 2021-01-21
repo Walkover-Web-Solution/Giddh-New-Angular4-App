@@ -864,6 +864,9 @@ sh-select:focus {
         display: flex !important;
         flex-direction: column;
     }
+    .download-invoice-ledger{
+        position: absolute !important;
+    }
 }
 @media only screen and (max-width: 991px) {
     .stat-block {
