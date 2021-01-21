@@ -6,7 +6,7 @@
 </div>
 <div class="modal-body">
     <div class="export-modal-wrapper">
-        <!-- <div class="row mb-15">
+        <!-- <div class="row mr-b15">
             <div class="col-sm-4">
                 <label>Export</label>
             </div>
@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-15">
+        <div class="row mr-b15">
             <div class="col-sm-4">
                 <label>PDF</label>
             </div>
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div> -->
-        <!-- <div class="row mb-15">
+        <!-- <div class="row mr-b15">
             <div class="col-sm-4">
                 <label>Order</label>
             </div>
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div> -->
-        <div class="row mb-15">
+        <div class="row mr-b15">
             <div class="col-sm-4">
                 <label>Select Copy</label>
             </div>
@@ -76,7 +76,7 @@
                 </sh-select>
             </div>
         </div>
-        <!-- <div class="row mb-15">
+        <!-- <div class="row mr-b15">
             <div class="col-sm-4 d-flex">
                 <input type="checkbox" class="show-on-mobile mr-3">
                 <label>Attachment</label>
@@ -88,7 +88,7 @@
                 </div>
             </div>
         </div> -->
-        <div class="row mb-15">
+        <div class="row mr-b15">
             <div class="col-sm-12">
             <button class="btn btn-success" [disabled]="!copyTypes || copyTypes.length === 0 || isLoading" (click)="exportVouchers(false)">Download</button>
                 <!-- <button class="btn btn-success">Print</button> -->
@@ -97,13 +97,13 @@
         OR
         <br>
         <br>
-        <div class="row mb-15">
+        <div class="row mr-b15">
             <div class="col-sm-12">
                 <label class="mb-1">You can add multiple id's comma separated</label>
             </div>
             <div class="col-sm-12">
                 <!-- Email id could be mulitiple   -->
-                <textarea type="text" placeholder="Recipient Email Id's" class="form-control mb-15 mulitiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
+                <textarea type="text" placeholder="Recipient Email Id's" class="form-control mr-b15 mulitiple-email" name="recipients" [(ngModel)]="recipients"></textarea>
                 <button class="btn btn-success" [disabled]="!recipients || recipients.length === 0 || !copyTypes || copyTypes.length === 0 || isLoading" (click)="exportVouchers(true)">Send Email</button>
             </div>
         </div>

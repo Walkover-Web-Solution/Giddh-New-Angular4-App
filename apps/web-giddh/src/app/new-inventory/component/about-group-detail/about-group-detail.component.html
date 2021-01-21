@@ -1,9 +1,9 @@
 <div class="container-fluid inventory-about-page static-tabs-on-page">
-    <div class="about-group pt-15">
+    <div class="about-group pd-t15">
         <div class="row">
-            <div class="col-10 col-md-6">
+            <div class="col-9 col-md-6">
                 <div class="group-detail d-flex w-100 align-items-center">
-                    <div class="group-thumbnail mr-15">
+                    <div class="group-thumbnail mr-r15">
                         <img src="{{imgPath}}Login-Page-Image.png" alt="group-icon">
                     </div>
                     <div class="group-name">
@@ -12,7 +12,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2 col-md-6 group-detail-right-btn">
+            <div class="col-3 col-md-6 group-detail-right-btn">
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
                     <div class="btn-group" dropdown>
                         <button id="more-btn-inventory" *ngIf="!isMobileScreen" dropdownToggle type="button"
@@ -34,7 +34,7 @@
                     </div>
                     <button class="btn btn-sky-blue bdr-radius-50" *ngIf="!isMobileScreen"
                         [routerLink]="['/pages/new-inventory/create-new-inventory']">+ Add Inventory</button>
-                    <i class="icon-cross pd cursor-pointer" [routerLink]="['/pages/new-inventory']"></i>
+                    <i class="icon-undo pd cursor-pointer" tooltip="Back" [routerLink]="['/pages/new-inventory']"></i>
                 </div>
             </div>
         </div>
@@ -43,9 +43,9 @@
         <tab heading="About Group">
             <div class="row">
                 <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                    <p class="text-gray font-14 mb-15">Lorem Ipsum dummy text will come here about create stock.</p>
+                    <p class="text-gray font-14 mr-b15">Lorem Ipsum dummy text will come here about create stock.</p>
                     <form>
-                        <div class="row mb-15">
+                        <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <label>Group Name <span class="red-text">*</span></label>
                             </div>
@@ -53,7 +53,7 @@
                                 <input id="group-name" class="form-control" type="text" placeholder="Enter Group Name">
                             </div>
                         </div>
-                        <div class="row mb-15">
+                        <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <label>Unique Name <span class="red-text">*</span></label>
                             </div>
@@ -61,24 +61,25 @@
                                 <input id="unique-name" class="form-control" type="text" placeholder="Unique Name">
                             </div>
                         </div>
-                        <div class="row mb-15">
+                        <div class="row mr-b15">
                             <div class="col-sm-6">
-                                <label>HSN Code</label>
+                                <span class="p-0 mr-3" (click)="selectCode(true)">
+                                    <input id="group-hsn-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
+                                    <label for="group-hsn-code-option" class="radio-custom-label">HSN</label>
+                                </span>
+                                <span class="p-0" (click)="selectCode(false)">
+                                    <input id="group-sac-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
+                                    <label for="group-sac-code-option" class="radio-custom-label">SAC</label>
+                                </span>
                             </div>
                             <div class="col-sm-6">
-                                <input id="hsn-code" class="form-control" type="text" placeholder="Enter Code">
-                            </div>
-                        </div>
-                        <div class="row mb-15">
-                            <div class="col-sm-6">
-                                <label>SAC Code</label>
-                            </div>
-                            <div class="col-sm-6">
-                                <input id="sac-code" class="form-control" type="text" placeholder="Enter Code">
-                                <div class="mt-15 d-flex">
+                                <input *ngIf="isHSN" id="group-hsn-code" class="form-control" type="text" placeholder="Enter HSN Code">
+                                <input *ngIf="!isHSN" id="group-sac-code" class="form-control" type="text" placeholder="Enter SAC Code">
+                                <div>
                                     <input id="usb-group" type="checkbox"><span class="font-14 ml-1">Is it
                                         Sub-group?</span>
                                 </div>
+
                             </div>
                         </div>
                     </form>
@@ -97,15 +98,15 @@
                 </tabset>
             </div>
         </tab>
-        <tab heading="Sub-details">
+        <tab heading="Report">
             <div class="d-flex">
                 <inventory-group-list-sidebar></inventory-group-list-sidebar>
                 <div class="right-side-content w-100 d-flex flex-column">
-                    <p class="font-14 mb-15">Following is the list of items created in <strong>Group Dummy Name
+                    <p class="font-14 mr-b15">Following is the list of items created in <strong>Group Dummy Name
                             Furniture</strong>
                         <i class="icon-info pd ml-1"></i>
                     </p>
-                    <div class="d-flex mb-15">
+                    <div class="d-flex mr-b15">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon bdr-radius-50"></i>
                             <input type="text" id="select-date-group" name="selectedDateRange"
@@ -166,7 +167,7 @@
 <div class="sticky-footer create-group-footer">
     <div class="footer-wrapper">
         <div class="button-group">
-            <button id="about-group-clear-btn" class="btn btn-primary bdr-radius-50 minwidth-100">Clear</button>
+            <button id="about-group-clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
             <button id="about-under-btn" class="btn btn-success disable bdr-radius-50">Update Group</button>
         </div>
     </div>

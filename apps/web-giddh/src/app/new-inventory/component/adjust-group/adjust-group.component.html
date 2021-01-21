@@ -1,14 +1,13 @@
 <div class="relative adjust-group-page">
     <hamburger-menu [pageHeading]="'Adjust group'"></hamburger-menu>
-    <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/new-inventory/adjust-inventory']"></i>
-
+    <span class="pull-right pd cursor-pointer back-to-page" [routerLink]="['/pages/new-inventory/adjust-inventory']">Back</span>
     <div class="adjust-field-wrapper mt-2 relative">
         <div>
             <form>
                 <p class="text-gray mx-3 my-3 font-14">Note: All the items or sub-groups under the selected Group will
                     be revalued.</p>
                 <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                    <div class="row mb-15">
+                    <div class="row mr-b15">
                         <div class="col-sm-4 col-lg-4"><label>Mode of Adjustment <span class="red-text">*</span></label>
                         </div>
                         <div class="col-sm-8 col-lg-6">
@@ -24,26 +23,26 @@
                             </span>
                         </div>
                     </div>
-                    <div class="row mb-15">
+                    <div class="row mr-b15">
                         <div class="col-sm-4 col-lg-4"><label>Reference No. <span class="red-text">*</span></label>
                         </div>
                         <div class="col-sm-8 col-lg-6"><input type="text" id="reference-no" class="form-control"
                                 placeholder="Enter Reference Number">
                         </div>
                     </div>
-                    <div class="row mb-15">
+                    <div class="row mr-b15">
                         <div class="col-sm-4 col-lg-4"><label>Date <span class="red-text">*</span></label></div>
                         <div class="col-sm-8 col-lg-6">
                             <giddh-datepicker name="adjustGroupDate"></giddh-datepicker>
                         </div>
                     </div>
-                    <div class="row mb-15">
+                    <div class="row mr-b15">
                         <div class="col-sm-4 col-lg-4"><label>Account <span class="red-text">*</span></label></div>
                         <div class="col-sm-8 col-lg-6">
                             <sh-select id="account-no" placeholder="Select Account"></sh-select>
                         </div>
                     </div>
-                    <div class="row mb-15">
+                    <div class="row mr-b15">
                         <div class="col-sm-4 col-lg-4"><label>Reason <span class="red-text">*</span></label></div>
                         <div class="col-sm-8 col-lg-6">
                             <sh-select id="reason" placeholder="Select Reason"></sh-select>
@@ -78,7 +77,7 @@
                                         <img src="{{imgPath}}Login-Page-Image.png" width="36" height="36">
                                     </span>
                                     <sh-select id="select-group-product-service" placeholder="Select Name"
-                                        class="ml-15 w-100"></sh-select>
+                                        class="mr-l15 w-100"></sh-select>
                                 </div>
                                 <textarea placeholder="Add Description" class="form-control"></textarea>
                             </td>
@@ -109,8 +108,8 @@
     <div class="inner-content-footer">
         <div class="d-flex">
             <div class="button-group">
-                <button id="adjust-group-btn" class="btn btn-primary minwidth-100 bdr-radius-50"> Clear </button>
-                <button id="adjust-group-convert-btn" class="btn btn-success minwidth-100 bdr-radius-50" disabled>
+                <button id="adjust-group-btn" class="btn btn-primary min-width-100 bdr-radius-50"> Clear </button>
+                <button id="adjust-group-convert-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>
                     Convert to Adjust </button>
             </div>
         </div>

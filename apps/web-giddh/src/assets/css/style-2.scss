@@ -9646,12 +9646,14 @@ input.mat-input-element{
     .custom-tabs.product-service-page-tab .nav-tabs,
     .custom-tabs.create-inventory-tab .nav-tabs,
     .custom-tabs.create-item-tab .nav-tabs,
-    .custom-tabs.location-data-tabs .nav-tabs{
+    .custom-tabs.location-data-tabs .nav-tabs,
+    .custom-tabs.create-new-group-tab .nav-tabs{
         position: static !important;
         padding-left: 15px !important;
         margin-left: -15px;
         margin-bottom: 15px;
         width: 101%;
+        background-color: transparent;
     }
     .change-address-dropdown a {
         color: $deep-sky-blue;
@@ -9666,6 +9668,18 @@ input.mat-input-element{
     }
     .custom-select{
         background-image: none !important;
+    }
+    .more-add-button{
+        .icon-undo{
+            border: 1px solid $midnight-blue;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 40px;
+            color: $midnight-blue;
+        }
     }
     /* responsive  starts here*/
 

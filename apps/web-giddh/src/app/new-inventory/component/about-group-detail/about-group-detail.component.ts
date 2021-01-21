@@ -37,6 +37,8 @@ export class AboutGroupDetailComponent implements OnInit {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /* this will store image path*/
     public imgPath: string = '';
+    /* this will store hsn boolean value */
+    public isHSN: boolean = true;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
@@ -98,6 +100,10 @@ export class AboutGroupDetailComponent implements OnInit {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
+    }
+    /* It will show/hide hsn code field */
+    public selectCode(isHSN: any): void {
+        this.isHSN = isHSN;
     }
     public ngOnDestroy() {
         this.destroyed$.next(true);
