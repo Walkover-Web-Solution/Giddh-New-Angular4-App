@@ -28,6 +28,15 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-undo:before {
+  content: "\e99a";
+}
+.icon-inventory-dashboard:before {
+  content: "\e99c";
+}
+.icon-fixed-assets:before {
+  content: "\e99b";
+}
 .icon-upload:before {
   content: "\e999";
 }

@@ -106,7 +106,7 @@ import { PurchaseRecordService } from '../services/purchase-record.service';
 import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
-import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
+import { VoucherAdjustments, AdjustAdvancePaymentModal, Adjustment } from '../models/api-models/AdvanceReceiptsAdjust';
 import { CurrentCompanyState } from '../store/Company/company.reducer';
 import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
 import { PurchaseOrderService } from '../services/purchase-order.service';
@@ -591,6 +591,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public accountAddressList: any[] = [];
     /** This will hold company addresses */
     public companyAddressList: any[] = [];
+    /** Stores the voucher eligible for adjustment */
+    public voucherForAdjustment: Array<Adjustment>;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -5710,6 +5712,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             };
             this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
                 if (res && res.status === 'success') {
+                    this.voucherForAdjustment = res.body;
                     if (res.body && res.body.length) {
                         this.isAccountHaveAdvanceReceipts = true;
                     } else {

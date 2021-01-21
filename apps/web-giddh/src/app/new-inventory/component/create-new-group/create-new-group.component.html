@@ -2,15 +2,15 @@
     <div class="header-create-group">
         <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="form-header">
-            <div class="back-button mr-15 p-05"><i class="icon-back-arrow"></i></div>
+            <div class="back-button mr-r15"><i class="icon-back-arrow"></i></div>
             <!-- (click)="backToMainAside()" - add funcationality back to main aside -->
             <h3 *ngIf="createGroupaside">Create Group</h3>
-            <h3>Create Group</h3>
+            <h3 *ngIf="hideCreateFieldData">Create New</h3>
         </div>
     </div>
-    <div class="aside-body flexy-child-1 create-new-block">
+    <div class="aside-body flexy-child-1 create-new-block"  *ngIf="hideCreateFieldData">
         <div class="create-product-wrapper">
-            <div class="create-one-item pb-15 pt-15 d-flex">
+            <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
                     <div class="circle-icon"></div>
                     <div class="create-item">
@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-            <div class="create-one-item pb-15 pt-15 d-flex">
+            <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
                     <div class="circle-icon"></div>
                     <div class="create-item">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <div class="create-one-item pb-15 pt-15 d-flex">
+            <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
                     <div class="circle-icon"></div>
                     <div class="create-item">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <div class="create-one-item pb-15 pt-15 d-flex">
+            <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
                     <div class="circle-icon"></div>
                     <div class="create-item">
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <div class="create-one-item pb-15 pt-15 d-flex">
+            <div class="create-one-item pd-b15 pd-t15 d-flex">
                 <div class="wrapper-create-item">
                     <div class="circle-icon"></div>
                     <div class="create-item">
@@ -65,7 +65,7 @@
             </div>
         </div>
     </div>
-    <div class="aside-body create-group-aside-body" *ngIf="hideCreateFieldData">
+    <div class="aside-body create-group-aside-body">
         <div class="create-group-block">
             <div class="create-group-page">
                 <div>
@@ -78,7 +78,7 @@
                     <div class="bg-white p-15">
                         <div class="wrapper-contain">
                             <form>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6">
                                         <label>Group Name <span class="red-text">*</span></label>
                                     </div>
@@ -87,7 +87,7 @@
                                             placeholder="Enter Group Name">
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6">
                                         <label>Unique Name <span class="red-text">*</span></label>
                                     </div>
@@ -96,26 +96,27 @@
                                             placeholder="Unique Name">
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6">
-                                        <label>HSN Code</label>
+                                        <span class="p-0 mr-3" (click)="selectCode(true)">
+                                            <input id="group-hsn-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
+                                            <label for="group-hsn-code-option" class="radio-custom-label">HSN</label>
+                                        </span>
+                                        <span class="p-0" (click)="selectCode(false)">
+                                            <input id="group-sac-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
+                                            <label for="group-sac-code-option" class="radio-custom-label">SAC</label>
+                                        </span>
+
                                     </div>
                                     <div class="col-sm-6">
-                                        <input id="hsn-code" class="form-control" type="text" placeholder="Enter Code">
-                                    </div>
-                                </div>
-                                <div class="row mb-15">
-                                    <div class="col-sm-6">
-                                        <label>SAC Code</label>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input id="sac-code" class="form-control" type="text" placeholder="Enter Code">
-                                        <div class="mt-15">
+                                        <input *ngIf="isHSN" id="group-hsn-code" class="form-control" type="text" placeholder="Enter HSN Code">
+                                        <input *ngIf="!isHSN" id="group-sac-code" class="form-control" type="text" placeholder="Enter SAC Code">
+                                        <div class="mt-1 font-14" *ngIf="!isHSN">
                                             <input id="usb-group" type="checkbox">Is it Sub-group?
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mt-15">
+                                <div class="row mr-t15">
                                     <div class="col-sm-6">
                                         <label>Parent Group</label>
                                     </div>
@@ -125,7 +126,7 @@
                                 </div>
                             </form>
                             <div class="other-group">
-                                <tabset class="custom-tabs">
+                                <tabset class="custom-tabs create-new-group-tab">
                                     <tab heading="Other">
                                         <div class="other-tab-content">
                                             <input type="checkbox" id="out-of-stock">
@@ -138,7 +139,7 @@
                                 </tabset>
                             </div>
                             <div class="button-group">
-                                <button id="clear-btn" class="btn btn-primary bdr-radius-50 minwidth-100">Clear</button>
+                                <button id="clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
                                 <button id="create-group-btn" class="btn btn-success bdr-radius-50">Create
                                     Group</button>
                             </div>
