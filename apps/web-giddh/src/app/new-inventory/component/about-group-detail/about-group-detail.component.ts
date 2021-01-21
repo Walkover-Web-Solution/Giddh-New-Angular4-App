@@ -102,7 +102,7 @@ export class AboutGroupDetailComponent implements OnInit {
         });
     }
     /* It will show/hide hsn code field */
-    selectCode(isHSN) {
+    public selectCode(isHSN: any): void {
         this.isHSN = isHSN;
     }
     public ngOnDestroy() {

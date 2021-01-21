@@ -24,12 +24,12 @@ export class CreateNewInventoryComponent implements OnInit {
     public formGroupRadio: FormGroup;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _fb: FormBuilder
+    constructor(private fb: FormBuilder
 
     ){}
     public ngOnInit() {
         // add group form
-        this.formGroupRadio = this._fb.group({
+        this.formGroupRadio = this.fb.group({
             radioType: [''],
         });
         // enable disable parentGroup select
@@ -61,7 +61,7 @@ export class CreateNewInventoryComponent implements OnInit {
         /* added image path */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
-    selectCode(isHSN) {
+    public selectCode(isHSN: any): void {
         this.isHSN = isHSN;
     }
 

@@ -9669,6 +9669,18 @@ input.mat-input-element{
     .custom-select{
         background-image: none !important;
     }
+    .more-add-button{
+        .icon-undo{
+            border: 1px solid $midnight-blue;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 40px;
+            color: $midnight-blue;
+        }
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {

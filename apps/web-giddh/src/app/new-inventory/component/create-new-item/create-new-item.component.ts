@@ -27,7 +27,7 @@ export class CreateNewItemComponent implements OnInit {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
     /* It will show/hide hsn code field */
-    public selectCode(isHSN) {
+    public selectCode(isHSN: any): void {
         this.isHSN = isHSN;
     }
 }
