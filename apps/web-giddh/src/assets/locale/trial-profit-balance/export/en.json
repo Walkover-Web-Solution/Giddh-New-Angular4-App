@@ -1,12 +1,15 @@
 {
     "xls" : {
         "main_group_report" : "Main Group Report",
-        "group_wise_report" : "Group Wise Report",
-        "condensed_report" : "Condensed Report",
-        "account_wise_report" : "Account Wise Report"
+        "all_group_report" : "All Group Report",
+        "all_account_report" : "All Account Report",
+        "complete_report" : "Complete Report"
     },
     "csv" : {
         "group_wise_report" : "Group Wise Report",
+        "trial_balance_group_wise_report_file_name": "Trial_Balance_group-wise.csv",
+        "trial_balance_condensed_report_file_name": "Trial_Balance_condensed.csv",
+        "trial_balance_account_wise_report_file_name": "Trial_Balance_account-wise.csv",
         "condensed_report" : "Condensed Report",
         "account_wise_report" : "Account Wise Report"
     },

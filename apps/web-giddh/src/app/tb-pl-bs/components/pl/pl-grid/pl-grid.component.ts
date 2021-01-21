@@ -32,6 +32,10 @@ export class PlGridComponent implements OnInit, OnChanges, OnDestroy {
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
 		

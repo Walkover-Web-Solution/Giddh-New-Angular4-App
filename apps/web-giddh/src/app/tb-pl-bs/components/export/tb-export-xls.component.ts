@@ -1,34 +1,25 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 
 @Component({
-    selector: 'tb-export-xls',  // <home></home>
-    template: `
-
-<div class="btn-group" dropdown>
-   <a dropdownToggle class="cp"><img src="{{ imgPath }}"/></a>
-   <ul id="dropdown-xls" *dropdownMenu class="dropdown-menu dropdown-menu-right cp tbpl-dropdown" role="menu" aria-labelledby="button-basic">
-      <span class="caret"></span>
-      <li><a (click)="downloadTbXls('main-group')">Main Group Report</a></li>
-      <li><a (click)="downloadTbXls('group')">All Group Report</a></li>
-      <li><a (click)="downloadTbXls('account')">All Account Report</a></li>
-      <li><a (click)="downloadTbXls('all')">Complete Report</a></li>
-   </ul>
-</div>
-    <!--end form-group -->
-  `
+    selector: 'tb-export-xls',
+    templateUrl: './tb-export-xls.component.html'
 })
 
-export class TbExportXlsComponent implements OnInit, OnDestroy {
+export class TbExportXlsComponent implements OnInit {
     @Input() public trialBalanceRequest: TrialBalanceRequest;
     public enableDownload: boolean = true;
     @Output() public tbExportXLSEvent = new EventEmitter<string>();
 
     public showTbXls: boolean;
     public imgPath: string = '';
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _tbPlActions: TBPlBsActions) {
 
@@ -42,9 +33,5 @@ export class TbExportXlsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/xls-icon.png' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.png';
-    }
-
-    public ngOnDestroy() {
-        //
     }
 }
