@@ -1,32 +1,34 @@
 <div class="relative create-new-inventory-page static-tabs-on-page">
     <hamburger-menu [pageHeading]="'Create Inventory'"></hamburger-menu>
-    <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/new-inventory']"></i>
+    <span class="back-to-page cursor-pointer" [routerLink]="['/pages/new-inventory']">Back</span>
     <div class="select-physical-product">
         <div class="px-3 mt-2">
             <p class="text-gray font-14">Select if its a physical good or a service or a combo of more than 1 product.
             </p>
             <div class="select-product-type mt-1">
-                <div class="radio-btn-wrapper mt-15">
-                    <span class="p-0 mr-3" >
-                        <input id="product-option" class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
-                            [value]="">
-                        <label for="product-option" class="radio-custom-label">Product</label>
-                    </span>
-                    <span class="p-0 mr-3" (click)="selectType(service)">
-                        <input id="service-option" class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
-                            [value]="">
-                        <label for="service-option" class="radio-custom-label">Service</label>
-                    </span>
-                    <span class="p-0 mr-3">
-                        <input id="combo-option" class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
-                            [value]="">
-                        <label for="combo-option" class="radio-custom-label">Combo</label>
-                    </span>
-                    <span class="p-0 mr-3">
-                        <input id="bulk-creation-option" class="radio-custom cp ml-0" type="radio"
-                            name="selectCreateOption" [value]="">
-                        <label for="bulk-creation-option" class="radio-custom-label">Bulk Creation</label>
-                    </span>
+                <div class="radio-btn-wrapper mr-t15">
+                    <form [formGroup]="formGroupRadio" class="form-body">
+                        <span class="p-0 mr-3" >
+                            <input id="product-option" formControlName="radioType" class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
+                                value="product">
+                            <label for="product-option" class="radio-custom-label">Product</label>
+                        </span>
+                        <span class="p-0 mr-3">
+                            <input id="service-option" formControlName="radioType" class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
+                                value="service">
+                            <label for="service-option" class="radio-custom-label">Service</label>
+                        </span>
+                        <span class="p-0 mr-3">
+                            <input id="combo-option" formControlName="radioType"  class="radio-custom cp ml-0" type="radio" name="selectCreateOption"
+                                value="combo">
+                            <label for="combo-option" class="radio-custom-label">Combo</label>
+                        </span>
+                        <span class="p-0 mr-3">
+                            <input id="bulk-creation-option" formControlName="radioType" class="radio-custom cp ml-0" type="radio"
+                                name="selectCreateOption" value="bulkCreation">
+                            <label for="bulk-creation-option" class="radio-custom-label">Bulk Creation</label>
+                        </span>
+                    </form>
                 </div>
                 <div class="right-img-div">
                     <img src="{{imgPath}}create-group-vector.svg">
@@ -39,7 +41,7 @@
                     <div class="row flex-column-reverse flex-md-row">
                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                             <form>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
                                         <label>Product Name <span class="red-text">*</span></label>
                                     </div>
@@ -48,7 +50,7 @@
                                             value="Product Dummy Name Furniture">
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
                                         <label>Product Unit <span class="red-text">*</span></label>
                                     </div>
@@ -56,7 +58,7 @@
                                         <input id="product-unit" class="form-control" type="text" value="Kilo Gram">
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
                                         <label>Under Group</label>
                                     </div>
@@ -64,7 +66,7 @@
                                         <input id="under-group" class="form-control" type="text" value="">
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
                                         <label>Unique Name <i class="icon-info text-gray"></i></label>
                                     </div>
@@ -93,7 +95,7 @@
                                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row">
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Inventory Account <span class="red-text"></span> <i
                                                                     class="icon-info text-gray"></i></label>
@@ -105,7 +107,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Opening Qty <span class="red-text"></span></label>
                                                         </div>
@@ -116,7 +118,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Rate <span class="red-text"></span></label>
                                                         </div>
@@ -131,7 +133,7 @@
                                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row">
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Low stock alert <span class="red-text"></span> <i
                                                                     class="icon-info text-gray"></i></label>
@@ -144,7 +146,7 @@
                                                 </div>
 
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Amount <span class="red-text"></span></label>
                                                         </div>
@@ -171,7 +173,7 @@
                                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row">
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Output Qty<span class="red-text">*</span> </label>
                                                         </div>
@@ -180,7 +182,7 @@
                                                                 type="text" placeholder="Enter Qty">
                                                         </div>
                                                     </div>
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Stock Unit <span class="red-text">*</span> </label>
                                                         </div>
@@ -194,7 +196,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-8 col-lg-8 col-xl-9 col-12">
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-lg-6 col-sm-6 col-xl-4">
                                                     <label>Input Stock Details</label>
                                                 </div>
@@ -224,7 +226,7 @@
                                     <div class="row">
                                         <div class="col-xl-6 col-12">
                                             <div class="purchase-information">
-                                                <div class="select-puchase-info mb-15">
+                                                <div class="select-puchase-info mr-b15">
                                                     <input id="purchase-info-check" type="checkbox" checked>
                                                     <span>Purchase Information</span>
                                                 </div>
@@ -233,7 +235,7 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Linked Account/s </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                             <textarea type="text" id="linked-account"
                                                                 class="form-control"
                                                                 placeholder="All Accounts Selected"></textarea>
@@ -241,7 +243,7 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Applicable Tax </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                             <sh-select id="applicable-tax" placeholder="Select Tax">
                                                             </sh-select>
                                                             <p class="mt-1 font-14"><input id="purchase-price-tax"
@@ -250,8 +252,8 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Unit & Rate </label>
                                                         </div>
-                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
-                                                            <div class="row add-new-field mb-15">
+                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
+                                                            <div class="row add-new-field mr-b15">
                                                                 <div class="col-sm-6 col-6"><input type="text"
                                                                         class="form-control" id="select-unit"
                                                                         placeholder="Select Unit"></div>
@@ -277,7 +279,7 @@
                                         </div>
                                         <div class="col-xl-6 col-12 pl-5">
                                             <div class="sales-information">
-                                                <div class="select-puchase-info mb-15">
+                                                <div class="select-puchase-info mr-b15">
                                                     <input id="sales-info-check" type="checkbox"> <span>Sales
                                                         Information</span>
                                                 </div>
@@ -287,7 +289,7 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Linked Account/s </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                             <textarea type="text" id="sales-linked-account"
                                                                 class="form-control" placeholder="All Accounts Selected"
                                                                 disabled></textarea>
@@ -295,7 +297,7 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Applicable Tax </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                             <sh-select id="sales-applicable-tax"
                                                                 placeholder="Select Tax" disabled></sh-select>
                                                             <p class="mt-1 font-14"><input id="sales-price-tax"
@@ -304,8 +306,8 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Unit & Rate </label>
                                                         </div>
-                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
-                                                            <div class="row add-new-field mb-15">
+                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
+                                                            <div class="row add-new-field mr-b15">
                                                                 <div class="col-sm-6 col-6"><input type="text"
                                                                         class="form-control" id="sales-select-unit"
                                                                         placeholder="Select Unit" disabled></div>
@@ -335,7 +337,7 @@
                         </div>
                     </tab>
                     <tab heading="Inventory">
-                        <p class="mb-15 font-14" hidden>
+                        <p class="mr-b15 font-14" hidden>
                             <span>
                                 <input type="checkbox" checked class="checkbox-custom" name="product-service"
                                     id="product-service" /> <label for="product-service"
@@ -347,18 +349,18 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Output Qty <span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="output-qty" class="form-control" placeholder="Enter">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Stock Unit<span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="stock-unit" class="form-control"
                                                 placeholder="Amount">
                                         </div>
@@ -368,28 +370,28 @@
                                 <div class="col-sm-6">
 
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Input Stock Name<span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="select-stock-nme" class="form-control"
                                                 placeholder="Select Stock">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Stock Qty.<span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="select-stock-qty" class="form-control"
                                                 placeholder="Qty.">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Stock Unit<span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="select-stock-unit" class="form-control"
                                                 placeholder="Select Unit">
                                         </div>
@@ -398,14 +400,14 @@
                                 </div>
                             </div>
                         </form>
-                        <p class="mb-15 font-14">
+                        <p class="mr-b15 font-14">
                             <span>
                                 <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label
                                     for="stock" class="checkbox-custom-label">Continue selling when out of
                                     stock?</label>
                             </span>
                         </p>
-                        <p class="mb-15 font-14">
+                        <p class="mr-b15 font-14">
                             <span>
                                 <input type="checkbox" class="checkbox-custom" name="return-policy"
                                     id="return-policy" /> <label for="return-policy" class="checkbox-custom-label">Is
@@ -413,7 +415,7 @@
                                     policy?</label>
                             </span>
                         </p>
-                        <p class="mb-15 font-14">
+                        <p class="mr-b15 font-14">
                             <span>
                                 <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" />
                                 <label for="variant" class="checkbox-custom-label">Variant? This product has multiple
@@ -428,7 +430,7 @@
                                 <form>
                                     <div class="row">
                                         <div class="col-sm-12 col-md-6">
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Option 1</label>
                                                     <input type="text" class="form-control" placeholder="Size"
@@ -440,7 +442,7 @@
                                                         id="select-category"></textarea>
                                                 </div>
                                             </div>
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <input type="text" class="form-control"
                                                         placeholder="Ex: Size, Color" id="select-size-color">
@@ -452,7 +454,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="javascript:void(0)" class="text-primary mb-15 d-block cp">+ another
+                                    <a href="javascript:void(0)" class="text-primary mr-b15 d-block cp">+ another
                                         option</a>
                                 </form>
                             </div>
@@ -462,7 +464,7 @@
                         <form>
                             <div class="row">
                                 <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                                    <div class="row mb-15">
+                                    <div class="row mr-b15">
                                         <div class="col-sm-6 col-lg-6">
                                             <label>Stock Display Name</label>
                                         </div>
@@ -471,7 +473,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-lg-8 col-xl-6 col-12 mb-15">
+                                <div class="col-md-8 col-lg-8 col-xl-6 col-12 mr-b15">
                                     <div class="row">
                                         <div class="col-sm-6 col-lg-6">
                                             <span class="p-0 mr-3" (click)="selectCode(true)">
@@ -493,7 +495,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                                    <div class="row mb-15">
+                                    <div class="row mr-b15">
                                         <div class="col-sm-6 col-lg-6">
                                             <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
                                         </div>
@@ -503,7 +505,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                                    <div class="row mb-15">
+                                    <div class="row mr-b15">
                                         <div class="col-sm-6 col-lg-6">
                                             <label>Custom Field</label>
                                         </div>
@@ -524,7 +526,7 @@
                     <div class="row flex-column-reverse flex-md-row">
                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                             <form>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
                                         <label>Service Name <span class="red-text">*</span></label>
                                     </div>
@@ -533,7 +535,7 @@
                                             value="Service Dummy Name Furniture">
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
                                         <label>Service Unit <span class="red-text">*</span></label>
                                     </div>
@@ -543,7 +545,7 @@
 
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
                                         <label>Under Group</label>
                                     </div>
@@ -552,7 +554,7 @@
                                             placeholder="select Group"></sh-select>
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
                                         <label>Unique Name <i class="icon-info text-gray"></i></label>
                                     </div>
@@ -581,7 +583,7 @@
                                         <div class="col-md-12 col-lg-8 col-xl-6 col-12">
                                             <div class="row">
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Inventory Account <span class="red-text"></span> <i
                                                                     class="icon-info text-gray"></i></label>
@@ -593,7 +595,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Low stock alert <span class="red-text"></span> <i
                                                                     class="icon-info text-gray"></i></label>
@@ -615,7 +617,7 @@
 
 
                                         <div class="col-12 col-xl-12">
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Amount <span class="red-text"></span></label>
                                                 </div>
@@ -636,7 +638,7 @@
                                 <div class="col-xl-6 col-lg-12">
                                     <div class="row">
                                         <div class="col-12 col-xl-12">
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Output Qty<span class="red-text">*</span> </label>
                                                 </div>
@@ -645,7 +647,7 @@
                                                         placeholder="Enter Qty">
                                                 </div>
                                             </div>
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Stock Unit <span class="red-text">*</span> </label>
                                                 </div>
@@ -659,7 +661,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-9 col-lg-12">
-                                    <div class="row mb-15">
+                                    <div class="row mr-b15">
                                         <div class="col-lg-6 col-sm-6 col-xl-4">
                                             <label>Input Stock Details</label>
                                         </div>
@@ -686,7 +688,7 @@
                             <div class="row">
                                 <div class="col-xl-6 col-12">
                                     <div class="purchase-information">
-                                        <div class="select-puchase-info mb-15">
+                                        <div class="select-puchase-info mr-b15">
                                             <input id="purchase-info-check" type="checkbox" checked> <span>Purchase
                                                 Information</span>
                                         </div>
@@ -695,14 +697,14 @@
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Linked Account/s </label>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                     <textarea type="text" id="linked-account" class="form-control"
                                                         placeholder="All Accounts Selected"></textarea>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Applicable Tax </label>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                     <sh-select id="applicable-tax" placeholder="Select Tax"></sh-select>
                                                     <p class="mt-1"><input id="purchase-price-tax" type="checkbox">Price
                                                         Inclusive of Tax ?</p>
@@ -710,8 +712,8 @@
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Unit & Rate </label>
                                                 </div>
-                                                <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
-                                                    <div class="row add-new-field mb-15">
+                                                <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
+                                                    <div class="row add-new-field mr-b15">
                                                         <div class="col-sm-6 col-6"><input type="text"
                                                                 class="form-control" id="select-unit"
                                                                 placeholder="Select Unit"></div>
@@ -735,7 +737,7 @@
                                 </div>
                                 <div class="col-xl-6 col-12 pl-5">
                                     <div class="sales-information">
-                                        <div class="select-puchase-info mb-15">
+                                        <div class="select-puchase-info mr-b15">
                                             <input id="sales-info-check" type="checkbox"> <span>Sales Information</span>
                                         </div>
                                         <form>
@@ -744,14 +746,14 @@
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Linked Account/s </label>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                     <textarea type="text" id="sales-linked-account" class="form-control"
                                                         placeholder="All Accounts Selected" disabled></textarea>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Applicable Tax </label>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                     <sh-select id="sales-applicable-tax" placeholder="Select Tax"
                                                         disabled>
                                                     </sh-select>
@@ -762,8 +764,8 @@
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Unit & Rate </label>
                                                 </div>
-                                                <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
-                                                    <div class="row add-new-field mb-15">
+                                                <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
+                                                    <div class="row add-new-field mr-b15">
                                                         <div class="col-sm-6 col-6"><input type="text"
                                                                 class="form-control" id="sales-select-unit"
                                                                 placeholder="Select Unit" disabled></div>
@@ -792,7 +794,7 @@
                     </tab>
                     <tab heading="Inventory">
                         <!-- hidden for service content -->
-                        <p class="mb-15 font-14" hidden>
+                        <p class="mr-b15 font-14" hidden>
                             <span>
                                 <input type="checkbox" checked class="checkbox-custom" name="product-service"
                                     id="product-service" /> <label for="product-service"
@@ -806,22 +808,22 @@
                                 <div class="col-md-8 col-lg-12 col-xl-8 col-12">
                                     <div class="row">
                                         <div class="col-md-12 col-lg-8 col-xl-6 col-12">
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6">
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <label>Output Qty <span class="red-text">*</span></label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input type="text" id="output-qty" class="form-control"
                                                                 placeholder="Enter">
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <label>Stock Unit<span class="red-text">*</span></label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input type="text" id="stock-unit" class="form-control"
                                                                 placeholder="Amount">
                                                         </div>
@@ -831,29 +833,29 @@
                                                 <div class="col-sm-6">
 
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <label>Input Stock Name<span
                                                                     class="red-text">*</span></label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input type="text" id="select-stock-nme"
                                                                 class="form-control" placeholder="Select Stock">
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <label>Stock Qty.<span class="red-text">*</span></label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input type="text" id="select-stock-qty"
                                                                 class="form-control" placeholder="Qty.">
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <label>Stock Unit<span class="red-text">*</span></label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input type="text" id="select-stock-unit"
                                                                 class="form-control" placeholder="Select Unit">
                                                         </div>
@@ -867,7 +869,7 @@
                             </div>
                         </form>
                         <!-- hidden for service content -->
-                        <p hidden class="mb-15 font-14">
+                        <p hidden class="mr-b15 font-14">
                             <span>
                                 <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label
                                     for="stock" class="checkbox-custom-label">Continue selling when out of
@@ -875,7 +877,7 @@
                             </span>
                         </p>
                         <!-- hidden for service content -->
-                        <p hidden class="mb-15 font-14">
+                        <p hidden class="mr-b15 font-14">
                             <span>
                                 <input type="checkbox" class="checkbox-custom" name="return-policy"
                                     id="return-policy" /> <label for="return-policy" class="checkbox-custom-label">Is
@@ -883,7 +885,7 @@
                                     policy?</label>
                             </span>
                         </p>
-                        <p class="mb-15 font-14">
+                        <p class="mr-b15 font-14">
                             <span>
                                 <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" />
                                 <label for="variant" class="checkbox-custom-label">Variant? This product has multiple
@@ -900,7 +902,7 @@
                                         <div class="col-md-8 col-lg-12 col-xl-8 col-12">
                                             <div class="row">
                                                 <div class="col-md-12 col-lg-8 col-xl-6 col-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Option 1</label>
                                                             <input type="text" class="form-control" placeholder="Size"
@@ -913,8 +915,8 @@
                                                                 id="service-select-category"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div class="row mb-15">
-                                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                                    <div class="row mr-b15">
+                                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input type="text" class="form-control"
                                                                 placeholder="Ex: Size, Color"
                                                                 id="service-select-size-color">
@@ -928,7 +930,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="javascript:void(0)" class="text-primary mb-15 d-block cp">+ another
+                                    <a href="javascript:void(0)" class="text-primary mr-b15 d-block cp">+ another
                                         option</a>
                                 </form>
                             </div>
@@ -940,7 +942,7 @@
                                 <div class="col-md-8 col-lg-12 col-xl-8 col-12">
                                     <div class="row">
                                         <div class="col-md-12 col-lg-8 col-xl-6 col-12">
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>SAC Code</label>
                                                 </div>
@@ -949,7 +951,7 @@
                                                         id="service-sac-code">
                                                 </div>
                                             </div>
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-6">
                                                     <label>Custom Field</label>
                                                 </div>
@@ -967,13 +969,13 @@
             </div>
         </div>
         <!-- combo content start -->
-        <div class="combo-detail-content" hidden>
-            <div class="mb-15">
+        <div class="combo-detail-content" *ngIf="isCombo">
+            <div class="mr-b15">
                 <div class="col-xl-8 col-lg-12">
                     <div class="row flex-column-reverse flex-md-row">
                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                             <form>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-12 col-md-4 col-lg-6">
                                         <label>Combo Name<span class="red-text">*</span></label>
                                     </div>
@@ -982,7 +984,7 @@
                                             placeholder="Emter Name">
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-12 col-md-4 col-lg-6">
                                         <label>Unit<span class="red-text">*</span></label>
                                     </div>
@@ -990,7 +992,7 @@
                                         <sh-select id="select-combo-unit" placeholder="Select Unit"></sh-select>
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-12 col-md-4 col-lg-6">
                                         <label>Under Group<span class="red-text">*</span></label>
                                     </div>
@@ -998,7 +1000,7 @@
                                         <sh-select id="select-under-group" placeholder="Select Group"></sh-select>
                                     </div>
                                 </div>
-                                <div class="row mb-15">
+                                <div class="row mr-b15">
                                     <div class="col-sm-12 col-md-4 col-lg-6">
                                         <label>Unique Name<span class="red-text">*</span></label>
                                     </div>
@@ -1076,7 +1078,7 @@
                                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row">
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Inventory Type <span class="red-text"></span> <i
                                                                     class="icon-info text-gray"></i></label>
@@ -1087,7 +1089,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Opening Qty <span class="red-text"></span></label>
                                                         </div>
@@ -1097,7 +1099,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Rate <span class="red-text"></span></label>
                                                         </div>
@@ -1112,7 +1114,7 @@
                                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row">
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Low stock alert <span class="red-text"></span> <i
                                                                     class="icon-info text-gray"></i></label>
@@ -1124,7 +1126,7 @@
                                                 </div>
 
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Amount <span class="red-text"></span></label>
                                                         </div>
@@ -1150,7 +1152,7 @@
                                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                             <div class="row">
                                                 <div class="col-12 col-xl-12">
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Output Qty<span class="red-text">*</span> </label>
                                                         </div>
@@ -1159,7 +1161,7 @@
                                                                 placeholder="Enter Qty">
                                                         </div>
                                                     </div>
-                                                    <div class="row mb-15">
+                                                    <div class="row mr-b15">
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Combo Unit <span class="red-text">*</span> </label>
                                                         </div>
@@ -1173,7 +1175,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-8 col-lg-8 col-xl-9 col-12">
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-lg-6 col-sm-6 col-xl-4">
                                                     <label>Input Combo Details</label>
                                                 </div>
@@ -1202,7 +1204,7 @@
                                     <div class="row">
                                         <div class="col-xl-6 col-12">
                                             <div class="purchase-information">
-                                                <div class="select-puchase-info mb-15">
+                                                <div class="select-puchase-info mr-b15">
                                                     <input id="purchase-info-check" type="checkbox" checked>
                                                     <span>Purchase Information</span>
                                                 </div>
@@ -1211,14 +1213,14 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Linked Account/s </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                             <textarea type="text" id="linked-account" class="form-control"
                                                                 placeholder="All Accounts Selected"></textarea>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Applicable Tax </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                             <sh-select id="applicable-tax" placeholder="Select Tax">
                                                             </sh-select>
                                                             <p class="mt-1 font-14"><input id="purchase-price-tax"
@@ -1227,8 +1229,8 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Unit & Rate </label>
                                                         </div>
-                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
-                                                            <div class="row add-new-field mb-15">
+                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
+                                                            <div class="row add-new-field mr-b15">
                                                                 <div class="col-sm-6 col-6"><input type="text" class="form-control"
                                                                         id="select-unit" placeholder="Select Unit"></div>
                                                                 <div class="col-sm-6 col-6"><input type="text" class="form-control"
@@ -1250,7 +1252,7 @@
                                         </div>
                                         <div class="col-xl-6 col-12 pl-5">
                                             <div class="sales-information">
-                                                <div class="select-puchase-info mb-15">
+                                                <div class="select-puchase-info mr-b15">
                                                     <input id="sales-info-check" type="checkbox"> <span>Sales
                                                         Information</span>
                                                 </div>
@@ -1260,14 +1262,14 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Linked Account/s </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                             <textarea type="text" id="sales-linked-account" class="form-control"
                                                                 placeholder="All Accounts Selected" disabled></textarea>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Applicable Tax </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 pl-0 mb-15">
+                                                        <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                             <sh-select id="sales-applicable-tax" placeholder="Select Tax" disabled>
                                                             </sh-select>
                                                             <p class="mt-1 font-14"><input id="sales-price-tax"
@@ -1276,8 +1278,8 @@
                                                         <div class="col-sm-6 col-lg-6">
                                                             <label>Unit & Rate </label>
                                                         </div>
-                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-15">
-                                                            <div class="row add-new-field mb-15">
+                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
+                                                            <div class="row add-new-field mr-b15">
                                                                 <div class="col-sm-6 col-6"><input type="text" class="form-control"
                                                                         id="sales-select-unit" placeholder="Select Unit" disabled>
                                                                 </div>
@@ -1305,7 +1307,7 @@
                         </div>
                     </tab>
                     <tab heading="Inventory">
-                        <p class="mb-15 font-14" hidden>
+                        <p class="mr-b15 font-14" hidden>
                             <span>
                                 <input type="checkbox" checked class="checkbox-custom" name="product-service"
                                     id="product-service" /> <label for="product-service" class="checkbox-custom-label">Is the
@@ -1316,18 +1318,18 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Output Qty <span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="output-qty" class="form-control" placeholder="Enter">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Combo Unit<span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="stock-unit" class="form-control" placeholder="Amount">
                                         </div>
                                     </div>
@@ -1336,27 +1338,27 @@
                                 <div class="col-sm-6">
 
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Input Combo Name<span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="select-stock-nme" class="form-control"
                                                 placeholder="Select Stock">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Combo Qty.<span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="select-stock-qty" class="form-control" placeholder="Qty.">
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <label>Combo Unit<span class="red-text">*</span></label>
                                         </div>
-                                        <div class="col-sm-6 col-lg-6 mb-15">
+                                        <div class="col-sm-6 col-lg-6 mr-b15">
                                             <input type="text" id="select-stock-unit" class="form-control"
                                                 placeholder="Select Unit">
                                         </div>
@@ -1365,14 +1367,14 @@
                                 </div>
                             </div>
                         </form>
-                        <p class="mb-15 font-14">
+                        <p class="mr-b15 font-14">
                             <span>
                                 <input type="checkbox" class="checkbox-custom" name="stock" id="stock" /> <label for="stock"
                                     class="checkbox-custom-label">Continue selling when out of
                                     Combo?</label>
                             </span>
                         </p>
-                        <p class="mb-15 font-14">
+                        <p class="mr-b15 font-14">
                             <span>
                                 <input type="checkbox" class="checkbox-custom" name="return-policy" id="return-policy" /> <label
                                     for="return-policy" class="checkbox-custom-label">Is
@@ -1380,7 +1382,7 @@
                                     policy?</label>
                             </span>
                         </p>
-                        <p class="mb-15 font-14">
+                        <p class="mr-b15 font-14">
                             <span>
                                 <input type="checkbox" checked class="checkbox-custom" name="variant" id="variant" />
                                 <label for="variant" class="checkbox-custom-label">Variant? This product has multiple
@@ -1395,7 +1397,7 @@
                                 <form>
                                     <div class="row">
                                         <div class="col-sm-12 col-md-6">
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <label>Option 1</label>
                                                     <input type="text" class="form-control" placeholder="Size" id="select-option">
@@ -1406,7 +1408,7 @@
                                                         id="select-category"></textarea>
                                                 </div>
                                             </div>
-                                            <div class="row mb-15">
+                                            <div class="row mr-b15">
                                                 <div class="col-sm-6 col-lg-4">
                                                     <input type="text" class="form-control" placeholder="Ex: Size, Color"
                                                         id="select-size-color">
@@ -1418,7 +1420,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <a href="javascript:void(0)" class="text-primary mb-15 d-block cp">+ another
+                                    <a href="javascript:void(0)" class="text-primary mr-b15 d-block cp">+ another
                                         option</a>
                                 </form>
                             </div>
@@ -1428,7 +1430,7 @@
                         <form>
                             <div class="row">
                                 <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                                    <div class="row mb-15">
+                                    <div class="row mr-b15">
                                         <div class="col-sm-6 col-lg-6">
                                             <label>Combo Display Name</label>
                                         </div>
@@ -1437,7 +1439,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-lg-8 col-xl-6 mb-15">
+                                <div class="col-md-8 col-lg-8 col-xl-6 mr-b15">
                                     <div class="row">
                                         <div class="col-sm-6 col-lg-6">
                                             <span class="p-0 mr-3" (click)="selectCode(true)">
@@ -1459,7 +1461,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-8 col-lg-6">
-                                    <div class="row mb-15">
+                                    <div class="row mr-b15">
                                         <div class="col-sm-6 col-lg-6">
                                             <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
                                         </div>
@@ -1468,8 +1470,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-lg-8 col-xl-6 mb-15">
-                                    <div class="row mb-15">
+                                <div class="col-md-8 col-lg-8 col-xl-6 mr-b15">
+                                    <div class="row mr-b15">
                                         <div class="col-sm-6 col-lg-6">
                                             <label>Custom Field</label>
                                         </div>
@@ -1486,9 +1488,9 @@
         </div>
         <!-- combo content end -->
         <!-- bulk create starts -->
-        <div class="bulk-create-content" hidden>
+        <div class="bulk-create-content" *ngIf="isBulkCreation">
             <div class="container-fluid">
-                <div class="bulk-create-head mb-15 d-flex">
+                <div class="bulk-create-head mr-b15 d-flex">
                     <div class="button-group relative" dropdown placement="top left" [autoClose]="false">
                         <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
                             aria-controls="dropdown-basic">

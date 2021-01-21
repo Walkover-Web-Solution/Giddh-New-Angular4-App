@@ -9,7 +9,7 @@
     <tabset class="custom-tabs">
         <div class="inventory-header d-flex px-3 pb-3">
             <div class="d-flex">
-                <div class="mr-15">
+                <div class="mr-r15">
                     <div class="button-group relative" dropdown placement="top left">
                         <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
                             aria-controls="dropdown-basic" tooltip="Customised Columns">
@@ -140,7 +140,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="mr-15">
+                <div class="mr-r15">
                     <span class="input-group" [ngClass]="{'full-width-input-group': !dateRangFullWidth}">
                         <div class="custom-datepicker">
                             <i class="icon-calender calendar-addon bdr-radius-50" (click)="expandDateRang()"></i>
@@ -154,7 +154,7 @@
 
                     </span>
                 </div>
-                <div class="mr-15" *ngIf="!isMobileScreen">
+                <div class="mr-r15" *ngIf="!isMobileScreen">
                     <span class="input-group" [ngClass]="{'full-width-search-group': !inputFullWidth}">
                         <input *ngIf="!inputFullWidth" [ngClass]="{'full-width': !inputFullWidth}" type="text"
                             id="select-date-mobile-view" class="form-control search-group bdr-radius-50"
@@ -162,11 +162,11 @@
                         <i class="icon-search1 pos-abs bdr-radius-50" (click)="searhcGroup()"></i>
                     </span>
                 </div>
-                <div class="mr-15" *ngIf="!isMobileScreen">
+                <div class="mr-r15" *ngIf="!isMobileScreen">
                     <sh-select placeholder="Search Branch Alice" id="select-branch-alice"></sh-select>
                 </div>
 
-                <div class="mr-15 advance-search-btn"> <i class="icon-advance-filter bdr-radius-50"
+                <div class="mr-r15 advance-search-btn"> <i class="icon-advance-filter bdr-radius-50"
                         (click)="openModal(inventoryAdvanceSearch)" tooltip="Advance Search"></i> </div>
 
             </div>
@@ -201,7 +201,7 @@
                 <button id="create-new-inventory" class="btn btn-sky-blue">+ New Inventory</button>
             </div>
         </div>
-        <div class="mx-3 mb-15 d-flex justify-content-between" *ngIf="isMobileScreen">
+        <div class="mx-3 mr-b15 d-flex justify-content-between" *ngIf="isMobileScreen">
             <div class="btn-group" dropdown>
                 <button id="more-btn-inventory-mobile" dropdownToggle type="button"
                     class="btn btn-primary dropdown-toggle min-width-100" aria-controls="more-inventory-dropdown-mobile">

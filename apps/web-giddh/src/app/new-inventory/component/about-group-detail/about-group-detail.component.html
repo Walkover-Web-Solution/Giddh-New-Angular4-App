@@ -1,9 +1,9 @@
 <div class="container-fluid inventory-about-page static-tabs-on-page">
-    <div class="about-group pt-15">
+    <div class="about-group pd-t15">
         <div class="row">
-            <div class="col-10 col-md-6">
+            <div class="col-9 col-md-6">
                 <div class="group-detail d-flex w-100 align-items-center">
-                    <div class="group-thumbnail mr-15">
+                    <div class="group-thumbnail mr-r15">
                         <img src="{{imgPath}}Login-Page-Image.png" alt="group-icon">
                     </div>
                     <div class="group-name">
@@ -12,7 +12,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2 col-md-6 group-detail-right-btn">
+            <div class="col-3 col-md-6 group-detail-right-btn">
                 <div class="more-add-button d-flex align-items-center justify-content-end w-100">
                     <div class="btn-group" dropdown>
                         <button id="more-btn-inventory" *ngIf="!isMobileScreen" dropdownToggle type="button"
@@ -43,9 +43,9 @@
         <tab heading="About Group">
             <div class="row">
                 <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                    <p class="text-gray font-14 mb-15">Lorem Ipsum dummy text will come here about create stock.</p>
+                    <p class="text-gray font-14 mr-b15">Lorem Ipsum dummy text will come here about create stock.</p>
                     <form>
-                        <div class="row mb-15">
+                        <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <label>Group Name <span class="red-text">*</span></label>
                             </div>
@@ -53,7 +53,7 @@
                                 <input id="group-name" class="form-control" type="text" placeholder="Enter Group Name">
                             </div>
                         </div>
-                        <div class="row mb-15">
+                        <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <label>Unique Name <span class="red-text">*</span></label>
                             </div>
@@ -61,7 +61,7 @@
                                 <input id="unique-name" class="form-control" type="text" placeholder="Unique Name">
                             </div>
                         </div>
-                        <div class="row mb-15">
+                        <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <span class="p-0 mr-3" (click)="selectCode(true)">
                                     <input id="group-hsn-code-option" class="radio-custom cp ml-0" type="radio" name="selectCode" [value]="">
@@ -102,11 +102,11 @@
             <div class="d-flex">
                 <inventory-group-list-sidebar></inventory-group-list-sidebar>
                 <div class="right-side-content w-100 d-flex flex-column">
-                    <p class="font-14 mb-15">Following is the list of items created in <strong>Group Dummy Name
+                    <p class="font-14 mr-b15">Following is the list of items created in <strong>Group Dummy Name
                             Furniture</strong>
                         <i class="icon-info pd ml-1"></i>
                     </p>
-                    <div class="d-flex mb-15">
+                    <div class="d-flex mr-b15">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon bdr-radius-50"></i>
                             <input type="text" id="select-date-group" name="selectedDateRange"
