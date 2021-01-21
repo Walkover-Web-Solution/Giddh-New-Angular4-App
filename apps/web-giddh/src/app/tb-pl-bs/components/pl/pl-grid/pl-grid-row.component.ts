@@ -6,7 +6,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
     template: `
     <div class="pl-grid-row row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)" [ngClass]="{'isHidden': !groupDetail.isVisible }">
       <div class="col-8  group" [innerHTML]="groupDetail.groupName | highlight:search" [ngStyle]="{'padding-left': padding+'px'}"></div>
-      <div class="col-4  bdrL group pull-right" *ngIf="!groupDetail.level1">
+      <div class="col-4  bd-rl group pull-right" *ngIf="!groupDetail.level1">
         <!-- {{groupDetail.closingBalance | recType}} -->
         <div class="row">
           <span class="col-6 text-right" [ngClass]="{'invisible': groupDetail.isOpen && (groupDetail.accounts.length || groupDetail.childGroups.length)}">
@@ -20,22 +20,22 @@ import { ChildGroup } from '../../../../models/api-models/Search';
         </div>
       </div>
 
-      <div class="col-4  bdrL group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
-      <!--    <div class="col-2  bdrL group text-right"> <span>{{groupDetail.forwardedBalance.amount | giddhCurrency}}{{groupDetail.forwardedBalance | recType}} </span></div> -->
+      <div class="col-4  bd-rl group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
+      <!--    <div class="col-2  bd-rl group text-right"> <span>{{groupDetail.forwardedBalance.amount | giddhCurrency}}{{groupDetail.forwardedBalance | recType}} </span></div> -->
     </div>
     <ng-container *ngFor="let account of groupDetail.accounts">
       <section class=" row-2  pl-grid-row account" [ngClass]="{'isHidden': !account.isVisible }" *ngIf="account.isVisible || account.isCreated"
                (dblclick)="entryClicked(account)">
         <div class="row" *ngIf="account.name && (account.closingBalance.amount !== 0 || account.openingBalance.amount !== 0)">
           <div class="col-8" [ngStyle]="{'padding-left': (padding+20)+'px'}" [innerHTML]="account.name | lowercase  | highlight:search"></div>
-          <div class="col-4 bdrL text-left pull-right">
+          <div class="col-4 bd-rl text-left pull-right">
             <div class="row d-flex">
               <!-- {{account.closingBalance | recType}} -->
               <span class="col-6 text-right"> {{account.closingBalance.amount | giddhCurrency}} </span>
               <span class="col-6 invisible"> {{account.closingBalance.amount | giddhCurrency}} </span>
             </div>
           </div>
-          <!-- <div class="col-2 bdrL text-left"><span>{{account.openingBalance.amount | giddhCurrency}}{{account.openingBalance | recType}}</span></div> -->
+          <!-- <div class="col-2 bd-rl text-left"><span>{{account.openingBalance.amount | giddhCurrency}}{{account.openingBalance | recType}}</span></div> -->
         </div>
       </section>
     </ng-container>

@@ -11,7 +11,7 @@
         <div class="aside-pane-form">
             <div class="row">
 
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-sm-6">
 
                     <div class="select-tax-dropdown d-flex flex-column">
                         <label>Select Tax<span class="text-danger">*</span></label>
@@ -22,7 +22,7 @@
                                 [showClear]="true">
                             </sh-select>
 
-                            <label style="margin-top: 3px;margin-left: 2px;"
+                            <label class="label-tax"
                                 *ngIf="otherTaxesModal?.appliedOtherTax?.name">
                                 {{ otherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>
@@ -32,7 +32,7 @@
 
                 </div>
 
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-sm-6">
 
                     <div>
                         <label>Calculation Method<span class="text-danger">*</span></label>

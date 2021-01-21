@@ -17,7 +17,7 @@
 			<input class="form-control" required name="account" (blur)="generateUniqueName();" type="text"
 				formControlName="name" placeholder="Enter Account Name">
 		</div>
-		<div class="clearfix mr-t1 pdR2 pos-rel">
+		<div class="clearfix mr-t1 pd-r2 position-relative">
 			<label>Account Unique Name</label>
 			<input class="form-control" required name="accUnqName" type="text" formControlName="uniqueName"
 				[control]="newAccountForm.get('uniqueName')" textCaseChangeDirective
