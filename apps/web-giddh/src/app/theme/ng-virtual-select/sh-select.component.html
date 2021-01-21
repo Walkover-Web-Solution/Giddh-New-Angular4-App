@@ -16,7 +16,7 @@
             <input type="text" autocomplete="disabled" class="pd-l1 form-control" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
                 [attr.style]="borderConfiguration?.style"
                 (click)="showSearchSuggestion ? show($event) : '';" [placeholder]="selectedValues?.length > 0 && !showCheckbox ? filter : placeholder"
-                [(ngModel)]="filter" (ngModelChange)="handleInputChange($event)">
+                [(ngModel)]="filter" (focus)="subscribeToQueryChange()" (ngModelChange)="handleInputChange($event)">
         </div>
         <!--endregion-->
 
