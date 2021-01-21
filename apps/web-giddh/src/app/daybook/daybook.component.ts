@@ -337,21 +337,23 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public checkIsStockEntryAvailable(): any {
-        this.daybookData$.subscribe(item => {
-            this.isEntryExpanded = item.entries.some(entry => {
-                if (entry.isExpanded && entry.otherTransactions) {
-                    return entry.otherTransactions.some(otherTrasaction => {
-                        if (otherTrasaction && otherTrasaction.inventory) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    });
-                } else {
-                    return false;
-                };
+        if(this.daybookData$) {
+            this.daybookData$.subscribe(item => {
+                this.isEntryExpanded = item.entries.some(entry => {
+                    if (entry.isExpanded && entry.otherTransactions) {
+                        return entry.otherTransactions.some(otherTrasaction => {
+                            if (otherTrasaction && otherTrasaction.inventory) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        });
+                    } else {
+                        return false;
+                    };
+                });
             });
-        });
+        }
     }
 
     /**

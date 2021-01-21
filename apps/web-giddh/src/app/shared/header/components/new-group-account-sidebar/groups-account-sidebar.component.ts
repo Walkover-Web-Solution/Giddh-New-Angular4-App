@@ -253,7 +253,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(a => activeGroup = a);
 
         if (this.isSearchingGroups) {
-            if (grps.length > 0) {
+            if (grps && grps.length > 0) {
                 let newCOL = new ColumnGroupsAccountVM(null);
                 let allGrps = [];
                 let allAccount = [];

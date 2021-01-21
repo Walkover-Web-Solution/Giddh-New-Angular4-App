@@ -1,0 +1,17 @@
+@import "../../../../assets/css/color.scss";
+
+.file-upload-label {
+    vertical-align: top;
+}
+.file-upload-field {
+    white-space:normal;
+    word-break: break-all;
+}
+.file-upload-label sup {
+    font-size: 14px;
+    color: $red;
+    top: 0px;
+}
+#import-statement-modal label.radio-inline.p-0 {
+    width: 287px;
+}

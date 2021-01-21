@@ -14,7 +14,7 @@ import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api
 @Component({
 	selector: 'permission-model',
 	templateUrl: './permission.model.component.html',
-	styleUrls: ['./permission.model.component.css'],
+	styleUrls: ['./permission.model.component.scss'],
 	providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 

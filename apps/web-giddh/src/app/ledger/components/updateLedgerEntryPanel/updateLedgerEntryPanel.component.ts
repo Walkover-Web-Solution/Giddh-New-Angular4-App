@@ -28,7 +28,7 @@ import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
-import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
+import { cloneDeep, filter, last, orderBy, uniqBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
@@ -294,6 +294,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.condition2 = !this.condition;
         this.Shown = !this.Shown;
         this.isHide = !this.isHide;
+    }
+
+    /** Track by function for items */
+    public trackByFunction(index: number, item: ILedgerTransactionItem): any {
+        return item.particular.uniqueName;
     }
 
     public ngOnInit() {
@@ -692,7 +697,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 }];
                             }
                             initialAccounts.push({
-                                label: `${t.particular.name}(${t.inventory.stock.uniqueName})`,
+                                label: `${t.particular.name} (${t.inventory.stock.uniqueName})`,
                                 value: `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`,
                                 additional: {
                                     stock: {
@@ -723,7 +728,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     });
                     // this.vm.flatternAccountList4Select = observableOf(orderBy(initialAccounts, 'label'));
                     initialAccounts.push(...this.defaultSuggestions);
-                    this.searchResults = orderBy(initialAccounts, 'label');
+                    this.searchResults = orderBy(uniqBy(initialAccounts, 'value'), 'label');
                     this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
                     // check if entry allows to show discount and taxes box
@@ -1554,7 +1559,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.forceClear$ = observableOf({ status: true });
                 }
                 let invoiceSelected;
-                const selectedInvoice = (this.vm.selectedLedger.invoiceLinkingRequest && this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices) ? this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0] : false;
+                const selectedInvoice = (this.vm.selectedLedger && this.vm.selectedLedger.invoiceLinkingRequest && this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices) ? this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0] : false;
                 if (selectedInvoice) {
                     selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                     invoiceSelected = {
@@ -1617,16 +1622,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.value && event.additional) {
-            this.vm.selectedLedger.invoiceLinkingRequest = {
-                linkedInvoices: [
-                    {
-                        invoiceUniqueName: event.value,
-                        voucherType: event.additional.voucherType
-                    }
-                ]
+            if(this.vm.selectedLedger) {
+                this.vm.selectedLedger.invoiceLinkingRequest = {
+                    linkedInvoices: [
+                        {
+                            invoiceUniqueName: event.value,
+                            voucherType: event.additional.voucherType
+                        }
+                    ]
+                }
             }
         } else {
-            this.vm.selectedLedger.invoiceLinkingRequest = null;
+            if(this.vm.selectedLedger) {
+                this.vm.selectedLedger.invoiceLinkingRequest = null;
+            }
         }
     }
 
@@ -1868,12 +1877,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }) || [];
                     this.noResultsFoundLabel = SearchResultText.NotFound;
                     if (page === 1) {
-                        this.searchResults = searchResults;
+                        this.searchResults = uniqBy(searchResults, 'value');
                     } else {
-                        this.searchResults = [
-                            ...this.searchResults,
-                            ...searchResults
-                        ];
+                        const uniqueResults = uniqBy([...this.searchResults,
+                            ...searchResults], 'value');
+                        this.searchResults = uniqueResults;
                     }
                     this.searchResultsPaginationData.page = data.body.page;
                     this.searchResultsPaginationData.totalPages = data.body.totalPages;
