@@ -931,6 +931,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.getCurrencyRate();
                 } else {
                     this.baseCurrencyDetails = this.foreignCurrencyDetails;
+                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
                 }
                 this.selectedCurrency = 0;
                 this.assignPrefixAndSuffixForCurrency();
