@@ -291,9 +291,14 @@ export class GstComponent implements OnInit, OnDestroy {
     /**
      * Select tax handler
      *
+     * @param {*} [event]
      * @memberof GstComponent
      */
-    public selectTax(): void {
+    public selectTax(event?: any): void {
+        if(event && event.value) {
+            this.activeCompanyGstNumber = event.value;
+        }
+
         this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
         this.loadTaxReport();
     }

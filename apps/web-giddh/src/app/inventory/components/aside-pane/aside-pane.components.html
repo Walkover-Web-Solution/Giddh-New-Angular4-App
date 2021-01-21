@@ -7,17 +7,17 @@
     <button id="close" (click)="closeAsidePane()" *ngIf="!hideFirstScreen"><i class="icon-cross"></i></button>
     <button id="back" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
 
-    <div class="aside-body flexy-child vmiddle asidePanelLedger " *ngIf="!hideFirstScreen" vr-item>
-        <div class="pb-3 alC">
+    <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen" vr-item>
+        <div class="pd-b3 text-center">
             <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Create Stock</button>
         </div>
-        <div class="pb-3 alC">
+        <div class="pd-b3 text-center">
             <button class="btn btn-lg btn-primary" (click)="toggleGroupPane()">Create Group</button>
         </div>
-        <div class="pb-3 alC">
+        <div class="pd-b3 text-center">
             <button class="btn btn-lg btn-primary" (click)="toggleUnitPane()">Create Unit</button>
         </div>
-        <div class="pb-3 alC">
+        <div class="pd-b3 text-center">
             <button class="btn btn-lg btn-primary" (click)="toggleImport()">Import Stock</button>
         </div>
     </div>
