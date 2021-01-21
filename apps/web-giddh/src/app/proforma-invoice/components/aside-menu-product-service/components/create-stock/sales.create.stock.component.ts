@@ -383,7 +383,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             if (s) {
                 this.resetStockForm();
                 this.addStockForm.get('taxes').patchValue('');
-                this.store.dispatch(this._generalActions.getFlattenAccount());
                 this.store.dispatch(this.inventoryAction.resetCreateStockFlags());
                 this.closeAsidePane();
             }

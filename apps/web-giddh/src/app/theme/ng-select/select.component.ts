@@ -67,6 +67,15 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     public filterEnabled: boolean = true;
     public isBelow: boolean = true;
 
+    /** True when pagination should be enabled */
+    @Input() public isPaginationEnabled: boolean;
+    /** True if the compoonent should be used as dynamic search component instead of static search */
+    @Input() public enableDynamicSearch: boolean;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
+    /** Emits dynamic searched query */
+    @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
+
     // Width and position for the dropdown container.
     public width: number;
     public top: number;
@@ -324,8 +333,16 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         this.selectionSpan.nativeElement.focus();
     }
 
-    /** Input change handling. **/
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof SelectComponent
+     */
+    public reachedEnd(): void {
+        this.scrollEnd.emit();
+    }
 
+    /** Input change handling. **/
     private handleInputChanges(changes: SimpleChanges) {
         let optionsChanged: boolean = changes.hasOwnProperty('options');
         let noFilterChanged: boolean = changes.hasOwnProperty('noFilter');

@@ -9,12 +9,12 @@
     <div class="aside-body">
         <div class="aside-pane-form">
             <account-add-new-details #addAccountNewComponent *ngIf="activeGroupUniqueName && !isUpdateAccount"
-                class="mr-t4" [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flatGroupsOptions"
+                class="mr-t4" [activeGroupUniqueName]="activeGroupUniqueName"
                 [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
                 [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$"
                 (submitClicked)="addNewAcSubmit($event)" (isGroupSelected)="isGroupSelected($event)"
                 [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
-                [showBankDetail]="showBankDetail">
+                [showBankDetail]="showBankDetail" [isCustomerCreation]="true" [isFlattenRemoved]="true">
             </account-add-new-details>
 
             <account-update-new-details *ngIf="activeGroupUniqueName && isUpdateAccount"
