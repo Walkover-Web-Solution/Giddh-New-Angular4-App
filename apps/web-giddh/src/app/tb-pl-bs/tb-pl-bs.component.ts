@@ -7,7 +7,6 @@ import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Compa
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
 
 @Component({
@@ -32,6 +31,10 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabsTBPL', {static: true}) public staticTabs: TabsetComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions, private _route: ActivatedRoute, private router: Router, private _generalActions: GeneralActions) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -42,8 +45,6 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.setCurrentPageTitle('Trial Balance');
-
         if (TEST_ENV) {
             this.CanNewTBLoadOnThisEnv = true;
         } else {
@@ -67,13 +68,6 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
         if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
             this.staticTabs.tabs[id].active = true;
         }
-    }
-
-    public setCurrentPageTitle(title) {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
     /**
