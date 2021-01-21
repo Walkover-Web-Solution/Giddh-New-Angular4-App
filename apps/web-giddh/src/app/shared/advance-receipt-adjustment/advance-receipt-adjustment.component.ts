@@ -44,9 +44,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     /** Exceed Amount from invoice amount after adjustment */
     public exceedDueAmount: number = 0;
 
-
-
-
     @ViewChild('tdsTypeBox', {static: true}) public tdsTypeBox: ElementRef;
     @ViewChild('tdsAmountBox', {static: true}) public tdsAmountBox: ElementRef;
 
@@ -81,6 +78,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     @Input() public adjustedVoucherType: AdjustedVoucherType;
     /** True if the current module is voucher module required as all voucher adjustments are not supported from API */
     @Input() public isVoucherModule: boolean;
+    /** Stores the voucher eligible for adjustment */
+    @Input() public voucherForAdjustment: Array<Adjustment>;
 
     /** Close modal event emitter */
     @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
@@ -172,7 +171,24 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 }
             });
         } else {
-            this.getAllAdvanceReceipts();
+            if (!this.voucherForAdjustment) {
+                this.getAllAdvanceReceipts();
+            } else {
+                if (this.voucherForAdjustment && this.voucherForAdjustment.length) {
+                    this.adjustVoucherOptions = [];
+                    this.voucherForAdjustment.forEach(item => {
+                        if (item) {
+                            item.voucherDate = item.voucherDate.replace(/-/g, '/');
+                            this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                            this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                        }
+                    });
+                } else {
+                    if (this.isVoucherModule) {
+                        this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
+                    }
+                }
+            }
         }
         if (this.isUpdateMode) {
             this.calculateBalanceDue();
@@ -280,22 +296,21 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getAllAdvanceReceipts(): void {
-        this.adjustVoucherOptions = [];
-        if(this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
-            this.adjustVoucherForm.adjustments.forEach(item => {
-                if (item) {
-                    item.voucherDate = item.voucherDate.replace(/-/g, '/');
-                    this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                    this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                }
-            });
-        }
-
         if (this.adjustPayment && this.adjustPayment.customerUniquename && this.adjustPayment.voucherDate) {
             this.getAllAdvanceReceiptsRequest.accountUniqueName = this.adjustPayment.customerUniquename;
             this.getAllAdvanceReceiptsRequest.invoiceDate = this.adjustPayment.voucherDate;
             this.salesService.getAllAdvanceReceiptVoucher(this.getAllAdvanceReceiptsRequest).subscribe(res => {
                 if (res.status === 'success') {
+                    this.adjustVoucherOptions = [];
+                    if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
+                        this.adjustVoucherForm.adjustments.forEach(item => {
+                            if (item && item.uniqueName) {
+                                item.voucherDate = item.voucherDate.replace(/-/g, '/');
+                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                            }
+                        });
+                    }
                     this.allAdvanceReceiptResponse = res.body
                     if (res.body && res.body.length) {
                         if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
