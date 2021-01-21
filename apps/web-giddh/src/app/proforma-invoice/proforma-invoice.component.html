@@ -2890,7 +2890,8 @@
                     [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData"
                     [isVoucherModule]="true" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                     (closeModelEvent)="closeAdvanceReceiptModal()"
-                    (submitClicked)="getAdvanceReceiptAdjustData($event)">
+                    (submitClicked)="getAdvanceReceiptAdjustData($event)"
+                    [voucherForAdjustment]="voucherForAdjustment">
                 </advance-receipt-adjustment-component>
             </div>
         </div>
