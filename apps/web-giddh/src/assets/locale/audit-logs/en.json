@@ -18,7 +18,6 @@
     "select_user_placeholder" : "Select Option",
     "get_logs" : "Get Logs",
     "page_heading" : "Audit Logs",
-    "entity" : "Entity",
     "date" : "Date",
     "user" : "User",
     "group" : "Group",
