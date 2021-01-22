@@ -35,6 +35,8 @@ import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
 import { SettingsIntegrationTab } from '../constants/settings.constant';
+import { SearchService } from '../../services/search.service';
+import { SalesService } from '../../services/sales.service';
 
 export declare const gapi: any;
 
@@ -129,6 +131,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public updateBankUrnNumber: any;
     /* This will clear the selected linked account */
     public forceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the list of accounts */
+    public accounts: IOption[];
 
     constructor(
         private router: Router,
@@ -143,7 +163,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsPermissionActions: SettingsPermissionActions,
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private settingsIntegrationService: SettingsIntegrationService) {
+        private settingsIntegrationService: SettingsIntegrationService,
+        private searchService: SearchService,
+        private salesService: SalesService
+    ) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -223,21 +246,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.amazonSellerForm.controls['sellers'].patchValue(this.amazonSellerRes);
                 // this.amazonSellerForm.controls['sellers'].disable();
                 this.addAmazonSellerRow();
-            }
-        });
-        this.flattenAccountsStream$.subscribe(data => {
-            if (data) {
-                let accounts: IOption[] = [];
-                let bankAccounts: IOption[] = [];
-                _.forEach(data, (item) => {
-                    accounts.push({ label: item.name, value: item.uniqueName });
-                    let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
-                    if (findBankIndx !== -1) {
-                        bankAccounts.push({ label: item.name, value: item.uniqueName });
-                    }
-                });
-                this.accounts$ = observableOf(accounts);
-                this.bankAccounts$ = observableOf(bankAccounts);
             }
         });
 
@@ -1297,6 +1305,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public loadPaymentData(event?: any): void {
         if (event && event instanceof TabDirective || !event) {
+            this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this._companyActions.getAllRegistrations());
             this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
             this.store.pipe(take(1)).subscribe(s => {
@@ -1327,6 +1336,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public loadCollectionData(event?): void {
         if (event && event instanceof TabDirective || !event) {
+            this.loadDefaultAccountsSuggestions();
+            this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
             this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
             this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
@@ -1397,5 +1408,123 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public tabChanged(tab: string): void {
         this.router.navigateByUrl('/pages/settings/integration/' + tab);
+    }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof SettingIntegrationComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accounts$ = observableOf(this.accounts);
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof SettingIntegrationComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof SettingIntegrationComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof SettingIntegrationComponent
+     */
+    private loadDefaultBankAccountsSuggestions(): void {
+        this.salesService.getAccountsWithCurrency('bankaccounts').subscribe(response => {
+            if (response?.body?.results) {
+                const bankAccounts = response.body.results.map(account => ({
+                    label: account.name,
+                    value: account.uniqueName
+                }))
+                this.bankAccounts$ = observableOf(bankAccounts);
+            }
+        });
     }
 }
