@@ -43,6 +43,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public exceedDueErrorMessage: string = 'The adjusted amount of the linked invoice is more than this receipt due amount';
     /** Exceed Amount from invoice amount after adjustment */
     public exceedDueAmount: number = 0;
+    /** True, if form is reset, used to avoid calculation as required sh-select auto-fills the value if only single option is present  */
+    public isFormReset: boolean;
 
     @ViewChild('tdsTypeBox', {static: true}) public tdsTypeBox: ElementRef;
     @ViewChild('tdsAmountBox', {static: true}) public tdsAmountBox: ElementRef;
@@ -244,6 +246,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public onClear(): void {
+        this.isFormReset = true;
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
             tdsAmount: {
@@ -264,6 +267,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 }
             ]
         };
+        setTimeout(() => {
+            this.isFormReset = false;
+        });
     }
 
     /**
@@ -547,7 +553,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
-        if (event && entry) {
+        if (event && entry && !this.isFormReset) {
             entry = cloneDeep(event.additional);
             this.formatAdjustmentData([event.additional]);
             this.adjustVoucherForm.adjustments.splice(index, 1, entry);
