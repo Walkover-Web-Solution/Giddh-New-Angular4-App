@@ -36,6 +36,8 @@ export class InprogressComponent implements OnInit, OnDestroy {
         type: ''
     };
     public paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(
         private _toaster: ToasterService,
