@@ -1413,7 +1413,7 @@ modal-container.modal {
     background: $success-green;
 }
 
-.pt-85 {
+.pd-t85 {
     padding-top: 85px !important;
 }
 
@@ -2559,7 +2559,7 @@ input[type="checkbox"]:checked:after {
     padding-top: 5px;
 }
 
-.pt-07 {
+.pd-t07 {
     padding-top: 7px;
 }
 
@@ -3757,15 +3757,6 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .map-txn-container table tr td {
     width: 25%;
-}
-
-.mrl0 {
-    margin-left: 0 !important;
-}
-
-
-.mr-b-5 {
-    margin-bottom: 5px;
 }
 
 .modal-header {
@@ -6190,7 +6181,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     background-color: $alice-blue-light;
 }
 
-.ledg-head table td.pr-25 {
+.ledg-head table td.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -6207,7 +6198,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: relative;
 }
 
-.ledg-head.entry-popup table td.pr-25 {
+.ledg-head.entry-popup table td.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -6300,7 +6291,7 @@ table td[class*=col-]:last-child {
     font-weight: 400;
 }
 
-.pr-25 {
+.pd-r25 {
     padding-right: 25px !important;
 }
 
@@ -7694,7 +7685,7 @@ app-header {
     outline: 1px dotted !important;
 }
 
-.pt-26 {
+.pd-t26 {
     padding-top: 26px;
 }
 
