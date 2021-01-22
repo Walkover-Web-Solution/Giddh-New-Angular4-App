@@ -248,7 +248,7 @@
         <div *ngIf="!isMobileScreen">
             <h1 class="mr-t2 primary-color" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
             <section id="eledgerwrap" class="mr-t2" *ngIf="lc.showEledger">
-                <div class="alert alert-danger ledger-book fade in position-relative pr-15">
+                <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
                     <button type="button" class="close">
                         <span class="font-12 font-weight-normal"
                             (click)="lc.showEledger = !lc.showEledger">Close</span>
@@ -266,8 +266,8 @@
                             <div class="px-3 w-100">
                                 <table class="ledger-head transaction-mapped mt-0" width="100%" colspan="100%">
                                     <tr>
-                                        <th colspan="6" class="pl-15 pr-2 font-14">Debit <span class="pull-right text-gray">Dr</span></th>
-                                        <th colspan="6" class="pr-15 pl-1 font-14">Credit <span class="pull-right text-gray">Cr</span></th>
+                                        <th colspan="6" class="pd-l15 pr-2 font-14">Debit <span class="pull-right text-gray">Dr</span></th>
+                                        <th colspan="6" class="pd-r15 pl-1 font-14">Credit <span class="pull-right text-gray">Cr</span></th>
                                     </tr>
                                 </table>
                             </div>
@@ -469,12 +469,12 @@
                             <td colspan="12" class="py-2 px-3 font-14">
                                 <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
                                     C/F Balance
-                                    <span class="pl-15 digit-blue" *ngIf="eLedgType == 'CREDIT'" >{{eDrBalAmnt | giddhCurrency}}</span>
+                                    <span class="pd-l15 digit-blue" *ngIf="eLedgType == 'CREDIT'" >{{eDrBalAmnt | giddhCurrency}}</span>
                                 </div>
                             </td>
                             <td colspan="12" class="bd-rl py-2 px-3 font-14" *ngIf="eLedgType == 'DEBIT'">
                                 <div class="pull-right">
-                                    C/F Balance <span  class="pl-15 digit-blue" *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
+                                    C/F Balance <span  class="pd-l15 digit-blue" *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
                                 </div>
                             </td>
                         </tr>
