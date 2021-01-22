@@ -174,7 +174,7 @@
             </table>
         </div>
         <div class="row warehouse-field">
-            <div *ngIf="currentTxn?.selectedAccount?.stock" class="col-sm-4 col-xs-12">
+            <div *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1" class="col-sm-4 col-xs-12">
                 <div class="source-warehouse">
                     <label>Select Warehouse</label>
                     <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-select-warehouse" [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"

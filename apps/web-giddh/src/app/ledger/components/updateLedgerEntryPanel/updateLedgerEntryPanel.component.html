@@ -666,7 +666,7 @@
             <div class="row ledger-bottom">
                 <div class="col-md-6 pt-1">
                     <!-- make it functional (Developer end) -->
-                    <div *ngIf="shouldShowWarehouse" class="row mr-b1">
+                    <div *ngIf="shouldShowWarehouse && warehouses?.length > 1" class="row mr-b1">
                         <div class="col-sm-6 pd-r1">
                             <div class="select-warehouse">
                                 <label class="font-12">Select Warehouse</label>
