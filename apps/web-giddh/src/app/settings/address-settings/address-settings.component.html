@@ -118,37 +118,38 @@
         </div>
         <!-- branch profile element start -->
         <div class="d-flex flex-column w-100" *ngIf="organizationType === 'BRANCH'">
-            <div class="branch-profile-address-content col-md-12 mb-15"
-                *ngFor="let address of addresses; index as addressIndex">
-                <div class="single-branch-detail mb-15">
-                    <h4><i class="icon-branch-icon"></i>{{address?.name}}</h4>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Address:</label>
-                            <p>
-                                {{address.address}}
-                                <ng-container *ngIf="address.taxType && address.taxNumber">
-                                    <br *ngIf="address.address" />
-                                    {{address.taxType}} : {{address.taxNumber}}
-                                </ng-container>
-                            </p>
-                        </div>
-                        <div class="col-md-4 mb-1">
-                            <label>State:</label>
-                            <p>{{address.stateCode}} - {{address.stateName}}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="set-default">
-                                <p class="no-selected mb-1 cursor-pointer" hidden><i
-                                        class="icon-no-selected mr-05"></i>Set
-                                    as Default</p>
-                                <p (click)="handleSetDefaultAddress(address)"
-                                    class="selected-defualt mb-1 cursor-pointer">
-                                    <i *ngIf="address.isDefault" class="icon-favorite-selected mr-05"></i>
-                                    <i *ngIf="!address.isDefault" class="icon-no-selected mr-05"></i>
-                                    Set as Default</p>
-                                <p (click)="showConfirmationModal(address)" class="cursor-pointer">
-                                    <i class="icon-unlink mr-05"></i>Unlink Address</p>
+            <div *ngFor="let address of addresses; index as addressIndex">
+                <div class="branch-profile-address-content col-md-12 mb-15">
+                    <div class="single-branch-detail mb-15">
+                        <h4><i class="icon-branch-icon"></i>{{address?.name}}</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Address:</label>
+                                <p>
+                                    {{address.address}}
+                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                        <br *ngIf="address.address" />
+                                        {{address.taxType}} : {{address.taxNumber}}
+                                    </ng-container>
+                                </p>
+                            </div>
+                            <div class="col-md-4 mb-1">
+                                <label>State:</label>
+                                <p>{{address.stateCode}} - {{address.stateName}}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="set-default">
+                                    <p class="no-selected mb-1 cursor-pointer" hidden><i
+                                            class="icon-no-selected mr-05"></i>Set
+                                        as Default</p>
+                                    <p (click)="handleSetDefaultAddress(address)"
+                                        class="selected-defualt mb-1 cursor-pointer">
+                                        <i *ngIf="address.isDefault" class="icon-favorite-selected mr-05"></i>
+                                        <i *ngIf="!address.isDefault" class="icon-no-selected mr-05"></i>
+                                        Set as Default</p>
+                                    <p (click)="showConfirmationModal(address)" class="cursor-pointer">
+                                        <i class="icon-unlink mr-05"></i>Unlink Address</p>
+                                </div>
                             </div>
                         </div>
                     </div>
