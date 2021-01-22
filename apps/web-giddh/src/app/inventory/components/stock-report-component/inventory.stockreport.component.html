@@ -450,7 +450,7 @@
 </section>
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<aside-pane [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
+<aside-pane *ngIf="asideMenuState === 'in'" [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
 <!-- aside menu section -->
 
 <!-- Advance search popup -->

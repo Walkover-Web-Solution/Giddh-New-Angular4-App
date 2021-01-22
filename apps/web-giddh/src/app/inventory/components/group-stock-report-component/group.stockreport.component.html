@@ -570,7 +570,7 @@
 </section>
 <!-- aside new stock/group/unit pane -->
 <div class="aside-overlay" *ngIf="asidePaneState === 'in'"></div>
-<aside-pane [class]="asidePaneState" [@slideInOut]="asidePaneState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
+<aside-pane *ngIf="asidePaneState === 'in'" [class]="asidePaneState" [@slideInOut]="asidePaneState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
 <!-- aside new stock/group/unit -->
 
 <!-- aside inwards/outwards/transfer pane -->
