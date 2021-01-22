@@ -771,7 +771,7 @@ table th[class*="col-"] {
  border:none;
 }
 
-.pt-350 {
+.pd-t350 {
     padding-bottom: 350px;
 }
 .table-bordered > thead > tr > td,
@@ -996,7 +996,7 @@ h4 {
 .magic-table .download-invoice-ledger {
     padding: 0 5px;
 }
-.magic-table .pr-25 {
+.magic-table .pd-r25 {
     padding-right: 25px !important;
 }
 /*footer style end*/

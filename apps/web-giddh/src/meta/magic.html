@@ -93,7 +93,7 @@
                         <!-- Tab panes -->
                         <div class="tab-content ledger-book row" id="transaction_table">
                             <div role="tabpanel" class="tab-pane col-lg-6 col-md-12 col-12"
-                                v-bind:class="{'active': selectedTab === 'debit' || !selectedTab, 'pt-350':!isResponsive}"
+                                v-bind:class="{'active': selectedTab === 'debit' || !selectedTab, 'pd-t350':!isResponsive}"
                                 id="debit" v-if="!selectedTab || selectedTab == 'debit'">
                                 <div class="row">
                                     <div class="col-12 pl-0 pr-0">
@@ -146,7 +146,7 @@
                                                                     <td class="col-6 bd-rl">To {{txn.particular.name}}
                                                                     </td>
                                                                     <td class="col-3 bd-rl position-relative"
-                                                                        v-bind:class="{'pr-25': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
+                                                                        v-bind:class="{'pd-r25': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                         align="right">
                                                                         {{txn.amount}}
                                                                         <template
@@ -210,7 +210,7 @@
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane col-lg-6 col-md-12 col-md-12"
-                                v-bind:class="{'active': selectedTab === 'credit', 'pt-350':!isResponsive}" id="credit"
+                                v-bind:class="{'active': selectedTab === 'credit', 'pd-t350':!isResponsive}" id="credit"
                                 v-if="!selectedTab || selectedTab == 'credit'">
                                 <div class="row">
                                 <div class="col-12 pl-0 pr-0">
@@ -264,7 +264,7 @@
                                                                     <td class="col-6 bd-rl">By {{txn.particular.name}}
                                                                     </td>
                                                                     <td class="col-3 bd-rl position-relative bd-rr"
-                                                                        v-bind:class="{'pr-25': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
+                                                                        v-bind:class="{'pd-r25': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                         align="right">
                                                                         {{txn.amount}}
                                                                         <template
