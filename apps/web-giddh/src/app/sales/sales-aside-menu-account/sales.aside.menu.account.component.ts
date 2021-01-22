@@ -92,7 +92,7 @@ export class SalesAsideMenuAccountComponent implements OnInit, OnDestroy, OnChan
 	}
 	public isGroupSelected(event) {
 		if (event) {
-			this.activeGroupUniqueName = event;
+			this.activeGroupUniqueName = event.value;
 		}
 	}
 	public addNewAcSubmit(accRequestObject: AddAccountRequest) {

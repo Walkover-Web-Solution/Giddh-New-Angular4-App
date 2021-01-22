@@ -35,6 +35,7 @@ import {
     TransferProductsRequest,
     NewBranchTransferRequest, NewBranchTransferResponse, NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest
 } from '../models/api-models/BranchTransfer';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 declare var _: any;
 
@@ -158,10 +159,18 @@ export class InventoryService {
         if (payload.companyUniqueName) {
             cmpUniqueName = payload.companyUniqueName;
         }
-        let url = this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName))
-
+        let url = this.config.apiUrl + INVENTORY_API.STOCKS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName));
+        let delimiter = '?';
         if (payload.branchUniqueName) {
-            url = url.concat(`?${payload.branchUniqueName !== cmpUniqueName ? encodeURIComponent(payload.branchUniqueName) : ''}`);
+            url = url.concat(`?branchUniqueName=${payload.branchUniqueName !== cmpUniqueName ? encodeURIComponent(payload.branchUniqueName) : ''}`);
+            delimiter = '&';
+        }
+        if (payload.q) {
+            url = url.concat(`${delimiter}q=${payload.q}`);
+            delimiter = '&';
+        }
+        if (payload.page) {
+            url = url.concat(`${delimiter}page=${payload.page}&count=${payload.count || PAGINATION_LIMIT}`);
         }
 
         return this._http.get(url).pipe(map((res) => {
