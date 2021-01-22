@@ -22,14 +22,14 @@ class FormatCsv implements IFormatable {
 	private header: string = '';
 	private body: string = '';
 	private footer: string = '';
-	private title: string = 'Name' + ',' + 'Opening Balance' + ',' + 'Debit' + ',' + 'Credit' + ',' + 'Closing Balance' + '\r\n';
+	private title: string = '';
 
-	constructor(private request: TrialBalanceRequest) {
-		
+	constructor(private request: TrialBalanceRequest, private localeData) {
+        this.title = this.localeData.csv.trial_balance.name + ',' + this.localeData.csv.trial_balance.opening_balance + ',' + this.localeData.csv.trial_balance.debit + ',' + this.localeData.csv.trial_balance.credit + ',' + this.localeData.csv.trial_balance.closing_balance + '\r\n';
 	}
 
 	public setHeader(selectedCompany: CompanyResponse) {
-		this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\nTrial Balance: ${this.request.from} to ${this.request.to}\r\n`;
+		this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\n${this.localeData.csv.trial_balance.trial_balance} ${this.request.from} ${this.localeData.csv.trial_balance.to} ${this.request.to}\r\n`;
 	}
 
 	public setRowData(data: any[], padding: number) {
@@ -39,7 +39,7 @@ class FormatCsv implements IFormatable {
 	}
 
 	public setFooter(data: any[]) {
-		this.footer += `Total,`;
+		this.footer += this.localeData.csv.trial_balance.total;
 		data.forEach(value => this.footer += `${value},`);
 		this.footer += `\r\n`;
 	}
@@ -88,10 +88,10 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
 		this.showCsvDownloadOptions = false;
 		let csv = '';
 		let name = '';
-		let formatCsv = new FormatCsv(this.trialBalanceRequest);
+		let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);
 		switch (value) {
 			case 'group-wise':
-				csv = this.dataFormatter.formatDataGroupWise();
+				csv = this.dataFormatter.formatDataGroupWise(this.localeData);
 				name = this.localeData.csv.trial_balance_group_wise_report_file_name;
 				break;
 			case 'condensed':

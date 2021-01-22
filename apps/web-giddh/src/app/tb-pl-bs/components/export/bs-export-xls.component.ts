@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
@@ -16,13 +15,15 @@ export class BsExportXlsComponent implements OnInit {
     public enableDownload: boolean = true;
     public imgPath: string = '';
     @Output() public plBsExportPdfEvent = new EventEmitter<boolean>();
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private store: Store<AppState>, private _tbPlActions: TBPlBsActions) {
 
     }
 
     public downloadBsXls() {
-        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName };
+        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData.xls.profit_loss.download_filename };
         this.store.dispatch(this._tbPlActions.DownloadBalanceSheetExcel(request));
     }
 
