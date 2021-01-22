@@ -131,7 +131,8 @@
                                 <div>
                                     <label>Link Account</label>
                                     <div class="input-group">
-                                        <sh-select class="linked-account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)" [forceClearReactive]="forceClearLinkAccount$ | async">
+                                        <sh-select class="linked-account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)" [forceClearReactive]="forceClearLinkAccount$ | async"
+                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)" >
                                         </sh-select>
                                         <div class="input-group-addon cp" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
                                             <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
