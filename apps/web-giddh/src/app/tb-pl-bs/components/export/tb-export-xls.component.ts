@@ -18,15 +18,13 @@ export class TbExportXlsComponent implements OnInit {
     public imgPath: string = '';
     /* This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
-    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _tbPlActions: TBPlBsActions) {
 
     }
 
     public downloadTbXls(value: string) {
-        let request = { ...this.trialBalanceRequest, export: value } as TrialBalanceExportExcelRequest;
+        let request = { ...this.trialBalanceRequest, export: value, filename: this.localeData.xls.trial_balance.download_filename } as TrialBalanceExportExcelRequest;
         this.store.dispatch(this._tbPlActions.DownloadTrialBalanceExcel(request));
         return false;
     }

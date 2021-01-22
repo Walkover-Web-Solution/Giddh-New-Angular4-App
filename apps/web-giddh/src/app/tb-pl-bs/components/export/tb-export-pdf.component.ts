@@ -28,7 +28,7 @@ class FormatPdf implements IFormatable {
     private colX: number;
     private colY: number = 20;
 
-    constructor(private request: TrialBalanceRequest) {
+    constructor(private request: TrialBalanceRequest, private localeData) {
         this.colX = 10;
         // this.colY = 50;
     }
@@ -43,15 +43,15 @@ class FormatPdf implements IFormatable {
         }
 
         this.pdf.text(10, this.colY += 5, (selectedCompany.city || '') + (selectedCompany.pincode ? ('-' + selectedCompany.pincode) : ''));
-        this.pdf.text(10, this.colY += 5, `Trial Balance: ${this.request.from} to ${this.request.to}`);
+        this.pdf.text(10, this.colY += 5, `${this.localeData.pdf.trial_balance.trial_balance} ${this.request.from} ${this.localeData.pdf.trial_balance.to} ${this.request.to}`);
         this.pdf.line(10, this.colY += 5, 200, this.colY);
 
         this.pdf.setFontSize(9);
-        this.pdf.text(10, this.colY += 5, 'PARTICULAR');
-        this.pdf.text(70, this.colY, 'OPENING BALANCE');
-        this.pdf.text(105, this.colY, 'DEBIT');
-        this.pdf.text(140, this.colY, 'CREDIT');
-        this.pdf.text(170, this.colY, 'CLOSING BALANCE');
+        this.pdf.text(10, this.colY += 5, this.localeData.pdf.trial_balance.particular.toUpperCase());
+        this.pdf.text(70, this.colY, this.localeData.pdf.trial_balance.opening_balance.toUpperCase());
+        this.pdf.text(105, this.colY, this.localeData.pdf.trial_balance.debit.toUpperCase());
+        this.pdf.text(140, this.colY, this.localeData.pdf.trial_balance.credit.toUpperCase());
+        this.pdf.text(170, this.colY, this.localeData.pdf.trial_balance.closing_balance.toUpperCase());
         this.pdf.line(10, this.colY += 3, 200, this.colY);
     }
 
@@ -71,7 +71,7 @@ class FormatPdf implements IFormatable {
     public setFooter(data: any[]) {
         this.pdf.setFontSize(10);
         this.pdf.line(10, this.colY += 5, 200, this.colY);
-        this.pdf.text(10, this.colY + 5, 'TOTAL');
+        this.pdf.text(10, this.colY + 5, this.localeData.pdf.trial_balance.total.toUpperCase());
         this.pdf.text(70, this.colY + 5, data[0].toString());
         this.pdf.text(105, this.colY + 5, data[1].toString());
         this.pdf.text(140, this.colY + 5, data[2].toString());
@@ -149,23 +149,23 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         let pdf = new jsPDF('p', 'pt') as JsPDFAutoTable;
         let columns = [
             {
-                title: 'Particular',
+                title: this.localeData.pdf.trial_balance.particular,
                 dataKey: 'name'
             },
             {
-                title: 'Opening Balance',
+                title: this.localeData.pdf.trial_balance.opening_balance,
                 dataKey: 'openingBalance'
             },
             {
-                title: 'Debit',
+                title: this.localeData.pdf.trial_balance.debit,
                 dataKey: 'debit'
             },
             {
-                title: 'Credit',
+                title: this.localeData.pdf.trial_balance.credit,
                 dataKey: 'credit'
             },
             {
-                title: 'Closing Balance',
+                title: this.localeData.pdf.trial_balance.closing_balance,
                 dataKey: 'closingBalance'
             }
         ];
@@ -208,7 +208,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
                         .forEach(p => pdf.text(40, colY += 15, p));
                 }
                 pdf.text(40, colY += 15, (this.selectedCompany.city || '') + (this.selectedCompany.pincode ? ('-' + this.selectedCompany.pincode) : ''));
-                pdf.text(40, colY += 15, `Trial Balance: ${this.trialBalanceRequest.from} to ${this.trialBalanceRequest.to}`);
+                pdf.text(40, colY += 15, `${this.localeData.pdf.trial_balance.trial_balance} ${this.trialBalanceRequest.from} ${this.localeData.pdf.trial_balance.to} ${this.trialBalanceRequest.to}`);
             }
         });
         let footerX = 40;
@@ -216,26 +216,25 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         let pageWidth = pdf.internal.pageSize.width - 40;
         pdf.setFontSize(8);
         pdf.line(40, lastY, pageWidth, lastY);
-        pdf.text(footerX, lastY + 20, 'Total');
+        pdf.text(footerX, lastY + 20, this.localeData.pdf.trial_balance.total);
         pdf.text(footerX + 210, lastY + 20, total.ob.toString());
         pdf.text(footerX + 280, lastY + 20, total.dr.toString());
         pdf.text(footerX + 360, lastY + 20, total.cr.toFixed(2));
         pdf.text(footerX + 450, lastY + 20, total.cb.toFixed(2));
         // Save the PDF
-        pdf.save('PdfGroupWise.pdf');
+        pdf.save(this.localeData.pdf.trial_balance.group_wise.download_filename);
     }
 
     private downloadPdfCondensed() {
-        //
-        let formatPdf = new FormatPdf(this.trialBalanceRequest);
+        let formatPdf = new FormatPdf(this.trialBalanceRequest, this.localeData);
         this.dataFormatter.formatDataCondensed(formatPdf);
-        formatPdf.save('PdfCondensed.pdf');
+        formatPdf.save(this.localeData.pdf.trial_balance.condensed.download_filename);
     }
 
     private downloadPdfAccountWise(): void {
-        let formatPdf = new FormatPdf(this.trialBalanceRequest);
+        let formatPdf = new FormatPdf(this.trialBalanceRequest, this.localeData);
         this.dataFormatter.formatDataAccountWise(formatPdf);
-        formatPdf.save('PdfAccountWise.pdf');
+        formatPdf.save(this.localeData.pdf.trial_balance.account_wise.download_filename);
     }
 
 }
