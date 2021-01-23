@@ -4,18 +4,17 @@
             <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline flex-row flex-nowrap">
                 <div class="form-group select-entity mr-r15">
                     <div class="linked-entities"  *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
-                        <label class="d-block">Select Entity</label>
+                        <label class="d-block">{{commonLocaleData?.app_select_entity}}</label>
                         <div class="form-group">
                             <sh-select [options]="currentCompanyBranches" name="entity" [(ngModel)]="currentBranch.uniqueName"
                                 [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
-                                [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias" class="entity-dropdown">
+                                [isFilterEnabled]="true" [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias" class="entity-dropdown">
                                 <ng-template #optionTemplate let-option="option">
                                     <ng-container>
                                         <a href="javascript:void(0)" class="list-item d-flex">
                                             <span class="entity-icon">
-                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                    tooltip="Branch"></i>
-                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
+                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany" tooltip="{{commonLocaleData?.app_branch}}"></i>
+                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="{{commonLocaleData?.app_company}}"></i>
                                             </span>
                                             <span class="entity-details">
                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
@@ -31,15 +30,15 @@
                     </div>
                 </div>
                 <div class="form-group select-group mr-r15">
-                    <label class="d-block">Select Groups</label>
+                    <label class="d-block">{{localeData?.select_groups_label}}</label>
                     <sh-select [options]="searchedGroups" name="groups" [(ngModel)]="groupName" [showClear]="false"
                         [ItemHeight]="33" width="100%" (selected)="onSelectGroup($event)" [isFilterEnabled]="true" required
-                        placeholder="Select Groups" autocomplete="off" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                        [placeholder]="localeData?.select_groups_placeholder" autocomplete="off" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
                         (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
                     </sh-select>
                 </div>
                 <div class="form-group mr-r15">
-                    <label>From - To</label>
+                    <label>{{localeData?.from_to}}</label>
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
                         <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
@@ -75,14 +74,14 @@
                     <label>&nbsp;</label>
                     <button [disabled]="search.invalid" class="btn btn-sm btn-success"
                         (click)="getClosingBalance(false,$event)">
-                        Search
+                        {{commonLocaleData?.app_search}}
                     </button>
                 </div>
                 <div>
                     <label>&nbsp;</label>
                     <button [disabled]="search.invalid" class="btn btn-sm btn-default"
                         (click)="getClosingBalance(true,$event)">
-                        Refresh
+                        {{commonLocaleData?.app_refresh}}
                     </button>
                 </div>
             </form>
