@@ -401,5 +401,7 @@
     "app_liabilities": "Liabilities",
     "app_debit" : "Debit",
     "app_credit" : "Credit",
-    "app_schedule_now": "Schedule Now"
+    "app_schedule_now": "Schedule Now",
+    "app_reset": "Reset",
+    "app_download_csv": "Download CSV"
 }
