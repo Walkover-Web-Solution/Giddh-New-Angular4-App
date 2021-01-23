@@ -47,5 +47,7 @@
     },
     "select_groups_label" : "Select Groups",
     "select_groups_placeholder" : "Search Groups",
-    "from_to" : "From - To"
+    "from_to" : "From - To",
+    "select_item": "Select Item",
+    "select_query": "Select Query"
 }
