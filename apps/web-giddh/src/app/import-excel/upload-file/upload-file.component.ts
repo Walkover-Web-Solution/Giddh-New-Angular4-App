@@ -19,6 +19,10 @@ import { AppState } from '../../store';
 export class UploadFileComponent implements OnInit, OnDestroy {
     @Input() public isLoading: boolean;
     @Input() public entity: string;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public onFileUpload = new EventEmitter();
     public file: File = null;
     public selectedFileName: string = '';
@@ -56,7 +60,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         let isValidFileType = validExts.some(s => type === s);
 
         if (!isValidFileType) {
-            this._toaster.errorToast('Only XLS files are supported for Import');
+            this._toaster.errorToast(this.localeData.invalid_file_type);
             this.selectedFileName = '';
             this.file = null;
             return;
@@ -140,9 +144,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         if (this.entity === 'group' || this.entity === 'account') {
             this.title = this.entity + 's';
         } else if (this.entity === 'stock') {
-            this.title = 'inventories';
+            this.title = this.localeData.inventories;
         } else if (this.entity === 'trial-balance') {
-            this.title = 'Trial Balances';
+            this.title = this.localeData.trial_balances;
         } else {
             this.title = this.entity;
         }
