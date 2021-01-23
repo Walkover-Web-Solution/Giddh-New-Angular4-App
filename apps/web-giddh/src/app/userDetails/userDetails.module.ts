@@ -61,7 +61,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DecimalDigitsModule,
         SharedModule,
         ElementViewChildModule,
-        ModalModule.forRoot(),
+        ModalModule,
         BsDropdownModule.forRoot(),
         TooltipModule.forRoot(),
         ScrollingModule,

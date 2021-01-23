@@ -11,7 +11,7 @@ import { SubscriptionModalRoutingModule } from './subscription-modal.routing.mod
         FormsModule,
         ReactiveFormsModule,
         SubscriptionModalRoutingModule,
-        ModalModule.forRoot(),
+        ModalModule,
 
     ],
     declarations: [SubscriptionModalComponent]

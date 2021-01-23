@@ -1,11 +1,4 @@
-import { AccountsAction } from '../../../actions/accounts.actions';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { LedgerService } from '../../../services/ledger.service';
-import { AccountService } from '../../../services/account.service';
-import { ReplaySubject } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/index';
-import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 
 @Component({
     selector: 'base-account',
@@ -24,10 +17,8 @@ export class BaseAccountComponent implements OnInit {
     @Output() public updateBaseAccount: EventEmitter<any> = new EventEmitter();
     @Input() public flattenAccountList: any;
     public changedAccountUniq: string = '';
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _ledgerService: LedgerService, private _accountService: AccountService,
-        private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
+    constructor() {
 
     }
 

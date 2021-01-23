@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../store';
-import { ReplaySubject, Observable } from 'rxjs';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { GeneralService } from '../../services/general.service';
-import { CompanyResponse } from '../../models/api-models/Company';
-import { cloneDeep } from '../../lodash-optimized';
+
 import { LoginActions } from '../../actions/login.action';
-import { AuthService } from '../../theme/ng-social-login-module/index';
+import { cloneDeep } from '../../lodash-optimized';
+import { CompanyResponse } from '../../models/api-models/Company';
+import { AppState } from '../../store';
+import { AuthService } from '../../theme/ng-social-login-module/auth.service';
 
 @Component({
     selector: 'mobile-home-sidebar',
@@ -29,7 +29,11 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
     /* This will hold the email of user */
     public userEmail: any;
 
-    constructor(private store: Store<AppState>, private loginAction: LoginActions, private socialAuthService: AuthService, private generalService: GeneralService) {
+    constructor(
+        private store: Store<AppState>,
+        private loginAction: LoginActions,
+        private socialAuthService: AuthService,
+    ) {
 
     }
 

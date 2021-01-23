@@ -8,7 +8,6 @@ import {LoginActions} from '../../../../actions/login.action';
 import {CommonActions} from '../../../../actions/common.actions';
 import {select, Store} from '@ngrx/store';
 import {Router} from '@angular/router';
-import {AuthService} from '../../../../theme/ng-social-login-module/index';
 import {GeneralService} from '../../../../services/general.service';
 import {AppState} from '../../../../store';
 import {
@@ -26,6 +25,7 @@ import {UserDetails} from 'apps/web-giddh/src/app/models/api-models/loginModels'
 import {NgForm} from '@angular/forms';
 import {CountryRequest} from "../../../../models/api-models/Common";
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
+import { AuthService } from 'apps/web-giddh/src/app/theme/ng-social-login-module/auth.service';
 
 @Component({
     selector: 'company-add-new-ui-component',
@@ -106,7 +106,18 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     /** Stores active company details */
     public activeCompanyDetails: any;
 
-    constructor(private socialAuthService: AuthService, private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private _generalService: GeneralService, private _toaster: ToasterService, private commonActions: CommonActions
+    constructor(
+        private socialAuthService: AuthService,
+        private store: Store<AppState>,
+        private verifyActions: VerifyMobileActions,
+        private companyActions: CompanyActions,
+        private _route: Router,
+        private _loginAction: LoginActions,
+        private _companyService: CompanyService,
+        private _generalActions: GeneralActions,
+        private _generalService: GeneralService,
+        private _toaster: ToasterService,
+        private commonActions: CommonActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();

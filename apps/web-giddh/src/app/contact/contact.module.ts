@@ -67,7 +67,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SharedModule,
         SelectModule.forRoot(),
         TabsModule.forRoot(),
-        ModalModule.forRoot(),
+        ModalModule,
         PaginationModule,
         ClickOutsideModule,
         DigitsOnlyModule,

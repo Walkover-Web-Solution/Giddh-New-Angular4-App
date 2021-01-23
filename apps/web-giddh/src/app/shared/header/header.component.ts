@@ -1,50 +1,86 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { AuthService } from '../../theme/ng-social-login-module/index';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
-import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
-import { ModalDirective, BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { AppState } from '../../store';
-import { LoginActions } from '../../actions/login.action';
-import { CompanyActions } from '../../actions/company.actions';
-import { CommonActions } from '../../actions/common.actions';
-import { ActiveFinancialYear, CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, OrganizationDetails } from '../../models/api-models/Company';
-import { UserDetails } from '../../models/api-models/loginModels';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
-import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
-import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Location } from '@angular/common';
+import {
+    AfterViewChecked,
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ComponentFactoryResolver,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    NgZone,
+    OnDestroy,
+    OnInit,
+    Output,
+    TemplateRef,
+    ViewChild,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { GeneralActions } from '../../actions/general/general.actions';
-import { createSelector } from 'reselect';
-import * as moment from 'moment/moment';
-import { AuthenticationService } from '../../services/authentication.service';
-import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { clone, cloneDeep, concat, orderBy, sortBy, map as lodashMap, slice, find } from '../../lodash-optimized';
-import { DbService } from '../../services/db.service';
-import { CompAidataModel } from '../../models/db';
+import {
+    ActivatedRoute,
+    NavigationEnd,
+    NavigationError,
+    NavigationStart,
+    RouteConfigLoadEnd,
+    Router,
+} from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
-import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
-import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
-import { CommonService } from '../../services/common.service';
-import { Location } from '@angular/common';
-import { SettingsProfileService } from '../../services/settings.profile.service';
-import { CompanyService } from '../../services/companyService.service';
+import * as moment from 'moment/moment';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
+import { PopoverDirective } from 'ngx-bootstrap/popover';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { createSelector } from 'reselect';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
+import { AccountsAction } from '../../actions/accounts.actions';
+import { CommonActions } from '../../actions/common.actions';
+import { CompanyActions } from '../../actions/company.actions';
+import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { LedgerActions } from '../../actions/ledger/ledger.actions';
+import { LoginActions } from '../../actions/login.action';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { AccountsAction } from '../../actions/accounts.actions';
-import { LedgerActions } from '../../actions/ledger/ledger.actions';
-import { PermissionService } from '../../services/permission.service';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { clone, cloneDeep, concat, find, map as lodashMap, orderBy, slice, sortBy } from '../../lodash-optimized';
+import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
+import {
+    ActiveFinancialYear,
+    CompanyCountry,
+    CompanyCreateRequest,
+    CompanyResponse,
+    Organization,
+    OrganizationDetails,
+    StatesRequest,
+} from '../../models/api-models/Company';
+import { UserDetails } from '../../models/api-models/loginModels';
+import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { CompAidataModel } from '../../models/db';
+import {
+    DEFAULT_AC,
+    DEFAULT_GROUPS,
+    DEFAULT_MENUS,
+    NAVIGATION_ITEM_LIST,
+    reassignNavigationalArray,
+} from '../../models/defaultMenus';
+import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
+import { OrganizationType, userLoginStateEnum } from '../../models/user-login-state';
+import { AuthenticationService } from '../../services/authentication.service';
+import { CommonService } from '../../services/common.service';
+import { CompanyService } from '../../services/companyService.service';
+import { DbService } from '../../services/db.service';
+import { SettingsProfileService } from '../../services/settings.profile.service';
+import { AppState } from '../../store';
+import { AuthService } from '../../theme/ng-social-login-module/auth.service';
+import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
+import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 
 @Component({
     selector: 'app-header',
@@ -250,7 +286,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsBranchAction: SettingsBranchActions,
         private accountsAction: AccountsAction,
         private ledgerAction: LedgerActions,
-        private permissionService: PermissionService,
         public location: Location
     ) {
         // Reset old stored application date

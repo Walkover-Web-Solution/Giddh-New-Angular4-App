@@ -9,11 +9,11 @@ import { remove } from '../lodash-optimized';
 import { Router } from '@angular/router';
 import { BACKSPACE } from '@angular/cdk/keycodes';
 import { LoginActions } from '../actions/login.action';
-import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommandKRequest } from '../models/api-models/Common';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { DOCUMENT } from '@angular/common';
+import { AuthService } from '../theme/ng-social-login-module/auth.service';
 
 @Component({
     selector: 'mobile-home',

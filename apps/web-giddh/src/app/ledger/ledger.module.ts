@@ -83,7 +83,7 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
         ReactiveFormsModule,
         TaxControlModule.forRoot(),
         LedgerRoutingModule,
-        ModalModule.forRoot(),
+        ModalModule,
         TooltipModule,
         PaginationModule,
         NgxUploaderModule,

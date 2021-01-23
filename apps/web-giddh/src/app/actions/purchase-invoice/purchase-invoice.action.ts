@@ -1,18 +1,21 @@
-import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
-import { GST_RETURN_ACTIONS, PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
-
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-import { CustomActions } from '../../store/customActions';
-import { IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { ToasterService } from '../../services/toaster.service';
-import { AppState } from '../../store/index';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
+import {
+    IInvoicePurchaseItem,
+    IInvoicePurchaseResponse,
+    ITaxResponse,
+    PurchaseInvoiceService,
+} from '../../services/purchase-invoice.service';
+import { ToasterService } from '../../services/toaster.service';
+import { CustomActions } from '../../store/customActions';
+import { GST_RETURN_ACTIONS, PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
 
 @Injectable()
 export class InvoicePurchaseActions {
@@ -404,8 +407,6 @@ export class InvoicePurchaseActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
         private purchaseInvoiceService: PurchaseInvoiceService) {
     }
 

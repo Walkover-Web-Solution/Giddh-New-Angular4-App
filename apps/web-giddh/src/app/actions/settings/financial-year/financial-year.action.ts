@@ -1,17 +1,19 @@
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { Injectable } from '@angular/core';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import { Observable } from 'rxjs';
-import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from './financial-year.const';
-import { CustomActions } from '../../../store/customActions';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { IFinancialYearResponse, ILockFinancialYearRequest, SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
-import { Action, Store } from '@ngrx/store';
-import { Router } from '@angular/router';
-import { AppState } from '../../../store/index';
 import { ActiveFinancialYear } from '../../../models/api-models/Company';
+import {
+    IFinancialYearResponse,
+    ILockFinancialYearRequest,
+    SettingsFinancialYearService,
+} from '../../../services/settings.financial-year.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { CustomActions } from '../../../store/customActions';
+import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from './financial-year.const';
 
 @Injectable()
 export class SettingsFinancialYearActions {
@@ -167,8 +169,6 @@ export class SettingsFinancialYearActions {
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
         private _settingsFinancialYearService: SettingsFinancialYearService) {
     }
 

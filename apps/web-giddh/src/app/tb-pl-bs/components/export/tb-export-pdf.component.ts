@@ -9,9 +9,9 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import { ChildGroup } from '../../../models/api-models/Search';
 import { Total } from './tb-export-csv.component';
 import 'jspdf-autotable';
-import { JsPDFAutoTable } from '../../../../customTypes/jsPDF/index';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { takeUntil } from 'rxjs/operators';
+import { JsPDFAutoTable } from 'apps/web-giddh/src/customTypes/jsPDF';
 
 interface GroupViewModel {
     credit: number;

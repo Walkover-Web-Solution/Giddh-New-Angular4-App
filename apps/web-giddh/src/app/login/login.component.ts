@@ -15,12 +15,6 @@ import {
     VerifyEmailResponseModel,
     VerifyMobileModel
 } from "../models/api-models/loginModels";
-import {
-    AuthService,
-    GoogleLoginProvider,
-    LinkedinLoginProvider,
-    SocialUser
-} from "../theme/ng-social-login-module/index";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
@@ -29,6 +23,10 @@ import { AuthenticationService } from "../services/authentication.service";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { isCordova } from "@giddh-workspaces/utils";
 import { GeneralService } from "../services/general.service";
+import { AuthService } from "../theme/ng-social-login-module/auth.service";
+import { SocialUser } from "../theme/ng-social-login-module/entities/user";
+import { GoogleLoginProvider } from "../theme/ng-social-login-module/providers/google-login-provider";
+import { LinkedinLoginProvider } from "../theme/ng-social-login-module/providers/linkedin-login-provider";
 
 @Component({
     selector: "login",
@@ -79,10 +77,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     public forgotStep: number = 0;
     public retryCount: number = 0;
     public apkVersion: string;
-    private imageURL: string;
-    private email: string;
-    private name: string;
-    private token: string;
     private userUniqueKey: string;
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
@@ -353,16 +347,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         data.mobileNumber = mobileNumber;
         data.countryCode = Number(this.selectedCountry);
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
-    }
-
-    /**
-     * Getting data from browser's local storage
-     */
-    public getData() {
-        this.token = localStorage.getItem("token");
-        this.imageURL = localStorage.getItem("image");
-        this.name = localStorage.getItem("name");
-        this.email = localStorage.getItem("email");
     }
 
     public async signInWithProviders(provider: string) {

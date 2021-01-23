@@ -4,11 +4,11 @@ import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angu
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
 import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store/index';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import * as moment from 'moment/moment';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { AppState } from '../../../store/roots';
 
 @Component({
     selector: 'share-ledger',
