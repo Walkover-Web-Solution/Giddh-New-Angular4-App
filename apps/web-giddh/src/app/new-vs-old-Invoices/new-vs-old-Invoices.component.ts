@@ -19,7 +19,7 @@ import { take, takeUntil } from 'rxjs/operators';
 })
 
 export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
-    public GetTypeOptions: IOption[] = [{ label: 'Month', value: 'month' }, { label: 'Quater', value: 'quater' }];
+    public GetTypeOptions: IOption[] = [{ label: 'Month', value: 'month' }, { label: 'Quarter', value: 'quater' }];
     public selectedType: string;
     public monthOptions: IOption[] = [{ label: 'January', value: '01' }, { label: 'February', value: '02' }, { label: 'March', value: '03' }, { label: 'April', value: '04' }, { label: 'May', value: '05' }, { label: 'June', value: '06' }, { label: 'July', value: '07' }, { label: 'August', value: '08' }, { label: 'September', value: '09' }, { label: 'October', value: '10' }, { label: 'November', value: '11' }, { label: 'December', value: '12' }];
     public selectedmonth: string;
@@ -47,6 +47,11 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    public bifurcationClients: string = "";
 
     constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions, private _companyActions: CompanyActions,
         private _toasty: ToasterService) {
@@ -71,6 +76,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
                     this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater).label;
                 }
+
+                this.bifurcationClients = this.localeData.bifurcation_clients;
+                this.bifurcationClients = this.bifurcationClients.replace("[COLUMN_NAME]", this.columnName);
             }
         });
 
