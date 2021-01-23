@@ -56,6 +56,10 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = {x: 0, y: 0};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private store: Store<AppState>, private cashFlowStatementService: CashFlowStatementService, private generalService: GeneralService, private toaster: ToasterService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -172,14 +176,14 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
             if(res) {
                 if (res.status === "success") {
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                    return saveAs(blob, `CashFlowStatement.xlsx`);
+                    return saveAs(blob, this.localeData.downloaded_filename);
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(res.message);
                 }
             } else {
                 this.toaster.clearAllToaster();
-                this.toaster.errorToast("Something went wrong! Please try again.");
+                this.toaster.errorToast(this.commonLocaleData.app_something_went_wrong);
             }
         });
     }

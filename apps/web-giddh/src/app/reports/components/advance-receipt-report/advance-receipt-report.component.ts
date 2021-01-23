@@ -204,6 +204,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public universalDate$: Observable<any>;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     /** @ignore */
     constructor(

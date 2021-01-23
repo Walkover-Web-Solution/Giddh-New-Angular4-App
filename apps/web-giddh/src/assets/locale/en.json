@@ -35,7 +35,8 @@
     "app_send_email": "Send Email",
     "app_gstin": "GSTIN",
     "app_trn": "TRN",
-    "app_no_records_found": "No Record Found !!",
+    "app_no_record_found": "No Record Found !!",
+    "app_no_records_found": "No Records Found",
     "app_pay_now": "Pay Now",
     "app_add_bank_details": "Add Bank Detail",
     "app_advance_search": "Advance Search",
@@ -81,7 +82,8 @@
     "app_quantity": "Quantity",
     "app_voucher_types": {
         "sales": "Sales",
-        "purchase": "Purchases",
+        "purchase": "Purchase",
+        "purchases": "Purchases",
         "receipt": "Receipt",
         "payment": "Payment",
         "journal": "Journal",
@@ -271,8 +273,6 @@
     "app_taxable_value": "Taxable Value",
     "app_tax_rate": "Tax Rate",
     "app_tax_amount": "Tax Amount",
-    "app_total_taxable_value": "Total Taxable Value",
-    "app_total_tax_amount": "Total Tax Amount",
     "app_s_no": "S. No",
     "app_type": "Type",
     "app_loading": "Loading…",
@@ -306,7 +306,7 @@
     "app_air": "Air",
     "app_ship": "Ship",
     "app_numbers": {
-        "0": "1",
+        "0": "0",
         "1": "1",
         "2": "2",
         "3": "3",
@@ -403,5 +403,6 @@
     "app_credit" : "Credit",
     "app_schedule_now": "Schedule Now",
     "app_reset": "Reset",
-    "app_download_csv": "Download CSV"
+    "app_download_csv": "Download CSV",
+    "app_show": "Show"
 }
