@@ -400,5 +400,6 @@
     "app_expenses": "Expenses",
     "app_liabilities": "Liabilities",
     "app_debit" : "Debit",
-    "app_credit" : "Credit"
+    "app_credit" : "Credit",
+    "app_schedule_now": "Schedule Now"
 }

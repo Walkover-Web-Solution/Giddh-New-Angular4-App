@@ -32,6 +32,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     public companyCountry: string;
     /** This will hold displayed support team number */
     public supportTeamNumber: any = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private _router: Router, private _window: WindowRef, private _generalService: GeneralService,
