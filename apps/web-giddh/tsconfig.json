@@ -4,6 +4,7 @@
         "types": [
             "jasmine"
         ],
+        "target": "es2015",
         "module": "es2020"
     },
     "include": [
