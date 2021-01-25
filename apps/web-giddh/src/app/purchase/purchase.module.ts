@@ -17,6 +17,7 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
 import {
     GenericAsideMenuAccountModule,
 } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -74,6 +75,7 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         InvoiceRoutingModule,
         ShSelectModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         SalesShSelectModule,
         GenericAsideMenuAccountModule,
         CurrencyModule,

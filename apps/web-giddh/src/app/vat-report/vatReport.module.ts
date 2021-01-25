@@ -17,6 +17,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { InvoiceModule } from '../invoice/invoice.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { SharedModule } from '../shared/shared.module';
         ElementViewChildModule,
         InvoiceModule,
         ShSelectModule,
-        SharedModule
+        SharedModule,
+        HamburgerMenuComponentModule
     ],
     exports: [
         VatReportRoutingModule

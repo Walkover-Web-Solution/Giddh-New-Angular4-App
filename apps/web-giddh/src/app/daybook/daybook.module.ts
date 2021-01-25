@@ -17,6 +17,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { SharedModule } from '../shared/shared.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
@@ -33,6 +34,7 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
         ElementViewChildModule,
         CurrencyModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         DatepickerWrapperModule,
         NgxMaskModule.forRoot(),
     ],

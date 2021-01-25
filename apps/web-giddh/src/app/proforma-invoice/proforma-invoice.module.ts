@@ -44,6 +44,7 @@ import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.co
 import { ProformaInvoiceComponent } from './proforma-invoice.component';
 import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
         BsDropdownModule,
         DigitsOnlyModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         AsideMenuRecurringEntryModule,
         ModalModule,
         TaxControlModule,

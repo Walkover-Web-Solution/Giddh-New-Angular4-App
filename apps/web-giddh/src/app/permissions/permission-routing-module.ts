@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { PermissionComponent } from './permission.component';
-import { PermissionListComponent } from './components/list/permission.list.component';
-import { PermissionDetailsComponent } from './components/details/permission.details.component';
-import { DeleteRoleConfirmationModelComponent } from './components/confirmation/confirmation.model.component';
-import { PermissionModelComponent } from './components/model/permission.model.component';
-import { NeedsAuthentication } from '../decorators/needsAuthentication';
-import { SortByPipe } from './sort.pipe';
-import { CapitalizePipe } from './capitalize.pipe';
 import { LaddaModule } from 'angular2-ladda';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
+
+import { NeedsAuthentication } from '../decorators/needsAuthentication';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { SharedModule } from '../shared/shared.module';
+import { CapitalizePipe } from './capitalize.pipe';
+import { DeleteRoleConfirmationModelComponent } from './components/confirmation/confirmation.model.component';
+import { PermissionDetailsComponent } from './components/details/permission.details.component';
+import { PermissionListComponent } from './components/list/permission.list.component';
+import { PermissionModelComponent } from './components/model/permission.model.component';
+import { PermissionComponent } from './permission.component';
+import { SortByPipe } from './sort.pipe';
 
 const PERMISSION_ROUTES: Routes = [
     { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full' },
@@ -53,13 +53,12 @@ const PERMISSION_ROUTES: Routes = [
         CapitalizePipe
     ],
     imports: [
-        CommonModule,
-        FormsModule,
         RouterModule.forChild(PERMISSION_ROUTES),
         LaddaModule,
         ModalModule,
         BsDropdownModule,
-        SharedModule
+        SharedModule,
+        HamburgerMenuComponentModule
     ],
     exports: [
         RouterModule,

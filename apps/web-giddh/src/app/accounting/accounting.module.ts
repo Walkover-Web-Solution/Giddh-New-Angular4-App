@@ -15,6 +15,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
@@ -62,6 +63,7 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         DecimalDigitsModule,
         AVShSelectModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         ClickOutsideModule,
         TooltipModule,
         TypeaheadModule.forRoot(),

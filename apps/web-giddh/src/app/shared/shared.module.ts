@@ -71,7 +71,6 @@ import { RevisionHistoryComponent } from './revision-history/revision-history.co
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
-import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { AsideSettingModule } from './header/components/aside-setting/aside-setting.module';
@@ -151,7 +150,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        HamburgerMenuComponent,
         GiddhDaterangepickerComponent
     ],
     imports: [
@@ -238,7 +236,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        HamburgerMenuComponent
     ],
     entryComponents: [
         CompanyAddComponent,

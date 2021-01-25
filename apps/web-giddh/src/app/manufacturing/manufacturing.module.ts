@@ -8,6 +8,7 @@ import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { MfReportComponent } from './report/mf.report.component';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { MfReportComponent } from './report/mf.report.component';
         ManufacturingRoutingModule,
         DatepickerWrapperModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         RouterModule
     ],
 })

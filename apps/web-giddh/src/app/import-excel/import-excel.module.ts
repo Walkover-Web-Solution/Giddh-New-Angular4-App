@@ -18,6 +18,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfe
 import { UploadSuccessComponent } from './upload-success/upload-success.component';
 import { ImportReportComponent } from './import-report/import-report.component';
 import { SharedModule } from '../shared/shared.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	suppressScrollX: true
@@ -49,7 +50,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BsDropdownModule,
 		PerfectScrollbarModule,
         PaginationModule,
-        SharedModule
+        SharedModule,
+        HamburgerMenuComponentModule
 	],
 })
 export class ImportExcelModule {

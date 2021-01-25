@@ -27,6 +27,7 @@ import { AllFeaturesComponent } from './components/all-features/all-features.com
 import { AddCompanyComponent } from './components/add-company/add-company.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AsideSettingModule } from '../shared/header/components/aside-setting/aside-setting.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -60,6 +61,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PerfectScrollbarModule,
         DecimalDigitsModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         ElementViewChildModule,
         ModalModule,
         BsDropdownModule.forRoot(),

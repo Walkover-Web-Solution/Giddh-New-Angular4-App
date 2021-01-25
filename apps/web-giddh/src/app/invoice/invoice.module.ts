@@ -5,6 +5,7 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { PurchaseModule } from '../purchase/purchase.module';
 import { SharedModule } from '../shared/shared.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 @NgModule({
     declarations: [],
     imports: [
@@ -13,7 +14,8 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
         DigitsOnlyModule,
         PurchaseModule,
         DatepickerWrapperModule,
-        SharedModule
+        SharedModule,
+        HamburgerMenuComponentModule
     ],
     exports: [
         InvoiceRoutingModule,

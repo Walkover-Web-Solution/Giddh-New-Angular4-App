@@ -20,6 +20,7 @@ import { ManufacturingModule } from '../manufacturing/manufacturing.module';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 import { ExceptionLogService } from '../services/exception-log.service';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
@@ -130,6 +131,7 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         InventoryRoutingModule,
         TooltipModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         Daterangepicker,
         TextCaseChangeModule,
         BsDropdownModule,

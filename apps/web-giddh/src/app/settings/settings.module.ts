@@ -42,6 +42,7 @@ import { CreateAddressComponent } from './create-address/create-address.componen
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { AsideSettingModule } from '../shared/header/components/aside-setting/aside-setting.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -79,6 +80,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ],
     imports: [
         SharedModule,
+        HamburgerMenuComponentModule,
         SettingRountingModule,
         AsideMenuCreateTaxModule,
         ContactModule,

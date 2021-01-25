@@ -16,6 +16,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { NgxUploaderModule } from 'ngx-uploader';
 
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { SharedModule } from '../shared/shared.module';
@@ -58,6 +59,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         TypeaheadModule.forRoot(),
         CollapseModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         LaddaModule,
         DigitsOnlyModule,
         DecimalDigitsModule,

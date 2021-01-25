@@ -14,6 +14,7 @@ import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
 import { NewVsOldInvoicesRoutingModule } from './new-vs-old-Invoices.routing.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 @NgModule({
     declarations: [
@@ -31,6 +32,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
         BsDropdownModule,
         TooltipModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         SelectModule.forRoot(),
         ModalModule,
         PaginationModule,

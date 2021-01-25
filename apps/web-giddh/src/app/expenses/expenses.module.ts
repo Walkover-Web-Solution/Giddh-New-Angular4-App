@@ -10,6 +10,7 @@ import { NgxUploaderModule } from 'ngx-uploader';
 import { LedgerModule } from '../ledger/ledger.module';
 import { SalesModule } from '../sales/sales.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
@@ -41,6 +42,7 @@ import { ExpensesRoutingModule } from './expenses.routing.module';
         NgxUploaderModule,
         PaginationModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         ShSelectModule,
         ModalModule,
         DatepickerWrapperModule,

@@ -13,7 +13,6 @@ import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination'
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AsideMenuAccountInContactComponent } from './aside-menu-account/aside.menu.account.component';
-import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
@@ -31,6 +30,8 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 //payemnt aside component
 
 
@@ -64,7 +65,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TabsModule,
         BsDropdownModule,
         TooltipModule,
-        SharedModule,
+        HamburgerMenuComponentModule,
         SelectModule.forRoot(),
         TabsModule.forRoot(),
         ModalModule,
@@ -81,7 +82,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxDaterangepickerMd.forRoot(),
         TextMaskModule,
         NgxMaskModule.forRoot(),
-        DatepickerWrapperModule
+        DatepickerWrapperModule,
+        ConfirmModalModule
     ],
     entryComponents: [
         PaginationComponent

@@ -37,6 +37,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { SharedModule } from '../shared/shared.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 @NgModule({
     declarations: [
         TbPlBsComponent,
@@ -82,6 +83,7 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
         TooltipModule,
         AccountDetailModalModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         DatepickerWrapperModule
     ],
 })

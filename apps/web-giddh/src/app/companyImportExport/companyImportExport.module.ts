@@ -10,6 +10,7 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { LaddaModule } from 'angular2-ladda';
 import { SharedModule } from './../shared/shared.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 @NgModule({
     imports: [
         CompanyImportExportRoutingModule,
@@ -20,6 +21,7 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
         Daterangepicker,
         LaddaModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         DatepickerWrapperModule
     ],
     exports: [],

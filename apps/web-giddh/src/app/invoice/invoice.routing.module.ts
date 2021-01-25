@@ -75,6 +75,7 @@ import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeTo
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -170,6 +171,7 @@ const INVOICE_ROUTES: Routes = [
         PdfJsViewerModule,
         ConfirmModalModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         VoucherTypeToNamePipeModule,
         SendEmailInvoiceModule,
         AdvanceReceiptAdjustmentModule,

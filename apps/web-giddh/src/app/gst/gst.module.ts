@@ -39,6 +39,7 @@ import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 
 @NgModule({
     declarations: [FileGstR1Component, FileGstR2Component, FileGstR3Component,
@@ -69,6 +70,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         CurrencyModule,
         ConfirmModalModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         ShSelectModule
     ],
     providers: [],

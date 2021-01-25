@@ -18,6 +18,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { HamburgerMenuComponentModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
@@ -46,6 +47,7 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
         ClickOutsideModule,
         CurrencyModule,
         SharedModule,
+        HamburgerMenuComponentModule,
         DatepickerWrapperModule
     ]
 })
