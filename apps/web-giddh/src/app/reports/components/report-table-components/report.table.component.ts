@@ -1,6 +1,4 @@
 import { Component, Input, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { ILedgersInvoiceResult } from "../../../models/api-models/Invoice";
 import { ReportsModel } from "../../../models/api-models/Reports";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -11,12 +9,12 @@ import { takeUntil } from 'rxjs/operators';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { ReplaySubject } from 'rxjs';
 
-
 @Component({
     selector: 'reports-table-component',
     templateUrl: './report.table.component.html',
     styleUrls: ['./report.table.component.scss']
 })
+
 export class ReportsTableComponent implements OnInit, OnDestroy {
     @Input() public reportRespone: ReportsModel[];
     @Input() public activeFinacialYr: any;
@@ -49,6 +47,10 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
 
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _groupWithAccountsAction: GroupWithAccountsAction, private _router: Router) {
     }
