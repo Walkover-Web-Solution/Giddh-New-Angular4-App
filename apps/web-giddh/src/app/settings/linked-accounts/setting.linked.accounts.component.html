@@ -65,7 +65,7 @@
                 </small>
                   <div class="select-account form-group" *ngIf="card.showAccList">
                       <div class="ng-select-wrap">
-                          <sh-select [options]="accounts$" (selected)="onAccountSelect(card, $event)" [placeholder]="'Select Account'" [ItemHeight]="33">
+                          <sh-select [options]="accounts" (selected)="onAccountSelect(card, $event)" [placeholder]="'Select Account'" [ItemHeight]="33">
                           </sh-select>
                       </div>
                   </div>
@@ -114,7 +114,8 @@
                             </small>
                             <div class="select-account form-group" *ngIf="card.showAccList">
                                 <div class="ng-select-wrap">
-                                    <sh-select [options]="accounts$" (selected)="onAccountSelect(card, $event)" [placeholder]="'Select Account'" [ItemHeight]="33">
+                                    <sh-select [options]="accounts" (selected)="onAccountSelect(card, $event)" [placeholder]="'Select Account'" [ItemHeight]="33"
+                                    [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)">
                                     </sh-select>
                                 </div>
                             </div>
