@@ -61,7 +61,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public paymentGatewayAdded: boolean = false;
     public autoCollectAdded: boolean = false;
     public payoutAdded: boolean = false;
-    public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
     public bankAccounts$: Observable<IOption[]>;
     public gmailAuthCodeUrl$: Observable<string> = null;
     public amazonSellerForm: FormGroup;
@@ -167,7 +166,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private searchService: SearchService,
         private salesService: SalesService
     ) {
-        this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));
