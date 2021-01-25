@@ -23,15 +23,11 @@ import { OrganizationType } from '../../../models/user-login-state';
     styleUrls: ['./report.details.component.scss']
 })
 export class ReportsDetailsComponent implements OnInit, OnDestroy {
-
-    bsValue = new Date();
     public reportRespone: ReportsModel[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeFinacialYr: ActiveFinancialYear;
     public salesRegisterTotal: ReportsModel = new ReportsModel();
-    public monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
+    public monthNames = [];
     public selectedType = 'monthly';
     private selectedMonth: string;
     public dateRange: Date[];
@@ -100,6 +96,21 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+
+    constructor(
+        private router: Router,
+        private store: Store<AppState>,
+        private companyActions: CompanyActions,
+        private companyService: CompanyService,
+        private _toaster: ToasterService,
+        private settingsBranchAction: SettingsBranchActions,
+        private generalService: GeneralService) {
+        this.setCurrentFY();
+    }
 
     ngOnInit() {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -161,17 +172,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             });
     }
 
-    constructor(
-        private router: Router,
-        private store: Store<AppState>,
-        private companyActions: CompanyActions,
-        private companyService: CompanyService,
-        private _toaster: ToasterService,
-        private settingsBranchAction: SettingsBranchActions,
-        private generalService: GeneralService) {
-        this.setCurrentFY();
-    }
-
     public goToDashboard() {
         this.router.navigate(['/pages/reports']);
     }
@@ -201,7 +201,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             if (dateDiff <= 8) {
                 this.setSalesRegisterTotal(item);
                 this.salesRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
-                reportsModel.particular = 'Week' + weekCount++;
+                reportsModel.particular = this.commonLocaleData.app_week + '' + weekCount++;
                 reportModelArray.push(reportsModel);
             } else if (dateDiff <= 31) {
                 this.setSalesRegisterTotal(item);
@@ -217,7 +217,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 reportsModelCombined.cumulative = item.closingBalance.amount;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
-                    reportsModelCombined.particular = 'Quarter ' + indexMonths / 3;
+                    reportsModelCombined.particular = this.commonLocaleData.app_quarter + ' ' + indexMonths / 3;
                     reportsModelCombined.reportType = 'combined';
                     reportModelArray.push(reportsModelCombined);
 
@@ -320,7 +320,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         }
     }
     public formatParticular(mdyTo, mdyFrom, index, monthNames) {
-        return 'Quarter ' + index + " (" + monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2] + "-" + monthNames[parseInt(mdyTo[1]) - 1] + " " + mdyTo[2] + ")";
+        return this.commonLocaleData.app_quarter + ' ' + index + " (" + monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2] + "-" + monthNames[parseInt(mdyTo[1]) - 1] + " " + mdyTo[2] + ")";
     }
 
     public bsValueChange(event: any) {
@@ -425,5 +425,17 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /*
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof ReportsDetailsComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.monthNames = [this.commonLocaleData.app_months_full.january, this.commonLocaleData.app_months_full.february, this.commonLocaleData.app_months_full.march, this.commonLocaleData.app_months_full.april, this.commonLocaleData.app_months_full.may, this.commonLocaleData.app_months_full.june, this.commonLocaleData.app_months_full.july, this.commonLocaleData.app_months_full.august, this.commonLocaleData.app_months_full.september, this.commonLocaleData.app_months_full.october, this.commonLocaleData.app_months_full.november, this.commonLocaleData.app_months_full.december];
+        }
     }
 }
