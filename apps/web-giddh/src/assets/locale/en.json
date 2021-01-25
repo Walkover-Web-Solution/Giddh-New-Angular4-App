@@ -198,11 +198,12 @@
         "input_gst": "InputGST",
         "others": "others"
     },
-    "app_tax_duration": {
+    "app_duration": {
         "monthly": "Monthly",
         "quarterly": "Quarterly",
         "half_yearly": "Half-Yearly",
-        "yearly": "Yearly"
+        "yearly": "Yearly",
+        "weekly": "Weekly"
     },
     "app_tax_subtypes": {
         "receivable": "Receivable",
@@ -405,5 +406,10 @@
     "app_schedule_now": "Schedule Now",
     "app_reset": "Reset",
     "app_download_csv": "Download CSV",
-    "app_show": "Show"
+    "app_show": "Show",
+    "app_report": "Report",
+    "app_tcs": "TCS",
+    "app_tds": "TDS",
+    "app_return": "Return",
+    "app_cumulative": "Cumulative"
 }
