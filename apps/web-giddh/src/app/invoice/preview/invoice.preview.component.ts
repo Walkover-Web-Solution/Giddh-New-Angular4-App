@@ -851,9 +851,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (actionToPerform === 'paid') {
                 this.performActionOnInvoiceModel.show();
                 setTimeout(() => {
-                    if(this.invoicePaymentModelComponent) {
-                        this.invoicePaymentModelComponent.loadPaymentModes();
-                    }
                     this.selectedInvoice = objItem;
                     if(this.invoicePaymentModelComponent) {
                         this.invoicePaymentModelComponent.focusAmountField();
