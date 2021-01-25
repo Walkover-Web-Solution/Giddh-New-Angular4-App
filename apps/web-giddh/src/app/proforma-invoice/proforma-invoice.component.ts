@@ -5181,7 +5181,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.invFormData.entries && this.invFormData.entries.length) {
             let validLineItem;
             for (let i = 0; i < this.invFormData.entries.length; i++) {
-                validLineItem = this.invFormData.entries[i].transactions.find(transaction => (transaction.accountUniqueName && transaction.amount > 0));
+                validLineItem = this.invFormData.entries[i].transactions.find(transaction => (transaction.accountUniqueName));
                 if (validLineItem) {
                     break;
                 }

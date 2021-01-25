@@ -649,31 +649,31 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewEntry(amount: any, transactionObj: any, entryIndex: number) {
         let index = entryIndex;
-        let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
-        if (amount === 0 || amount === '0') {
-            if (entryIndex === 0) {
-                this.isFirstRowDeleted = true;
-            } else {
-                this.isFirstRowDeleted = false;
-            }
-            this.requestObj.transactions[index].currentBalance = '';
-            this.requestObj.transactions[index].selectedAccount.type = '';
-            this.requestObj.transactions.splice(index, 1);
-            if (reqField === null) {
-                this.dateField.nativeElement.focus();
-            } else {
-                reqField.focus();
-            }
-            if (!this.requestObj.transactions.length) {
-                if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
-                    this.newEntryObj('by');
-                } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                    this.newEntryObj('to');
-                }
-            }
-        } else {
+        // let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
+        // if (amount === 0 || amount === '0') {
+        //     if (entryIndex === 0) {
+        //         this.isFirstRowDeleted = true;
+        //     } else {
+        //         this.isFirstRowDeleted = false;
+        //     }
+        //     this.requestObj.transactions[index].currentBalance = '';
+        //     this.requestObj.transactions[index].selectedAccount.type = '';
+        //     this.requestObj.transactions.splice(index, 1);
+        //     if (reqField === null) {
+        //         this.dateField.nativeElement.focus();
+        //     } else {
+        //         reqField.focus();
+        //     }
+        //     if (!this.requestObj.transactions.length) {
+        //         if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
+        //             this.newEntryObj('by');
+        //         } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+        //             this.newEntryObj('to');
+        //         }
+        //     }
+        // } else {
             this.calModAmt(amount, transactionObj, index);
-        }
+        //}
     }
 
     public calModAmt(amount, transactionObj, indx) {
@@ -686,11 +686,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let creditTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'to');
         this.totalCreditAmount = sumBy(creditTransactions, (o: any) => Number(o.amount));
         if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
-            if (this.totalCreditAmount < this.totalDebitAmount) {
+            if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
                 if (this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
                     this.newEntryObj('to');
+                } else {
+                    if(this.requestObj.transactions.length === 1) {
+                        this.newEntryObj('by');
+                    }
                 }
-            } else if (this.totalDebitAmount < this.totalCreditAmount) {
+            } else if (this.totalDebitAmount < this.totalCreditAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
                 this.newEntryObj('by');
             }
         }
@@ -820,7 +824,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
                 let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                    data.transactions.splice(0, 2);
+                    if (this.receiptEntries && this.receiptEntries.length > 0) {
+                        data.transactions.splice(0, 2);
+                    } else {
+                        data.transactions.splice(0, 1);
+                    }
                 } else {
                     data.transactions.splice(indexOfMaxAmountEntry, 1);
                 }
@@ -1086,7 +1094,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public changeQuantity(idx, val) {
         let i = this.selectedIdx;
-        let entry = this.requestObj.transactions[i];
         this.requestObj.transactions[i].inventory[idx].quantity = Number(val);
         this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
         this.amountChanged(idx);
@@ -1094,7 +1101,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public validateAndAddNewStock(idx) {
         let i = this.selectedIdx;
-        if (this.requestObj.transactions[i].inventory.length - 1 === idx && this.requestObj.transactions[i].inventory[idx].amount) {
+        if (this.requestObj.transactions[i].inventory.length - 1 === idx) {
             this.requestObj.transactions[i].inventory.push(this.initInventory());
         }
     }
@@ -1699,7 +1706,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.receiptEntries.forEach(receipt => {
             if (isValid) {
-                if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
+                if (isNaN(parseFloat(receipt.amount))) {
                     isValid = false;
                 } else {
                     if (receipt.type === AdjustmentTypesEnum.againstReference) {
@@ -1720,7 +1727,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         if (isValid) {
-            if (receiptTotal != this.adjustmentTransaction.amount || adjustmentTotal > this.adjustmentTransaction.amount) {
+            if (this.adjustmentTransaction.amount && (receiptTotal != this.adjustmentTransaction.amount || adjustmentTotal > this.adjustmentTransaction.amount)) {
                 this.isValidForm = false;
 
                 if (showErrorMessage) {
@@ -1951,19 +1958,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public validateAndOpenAdjustmentPopup(transaction: any, template: TemplateRef<any>): void {
-        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && transaction.amount && Number(transaction.amount) > 0 && !transaction.voucherAdjustments) {
+        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && !transaction.voucherAdjustments) {
+            if(transaction.amount && Number(transaction.amount) > 0) {
+                if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+                    this.pendingInvoicesListParams.accountUniqueNames = [];
+                    this.pendingInvoicesListParams.accountUniqueNames.push(transaction.selectedAccount.UniqueName);
+                }
 
-            if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                this.pendingInvoicesListParams.accountUniqueNames = [];
-                this.pendingInvoicesListParams.accountUniqueNames.push(transaction.selectedAccount.UniqueName);
+                this.getInvoiceListForReceiptVoucher();
+                this.currentTransaction = transaction;
+                this.modalRef = this.modalService.show(
+                    template,
+                    Object.assign({}, { class: 'modal-lg', ignoreBackdropClick: true })
+                );
             }
-
-            this.getInvoiceListForReceiptVoucher();
-            this.currentTransaction = transaction;
-            this.modalRef = this.modalService.show(
-                template,
-                Object.assign({}, { class: 'modal-lg', ignoreBackdropClick: true })
-            );
         }
     }
 }
