@@ -20,8 +20,6 @@
     "advance_receipt": "Advance Receipt",
     "tax_on_advance_receipt": "Tax on Advance Receipt (coming soon)",
     "cumulative": "Cumulative",
-    "quantity_rate": "Qty-Rate",
-    "transaction_count": "Transaction count",
     "receipt_beta": "Receipt(Beta)",
     "search_report": "Search Report"
 }
