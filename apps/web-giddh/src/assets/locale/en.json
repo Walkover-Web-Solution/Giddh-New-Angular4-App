@@ -173,7 +173,8 @@
         "exclude": "Exclude",
         "excluded": "Excluded",
         "greater_than_equals": "Greater Than or Equals",
-        "less_than_equals": "Less Than or Equals"
+        "less_than_equals": "Less Than or Equals",
+        "not_equals": "Not Equals"
     },
     "app_today": "Today",
     "app_done": "Done",
