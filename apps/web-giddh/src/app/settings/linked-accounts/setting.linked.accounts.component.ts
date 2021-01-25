@@ -11,11 +11,11 @@ import { SettingsLinkedAccountsService } from '../../services/settings.linked.ac
 import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-accounts/settings.linked.accounts.action';
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { SearchService } from '../../services/search.service';
 
 @Component({
     selector: 'setting-linked-accounts',
@@ -36,10 +36,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     public iframeSource: string = null;
     public ebankAccounts: BankAccountsResponse[] = [];
-    public accounts$: IOption[];
+    public accounts: IOption[];
     public confirmationMessage: string;
     public dateToUpdate: string;
-    public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
     public yodleeForm: FormGroup;
     public companyUniqueName: string;
     public selectedProvider: string;
@@ -47,6 +46,23 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     public providerAccountId: string = null;
     public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
     public selectedBank: any = null;
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private selectedAccount: IEbankAccount;
     private actionToPerform: string;
@@ -58,9 +74,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         private settingsLinkedAccountsActions: SettingsLinkedAccountsActions,
         private _fb: FormBuilder,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
-        private _generalService: GeneralService
+        private _generalService: GeneralService,
+        private searchService: SearchService,
     ) {
-        this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.companyUniqueName = this._generalService.companyUniqueName;
         this.needReloadingLinkedAccounts$ = this.store.pipe(select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts), takeUntil(this.destroyed$));
     }
@@ -94,15 +110,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.flattenAccountsStream$.subscribe(data => {
-            if (data) {
-                let accounts: IOption[] = [];
-                data.map(d => {
-                    accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
-                });
-                this.accounts$ = accounts;
-            }
-        });
+        this.loadDefaultAccountsSuggestions();
 
         this.needReloadingLinkedAccounts$.subscribe(a => {
             // if (a && this.isRefreshWithCredentials) {
@@ -265,4 +273,104 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof SettingLinkedAccountsComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof SettingLinkedAccountsComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof SettingLinkedAccountsComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
+        });
+    }
+
 }
