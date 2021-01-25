@@ -145,7 +145,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
      *
      * @memberof DiscountComponent
      */
-    public getDiscountAccounts() {
+    public getDiscountAccounts(): void {
         this.salesService.getAccountsWithCurrency('discount').subscribe(response => {
             if (response?.body?.results) {
                 this.accounts = response.body.results.map(discount => {
