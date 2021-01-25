@@ -18,6 +18,8 @@ export class TranslateDirective implements OnInit {
     @Output() public localeData: EventEmitter<any> = new EventEmitter();
     /* This will emit common JSON data */
     @Output() public commonLocaleData: EventEmitter<any> = new EventEmitter();
+    /* This will emit if response is complete  */
+    @Output() public translationComplete: EventEmitter<boolean> = new EventEmitter();
 
     /* Initializing the current language */
     private currentLanguage: string = "en";
@@ -45,6 +47,7 @@ export class TranslateDirective implements OnInit {
         if(this.file && this.currentLanguage) {
             this.localeService.getLocale(this.file, this.currentLanguage).subscribe(response => {
                 this.localeData.emit(response);
+                this.translationComplete.emit(true);
             });
         }
 
