@@ -225,11 +225,19 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                     flattenItem.applicableTaxes = flattenItem.applicableTaxes.map(acc => acc.uniqueName);
                 }
 
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: [...state.flattenAccounts, flattenItem]
-                };
+                if(state.flattenAccounts) {
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: [...state.flattenAccounts, flattenItem]
+                    };
+                } else {
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: [flattenItem]
+                    };
+                }
             }
             return state;
         }
