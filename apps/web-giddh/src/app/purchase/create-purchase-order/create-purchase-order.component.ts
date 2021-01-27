@@ -20,7 +20,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest, CurrentPage } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -51,6 +51,7 @@ import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { OrganizationType } from '../../models/user-login-state';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { SearchService } from '../../services/search.service';
 
 const THEAD_ARR_READONLY = [
     {
@@ -86,6 +87,12 @@ const THEAD_ARR_READONLY = [
         label: 'Total'
     }
 ];
+
+/** Type of search: vendor and item (product/service) search */
+const SEARCH_TYPE = {
+    VENDOR: 'vendor',
+    ITEM: 'item'
+}
 
 @Component({
     selector: 'create-purchase-order',
@@ -327,10 +334,72 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public accountAddressList: any[] = [];
     /** This will hold company addresses */
     public companyAddressList: any[] = [];
+    /** Stores the search results */
+    public searchResults: Array<IOption> = [];
+    /** Stores the search results pagination details */
+    public searchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for searching vendor */
+    public defaultVendorSuggestions: Array<IOption> = [];
+    /** Default search suggestion list to be shown for searching stock or services */
+    public defaultItemSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the search results pagination details for vendor */
+    public searchVendorResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the search results pagination details for stock or service  */
+    public searchItemResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the default search results pagination details for vendor */
+    public defaultVendorResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the default search results pagination details for stock or service */
+    public defaultItemResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** No results found label for dynamic search */
+    public noResultsFoundLabel = SearchResultText.NewSearch;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService, private settingsBranchAction: SettingsBranchActions) {
+    constructor(
+        private store: Store<AppState>,
+        private breakPointObservar: BreakpointObserver,
+        private salesAction: SalesActions,
+        private salesService: SalesService,
+        private warehouseActions: WarehouseActions,
+        private settingsUtilityService: SettingsUtilityService,
+        private settingsProfileActions: SettingsProfileActions,
+        private toaster: ToasterService,
+        private commonActions: CommonActions,
+        private settingsDiscountAction: SettingsDiscountActions,
+        private companyActions: CompanyActions,
+        private generalService: GeneralService,
+        public purchaseOrderService: PurchaseOrderService,
+        private loaderService: LoaderService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private generalActions: GeneralActions,
+        private invoiceService: InvoiceService,
+        private modalService: BsModalService,
+        private settingsBranchAction: SettingsBranchActions,
+        private searchService: SearchService
+    ) {
         this.getInvoiceSettings();
-        this.store.dispatch(this.generalActions.getFlattenAccount());
+        // this.store.dispatch(this.generalActions.getFlattenAccount());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -397,8 +466,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-        this.createVendorList();
+        this.loadDefaultSearchSuggestions();
         this.initializeWarehouse();
 
         this.selectedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(async accountDetails => {
@@ -407,7 +475,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     await this.getUpdatedStateCodes(accountDetails.country.countryCode, false);
                 }
                 this.updateVendorDetails(accountDetails);
-
+                this.prepareSearchLists([{
+                    name: accountDetails.name,
+                    uniqueName: accountDetails.uniqueName
+                }], 1, SEARCH_TYPE.VENDOR);
                 if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails) {
                     let billingDetails = this.purchaseOrderDetails.account.billingDetails;
 
@@ -663,69 +734,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.autoFillVendorShipping = isEqual(this.purchaseOrder.account.billingDetails, this.purchaseOrder.account.shippingDetails);
         }
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
-    }
-
-    /**
-     * This will prepare list of vendors to show in select vendor dropdown
-     *
-     * @memberof CreatePurchaseOrderComponent
-     */
-    public createVendorList(): void {
-        this.flattenAccountListStream$.pipe(takeUntil(this.destroyed$)).subscribe(items => {
-            if (items && items.length > 0) {
-                let sundryCreditorsAcList = [];
-                let stockAccountsList = [];
-                let existingAccounts = [];
-                items.forEach(item => {
-                    if (item.parentGroups.some(group => group.uniqueName === 'sundrycreditors') && existingAccounts.indexOf(item.uniqueName) === -1) {
-                        existingAccounts.push(item.uniqueName);
-
-                        sundryCreditorsAcList.push({
-                            label: item.name,
-                            value: item.uniqueName,
-                            additional: item
-                        });
-                    }
-
-                    if (item.parentGroups.some(group => group.uniqueName === 'operatingcost' || group.uniqueName === 'indirectexpenses')) {
-                        if (item.stocks) {
-                            // normal entry
-                            stockAccountsList.push({
-                                value: item.uniqueName,
-                                label: item.name,
-                                additional: item
-                            });
-
-                            // stock entry
-                            item.stocks.map(as => {
-                                stockAccountsList.push({
-                                    value: `${item.uniqueName}#${as.uniqueName}`,
-                                    label: `${item.name} (${as.name})`,
-                                    additional: Object.assign({}, item, { stock: as })
-                                });
-                            });
-                        } else {
-                            stockAccountsList.push({
-                                value: item.uniqueName,
-                                label: item.name,
-                                additional: item
-                            });
-                        }
-                    }
-                });
-                this.salesAccounts$ = observableOf(_.orderBy(stockAccountsList, 'label'));
-                this.vendorAcList$ = observableOf(_.orderBy(sundryCreditorsAcList, 'label'));
-                this.flattenAccounts = items;
-                this.vendorAccountsLoaded = true;
-
-                if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
-                    this.getAccountInProgress = true;
-                    this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
-                }
-
-                this.focusInVendorName();
-            }
-        });
     }
 
     /**
@@ -1268,147 +1276,67 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @returns {*}
      * @memberof CreatePurchaseOrderComponent
      */
-    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass): any {
-        if (selectedAcc.value && selectedAcc.additional.uniqueName) {
-
-            let additional = _.cloneDeep(selectedAcc.additional);
-
-            // check if we have quantity in additional object. it's for only bulk add mode
-            txn.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
-            txn.applicableTaxes = [];
-            txn.sku_and_customfields = null;
-
-            // description with sku and custom fields
-            if ((additional.stock)) {
-                let description = [];
-                let skuCodeHeading = additional.stock.skuCodeHeading ? additional.stock.skuCodeHeading : 'SKU Code';
-                if (additional.stock.skuCode) {
-                    description.push(skuCodeHeading + ':' + additional.stock.skuCode);
-                }
-
-                let customField1Heading = additional.stock.customField1Heading ? additional.stock.customField1Heading : 'Custom field 1';
-                if (additional.stock.customField1Value) {
-                    description.push(customField1Heading + ':' + additional.stock.customField1Value);
-                }
-
-                let customField2Heading = additional.stock.customField2Heading ? additional.stock.customField2Heading : 'Custom field 2';
-                if (additional.stock.customField2Value) {
-                    description.push(customField2Heading + ':' + additional.stock.customField2Value);
-                }
-
-                txn.sku_and_customfields = description.join(', ');
-            }
-
-            // assign taxes and create fluctuation
-            if (additional.stock && additional.stock.stockTaxes && additional.stock.stockTaxes.length) {
-                additional.stock.stockTaxes.forEach(stockTax => {
-                    let tax = this.companyTaxesList.find(tax => tax.uniqueName === stockTax);
-                    if (tax) {
-                        switch (tax.taxType) {
-                            case 'tcsrc':
-                            case 'tcspay':
-                            case 'tdsrc':
-                            case 'tdspay':
-                                entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
-                                entry.isOtherTaxApplicable = true;
-                                break;
-                            default:
-                                txn.applicableTaxes.push(stockTax);
-                                break;
-                        }
-                    }
-                });
-            } else {
-                // assign taxes for non stock accounts
-                txn.applicableTaxes = additional.applicableTaxes;
-            }
-
-            txn.accountName = additional.name;
-            txn.accountUniqueName = additional.uniqueName;
-
-            if (additional.stocks && additional.stock) {
-                // set rate auto
-                txn.rate = null;
-                let obj: IStockUnit = {
-                    id: additional.stock.stockUnit.code,
-                    text: additional.stock.stockUnit.name
+    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false): any {
+        if ((selectedAcc.value || isBulkItem) && selectedAcc.additional.uniqueName) {
+            let requestObject;
+            if (selectedAcc.additional.stock) {
+                requestObject = {
+                    stockUniqueName: selectedAcc.additional.stock.uniqueName
                 };
-                txn.stockList = [];
-                if (additional.stock && additional.stock.accountStockDetails.unitRates.length) {
-                    txn.stockList = this.prepareUnitArr(additional.stock.accountStockDetails.unitRates);
-                    txn.stockUnit = txn.stockList[0].id;
-                    txn.rate = txn.stockList[0].rate;
-                } else {
-                    txn.stockList.push(obj);
-                    txn.stockUnit = additional.stock.stockUnit.code;
-                }
-                txn.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
-                txn.isStockTxn = true;
+            }
+            if (isBulkItem) {
+                txn = this.calculateItemValues(selectedAcc, txn, entry);
             } else {
-                txn.isStockTxn = false;
-                txn.stockUnit = null;
-                txn.stockDetails = null;
-                txn.stockList = [];
-                // reset fields
-                txn.rate = null;
-                txn.quantity = null;
-                txn.amount = 0;
-                txn.taxableValue = 0;
-                this.handleWarehouseVisibility();
-            }
-            txn.sacNumber = null;
-            txn.sacNumberExists = false;
-            txn.hsnNumber = null;
+                this.searchService.loadDetails(selectedAcc.additional.uniqueName, requestObject).subscribe(data => {
+                    if (data && data.body) {
+                        // Take taxes of parent group and stock's own taxes
+                        const taxes = data.body.taxes || [];
+                        if (data.body.stock) {
+                            taxes.push(...data.body.stock.taxes);
+                        }
 
-            if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !txn.stockDetails.sacNumber)) {
-                txn.hsnNumber = txn.stockDetails.hsnNumber;
-                txn.hsnOrSac = 'hsn';
-            }
-            if (txn.stockDetails && txn.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
-                txn.sacNumber = txn.stockDetails.sacNumber;
-                txn.sacNumberExists = true;
-                txn.hsnOrSac = 'sac';
-            }
+                        // directly assign additional property
+                        selectedAcc.additional = {
+                            ...selectedAcc.additional,
+                            label: selectedAcc.label,
+                            value: selectedAcc.value,
+                            applicableTaxes: taxes,
+                            currency: data.body.currency,
+                            currencySymbol: data.body.currencySymbol,
+                            email: data.body.emails,
+                            isFixed: data.body.isFixed,
+                            mergedAccounts: data.body.mergedAccounts,
+                            mobileNo: data.body.mobileNo,
+                            nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
+                            stock: (data.body.stock) ? data.body.stock : '',
+                            hsnNumber: (data.body.stock) ? data.body.stock.hsnNumber : "",
+                            sacNumber: (data.body.stock) ? data.body.sacNumber : "",
+                            uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
+                        };
+                        txn = this.calculateItemValues(selectedAcc, txn, entry);
+                    }
+                }, () => {
+                    txn.isStockTxn = false;
+                    txn.amount = 0;
+                    txn.accountName = null;
+                    txn.accountUniqueName = null;
+                    txn.hsnOrSac = 'sac';
+                    txn.total = null;
+                    txn.rate = null;
+                    txn.sacNumber = null;
+                    txn.sacNumberExists = false;
+                    txn.taxableValue = 0;
+                    txn.applicableTaxes = [];
 
-            if (!additional.stock && additional.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !additional.sacNumber)) {
-                txn.hsnNumber = additional.hsnNumber;
-                txn.hsnOrSac = 'hsn';
+                    setTimeout(() => {
+                        let description = this.description.toArray();
+                        if (description && description[this.activeIndex] && description[this.activeIndex].nativeElement) {
+                            description[this.activeIndex].nativeElement.focus();
+                        }
+                    }, 200);
+                    return txn;
+                });
             }
-            if (!additional.stock && additional.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
-                txn.sacNumber = additional.sacNumber;
-                txn.sacNumberExists = true;
-                txn.hsnOrSac = 'sac';
-            }
-
-            setTimeout(() => {
-                let description = this.description.toArray();
-                if (description && description[this.activeIndex]) {
-                    description[this.activeIndex].nativeElement.focus();
-                }
-            }, 200);
-            this.calculateStockEntryAmount(txn);
-            this.calculateWhenTrxAltered(entry, txn);
-            return txn;
-        } else {
-            txn.isStockTxn = false;
-            txn.amount = 0;
-            txn.accountName = null;
-            txn.accountUniqueName = null;
-            txn.hsnOrSac = 'sac';
-            txn.total = null;
-            txn.rate = null;
-            txn.sacNumber = null;
-            txn.sacNumberExists = false;
-            txn.taxableValue = 0;
-            txn.applicableTaxes = [];
-
-            setTimeout(() => {
-                let description = this.description.toArray();
-                if (description && description[this.activeIndex]) {
-                    description[this.activeIndex].nativeElement.focus();
-                }
-            }, 200);
-            return txn;
         }
     }
 
@@ -2234,6 +2162,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.purchaseOrderService.create(getRequestObject, updatedData).subscribe(response => {
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
+                    this.vendorAcList$ = observableOf(_.orderBy(this.defaultVendorSuggestions, 'label'));
+                    this.salesAccounts$ = observableOf(_.orderBy(this.defaultItemSuggestions, 'label'));
                     this.resetForm();
                     this.toaster.successToast("Purchase order created succesfully with voucher number - " + response.body.number);
                 } else {
@@ -2364,33 +2294,26 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public addBulkStockItems(items: SalesAddBulkStockItems[]): void {
-        let salesAccs: IOption[] = [];
-        this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
-
         for (const item of items) {
-            let salesItem: IOption = salesAccs.find(sItem => sItem.value === item.uniqueName);
-            if (salesItem) {
+            // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
+            item.additional['quantity'] = item.quantity;
+            let lastIndex = -1;
+            let blankItemIndex = this.purchaseOrder.entries.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
 
-                // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
-                salesItem.additional = { ...salesItem.additional, quantity: item.quantity };
-                let lastIndex = -1;
-                let blankItemIndex = this.purchaseOrder.entries.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
-
-                if (blankItemIndex > -1) {
-                    lastIndex = blankItemIndex;
-                    this.purchaseOrder.entries[lastIndex] = new SalesEntryClass();
-                } else {
-                    this.purchaseOrder.entries.push(new SalesEntryClass());
-                    lastIndex = this.purchaseOrder.entries.length - 1;
-                }
-
-                this.activeIndex = lastIndex;
-                this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
-                this.purchaseOrder.entries[lastIndex].isNewEntryInUpdateMode = true;
-                this.onSelectSalesAccount(salesItem, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex]);
-                this.calculateStockEntryAmount(this.purchaseOrder.entries[lastIndex].transactions[0]);
-                this.calculateWhenTrxAltered(this.purchaseOrder.entries[lastIndex], this.purchaseOrder.entries[lastIndex].transactions[0]);
+            if (blankItemIndex > -1) {
+                lastIndex = blankItemIndex;
+                this.purchaseOrder.entries[lastIndex] = new SalesEntryClass();
+            } else {
+                this.purchaseOrder.entries.push(new SalesEntryClass());
+                lastIndex = this.purchaseOrder.entries.length - 1;
             }
+
+            this.activeIndex = lastIndex;
+            this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
+            this.purchaseOrder.entries[lastIndex].isNewEntryInUpdateMode = true;
+            this.onSelectSalesAccount(item, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex], true);
+            this.calculateStockEntryAmount(this.purchaseOrder.entries[lastIndex].transactions[0]);
+            this.calculateWhenTrxAltered(this.purchaseOrder.entries[lastIndex], this.purchaseOrder.entries[lastIndex].transactions[0]);
         }
     }
 
@@ -2649,7 +2572,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName;
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = transaction.date;
-                salesEntryClass.transactions.push(salesTransactionItemClass);
 
                 let usedTaxes = [];
 
@@ -2697,19 +2619,23 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     salesTransactionItemClass.stockDetails = {};
                     salesTransactionItemClass.stockDetails.name = transaction.stock.name;
                     salesTransactionItemClass.stockDetails.uniqueName = transaction.stock.uniqueName;
+                    salesTransactionItemClass.stockDetails.customField1 = transaction.stock.customField1;
+                    salesTransactionItemClass.stockDetails.customField2 = transaction.stock.customField2;
+                    salesTransactionItemClass.stockDetails.stockUnit = transaction.stock.stockUnit;
+                    salesTransactionItemClass.stockDetails.unitRates = transaction.stock.unitRates;
+                    salesTransactionItemClass.stockDetails.uniqueName = transaction.stock.uniqueName;
+                    salesTransactionItemClass.stockDetails.skuCodeHeading = transaction.stock.skuCodeHeading;
                     salesTransactionItemClass.quantity = transaction.stock.quantity;
                     salesTransactionItemClass.rate = transaction.stock.rate.amountForAccount;
                     salesTransactionItemClass.stockDetails.skuCode = transaction.stock.sku;
                     salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName + '#' + transaction.stock.uniqueName;
 
-                    let selectedAcc = this.flattenAccounts.find(account => {
-                        return (account.uniqueName === transaction.account.uniqueName);
-                    });
-
-                    let stock = selectedAcc.stocks.find(stock => stock.uniqueName === transaction.stock.uniqueName);
+                    let stock = salesTransactionItemClass.stockDetails;
 
                     if (stock) {
+                        // description with sku and custom fields
+                        salesTransactionItemClass.sku_and_customfields = null;
                         let description = [];
                         let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
 
@@ -2729,18 +2655,21 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                         salesTransactionItemClass.sku_and_customfields = description.join(', ');
                     }
-
+                    stock.unitRates = stock.unitRates || [];
+                    const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
+                    let stockUnit: IStockUnit = {
+                        id: stock.stockUnit.code,
+                        text: unitRate ? unitRate.stockUnitName : ''
+                    };
                     salesTransactionItemClass.stockList = [];
-                    if (stock.accountStockDetails.unitRates.length) {
-                        salesTransactionItemClass.stockList = this.prepareUnitArr(stock.accountStockDetails.unitRates);
+                    if (stock.unitRates && stock.unitRates.length) {
+                        salesTransactionItemClass.stockList = this.prepareUnitArr(stock.unitRates);
                     } else {
-                        let stockUnit: IStockUnit = {
-                            id: stock.stockUnit.code,
-                            text: stock.stockUnit.name
-                        };
                         salesTransactionItemClass.stockList.push(stockUnit);
                     }
                 }
+                salesEntryClass.transactions.push(salesTransactionItemClass);
+
             });
 
             if (entry.discounts && entry.discounts.length) {
@@ -3042,5 +2971,366 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.autoFillShippingDetails('vendor');
             }
         }
+    }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {string} searchType Type of search to make
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (searchType === SEARCH_TYPE.VENDOR && this.defaultVendorSuggestions && this.defaultVendorSuggestions.length === 0) ||
+                (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions && this.defaultItemSuggestions.length === 0) || successCallback)) {
+            if (searchType === SEARCH_TYPE.VENDOR) {
+                this.searchVendorResultsPaginationData.query = query;
+            } else if (searchType === SEARCH_TYPE.ITEM) {
+                this.searchItemResultsPaginationData.query = query;
+            }
+            const requestObject = this.getSearchRequestObject(query, page, searchType);
+            this.searchAccount(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    this.prepareSearchLists(data.body.results, page, searchType);
+                    this.noResultsFoundLabel = SearchResultText.NotFound;
+                    if (searchType === SEARCH_TYPE.VENDOR) {
+                        this.searchVendorResultsPaginationData.page = data.body.page;
+                        this.searchVendorResultsPaginationData.totalPages = data.body.totalPages;
+                    } else if (searchType === SEARCH_TYPE.ITEM) {
+                        this.searchItemResultsPaginationData.page = data.body.page;
+                        this.searchItemResultsPaginationData.totalPages = data.body.totalPages;
+                    }
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            if (searchType === SEARCH_TYPE.VENDOR) {
+                this.searchResults = [...this.defaultVendorSuggestions];
+                this.searchVendorResultsPaginationData.page = this.defaultVendorResultsPaginationData.page;
+                this.searchVendorResultsPaginationData.totalPages = this.defaultVendorResultsPaginationData.totalPages;
+            } else if (searchType === SEARCH_TYPE.ITEM) {
+                this.searchResults = [...this.defaultItemSuggestions];
+                this.searchItemResultsPaginationData.page = this.defaultItemResultsPaginationData.page;
+                this.searchItemResultsPaginationData.totalPages = this.defaultItemResultsPaginationData.totalPages;
+            }
+            this.assignSearchResultToList(searchType);
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll to bottom handler
+     *
+     * @param {string} searchType Search type
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public handleScrollEnd(searchType: string): void {
+        const query = searchType === SEARCH_TYPE.VENDOR ? this.searchVendorResultsPaginationData.query :
+            searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.query : '';
+        const page = searchType === SEARCH_TYPE.VENDOR ? this.searchVendorResultsPaginationData.page :
+            searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.page : 1;
+        if (
+            (searchType === SEARCH_TYPE.VENDOR && this.searchVendorResultsPaginationData.page < this.searchVendorResultsPaginationData.totalPages) ||
+            (searchType === SEARCH_TYPE.ITEM && this.searchItemResultsPaginationData.page < this.searchItemResultsPaginationData.totalPages)) {
+            this.onSearchQueryChanged(
+                query,
+                page + 1,
+                searchType,
+                (response) => {
+                    if (!query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                                label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                                additional: result
+                            }
+                        }) || [];
+                        if (searchType === SEARCH_TYPE.VENDOR) {
+                            this.defaultVendorSuggestions = this.defaultVendorSuggestions.concat(...results);
+                            this.defaultVendorResultsPaginationData.page = this.searchVendorResultsPaginationData.page;
+                            this.defaultVendorResultsPaginationData.totalPages = this.searchVendorResultsPaginationData.totalPages;
+                            this.searchResults = [...this.defaultVendorSuggestions];
+                            this.assignSearchResultToList(SEARCH_TYPE.VENDOR);
+                        } else if (searchType === SEARCH_TYPE.ITEM) {
+                            this.defaultItemSuggestions = this.defaultItemSuggestions.concat(...results);
+                            this.defaultItemResultsPaginationData.page = this.searchItemResultsPaginationData.page;
+                            this.defaultItemResultsPaginationData.totalPages = this.searchItemResultsPaginationData.totalPages;
+                            this.searchResults = [...this.defaultItemSuggestions];
+                            this.assignSearchResultToList(SEARCH_TYPE.ITEM);
+                        }
+                    }
+            });
+        }
+    }
+
+    /**
+     * Returns the search request object
+     *
+     * @param {string} query Query to be searched
+     * @param {number} [page=1] Page for which search is to be made
+     * @param {string} searchType Type of search to be performed
+     * @returns {*} Search request object
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getSearchRequestObject(query: string, page: number = 1, searchType: string): any {
+        let withStocks: boolean;
+        let group: string;
+        if (searchType === SEARCH_TYPE.VENDOR) {
+            this.searchVendorResultsPaginationData.query = query;
+            group = 'sundrycreditors';
+            this.selectedGroupUniqueNameForAddEditAccountModal = 'sundrycreditors';
+        } else if (searchType === SEARCH_TYPE.ITEM) {
+            group = 'operatingcost, indirectexpenses';
+            withStocks = !!query;
+        }
+        const requestObject = {
+            q: encodeURIComponent(query),
+            page,
+            group: encodeURIComponent(group)
+        };
+        if (withStocks) {
+            requestObject['withStocks'] = withStocks;
+        }
+        return requestObject;
+    }
+
+    /**
+     * Searches account
+     *
+     * @param {*} requestObject Request object
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public searchAccount(requestObject: any): Observable<any> {
+        return this.searchService.searchAccount(requestObject);
+    }
+
+    /**
+     * Prepares the search list when the data is received
+     *
+     * @param {*} results Search results
+     * @param {number} [currentPage=1] Current page requested
+     * @param {string} searchType Search type of the searched item
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public prepareSearchLists(results: any, currentPage: number = 1, searchType: string): void {
+        const searchResults = results.map(result => {
+            return {
+                value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                additional: result
+            };
+        }) || [];
+        if (currentPage === 1) {
+            this.searchResults = searchResults;
+        } else {
+            this.searchResults = [
+                ...this.searchResults,
+                ...searchResults
+            ];
+        }
+        this.assignSearchResultToList(searchType);
+    }
+
+    /**
+     * Loads the default search suggestion for vendor and item when voucher module is loaded and
+     * when voucher is changed
+     *
+     * @private
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private loadDefaultSearchSuggestions(): void {
+        this.onSearchQueryChanged('', 1, SEARCH_TYPE.VENDOR, (response) => {
+            let selectedAccountDetails;
+            if (this.isUpdateMode) {
+                this.selectedAccountDetails$.pipe(take(1)).subscribe(accountDetails => {
+                    selectedAccountDetails = accountDetails;
+                });
+                if (selectedAccountDetails) {
+                    response.unshift({
+                        name: selectedAccountDetails.name,
+                        uniqueName: selectedAccountDetails.uniqueName
+                    });
+                }
+            }
+            this.defaultVendorSuggestions = response.map(result => {
+                return {
+                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                    additional: result
+                }
+            }) || [];
+            this.noResultsFoundLabel = SearchResultText.NotFound;
+            this.searchResults = [
+                ...this.defaultVendorSuggestions
+            ];
+            this.assignSearchResultToList(SEARCH_TYPE.VENDOR);
+            this.vendorAccountsLoaded = true;
+            if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
+                this.getAccountInProgress = true;
+                this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
+            }
+            this.focusInVendorName();
+        });
+        this.onSearchQueryChanged('', 1, SEARCH_TYPE.ITEM, (response) => {
+            this.defaultItemSuggestions = response.map(result => {
+                return {
+                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                    additional: result
+                }
+            }) || [];
+            this.noResultsFoundLabel = SearchResultText.NotFound;
+        });
+    }
+
+    /**
+     * Assigns the search results based on invoice type and search type
+     *
+     * @private
+     * @param {string} searchType Search type made by the user
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private assignSearchResultToList(searchType: string): void {
+        if (searchType === SEARCH_TYPE.VENDOR) {
+            this.vendorAcList$ = observableOf(_.orderBy(this.searchResults, 'label'));
+        } else if (searchType === SEARCH_TYPE.ITEM) {
+            this.salesAccounts$ = observableOf(_.orderBy(this.searchResults, 'label'));
+        }
+    }
+
+    /**
+     * Calculates the entry value
+     *
+     * @param {*} selectedAcc Currently selected account
+     * @param {SalesTransactionItemClass} transaction Current transaction of entry
+     * @param {SalesEntryClass} entry Entry
+     * @returns {SalesTransactionItemClass} Returns the complete transaction instance
+     * @memberof ProformaInvoiceComponent
+     */
+    private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true): SalesTransactionItemClass {
+        let additional = _.cloneDeep(selectedAcc.additional);
+        transaction.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
+        transaction.applicableTaxes = [];
+        transaction.sku_and_customfields = null;
+        // description with sku and custom fields
+        if ((additional.stock)) {
+            let description = [];
+            let skuCodeHeading = additional.stock.skuCodeHeading ? additional.stock.skuCodeHeading : 'SKU Code';
+            if (additional.stock.skuCode) {
+                description.push(skuCodeHeading + ':' + additional.stock.skuCode);
+            }
+
+            let customField1Heading = additional.stock.customField1Heading ? additional.stock.customField1Heading : 'Custom field 1';
+            if (additional.stock.customField1Value) {
+                description.push(customField1Heading + ':' + additional.stock.customField1Value);
+            }
+
+            let customField2Heading = additional.stock.customField2Heading ? additional.stock.customField2Heading : 'Custom field 2';
+            if (additional.stock.customField2Value) {
+                description.push(customField2Heading + ':' + additional.stock.customField2Value);
+            }
+
+            transaction.sku_and_customfields = description.join(', ');
+        }
+
+        // assign taxes and create fluctuation
+        if (additional.stock && additional.stock.taxes && additional.stock.taxes.length) {
+            additional.stock.taxes.forEach(stockTax => {
+                let tax = this.companyTaxesList.find(tax => tax.uniqueName === stockTax);
+                if (tax) {
+                    switch (tax.taxType) {
+                        case 'tcsrc':
+                        case 'tcspay':
+                        case 'tdsrc':
+                        case 'tdspay':
+                            entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                            entry.isOtherTaxApplicable = true;
+                            break;
+                        default:
+                            transaction.applicableTaxes.push(stockTax);
+                            break;
+                    }
+                }
+            });
+        } else {
+            // assign taxes for non stock accounts
+            transaction.applicableTaxes = additional.applicableTaxes;
+        }
+
+        transaction.accountName = additional.name;
+        transaction.accountUniqueName = additional.uniqueName;
+
+        if (additional.stock) {
+            // set rate auto
+            transaction.rate = null;
+            let obj: IStockUnit = {
+                id: additional.stock.stockUnitCode,
+                text: additional.stock.stockUnitName
+            };
+            transaction.stockList = [];
+            if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
+                transaction.stockList = this.prepareUnitArr(additional.stock.unitRates);
+                transaction.stockUnit = transaction.stockList[0].id;
+                transaction.rate = transaction.stockList[0].rate;
+            } else {
+                transaction.stockList.push(obj);
+                transaction.stockUnit = additional.stock.stockUnit.code;
+            }
+            transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
+            transaction.isStockTxn = true;
+        } else {
+            transaction.isStockTxn = false;
+            transaction.stockUnit = null;
+            transaction.stockDetails = null;
+            transaction.stockList = [];
+            // reset fields
+            transaction.rate = null;
+            transaction.quantity = null;
+            transaction.amount = 0;
+            transaction.taxableValue = 0;
+            this.handleWarehouseVisibility();
+        }
+        transaction.sacNumber = null;
+        transaction.sacNumberExists = false;
+        transaction.hsnNumber = null;
+
+        if (transaction.stockDetails && transaction.stockDetails.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !transaction.stockDetails.sacNumber)) {
+            transaction.hsnNumber = transaction.stockDetails.hsnNumber;
+            transaction.hsnOrSac = 'hsn';
+        }
+        if (transaction.stockDetails && transaction.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
+            transaction.sacNumber = transaction.stockDetails.sacNumber;
+            transaction.sacNumberExists = true;
+            transaction.hsnOrSac = 'sac';
+        }
+
+        if (!additional.stock && additional.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !additional.sacNumber)) {
+            transaction.hsnNumber = additional.hsnNumber;
+            transaction.hsnOrSac = 'hsn';
+        }
+        if (!additional.stock && additional.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
+            transaction.sacNumber = additional.sacNumber;
+            transaction.sacNumberExists = true;
+            transaction.hsnOrSac = 'sac';
+        }
+
+        setTimeout(() => {
+            let description = this.description.toArray();
+            if (description && description[this.activeIndex] && description[this.activeIndex].nativeElement) {
+                description[this.activeIndex].nativeElement.focus();
+            }
+        }, 200);
+        this.calculateStockEntryAmount(transaction);
+        this.calculateWhenTrxAltered(entry, transaction);
+        return transaction;
     }
 }
