@@ -53,8 +53,8 @@
     background: $very-light-gray !important;
 }
 
-.activeRow {
-    background: $gray-90;
+.active-row {
+    background: $whisper;
 }
 
 .confirmation-box {
@@ -85,7 +85,7 @@
 }
 
 .appearance-none {
-    background: $gray-90 !important;
+    background: $whisper !important;
     border: 0 !important;
     font-size: 16px;
     color: $night-rider;
@@ -168,7 +168,7 @@ textarea[name="narration"] {
 
 input[name="entryDate"]:focus,
 textarea[name="narration"]:focus {
-    background: $gray-90 !important;
+    background: $whisper !important;
 }
 
 :host ::ng-deep .menu {

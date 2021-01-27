@@ -52,7 +52,7 @@ import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/consta
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-record.action';
 import { Location } from '@angular/common';
-import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../models/api-models/AdvanceReceiptsAdjust';
+import { VoucherAdjustments, AdjustAdvancePaymentModal, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
@@ -266,17 +266,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-    /* This will store selected date range to show on UI */
+    /** Stores the voucher eligible for adjustment */
+    public voucherForAdjustment: Array<Adjustment>;
+    /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /* This will store available date ranges */
+    /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Selected from date */
+    /** Selected from date */
     public fromDate: string;
-    /* Selected to date */
+    /** Selected to date */
     public toDate: string;
-    /* Selected range label */
+    /** Selected range label */
     public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
+    /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
@@ -1729,6 +1731,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
                 if (res && res.status === 'success') {
                     if (res.body && res.body.length) {
+                        this.voucherForAdjustment = res.body;
                         this.isAccountHaveAdvanceReceipts = true;
                         this.showAdvanceReceiptAdjust = true;
                         this.adjustPaymentModal.show();

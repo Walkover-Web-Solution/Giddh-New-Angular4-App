@@ -3,7 +3,7 @@
         <div class="pr d-flex mb-2 inventory-branch-dropdown justify-content-between">
             <!-- enable branch selection after implimentation from api-->
             <div class="d-flex">
-                <div class="mr-15 sh-select-dropdown">
+                <div class="mr-r15 sh-select-dropdown">
                     <div class="select-style middle">
                         <sh-select placeholder="Select Branch" formControlName="selectedEntity" (selected)="selectEntity($event)" [(ngModel)]="selectedEntity" [options]="entities$ | async" [ItemHeight]="33"></sh-select>
                         <!-- html dropdown <select class="form-control" formControlName="selectedEntity" [(ngModel)]="selectedEntity"
@@ -40,7 +40,7 @@
                     <span class="icon-advance-filter"></span>
                 </div>
 
-                <!-- <i class="fa fa-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter(true)"></i> -->
+                <!-- <i class="icon-refresh ml-1 cp" *ngIf="isFilterCorrect" (click)="resetFilter(true)"></i> -->
             </div>
             <div class="clear-filter">
                 <button class="btn btn-filter" *ngIf="isFilterCorrect" (click)="resetFilter()">
@@ -51,10 +51,10 @@
             <div>
 
                 <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-15" (click)="editStock()" tooltip="Edit Stock">
+                    <button class="btn-link icon-btn mr-r15" (click)="editStock()" tooltip="Edit Stock">
                         <i class="icon-edit-pencil"></i>
                     </button>
-                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mr-t05 cp mr-15 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
+                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mr-t05 cp mr-r15 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
                         <i class="icon-download strong"></i>
                     </button>
                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu" aria-labelledby="button-alignment">
@@ -88,7 +88,7 @@
 
     <section>
         <div class="mobile-card-wrapper">
-            <table class="table basic on-mobile-view table-responsive" [ngClass]="{'mb-100': stockReport && stockReport.transactions && stockReport.transactions.length>6}">
+            <table class="table basic on-mobile-view table-responsive" [ngClass]="{'mr-b100': stockReport && stockReport.transactions && stockReport.transactions.length>6}">
                 <thead>
                     <tr>
                         <th colspan="3" width="40%">

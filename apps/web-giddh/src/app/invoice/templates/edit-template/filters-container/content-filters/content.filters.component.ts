@@ -69,18 +69,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
 
         this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
-
-        this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
-            if (companies) {
-                companies.forEach(company => {
-                    if (company.uniqueName === activeCompanyUniqueName) {
-                        if (company.country === "India") {
-                            this.showGstComposition = true;
-                        }
-                    }
-                });
-            }
-        });
     }
 
     /**
@@ -89,6 +77,13 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ContentFilterComponent
      */
     public ngOnInit(): void {
+        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
+            if (activeCompany?.countryV2?.countryName) {
+                this.showGstComposition = activeCompany.countryV2.countryName === 'India';
+            } else {
+                this.showGstComposition = false;
+            }
+        });
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
@@ -326,10 +321,12 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public changeDisableQuantity(): void {
         let template = _.cloneDeep(this.customTemplate);
-        if (!template.sections.table.data.quantity.display) {
-            template.sections.table.data.totalQuantity.display = false;
-        } else {
-            template.sections.table.data.totalQuantity.display = true;
+        if(template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
+            if (!template.sections.table.data.quantity.display) {
+                template.sections.table.data.totalQuantity.display = false;
+            } else {
+                template.sections.table.data.totalQuantity.display = true;
+            }
         }
         this._invoiceUiDataService.setCustomTemplate(template);
     }

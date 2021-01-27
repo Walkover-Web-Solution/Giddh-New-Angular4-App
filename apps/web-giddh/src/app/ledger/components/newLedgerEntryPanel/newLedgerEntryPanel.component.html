@@ -8,7 +8,7 @@
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
         <!--        tourist scheme template end-->
         <div class="basic_detail mr-b1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
-            <table class="width100 total-detail-table">
+            <table class="width-100 total-detail-table">
 
                 <tbody>
 
@@ -19,7 +19,7 @@
                                 <tbody>
                                     <tr>
                                         <td class="text-right width-70">
-                                            <label class="mr-05 font-12">Qty</label>
+                                            <label class="mr-r05 font-12">Qty</label>
                                             <input id="ledger-quantity" type="text" name="" class="form-control text-right"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields || isReadOnly ? 'disabled' : null"
                                                 (change)="changeQuantity($event.target.value)"
@@ -49,7 +49,7 @@
 
                         <td class="text-center table-plus" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label class="d-block">&nbsp;</label>
-                            <label class="font-20 pt-04">x</label>
+                            <label class="font-20 pd-t04">x</label>
                         </td>
 
                         <td class="item-padding text-right price" *ngIf="currentTxn?.selectedAccount?.stock">
@@ -181,7 +181,7 @@
                 </div>
             </div>
             <div class="col-md-8 col-12" [ngClass]="{'offset-md-4' : !(currentTxn?.selectedAccount?.stock)}">
-                <div class="text-right mb-1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
+                <div class="text-right mr-b1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <input [disabled]="isReadOnly" id="ledger-other-tax" type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
@@ -236,7 +236,7 @@
                 [(ngModel)]="blankLedger.description"></textarea>
         </div>
 
-        <table class="width100 mr-t05">
+        <table class="width-100 mr-t05">
             <tbody>
                 <tr>
                     <td class="primary-color pl-0" (click)="toggleMoreDetail();">
@@ -292,7 +292,7 @@
                                             </span>
                                         </button>
 
-                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100" role="menu">
+                                        <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width-100" role="menu">
                                             <li *ngIf="invoiceList.length==0">No results found</li>
                                             <li *ngFor="let invoice of invoiceList">
 
@@ -361,7 +361,7 @@
                             </td>
                             <td (click)="isReadOnly ? '' : handleVoucherAdjustment()"
                                 class="cp pd-r1 pt-2" *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount">
-                                <span class="text-gray advance-receipt-edit ml-05">
+                                <span class="text-gray advance-receipt-edit mr-l05">
                                     <i class="icon-edit-pencil"></i>
                                     Adjusted Amt.: {{currentTxn?.voucherAdjustments?.totalAdjustmentAmount}}</span>
                             </td>
@@ -465,7 +465,7 @@
 
             <div class="clearfix w-100">
 
-                <div class="pull-left pl-15">
+                <div class="pull-left pd-l15">
 
                     <ul class="list-inline font-14" *ngIf="isLedgerAccountAllowsMultiCurrency">
                         <li>
@@ -492,13 +492,13 @@
                     <input [disabled]="isReadOnly" type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
                         ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput
                         (click)="onUploadOutput()">
-                    <label class="upload-div pr-15"
+                    <label class="upload-div pd-r15"
                         [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
 
                         <label for="invoiceFile" class="cp font-16">
                             <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i> Attach file</label>
                     </label>
-                    <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger?.attachedFile?.length > 0">
+                    <div class="file_attached clearfix text-right pd-r15" *ngIf="blankLedger?.attachedFile?.length > 0">
                         <span>{{ blankLedger.attachedFileName }}</span>
                         <label class="remove cp text-danger pl-1"
                             (click)="showDeleteAttachedFileModal()">(remove)</label>
@@ -591,7 +591,7 @@
     </div>
 </ng-template>
 <ng-template #touristSchemeTemplate>
-    <div class="row font-14 mb-1" *ngIf="isTouristSchemeApplicable">
+    <div class="row font-14 mr-b1" *ngIf="isTouristSchemeApplicable">
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">

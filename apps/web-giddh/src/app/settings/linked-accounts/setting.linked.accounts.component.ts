@@ -20,12 +20,7 @@ import { SearchService } from '../../services/search.service';
 @Component({
     selector: 'setting-linked-accounts',
     templateUrl: './setting.linked.accounts.component.html',
-    styles: [`
-    .bank-delete {
-      right: 0;
-      bottom: 0;
-    }
-  `]
+    styleUrls: ['./setting.linked.accounts.component.scss']
 })
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 

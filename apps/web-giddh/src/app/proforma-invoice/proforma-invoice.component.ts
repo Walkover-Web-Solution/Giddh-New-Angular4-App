@@ -106,7 +106,7 @@ import { PurchaseRecordService } from '../services/purchase-record.service';
 import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
-import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
+import { VoucherAdjustments, AdjustAdvancePaymentModal, Adjustment } from '../models/api-models/AdvanceReceiptsAdjust';
 import { CurrentCompanyState } from '../store/Company/company.reducer';
 import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
 import { PurchaseOrderService } from '../services/purchase-order.service';
@@ -591,6 +591,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public accountAddressList: any[] = [];
     /** This will hold company addresses */
     public companyAddressList: any[] = [];
+    /** Stores the voucher eligible for adjustment */
+    public voucherForAdjustment: Array<Adjustment>;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1936,6 +1938,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (item && item.currency && item.currency !== this.companyCurrency) {
             this.getCurrencyRate(this.companyCurrency, item.currency,
                 moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+        } else {
+            this.originalExchangeRate = 1;
+            this.exchangeRate = 1;
+            this.recalculateEntriesTotal();
         }
 
         if (this.isSalesInvoice && this.isMulticurrencyAccount) {
@@ -2661,11 +2667,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if(trx.amount) {
             let transactionAmount = trx.amount.toString();
 
-            if(this.invFormData.accountDetails.currencySymbol) {
+            if(this.invFormData.accountDetails.currencySymbol && transactionAmount) {
                 transactionAmount = transactionAmount.replace(this.invFormData.accountDetails.currencySymbol, "");
             }
 
-            if(this.selectedSuffixForCurrency) {
+            if(this.selectedSuffixForCurrency && transactionAmount) {
                 transactionAmount = transactionAmount.replace(this.selectedSuffixForCurrency, "");
             }
 
@@ -3723,8 +3729,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesEntryClass.uniqueName = entry.uniqueName;
                 salesEntryClass.description = entry.description;
                 salesEntryClass.date = entry.entryDate;
+                let calculationMethod = (entry.otherTaxModal && entry.otherTaxModal.tcsCalculationMethod) ? entry.otherTaxModal.tcsCalculationMethod : "";
                 entry.taxList.forEach(t => {
-                    salesEntryClass.taxes.push({uniqueName: t});
+                    salesEntryClass.taxes.push({uniqueName: t, calculationMethod: calculationMethod});
                 });
                 entry.transactions.forEach(tr => {
                     let transactionClassMul = new TransactionClassMulticurrency();
@@ -4167,7 +4174,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-            if (!modal.appliedOtherTax.name && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
+            if ((!modal.appliedOtherTax || !modal.appliedOtherTax.name) && entry.otherTaxModal && entry.otherTaxModal.appliedOtherTax) {
                 entry.otherTaxModal.appliedOtherTax.name = tax.name;
             }
             if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
@@ -4894,6 +4901,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.calculateGrandTotal();
                         this.calculateBalanceDue();
                     }
+                    if (from !== to && !this.isPurchaseInvoice) {
+                        // Multi currency case
+                        this.recalculateEntriesTotal();
+                    }
                 }
             }, (error => {
 
@@ -5170,7 +5181,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.invFormData.entries && this.invFormData.entries.length) {
             let validLineItem;
             for (let i = 0; i < this.invFormData.entries.length; i++) {
-                validLineItem = this.invFormData.entries[i].transactions.find(transaction => (transaction.accountUniqueName && transaction.amount > 0));
+                validLineItem = this.invFormData.entries[i].transactions.find(transaction => (transaction.accountUniqueName));
                 if (validLineItem) {
                     break;
                 }
@@ -5703,6 +5714,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             };
             this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
                 if (res && res.status === 'success') {
+                    this.voucherForAdjustment = res.body;
                     if (res.body && res.body.length) {
                         this.isAccountHaveAdvanceReceipts = true;
                     } else {
@@ -6762,5 +6774,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.autoFillShippingDetails();
             }
         }
+    }
+
+    /**
+     * Recalculates the entries total value
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private recalculateEntriesTotal(): void {
+        this.updateStockEntries();
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this.calculateGrandTotal();
+        this.calculateBalanceDue();
     }
 }

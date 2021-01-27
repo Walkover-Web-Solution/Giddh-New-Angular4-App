@@ -62,7 +62,7 @@
                     </div>
                 </div>
 
-                <button class="btn btn-default desktop-view-btn mr-15" tooltip="Export" (click)="exportCsvDownload()"
+                <button class="btn btn-default desktop-view-btn mr-r15" tooltip="Export" (click)="exportCsvDownload()"
                     [ladda]="exportInvoiceRequestInProcess$ | async"
                     *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
                     data-spinner-size="20px">
@@ -132,7 +132,7 @@
                     <div *ngIf="selectedItems.length === 1">
                         <div *ngIf="!isCompany" class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
                             <button dropdownToggle type="button"
-                                class="btn mr-15 more-btn-dropdown btn-default dropdown-toggle"
+                                class="btn mr-r15 more-btn-dropdown btn-default dropdown-toggle"
                                 aria-controls="dropdown-basic">
                                 More
                                 <span class="caret"></span>
@@ -152,7 +152,7 @@
                             </ul>
                         </div>
                     </div>
-                    <button class="btn btn-default mr-15" tooltip="Export" (click)="exportCsvDownload()"
+                    <button class="btn btn-default mr-r15" tooltip="Export" (click)="exportCsvDownload()"
                         [ladda]="exportInvoiceRequestInProcess$ | async"
                         *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
                         data-spinner-size="20px">
@@ -235,7 +235,7 @@
         <!-- For mobile screen sizes ends -->
 
         <div class="invoice-preview table-responsive">
-            <table class="table basic table-bordered mt-15 pt-15 invoice-table desktop-table giddh-table on-mobile-view">
+            <table class="table basic table-bordered mr-t15 pd-t15 invoice-table desktop-table giddh-table on-mobile-view">
                 <!--sales-->
                 <thead class="thead-background1" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                     <tr>
@@ -595,7 +595,7 @@
         </div>
 
         <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
-            <div class="card mobile-table mt-15" *ngFor="let item of voucherData?.items; let i = index">
+            <div class="card mobile-table mr-t15" *ngFor="let item of voucherData?.items; let i = index">
                 <table class="table basic table-bordered invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                     <tbody>
                     <tr>
@@ -908,7 +908,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
-                (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)" [isVoucherModule]="true">
+                (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)" [isVoucherModule]="true" [voucherForAdjustment]="voucherForAdjustment">
             </advance-receipt-adjustment-component>
         </div>
     </div>

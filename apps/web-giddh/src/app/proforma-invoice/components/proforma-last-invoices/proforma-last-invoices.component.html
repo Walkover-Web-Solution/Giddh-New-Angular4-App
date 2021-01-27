@@ -2,14 +2,14 @@
     <ul>
         <perfect-scrollbar>
             <li *ngFor="let item of data" (click)="onInvoiceSelected(item)">
-                <div class="d-flex justify-content-between pd">
-
+                <div class="pd">
                     <div class="d-flex flex-column">
-                        <span class="left-text-purple">{{ item.versionNumber }}</span>
+                            <div class="d-flex justify-content-between">
+                                    <span class="left-text-purple">{{ item.versionNumber }}</span>
+                                    <span>{{ item.grandTotal?.amountForAccount }}</span>
+                                </div>
                         <span class="left-text-purple">{{ item.date }} ( {{ item.account?.name }} )</span>
                     </div>
-
-                    <span>{{ item.grandTotal?.amountForAccount }}</span>
 
                 </div>
             </li>

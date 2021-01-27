@@ -2,7 +2,7 @@
     <i><img src="assets/images/custom-calender.svg"></i>
     <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
 </div> -->
-<div class="audit-form-wrap mt-15">
+<div class="audit-form-wrap mr-t15">
     <div class="clearfix form-field">
         <label>Entity <sup class="text-danger">*</sup></label>
         <sh-select [options]="auditLogFormVM.entities" #selectEntity [isFilterEnabled]="true" [placeholder]="'Select Option'" (selected)="selectedEntityType($event)" [(ngModel)]="auditLogFormVM.selectedEntity" [forceClearReactive]="forceClearEntity$ | async"></sh-select>

@@ -2,7 +2,7 @@
     <div class="header-create-unit">
         <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="form-header">
-            <div class="back-button mr-15 p-05"><i class="icon-back-arrow"></i></div>
+            <div class="back-button mr-r15"><i class="icon-back-arrow"></i></div>
             <!-- funcation of back to main aside (click)="backToMainAside()" -->
             <h3>Create Unit</h3>
         </div>
@@ -30,10 +30,10 @@
                         <div class="checkbox square-switch">
                             <input type="checkbox" id="isDivide" [checked]="isDivide" (change)="isDivide = !isDivide" />
                             <label for="isDivide">
-                                <span class="pull-left width100 text-left" *ngIf="isDivide"><img
+                                <span class="pull-left width-100 text-left" *ngIf="isDivide"><img
                                         src="./assets/images/divide-ico.svg" />
                                     Divide</span>
-                                <span class="pull-right width100 text-right" *ngIf="!isDivide"><img
+                                <span class="pull-right width-100 text-right" *ngIf="!isDivide"><img
                                         src="./assets/images/multiply.svg" [style.width.px]="11" />
                                     Multiply</span>
                             </label>

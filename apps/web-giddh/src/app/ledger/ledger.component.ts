@@ -240,7 +240,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** This will hold if import statement modal is visible */
     public isImportStatementVisible: boolean = false;
     /** This will hold bank transactions api response */
-    public bankTransactionsResponse: any = {count: 0, totalItems: 0, totalPages: 0, page: 1};
+    public bankTransactionsResponse: any = {totalItems: 0, totalPages: 0, page: 1, countPerPage: 500};
     /** Set to true the first time advance search modal is opened, done
      * to prevent the API call only when the advance search filter is opened
      * by user and not when the user visits the page
@@ -922,6 +922,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.getCurrencyRate();
                 } else {
                     this.baseCurrencyDetails = this.foreignCurrencyDetails;
+                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
                 }
                 this.selectedCurrency = 0;
                 this.assignPrefixAndSuffixForCurrency();
@@ -1048,14 +1049,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (this.trxRequest.accountUniqueName) {
             this.isBankTransactionLoading = true;
 
-            let getRequest = {accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: 500, page: this.bankTransactionsResponse.page}
+            let getRequest = {accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page}
             this._ledgerService.GetBankTranscationsForLedger(getRequest).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
                     if(res.body) {
                         this.bankTransactionsResponse.totalItems = res.body.totalItems;
                         this.bankTransactionsResponse.totalPages = res.body.totalPages;
-                        this.bankTransactionsResponse.count = res.body.count;
                         this.bankTransactionsResponse.page = res.body.page;
 
                         this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.generalService.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));

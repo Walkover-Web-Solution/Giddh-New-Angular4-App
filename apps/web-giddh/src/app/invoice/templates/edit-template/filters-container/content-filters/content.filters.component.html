@@ -324,7 +324,7 @@
                             <input type="checkbox" checked /> Tax Bifurcation
                         </div>
                         <div class="ml-3">
-                            <div class="clearfix mb-05">
+                            <div class="clearfix mr-b05">
                                 <input type="radio" class="radio-theme" name="tax-rate" /> Tax Rate
                             </div>
 
@@ -497,7 +497,7 @@
                             <input type="checkbox" [(ngModel)]="customTemplate.sections['table'].data['taxBifurcation'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'table')" /> Tax Bifurcation
                         </div>
                         <div class="ml-3" *ngIf="customTemplate.sections['table'].data['taxBifurcation'].display">
-                            <div class="clearfix mb-05">
+                            <div class="clearfix mr-b05">
                                 <input type="radio" class="radio-theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','table' )" [checked]="customTemplate.sections['table'].data['taxBifurcation'].label === 'taxRateBifurcation'"
                                     [disabled]="!customTemplate.sections['table'].data['taxBifurcation'].display" /> Tax Rate
                             </div>
@@ -570,7 +570,7 @@
                         <input type="checkbox" [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null); checkedTaxBifurcation('taxRateBifurcation', 'footer')" /> Tax Bifurcation
                     </div>
                     <div class="ml-3" *ngIf="customTemplate.sections['footer'].data['taxBifurcation'].display">
-                        <div class="clearfix mb-05">
+                        <div class="clearfix mr-b05">
                             <input type="radio" class="radio-theme" name="tax-rate" (ngModelChange)='onFieldChange(null, null, null)' (change)="checkedTaxBifurcation('taxRateBifurcation','footer')" [checked]="customTemplate.sections['footer'].data['taxBifurcation'].label === 'taxRateBifurcation'"
                                 [disabled]="!customTemplate.sections['footer'].data['taxBifurcation'].display" /> Tax Rate
                         </div>

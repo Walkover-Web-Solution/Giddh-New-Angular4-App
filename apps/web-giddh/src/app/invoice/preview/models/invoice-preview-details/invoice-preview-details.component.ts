@@ -178,10 +178,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public get shouldShowPrintDocument(): boolean {
-        return (this.selectedItem) && this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
+        return this.selectedItem && (this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
             (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.pdfPreviewLoaded) ||
             (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.attachedDocumentType &&
-                (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image'));
+                (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image')));
     }
 
     ngOnInit() {

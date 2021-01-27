@@ -225,11 +225,19 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                     flattenItem.applicableTaxes = flattenItem.applicableTaxes.map(acc => acc.uniqueName);
                 }
 
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: [...state.flattenAccounts, flattenItem]
-                };
+                if(state.flattenAccounts) {
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: [...state.flattenAccounts, flattenItem]
+                    };
+                } else {
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: [flattenItem]
+                    };
+                }
             }
             return state;
         }
@@ -261,11 +269,20 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
 
                 let flattenItem = cloneDeep(accountData.body);
                 flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: [...state.flattenAccounts, flattenItem]
-                };
+
+                if(state.flattenAccounts) {
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: [...state.flattenAccounts, flattenItem]
+                    };
+                } else {
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: [flattenItem]
+                    };
+                }
             }
             return state;
         }
@@ -294,7 +311,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
                 let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === d.request.accountUniqueName);
-                let parentGroupsLength = accountForDelete.parentGroups.length;
+                let parentGroupsLength = (accountForDelete && accountForDelete.parentGroups) ? accountForDelete.parentGroups.length : 0;
                 removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, d.request.accountUniqueName, null);
                 let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === accountForDelete.uniqueName);
                 flattenAccountsArray.splice(index, 1);
@@ -312,7 +329,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
                 let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === mAcc.queryString.accountUniqueName);
-                let parentGroupsLength = accountForDelete.parentGroups.length;
+                let parentGroupsLength = (accountForDelete && accountForDelete.parentGroups) ? accountForDelete.parentGroups.length : 0;
                 let deletedItem = removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, mAcc.queryString.accountUniqueName, null);
                 let parentPath = [];
                 addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false, parentPath);
@@ -488,16 +505,18 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
 };
 
 const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
-    for (let i = 0; i < groups.length; i++) {
-        if (groups[i].uniqueName === uniqueName) {
-            result = groups[i];
-            groups.splice(i, 1);
-            return result;
-        }
-        if (groups[i].groups) {
-            result = removeGroupFunc(groups[i].groups, uniqueName, result);
-            if (result) {
+    if(groups) {
+        for (let i = 0; i < groups.length; i++) {
+            if (groups[i].uniqueName === uniqueName) {
+                result = groups[i];
+                groups.splice(i, 1);
                 return result;
+            }
+            if (groups[i].groups) {
+                result = removeGroupFunc(groups[i].groups, uniqueName, result);
+                if (result) {
+                    return result;
+                }
             }
         }
     }

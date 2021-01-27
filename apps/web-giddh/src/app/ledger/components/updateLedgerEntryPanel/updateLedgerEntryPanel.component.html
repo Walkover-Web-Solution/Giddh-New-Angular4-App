@@ -69,7 +69,7 @@
                 <!-- region debit transaction -->
                 <div class="left-col-new bd-rr" [ngClass]="Shown ? 'active' : ''">
                     <!-- region debit transaction header -->
-                    <table class="width100 card-table">
+                    <table class="width-100 card-table">
 
                         <thead class="hidden-xs">
                             <tr class="thead-background1 row">
@@ -89,7 +89,7 @@
 
                         <tbody class="ledger-main">
                             <tr class="debit-blank-row row"
-                                *ngFor="let txn of vm.selectedLedger.transactions; let i = index; ">
+                                *ngFor="let txn of vm.selectedLedger.transactions; let i = index; trackBy: trackByFunction">
                                 <ng-container *ngIf="txn.type === 'DEBIT'">
 
                                     <td class="col-3" data-title="Date">
@@ -124,7 +124,6 @@
                                                     (selected)="selectAccount($event,txn, dbtSelect)"
                                                     [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
                                                     [ItemHeight]="67" (onShow)="dbs.hide()"
-                                                    [useInBuiltFilterForFlattenAc]="true"
                                                     [defaultValue]="txn.particular.name"
                                                     [placeholder]="'To Select Accounts'">
 
@@ -260,7 +259,7 @@
                 <div class="right-col-new" [ngClass]="isHide ? 'active' : 'right-col-new'">
 
                     <!-- region credit transaction header -->
-                    <table class="width100 card-table">
+                    <table class="width-100 card-table">
                         <thead class="xs-hidden">
                             <tr class="thead-background1 row">
                                 <th class="col-3 bd-r-top-none">
@@ -309,7 +308,6 @@
                                                     [fixedValue]="txn.particular.name"
                                                     (onShow)="cbs.hide()" [showClear]="false"
                                                     [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
-                                                    [useInBuiltFilterForFlattenAc]="true"
                                                     [defaultValue]="txn.particular.name"
                                                     [placeholder]="'By Select Accounts'">
 
@@ -430,7 +428,7 @@
         <!-- endregion -->
 
         <!-- region new entry -->
-        <div class="entrypanel width100 pt-2">
+        <div class="entrypanel width-100 pt-2">
             <!-- reverse charge transction start -->
             <div *ngIf="shouldShowRcmEntry" class="pd-b1 mt-b1 tourist-scheme-wrapper">
                 <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
@@ -452,7 +450,7 @@
             <!-- region amount and discount container -->
             <div class="clearfix">
                 <ng-container *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields">
-                    <div class="width100 total-detail-table"
+                    <div class="width-100 total-detail-table"
                         [ngClass]="{'add-multicurrency': vm.isMultiCurrencyAvailable}">
                         <!-- <div *ngIf="vm.stockTrxEntry" class="table-amount">
                           <table>
@@ -640,7 +638,7 @@
                                 <div *ngIf="vm.selectedLedger.isOtherTaxesApplicable" class="pl-1">
                                     <label>Other Tax <a href="javascript: void(0)" class="text-gray"
                                             (click)="(currentOrganizationType === 'COMPANY' && branches?.length === 1) || (currentOrganizationType === 'BRANCH') ? toggleOtherTaxesAsideMenu.emit(vm) : ''">
-                                            <i class="icon-edit11 font-12 ml-05"></i>
+                                            <i class="icon-edit11 font-12 mr-l05"></i>
                                         </a>
                                     </label>
 
@@ -741,38 +739,38 @@
                         </p>
                         <ng-template #adjustmentPopOverTemplate>
                             <div class="adjusted-info">
-                                <p class="mb-1"><strong>Adjustment</strong></p>
+                                <p class="mr-b1"><strong>Adjustment</strong></p>
                                 <p class="info-text">The selected entry is a part of {{vm.selectedLedger?.voucherNumber}}. All the
                                     adjustment will reflect
                                     to subsequent entries as well. Here we
                                     are adjusting the Invoice not just the selected entry. Please note that linked entries cannot be updated from here.</p>
                             </div>
                         </ng-template>
-                        <p class="font-12 text-light mb-1">
+                        <p class="font-12 text-light mr-b1">
                             {{ vm.baseCurrencyDetails?.symbol}}{{vm.selectedLedger?.voucherAdjustments?.totalAdjustmentAmount | giddhCurrency}}
                         </p>
                         <div class="clearfix adjustment-field">
                             <div class="row" *ngFor="let item of vm.selectedLedger?.voucherAdjustments?.adjustments; let entryIdx = index;">
-                                <div class="col-md-5 col-sm-5 pr-05">
+                                <div class="col-md-5 col-sm-5 pd-r05">
                                     <div class="form-group">
                                         <label>Adjustment Vouchers
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input id="update-ledger-adjust-voucher" type="text" class="form-control mb-1" [(ngModel)]="item.voucherNumber" disabled>
+                                        <input id="update-ledger-adjust-voucher" type="text" class="form-control mr-b1" [(ngModel)]="item.voucherNumber" disabled>
                                     </div>
                                 </div>
-                                <div class="col-md-5 col-sm-5 pl-05 pr-05">
+                                <div class="col-md-5 col-sm-5 pd-l05 pd-r05">
                                     <div class="form-group">
-                                        <label>Amount<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt" class="text-light font-12 ml-05">(Inclusive
+                                        <label>Amount<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt" class="text-light font-12 mr-l05">(Inclusive
                             Tax)</span></label>
-                                        <input id="update-ledger-inclusive-tax-edit-mode" type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
-                                        <input [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1" id="update-ledger-inclusive-tax" type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
+                                        <input id="update-ledger-inclusive-tax-edit-mode" type="text" class="form-control mr-b1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
+                                        <input [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1" id="update-ledger-inclusive-tax" type="text" class="form-control mr-b1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                     </div>
                                 </div>
-                                <div *ngIf="item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'" class="col-sm-2 pl-05">
+                                <div *ngIf="item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'" class="col-sm-2 pd-l05">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" id="update-ledger-voucher-tax" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
+                                        <input type="text" id="update-ledger-voucher-tax" class="form-control mr-b1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -789,7 +787,7 @@
                                 <i class="icon-edit11 font-10"></i>
                                 <i class="icon-info"></i>
                                 <div class="adjusted-info">
-                                    <p class="mb-1"><strong>Adjustment</strong></p>
+                                    <p class="mr-b1"><strong>Adjustment</strong></p>
                                     <p class="info-text">The selected entry is a part of Invoice# 43242. All the
                                         adjustment will reflect
                                         to subsequent entries as well. Here we
@@ -798,33 +796,33 @@
                                 <i class="icon-edit11 font-10"></i>
                             </a>
                         </p>
-                        <p class="font-12 text-light mb-1">
+                        <p class="font-12 text-light mr-b1">
                             {{ vm.baseCurrencyDetails?.symbol}}{{totalAdjustedAmount | giddhCurrency}}
                         </p>
                         <div class="clearfix adjustment-field">
                             <div class="row" *ngFor="let item of vm.selectedLedger?.voucherAdjustments?.adjustments; let entryIdx = index;">
-                                <div class="col-md-4 col-sm-5 pr-05">
+                                <div class="col-md-4 col-sm-5 pd-r05">
                                     <div class="form-group">
                                         <label>Adjustment Voucher<span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" class="form-control mb-1" name="voucherNumber"
+                                        <input type="text" class="form-control mr-b1" name="voucherNumber"
                                             [(ngModel)]="item.voucherNumber" disabled>
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-sm-5 pl-05 pr-05">
+                                <div class="col-md-4 col-sm-5 pd-l05 pd-r05">
                                     <div class="form-group">
-                                        <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 ml-05">(Inclusive
+                                        <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 mr-l05">(Inclusive
                             Tax)</span></label>
-                                        <input type="text" class="form-control mb-1" name="amountForAccount" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount"
+                                        <input type="text" class="form-control mr-b1" name="amountForAccount" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount"
                                             disabled>
-                                        <input type="text" class="form-control mb-1" name="amountForAccount" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedReceiptsAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                        <input type="text" class="form-control mr-b1" name="amountForAccount" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedReceiptsAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
                                             [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 pl-05">
+                                <div class="col-sm-2 pd-l05">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" class="form-control mb-1" name="calculatedTaxAmount"
+                                        <input type="text" class="form-control mr-b1" name="calculatedTaxAmount"
                                             decimalDigitsDirective [mask]="vm.inputMaskFormat"
                                             [prefix]="vm.selectedPrefixForCurrency"
                                             [(ngModel)]="item.calculatedTaxAmount" disabled>
@@ -841,7 +839,7 @@
                 </div>
 
                 <div class="col-md-6 font-14 pt-1 bl-1 remove-border-left-onmo">
-                    <table class="width100">
+                    <table class="width-100">
                         <tbody>
                             <tr>
                                 <td class="primary-color" (click)="getInvoiveLists(); toggleMoreDetail()">
@@ -899,7 +897,7 @@
                                                     <i class="fa fa-caret-down"></i>
                                                 </span>
                                             </button>
-                                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width100"
+                                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-2 width-100"
                                                 role="menu">
                                                 <li *ngIf="invoiceList.length==0">No results found</li>
                                                 <li *ngFor="let invoice of invoiceList">
@@ -1039,7 +1037,7 @@
                             </div>
                         </div>
                         <div class="d-flex w-100 mb-2 justify-content-between">
-                            <div class="w-100 d-flex pl-15" *ngIf="vm.isMultiCurrencyAvailable">
+                            <div class="w-100 d-flex pd-l15" *ngIf="vm.isMultiCurrencyAvailable">
                                 <ul class="list-inline d-flex font-14 currency-convertor">
 
                                     <li>
@@ -1063,7 +1061,7 @@
                                 </ul>
                             </div>
 
-                            <div class="d-flex justify-content-end w-100 pr-15" *ngIf="!isPettyCash">
+                            <div class="d-flex justify-content-end w-100 pd-r15" *ngIf="!isPettyCash">
                                 <div class="file_attached pull-right text-right"
                                     *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
                                     <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
@@ -1082,7 +1080,7 @@
                         </div>
 
                         <div class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
-                            <!--                            <div class="width-100 mb-05">-->
+                            <!--                            <div class="width-100 mr-b05">-->
                             <!--                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;-->
                             <!--                                        update them first and try again.</p>-->
                             <!--                            </div>-->
@@ -1153,8 +1151,8 @@
 <!-- endregion -->
 <!-- Tourist scheme template block-->
 <ng-template #touristSchemeTemplate>
-    <div class="font-14 mb-1 d-flex align-items-center xs-d-block" *ngIf="isTouristSchemeApplicable">
-        <div class="mr-3 xs-mr-0 mb-1">
+    <div class="font-14 mr-b1 d-flex align-items-center xs-d-block" *ngIf="isTouristSchemeApplicable">
+        <div class="mr-r3 xs-mr-0 mr-b1">
             <div class="d-flex align-items-center">
                 <span class="pull-left">
                     <input [disabled]="!isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1" id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"

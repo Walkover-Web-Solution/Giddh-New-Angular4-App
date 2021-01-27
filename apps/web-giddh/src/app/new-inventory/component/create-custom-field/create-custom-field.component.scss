@@ -1,12 +1,13 @@
 @import "../../../../assets/css/color.scss";
 
 .create-custom-field-page {
-    .icon-cross {
+    .back-to-page {
         position: absolute;
-        right: 10px;
-        top: 3px;
+        right: 5px;
+        top: 0;
         padding: 10px;
         z-index: 10;
+        color: $primary;
     }
     .custom-field-wrapper {
         min-height: 73vh;
@@ -53,11 +54,15 @@
 
 @media (max-width: 767px) {
     .create-custom-field-page {
+        .back-to-page{
+            top: -12px;
+            right: 0;
+        }
         .custom-field-wrapper {
             min-height: calc(100vh - 250px);
             form {
                 p {
-                    margin-right: 40px !important;
+                    margin-right: 60px !important;
                 }
             }
             .icon-cross {
@@ -65,6 +70,9 @@
                 right: -20px;
                 top: -10px;
                 padding: 10px;
+            }
+            .vector-image{
+                display: none;
             }
         }
     }

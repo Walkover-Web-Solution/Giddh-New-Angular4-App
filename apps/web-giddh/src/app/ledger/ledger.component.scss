@@ -198,7 +198,7 @@ input {
 }
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: "" opensans-semibold "";
+    font-family: " opensans-semibold ";
     text-transform: capitalize;
 }
 .ledger-footer-1 {
@@ -240,8 +240,9 @@ input {
 }
 .page-count {
     overflow: hidden;
-    width: 100% !important;
-    left: 0% !important;
+    width: 90% !important;
+    left: 5% !important;
+    right: 5%;
     bottom: 100px;
     background: $white;
     padding: 5px;
@@ -387,12 +388,12 @@ sh-select:focus {
     background: $white;
     padding: 0 15px 350px;
 }
-.left-col-new table.width100.h-table tbody tr td:last-child,
-.left-col-new table.width100.h-table thead tr th:last-child {
+.left-col-new table.width-100.h-table tbody tr td:last-child,
+.left-col-new table.width-100.h-table thead tr th:last-child {
     border-right: 0px !important;
 }
-.left-col-new table.width100.h-table tbody tr td:first-child,
-.left-col-new table.width100.h-table thead tr th:first-child {
+.left-col-new table.width-100.h-table tbody tr td:first-child,
+.left-col-new table.width-100.h-table thead tr th:first-child {
     border-left: 1px solid $gainsboro !important;
 }
 .custom-tabs {
@@ -434,12 +435,10 @@ sh-select:focus {
     padding: 6px 9px;
     color: $white;
 }
-.left-col-new table.width100.h-table#blank-ledger-container .no-left-border{
+.left-col-new table.width-100.h-table#blank-ledger-container .no-left-border{
     border-left: none !important;
 }
-.ledger-row input[type="checkbox"] {
-    margin-right: 15px;
-}
+
 .ledger-book .ledger-footer-1 .total-col .border-top {
     border-top: 1px solid $gainsboro !important;
 }
@@ -864,6 +863,9 @@ sh-select:focus {
         display: flex !important;
         flex-direction: column;
     }
+    .download-invoice-ledger{
+        position: absolute !important;
+    }
 }
 @media only screen and (max-width: 991px) {
     .stat-block {
@@ -937,8 +939,8 @@ sh-select:focus {
         font-size: 12px !important;
         padding: 6px;
     }
-    .left-col-new table.width100.h-table tbody tr td:first-child,
-    .left-col-new table.width100.h-table thead tr th:first-child {
+    .left-col-new table.width-100.h-table tbody tr td:first-child,
+    .left-col-new table.width-100.h-table thead tr th:first-child {
         border-left: 0px solid $gainsboro !important;
     }
     .ledg-head.some.transactions-page {
@@ -1175,7 +1177,7 @@ sh-select:focus {
         }
     }
 }
-.icon-upload-icon {
+.icon-upload {
     font-size: 16px;
 }
 .account-placeholder {
