@@ -413,5 +413,6 @@
     "app_return": "Return",
     "app_cumulative": "Cumulative",
     "app_country": "Country",
-    "app_subtotal": "Sub Total"
+    "app_subtotal": "Sub Total",
+    "app_clear_selected": "Clear Selected"
 }
