@@ -252,6 +252,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public closingBalance: number = 0;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
