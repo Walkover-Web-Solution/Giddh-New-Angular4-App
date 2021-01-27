@@ -299,7 +299,7 @@ export class SettingTriggerComponent implements OnInit {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof SettingTriggerComponent
      */
-    public onAccountSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.accountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
@@ -409,7 +409,6 @@ export class SettingTriggerComponent implements OnInit {
             this.onAccountSearchQueryChanged(
                 this.accountsSearchResultsPaginationData.query,
                 this.accountsSearchResultsPaginationData.page + 1,
-                this.accountsSearchResultsPaginationData.query ? true : false,
                 (response) => {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
@@ -460,7 +459,7 @@ export class SettingTriggerComponent implements OnInit {
      * @memberof SettingTriggerComponent
      */
     private loadDefaultAccountsSuggestions(): void {
-        this.onAccountSearchQueryChanged('', 1, false, (response) => {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
                     value: result.uniqueName,
