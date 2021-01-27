@@ -1,9 +1,8 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AgingReportActions } from '../../actions/aging-report.actions';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
@@ -27,7 +26,13 @@ import { OrganizationType } from '../../models/user-login-state';
     templateUrl: 'aging-report.component.html',
     styleUrls: ['aging-report.component.scss']
 })
+
 export class AgingReportComponent implements OnInit {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+
     public totalDueSelectedOption: string = '0';
     public totalDueAmount: number = 0;
     public includeName: boolean = false;

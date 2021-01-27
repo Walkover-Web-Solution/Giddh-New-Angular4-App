@@ -23,8 +23,11 @@ import { GeneralService } from '../../services/general.service';
     styleUrls: [`./payment-aside.component.scss`],
 })
 
-
 export class PaymentAsideComponent implements OnInit, OnChanges {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     //variable that holds registered account information
     public registeredAccounts: any;
@@ -118,7 +121,6 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public isBankSelectedForBulkPayment: boolean = false;
     /** Get all bank inprogress */
     public isGetAllIntegratedBankInProgress$: Observable<boolean>;
-
 
     constructor(
         private formBuilder: FormBuilder,
