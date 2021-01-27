@@ -221,6 +221,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
+        this.saveLastState();
         if (!this.isMobileScreen) {
             this.setDefaultGroup();
         }
