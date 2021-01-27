@@ -154,40 +154,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         msg: '',
         subject: ''
     };
-    public dataVariables = [
-        {
-            name: 'Opening Balance',
-            value: '%s_OB',
-        },
-        {
-            name: 'Closing Balance',
-            value: '%s_CB',
-        },
-        {
-            name: 'Credit Total',
-            value: '%s_CT',
-        },
-        {
-            name: 'Debit Total',
-            value: '%s_DT',
-        },
-        {
-            name: 'From Date',
-            value: '%s_FD',
-        },
-        {
-            name: 'To Date',
-            value: '%s_TD',
-        },
-        {
-            name: 'Magic Link',
-            value: '%s_ML',
-        },
-        {
-            name: 'Account Name',
-            value: '%s_AN',
-        },
-    ];
+    public dataVariables = [];
     public selectedItems: string[] = [];
     public totalSales: number = 0;
     public totalReceipts: number = 0;
@@ -321,7 +288,11 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         }
         if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
-            this._toaster.infoToast(`${this.selectedCheckedContacts.length - this.selectedAccountsList.length} out of ${this.selectedCheckedContacts.length} transactions could not be processed as bank details of those accounts are not updated.`);
+            let message = this.localeData.bank_transactions_message;
+            message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
+            message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
+
+            this._toaster.infoToast(message);
         }
         if (this.selectedAccountsList.length || this.selectedAccForPayment) {
             this.bulkPaymentModalRef = this.modalService.show(template,
@@ -666,7 +637,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
         } else {
-            this._toaster.errorToast('Please enter Cashfree details.', 'Validation');
+            this._toaster.errorToast(this.localeData.cashfree_details_required_message, 'Validation');
             return;
         }
     }
@@ -834,7 +805,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         // uncomment it
         // request.data = Object.assign({} , request.data, this.formattedQuery);
 
-        if (this.messageBody.btn.set === 'Send Email') {
+        if (this.messageBody.btn.set === this.commonLocaleData.app_send_email) {
             return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
                     r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
@@ -844,7 +815,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.selectedItems = [];
                     this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
                 });
-        } else if (this.messageBody.btn.set === 'Send Sms') {
+        } else if (this.messageBody.btn.set === this.commonLocaleData.app_send_sms) {
             let temp = request;
             delete temp.data['subject'];
             return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
@@ -878,7 +849,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public loadPaginationComponent(s) {
-        let transactionData = null;
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
         if (this.paginationChild && this.paginationChild.viewContainerRef) {
             let viewContainerRef = this.paginationChild.viewContainerRef;
@@ -1452,5 +1422,56 @@ export class ContactComponent implements OnInit, OnDestroy {
         let formattedAmount = this.currencyPipe.transform(amount);
         formattedAmount = formattedAmount.replace(/,/g, "");
         return formattedAmount;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof ContactComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.messageBody.header.email = this.commonLocaleData.app_send_email;
+            this.messageBody.header.sms = this.commonLocaleData.app_send_sms;
+
+            this.messageBody.btn.email = this.commonLocaleData.app_send_email;
+            this.messageBody.btn.sms = this.commonLocaleData.app_send_sms;
+
+            this.dataVariables = [
+                {
+                    name: this.localeData.data_variables.opening_balance,
+                    value: '%s_OB',
+                },
+                {
+                    name: this.localeData.data_variables.closing_balance,
+                    value: '%s_CB',
+                },
+                {
+                    name: this.localeData.data_variables.credit_total,
+                    value: '%s_CT',
+                },
+                {
+                    name: this.localeData.data_variables.debit_total,
+                    value: '%s_DT',
+                },
+                {
+                    name: this.localeData.data_variables.from_date,
+                    value: '%s_FD',
+                },
+                {
+                    name: this.localeData.data_variables.to_date,
+                    value: '%s_TD',
+                },
+                {
+                    name: this.localeData.data_variables.magic_link,
+                    value: '%s_ML',
+                },
+                {
+                    name: this.localeData.data_variables.account_name,
+                    value: '%s_AN',
+                }
+            ];
+        }
     }
 }

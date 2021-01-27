@@ -44,7 +44,6 @@
     "app_amount": "Amount",
     "app_select": "Select",
     "app_reset_filter": "Reset Filter",
-    "app_due_in_last_days": "Due in Last days",
     "app_result_total": "Result Total",
     "app_upcoming": "Upcoming",
     "app_customer_name": "Customer Name",
@@ -308,16 +307,16 @@
     "app_air": "Air",
     "app_ship": "Ship",
     "app_numbers": {
-        "0": "0",
-        "1": "1",
-        "2": "2",
-        "3": "3",
-        "4": "4",
-        "5": "5",
-        "6": "6",
-        "7": "7",
-        "8": "8",
-        "9": "9"
+        "zero": "0",
+        "one": "1",
+        "two": "2",
+        "three": "3",
+        "four": "4",
+        "five": "5",
+        "six": "6",
+        "seven": "7",
+        "eight": "8",
+        "nine": "9"
     },
     "app_vehicle_no": "Vehicle No",
     "app_mode": "Mode",
@@ -414,5 +413,10 @@
     "app_cumulative": "Cumulative",
     "app_country": "Country",
     "app_subtotal": "Sub Total",
-    "app_clear_selected": "Clear Selected"
+    "app_clear_selected": "Clear Selected",
+    "app_due_amount": "Due Amount",
+    "app_enter_otp": "Enter OTP",
+    "app_resend": "Resend",
+    "app_cancel_otp": "Cancel OTP",
+    "app_payment_proceed": "Payment proceed"
 }
