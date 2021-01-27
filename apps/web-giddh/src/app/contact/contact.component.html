@@ -1,4 +1,4 @@
-<div appTranslate [file]="'contact'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate [file]="'contact'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="relative">
         <hamburger-menu *ngIf="activeTab !== 'vendor'"></hamburger-menu>
         <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="activeTab === 'vendor'"></hamburger-menu>
@@ -237,7 +237,7 @@
             <!-- region Aging Report -->
             <tab heading="Aging Report" [id]="(activeTab === 'aging-report') ? 'giddh-page-heading': ''" (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
                 <!--    <div *ngIf="activeTab === 'aging'">-->
-                <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
+                <aging-report [localeData]="localeData" [commonLocaleData]="commonLocaleData" (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
                 <!--    </div>-->
             </tab>
             <!-- endregion -->
@@ -316,14 +316,13 @@
 
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
     <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-        <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
-            (getUpdateList)="getUpdatedList($event)">
+        <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState" [commonLocaleData]="commonLocaleData" (closeAsideEvent)="toggleAccountAsidePane($event)" (getUpdateList)="getUpdatedList($event)">
         </aside-menu-account>
     </div>
 
     <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
     <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-        <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment">
+        <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
         </payment-aside>
     </div>
 
