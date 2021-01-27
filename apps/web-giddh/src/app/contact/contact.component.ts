@@ -250,6 +250,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
