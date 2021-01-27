@@ -3214,7 +3214,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @param {SalesTransactionItemClass} transaction Current transaction of entry
      * @param {SalesEntryClass} entry Entry
      * @returns {SalesTransactionItemClass} Returns the complete transaction instance
-     * @memberof ProformaInvoiceComponent
+     * @memberof CreatePurchaseOrderComponent
      */
     private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true): SalesTransactionItemClass {
         let additional = _.cloneDeep(selectedAcc.additional);
