@@ -20,7 +20,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { WarehouseActions } from './warehouse/action/warehouse.action';
-import { PAGINATION_LIMIT } from '../app.constant';
+import { PAGINATION_LIMIT, SETTING_INTEGRATION_TABS } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
@@ -46,7 +46,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCompanyProfileUpdated: boolean = false;
     //variable to hold sub tab value inside any tab e.g. integration -> payment
-    public selectedChildTab: number = 0;
+    public selectedChildTab: number = SETTING_INTEGRATION_TABS.SMS.VALUE;
     public activeTab: string = 'taxes';
     public integrationtab: string;
     public isMobileScreen: boolean = true;
@@ -101,7 +101,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 this.activeTab = params['type'];
             } else if (params['type'] && this.activeTab !== params['type']) {
                 this.setStateDetails(params['type'], params['referrer']);
-                this.selectedChildTab = 0;
+                this.selectedChildTab = SETTING_INTEGRATION_TABS.SMS.VALUE;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
             } else {
@@ -180,18 +180,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     public assignChildtabForIntegration(childTab: string): number {
         switch (childTab) {
-            case 'payment':
-                return 4;
-            case 'ecommerce':
-                return 3;    
-            case 'collection':
-                return 2;
-            case 'email':
-                return 1;
-            case 'sms':
-                return 0;
+            case SETTING_INTEGRATION_TABS.PAYMENT.LABEL:
+                return SETTING_INTEGRATION_TABS.PAYMENT.VALUE;
+            case SETTING_INTEGRATION_TABS.E_COMMERCE.LABEL:
+                return SETTING_INTEGRATION_TABS.E_COMMERCE.VALUE;
+            case SETTING_INTEGRATION_TABS.COLLECTION.LABEL:
+                return SETTING_INTEGRATION_TABS.COLLECTION.VALUE;
+            case SETTING_INTEGRATION_TABS.EMAIL.LABEL:
+                return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
+            case SETTING_INTEGRATION_TABS.SMS.LABEL:
+                return SETTING_INTEGRATION_TABS.SMS.VALUE;
             default:
-                return 0;
+                return SETTING_INTEGRATION_TABS.SMS.VALUE;
         }
     }
 

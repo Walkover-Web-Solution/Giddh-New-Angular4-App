@@ -280,3 +280,12 @@ export const RESTRICTED_BRANCH_ROUTES = [
 export const SUPPORT_TEAM_NUMBERS = [
     "+918889500411", "+918889500350", "+918889378604"
 ];
+
+/** Settings integration tabs */
+export const SETTING_INTEGRATION_TABS = {
+    SMS: { LABEL: 'sms', VALUE: 0 },
+    EMAIL: { LABEL: 'email', VALUE: 1 },
+    COLLECTION: { LABEL: 'collection', VALUE: 2 },
+    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 3 },
+    PAYMENT: { LABEL: 'payment', VALUE: 4 }
+};
