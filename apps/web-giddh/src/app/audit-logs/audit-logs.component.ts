@@ -12,7 +12,6 @@ import * as moment from 'moment';
 import { GeneralService } from '../services/general.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CurrentPage } from '../models/api-models/Common';
-import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
 import { GetAuditLogsRequest } from '../models/api-models/Logs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
@@ -184,6 +183,6 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         if (this.isNewVersion && this.auditLogFormComponent) {
             this.auditLogFormComponent.resetFilters();
             this.showClearFilter = false;
-        } 
+        }
     }
 }
