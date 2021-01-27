@@ -20,7 +20,7 @@
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Vendor Name<span class="red-text">*</span></label>
                                 </div>
-                                <!-- region customer dropdown -->
+                                <!-- region vendor dropdown -->
                                 <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
@@ -30,6 +30,9 @@
                                                 [customFilter]="customMoveGroupFilter"
                                                 (selected)="onSelectVendor($event);" [placeholder]="'Select Vendor'"
                                                 [notFoundLink]="true" [doNotReset]="true"
+                                                [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('vendor')"
+                                                (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'vendor')"
+                                                [notFoundMsg]="noResultsFoundLabel" [enableDynamicSearch]="true"
                                                 [fixedValue]="purchaseOrder.account.name"
                                                 [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true"
                                                 (noResultsClicked)="addNewAccount()" [multiple]="false"
@@ -52,7 +55,7 @@
                                                 </ng-template>
 
                                             </sales-sh-select>
-                                            <!-- region Unregistered Business / customer details -->
+                                            <!-- region Unregistered Business / vendor details -->
                                             <div class="d-flex aqua-color"
                                                 *ngIf="purchaseOrder.voucherDetails.customerName">
                                                 <span class="cp aqua-color"
@@ -75,7 +78,7 @@
                                 <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Deliver From<span class="red-text">*</span></label>
                                 </div>
-                                <!-- region customer dropdown -->
+                                <!-- region vendor dropdown -->
                                 <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 select-customer-name">
                                     <section class="form-inline">
 
@@ -625,6 +628,10 @@
                                         name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                         (selected)="onSelectSalesAccount($event, transaction, entry)"
                                         [placeholder]="'Select A/c'" [notFoundLink]="true"
+                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
+                                        (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                        (onHide)="noResultsFoundLabel = 'Type to search a/c'"
+                                        [notFoundMsg]="noResultsFoundLabel" [enableDynamicSearch]="true"
                                         [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName"
                                         [forceClearReactive]="forceClear$ | async"
                                         [multiple]="false"
