@@ -221,6 +221,27 @@
         }
     }
 }
+.final-product-recipe{
+    background-color: $white;
+    padding: 15px;
+    margin-bottom: 15px;
+    .col-sm-1
+    {
+        flex: 0 0 5.333333%;
+        max-width: 5.333333%;
+    }
+    .add-expanse{
+        width: 32px;
+        height: 32px;
+    }
+    .recipe-input-tab{
+        .col-sm-3{
+            flex: 0 0 27%;
+            max-width: 27%;
+        }
+    }
+}
+
 /*responsive view*/
 @media (max-width: 1199px) {
     .pl-5 {

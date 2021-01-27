@@ -517,6 +517,215 @@
                             </div>
                         </form>
                     </tab>
+                    <tab heading="Variant">
+                        <form class="mr-b15">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <label>
+                                                Vairent 1
+                                            </label>
+                                            <!-- vaiant will be auto fill and readonly view -->
+                                            <input type="text" class="form-control" placeholder="Variant Name" readonly>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>
+                                                SKU
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="SKU">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>
+                                               Opening Balance
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Enter amount">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>
+                                                Opening Qty
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Enter Qty">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>
+                                                Rate
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Enter Rate">
+                                        </div>
+
+
+                                    </div>
+                                    <div><a href="#" class="font-14 mr-t1 d-flex"> + Add More</a></div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </tab>
+                    <tab heading="Addon">
+                        <form class="mr-b15">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <label>
+                                                Item
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Add item">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>
+                                                Quantity
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Enter Quantity">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>
+                                                Unit
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="eg. cm, kg, m, box">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>
+                                                Rate
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Enter Rate">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>
+                                                Available on vairent
+                                            </label>
+                                            <!-- All available variant list show with checkbox -->
+                                           <sh-select placeholder=""></sh-select>
+                                        </div>
+                                    </div>
+                                    <div><a href="#" class="font-14 mr-t1 d-flex"> + Add More</a></div>
+                                </div>
+                            </div>
+                        </form>
+                    </tab>
+                    <tab heading="Recipe">
+                        <form class="mr-b15">
+                            <div class="final-product-recipe">
+                                <div class="row align-items-center">
+                                    <div class="col-xl-12">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <label>
+                                                    Variant Name
+                                                </label>
+                                                <!-- All vairant list will show in dropdown -->
+                                                <sh-select placeholder=""></sh-select>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <label class="d-block">
+                                                    &nbsp;
+                                                </label>
+                                            <span class="text-primary font-14">Variant Name (linked)</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <label>
+                                                            Final Product 1
+                                                        </label>
+                                                        <input type="text" class="form-control" placeholder="Product 1">
+                                                    </div>
+                                                    <!-- final product 2 will be show if multiple product will generated by single recipe -->
+                                                    <div class="col-lg-12" hidden>
+                                                        <label>
+                                                            Final Product 2
+                                                        </label>
+                                                        <input type="text" class="form-control" placeholder="Product 1">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <label>
+                                                            Output Qty
+                                                        </label>
+                                                        <input type="text" class="form-control" placeholder="Enter Qty">
+                                                    </div>
+                                                    <div class="col-sm-5">
+                                                        <label>
+                                                            Output Unit
+                                                        </label>
+                                                        <input type="text" class="form-control" placeholder="eg. cm, kg, m, box">
+                                                    </div>
+                                                    <div class="col-sm-1 pl-0 pr-0">
+                                                        <label class="d-block">
+                                                            &nbsp;
+                                                        </label>
+                                                        <span><a href="#" class="font-22 d-flex">+</a></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 recipe-input-tab">
+                                                <div class="row">
+                                                    <div class="col-sm-1">
+                                                        <label class="d-block">
+                                                            &nbsp;
+                                                        </label>
+                                                        <span class="font-22 d-flex"> = </span>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label>
+                                                            Attribute
+                                                        </label>
+                                                        <input type="text" class="form-control" placeholder="Add item">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label>
+                                                            Input Qty
+                                                        </label>
+                                                        <input type="text" class="form-control" placeholder="Enter Qty">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label>
+                                                            Input Unit
+                                                        </label>
+                                                        <input type="text" class="form-control" placeholder="eg. cm, kg, m, box">
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <label class="d-block">
+                                                            &nbsp;
+                                                        </label>
+                                                        <a href="#" class="font-22 d-flex"> + </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row flex-column mr-t15">
+                                    <div class="text-primary cursor-pointer pd-l15 d-block mr-b1 font-14" (click)="toggleExpense()">+ Add Expense</div>
+                                    <div class="col-xl-12" *ngIf="!isExpense">
+                                        <div class="row  align-items-center">
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" placeholder="Liability/Asset A/c">
+                                            </div>
+                                            to
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" placeholder="Expense A/c">
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" placeholder="Amount">
+                                            </div>
+                                            <div class="pd cursor-pointer add-expanse d-flex justify-content-center align-items-center">
+                                                <span class="font-22 text-primary">+</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="text-primary font-14">+ Add more recipe</a>
+                        </form>
+                    </tab>
                 </tabset>
             </div>
         </div>
@@ -964,6 +1173,15 @@
                                 </div>
                             </div>
                         </form>
+                    </tab>
+                    <tab heading="Variant">
+
+                    </tab>
+                    <tab heading="Addon">
+
+                    </tab>
+                    <tab heading="Recipe">
+
                     </tab>
                 </tabset>
             </div>
@@ -1482,6 +1700,15 @@
                                 </div>
                             </div>
                         </form>
+                    </tab>
+                    <tab heading="Variant">
+
+                    </tab>
+                    <tab heading="Addon">
+
+                    </tab>
+                    <tab heading="Recipe">
+
                     </tab>
                 </tabset>
             </div>
