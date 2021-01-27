@@ -411,5 +411,7 @@
     "app_tcs": "TCS",
     "app_tds": "TDS",
     "app_return": "Return",
-    "app_cumulative": "Cumulative"
+    "app_cumulative": "Cumulative",
+    "app_country": "Country",
+    "app_subtotal": "Sub Total"
 }
