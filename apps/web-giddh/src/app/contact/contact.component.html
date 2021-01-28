@@ -823,7 +823,7 @@
 
 
     <ng-template #template>
-        <payment-aside *ngIf="isBulkPaymentShow" [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel($event)"></payment-aside>
+        <payment-aside *ngIf="isBulkPaymentShow" [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (closeModelEvent)="closeBulkPaymentModel($event)"></payment-aside>
     </ng-template>
     <!-- endregion -->
 
