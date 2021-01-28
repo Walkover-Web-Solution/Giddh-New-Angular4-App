@@ -82,7 +82,7 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     apiKey: 'AIzaSyAAvwBeHl0uuVSEVeZ3bTylwIkRGKCFvdI'
 };
 const INVOICE_ROUTES: Routes = [
-    { path: 'download-bulk-invoice', pathMatch: 'full', component: DownloadBulkInvoiceComponent, canActivate: [NeedsAuthentication], },
+
     {
         path: '',
         canActivate: [NeedsAuthentication],
@@ -98,7 +98,7 @@ const INVOICE_ROUTES: Routes = [
         ]
     },
     { path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent },
-
+    { path: 'download-bulk-invoice', pathMatch: 'full', component: DownloadBulkInvoiceComponent, canActivate: [NeedsAuthentication], },
 ];
 
 @NgModule({
