@@ -32,7 +32,7 @@ export class GroupResponse implements ICreateGroup {
 	public closingBalanceTriggerAmountType: string;
     public applicableDiscounts?: any[];
     public parentGroups?: any;
-
+    public inheritedDiscounts?: any;
 }
 
 /**
