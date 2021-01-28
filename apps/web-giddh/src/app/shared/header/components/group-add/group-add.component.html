@@ -4,43 +4,39 @@
 
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6">
-                <label>Group Name</label>
-                <!-- (change)="generateUniqueName()" -->
-                <input type="text" class="form-control" #autoFocused placeholder="Enter Group Name"
-                    formControlName="name">
+                <label>{{localeData?.group_name_label}}</label>
+                <input type="text" class="form-control" #autoFocused [placeholder]="localeData?.group_name_placeholder" formControlName="name">
             </div>
             <div class="form-group col-xs-12 col-sm-6">
-                <label>Unique Name</label>
-                <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')"
-                    UniqueNameDirective textCaseChangeDirective placeholder="Enter Unique Name"
-                    formControlName="uniqueName">
+                <label>{{commonLocaleData?.app_unique_name}}</label>
+                <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')" UniqueNameDirective textCaseChangeDirective [placeholder]="commonLocaleData?.app_unique_name_placeholder" formControlName="uniqueName">
             </div>
         </div>
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6">
-                <label for="">Balance for Trigger</label>
+                <label for="">{{localeData?.balance_for_trigger}}</label>
                 <div class="input-group width-100"
                     [ngClass]="{'clearfix': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
                     <input type="number" min="0" class="form-control text-right"
-                        formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
+                        formControlName="closingBalanceTriggerAmount" [placeholder]="commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero+'.'+commonLocaleData?.app_numbers?.zero+''+commonLocaleData?.app_numbers?.zero" />
                     <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">DR.
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">{{commonLocaleData?.app_dr?.toUpperCase()}}
                     </div>
                     <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">CR.
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">{{commonLocaleData?.app_cr?.toUpperCase()}}
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-group clearfix">
-            <label>Description</label>
-            <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description"
+            <label>{{localeData?.description_label}}</label>
+            <textarea maxlength="200" rows="5" cols="10" class="form-control" [placeholder]="localeData?.description_placeholder"
                 formControlName="description"></textarea>
         </div>
         <button class="btn btn-success pull-right" [ladda]="isCreateGroupInProcess$ | async"
-            [disabled]="!groupDetailForm.valid">Add
+            [disabled]="!groupDetailForm.valid">{{commonLocaleData?.app_add}}
         </button>
     </div>
 </form>
