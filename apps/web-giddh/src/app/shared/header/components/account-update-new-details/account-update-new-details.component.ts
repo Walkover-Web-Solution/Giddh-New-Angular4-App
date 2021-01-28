@@ -63,6 +63,10 @@ import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -160,6 +164,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isDiscountSaveDisable$: Observable<boolean> = observableOf(true);
     /** This will hold active parent group */
     public activeParentGroup: string = "";
+    /** This will hold placeholder for tax */
+    public taxNamePlaceholder: string = "";
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction, private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
         this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
@@ -432,6 +438,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 } else {
                     this.GSTIN_OR_TRN = '';
                 }
+                this.taxNamePlaceholder = this.commonLocaleData.app_enter_tax_name;
+                this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName'].label);
             }
         });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
@@ -750,7 +758,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                         this._toaster.clearAllToaster();
                         if (this.formFields['taxName']) {
-                            this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
+                            let invalidTaxName = this.commonLocaleData.app_invalid_tax_name;
+                            invalidTaxName = invalidTaxName.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                            this._toaster.errorToast(invalidTaxName);
                         }
                     }
                 });
@@ -810,12 +820,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.isMobileNumberValid = true;
             } else {
                 this.isMobileNumberValid = false;
-                this._toaster.errorToast('Invalid Contact number');
+                this._toaster.errorToast(this.localeData.invalid_contact_number);
                 ele.classList.add('error-box');
             }
         } catch (error) {
             this.isMobileNumberValid = false;
-            this._toaster.errorToast('Invalid Contact number');
+            this._toaster.errorToast(this.localeData.invalid_contact_number);
             ele.classList.add('error-box');
         }
     }
@@ -843,7 +853,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             accountRequest.mobileCode = '';
         } else {
             if(!this.isMobileNumberValid) {
-                this._toaster.errorToast('Invalid Contact number');
+                this._toaster.errorToast(this.localeData.invalid_contact_number);
                 return false;
             }
         }
@@ -1169,7 +1179,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
-            this._toaster.errorToast('Please Select at least one account');
+            this._toaster.errorToast(this.localeData.merge_account_error);
             return;
         }
     }
@@ -1183,7 +1193,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge.trim();
-        this.deleteMergedAccountModalBody = `Are you sure you want to delete ${merge} Account ?`;
+        this.deleteMergedAccountModalBody = this.localeData.delete_merged_account_content;
+        this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountModal.show();
     }
@@ -1298,7 +1309,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public showMoveMergedAccountModal() {
-        this.moveMergedAccountModalBody = `Are you sure you want to move ${this.setAccountForMove} Account to ${this.selectedAccountForMove} ?`;
+        this.moveMergedAccountModalBody = this.localeData.move_merged_account_content;
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 
@@ -1426,14 +1439,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (type === 'bankAccountNo') {
             if (this.selectedCountryCode === 'IN') {
                 if (element && element.value && element.value.length < 9) {
-                    this._toaster.errorToast('The bank account number must contain 9 to 18 characters');
+                    this._toaster.errorToast(this.commonLocaleData.app_invalid_bank_account_number);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
                 }
             } else {
                 if (element && element.value && element.value.length < 23) {
-                    this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
+                    this._toaster.errorToast(this.commonLocaleData.app_invalid_iban);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
@@ -1441,7 +1454,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         } else if (type === 'swiftCode') {
             if (element && element.value && element.value.length < 8) {
-                this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
+                this._toaster.errorToast(this.commonLocaleData.app_invalid_swift_code);
                 element.classList.add('error-box');
             } else {
                 element.classList.remove('error-box');

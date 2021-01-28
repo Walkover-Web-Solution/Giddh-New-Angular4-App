@@ -1,5 +1,5 @@
 import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
-import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -41,6 +41,10 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -148,6 +152,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         totalPages: 0,
         query: ''
     };
+    /** This will hold placeholder for tax */
+    public taxNamePlaceholder: string = "";
 
     constructor(
         private _fb: FormBuilder,
@@ -307,6 +313,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 } else {
                     this.GSTIN_OR_TRN = '';
                 }
+                this.taxNamePlaceholder = this.commonLocaleData.app_enter_tax_name;
+                this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName'].label);
             }
         });
         this.getCurrency();
@@ -538,7 +546,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                         this._toaster.clearAllToaster();
                         if (this.formFields['taxName']) {
-                            this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
+                            let invalidTaxName = this.commonLocaleData.app_invalid_tax_name;
+                            invalidTaxName = invalidTaxName.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                            this._toaster.errorToast(invalidTaxName);
                         }
                     }
                 });
@@ -598,12 +608,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.isMobileNumberValid = true;
             } else {
                 this.isMobileNumberValid = false;
-                this._toaster.errorToast('Invalid Contact number');
+                this._toaster.errorToast(this.localeData.invalid_contact_number);
                 ele.classList.add('error-box');
             }
         } catch (error) {
             this.isMobileNumberValid = false;
-            this._toaster.errorToast('Invalid Contact number');
+            this._toaster.errorToast(this.localeData.invalid_contact_number);
             ele.classList.add('error-box');
         }
     }
@@ -629,7 +639,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             accountRequest.mobileCode = '';
         } else {
             if(!this.isMobileNumberValid) {
-                this._toaster.errorToast('Invalid Contact number');
+                this._toaster.errorToast(this.localeData.invalid_contact_number);
                 return false;
             }
         }
@@ -992,14 +1002,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (type === 'bankAccountNo') {
             if (this.selectedCountryCode === 'IN') {
                 if (element && element.value && element.value.length < 9) {
-                    this._toaster.errorToast('The bank account number must contain 9 to 18 characters');
+                    this._toaster.errorToast(this.commonLocaleData.app_invalid_bank_account_number);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
                 }
             } else {
                 if (element && element.value && element.value.length < 23) {
-                    this._toaster.errorToast('The IBAN must contain 23 to 34 characters.');
+                    this._toaster.errorToast(this.commonLocaleData.app_invalid_iban);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
@@ -1007,7 +1017,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         } else if (type === 'swiftCode') {
             if (element && element.value && element.value.length < 8) {
-                this._toaster.errorToast('The SWIFT Code/BIC must contain 8 to 11 characters.');
+                this._toaster.errorToast(this.commonLocaleData.app_invalid_swift_code);
                 element.classList.add('error-box');
             } else {
                 element.classList.remove('error-box');

@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h4 class="modal-title pull-left">{{commonLocaleData?.app_payment}}</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="closePaymentModel(false)">
+    <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="closePaymentModel(false)">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
@@ -248,7 +248,7 @@
     <ng-template #successTemplate>
         <div class="modal-header">
             <h4 class="modal-title pull-left">{{localeData?.payment_status}}</h4>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="successModalRef.hide()">
+            <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="successModalRef.hide()">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>

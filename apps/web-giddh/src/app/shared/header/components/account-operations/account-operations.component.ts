@@ -38,7 +38,14 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
     templateUrl: './account-operations.component.html',
     styleUrls: [`./account-operations.component.scss`]
 })
+
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+    public groupSharedWith: string = "";
+    public accountSharedWith: string = "";
     public showAddNewAccount$: Observable<boolean>;
     public showAddNewGroup$: Observable<boolean>;
     public showEditAccount$: Observable<boolean>;
@@ -103,14 +110,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public updateAccountInProcess$: Observable<boolean>;
     public updateAccountIsSuccess$: Observable<boolean>;
     public discountList$: Observable<IDiscountList[]>;
-    public taxPopOverTemplate: string = `
-  <div class="popover-content">
-  <label>Tax being inherited from:</label>
-    <ul>
-    <li>@inTax.name</li>
-    </ul>
-  </div>
-  `;
+//     public taxPopOverTemplate: string = `
+//   <div class="popover-content">
+//   <label>Tax being inherited from:</label>
+//     <ul>
+//     <li>@inTax.name</li>
+//     </ul>
+//   </div>
+//   `;
     public moveAccountSuccess$: Observable<boolean>;
     public showDeleteMove: boolean = false;
     public isGstEnabledAcc: boolean = false;
@@ -226,10 +233,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.selectedItems = [];
         this.settings = {
             singleSelection: false,
-            text: "Select Fields",
-            selectAllText: 'Select All',
-            unSelectAllText: 'UnSelect All',
-            searchPlaceholderText: 'Search Fields',
+            text: this.localeData.select_fields,
+            selectAllText: this.commonLocaleData.app_select_all,
+            unSelectAllText: this.commonLocaleData.app_unselect_all,
+            searchPlaceholderText: this.localeData.search_fields,
             enableSearchFilter: true,
             badgeShowLimit: 5,
             groupBy: "category",
@@ -300,16 +307,16 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.showAddNewGroup$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf('Create Group') === -1) {
-                    this.breadcrumbPath.push('Create Group');
+                if (this.breadcrumbPath.indexOf(this.commonLocaleData.app_create_group) === -1) {
+                    this.breadcrumbPath.push(this.commonLocaleData.app_create_group);
                 }
             }
         });
 
         this.showAddNewAccount$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf('Create Account') === -1) {
-                    this.breadcrumbPath.push('Create Account');
+                if (this.breadcrumbPath.indexOf(this.commonLocaleData.app_create_account) === -1) {
+                    this.breadcrumbPath.push(this.commonLocaleData.app_create_account);
                 }
             }
         });
@@ -389,9 +396,22 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
 
-
         this.accountsAction.mergeAccountResponse$.subscribe(res => {
             this.selectedaccountForMerge = '';
+        });
+
+        this.activeGroupSharedWith$.subscribe(response => {
+            if(response) {
+                this.groupSharedWith = this.localeData.shared_with;
+                this.groupSharedWith = this.groupSharedWith.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+            }
+        });
+
+        this.activeAccountSharedWith$.subscribe(response => {
+            if(response) {
+                this.accountSharedWith = this.localeData.shared_with;
+                this.accountSharedWith = this.accountSharedWith.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+            }
         });
     }
 
@@ -677,7 +697,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge.trim();
-        this.deleteMergedAccountModalBody = `Are you sure you want to delete ${merge} Account ?`;
+        this.deleteMergedAccountModalBody = this.localeData.delete_merged_account_content;
+        this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountModal.show();
     }
@@ -728,13 +749,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
-            this._toaster.errorToast('Please Select at least one account');
+            this._toaster.errorToast(this.localeData.merge_account_error);
             return;
         }
     }
 
     public showMoveMergedAccountModal() {
-        this.moveMergedAccountModalBody = `Are you sure you want to move ${this.setAccountForMove} Account to ${this.selectedAccountForMove} ?`;
+        this.moveMergedAccountModalBody = this.localeData.move_merged_account_content;
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 
