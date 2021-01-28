@@ -1439,35 +1439,36 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.modelRef) {
             this.modelRef.hide();
         }
-
-        if (item && item.type === 'MENU') {
-            if (item.additional && item.additional.tab) {
-                if (item.uniqueName.includes('?')) {
-                    item.uniqueName = item.uniqueName.split('?')[0];
-                }
-                this.router.navigate([item.uniqueName], {
-                    queryParams: {
-                        tab: item.additional.tab,
-                        tabIndex: item.additional.tabIndex
+        setTimeout(() => {
+            if (item && item.type === 'MENU') {
+                if (item.additional && item.additional.tab) {
+                    if (item.uniqueName.includes('?')) {
+                        item.uniqueName = item.uniqueName.split('?')[0];
                     }
-                });
+                    this.router.navigate([item.uniqueName], {
+                        queryParams: {
+                            tab: item.additional.tab,
+                            tabIndex: item.additional.tabIndex
+                        }
+                    });
+                } else {
+                    this.router.navigate([item.uniqueName]);
+                }
             } else {
-                this.router.navigate([item.uniqueName]);
+                // direct account scenario
+                let url = `ledger/${item.uniqueName}`;
+                // if (!this.isLedgerAccSelected) {
+                //   this.navigateToUser = true;
+                // }
+                if (!isCtrlClicked) {
+                    this.router.navigate([url]); // added link in routerLink
+                }
             }
-        } else {
-            // direct account scenario
-            let url = `ledger/${item.uniqueName}`;
-            // if (!this.isLedgerAccSelected) {
-            //   this.navigateToUser = true;
-            // }
-            if (!isCtrlClicked) {
-                this.router.navigate([url]); // added link in routerLink
-            }
-        }
-        // save data to db
-        item.time = +new Date();
-        let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
-        this.doEntryInDb(entity, item, fromInvalidState);
+            // save data to db
+            item.time = +new Date();
+            let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
+            this.doEntryInDb(entity, item, fromInvalidState);
+        }, 200);
     }
 
     public filterCompanyList(ev) {
