@@ -7,14 +7,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DownloadBulkInvoiceComponent implements OnInit {
     /* it will store current page url */
-    public currentPageUrl: string = '';
+    public downloadUrl: string = '';
 
-    constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-    ){}
+    constructor(private route: ActivatedRoute) {
+
+    }
 
     public ngOnInit() {
-        this.currentPageUrl = this.router.url;
+        this.route.queryParams.subscribe(response => {
+            if(response && response.url) {
+                this.downloadUrl = response.url;
+            }
+        });
     }
 }
