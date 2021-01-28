@@ -7,7 +7,7 @@
         <span class="row mr-0 ml-0">
             <h3 class="modal-title bg pd-t05">Manage Groups &amp; Accounts</h3>
         </span>
-        <div class="pull-right mr-3 search-bar-wrapper">
+        <div class="pull-right mr-r3 search-bar-wrapper">
             <div class="form-inline">
                 <div class="form-group search-bar">
                     <input type="text" name="grpSrch" #grpSrch id="grpSrch" [(ngModel)]="searchString" (keyup)="searchGroups(grpSrch.value)" class="form-control" placeholder="Search accounts" trial-accordion="search" [style.width.px]="260" />
@@ -39,7 +39,7 @@
                         <div>
                             <!-- ngIf: showListGroupsNow -->
                             <perfect-scrollbar #perfectdirective class="scroll-container" fxFlex="auto" [config]="config" [scrollIndicators]="true">
-                                <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}" class="wrapAccountSidebar">
+                                <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}" class="wrap-account-sidebar">
                                     <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}" [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
                                         [groups]="(groupList$ | async)" (breadcrumbPathChanged)="breadcrumbPathChanged($event)" (resetSearchString)="resetGroupSearchString(false)" (ScrollToRight)="ScrollToRight()" [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
                                 </div>
