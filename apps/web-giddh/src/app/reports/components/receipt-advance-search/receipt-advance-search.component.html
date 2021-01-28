@@ -1,7 +1,7 @@
 <div class="clearfix">
     <div class="modal-header">
         <h4 class="modal-title bg pull-left">{{commonLocaleData?.app_advance_search}}</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal.emit()">
+        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close" (click)="closeModal.emit()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>

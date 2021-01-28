@@ -81,6 +81,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public selectedRowIndex: number = null;
     /* To check form value validation */
     public isCustomFormValid: boolean = true;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	// tslint:disable-next-line:no-empty
     constructor(
@@ -239,11 +243,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                     this.updateModeLength = customFieldResponse.length;
                     this.renderCustomField(customFieldResponse);
                     if (operationType === 'create') {
-                        this.toasterService.successToast('Custom field created successfully');
+                        this.toasterService.successToast(this.localeData.custom_field_created);
                     } else if (operationType === 'delete') {
-                        this.toasterService.successToast('Custom field deleted successfully');
+                        this.toasterService.successToast(this.localeData.custom_field_deleted);
                     } else {
-                        this.toasterService.successToast('Custom field updated successfully');
+                        this.toasterService.successToast(this.localeData.custom_field_updated);
                     }
                 } else {
                     this.toasterService.errorToast(response.message);
@@ -345,7 +349,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         if (this.customFieldForm.valid) {
             customRow.push(this.initNewCustomField(null));
         } else {
-            this.toasterService.warningToast('Please fill all mandatory field');
+            this.toasterService.warningToast(this.localeData.fill_mandatory_fields);
         }
         return;
     }
@@ -420,16 +424,16 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.isCustomFormValid = true;
         if (type === 'name') {
             if (row.controls[index] && row.controls[index].get('key') && row.controls[index].get('key').value && row.controls[index].get('key').value.length > 50) {
-                this.toasterService.errorToast('Name can not be greater than 50 characters');
+                this.toasterService.errorToast(this.localeData.name_length_validation);
                 this.isCustomFormValid = false;
             }
         } else {
             if (row.controls[index].get('dataType').value === 'NUMERIC' && row.controls[index].get('valueLength').value > 30) {
-                this.toasterService.warningToast('Length can not be greater than 30 for type number');
+                this.toasterService.warningToast(this.localeData.number_length_validation);
                 this.isCustomFormValid = false;
 
             } else if (row.controls[index].get('dataType').value === 'STRING' && row.controls[index].get('valueLength').value > 150) {
-                this.toasterService.warningToast('Length can not be greater than 150 for type string');
+                this.toasterService.warningToast(this.localeData.string_length_validation);
                 this.isCustomFormValid = false;
             }
         }
