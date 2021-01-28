@@ -426,3 +426,16 @@ hr {
 .rotate-90 {
     transform: rotate(-90deg);
 }
+
+.calendar-dropdown-menu{
+    z-index:10; 
+    min-height:290px;
+}
+
+.btn-span{
+    margin: 5px 10px;
+}
+
+.width-200{
+    width: 200px;
+}

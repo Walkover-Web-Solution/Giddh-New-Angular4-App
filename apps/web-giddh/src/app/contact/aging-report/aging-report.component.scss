@@ -182,10 +182,15 @@ tr.aging-table-top td {
     .pagination-wrapper {
         margin-bottom: 0px;
     }
-    .wrap-searching-aging .max250 {
-        max-width: calc(100% - 30px);
-        width: 100%;
-    }
+    .wrap-searching-aging{
+        .max250 {
+            max-width: calc(100% - 30px);
+            width: 100%;
+            .form-control{
+                width:210px !important;
+            }
+        }
+    } 
     .wrap-searching-aging .max250.default-width {
         max-width: calc(100% - 90px);
         width: 100%;

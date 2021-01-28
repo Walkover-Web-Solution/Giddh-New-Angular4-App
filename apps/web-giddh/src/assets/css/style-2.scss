@@ -4844,8 +4844,12 @@ label {
     margin-left: 255px;
 }
 
-.height100 {
-    height: 100%;
+.height-100 {
+    height: 100% !important;
+    min-height: 100%;
+}
+
+.min-height{
     min-height: 100%;
 }
 
@@ -6335,7 +6339,7 @@ table td[class*=col-]:last-child {
     border: 0 !important;
 } */
 
-.select2-ledger sh-select .selectedVal {
+.select2-ledger sh-select .selected-val {
     border: 0 !important;
 }
 
@@ -7862,6 +7866,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 
 .border-radius-0 {
     font-family: "opensans-regular";
+    border-radius: 0 !important;
 }
 
 .border-radius-0 small.mr-t05.mr-b05.grey {
@@ -8036,11 +8041,11 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     padding-left: 0 !important;
 }
 
-/* .custom-select input.form-control.selectedVal.cp {
+/* .custom-select input.form-control.selected-val.cp {
   padding-right: 0 !important;
 } */
 
-.welcome-container .select-box .custom-select input.form-control.selectedVal.cp,
+.welcome-container .select-box .custom-select input.form-control.selected-val.cp,
 .welcome-container .select-box input,
 .welcome-container .select-box textarea {
     color: $night-rider;
@@ -9434,7 +9439,7 @@ span#HW_badge_cont:nth-child(3) {
 #update-ledger-voucher-type-default.disabled-ledger, #update-ledger-assign-tag.disabled-ledger{
     .sh-select-disabled{
         background-color: $whisper-light !important;
-        input.selectedVal.form-control, input[disabled]{
+        input.selected-val.form-control, input[disabled]{
                 background-color: $whisper-light !important;
         }
     }

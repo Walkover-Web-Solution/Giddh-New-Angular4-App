@@ -3662,7 +3662,11 @@ tr.db-bnk-account > td.reconnectDiv {
 }
 
 .right0 {
-    right: 0px;
+    right: 0px !important;
+}
+
+.width-2000{
+    width: 2000px !important;
 }
 
 .filter-btn {

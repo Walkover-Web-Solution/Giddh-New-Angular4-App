@@ -1,5 +1,5 @@
 <div class="accounts-side-bar grey-bg wrapAcList" ng-click="$event.stopPropagation()">
-    <div *ngIf="flyAccounts" style="height: 100%" class="wrapAcList" id="grp_acc_wrapper">
+    <div *ngIf="flyAccounts" class="wrapAcList h-100" id="grp_acc_wrapper">
         <div class="pd-1 wrapAcList" *ngIf="(isFlyAccountInProcess$ | async)">
             Loading Accounts...
         </div>
