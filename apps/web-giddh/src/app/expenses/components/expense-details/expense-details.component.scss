@@ -108,6 +108,11 @@ span.close-modal.cp.pull-right {
     overflow-y: auto;**/
     background: $white;
 }
+
+.list-item{
+    border-bottom: 1px solid $gainsboro;
+}
+
 @media only screen and (max-width: 1440px) {
     .pettycash {
         height: initial;

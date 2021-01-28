@@ -148,7 +148,7 @@
 button[aria-expanded="true"] i {
     color: $dark-gray;
 }
-.stockDiscription {
+.stock-description {
     white-space: normal;
 }
 /* voucher type DDL */
@@ -213,4 +213,8 @@ button.btn.btn-filter {
 .job-work-content {
     width: 100%;
     justify-content: space-between;
+}
+
+.margin-datepicker{
+    margin-top: -7px !important;
 }
