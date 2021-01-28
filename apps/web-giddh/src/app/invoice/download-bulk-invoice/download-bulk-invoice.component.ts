@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,7 +5,6 @@ import { Component, OnInit } from '@angular/core';
     templateUrl: './download-bulk-invoice.component.html',
     styleUrls: ['./download-bulk-invoice.component.scss'],
 })
-
 export class DownloadBulkInvoiceComponent implements OnInit {
 
     public ngOnInit() {
