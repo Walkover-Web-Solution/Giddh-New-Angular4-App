@@ -43,7 +43,10 @@ import { cloneDeep } from '../../../lodash-optimized';
 })
 
 export class ExpenseDetailsComponent implements OnInit, OnChanges {
-
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public modalRef: BsModalRef;
     public approveEntryModalRef: BsModalRef;
     public message: string;
@@ -99,6 +102,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     public imgAttachedFileName = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will hold creator name */
+    public byCreator: string = '';
 
     constructor(private modalService: BsModalService,
         private _toasty: ToasterService,
@@ -161,6 +166,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
         this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
+        this.buildCreatorString();
     }
 
     public preFillData(res: PettyCashResonse) {
@@ -235,7 +241,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
     public approveEntry() {
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
-            this._toasty.errorToast('Please Select ' + this.entryAgainstObject.base + '  for entry..');
+            let errorMessage = this.localeData.entry_against_error;
+            errorMessage = errorMessage.replace("[ENTRY_AGAINST]", this.entryAgainstObject.base);
+            this._toasty.errorToast(errorMessage);
             this.hideApproveConfirmPopup(false);
             return;
         }
@@ -321,6 +329,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             this.selectedItem = changes['selectedRowItem'].currentValue;
             this.store.dispatch(this._expenceActions.getPettycashEntryRequest(this.selectedItem.uniqueName));
             this.store.dispatch(this._ledgerActions.setAccountForEdit(this.selectedItem.baseAccount.uniqueName || null));
+            this.buildCreatorString();
         }
     }
 
@@ -368,7 +377,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
                 this.imgAttachedFileName = output.file.response.body.name;
                 this.imageURL.push(img);
                 // this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
-                this._toasty.successToast('file uploaded successfully.');
+                this._toasty.successToast(this.localeData.file_upload_success);
                 // this.startUpload();
             } else {
                 this._toasty.errorToast(output.file.response.message, output.file.response.code);
@@ -459,5 +468,19 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
     private isCashBankAccount(uniqueName) {
         return this.cashAndBankAccountsOptions.some(s => s.value === uniqueName);
+    }
+
+    /**
+     * This will build the creator name string
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public buildCreatorString(): void {
+        if(this.selectedItem && this.selectedItem.createdBy) {
+            this.byCreator = this.localeData.by_creator;
+            this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedItem.createdBy.name);
+        } else {
+            this.byCreator = "";
+        }
     }
 }

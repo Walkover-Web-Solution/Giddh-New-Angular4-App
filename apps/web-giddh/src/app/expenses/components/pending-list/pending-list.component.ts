@@ -20,7 +20,10 @@ import * as moment from 'moment/moment';
 })
 
 export class PendingListComponent implements OnInit, OnChanges {
-
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public expensesItems: ExpenseResults[] = [];
     public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
@@ -122,7 +125,7 @@ export class PendingListComponent implements OnInit, OnChanges {
 
     public async approveEntry() {
         if (!this.selectedEntryForApprove.baseAccount.uniqueName) {
-            this._toasty.errorToast('Please Select Base Account First For Approving An Entry...');
+            this._toasty.errorToast(this.localeData.approve_entry_error);
             this.hideApproveConfirmPopup(false);
             return;
         }
@@ -256,5 +259,20 @@ export class PendingListComponent implements OnInit, OnChanges {
         while ((c = c.parentNode) && c !== p) {
         }
         return !!c;
+    }
+
+    /**
+     * This will replace the search field title
+     *
+     * @param {string} title
+     * @returns {string}
+     * @memberof PendingListComponent
+     */
+    public replaceTitle(title: string): string {
+        if(this.localeData && this.localeData.search_field) {
+            return this.localeData.search_field.replace("[FIELD]", title);
+        } else {
+            return title;
+        }
     }
 }
