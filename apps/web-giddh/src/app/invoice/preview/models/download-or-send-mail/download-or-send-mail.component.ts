@@ -16,20 +16,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'download-or-send-mail-invoice',
     templateUrl: './download-or-send-mail.component.html',
-    styles: [`
-    .dropdown-menu {
-      width: 400px;
-    }
-
-    .dropdown-menu .form-group {
-      padding: 20px;
-      margin-bottom: 0
-    }
-
-    .dropdown-menu.open {
-      display: block
-    }
-  `]
+    styleUrls: ['./download-or-send-mail.component.scss']
 })
 
 export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {

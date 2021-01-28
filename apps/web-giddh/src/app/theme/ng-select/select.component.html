@@ -44,7 +44,7 @@
 
     </div>
     <div class="single" *ngIf="isTypeAheadMode">
-        <div class="option" style="width:100%;">
+        <div class="option w-100">
             <input #filterInput autocomplete="off" tabindex="0" [placeholder]="placeholderView"
                 [value]="optionList.hasSelected ? optionList.selection[0].label : ''"
                 (input)="onFilterInput($event.target.value)" (keydown)="onTypeAheadFilterKeydown($event)"

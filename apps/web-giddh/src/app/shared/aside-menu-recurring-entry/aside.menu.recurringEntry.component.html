@@ -29,8 +29,8 @@
 
 			<div class="form-group ng-select-wrap select-list select-group">
 				<label class="mr-b1">Interval<span class="text-danger">*</span></label>
-				<ng-select placeholder="Select Interval" filterPlaceholder="Type to search..."
-					formControlName="duration" name="duration" [options]="intervalOptions" style="width:100%">
+				<ng-select placeholder="Select Interval" filterPlaceholder="Type to search..." class="w-100"
+					formControlName="duration" name="duration" [options]="intervalOptions">
 					<ng-template #optionTemplate let-option="option">
 						<div class="account-list-item">{{option?.label}}</div>
 						<div class="account-list-item font-12">{{option?.value}}</div>

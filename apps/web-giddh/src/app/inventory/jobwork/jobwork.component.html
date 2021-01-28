@@ -20,7 +20,7 @@
                                 <span *ngIf="type==='person'"
                                     class="report-info"><span>{{nameStockOrPerson}}</span></span>
                             </h2>
-                            <div class="form-group" style="margin-top: -7px;">
+                            <div class="form-group date-picker-margin">
                                 <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                                     class="form-control date-range-picker"
                                     (applyDaterangepicker)="dateSelected($event)" />
@@ -41,7 +41,7 @@
                                 <span class="icon-cross"></span> Clear Filter
                             </button>
                         </div>
-                        <div class="">
+                        <div>
                             <div class="pull-right">
                                 <div class="btn-group " dropdown placement="bottom right">
                                     <button id="buttonalignment" dropdownToggle type="button"

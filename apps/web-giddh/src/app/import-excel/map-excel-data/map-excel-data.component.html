@@ -62,8 +62,7 @@
                     <span
                         [ngStyle]="{'color': mandatoryHeadersCount === mandatoryHeadersModel.length ? '#00b503' : '#adadad'}">
                         {{ mandatoryHeadersCount }}</span>/{{ mandatoryHeadersModel.length }} done.</span>
-                &nbsp;<span *ngIf="mandatoryHeadersCount === mandatoryHeadersModel.length"
-                    style="color: #00b503">Successful.</span>
+                &nbsp;<span *ngIf="mandatoryHeadersCount === mandatoryHeadersModel.length" class="success-label">Successful.</span>
             </p>
         </div>
 

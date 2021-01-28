@@ -115,14 +115,14 @@ i.close.icon.clear:hover::after {
     color: $black;
 }
 
-.sh-select-disabled .selectedVal,
+.sh-select-disabled .selected-val,
 .sh-select-disabled .form-control {
     background: $whisper-light !important;
     pointer-events: none;
     cursor: not-allowed;
 }
 
-.selectedVal {
+.selected-val {
     border: 1px solid $light-gray !important;
     padding-right: 5px !important;
     background: $white !important;

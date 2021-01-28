@@ -42,7 +42,7 @@
                 <div *ngIf="selectedField === 'signature' && signatureOptions === 'image'" class="uplode-logo">
                     <div class="form-group">
                         <label [hidden]="isSignatureAttached">
-                            <input type="file" style="display: none;" name="bulkUploadfileInput"
+                            <input type="file" class="d-none" name="bulkUploadfileInput"
                                 id="bulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
                                 [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                             <label class="cp font-16 text-gray font-14" for="bulkUploadfileInput">
@@ -117,7 +117,7 @@
                 <small>Note: All the selected invoices will be updated with new information and you cannot undo this.</small>
             </div>
         </div>
-        <div class="modal-footer d-flex" style="justify-content: flex-start">
+        <div class="modal-footer d-flex justify-content-start">
             <button class="btn btn-success" (click)="updateBulkInvoice();" [ladda]="updateInProcess" [disabled]="bulkUpdateForm.invalid">Update</button>
             <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
         </div>

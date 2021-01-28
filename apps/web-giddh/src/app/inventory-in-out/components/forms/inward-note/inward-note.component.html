@@ -142,7 +142,7 @@
 
                             <div formGroupName="manufacturingDetails">
 
-                                <div class="row" style="padding-top: 5px">
+                                <div class="row pd-r05">
                                     <div class="col-xs-4">
                                         <label class="font-14">Output Qty <sup>*</sup></label>
                                     </div>
@@ -163,7 +163,7 @@
                                             [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
                                     </div>
 
-                                    <div class="col-xs-3" style="display: flex;align-items: center;height: 30px"
+                                    <div class="col-xs-3 d-flex align-items-center height-30"
                                         *ngIf="manufacturingDetails.controls['manufacturingQuantity'].value">
                                         <label>&nbsp;</label>
                                         <span class="d-block"><strong>= (

@@ -176,7 +176,7 @@
 
 <!--quick account popup -->
 <div bsModal #quickAccountModal="bs-modal" [config]="{ backdrop: false }" class="modal" role="dialog">
-    <div class="modal-dialog modal-sm" style="width: 298px">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
         </div>
@@ -185,7 +185,7 @@
 
 <!-- Cheque Detail Modal-->
 <div bsModal #chequeEntryModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-    <div class="modal-dialog modal-sm" style="width: 298px">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <form autocomplete="off" novalidate name="chequeDetailForm" [formGroup]="chequeDetailForm"
                 class="new-account-form" (submit)="onSubmitChequeDetail()">

@@ -55,8 +55,7 @@
                             <label>State <span class="red-text">*</span></label>
                             <sh-select #states [options]="statesSource$ | async" required [isRequired]="true" [isFilterEnabled]="true"
                                 [disabled]="disableState" [defaultValue]="selectedState"
-                                [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode"
-                                style="width:100%"></sh-select>
+                                [(ngModel)]="billingDetailsObj.stateCode" id="stateCode" name="stateCode" class="width-100"></sh-select>
                         </div>
                         <div class="form-group">
                             <label>Address</label>

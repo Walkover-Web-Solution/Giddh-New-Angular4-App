@@ -535,6 +535,15 @@ small {
     align-items: center;
     display: flex;
 }
+
+.form-inline{
+    width: 80px;
+}
+
+.mobile-no-width{
+    width: calc(100% - 80px);
+}
+
 @media only screen and (max-width: 767px) {
     .giddh-login {
         margin: 0 auto;

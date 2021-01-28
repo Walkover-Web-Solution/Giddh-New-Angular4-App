@@ -45,6 +45,10 @@
     position: relative;
     margin-top: 15px;
 }
+.label-modal{
+    margin-top: 3px;
+    margin-left: 2px;
+}
 @media (max-width: 768px) {
     :host {
         max-width: 600px;
