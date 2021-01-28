@@ -85,7 +85,7 @@
 
     <section>
         <div class="mobile-card-wrapper">
-            <table class="table basic on-mobile-view table-responsive" [ngClass]="{'mb-100': stockReport && stockReport.transactions && stockReport.transactions.length>6}">
+            <table class="table basic on-mobile-view table-responsive" [ngClass]="{'mr-b100': stockReport && stockReport.transactions && stockReport.transactions.length>6}">
                 <thead>
                     <tr>
                         <th colspan="3" width="40%">
@@ -368,7 +368,7 @@
                             <h4 class="text-light text-left">Profit/Loss</h4>
                         </div>
                         <div class="col-12 p-0">
-                            <h4 class="text-purple text-left">&nbsp;{{stockReport.profit | giddhCurrency}} ({{dateRangePickerCmp.value | replaceHyphens}})</h4>
+                            <h4 class="text-purple text-left">&nbsp;{{stockReport.profit | giddhCurrency}} ({{selectedDateRangeUi | replaceHyphens}})</h4>
                         </div>
                     </div>
                     </div>
@@ -447,7 +447,7 @@
 </section>
 <!-- aside menu section -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<aside-pane [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
+<aside-pane *ngIf="asideMenuState === 'in'" [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
 <!-- aside menu section -->
 
 <!-- Advance search popup -->
@@ -522,7 +522,7 @@
 <ng-template #template>
     <div class="recept-modal">
         <div class="modal-body">
-            <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode">
+            <new-branch-transfer (hideModal)="hideModal($event)" [branchTransferMode]="branchTransferMode">
             </new-branch-transfer>
         </div>
     </div>

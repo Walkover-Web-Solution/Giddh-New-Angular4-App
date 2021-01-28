@@ -198,7 +198,7 @@
 
     <section class="bottom-button-display">
         <div class="mobile-card-wrapper">
-            <table class="table basic table-border inventory-stock-table on-mobile-view table-responsive" [ngClass]="{'mb-100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
+            <table class="table basic table-border inventory-stock-table on-mobile-view table-responsive" [ngClass]="{'mr-b100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
                 <thead>
                     <tr>
                         <!-- in case of all entity with group -->
@@ -569,7 +569,7 @@
 </section>
 <!-- aside new stock/group/unit pane -->
 <div class="aside-overlay" *ngIf="asidePaneState === 'in'"></div>
-<aside-pane [class]="asidePaneState" [@slideInOut]="asidePaneState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
+<aside-pane *ngIf="asidePaneState === 'in'" [class]="asidePaneState" [@slideInOut]="asidePaneState" (closeAsideEvent)="toggleAsidePane()"></aside-pane>
 <!-- aside new stock/group/unit -->
 
 <!-- aside inwards/outwards/transfer pane -->
@@ -644,7 +644,7 @@
 <ng-template #template>
     <div class="recept-modal">
         <div class="modal-body">
-            <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode">
+            <new-branch-transfer (hideModal)="hideModal($event)" [branchTransferMode]="branchTransferMode">
             </new-branch-transfer>
         </div>
     </div>
