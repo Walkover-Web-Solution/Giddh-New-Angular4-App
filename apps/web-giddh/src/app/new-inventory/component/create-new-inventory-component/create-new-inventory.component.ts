@@ -22,7 +22,7 @@ export class CreateNewInventoryComponent implements OnInit {
     public isCombo: boolean = false;
     public isBulkCreation: boolean = false;
     public formGroupRadio: FormGroup;
-    /* this will store expanse boolean value */
+    /* this will store expense boolean value */
     public isExpense: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

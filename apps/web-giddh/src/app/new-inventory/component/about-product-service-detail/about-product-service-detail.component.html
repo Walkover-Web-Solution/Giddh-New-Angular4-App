@@ -385,13 +385,13 @@
                                                     <label>
                                                         Opening Qty
                                                     </label>
-                                                    <input type="text" id="vairant-qty" class="form-control" placeholder="Enter Qty" readonly>
+                                                    <input type="text" id="variant-qty" class="form-control" placeholder="Enter Qty" readonly>
                                                 </div>
                                                 <div class="col-xl-2 col-md-6">
                                                     <label>
                                                         Rate
                                                     </label>
-                                                    <input type="text" id="vairant-rate" class="form-control" placeholder="Enter Rate" readonly>
+                                                    <input type="text" id="variant-rate" class="form-control" placeholder="Enter Rate" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -413,7 +413,7 @@
                                                     <label>
                                                         Quantity
                                                     </label>
-                                                    <input type="text" id="addone-qty" class="form-control" placeholder="Enter Quantity" readonly>
+                                                    <input type="text" id="addon-qty" class="form-control" placeholder="Enter Quantity" readonly>
                                                 </div>
                                                 <div class="col-xl-2 col-md-6">
                                                     <label>
@@ -450,7 +450,7 @@
                                                             <label>
                                                                 Variant Name
                                                             </label>
-                                                            <!-- All vairant list will show in dropdown -->
+                                                            <!-- All variant list will show in dropdown -->
                                                             <sh-select placeholder="" id="variant-name"></sh-select>
                                                         </div>
                                                         <div>
@@ -524,19 +524,19 @@
                                             </div>
                                         </div>
                                         <div class="row flex-column mr-t15">
-                                            <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expanse-form" *ngIf="!isExpense">
+                                            <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expense-form" *ngIf="!isExpense">
 
                                                 <div class="width-30-percent">
-                                                    <input type="text" id="expanse-assets" class="form-control" placeholder="Liability/Asset A/c" readonly>
+                                                    <input type="text" id="expense-assets" class="form-control" placeholder="Liability/Asset A/c" readonly>
                                                 </div>
                                                 <span class="to-span"> to </span>
                                                 <div class="width-30-percent">
-                                                    <input type="text" id="expanse-account" class="form-control" placeholder="Expense A/c" readonly>
+                                                    <input type="text" id="expense-account" class="form-control" placeholder="Expense A/c" readonly>
                                                 </div>
                                                 <div class="width-30-percent">
-                                                    <input id="expanse-amount" type="text" class="form-control" placeholder="Amount" readonly>
+                                                    <input id="expense-amount" type="text" class="form-control" placeholder="Amount" readonly>
                                                 </div>
-                                                <div class="cursor-pointer add-expanse d-flex justify-content-center align-items-center">
+                                                <div class="cursor-pointer add-expense d-flex justify-content-center align-items-center">
                                                     <span class="font-22 text-primary pd-l05 pd-r05">+</span>
                                                 </div>
 
@@ -794,13 +794,13 @@
                                                     <label>
                                                         Opening Qty
                                                     </label>
-                                                    <input type="text" id="service-vairant-qty" class="form-control" placeholder="Enter Qty" readonly>
+                                                    <input type="text" id="service-variant-qty" class="form-control" placeholder="Enter Qty" readonly>
                                                 </div>
                                                 <div class="col-xl-2 col-md-6">
                                                     <label>
                                                         Rate
                                                     </label>
-                                                    <input type="text" id="service-vairant-rate" class="form-control" placeholder="Enter Rate" readonly>
+                                                    <input type="text" id="service-variant-rate" class="form-control" placeholder="Enter Rate" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -822,7 +822,7 @@
                                                     <label>
                                                         Quantity
                                                     </label>
-                                                    <input type="text" id="service-addone-qty" class="form-control" placeholder="Enter Quantity" readonly>
+                                                    <input type="text" id="service-addon-qty" class="form-control" placeholder="Enter Quantity" readonly>
                                                 </div>
                                                 <div class="col-xl-2 col-md-6">
                                                     <label>
@@ -860,7 +860,7 @@
                                                             <label>
                                                                 Variant Name
                                                             </label>
-                                                            <!-- All vairant list will show in dropdown -->
+                                                            <!-- All variant list will show in dropdown -->
                                                             <sh-select placeholder="" id="service-variant-name"></sh-select>
                                                         </div>
                                                         <div>
@@ -940,21 +940,21 @@
                                             </div>
                                         </div>
                                         <div class="row flex-column mr-t15">
-                                            <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expanse-form"
+                                            <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expense-form"
                                                 *ngIf="!isExpense">
 
                                                 <div class="width-30-percent">
-                                                    <input type="text" id="service-expanse-assets" class="form-control" placeholder="Liability/Asset A/c"
+                                                    <input type="text" id="service-expense-assets" class="form-control" placeholder="Liability/Asset A/c"
                                                         readonly>
                                                 </div>
                                                 <span class="to-span"> to </span>
                                                 <div class="width-30-percent">
-                                                    <input type="text" id="service-expanse-account" class="form-control" placeholder="Expense A/c" readonly>
+                                                    <input type="text" id="service-expense-account" class="form-control" placeholder="Expense A/c" readonly>
                                                 </div>
                                                 <div class="width-30-percent">
-                                                    <input id="service-expanse-amount" type="text" class="form-control" placeholder="Amount" readonly>
+                                                    <input id="service-expense-amount" type="text" class="form-control" placeholder="Amount" readonly>
                                                 </div>
-                                                <div class="cursor-pointer add-expanse d-flex justify-content-center align-items-center">
+                                                <div class="cursor-pointer add-expense d-flex justify-content-center align-items-center">
                                                     <span class="font-22 text-primary pd-l05 pd-r05">+</span>
                                                 </div>
 
@@ -1229,14 +1229,14 @@
                                                     <label>
                                                         Opening Qty
                                                     </label>
-                                                    <input type="text" id="service-vairant-qty" class="form-control" placeholder="Enter Qty"
+                                                    <input type="text" id="service-variant-qty" class="form-control" placeholder="Enter Qty"
                                                         readonly>
                                                 </div>
                                                 <div class="col-xl-2 col-md-6">
                                                     <label>
                                                         Rate
                                                     </label>
-                                                    <input type="text" id="service-vairant-rate" class="form-control"
+                                                    <input type="text" id="service-variant-rate" class="form-control"
                                                         placeholder="Enter Rate" readonly>
                                                 </div>
                                             </div>
@@ -1260,7 +1260,7 @@
                                                     <label>
                                                         Quantity
                                                     </label>
-                                                    <input type="text" id="service-addone-qty" class="form-control"
+                                                    <input type="text" id="service-addon-qty" class="form-control"
                                                         placeholder="Enter Quantity" readonly>
                                                 </div>
                                                 <div class="col-xl-2 col-md-6">
@@ -1300,7 +1300,7 @@
                                                             <label>
                                                                 Variant Name
                                                             </label>
-                                                            <!-- All vairant list will show in dropdown -->
+                                                            <!-- All variant list will show in dropdown -->
                                                             <sh-select placeholder="" id="service-variant-name"></sh-select>
                                                         </div>
                                                         <div>
@@ -1382,23 +1382,23 @@
                                             </div>
                                         </div>
                                         <div class="row flex-column mr-t15">
-                                            <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expanse-form"
+                                            <div class="col-xl-6 d-flex flex-column flex-lg-row  align-items-center expense-form"
                                                 *ngIf="!isExpense">
 
                                                 <div class="width-30-percent">
-                                                    <input type="text" id="service-expanse-assets" class="form-control"
+                                                    <input type="text" id="service-expense-assets" class="form-control"
                                                         placeholder="Liability/Asset A/c" readonly>
                                                 </div>
                                                 <span class="to-span"> to </span>
                                                 <div class="width-30-percent">
-                                                    <input type="text" id="service-expanse-account" class="form-control"
+                                                    <input type="text" id="service-expense-account" class="form-control"
                                                         placeholder="Expense A/c" readonly>
                                                 </div>
                                                 <div class="width-30-percent">
-                                                    <input id="service-expanse-amount" type="text" class="form-control" placeholder="Amount"
+                                                    <input id="service-expense-amount" type="text" class="form-control" placeholder="Amount"
                                                         readonly>
                                                 </div>
-                                                <div class="cursor-pointer add-expanse d-flex justify-content-center align-items-center">
+                                                <div class="cursor-pointer add-expense d-flex justify-content-center align-items-center">
                                                     <span class="font-22 text-primary pd-l05 pd-r05">+</span>
                                                 </div>
 
