@@ -441,5 +441,8 @@
     "app_generate_multiple": "Generate Multiple",
     "app_generate_compound": "Generate Compound",
     "app_error": "Error",
-    "app_warning": "Warning"
+    "app_warning": "Warning",
+    "app_other_tax": "Other Tax",
+    "app_cheque_number": "Cheque Number",
+    "app_cheque_clearance_date": "Cheque Clearance Date"
 }
