@@ -19,7 +19,7 @@
                                 <tbody>
                                     <tr>
                                         <td class="text-right width-70">
-                                            <label class="mr-r05 font-12">Qty</label>
+                                            <label class="mr-r05 font-12">{{localeData?.qty}}</label>
                                             <input id="ledger-quantity" type="text" name="" class="form-control text-right"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields || isReadOnly ? 'disabled' : null"
                                                 (change)="changeQuantity($event.target.value)"
@@ -28,7 +28,7 @@
                                         </td>
 
                                         <td *ngIf="currentTxn?.unitRate">
-                                            <label class="font-12">Unit</label>
+                                            <label class="font-12">{{commonLocaleData?.app_unit}}</label>
                                             <select id="ledger-unit" class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                                 (change)="unitChanged($event.target.value)"
@@ -53,7 +53,7 @@
                         </td>
 
                         <td class="item-padding text-right price" *ngIf="currentTxn?.selectedAccount?.stock">
-                            <label class="font-12">Price</label>
+                            <label class="font-12">{{localeData?.price}}</label>
                             <input [disabled]="isReadOnly" type="text" id="ledger-price" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
@@ -73,7 +73,7 @@
 
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="item-padding text-right amount">
-                            <label class="primary-color font-12">Amount</label>
+                            <label class="primary-color font-12">{{commonLocaleData?.app_amount}}</label>
                             <input [disabled]="isReadOnly" id="new-ledger-enter-amount" *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
@@ -125,11 +125,9 @@
                             class="custom-component item-padding amount position-relative dropdown-container text-right dropdown-width"
                             (clickOutside)="hideTax()" (click)="$event.stopPropagation()">
                             <!--tax control component-->
-                            <!-- Login Changes by Sagar  -->
-                            <!-- [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes" -->
                             <tax-control id="ledger-tax" #tax [taxes]="companyTaxesList$ | async" [date]="blankLedger?.entryDate"
                                 [taxRenderData]="currentTxn.taxesVm" [totalForTax]="totalForTax"
-                                [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
+                                [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? localeData?.tax_on_advance : isRcmEntry ? localeData?.tax_rcm : ''"
                                 [isMandatory]="isRcmEntry" [exceptTaxTypes]="['tdsrc', 'tdspay','tcspay', 'tcsrc']"
                                 [maskInput]="inputMaskFormat" [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency"
@@ -156,7 +154,7 @@
 
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="item-padding text-right total-amount-ledger" id="totalTd" (resized)="onResized($event)">
-                            <label class="primary-color font-12">Total</label>
+                            <label class="primary-color font-12">{{commonLocaleData?.app_total}}</label>
                             <input [disabled]="isReadOnly" type="text" id="ledger-total-amount" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right"
                                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
@@ -175,9 +173,8 @@
         <div class="row warehouse-field">
             <div *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1" class="col-sm-4 col-xs-12">
                 <div class="source-warehouse">
-                    <label>Select Warehouse</label>
-                    <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-select-warehouse" [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
-                        [options]="warehouses"></sh-select>
+                    <label>{{localeData?.select_warehouse}}</label>
+                    <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-select-warehouse" [(ngModel)]="selectedWarehouse" [placeholder]="localeData?.select_warehouse" [options]="warehouses"></sh-select>
                 </div>
             </div>
             <div class="col-md-8 col-12" [ngClass]="{'offset-md-4' : !(currentTxn?.selectedAccount?.stock)}">
@@ -187,12 +184,12 @@
                         <input [disabled]="isReadOnly" id="ledger-other-tax" type="checkbox" [(ngModel)]="blankLedger.isOtherTaxesApplicable"
                             *ngIf="!blankLedger.isOtherTaxesApplicable"
                             (ngModelChange)="toggleOtherTaxesAsidePane(blankLedger.isOtherTaxesApplicable)" />
-                        <span *ngIf="!blankLedger.isOtherTaxesApplicable">Other Tax ?</span>
+                        <span *ngIf="!blankLedger.isOtherTaxesApplicable">{{localeData?.other_tax}}</span>
 
                         <div class="clearfix">
                             <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mr-t1 pull-right"
                                 [ngStyle]="{ 'width': totalTdElementWidth + 'px'}">
-                                <label>Other Tax</label>
+                                <label>{{commonLocaleData?.app_other_tax}}</label>
                                 <span class="d-flex">
                                     <span class="d-flex align-item-center">
                                         <a href="javascript:void(0)" (click)="isReadOnly ? '' : toggleOtherTaxesAsidePane(true)">
@@ -216,7 +213,7 @@
         </div>
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
-                <label class="primary-color">Taxable Amount</label>
+                <label class="primary-color">{{localeData?.taxable_amount}}</label>
                 <input [disabled]="isReadOnly" id="ledger-taxable-amount" type="text" name="taxable-amount" class="form-control text-right"
                     [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                     [(ngModel)]="currentTxn.reverseChargeTaxableAmount" />
@@ -224,16 +221,14 @@
         </ng-container>
         <ng-container *ngIf="shouldShowItcSection">
             <div class="taxable-amount-section">
-                <label class="primary-color">ITC Type</label>
-                <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-itc-type" [(ngModel)]="currentTxn.itcAvailable" [placeholder]="'ITC Type'"
-                    [options]="availableItcList">
+                <label class="primary-color">{{localeData?.itc_type}}</label>
+                <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-itc-type" [(ngModel)]="currentTxn.itcAvailable" [placeholder]="localeData?.itc_type" [options]="availableItcList">
                 </sh-select>
             </div>
         </ng-container>
 
         <div class="clearfix">
-            <textarea [disabled]="isReadOnly" id="ledger-description" rows="3" cols="" name="des" class="form-control" placeholder="Description"
-                [(ngModel)]="blankLedger.description"></textarea>
+            <textarea [disabled]="isReadOnly" id="ledger-description" rows="3" cols="" name="des" class="form-control" [placeholder]="commonLocaleData?.app_description" [(ngModel)]="blankLedger.description"></textarea>
         </div>
 
         <table class="width-100 mr-t05">
@@ -242,13 +237,12 @@
                     <td class="primary-color pl-0" (click)="toggleMoreDetail();">
                         <i class="cp collapse-icons"
                             [ngClass]="{'icon-minus':showAdvanced, 'icon-plus': !showAdvanced}"></i>
-                        <button id="ledger-more-details" class="no-btn pl-0">&nbsp;More Details</button>
+                        <button id="ledger-more-details" class="no-btn pl-0">&nbsp; {{localeData?.more_details}}</button>
                     </td>
 
                     <td class="text-right">
                         <span class="primary-color">
-                            Total in
-                            {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}:
+                            {{ getTotalInCurrency() }}:
                             <span>{{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}</span>
                             {{ blankLedger.compoundTotal | giddhCurrency }}
                         </span>
@@ -264,18 +258,17 @@
                         <tr>
                             <td class="select2-parent pd-r1">
                                 <div class="form-group">
-                                    <label class="default-color">Voucher Type</label>
+                                    <label class="default-color">{{commonLocaleData?.app_voucher_type}}</label>
                                     <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-voucher-type" #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"
-                                        (selected)="getInvoiceListsData($event)" [placeholder]="'Select Vouchers'"
+                                        (selected)="getInvoiceListsData($event)" [placeholder]="localeData?.select_vouchers"
                                         [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'"
                                         [style.width.px]="161"></sh-select>
                                 </div>
                             </td>
                             <td class="pd-r1"
                                 *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'pay')">
-                                <label class="default-color">Invoice No.</label>
-                                <input [disabled]="isReadOnly" id="ledger-invoice-number" type="text" placeholder="Invoice no." class="form-control"
-                                    [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
+                                <label class="default-color">{{commonLocaleData?.app_invoice_no}}</label>
+                                <input [disabled]="isReadOnly" id="ledger-invoice-number" type="text" [placeholder]="commonLocaleData?.app_invoice_no" class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
 
                             <!-- <td class="pd-r1" *ngIf="blankLedger.voucherType == 'rcpt'">
@@ -308,9 +301,9 @@
 
                             <td class="pd-r1" *ngIf="blankLedger.voucherType == 'credit note' || blankLedger.voucherType === 'debit note'">
                                 <div class="form-group">
-                                    <label class="default-color">Voucher No.</label>
+                                    <label class="default-color">{{commonLocaleData?.app_voucher_no}}</label>
 
-                                    <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-voucher-type-debit-note" [options]="invoiceList" #invoice placeholder="Select Invoice"
+                                    <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-voucher-type-debit-note" [options]="invoiceList" #invoice [placeholder]="localeData?.select_invoice"
                                         [(ngModel)]="selectedInvoiceForCreditNote" [notFoundLink]="false"
                                         [forceClearReactive]="forceClear$ | async"
                                         (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
@@ -320,10 +313,10 @@
                                                 <div class="item">{{ option.label }}
                                                 </div>
                                                 <div class="item-unique">
-                                                    (Dated: {{ option.additional?.voucherDate}})
+                                                    ({{localeData?.dated}}: {{ option.additional?.voucherDate}})
                                                 </div>
                                                 <div class="item-unique">
-                                                    (Due:
+                                                    ({{commonLocaleData?.app_due}}:
                                                     {{ option.additional?.balanceDue.amountForAccount | giddhCurrency }})
                                                 </div>
                                             </a>
@@ -334,38 +327,31 @@
                             <td *ngIf="(blankLedger.voucherType === 'credit note' || blankLedger.voucherType === 'debit note') && selectedInvoiceForCreditNote"
                                 class="cp remove-invoice pd-r1 pt-1 hidden-xs" (click)="removeSelectedInvoice()">
                                 <span class=“remove-invoice-icon”>×</span>
-                                <span class="label">Remove</span>
+                                <span class="label">{{commonLocaleData?.app_remove}}</span>
                             </td>
                             <td *ngIf="blankLedger.voucherType &&
                                 (blankLedger.voucherType !== 'jr' && blankLedger.voucherType !== 'cntr' && blankLedger.voucherType !== 'rcpt'
                                 && blankLedger.voucherType !== 'advance-receipt')" class="pd-r1 pt-2 hidden-xs">
                                 <input [disabled]="isReadOnly" id="ledger-adjust-sale" type="checkbox" name="adjustSales" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustVoucherSelected">
-                                Adjust {{
-                                    blankLedger.voucherType === 'sal' ? 'Sales' :
-                                    blankLedger.voucherType === 'pur' ? 'Purchase' :
-                                    blankLedger.voucherType === 'credit note' ? 'Credit Note' :
-                                    blankLedger.voucherType === 'debit note' ? 'Debit Note' :
-                                    blankLedger.voucherType === 'pay' ? 'Payment' : ''
-                                }}
+                                {{getAdjustVoucherType()}}
                             </td>
                             <td *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt" class="pd-r1 pt-2 hidden-xs">
                                 <input [disabled]="isReadOnly" id="ledger-adjust-receipt" type="checkbox" name="adjustReceipt" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustReceiptSelected">
-                                Adjust Receipt
+                                {{localeData?.adjust_receipt}}
                             </td>
                             <td *ngIf="blankLedger.voucherType == 'advance-receipt' && shouldShowAdvanceReceipt" class="pd-r1 pt-2 hidden-xs">
                                 <input [disabled]="isReadOnly" id="ledger-adjust-advance-receipt" type="checkbox" name="adjustAdvanceReceipt" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustAdvanceReceiptSelected">
-                                Adjust Advance Receipt
+                                {{localeData?.adjust_advance_receipt}}
                             </td>
                             <td (click)="isReadOnly ? '' : handleVoucherAdjustment()"
                                 class="cp pd-r1 pt-2" *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount">
                                 <span class="text-gray advance-receipt-edit mr-l05">
                                     <i class="icon-edit-pencil"></i>
-                                    Adjusted Amt.: {{currentTxn?.voucherAdjustments?.totalAdjustmentAmount}}</span>
+                                    {{localeData?.adjusted_amount}}: {{currentTxn?.voucherAdjustments?.totalAdjustmentAmount}}</span>
                             </td>
-
                         </tr>
                     </table>
 
@@ -373,13 +359,13 @@
                         <tbody>
                             <tr>
                                 <td class="pd-r1">
-                                    <label class="default-color">Cheque Number</label>
-                                    <input [disabled]="isReadOnly" id="ledger-cheque-number" type="text" placeholder="XXXX2619" class="form-control"
+                                    <label class="default-color">{{commonLocaleData?.app_cheque_number}}</label>
+                                    <input [disabled]="isReadOnly" id="ledger-cheque-number" type="text" [placeholder]="localeData?.cheque_number_placeholder" class="form-control"
                                         [(ngModel)]="blankLedger.chequeNumber" />
                                 </td>
 
                                 <td>
-                                    <label class="default-color">Cheque Clearance Date</label>
+                                    <label class="default-color">{{commonLocaleData?.app_cheque_clearance_date}}</label>
                                     <input [disabled]="isReadOnly" type="text" autocomplete="off" class="form-control" id="chequeClearanceDate"
                                         [(ngModel)]="blankLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
                                         [outsideClick]="true"
@@ -396,9 +382,9 @@
                             <tr>
 
                                 <td>
-                                    <label class="default-color">Assign Tag</label>
+                                    <label class="default-color">{{localeData?.assign_tag}}</label>
                                     <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-assign-tag" [options]="tags$ | async" [multiple]="true" [isFilterEnabled]="true"
-                                        [placeholder]="'Select Tag'" [(ngModel)]="blankLedger.tagNames"
+                                        [placeholder]="commonLocaleData?.app_select_tag" [(ngModel)]="blankLedger.tagNames"
                                         [ItemHeight]="'auto'"></sh-select>
                                 </td>
 
