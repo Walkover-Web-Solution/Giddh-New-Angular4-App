@@ -364,6 +364,7 @@
     "app_email_sheet": "Email Sheet",
     "app_proceed": "Proceed",
     "app_details": "Details",
+    "app_invoice": "Invoice",
     "app_invoices": "Invoices",
     "app_credit_notes": "Credit Notes",
     "app_debit_notes": "Debit Notes",
@@ -430,5 +431,15 @@
     "app_order": "Order",
     "app_permanently_delete_message": "It will be deleted permanently and will no longer be accessible from any other module.",
     "app_filter": "Filter",
-    "app_by": "by"
+    "app_by": "by",
+    "app_ac": "A/c",
+    "app_generate_voucher": "Generate Voucher",
+    "app_reset_advance_search": "Reset Advance Search",
+    "app_select_branch": "Select Branch",
+    "app_voucher": "Voucher",
+    "app_alt_c": "Alt+C",
+    "app_generate_multiple": "Generate Multiple",
+    "app_generate_compound": "Generate Compound",
+    "app_error": "Error",
+    "app_warning": "Warning"
 }

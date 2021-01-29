@@ -98,7 +98,12 @@ const NEW_LEDGER_ENTRIES = [
         ]),
     ]
 })
+
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Input() public blankLedger: BlankLedgerVM;
     @Input() public currentTxn: TransactionVM = null;
     @Input() public needToReCalculate: BehaviorSubject<boolean>;
