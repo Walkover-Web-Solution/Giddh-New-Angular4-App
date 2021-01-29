@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { CompanyActions } from '../actions/company.actions';
@@ -15,9 +15,9 @@ import { GeneralActions } from '../actions/general/general.actions';
     templateUrl: './invoice.component.html',
     styleUrls:[`./invoice.component.scss`]
 })
-export class InvoiceComponent implements OnInit, OnDestroy {
+export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    
+
     public tabsDropdown:boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
     public activeTab: string;
@@ -81,15 +81,22 @@ export class InvoiceComponent implements OnInit, OnDestroy {
         this.selectedVoucherType = VoucherTypeEnum[tab];
     }
 
-/**
- *
- *
- * @param {string} tab  this is voucher type
- * @param {*} e   event to set last state
- * @param {string} [type]    selected type only to it for Cr/Dr and sales voucher(common tabs like pending, template and settings)
- * @memberof InvoiceComponent
- */
-public tabChanged(tab: string, e, type?: string) {
+    /**
+     * Saves the last state
+     */
+    public ngAfterViewInit(): void {
+        this.saveLastState(this.activeTab);
+    }
+
+    /**
+     *
+     *
+     * @param {string} tab  this is voucher type
+     * @param {*} e   event to set last state
+     * @param {string} [type]    selected type only to it for Cr/Dr and sales voucher(common tabs like pending, template and settings)
+     * @memberof InvoiceComponent
+     */
+    public tabChanged(tab: string, e, type?: string) {
         this.activeTab = tab;
         if (type && tab) {
             this.router.navigate(['pages', 'invoice', 'preview', tab, type]);
@@ -119,7 +126,7 @@ public tabChanged(tab: string, e, type?: string) {
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `pages/invoice/preview/${state}`;
+        stateDetailsRequest.lastState = `pages/invoice/preview/${state}/${this.selectedVoucherType !== state ? this.selectedVoucherType : ''}`;
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }

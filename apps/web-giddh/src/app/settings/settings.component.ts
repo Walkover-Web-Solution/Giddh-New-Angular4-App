@@ -91,20 +91,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
-                this.setStateDetails(params['type'], params['referrer']);
                 if (params['type'] === 'integration' && params['referrer']) {
                     this.selectedChildTab = this.assignChildtabForIntegration(params['referrer']);
                 }
                 this.integrationtab = params['referrer'];
                 this.activeTab = params['type'];
             } else if (params['type'] && this.activeTab !== params['type']) {
-                this.setStateDetails(params['type'], params['referrer']);
                 this.selectedChildTab = SETTING_INTEGRATION_TABS.SMS.VALUE;
                 this.integrationtab = '';
                 this.activeTab = params['type'];
             } else {
                 this.integrationtab = params['referrer'];
             }
+            this.setStateDetails(params['type'], params['referrer']);
 
             this.tabChanged(this.activeTab);
 
