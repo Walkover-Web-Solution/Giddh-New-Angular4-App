@@ -58,6 +58,7 @@ import { reducers } from './store';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { UniversalListModule } from './theme/universal-list/universal.list.module';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
+import { DownloadComponent } from './download/download.component';
 
 // import { SuccessComponent } from './settings/linked-accounts/success.component';
 /*
@@ -126,7 +127,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MobileHomeComponent,
         MobileHomeSidebarComponent,
         MobileSearchCompanyComponent,
-        MobileSearchBranchComponent
+        MobileSearchBranchComponent,
+        DownloadComponent
         // SignupComponent
     ],
     /**
