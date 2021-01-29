@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 @Component({
     selector: 'download',
-    templateUrl: './download-in-bulk.component.html',
-    styleUrls: ['./download-in-bulk.component.scss'],
+    templateUrl: './download.component.html',
+    styleUrls: ['./download.component.scss'],
 })
 
-export class DownloadInBulkComponent implements OnInit, OnDestroy {
+export class DownloadComponent implements OnInit, OnDestroy {
     /** This holds url to download */
     public downloadUrl: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
