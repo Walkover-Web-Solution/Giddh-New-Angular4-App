@@ -3,11 +3,10 @@ import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Eve
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
-import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import {PaginationComponent} from 'ngx-bootstrap/pagination';
@@ -17,7 +16,6 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { v4 as uuidv4 } from 'uuid';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -25,12 +23,12 @@ import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 import { LoaderService } from '../loader/loader.service';
-import { cloneDeep, filter, find, orderBy, uniq } from '../lodash-optimized';
+import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
-import { SalesOtherTaxesModal, VoucherTypeEnum } from '../models/api-models/Sales';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
+import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
@@ -50,7 +48,6 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
-import { UploadBankStatementComponent } from './components/upload-bank-statement/upload-bank-statement.component';
 
 @Component({
     selector: 'ledger',
@@ -69,6 +66,7 @@ import { UploadBankStatementComponent } from './components/upload-bank-statement
         ]),
     ]
 })
+
 export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('updateledgercomponent', {static: true}) public updateledgercomponent: ElementViewContainerRef;
     @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
@@ -246,6 +244,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * by user and not when the user visits the page
      */
     public isAdvanceSearchOpened: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -256,7 +258,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _companyActions: CompanyActions,
         private _settingsTagActions: SettingsTagActions,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private _generalActions: GeneralActions,
         private generalService: GeneralService,
         private _loginActions: LoginActions,
         private _loaderService: LoaderService,
@@ -809,11 +810,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                 if (lt.periodClosingBalance) {
                     this.closingBalanceBeforeReconcile = lt.periodClosingBalance;
-                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
+                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? this.localeData.cr : this.localeData.dr;
                 }
                 if (lt.closingBalanceForBank) {
                     this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
-                    this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? 'Cr' : 'Dr';
+                    this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? this.localeData.cr : this.localeData.dr;
                 }
 
                 let checkedEntriesName: string[] = uniq([
@@ -865,7 +866,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.isLedgerCreateSuccess$.subscribe(s => {
             if (s) {
-                this._toaster.successToast('Entry created successfully', 'Success');
+                this._toaster.successToast(this.localeData.entry_created, 'Success');
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
                 this.isMoreDetailsOpened = false;
@@ -1134,7 +1135,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
             this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
-            this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
+            this._toaster.errorToast(this.localeData.transaction_required, this.commonLocaleData.app_error);
         }
     }
 
@@ -1441,7 +1442,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (this.lc.blankLedger.entryDate) {
             if (!moment(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
-                this._toaster.errorToast('Invalid Date Selected.Please Select Valid Date');
+                this._toaster.errorToast(this.localeData.invalid_date);
                 this._loaderService.hide();
                 return;
             } else {
@@ -1451,7 +1452,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (this.lc.blankLedger.chequeClearanceDate) {
             if (!moment(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
-                this._toaster.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
+                this._toaster.errorToast(this.localeData.invalid_cheque_clearance_date);
                 this._loaderService.hide();
                 return;
             } else {
@@ -1467,7 +1468,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
             this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
-            this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
+            this._toaster.errorToast(this.localeData.transaction_required, this.commonLocaleData.app_error);
             this._loaderService.hide();
         }
     }
@@ -1737,7 +1738,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (val) {
                 this.closingBalanceBeforeReconcile = val.periodClosingBalance;
                 if (this.closingBalanceBeforeReconcile) {
-                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
+                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? this.localeData.cr : this.localeData.dr;
                 }
             }
         });
@@ -1777,7 +1778,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ]);
         // }
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
-            this._toaster.errorToast('Please select at least one entry.', 'Error');
+            this._toaster.errorToast(this.localeData.select_one_entry, this.commonLocaleData.app_error);
             return;
         }
         switch (actionType) {
@@ -1791,7 +1792,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 fileInput.click();
                 break;
             default:
-                this._toaster.warningToast('Please select a valid action.', 'Warning');
+                this._toaster.warningToast(this.localeData.select_valid_action, this.commonLocaleData.app_warning);
         }
     }
 
@@ -1880,7 +1881,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction = [];
                 this.getTransactionData();
                 this.isFileUploading = false;
-                this._toaster.successToast('file uploaded successfully');
+                this._toaster.successToast(this.localeData.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this._toaster.errorToast(output.file.response.message);
@@ -1900,7 +1901,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public openSelectFilePopup(fileInput: any) {
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
-            this._toaster.errorToast('Please select at least one entry.', 'Error');
+            this._toaster.errorToast(this.localeData.select_one_entry, this.commonLocaleData.app_error);
             return;
         }
         fileInput.click();
@@ -1952,7 +1953,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public deleteBankTxn(transactionId) {
         this._ledgerService.DeleteBankTransaction(transactionId).pipe(takeUntil(this.destroyed$)).subscribe((res: BaseResponse<any, string>) => {
             if (res.status === 'success') {
-                this._toaster.successToast('Bank transaction deleted Successfully');
+                this._toaster.successToast(this.localeData.bank_transaction_deleted);
             }
         });
     }
@@ -1962,7 +1963,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public toggleCurrency(event) {
         let isThereBlankEntry = this.lc.blankLedger.transactions.some(s => s.selectedAccount);
         if (isThereBlankEntry) {
-            this._toaster.errorToast('please save unfinished entry first...');
+            this._toaster.errorToast(this.localeData.save_unfinished_entry);
             event.preventDefault();
             return false;
         }
@@ -2376,5 +2377,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public bankTransactionPageChanged(event: any): void {
         this.bankTransactionsResponse.page = event.page;
         this.getBankTransactions();
+    }
+
+    /**
+     * This will return particular name
+     *
+     * @param {*} transaction
+     * @param {string} toBy
+     * @returns {string}
+     * @memberof LedgerComponent
+     */
+    public getParticular(transaction: any, toBy: string): string {
+        let particular = (toBy === "by") ? this.localeData.by_particular : this.localeData.to_particular;
+        particular = particular.replace("[PARTICULAR]", transaction.inventory ? transaction.particular.name + ' (' + transaction.inventory.stock.name + ')' : transaction.particular.name);
+        return particular;
     }
 }

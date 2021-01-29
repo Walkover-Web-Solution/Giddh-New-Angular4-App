@@ -70,7 +70,7 @@
                             {{ expenses.amount | giddhCurrency}}</td>
 
                         <td [attr.data-title]="localeData?.payment_receipt">
-                            <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">{{localeData?.account}}</span>
+                            <span *ngIf="expenses.baseAccountCategory==='OTHER'" class="font-12 text-gray">{{commonLocaleData?.app_ac}}</span>
                             <span *ngIf="expenses.baseAccountCategory==='BANK'"
                                 class="font-12 text-gray icon-atm-card"></span>
                             <span *ngIf="expenses.baseAccountCategory==='CASH'"
