@@ -20,8 +20,10 @@ export class CreateNewInventoryComponent implements OnInit {
     public isProduct: boolean = true;
     public isService: boolean = false;
     public isCombo: boolean = false;
-    public isBulkCreation: boolean = false
+    public isBulkCreation: boolean = false;
     public formGroupRadio: FormGroup;
+    /* this will store expense boolean value */
+    public isExpense: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private fb: FormBuilder
@@ -65,4 +67,7 @@ export class CreateNewInventoryComponent implements OnInit {
         this.isHSN = isHSN;
     }
 
+    public toggleExpense(isExpense: any): void {
+        this.isExpense = isExpense;
+    }
 }

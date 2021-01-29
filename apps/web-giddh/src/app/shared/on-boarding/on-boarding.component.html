@@ -45,9 +45,8 @@
                                             <sh-select id="country"
                                                 [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
                                                 [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
-                                                [(ngModel)]="company.country" class="pull-left select-caret" [required]='true' [isRequired]="true"
-                                                (selected)="selectCountry($event)" [defaultValue]="selectedCountry"
-                                                style="width: 100%">
+                                                [(ngModel)]="company.country" class="pull-left select-caret width-100" [required]='true' [isRequired]="true"
+                                                (selected)="selectCountry($event)" [defaultValue]="selectedCountry">
                                             </sh-select>
                                         </span>
                                     </div>

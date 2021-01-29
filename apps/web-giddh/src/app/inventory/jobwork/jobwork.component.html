@@ -20,7 +20,7 @@
                                 <span *ngIf="type==='person'"
                                     class="report-info"><span>{{nameStockOrPerson}}</span></span>
                             </h2>
-                            <div class="form-group" style="margin-top: -7px;">
+                            <div class="form-group margin-datepicker">
                                 <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                                     class="form-control date-range-picker"
                                     (applyDaterangepicker)="dateSelected($event)" />
@@ -193,7 +193,7 @@
                                     <td class="bd-rr">{{txn.receiver.name}}</td>
                                     <td class="bd-rr" (click)='updateDescriptionIdx = idx'>
                                         <ng-container *ngIf='updateDescriptionIdx != idx'>
-                                            <div class="stockDiscription">{{txn.description}}</div>
+                                            <div class="stock-description">{{txn.description}}</div>
                                         </ng-container>
                                         <ng-container *ngIf='updateDescriptionIdx === idx'>
                                             <input type="text" class='form-control' maxlength='100' autofocus="true"
