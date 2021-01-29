@@ -105,6 +105,10 @@ tr.aging-table-top td {
     }
 }
 
+.name-width{
+    width: 210px; 
+}
+
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {

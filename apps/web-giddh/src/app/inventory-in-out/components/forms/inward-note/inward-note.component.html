@@ -142,28 +142,28 @@
 
                             <div formGroupName="manufacturingDetails">
 
-                                <div class="row" style="padding-top: 5px">
-                                    <div class="col-xs-4">
+                                <div class="row pd-t05">
+                                    <div class="col-4">
                                         <label class="font-14">Output Qty <sup>*</sup></label>
                                     </div>
-                                    <div class="col-xs-5">
+                                    <div class="col-5">
                                         <label class="font-14">Stock Unit <sup>*</sup></label>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-4 form-group">
+                                    <div class="col-4 form-group">
                                         <input type="text" class="form-control" decimalDigitsDirective
                                             [DecimalPlaces]="4" name="manufacturingQuantity" placeholder="Quantity"
                                             formControlName="manufacturingQuantity" />
                                     </div>
 
-                                    <div class="col-xs-5 form-group">
+                                    <div class="col-5 form-group">
                                         <sh-select [options]="stockUnitsOptions" formControlName="manufacturingUnitCode"
                                             [placeholder]="'Select Unit'" [multiple]="false" [ItemHeight]="33" [isRequired]="true"></sh-select>
                                     </div>
 
-                                    <div class="col-xs-3" style="display: flex;align-items: center;height: 30px"
+                                    <div class="col-3 d-flex align-items-center height-30"
                                         *ngIf="manufacturingDetails.controls['manufacturingQuantity'].value">
                                         <label>&nbsp;</label>
                                         <span class="d-block"><strong>= (

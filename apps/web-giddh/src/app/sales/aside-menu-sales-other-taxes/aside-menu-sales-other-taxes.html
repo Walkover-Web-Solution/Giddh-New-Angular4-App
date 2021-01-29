@@ -16,7 +16,7 @@
 
                 <div class="col-sm-6 col-xs-12">
 
-                    <div style="display: flex;flex-direction: column" class="select-tax-dropdown">
+                    <div class="select-tax-dropdown d-flex flex-column">
                         <label>Select Tax<span class="text-danger">*</span></label>
 
                         <div class="mr-b2">
@@ -24,7 +24,7 @@
                                 [(ngModel)]="selectedTaxUniqueName" (selected)="applyTax($event)" (onClear)="onClear()"
                                 [showClear]="true"></sh-select>
 
-                            <label style="margin-top: 3px;margin-left: 2px;"
+                            <label class="label-select-tax"
                                 *ngIf="otherTaxesModal?.appliedOtherTax?.name">
                                 {{ otherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>

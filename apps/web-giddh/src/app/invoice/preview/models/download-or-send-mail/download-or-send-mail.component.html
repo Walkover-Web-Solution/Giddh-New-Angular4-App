@@ -91,7 +91,7 @@
         <span></span>
         <span></span>
     </div>
-    <div id="pdf-wrapper" *ngIf="showPdfWrap" style="width: 100%; height: 600px;">
+    <div id="pdf-wrapper" *ngIf="showPdfWrap" class="w-100 height-pdf">
         <!-- <webview *ngIf="isElectron" plugins [attr.src]="unSafeBase64StringForModel" type="application/pdf" style="width: 100%; height: 600px;"></webview> -->
         <ng-container *ngIf="isElectron">
             <ng2-pdfjs-viewer #pdfViewer type="application/pdf" [downloadFileName]="'invoice.pdf'" [openFile]="false"
