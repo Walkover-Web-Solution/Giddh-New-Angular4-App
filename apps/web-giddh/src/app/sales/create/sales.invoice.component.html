@@ -1269,8 +1269,8 @@
 
 
         <div class="clearfix wrapper-customer-table pd-t2">
-            <table class="table customer-invoice-table"
-                [ngClass]="{' first-table' : !invFormData.voucherDetails.customerName }" style="display: none;">
+            <table class="table customer-invoice-table d-none"
+                [ngClass]="{' first-table' : !invFormData.voucherDetails.customerName }">
                 <tr [hidden]="isPurchaseInvoice">
                     <td width="150px">
                         <label>Customer Name </label>

@@ -16,11 +16,11 @@ import { BreakpointObserver } from '@angular/cdk/layout';
     styleUrls: ['stockList.component.scss'],
     template: `
     <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen">
-      <li class="clearfix " *ngFor="let item of Groups.stocks" style="padding: 0px">
+      <li class="clearfix p-0" *ngFor="let item of Groups.stocks">
         <div class="in-list" [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">
-          <a (click)="OpenStock(item, $event)" style="display: flex;align-items: center;flex: 1;color: black;justify-content: space-between" class="d-flex">
+          <a (click)="OpenStock(item, $event)" class="d-flex align-items-center flex-fill justify-content-between black-color">
             <span class="span">{{item.name}}</span>
-            <span class="d-block" *ngIf="item.count" style="margin-right: 12px;" [hidden]="(activeStockUniqueName$ | async) === item.uniqueName">
+            <span class="d-block mr-r1" *ngIf="item.count" [hidden]="(activeStockUniqueName$ | async) === item.uniqueName">
          {{item.count}}</span>
           </a>
           <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="!isMobileScreen && (activeStockUniqueName$ | async) === item.uniqueName">
