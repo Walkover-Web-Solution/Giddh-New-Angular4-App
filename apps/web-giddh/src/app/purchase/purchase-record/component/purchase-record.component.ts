@@ -85,7 +85,7 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
      */
     private saveLastState(tabName: string): void {
         let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
+        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = `pages/purchase-management/purchase/${tabName}`;
