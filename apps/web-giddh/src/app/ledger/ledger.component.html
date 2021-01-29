@@ -1233,7 +1233,7 @@
             <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm mr-0"
                 (click)="getReconciledBack();">Back
             </button>
-            <div *ngIf="closingBalanceBeforeReconcile  showLoader" class="box balance-detail mr-t2 mr-b2 clearfix text-center">
+            <div *ngIf="closingBalanceBeforeReconcile && !showLoader" class="box balance-detail mr-t2 mr-b2 clearfix text-center">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-12 text-right">Balance as per bank
                         <h3 class="font-20 primary-color">{{reconcileClosingBalanceForBank?.amount}}
