@@ -7,9 +7,12 @@
     padding: 2px 10px 2px 0;
 }
 
-.table-label td {
-    padding-top: 12px !important;
-    padding-bottom: 5px;
+.table-label{
+    border-color: $gainsboro;
+    td {
+        padding-top: 12px !important;
+        padding-bottom: 5px;
+    }
 }
 
 .dropdown-menu {
