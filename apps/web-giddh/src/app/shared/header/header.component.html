@@ -405,7 +405,7 @@
         </div>
     </nav>
 </header>
-<div class="padding-top-fixed-mobile">
+<div class="padding-top-fixed-mobile" *ngIf="isMobileView">
     <header class="clearfix header-container mobile-header">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
             <div class="container-fluid  mr-b1 ">
@@ -421,10 +421,10 @@
                                     class="icon-back-arrow"></i></span>
                         </li>
                         <li class="hamburger-menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
+                            <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
-                            <h4 class="inline text-capitalize" id="giddh-page-heading-link" *ngIf="!navigationEnd && !navigateToUser">
+                            <h4 class="inline text-capitalize" *ngIf="!navigationEnd && !navigateToUser">
                                 {{oldSelectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
                         </li>
