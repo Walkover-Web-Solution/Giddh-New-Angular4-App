@@ -1,4 +1,4 @@
-<div appTranslate [file]="'permissions'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'permissions'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid clearfix" *ngIf="allRoles.length > 0">
         <a href="javascript:void(0)" *ngIf="showBackButton" class="btn btn-sky-blue pull-right mr-t1 mr-b1" [routerLink]="['/pages/settings/permission']">{{commonLocaleData?.app_back}}</a>
@@ -50,4 +50,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

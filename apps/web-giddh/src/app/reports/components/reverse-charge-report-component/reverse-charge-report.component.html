@@ -1,4 +1,4 @@
-<div appTranslate [file]="'reports/reverse-charge'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'reports/reverse-charge'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="reverse-table-report">
         <div class="container-fluid">
@@ -170,4 +170,4 @@
             </div>
         </div>
     </ng-template>
-</div>
+</ng-container>

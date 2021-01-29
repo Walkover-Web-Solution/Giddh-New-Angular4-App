@@ -48,7 +48,10 @@ export class TaxControlData {
     styleUrls: ['./tax-control.component.scss'],
     providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
+
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Input() public date: string;
     @Input() public taxes: TaxResponse[];
     @Input() public applicableTaxes: string[] = [];

@@ -1,4 +1,4 @@
-<div appTranslate [file]="'home/revenue'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'home/revenue'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div id="pie-chart" class="card" *ngIf="!graphExpanded">
         <div class="card-body">
             <div class="row">
@@ -175,4 +175,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

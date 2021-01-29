@@ -22,8 +22,6 @@ const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
     styleUrls: [`./advance-receipt-adjustment.component.scss`]
 })
 
-
-
 export class AdvanceReceiptAdjustmentComponent implements OnInit {
 
     public newAdjustVoucherOptions: IOption[] = [];

@@ -1,4 +1,4 @@
-<div appTranslate [file]="'permissions'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'permissions'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <section id="single-role" *ngIf="roleObj && localeData?.page_heading">
         <div class="pd-1 bd-rb clearfix text-center mr-b15">
             <span class="lead">{{ newRole.name }}</span>
@@ -82,4 +82,4 @@
             </div>
         </section>
     </section>
-</div>
+</ng-container>
