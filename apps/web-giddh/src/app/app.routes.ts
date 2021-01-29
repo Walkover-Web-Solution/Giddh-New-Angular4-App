@@ -24,12 +24,14 @@ import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mo
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component'
 export const ROUTES: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule), canActivate: [BrowserSupported] },
+    { path: '', redirectTo: 'download', pathMatch: 'full' },
     { path: '404', component: NotFoundComponent },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
     { path: 'token-verify', component: TokenVerifyComponent },
     { path: 'create-invoice', loadChildren: () => import('./create/create.module').then(module => module.CreateModule) },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [BrowserSupported, UserAuthenticated] },
+
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
