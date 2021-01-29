@@ -3,6 +3,7 @@ export const ROUTES = [
     { path: '404' },
     { path: 'create-invoice', loadChildren: () => import('./create/create.module').then(module => module.CreateModule) },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule) },
+    { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
