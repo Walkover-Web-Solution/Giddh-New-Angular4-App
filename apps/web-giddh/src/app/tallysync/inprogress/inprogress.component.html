@@ -1,4 +1,4 @@
-<div appTranslate [file]="'tallysync'" (localeData)="localeData = $event">
+<ng-container appTranslate [file]="'tallysync'" (localeData)="localeData = $event">
     <ng-container>
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="no-data" *ngIf="!progressData?.length">
@@ -105,4 +105,4 @@
             </div>
         </div>
     </ng-container>
-</div>
+</ng-container>

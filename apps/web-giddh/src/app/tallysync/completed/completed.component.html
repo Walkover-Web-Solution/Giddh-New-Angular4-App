@@ -1,4 +1,4 @@
-<div appTranslate [file]="'tallysync'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'tallysync'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <ng-container>
         <form (ngSubmit)="getReport()" [formGroup]="filterForm">
             <div class="row form">
@@ -158,4 +158,4 @@
             </pagination>
         </div>
     </ng-container>
-</div>
+</ng-container>

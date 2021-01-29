@@ -1,4 +1,4 @@
-<div appTranslate [file]="'reports'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'reports'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid pd-t2 pd-b2">
         <div class="row mb-2">
@@ -45,4 +45,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

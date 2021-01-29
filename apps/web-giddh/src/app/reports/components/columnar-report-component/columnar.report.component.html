@@ -1,4 +1,4 @@
-<div appTranslate [file]="'reports/monthly-columnar'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'reports/monthly-columnar'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="columnar-report-page mr-t2">
         <div class="container-fluid font-14">
@@ -57,4 +57,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

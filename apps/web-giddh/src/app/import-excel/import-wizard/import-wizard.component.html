@@ -1,4 +1,4 @@
-<div appTranslate [file]="'import-data'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'import-data'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid clearfix">
         <div class="top-bar" *ngIf="step <= 3">
@@ -36,4 +36,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

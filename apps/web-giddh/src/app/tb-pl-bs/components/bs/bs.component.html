@@ -1,4 +1,4 @@
-<div appTranslate [file]="'trial-profit-balance/balance-sheet'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'trial-profit-balance/balance-sheet'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <tb-pl-bs-filter #filter [selectedCompany]="selectedCompany" (onPropertyChanged)="filterData($event)"
         [showLoader]="showLoader | async" [showLabels]="true" (seachChange)="searchChanged($event)"
         (expandAll)="expandAllEvent($event)" [BsExportXLS]="true" (plBsExportXLSEvent)="exportXLS($event)">
@@ -24,4 +24,4 @@
             <h2>{{localeData?.no_data_found}}</h2>
         </div>
     </div>
-</div>
+</ng-container>
