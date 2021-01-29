@@ -10160,6 +10160,10 @@ input.mat-input-element{
         margin-left: 0;
         margin-top:5px;
         position: static !important;
+        display: inline-block;
+        overflow-x: auto;
+        white-space: nowrap;
+        overflow-y: hidden;
     }
 }
     @media (max-width: 1199px) {
