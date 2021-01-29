@@ -1,34 +1,60 @@
 <section id="manufacture" class="clearfix">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
-    <div class="clearfix">
-        <div class="mr-t15 justify-content-between pr-3" [ngClass]="{'d-flex' : currentCompanyBranches?.length > 2}">
-            <div *ngIf="currentCompanyBranches?.length > 2" class="form-group col-lg-2 col-md-6 linked-entities">
-                <label class="d-block pb-1">Entity</label>
-                <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
-                    name="entityDropdown" [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
-                    [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
-                    <ng-template #optionTemplate let-option="option">
-                        <ng-container>
-                            <a href="javascript:void(0)" class="list-item d-flex">
-                                <span class="entity-icon">
-                                    <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany" tooltip="Branch"></i>
-                                    <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
-                                </span>
-                                <span class="entity-details">
-                                    <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                    <div class="item-unique giddh-limit single-line-clamp">
-                                        {{ option.name || '-' }}
-                                    </div>
-                                </span>
-                            </a>
-                        </ng-container>
-                    </ng-template>
-                </sh-select>
-            </div>
-            <div>
-                <label class="d-none" [ngClass]="{'d-block' : currentCompanyBranches?.length > 2}" >&nbsp;</label>
-                <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()" type="button">Create
+    <div class="clearfix mr-r15" *ngIf="isMobileScreen">
+        <div>
+            <label class="d-none">&nbsp;</label>
+            <button *ngIf="!isCompany" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()"
+                type="button">Create
                 Manufacture</button>
+        </div>
+    </div>
+    <div class="col-12 col-sm-12 mr-t15">
+        <div class="row">
+            <div class="col-12" [ngClass]="currentCompanyBranches?.length > 2 ? 'manufacturing-head' : 'no-branch-head'">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-4 col-md-6 mr-b15" *ngIf="currentCompanyBranches?.length > 2">
+                        <div class="link-entity-dropdown"><label class="d-block pb-1 font-14">Entity</label>
+                            <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
+                                name="entityDropdown" [showClear]="false" [ItemHeight]="33" width="100%"
+                                (selected)="handleBranchChange($event)" [isFilterEnabled]="true" placeholder="Select Entity"
+                                [fixedValue]="currentBranch?.alias">
+                                <ng-template #optionTemplate let-option="option">
+                                    <ng-container>
+                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                            <span class="entity-icon">
+                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany" tooltip="Branch"></i>
+                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
+                                            </span>
+                                            <span class="entity-details">
+                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                <div class="item-unique giddh-limit single-line-clamp">
+                                                    {{ option.name || '-' }}
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </ng-container>
+                                </ng-template>
+                            </sh-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mr-b15 datepicker-flex" [ngClass]="currentCompanyBranches?.length > 2 ? 'col-xl-3 col-lg-4 ' : 'col-xl-2 col-lg-4'">
+                        <label class="d-block font-14 pb-1">From - To</label>
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon"></i>
+                            <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker" />
+                        </div>
+                    </div>
+                    <div class="col-md-6" [ngClass]="currentCompanyBranches?.length > 2 ? 'col-xl-6 col-lg-4' : 'col-xl-10 col-lg-8'" *ngIf="!isMobileScreen">
+                        <div>
+                            <label class="d-block">&nbsp;</label>
+                            <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()"
+                                type="button">Create
+                                Manufacture</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -44,12 +70,9 @@
                             [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown"
                             [ItemHeight]="33" (selected)="setActiveStockGroup($event)"></sh-select>
                     </div>
-                    <div class="form-group col-xl-2 col-lg-3 col-md-6 col-12 datepicker-flex">
-                        <label class="d-block">From - To</label>
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i class="icon-calender calendar-addon"></i>
-                            <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
-                        </div>
+                    <div class="form-group col-xl-2 col-lg-3 col-md-6 col-12">
+                        <label class="d-block">Warehouse</label>
+                        <sh-select placeholder="Select Warehouse"></sh-select>
                     </div>
 
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
@@ -94,11 +117,12 @@
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Voucher Number</th>
+                            <th>Voucher #</th>
                             <th>Final Product</th>
                             <th>Raw Products</th>
                             <th>Product Inwards</th>
-                            <th>Quantity Outwards</th>
+                            <th>Qty Outwards</th>
+                            <th>Warehouse</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -112,11 +136,13 @@
                                     {{row.stockName}}
                                 </span>
                             </td>
-                            <td data-title="Quantity Outwards">
+                            <td data-title="Qty Outwards">
                                 <span *ngFor="let row of item.linkedStocks">
                                     {{row.manufacturingQuantity}} {{row.manufacturingUnit}}
                                 </span>
                             </td>
+                            <!-- make it dynamic -->
+                            <td data-title="Warehouse">Warehouse name</td>
                         </tr>
                     </tbody>
                 </table>

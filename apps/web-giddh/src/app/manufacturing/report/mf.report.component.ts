@@ -20,6 +20,7 @@ import { AppState } from '../../store';
 import { MfStockSearchRequestClass } from '../manufacturing.utility';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../../shared/helpers/defaultDateFormat';
 import { IOption } from './../../theme/ng-select/option.interface';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 const filter1 = [
 	{ label: 'Greater', value: 'greaterThan' },
@@ -94,6 +95,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /* this wll store mobile screen size */
+    public isMobileScreen: boolean = true;
 
 	constructor(
         private store: Store<AppState>,
@@ -103,7 +106,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
         public bsConfig: BsDatepickerConfig,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private breakPointObservar: BreakpointObserver,
     ) {
 		this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
 		this.mfStockSearchRequest.product = '';
@@ -113,6 +117,14 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
+
+        this.breakPointObservar.observe([
+            '(max-width: 991px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
+
         this.isInventoryPage = this.router.url.includes('/pages/inventory');
 		this.initializeSearchReqObj();
 		// Refresh the stock list

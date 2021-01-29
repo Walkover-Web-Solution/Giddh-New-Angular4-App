@@ -9670,6 +9670,14 @@ input.mat-input-element{
             color: $midnight-blue;
         }
     }
+    .link-entity-dropdown{
+        .list-item.d-flex{
+            align-items: center;
+            .entity-icon{
+                padding-right: 5px;
+            }
+        }
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
