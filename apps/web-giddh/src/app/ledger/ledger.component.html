@@ -39,7 +39,7 @@
                                 (click)="performBulkAction('upload', BulkUploadfileInput)" container="body"
                                 tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                             </button>
-                            <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
+                            <input type="file" #BulkUploadfileInput class="d-none" name="BulkUploadfileInput"
                                 id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
                                 [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                         </div>
@@ -1153,11 +1153,11 @@
 
                                 <div class="d-flex flex-column">
 
-                                    <span class="bd-rt ng-binding" style="padding: 1px 0;">
+                                    <span class="bd-rt ng-binding padding-ledger">
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningDebitTotal  | giddhCurrency }}
                                     </span>
 
-                                    <span class="bd-rt ng-binding text-gray" style="padding: 1px 0;"
+                                    <span class="bd-rt ng-binding text-gray padding-ledger"
                                         *ngIf="isLedgerAccountAllowsMultiCurrency">
                                         {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningDebitTotal  | giddhCurrency }}
                                     </span>
@@ -1191,12 +1191,11 @@
                             <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
 
                                 <div class="d-flex flex-column">
-                                    <span class="bd-rt" style="padding: 1px 0;">
+                                    <span class="bd-rt padding-ledger">
                                         {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningCreditTotal | giddhCurrency }}
                                     </span>
 
-                                    <span class="bd-rt text-gray" *ngIf="isLedgerAccountAllowsMultiCurrency"
-                                        style="padding: 1px 0;">
+                                    <span class="bd-rt text-gray padding-ledger" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                         {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningCreditTotal | giddhCurrency }}
                                     </span>
                                 </div>
@@ -1294,7 +1293,7 @@
                 <div class="col-sm-3 col-xs-12 stat-block">
                     <div class="ledger-state-box">
 
-                        <h1 class="">Net Total</h1>
+                        <h1>Net Total</h1>
 
                         <div class="d-flex justify-content-between">
 
