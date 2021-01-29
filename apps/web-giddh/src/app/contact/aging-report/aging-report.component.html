@@ -28,8 +28,8 @@
             </div>
             <div class="pull-left d-flex wrap-searching-aging">
                 <div class="form-group search-field max250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
-                    <input type="text" [placeholder]="localeData?.name_amount" class="form-control" [(ngModel)]="searchStr"
-                        (ngModelChange)="searchStr$.next($event)" style="width:210px" />
+                    <input type="text" [placeholder]="localeData?.name_amount" class="form-control name-width" [(ngModel)]="searchStr"
+                        (ngModelChange)="searchStr$.next($event)" />
                     <span class="input-addon">
                         <i class="icon-search"></i>
                     </span>
@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="btn-group  pull-right">
-                <button class="btn btn-sky-blue" style="margin-right: 5px" (click)="creteNewCustomerEvent.emit(true)">
+                <button class="btn btn-sky-blue mr-r05" (click)="creteNewCustomerEvent.emit(true)">
                     {{localeData?.new_customer}}
                 </button>
             </div>

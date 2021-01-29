@@ -43,9 +43,10 @@
         <div>
             <p class="right-head">{{localeData?.mandatory_fields}} <span class="text-or">{{ entity | titlecase }}</span> {{localeData?.in_giddh_are}}
                 <span>
-                    <span [ngStyle]="{'color': mandatoryHeadersCount === mandatoryHeadersModel.length ? '#00b503' : '#adadad'}">
+                    <span
+                        [ngStyle]="{'color': mandatoryHeadersCount === mandatoryHeadersModel.length ? '#00b503' : '#adadad'}">
                         {{ mandatoryHeadersCount }}</span>/{{ mandatoryHeadersModel.length }} {{localeData?.done}}</span>
-                &nbsp;<span *ngIf="mandatoryHeadersCount === mandatoryHeadersModel.length" style="color: #00b503">{{localeData?.successful}}</span>
+                &nbsp;<span *ngIf="mandatoryHeadersCount === mandatoryHeadersModel.length" class="success-label">{{localeData?.successful}}</span>
             </p>
         </div>
         <div class="row mt-2 d-flex" *ngFor="let manField of mandatoryHeadersModel">

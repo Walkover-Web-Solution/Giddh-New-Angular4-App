@@ -114,12 +114,12 @@
                                 </div>
                             </th>
 
-                            <th *ngIf="showFieldFilter.voucherNo" class="td-search-box nowrap" style="width: 210px;"
-                                #searchInvoiceContainer (clickOutside)="clickedOutsideEvent()">
-                                <div [hidden]="showSearchInvoiceNo">
-                                    <span>{{commonLocaleData?.app_voucher_no}}</span>
-                                    <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
-                                </div>
+                        <th *ngIf="showFieldFilter.voucherNo" class="td-search-box nowrap voucher-width"
+                            #searchInvoiceContainer (clickOutside)="clickedOutsideEvent()">
+                            <div [hidden]="showSearchInvoiceNo">
+                                <span>{{commonLocaleData?.app_voucher_no}}</span>
+                                <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
+                            </div>
 
                                 <div class="input-container" [hidden]="!showSearchInvoiceNo">
                                     <input type="text" [placeholder]="localeData?.search_voucher_no" class="w100" #invoiceSearch
