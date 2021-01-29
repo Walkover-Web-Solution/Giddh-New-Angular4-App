@@ -1,4 +1,4 @@
-<div appTranslate [file]="'audit-logs'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'audit-logs'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="!isNewVersion"></hamburger-menu>
     <hamburger-menu [pageHeading]="localeData?.page_heading_new" *ngIf="isNewVersion"></hamburger-menu>
     <div class="container-fluid">
@@ -37,4 +37,4 @@
             </div>
         </div>
     </ng-template>
-</div>
+</ng-container>

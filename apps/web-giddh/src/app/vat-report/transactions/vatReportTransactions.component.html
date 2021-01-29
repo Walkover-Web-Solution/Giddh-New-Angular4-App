@@ -1,4 +1,4 @@
-<div appTranslate [file]="'vat-report'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="branch-transfer-report mt-2">
         <hamburger-menu [pageHeading]="localeData?.tab_heading"></hamburger-menu>
         <div class="container-fluid">
@@ -66,4 +66,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

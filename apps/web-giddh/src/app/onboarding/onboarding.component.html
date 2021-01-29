@@ -1,4 +1,4 @@
-<div appTranslate [file]="'onboarding'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'onboarding'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div id="main" class="welcome-container clearfix">
         <div>
@@ -105,4 +105,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

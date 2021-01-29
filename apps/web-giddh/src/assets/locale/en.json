@@ -88,7 +88,8 @@
         "journal": "Journal",
         "contra": "Contra",
         "debit_note": "Debit Note",
-        "credit_note": "Credit Note"
+        "credit_note": "Credit Note",
+        "advance_receipt": "Advance Receipt"
     },
     "app_create": "Create",
     "app_date_range": "Date Range",
@@ -444,5 +445,13 @@
     "app_warning": "Warning",
     "app_other_tax": "Other Tax",
     "app_cheque_number": "Cheque Number",
-    "app_cheque_clearance_date": "Cheque Clearance Date"
+    "app_cheque_clearance_date": "Cheque Clearance Date",
+    "app_percent": "Percent",
+    "app_and": "AND",
+    "app_no_tax_found": "No Taxes Found",
+    "app_on_taxable_value": "On Taxable Value (Amt - Dis)",
+    "app_on_total_value": "On Total Value (Taxable + Gst + Cess)",
+    "app_tax_applicable": "Tax applicable",
+    "app_calculation_method": "Calculation Method",
+    "app_select_method": "Select Method"
 }
