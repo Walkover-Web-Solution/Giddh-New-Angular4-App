@@ -7,7 +7,7 @@ import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 @Component({
     selector: 'bs-export-xls',  // <home></home>
     template: `
-    <div class="form-group xls-export cp" style="margin: 0;">
+    <div class="form-group xls-export cp m-0">
       <a (click)="downloadBsXls()" *ngIf="enableDownload"><img
         src="{{ imgPath }}"/></a>
       <!--end form-group -->
