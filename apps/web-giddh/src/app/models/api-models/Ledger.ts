@@ -238,6 +238,7 @@ export class TransactionsResponse implements ITransactions {
     public currencyCode?: string;
     public convertedCurrencySymbol?: string;
     public convertedCurrencyCode?: string;
+    public periodClosingBalance?: { amount: number; type: string; };
 }
 
 export class TransactionsRequest {
