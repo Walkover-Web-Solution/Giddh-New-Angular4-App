@@ -126,7 +126,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MobileHomeComponent,
         MobileHomeSidebarComponent,
         MobileSearchCompanyComponent,
-        MobileSearchBranchComponent,
+        MobileSearchBranchComponent
         // SignupComponent
     ],
     /**
