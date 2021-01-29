@@ -28,7 +28,7 @@
                             <label class="d-block">Quantity</label>
                             <input type="text" class="form-control" [disabled]="!manufacturingDetails.stockUniqueName" decimalDigitsDirective [DecimalPlaces]="4" (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)" (blur)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)"
                                 [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="manufacturingMultipleOf" />
-                            <small class="pos-abs" style="right:0;">Multiple of <span
+                            <small class="position-absolute right0">Multiple of <span
                                     *ngIf="manufacturingDetails.multipleOf">{{manufacturingDetails.multipleOf | json}}</span>
                             </small>
                         </div>
@@ -36,8 +36,8 @@
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group mr-r1">
                             <label class="d-block">Date</label>
-                            <div class="col-xs-8" style="padding: 0">
-                                <input type="text" name="invoiceDateRange" bsDatepicker required class="form-control" style="width: 100%" [(ngModel)]="manufacturingDetails.date" [bsValue]="bsValue" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
+                            <div class="col-xs-8 p-0">
+                                <input type="text" name="invoiceDateRange" bsDatepicker required class="form-control w-100" [(ngModel)]="manufacturingDetails.date" [bsValue]="bsValue" [bsConfig]="{dateInputFormat: giddhDateFormat}" />
                             </div>
                         </div>
 
@@ -180,7 +180,7 @@
                                 <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
                                     <td colspan="1">
                                         <div class="custom-select position-relative">
-                                            <sh-select [options]="liabilityGroupAccounts$ | async" [ItemHeight]="56" [isFilterEnabled]="true" name="baseAccount{{i}}" [(ngModel)]="expense.baseAccount.uniqueName" class="pull-left  select-caret" style="width: 100%">
+                                            <sh-select [options]="liabilityGroupAccounts$ | async" [ItemHeight]="56" [isFilterEnabled]="true" name="baseAccount{{i}}" [(ngModel)]="expense.baseAccount.uniqueName" class="pull-left  select-caret w-100">
                                             </sh-select>
                                         </div>
                                     </td>
@@ -189,7 +189,7 @@
                                     </td>
                                     <td>
                                         <div class="custom-select position-relative">
-                                            <sh-select [options]="expenseGroupAccounts$ | async" [ItemHeight]="56" [isFilterEnabled]="true" name="expense{{i}}" [(ngModel)]="expense.transactions[0].account.uniqueName" class="pull-left  select-caret" style="width: 100%">
+                                            <sh-select [options]="expenseGroupAccounts$ | async" [ItemHeight]="56" [isFilterEnabled]="true" name="expense{{i}}" [(ngModel)]="expense.transactions[0].account.uniqueName" class="pull-left  select-caret w-100">
                                             </sh-select>
                                         </div>
                                     </td>
@@ -219,7 +219,7 @@
                                                 #transactionAmount></div>
                                     </td>
                                     <td>
-                                        <button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn p-0"><i class="icon-plus text-danger"
+                                        <button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" class="ico-btn p-0 mr-t1"><i class="icon-plus text-danger"
                                                 aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
