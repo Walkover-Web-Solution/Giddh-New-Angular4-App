@@ -1602,4 +1602,41 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public emitOtherTaxes(): void {
         this.saveOtherTax.emit(this.blankLedger);
     }
+
+    /**
+     * This will give text total in currency
+     *
+     * @returns {string}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getTotalInCurrency(): string {
+        let totalInCurrency = this.localeData.total_in_currency;
+        let currency = "";
+
+        if(this.selectedCurrency === 0) {
+            if(this.baseCurrencyDetails) {
+                currency = this.baseCurrencyDetails.code;
+            }
+        } else {
+            if(this.foreignCurrencyDetails) {
+                currency = this.foreignCurrencyDetails.code;
+            }
+        }
+
+        totalInCurrency = totalInCurrency.replace("[CURRENCY]", currency);
+        return totalInCurrency;
+    }
+
+    /**
+     * This will give text adjust voucher
+     *
+     * @returns {string}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getAdjustVoucherType(): string {
+        let adjustVoucher = this.localeData.adjust_voucher;
+        adjustVoucher = adjustVoucher.replace("[VOUCHER_TYPE]", (this.blankLedger.voucherType === 'sal' ? 'Sales' : this.blankLedger.voucherType === 'pur' ? 'Purchase' : this.blankLedger.voucherType === 'credit note' ? 'Credit Note' : this.blankLedger.voucherType === 'debit note' ? 'Debit Note' : this.blankLedger.voucherType === 'pay' ? 'Payment' : ''));
+
+        return adjustVoucher;
+    }
 }
