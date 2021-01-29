@@ -135,7 +135,9 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
                 } else {
                     gstForm.get('stateCode').patchValue(null);
                     this._toaster.clearAllToaster();
-                    this._toaster.warningToast('Invalid GSTIN.');
+                    if (!gstForm.get('gstNumber')?.valid) {
+                        this._toaster.warningToast('Invalid GSTIN.');
+                    }
                 }
             });
         } else {

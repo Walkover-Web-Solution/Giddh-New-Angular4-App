@@ -535,7 +535,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             gstForm.get('state').get('code').patchValue(null);
                         }
                         this._toaster.clearAllToaster();
-                        if (this.formFields['taxName']) {
+                        if (this.formFields['taxName'] && !gstForm.get('gstNumber')?.valid) {
                             this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
                         }
                     }
