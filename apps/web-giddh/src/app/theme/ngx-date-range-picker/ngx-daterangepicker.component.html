@@ -231,8 +231,7 @@
                                     </div>
                                     <div class="drp-animate">
                                         <ng-container *ngFor="let row of calendarMonth.start.calRows">
-                                            <div class="d-flex" [class]="calendarMonth.start.classes[row].classList"
-                                                style="display:flex;">
+                                            <div class="d-flex" [class]="calendarMonth.start.classes[row].classList">
                                                 <div class="week td-div" *ngIf="showWeekNumbers">
                                                     <span>{{calendarMonth.start.calendar[row][0].week()}}</span>
                                                 </div>
@@ -349,8 +348,7 @@
                                         </div>
                                     </div>
                                     <ng-container *ngFor="let row of calendarMonth.end.calRows">
-                                        <div class="d-flex" [class]="calendarMonth.end.classes[row].classList"
-                                            style="display:flex;">
+                                        <div class="d-flex" [class]="calendarMonth.end.classes[row].classList">
                                             <div class="week td-div" *ngIf="showWeekNumbers">
                                                 <span>{{calendarMonth.end.calendar[row][0].week()}}</span>
                                             </div>

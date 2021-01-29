@@ -86,7 +86,7 @@
                                 </button>
                             </span>
                         </div>
-                        <div *ngIf="showGSTR1DatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                        <div *ngIf="showGSTR1DatePicker" class="position-absolute calendar-dropdown-menu">
                             <ul class="my-dropdown-menu calendar-dropdown">
                                 <li>
                                     <datepicker [datepickerMode]="'month'" name="fromDate"
@@ -172,7 +172,7 @@
                                 <i class="fa fa-caret-down"></i>
                             </span>
                         </button>
-                        <ul *dropdownMenu class="dropdown-menu pd" role="menu" style="width: 200px;">
+                        <ul *dropdownMenu class="dropdown-menu pd width-200" role="menu">
                             <li class="cp dd-options" *ngIf="selectedGstrType.name !== 'GSTR3B'"
                                 (click)="onDownloadSheetGSTR(selectedGstrType.uniqueName);">Download Sheet
                             </li>
@@ -208,7 +208,7 @@
                     (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i class="fa fa-cog" aria-hidden="true"></i>
                     Jio GST
                 </button>
-                <span style="margin: 5px 10px;" class="pull-right">OR</span>
+                <span class="pull-right span-btn-between">OR</span>
                 <button class="btn btn-default pull-right primary-color"
                     (click)="toggleSettingAsidePane($event, 'TAXPRO');"><i class="fa fa-cog" aria-hidden="true"></i> Tax
                     Pro
