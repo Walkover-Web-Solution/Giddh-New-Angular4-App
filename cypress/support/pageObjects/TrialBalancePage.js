@@ -14,9 +14,9 @@ class TrialBalancePage {
         return cy.get('.icon-refresh')
     }
 
-    //searchAccountName(){
-       //return  cy.xpath('//span[@class=\'ui-select-highlight\']')
-    //}
+    searchAccountName(){
+       return  cy.xpath('//span[@class=\'ui-select-highlight\']')
+    }
 
     searchAccountAmount(){
         return cy.get('tr > :nth-child(3)')
