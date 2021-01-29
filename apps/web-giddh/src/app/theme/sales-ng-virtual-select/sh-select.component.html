@@ -48,8 +48,8 @@
             <ng-container *ngIf="!selectedValues?.length">
                 <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" *ngIf="!showLabelOnly"
                     (focus)="subscribeToQueryChange()" [attr.style]="borderConfiguration?.style"
-                    [tabindex]="tabIndex" class="firstElementToFocus form-control" name="filter2" [(ngModel)]="filter"
-                    (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter" class="pd-r3" />
+                    [tabindex]="tabIndex" class="firstElementToFocus form-control pd-r3" name="filter2" [(ngModel)]="filter"
+                    (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter" />
             </ng-container>
         </div>
         <!--endregion-->
