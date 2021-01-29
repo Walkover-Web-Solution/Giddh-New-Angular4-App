@@ -124,7 +124,7 @@
                     <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">{{localeData?.subject_label}}</h1>
                     <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" [placeholder]="localeData?.subject_placeholder" />
                     <h1 class="mr-b1">{{localeData?.message_body_label}}</h1>
-                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" [placeholder]="localeData?.message_body_placeholder"></textarea>
+                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control resize-none" rows="4" style="resize:none;" [placeholder]="localeData?.message_body_placeholder"></textarea>
                     <small class="mr-t05 mr-b05 grey">{{localeData?.message_body_tips}}</small>
                     <div class="row mr-t2">
                         <ul class="list-inline pills">

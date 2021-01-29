@@ -33,7 +33,7 @@
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
                     <input autocomplete="disabled" type="text" readonly value="{{selectedValues[0].label}}"
-                        class="form-control selectedVal cp" [attr.style]="borderConfiguration?.style" />
+                        class="form-control selected-val cp" [attr.style]="borderConfiguration?.style" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">

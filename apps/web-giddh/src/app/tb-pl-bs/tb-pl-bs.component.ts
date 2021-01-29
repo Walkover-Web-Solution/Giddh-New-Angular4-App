@@ -23,6 +23,10 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
     public CanBSLoad: boolean = false;
     public CanNewTBLoadOnThisEnv: boolean = false;
     public isWalkoverCompany: boolean = false;
+    /* This will hold active tab */
+    public activeTab: string = 'trial-balance';
+    /* This will hold active tab index */
+    public activeTabIndex: number = 0;
 
     @ViewChild('staticTabsTBPL', {static: true}) public staticTabs: TabsetComponent;
 
@@ -49,19 +53,15 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
 
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        // Sagar: show new trial balance for Walkover company only
-        this.isWalkoverCompany = (companyUniqueName === 'walkpvindore14504197149880siqli') ? true : false;
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'trial-balance-and-profit-loss';
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
+                this.activeTab = val.tab;
+                this.activeTabIndex = val.tabIndex;
                 this.selectTab(val.tabIndex);
             }
         });
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        this.saveLastState(this.activeTab, this.activeTabIndex);
     }
 
     public selectTab(id: number) {
@@ -89,5 +89,23 @@ export class TbPlBsComponent implements OnInit, OnDestroy {
      */
     public tabChanged(tab: string, tabIndex: number): void {
         this.router.navigateByUrl('/pages/trial-balance-and-profit-loss?tab=' + tab + '&tabIndex=' + tabIndex);
+        this.saveLastState(tab, tabIndex);
+    }
+
+    /**
+     * Saves the last state for purchase module
+     *
+     * @private
+     * @param {string} tabName Current tab name
+     * @param {number} tabIndex Current tab index
+     * @memberof TbPlBsComponent
+     */
+    private saveLastState(tabName: string, tabIndex: number): void {
+        let companyUniqueName = null;
+        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = `/pages/trial-balance-and-profit-loss?tab=${tabName}&tabIndex=${tabIndex}`;
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }

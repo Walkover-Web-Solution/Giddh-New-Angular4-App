@@ -6335,7 +6335,7 @@ table td[class*=col-]:last-child {
     border: 0 !important;
 } */
 
-.select2-ledger sh-select .selectedVal {
+.select2-ledger sh-select .selected-val {
     border: 0 !important;
 }
 
@@ -8036,11 +8036,11 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     padding-left: 0 !important;
 }
 
-/* .custom-select input.form-control.selectedVal.cp {
+/* .custom-select input.form-control.selected-val.cp {
   padding-right: 0 !important;
 } */
 
-.welcome-container .select-box .custom-select input.form-control.selectedVal.cp,
+.welcome-container .select-box .custom-select input.form-control.selected-val.cp,
 .welcome-container .select-box input,
 .welcome-container .select-box textarea {
     color: $night-rider;
@@ -9434,7 +9434,7 @@ span#HW_badge_cont:nth-child(3) {
 #update-ledger-voucher-type-default.disabled-ledger, #update-ledger-assign-tag.disabled-ledger{
     .sh-select-disabled{
         background-color: $whisper-light !important;
-        input.selectedVal.form-control, input[disabled]{
+        input.selected-val.form-control, input[disabled]{
                 background-color: $whisper-light !important;
         }
     }
@@ -10160,6 +10160,10 @@ input.mat-input-element{
         margin-left: 0;
         margin-top:5px;
         position: static !important;
+        display: inline-block;
+        overflow-x: auto;
+        white-space: nowrap;
+        overflow-y: hidden;
     }
 }
     @media (max-width: 1199px) {

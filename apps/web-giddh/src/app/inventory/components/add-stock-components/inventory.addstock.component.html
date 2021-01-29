@@ -324,16 +324,16 @@
                                     <ng-container formArrayName="linkedStocks">
                                         <tr *ngFor="let list of addStockForm.get('manufacturingDetails')['controls']['linkedStocks'].controls;let i = index; let l = last" [formGroupName]="i" class="fsstock">
                                             <td>
-                                                <label class="inputLabelStock">Input Stock Name</label>
+                                                <label class="input-label-stock">Input Stock Name</label>
                                                 <sh-select [options]="stockListDropDown$ | async" formControlName="stockUniqueName" [multiple]="false" [placeholder]="'Select Stock Name'" [placeholder]="'Select Stock'" [ItemHeight]="33" (selected)="findAddedStock($event?.value, i)" [forceClearReactive]="forceClearStock$ | async"></sh-select>
                                             </td>
 
                                             <td>
-                                                <label class="inputLabelStock">Stock Qty</label>
+                                                <label class="input-label-stock">Stock Qty</label>
                                                 <input type="text" formControlName="quantity" decimalDigitsDirective [DecimalPlaces]="4" name="quantity" placeholder="Enter Quantity" class="form-control" />
                                             </td>
                                             <td>
-                                                <label class="inputLabelStock">Stock Unit</label>
+                                                <label class="input-label-stock">Stock Unit</label>
                                                 <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode" [multiple]="false" [placeholder]="'Select Unit'" [ItemHeight]="33" [forceClearReactive]="forceClearStockUnit$ | async"></sh-select>
                                             </td>
                                             <td>
