@@ -1,4 +1,4 @@
-<div appTranslate [file]="'trial-profit-balance/balance-sheet/grid'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'trial-profit-balance/balance-sheet/grid'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <!-- no data start -->
     <div class="no-data" *ngIf="noData">
         <h1>{{localeData?.no_data_found}}</h1>
@@ -142,4 +142,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>

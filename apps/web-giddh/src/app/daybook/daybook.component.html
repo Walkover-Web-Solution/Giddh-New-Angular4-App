@@ -1,4 +1,4 @@
-<div appTranslate [file]="'daybook'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'daybook'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="no-data mr-t2 loader-main" *ngIf="showLoader">
         <div class="spinner2">
@@ -207,4 +207,4 @@
             </div>
         </div>
     </ng-template>
-</div>
+</ng-container>

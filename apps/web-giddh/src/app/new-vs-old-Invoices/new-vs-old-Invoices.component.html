@@ -1,4 +1,4 @@
-<div appTranslate [file]="'new-old-invoices'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'new-old-invoices'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid">
         <div class="top-bar clearfix">
@@ -232,4 +232,4 @@
             </div>
         </div>
     </div>
-</div>
+</ng-container>
