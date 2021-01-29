@@ -5,7 +5,7 @@
 
 
         <!--region multiple-->
-        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
+        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" class="bdr white-bg">
             <ng-container *ngIf="selectedValues?.length">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
@@ -28,11 +28,11 @@
             [hidden]="((!isOpen || !isFilterEnabled))">{{selectedValues[0]?.label}}
         </button>
 
-        <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" class="form-control" #inputFilter
+        <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" class="form-control pd-r3" #inputFilter
             *ngIf="!multiple && !showLabelOnly" [hidden]="((!isOpen || !isFilterEnabled))"
             (focus)="subscribeToQueryChange()" [attr.style]="borderConfiguration?.style"
             (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter"
-            (ngModelChange)="handleInputChange($event)" style="padding-right: 28px !important;">
+            (ngModelChange)="handleInputChange($event)">
 
         <!-- (click)="show($event);" -->
         <div *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
@@ -49,8 +49,7 @@
                 <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" *ngIf="!showLabelOnly"
                     (focus)="subscribeToQueryChange()" [attr.style]="borderConfiguration?.style"
                     [tabindex]="tabIndex" class="firstElementToFocus form-control" name="filter2" [(ngModel)]="filter"
-                    (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter"
-                    style="padding-right: 28px !important;" />
+                    (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter" class="pd-r3" />
             </ng-container>
         </div>
         <!--endregion-->
