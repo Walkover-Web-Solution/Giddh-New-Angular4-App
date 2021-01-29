@@ -38,9 +38,9 @@
                                 (click)="performBulkAction('upload', BulkUploadfileInput)" container="body"
                                 tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                             </button>
-                            <input type="file" #BulkUploadfileInput name="BulkUploadfileInput"
+                            <input type="file" #BulkUploadfileInput class="d-none" name="BulkUploadfileInput"
                                 id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
-                                [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" class="d-none">
+                                [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                         </div>
                     </div>
                     <!-- [ngClass]="{'class-1':condition1==condition2, 'class-2': condition3==condition4}" -->
@@ -1293,7 +1293,7 @@
                 <div class="col-sm-3 col-xs-12 stat-block">
                     <div class="ledger-state-box">
 
-                        <h1 class="">Net Total</h1>
+                        <h1>Net Total</h1>
 
                         <div class="d-flex justify-content-between">
 
