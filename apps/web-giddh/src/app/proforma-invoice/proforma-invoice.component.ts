@@ -196,7 +196,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('copyPreviousEstimate', {static: true}) public copyPreviousEstimate: ElementRef;
     @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
-    @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
+    @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: ShSelectComponent;
@@ -1963,14 +1963,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (selectedState) {
                 this.invFormData.accountDetails[type].stateCode = selectedState.value;
                 this.invFormData.accountDetails[type].state.code = selectedState.value;
-
+                statesEle.disabled = true;
             } else {
+                this._toasty.clearAllToaster();
                 this.invFormData.accountDetails[type].stateCode = null;
                 this.invFormData.accountDetails[type].state.code = null;
-                this._toasty.clearAllToaster();
+                statesEle.disabled = false;
             }
-            statesEle.disabled = true;
-
         } else {
             statesEle.disabled = false;
             this.invFormData.accountDetails[type].stateCode = null;
