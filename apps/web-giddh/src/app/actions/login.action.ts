@@ -1178,10 +1178,27 @@ export class LoginActions {
     }
 
     public finalNavigate(route: any, parameter?: any): void {
+        let isQueryParams: boolean;
         if (screen.width <= 767 || isCordova) {
             this._router.navigate(["/pages/mobile-home"]);
         } else {
-            this._router.navigate([route], parameter);
+            if (route.includes('?')) {
+                parameter = parameter || {};
+                isQueryParams = true;
+                const splittedRoute = route.split('?');
+                route = splittedRoute[0];
+                const paramString = splittedRoute[1];
+                const params = paramString?.split('&');
+                params?.forEach(param => {
+                    const [key, value] = param.split('=');
+                    parameter[key] = value;
+                });
+            }
+            if (isQueryParams) {
+                this._router.navigate([route], {queryParams: parameter});
+            } else {
+                this._router.navigate([route], parameter);
+            }
         }
         if (isCordova || isElectron) {
             setTimeout(() => {
