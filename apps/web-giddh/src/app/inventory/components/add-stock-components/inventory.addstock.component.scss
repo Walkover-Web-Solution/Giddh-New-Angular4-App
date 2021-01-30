@@ -7,9 +7,12 @@
     padding: 2px 10px 2px 0;
 }
 
-.table_label td {
-    padding-top: 12px !important;
-    padding-bottom: 5px;
+.table-label{
+    border-color: $gainsboro;
+    td {
+        padding-top: 12px !important;
+        padding-bottom: 5px;
+    }
 }
 
 .dropdown-menu {
@@ -61,13 +64,13 @@
 tr.fsstock td {
     padding-bottom: 15px;
 }
-.table_label strong {
+.table-label strong {
     color: $charcoal;
     font-weight: normal !important;
     font-size: 14px;
     font-family: "opensans-regular";
 }
-.inputLabelStock {
+.input-label-stock {
     display: none;
 }
 
@@ -108,10 +111,10 @@ tr.fsstock td {
         display: block;
         margin-bottom: 0;
     }
-    tr.no-hover.table_label {
+    tr.no-hover.table-label {
         display: none;
     }
-    .inputLabelStock {
+    .input-label-stock {
         display: block;
     }
 }

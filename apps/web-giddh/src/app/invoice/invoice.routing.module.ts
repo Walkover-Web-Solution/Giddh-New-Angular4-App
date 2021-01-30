@@ -81,6 +81,7 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     apiKey: 'AIzaSyAAvwBeHl0uuVSEVeZ3bTylwIkRGKCFvdI'
 };
 const INVOICE_ROUTES: Routes = [
+
     {
         path: '',
         canActivate: [NeedsAuthentication],
@@ -92,6 +93,7 @@ const INVOICE_ROUTES: Routes = [
             { path: 'preview/:voucherType/:voucherNoForDetail/:voucherAction', component: InvoiceComponent },
             //{ path: 'receipt', component: ReceiptComponent },
             { path: 'ewaybill/create', component: EWayBillCreateComponent },
+
         ]
     },
     { path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent },
@@ -133,7 +135,7 @@ const INVOICE_ROUTES: Routes = [
         DownloadOrPreviewEwayComponent,
         InvoicePreviewDetailsComponent,
         ProformaListComponent,
-        DownloadVoucherComponent
+        DownloadVoucherComponent,
     ],
     imports: [
         FormsModule,

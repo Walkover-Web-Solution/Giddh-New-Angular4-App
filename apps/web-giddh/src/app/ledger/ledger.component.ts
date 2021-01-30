@@ -807,8 +807,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.arrangeLedgerTransactionsForMobile();
                 }
 
-                if (lt.closingBalance) {
-                    this.closingBalanceBeforeReconcile = lt.closingBalance;
+                if (lt.periodClosingBalance) {
+                    this.closingBalanceBeforeReconcile = lt.periodClosingBalance;
                     this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
                 }
                 if (lt.closingBalanceForBank) {
@@ -1735,7 +1735,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public getReconciliation() {
         this.lc.transactionData$.pipe(take(1)).subscribe((val) => {
             if (val) {
-                this.closingBalanceBeforeReconcile = val.closingBalance;
+                this.closingBalanceBeforeReconcile = val.periodClosingBalance;
                 if (this.closingBalanceBeforeReconcile) {
                     this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
                 }

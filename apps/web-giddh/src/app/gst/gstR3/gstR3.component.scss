@@ -533,6 +533,37 @@ ul#dropdown-menu {
     padding: 15px;
     height:65px;
 }
+
+.dropdown-menu-right{
+    min-width: 350px;
+}
+
+.pd-r120{
+    padding-right: 120px;
+}
+
+.pd-r160{
+    padding-right:160px;
+}
+
+.pd-r190{
+    padding-right:190px;
+}
+
+.bg-thead{
+    background-color: $whisper; 
+    color: $black;
+}
+
+.bg-thead-dark{
+    background: $alice-blue-light; 
+    color: $black;
+}
+
+.pointer-none{
+    pointer-events:none !important;
+}
+
 @media(max-width:991px){
     .gstr-summary-head{
         height: auto;

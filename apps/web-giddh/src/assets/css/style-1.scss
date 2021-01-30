@@ -668,6 +668,10 @@ aside-menu-account .container-fluid {
     color: $white;
 }
 
+.black-color {
+    color: $black;
+}
+
 .grey-bg {
     background: $gray-95;
     /*min-width:320px;*/
@@ -683,6 +687,10 @@ aside-menu-account .container-fluid {
 
 .min-width-100{
     min-width: 100px;
+}
+
+.width-2000{
+    width: 2000px;
 }
 
 .overflow-hidden {
@@ -2210,7 +2218,9 @@ i.cls-alert {
 .min150 {
     min-width: 150px;
 }
-
+.min160{
+    min-width: 160px;
+}
 .account-card {
     max-width: 300px;
     min-height: 240px;

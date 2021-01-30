@@ -16,7 +16,6 @@ export class AboutProductServiceDetailComponent implements OnInit {
     public isMobileScreen: boolean = true;
     /* this will store image path*/
     public imgPath: string = '';
-
     public productContent: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(

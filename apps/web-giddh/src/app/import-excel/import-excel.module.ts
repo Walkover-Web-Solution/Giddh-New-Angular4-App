@@ -32,7 +32,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		UploadFileComponent,
 		UploadSuccessComponent,
 		ImportWizardComponent,
-		ImportReportComponent
+        ImportReportComponent
 	],
 	exports: [ImportComponent],
 	providers: [{
