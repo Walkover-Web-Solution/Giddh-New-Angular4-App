@@ -28,6 +28,10 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
     public activeAccountSharedWith: any[] = [];
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private _ledgerService: LedgerService, private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
     }
