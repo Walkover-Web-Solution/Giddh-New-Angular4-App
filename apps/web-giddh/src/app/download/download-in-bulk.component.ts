@@ -3,12 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 @Component({
-    selector: 'download-bulk-invoice',
-    templateUrl: './download-bulk-invoice.component.html',
-    styleUrls: ['./download-bulk-invoice.component.scss'],
+    selector: 'download',
+    templateUrl: './download-in-bulk.component.html',
+    styleUrls: ['./download-in-bulk.component.scss'],
 })
 
-export class DownloadBulkInvoiceComponent implements OnInit, OnDestroy {
+export class DownloadInBulkComponent implements OnInit, OnDestroy {
     /** This holds url to download */
     public downloadUrl: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -21,7 +21,7 @@ export class DownloadBulkInvoiceComponent implements OnInit, OnDestroy {
     /**
      * Initializes the component
      *
-     * @memberof DownloadBulkInvoiceComponent
+     * @memberof DownloadInBulkComponent
      */
     public ngOnInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -34,7 +34,7 @@ export class DownloadBulkInvoiceComponent implements OnInit, OnDestroy {
     /**
      * Releases the memory
      *
-     * @memberof DownloadBulkInvoiceComponent
+     * @memberof DownloadInBulkComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

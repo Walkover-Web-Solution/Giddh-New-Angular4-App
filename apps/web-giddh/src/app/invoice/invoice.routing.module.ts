@@ -75,7 +75,6 @@ import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeTo
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
-import { DownloadBulkInvoiceComponent } from './download-bulk-invoice/download-bulk-invoice.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -98,7 +97,6 @@ const INVOICE_ROUTES: Routes = [
         ]
     },
     { path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent },
-    { path: 'download-bulk-invoice', pathMatch: 'full', component: DownloadBulkInvoiceComponent, canActivate: [NeedsAuthentication], },
 ];
 
 @NgModule({
@@ -138,7 +136,6 @@ const INVOICE_ROUTES: Routes = [
         InvoicePreviewDetailsComponent,
         ProformaListComponent,
         DownloadVoucherComponent,
-        DownloadBulkInvoiceComponent
     ],
     imports: [
         FormsModule,
