@@ -18,7 +18,6 @@ import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, 
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
-import { GeneralActions } from '../actions/general/general.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
@@ -68,9 +67,9 @@ import { OrganizationType } from '../models/user-login-state';
 })
 
 export class LedgerComponent implements OnInit, OnDestroy {
-    @ViewChild('updateledgercomponent', {static: true}) public updateledgercomponent: ElementViewContainerRef;
+    @ViewChild('updateledgercomponent', {static: false}) public updateledgercomponent: ElementViewContainerRef;
     @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
-    @ViewChild('sharLedger', {static: true}) public sharLedger: ShareLedgerComponent;
+    @ViewChild('sharLedger', {static: false}) public sharLedger: ShareLedgerComponent;
     @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
 
     @ViewChild('advanceSearchComp', {static: false}) public advanceSearchComp: AdvanceSearchModelComponent;
@@ -86,17 +85,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
     @ViewChild('newLedPanel', {static: false}) public newLedgerComponent: NewLedgerEntryPanelComponent;
-    @ViewChild('updateLedgerModal', {static: true}) public updateLedgerModal: ModalDirective;
-    @ViewChild('exportLedgerModal', {static: true}) public exportLedgerModal: ModalDirective;
-    @ViewChild('shareLedgerModal', {static: true}) public shareLedgerModal: ModalDirective;
-    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+    @ViewChild('updateLedgerModal', {static: false}) public updateLedgerModal: ModalDirective;
+    @ViewChild('exportLedgerModal', {static: false}) public exportLedgerModal: ModalDirective;
+    @ViewChild('shareLedgerModal', {static: false}) public shareLedgerModal: ModalDirective;
+    @ViewChild('advanceSearchModel', {static: false}) public advanceSearchModel: ModalDirective;
     @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
     @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
     /** upload bank statement modal instance */
-    @ViewChild('importStatementModal', {static: true}) public importStatementModal: ModalDirective;
+    @ViewChild('importStatementModal', {static: false}) public importStatementModal: ModalDirective;
     /** datepicker element reference  */
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: false}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;

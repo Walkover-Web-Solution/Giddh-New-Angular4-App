@@ -1070,7 +1070,7 @@
                                         <span *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'"
                                             [tooltip]="lc.ledgerUnderStandingObj.balanceText.dr" [placement]="'left'">
                                             <!-- By -->
-                                            By Balance C/F:
+                                            {{localeData?.by_balance_cf}}:
                                             <span class="digit-blue">
                                                 {{ ledgerTxnBalance?.currencySymbol }}{{ledgerTxnBalance?.closingBalance?.amount  | giddhCurrency}}
                                             </span>
@@ -1274,10 +1274,9 @@
             </ledger-columnar-report-table>
         </div>
 
-
         <!-- aside menu section -->
         <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-        <ledger-aside-pane [class]="asideMenuState" *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" [keyboardShortcut]="'esc'" (onShortcutPress)="toggleAsidePane()" (closeAsideEvent)="toggleAsidePane()">
+        <ledger-aside-pane [class]="asideMenuState" *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" [keyboardShortcut]="'esc'" [localeData]="localeData" [commonLocaleData]="commonLocaleData" (onShortcutPress)="toggleAsidePane()" (closeAsideEvent)="toggleAsidePane()">
         </ledger-aside-pane>
         <!-- aside menu section -->
 
@@ -1299,9 +1298,7 @@
         <div bsModal #exportLedgerModal="bs-modal" tabindex="-1" class="modal fade" role="dialog">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
-                    <export-ledger [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq"
-                        (closeExportLedgerModal)="hideExportLedgerModal()"
-                        (showColumnarTable)="onShowColumnarReportTable($event)"></export-ledger>
+                    <export-ledger *ngIf="exportLedgerModal.isShown" [advanceSearchRequest]="advanceSearchRequest" [accountUniqueName]="lc.accountUnq" (closeExportLedgerModal)="hideExportLedgerModal()" (showColumnarTable)="onShowColumnarReportTable($event)"></export-ledger>
                 </div>
             </div>
         </div>
