@@ -3005,6 +3005,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     }
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        if (searchType === SEARCH_TYPE.VENDOR) {
+                            this.defaultVendorResultsPaginationData.page = data.body.page;
+                            this.defaultVendorResultsPaginationData.totalPages = data.body.totalPages;
+                        } else if (searchType === SEARCH_TYPE.ITEM) {
+                            this.defaultItemResultsPaginationData.page = data.body.page;
+                            this.defaultItemResultsPaginationData.totalPages = data.body.totalPages;
+                        }
                     }
                 }
             });
