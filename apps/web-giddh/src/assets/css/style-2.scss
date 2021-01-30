@@ -9580,6 +9580,12 @@ input.mat-input-element{
 .custom-select{
     background-image: none !important;
 }
+.top-bar.aging-top-bar, .top-bar.customer-top-bar{
+    padding-top: 18px !important;
+}
+.top-bar.customer-top-bar.vendor-top-bar{
+    padding-top: 15px !important;
+}
 /* responsive  starts here */
 
 @media (max-width: 1440px) {
