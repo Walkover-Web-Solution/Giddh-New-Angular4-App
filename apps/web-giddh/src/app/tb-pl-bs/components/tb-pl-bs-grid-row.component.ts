@@ -1,11 +1,8 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { Observable } from 'rxjs';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { take } from 'rxjs/operators';
+import { SearchService } from '../../services/search.service';
 
 @Component({
     selector: '[tb-pl-bs-grid-row]',  // <home></home>
@@ -23,19 +20,17 @@ import { take } from 'rxjs/operators';
     <ng-container *ngFor="let account of groupDetail.accounts;trackBy: trackByFn">
       <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
       <section class="row-2 account " style="overflow: visible;" *ngIf="account.isVisible || account.isCreated" [hidden]="!account.isVisible"
-               (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()">
+               (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()" [exclude]="'.row-item'">
 
-        <div class="row" style="height: 35px !important;" *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
+        <div class="row row-item" style="height: 35px !important;" *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
           <div class="col-4 account no-select" [ngStyle]="{'padding-left': (padding+20)+'px'}">
 
             <div style="padding: 0px;border-right: 0px;" [innerHTML]="account.name | lowercase | highlight:search">
             </div>
-
             <span account-detail-modal-component *ngIf="modalUniqueName && modalUniqueName === account.uniqueName" [shouldShowGenerateInvoice]="false"
-                  [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === modalUniqueName"
+                  [accountUniqueName]="account.uniqueName" [isModalOpen]="account.uniqueName === modalUniqueName" [accInfo]="accountDetails"
                   [from]="from" [to]="to">
             </span>
-
           </div>
           <div class="col-2 account text-right">{{ account.openingBalance?.amount | giddhCurrency }} {{account.openingBalance | recType }}
           </div>
@@ -51,7 +46,7 @@ import { take } from 'rxjs/operators';
     <ng-content></ng-content>
   `
 })
-export class TlPlGridRowComponent implements OnInit, OnChanges {
+export class TlPlGridRowComponent implements OnChanges {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     @Input() public from: string;
@@ -59,10 +54,11 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
     @Input() public padding: string;
     public modalUniqueName: string = null;
     public accountDetails: IFlattenAccountsResultItem;
-    public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
 
-    constructor(private cd: ChangeDetectorRef, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
-        this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts));
+    constructor(
+        private cd: ChangeDetectorRef,
+        private searchService: SearchService
+    ) {
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -74,42 +70,33 @@ export class TlPlGridRowComponent implements OnInit, OnChanges {
         }
     }
 
-    public ngOnInit() {
-        //  this.accountDetails.map(f=> f.parentGroups.find(e=> e.name === this.groupDetail.groupName));
+    public entryClicked(acc) {
+        let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+        if (isElectron) {
+            let ipcRenderer = (window as any).require('electron').ipcRenderer;
+            url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+            ipcRenderer.send('open-url', url);
+        } else if (isCordova) {
+            //todo: entry Clicked
+        } else {
+            (window as any).open(url);
+        }
     }
-
-  public entryClicked(acc) {
-    let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
-    if (isElectron) {
-      let ipcRenderer = (window as any).require('electron').ipcRenderer;
-      url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
-      ipcRenderer.send('open-url', url);
-    }else if(isCordova){
-        //todo: entry Clicked
-    } else {
-      (window as any).open(url);
-    }
-  }
 
     public accountInfo(acc, e: Event) {
-        this.flattenAccounts$.pipe(
-            take(1),
-        ).subscribe(data => {
-            if (data && data.length) {
-                let account = data.find(f => f.uniqueName === acc.uniqueName);
-                if (account) {
-                    let creditorsString = 'currentliabilities, sundrycreditors';
-                    let debtorsString = 'currentassets, sundrydebtors';
-                    if (account.uNameStr.indexOf(creditorsString) > -1 || account.uNameStr.indexOf(debtorsString) > -1) {
-                        this.modalUniqueName = account.uniqueName;
-                    } else {
-                        this.modalUniqueName = '';
-                        this.entryClicked(acc);
-                    }
+        this.searchService.loadDetails(acc.uniqueName).subscribe(response => {
+            if (response?.body) {
+                this.accountDetails = response.body;
+                const parentGroups = response.body.parentGroups?.join(', ');
+                const creditorsString = 'currentliabilities, sundrycreditors';
+                const debtorsString = 'currentassets, sundrydebtors';
+                if (parentGroups.indexOf(creditorsString) > -1 || parentGroups.indexOf(debtorsString) > -1) {
+                    this.modalUniqueName = response.body.uniqueName;
                 } else {
                     this.modalUniqueName = '';
                     this.entryClicked(acc);
                 }
+                this.cd.detectChanges();
             }
         });
     }
