@@ -1630,6 +1630,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.searchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
                     }
                 }
             });
