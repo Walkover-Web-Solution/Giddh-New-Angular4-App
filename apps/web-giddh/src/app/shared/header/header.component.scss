@@ -816,7 +816,7 @@ ul.sub-list {
         .dropdown-menu{
             left: auto !important;
             right: -270px !important;
-            top: 10px !important;
+            top: 17px !important;
             transform: translateY(0px);
             bottom: auto;
             border: 1px solid $gainsboro;
@@ -842,6 +842,9 @@ ul.sub-list {
                         color: $chetwode-blue;
                         font-weight: bold;
 
+                    }
+                    &.company-create{
+                        color: $chetwode-blue !important;
                     }
                     &:hover{
                         color: $chetwode-blue !important;
@@ -870,6 +873,7 @@ ul.sub-list {
             div{
                 input{
                     padding-left: 30px;
+                    border-left: none;
                     background-image: url(../../../assets/images/Search.svg);
                 }
                 .input-group-addon{
