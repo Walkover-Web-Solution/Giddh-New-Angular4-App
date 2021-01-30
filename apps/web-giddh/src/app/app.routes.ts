@@ -23,7 +23,6 @@ import { MobileHomeComponent } from "./mobile-home/mobile-home.component";
 import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
-import { InventoryCreateGroupComponent } from './new-inventory/component/create-group/create-group.component';
 import { DownloadComponent } from './download/download.component';
 
 export const ROUTES: Routes = [
