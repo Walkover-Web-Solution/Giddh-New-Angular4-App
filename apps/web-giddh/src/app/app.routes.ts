@@ -26,7 +26,7 @@ import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/
 import { DownloadComponent } from './download/download.component';
 export const ROUTES: Routes = [
     { path: 'download', component: DownloadComponent },
-    { path: '', redirectTo: 'download', pathMatch: 'full' },
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404', component: NotFoundComponent },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
     { path: 'token-verify', component: TokenVerifyComponent },
