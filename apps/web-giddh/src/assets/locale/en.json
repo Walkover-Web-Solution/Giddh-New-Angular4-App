@@ -445,13 +445,22 @@
     "app_warning": "Warning",
     "app_other_tax": "Other Tax",
     "app_cheque_number": "Cheque Number",
+    "app_clearance_date": "Clearance Date",
     "app_cheque_clearance_date": "Cheque Clearance Date",
     "app_percent": "Percent",
     "app_and": "AND",
+    "app_or": "OR",
     "app_no_tax_found": "No Taxes Found",
     "app_on_taxable_value": "On Taxable Value (Amt - Dis)",
     "app_on_total_value": "On Total Value (Taxable + Gst + Cess)",
     "app_tax_applicable": "Tax applicable",
     "app_calculation_method": "Calculation Method",
-    "app_select_method": "Select Method"
+    "app_select_method": "Select Method",
+    "app_balance": "Balance",
+    "app_dated": "Dated",
+    "app_add_new_line": "Add New Line",
+    "app_voucher_number": "Voucher Number",
+    "app_stock_name": "Stock Name",
+    "app_select_group": "Select Group",
+    "app_copy": "Copy"
 }
