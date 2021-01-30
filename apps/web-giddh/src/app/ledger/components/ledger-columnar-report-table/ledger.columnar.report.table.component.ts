@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
-import { select, Store } from '@ngrx/store';
-import { takeUntil, take, single } from 'rxjs/operators';
-import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
-import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ReportsDetailedRequestFilter, ColumnarResponseResult } from '../../../models/api-models/Reports';
@@ -40,12 +39,15 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public paginationLimit: number = PAGINATION_LIMIT;
     /** Subject to destroy all observers  */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(public settingsFinancialYearService: SettingsFinancialYearService,
         private store: Store<AppState>,
         private toaster: ToasterService,
-        private ledgerService: LedgerService,
-        private generalService: GeneralService) {
+        private ledgerService: LedgerService) {
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state && state.session && state.session.companyUniqueName) {
                 this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
@@ -58,7 +60,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      *
      * @memberof ColumnarReportTableComponent
      */
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.getColumnarRequestModel = new ReportsDetailedRequestFilter();
         this.getColumnarRequestModel.page = 1;
         this.getColumnarRequestModel.count = this.paginationLimit;
