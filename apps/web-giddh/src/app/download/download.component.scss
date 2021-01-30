@@ -1,5 +1,7 @@
+@import "../../assets/css/color.scss";
+
 .header{
-    background-color: #1a237e;
+    background-color: $midnight-blue;
     padding: 15px;
     min-height: 60px;
 }
