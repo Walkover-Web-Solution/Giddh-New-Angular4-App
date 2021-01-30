@@ -131,7 +131,11 @@ const INVOICE_ROUTES: Routes = [
         DownloadOrPreviewEwayComponent,
         InvoicePreviewDetailsComponent,
         ProformaListComponent,
+<<<<<<< HEAD
         DownloadVoucherComponent
+=======
+        DownloadVoucherComponent,
+>>>>>>> 64cd98fbc9... shalinee | TEST | fianl design updated of common download button page
     ],
     imports: [
         FormsModule,
