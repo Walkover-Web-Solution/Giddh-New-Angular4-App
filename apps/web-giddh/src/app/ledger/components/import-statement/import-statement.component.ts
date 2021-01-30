@@ -10,6 +10,8 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class ImportStatementComponent {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
     /** Account unique name */
     @Input() public accountUniqueName: string = '';
     /** Directives to emit true if API call successful */
@@ -42,7 +44,7 @@ export class ImportStatementComponent {
 
         if (!isValidFileType) {
             if(file && file.length > 0) {
-                this.toaster.errorToast('Only PDF files are supported for Import');
+                this.toaster.errorToast(this.localeData?.import_error);
             }
             this.selectedFile = null;
             this.postRequest.file = null;
@@ -63,7 +65,7 @@ export class ImportStatementComponent {
         
         this.ledgerService.importStatement(this.getRequest, this.postRequest).subscribe(response => {
             if (response.status === 'success') {
-                this.toaster.successToast("File has been uploaded successfully.");
+                this.toaster.successToast(this.localeData?.import_success);
                 this.closeModal.emit(true);
             } else {
                 this.toaster.errorToast(response.message, response.code);
