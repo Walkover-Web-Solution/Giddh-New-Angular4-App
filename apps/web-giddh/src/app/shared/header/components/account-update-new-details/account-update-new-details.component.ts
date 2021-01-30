@@ -757,7 +757,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             gstForm.get('state').get('code').patchValue(null);
                         }
                         this._toaster.clearAllToaster();
-                        if (this.formFields['taxName']) {
+                        if (this.formFields['taxName'] && !gstForm.get('gstNumber')?.valid) {
                             let invalidTaxName = this.commonLocaleData.app_invalid_tax_name;
                             invalidTaxName = invalidTaxName.replace("[TAX_NAME]", this.formFields['taxName'].label);
                             this._toaster.errorToast(invalidTaxName);
