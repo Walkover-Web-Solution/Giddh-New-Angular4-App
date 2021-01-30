@@ -6,10 +6,10 @@
     <tab heading="Customer" [id]="(activeTab !== 'aging-report') ? 'giddh-page-heading': ''" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
         <div class="container-fluid">
 
-            <div class="top-bar customer-top-bar clearfix">
+            <div class="top-bar customer-top-bar clearfix" [ngClass]="{'vendor-top-bar': activeTab === 'vendor'}">
                 <div class="customer-form-inline">
                     <div>
-                        <div class="dis pull-left mr-r1">
+                        <div class="dis mr-r15 pull-left">
 
                             <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'right'">
                                 <i dropdownToggle class="icon-options pd cp font-20"></i>
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
-                            <div class="form-group">
+                            <div>
                                 <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                                     [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
                                     placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
@@ -107,7 +107,7 @@
                     <button class="btn btn-group btn-filter desktop-button-filter " *ngIf="selectedAccountsList.length>0" (click)="clearSelectedContacts();">
                             <span class="icon-cross"></span> Clear Selected
                     </button>
-                    <div class="mt-1">
+                    <div>
                         <div class="btn-group  pull-right onDesktopView">
                             <button *ngIf="activeTab == 'customer'" class="btn btn-sky-blue mr-0" (click)="openAddAndManage('customer')">
                             + New Customer
