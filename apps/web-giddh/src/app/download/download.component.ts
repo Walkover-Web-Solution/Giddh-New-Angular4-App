@@ -14,9 +14,10 @@ export class DownloadComponent implements OnInit, OnDestroy {
     public downloadUrl: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* it will store image path */
+    public imgPath: string = '';
 
     constructor(private route: ActivatedRoute) {
-
     }
 
     /**
@@ -25,6 +26,9 @@ export class DownloadComponent implements OnInit, OnDestroy {
      * @memberof DownloadBulkInvoiceComponent
      */
     public ngOnInit(): void {
+
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response && response.url) {
                 this.downloadUrl = response.url;
