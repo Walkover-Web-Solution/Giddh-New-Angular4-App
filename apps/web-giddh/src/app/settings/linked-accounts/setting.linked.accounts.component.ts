@@ -312,6 +312,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = data.body.page;
+                        this.defaultAccountPaginationData.totalPages = data.body.totalPages;
                     }
                 }
             });

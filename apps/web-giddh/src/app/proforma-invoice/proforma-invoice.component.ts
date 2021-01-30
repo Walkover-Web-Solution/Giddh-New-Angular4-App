@@ -5808,6 +5808,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        if (searchType === SEARCH_TYPE.CUSTOMER) {
+                            this.defaultCustomerResultsPaginationData.page = data.body.page;
+                            this.defaultCustomerResultsPaginationData.totalPages = data.body.totalPages;
+                        } else if (searchType === SEARCH_TYPE.ITEM) {
+                            this.defaultItemResultsPaginationData.page = data.body.page;
+                            this.defaultItemResultsPaginationData.totalPages = data.body.totalPages;
+                        }
                     }
                 }
             });
