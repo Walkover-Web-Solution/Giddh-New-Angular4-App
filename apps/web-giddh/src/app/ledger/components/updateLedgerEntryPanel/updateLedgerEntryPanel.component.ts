@@ -497,7 +497,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
                     }
 
-                    this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name);
+                    this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name, this.localeData);
                     // TODO: Prateek start
                     // let accountsArray: IOption[] = [];
                     // let accountsForBaseAccountArray: IOption[] = [];
@@ -972,6 +972,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.checkAdvanceReceiptOrInvoiceAdjusted();
                     }
                 });
+        }
+
+        if(this.localeData) {
+            this.availableItcList[0].label = this.localeData.import_goods;
+            this.availableItcList[1].label = this.localeData.import_services;
+            this.availableItcList[2].label = this.localeData.others;
         }
     }
 
