@@ -157,11 +157,11 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Invoice > Proforma', uniqueName: '/pages/invoice/preview/proformas', additional: { tab: 'proformas', tabIndex: 0 }, hasTabs: true },
 ];
 export let DEFAULT_AC_ORIGINAL = [
-    { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash', hasTabs: false },
-    { type: 'ACCOUNT', name: 'Sales', uniqueName: 'sales', hasTabs: false },
-    { type: 'ACCOUNT', name: 'Purchase', uniqueName: 'purchases', hasTabs: false },
-    { type: 'ACCOUNT', name: 'General Reserves', uniqueName: 'generalreserves', hasTabs: false },
-    { type: 'ACCOUNT', name: 'Reverse Charge ', uniqueName: 'reversecharge', hasTabs: false },
+    { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash', hasTabs: false, time: +new Date() },
+    { type: 'ACCOUNT', name: 'Sales', uniqueName: 'sales', hasTabs: false, time: +new Date() },
+    { type: 'ACCOUNT', name: 'Purchase', uniqueName: 'purchases', hasTabs: false, time: +new Date() },
+    { type: 'ACCOUNT', name: 'General Reserves', uniqueName: 'generalreserves', hasTabs: false, time: +new Date() },
+    { type: 'ACCOUNT', name: 'Reverse Charge ', uniqueName: 'reversecharge', hasTabs: false, time: +new Date() },
 
 ];
 export const DEFAULT_GROUPS_ORIGINAL = ['sundrydebtors', 'sundrycreditors', 'bankaccounts'];
@@ -231,11 +231,11 @@ export let DEFAULT_MENUS_RESPONSIVE: IUlist[] = [
 
 export let DEFAULT_AC = [];
 export let DEFAULT_AC_RESPONSIVE = [
-    { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash', hasTabs: false },
-    { type: 'ACCOUNT', name: 'Sales', uniqueName: 'sales', hasTabs: false },
-    { type: 'ACCOUNT', name: 'Purchase', uniqueName: 'purchases', hasTabs: false },
-    { type: 'ACCOUNT', name: 'General Reserves', uniqueName: 'generalreserves', hasTabs: false },
-    { type: 'ACCOUNT', name: 'Reverse Charge ', uniqueName: 'reversecharge', hasTabs: false }
+    { type: 'ACCOUNT', name: 'Cash', uniqueName: 'cash', hasTabs: false, time: +new Date() },
+    { type: 'ACCOUNT', name: 'Sales', uniqueName: 'sales', hasTabs: false, time: +new Date() },
+    { type: 'ACCOUNT', name: 'Purchase', uniqueName: 'purchases', hasTabs: false, time: +new Date() },
+    { type: 'ACCOUNT', name: 'General Reserves', uniqueName: 'generalreserves', hasTabs: false, time: +new Date() },
+    { type: 'ACCOUNT', name: 'Reverse Charge ', uniqueName: 'reversecharge', hasTabs: false, time: +new Date() }
 ];
 
 export let DEFAULT_GROUPS = [];

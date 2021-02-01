@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="pull-left d-flex wrap-searching-aging">
-                <div class="form-group search-field max250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
+                <div class="form-group search-field max-width-250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
                     <input type="text" [placeholder]="localeData?.name_amount" class="form-control name-width" [(ngModel)]="searchStr"
                         (ngModelChange)="searchStr$.next($event)" />
                     <span class="input-addon">
