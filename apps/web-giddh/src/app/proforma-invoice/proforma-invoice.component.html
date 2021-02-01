@@ -1767,7 +1767,7 @@
                                                                 <li class="clearfix mr-t1 d-flex align-items-center payment-mode-amount" *ngIf="isSalesInvoice">
                                                                     <input type="text" (blur)="calculateBalanceDue()"
                                                                         placeholder="Amount" name="dueAmount"
-                                                                        class="form-control amount-field text-right pull-right max100"
+                                                                        class="form-control amount-field text-right pull-right max-width-100"
                                                                         [(ngModel)]="depositAmount"
                                                                         [prefix]="depositCurrSymbol"
                                                                         [suffix]="selectedSuffixForCurrency"
@@ -1777,7 +1777,7 @@
 
                                                                 <li class="clearfix mr-t1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
                                                                     <span
-                                                                        class="amount-field pull-right max100 amount-filed-cash">
+                                                                        class="amount-field pull-right max-width-100 amount-filed-cash">
                                                                         <span
                                                                             *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue
                                                 | giddhCurrency}}</span>
@@ -2560,14 +2560,14 @@
 
                                                 <li class="clearfix mr-t1  d-flex align-items-center payment-mode-amount" *ngIf="isSalesInvoice">
                                                     <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount"
-                                                        name="dueAmount" class="form-control amount-field text-right pull-right max100"
+                                                        name="dueAmount" class="form-control amount-field text-right pull-right max-width-100"
                                                         [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol"
                                                         [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                                     <label class="pull-right pt-1">Amount</label>
                                                 </li>
 
                                                 <li class="clearfix mr-t1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
-                                                    <span class="amount-field pull-right max100 amount-filed-cash">
+                                                    <span class="amount-field pull-right max-width-100 amount-filed-cash">
                                                         <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
