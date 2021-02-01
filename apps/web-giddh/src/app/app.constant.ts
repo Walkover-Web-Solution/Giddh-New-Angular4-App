@@ -289,3 +289,5 @@ export const SETTING_INTEGRATION_TABS = {
     E_COMMERCE: { LABEL: 'ecommerce', VALUE: 3 },
     PAYMENT: { LABEL: 'payment', VALUE: 4 }
 };
+/** Email Validation Regex */
+export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
