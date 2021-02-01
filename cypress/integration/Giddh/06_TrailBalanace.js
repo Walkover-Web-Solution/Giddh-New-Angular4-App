@@ -40,11 +40,11 @@ describe('This is TrialBalance Search Test', () => {
             if (response.status === 201){
                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
             }
-            cy.searchOnTrialBalance('uitest', '199')
+            cy.searchOnTrialBalance('uitest', '199.99')
         })
     });
 
-    it('Verify Profit & Loss Amount after Create Entry', () => {
+    xit('Verify Profit & Loss Amount after Create Entry', () => {
         cy.createLedgerAPI('uitest').then((response) => {
             if (response.status === 201){
                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
