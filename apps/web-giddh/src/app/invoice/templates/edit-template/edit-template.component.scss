@@ -15,6 +15,8 @@
 .template-grid h3 {
     text-transform: capitalize;
     font-size: 18px;
+    padding-bottom: 5px;
+    height: 34px;
 }
 
 .template-action {
@@ -26,6 +28,12 @@
 
 .template-meta {
     padding: 15px 0 0;
+}
+
+.primary-color{
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 
 @import "../../../../../../web-giddh/src/assets/css/color.scss";
