@@ -102,84 +102,97 @@
     "account_unchanged": "Account not changed",
     "base_account_change_error": "You are not permitted to change base account. Voucher is already Generated",
     "account_entry_error": "Please Select [ACCOUNT] for entry..",
-    "debtor": {
-        "cr": {
-            "text": "Is <accountName> giver?",
-            "balance_text": "Advance from Debtors"
+    "text_data": [
+        {
+            "accountType": "Debtors",
+            "text": {
+                "cr": "Is <accountName> giver?",
+                "dr": "Is <accountName> receiver?"
+            },
+            "balanceText": {
+                "cr": "Advance from Debtors",
+                "dr": "Due"
+            }
         },
-        "dr": {
-            "text": "Is <accountName> receiver?",
-            "balance_text": "Due"
-        }
-    },
-    "creditor": {
-        "cr": {
-            "text": "Is <accountName> giver?",
-            "balance_text": "Payable to creditors"
+        {
+            "accountType": "Creditors",
+            "text": {
+                "cr": "Is <accountName> giver?",
+                "dr": "Is <accountName> receiver?"
+            },
+            "balanceText": {
+                "cr": "Payable to creditors",
+                "dr": "Advance to creditors"
+            }
         },
-        "dr": {
-            "text": "Is <accountName> receiver?",
-            "balance_text": "Advance to creditors"
-        }
-    },
-    "revenue": {
-        "cr": {
-            "text": "+ <accountName> (Increasing)",
-            "balance_text": "Revenue"
+        {
+            "accountType": "Revenue",
+            "text": {
+                "cr": "+ <accountName> (Increasing)",
+                "dr": "- <accountName> (Decreasing)"
+            },
+            "balanceText": {
+                "cr": "Revenue",
+                "dr": "(-) Negative Revenue"
+            }
         },
-        "dr": {
-            "text": "- <accountName> (Decreasing)",
-            "balance_text": "(-) Negative Revenue"
-        }
-    },
-    "expense": {
-        "cr": {
-            "text": "<accountName> ↓  (decreasing)",
-            "balance_text": "Negative Expense (looks strange) "
+        {
+            "accountType": "Expense",
+            "text": {
+                "cr": "<accountName> ↓  (decreasing)",
+                "dr": "<accountName> ↑ (Increasing)"
+            },
+            "balanceText": {
+                "cr": "Negative Expense (looks strange) ",
+                "dr": "Expense"
+            }
         },
-        "dr": {
-            "text": "<accountName> ↑ (Increasing)",
-            "balance_text": "Expense"
-        }
-    },
-    "asset": {
-        "cr": {
-            "text": "<accountName> is Going out (-)",
-            "balance_text": "(-) Asset ( ohh no!)"
+        {
+            "accountType": "Asset",
+            "text": {
+                "cr": "<accountName> is Going out (-)",
+                "dr": "<accountName> is Coming in (+)"
+            },
+            "balanceText": {
+                "cr": "(-) Asset ( ohh no!)",
+                "dr": "Asset value"
+            }
         },
-        "dr": {
-            "text": "<accountName> is Coming in (+)",
-            "balance_text": "Asset value"
-        }
-    },
-    "liability": {
-        "cr": {
-            "text": "<accountName> is increasing ↑",
-            "balance_text": "Liability Payable"
+        {
+            "accountType": "Liability",
+            "text": {
+                "cr": "<accountName> is increasing ↑",
+                "dr": "<accountName> is decreasing ↓"
+            },
+            "balanceText": {
+                "cr": "Liability Payable",
+                "dr": "Liabilities paid in advance (hurrey!)"
+            }
         },
-        "dr": {
-            "text": "<accountName> is decreasing ↓",
-            "balance_text": "Liabilities paid in advance (hurrey!)"
-        }
-    },
-    "reverse_charge": {
-        "cr": {
-            "text": "<accountName> is decreasing ↓",
-            "balance_text": "(-) Reverse Charge ( ohh no!)"
+        {
+            "accountType": "ReverseCharge",
+            "text": {
+                "cr": "<accountName> is decreasing ↓",
+                "dr": "<accountName> is increasing ↑"
+            },
+            "balanceText": {
+                "cr": "(-) Reverse Charge ( ohh no!)",
+                "dr": "Reverse Charge value"
+            }
         },
-        "dr": {
-            "text": "<accountName> is increasing ↑",
-            "balance_text": "Reverse Charge value"
+        {
+            "accountType": "null",
+            "text": {
+                "cr": "<accountName> liability is going out",
+                "dr": "<accountName> liability is coming in"
+            },
+            "balanceText": {
+                "cr": "",
+                "dr": ""
+            }
         }
-    },
-    "default": {
-        "cr": {
-            "text": "<accountName> liability is going out",
-            "balance_text": ""
-        },
-        "dr": {
-            "text": "<accountName> liability is coming in",
-            "balance_text": ""
-        }
-    }
+    ],
+    "import_goods": "Import of goods",
+    "import_services": "Import of services",
+    "others": "Others"
 }
