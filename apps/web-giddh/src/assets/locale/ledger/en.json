@@ -83,5 +83,103 @@
     "import_success": "File has been uploaded successfully.",
     "import_page_heading": "Import Statement (PDF only)",
     "file": "File",
-    "password": "Password"
+    "password": "Password",
+    "type_filter": "Type to filter..",
+    "c_f": "C/F",
+    "total_amount": "Total Amt.",
+    "adjusted_amount_full": "Adjusted Amount",
+    "adjustment": "Adjustment",
+    "adjustment_notes": "The selected entry is a part of [VOUCHER_NUMBER]. All the adjustment will reflect to subsequent entries as well. Here we are adjusting the Invoice not just the selected entry. Please note that linked entries cannot be updated from here.",
+    "adjustment_vouchers": "Adjustment Vouchers",
+    "excess_amount": "Excess amount",
+    "adjustment_amount_error": "Adjustment amount is more than receipts.",
+    "voucher_no": "Voucher No.",
+    "compound_total": "Compound Total",
+    "toedit_switch_branch": "To edit, switch \"Branch\"",
+    "confirm_delete_entry": "Are you sure you want to delete this entry?",
+    "multiple_stock_entry_error": "you can't add multiple stock entry",
+    "invalid_account_transaction_error": "Please select a valid account in transaction",
+    "account_unchanged": "Account not changed",
+    "base_account_change_error": "You are not permitted to change base account. Voucher is already Generated",
+    "account_entry_error": "Please Select [ACCOUNT] for entry..",
+    "debtor": {
+        "cr": {
+            "text": "Is <accountName> giver?",
+            "balance_text": "Advance from Debtors"
+        },
+        "dr": {
+            "text": "Is <accountName> receiver?",
+            "balance_text": "Due"
+        }
+    },
+    "creditor": {
+        "cr": {
+            "text": "Is <accountName> giver?",
+            "balance_text": "Payable to creditors"
+        },
+        "dr": {
+            "text": "Is <accountName> receiver?",
+            "balance_text": "Advance to creditors"
+        }
+    },
+    "revenue": {
+        "cr": {
+            "text": "+ <accountName> (Increasing)",
+            "balance_text": "Revenue"
+        },
+        "dr": {
+            "text": "- <accountName> (Decreasing)",
+            "balance_text": "(-) Negative Revenue"
+        }
+    },
+    "expense": {
+        "cr": {
+            "text": "<accountName> ↓  (decreasing)",
+            "balance_text": "Negative Expense (looks strange) "
+        },
+        "dr": {
+            "text": "<accountName> ↑ (Increasing)",
+            "balance_text": "Expense"
+        }
+    },
+    "asset": {
+        "cr": {
+            "text": "<accountName> is Going out (-)",
+            "balance_text": "(-) Asset ( ohh no!)"
+        },
+        "dr": {
+            "text": "<accountName> is Coming in (+)",
+            "balance_text": "Asset value"
+        }
+    },
+    "liability": {
+        "cr": {
+            "text": "<accountName> is increasing ↑",
+            "balance_text": "Liability Payable"
+        },
+        "dr": {
+            "text": "<accountName> is decreasing ↓",
+            "balance_text": "Liabilities paid in advance (hurrey!)"
+        }
+    },
+    "reverse_charge": {
+        "cr": {
+            "text": "<accountName> is decreasing ↓",
+            "balance_text": "(-) Reverse Charge ( ohh no!)"
+        },
+        "dr": {
+            "text": "<accountName> is increasing ↑",
+            "balance_text": "Reverse Charge value"
+        }
+    },
+    "default": {
+        "cr": {
+            "text": "<accountName> liability is going out",
+            "balance_text": ""
+        },
+        "dr": {
+            "text": "<accountName> liability is coming in",
+            "balance_text": ""
+        }
+    }
 }
