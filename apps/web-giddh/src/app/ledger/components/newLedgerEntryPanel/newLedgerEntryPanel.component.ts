@@ -356,6 +356,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
         // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
+
+        if(this.localeData) {
+            this.availableItcList[0].label = this.localeData.import_goods;
+            this.availableItcList[1].label = this.localeData.import_services;
+            this.availableItcList[2].label = this.localeData.others;
+        }
     }
 
     @HostListener('click', ['$event'])

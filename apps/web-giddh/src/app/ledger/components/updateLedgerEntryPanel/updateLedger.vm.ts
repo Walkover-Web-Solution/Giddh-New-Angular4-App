@@ -7,7 +7,6 @@ import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-ta
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { underStandingTextData } from 'apps/web-giddh/src/app/ledger/underStandingTextData';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
@@ -594,7 +593,9 @@ export class UpdateLedgerVm {
         return requestObj;
     }
 
-    public getUnderstandingText(selectedLedgerAccountType, accountName) {
+    public getUnderstandingText(selectedLedgerAccountType, accountName, localeData?: any) {
+        let underStandingTextData = localeData?.text_data;
+
         let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
         if (data) {
             if(data.balanceText && data.balanceText.cr) {

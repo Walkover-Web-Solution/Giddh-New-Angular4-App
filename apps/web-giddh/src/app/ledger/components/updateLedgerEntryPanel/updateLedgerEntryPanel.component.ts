@@ -478,7 +478,92 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
                     }
 
-                    this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name);
+                    this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name, this.localeData);
+                    // TODO: Prateek start
+                    // let accountsArray: IOption[] = [];
+                    // let accountsForBaseAccountArray: IOption[] = [];
+                    // if (isStockableAccount) {
+                    //     // stocks from ledger account
+                    //     this.vm.flatternAccountList.map(acc => {
+                    //         // normal entry
+                    //         accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+
+                    //         // normal merge account entry
+                    //         if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                    //             let mergeAccs = acc.mergedAccounts.split(',');
+                    //             mergeAccs.map(m => m.trim()).forEach(ma => {
+                    //                 accountsArray.push({
+                    //                     value: ma,
+                    //                     label: ma,
+                    //                     additional: acc
+                    //                 });
+                    //             });
+                    //         }
+
+                    //         // check if taxable or round off account then don't assign stocks
+                    //         let notRoundOff = acc.uniqueName === 'roundoff';
+                    //         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
+                    //         if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+                    //             stockListFormFlattenAccount.stocks.map(as => {
+                    //                 // stock entry
+                    //                 accountsArray.push({
+                    //                     value: `${acc.uniqueName}#${as.uniqueName}`,
+                    //                     label: acc.name + '(' + as.uniqueName + ')',
+                    //                     additional: Object.assign({}, acc, { stock: as })
+                    //                 });
+                    //                 // normal merge account entry
+                    //                 if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                    //                     let mergeAccs = acc.mergedAccounts.split(',');
+                    //                     mergeAccs.map(m => m.trim()).forEach(ma => {
+                    //                         accountsArray.push({
+                    //                             value: `${ma}#${as.uniqueName}`,
+                    //                             label: ma + '(' + as.uniqueName + ')',
+                    //                             additional: Object.assign({}, acc, { stock: as })
+                    //                         });
+                    //                     });
+                    //                 }
+                    //             });
+                    //         }
+
+                    //         // add current account entry in base account array
+                    //         accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                    //     });
+
+                    // } else {
+                    //     this.vm.flatternAccountList.map(acc => {
+                    //         if (acc.stocks) {
+                    //             acc.stocks.map(as => {
+                    //                 accountsArray.push({
+                    //                     value: `${acc.uniqueName}#${as.uniqueName}`,
+                    //                     label: `${acc.name} (${as.uniqueName})`,
+                    //                     additional: Object.assign({}, acc, { stock: as })
+                    //                 });
+                    //             });
+                    //             accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                    //         } else {
+                    //             accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+
+                    //             // add current account entry in base account array
+                    //             accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                    //         }
+                    //         // normal merge account entry
+                    //         if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                    //             let mergeAccs = acc.mergedAccounts.split(',');
+                    //             mergeAccs.map(m => m.trim()).forEach(ma => {
+                    //                 accountsArray.push({
+                    //                     value: ma,
+                    //                     label: ma,
+                    //                     additional: acc
+                    //                 });
+                    //             });
+                    //         }
+                    //     });
+                    // }
+
+                    // this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'label'));
+                    // this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'label');
+                    // TODO: Prateek end
+
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[0];
                     this.formatAdjustments();
@@ -711,6 +796,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.checkAdvanceReceiptOrInvoiceAdjusted();
                     }
                 });
+        }
+
+        if(this.localeData) {
+            this.availableItcList[0].label = this.localeData.import_goods;
+            this.availableItcList[1].label = this.localeData.import_services;
+            this.availableItcList[2].label = this.localeData.others;
         }
     }
 
