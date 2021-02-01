@@ -21,7 +21,7 @@
             <span class="text-danger position-absolute mr-t05"
                 *ngIf="f?.controls?.entity?.errors">Please Select Filter.</span>
         </div>
-        <div class="form-group max100" *ngIf="type === 'stock'">
+        <div class="form-group max-width-100" *ngIf="type === 'stock'">
             <input name="number" type="text" placeholder="Number" [(ngModel)]="filter.quantity" class="form-control" />
         </div>
 

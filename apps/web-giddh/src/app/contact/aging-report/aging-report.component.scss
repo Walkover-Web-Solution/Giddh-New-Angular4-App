@@ -187,11 +187,11 @@ tr.aging-table-top td {
     .pagination-wrapper {
         margin-bottom: 0px;
     }
-    .wrap-searching-aging .max250 {
+    .wrap-searching-aging .max-width-250 {
         max-width: calc(100% - 30px);
         width: 100%;
     }
-    .wrap-searching-aging .max250.default-width {
+    .wrap-searching-aging .max-width-250.default-width {
         max-width: calc(100% - 90px);
         width: 100%;
     }
@@ -268,15 +268,15 @@ tr.aging-table-top td {
     }
 }
 @media (max-width: 575px) {
-    .wrap-searching-aging .max250 {
+    .wrap-searching-aging .max-width-250 {
         max-width: 250px;
         width: 100%;
     }
-    .wrap-searching-aging .max250.default-width {
+    .wrap-searching-aging .max-width-250.default-width {
         max-width: 250px;
         width: 100%;
     }
-    .wrap-searching-aging .max250 input {
+    .wrap-searching-aging .max-width-250 input {
         width: 100% !important;
     }
     .wrap-searching-aging {
