@@ -22,7 +22,7 @@ section.receipt-note {
 }
 .receipt-note-content {
     font-size: 14px;
-    height: 86vh;
+    max-height: calc(100vh - 142px);
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -32,11 +32,11 @@ section.receipt-note {
     line-height: 2.5;
     color: $nero;
 }
-#table-recipt th,
-#table-recipt td {
+#table-receipt th,
+#table-receipt td {
     border-left: 1px solid $gainsboro !important;
 }
-#table-recipt td {
+#table-receipt td {
     vertical-align: top !important;
 }
 .table-sec .table-row .table-cell {
@@ -76,7 +76,7 @@ button.btn.btn-filter {
 tfoot td .table-sec.form-group {
     margin-right: 0;
 }
-#table-recipt #tfoot tr td {
+#table-receipt #tfoot tr td {
     border: none !important;
 }
 .copy-receipt-note {
@@ -294,7 +294,7 @@ tfoot td .table-sec.form-group {
 .advance-icon:hover {
     background: $whisper-color;
 }
-#table-recipt {
+#table-receipt {
     width: 100%;
     max-width: 1140px;
 }
@@ -421,7 +421,7 @@ tfoot td .table-sec.form-group {
     }
 }
 @media(max-width:991px){
-    #table-recipt{
+    #table-receipt{
        width: calc(100% - 30px);
     }
 }
