@@ -79,35 +79,7 @@ export class UpdateLedgerVm {
     public ratePrecision = RATE_FIELD_PRECISION;
 
     constructor() {
-        this.voucherTypeList = [{
-            label: 'Sales',
-            value: 'sal'
-        }, {
-            label: 'Purchases',
-            value: 'pur'
-        }, {
-            label: 'Receipt',
-            value: 'rcpt'
-        }, {
-            label: 'Payment',
-            value: 'pay'
-        }, {
-            label: 'Journal',
-            value: 'jr'
-        }, {
-            label: 'Contra',
-            value: 'cntr'
-        }, {
-            label: 'Debit Note',
-            value: 'debit note'
-        }, {
-            label: 'Credit Note',
-            value: 'credit note'
-        }, {
-            label: 'Advance Receipt',
-            value: 'advance-receipt',
-            subVoucher: SubVoucher.AdvanceReceipt
-        }];
+        
     }
 
     public get stockTrxEntry(): ILedgerTransactionItem {
