@@ -27,7 +27,7 @@
                                     <div class="col-sm-12 col-md-12 col-lg-3 "><label>Default payment gateway</label></div>
 
                                     <div class="col-sm-6 col-md-9">
-                                        <div class="form-group clearfix max150">
+                                        <div class="form-group clearfix max-width-150">
                                             <sh-select placeholder="Payment Gateway" name="defaultPaymentGateway" [(ngModel)]="invoiceSetting.defaultPaymentGateway" [options]="paymentGatewayList"></sh-select>
                                         </div>
                                     </div>
@@ -542,7 +542,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-9">
                                     <div class="form-group clearfix">
                                         <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left" name="proformaCreatePaymentEntry" class="hide-on-mobile" />
-                                        <!-- <div class="mr-t1 max250 mr-t3" *ngIf="invoiceSetting.sendInvLinkOnSms">
+                                        <!-- <div class="mr-t1 max-width-250 mr-t3" *ngIf="invoiceSetting.sendInvLinkOnSms">
     <textarea [(ngModel)]="invoiceSetting.smsContent" class="pull-left form-control" name="sendInvLinkOnSms" rows="3"></textarea>
 </div> -->
                                     </div>
