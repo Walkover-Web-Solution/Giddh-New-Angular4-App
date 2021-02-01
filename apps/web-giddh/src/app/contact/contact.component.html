@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="pull-left header-left">
-                            <div class="form-group max250 search-field" *ngIf="activeTab !== 'aging'">
+                            <div class="form-group max-width-250 search-field" *ngIf="activeTab !== 'aging'">
                                 <input type="text" placeholder="Name/Email/Mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                                 <span class="input-addon">
                                 <i class="icon-search"></i>
@@ -119,7 +119,7 @@
                         <div class="customer-footer-box pull-right ">
 
                             <div class="clearfix customer-inner-box">
-                                <span class="pull-left mr-r1 totalContacts">
+                                <span class="pull-left mr-r1 total-contacts">
                                 <h5>
                                     <span *ngIf="!selectedCheckedContacts.length"
                                         class="number-total">{{activeTab === 'customer' ? totalCustomers : totalVendors}}</span>
