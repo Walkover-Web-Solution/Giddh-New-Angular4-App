@@ -258,6 +258,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
                 }
             });
@@ -339,6 +342,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
                 }
             });

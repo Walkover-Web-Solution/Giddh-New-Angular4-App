@@ -7,10 +7,10 @@
             <tab heading="{{localeData?.customer}}" [id]="(activeTab !== 'aging-report') ? 'giddh-page-heading': ''" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
                 <div class="container-fluid">
 
-                    <div class="top-bar customer-top-bar clearfix">
+                    <div class="top-bar customer-top-bar clearfix" [ngClass]="{'vendor-top-bar': activeTab === 'vendor'}">
                         <div class="customer-form-inline">
                             <div>
-                                <div class="dis pull-left mr-r1">
+                                <div class="dis mr-r15 pull-left">
 
                                     <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="localeData?.filter_toggle" [placement]="'right'">
                                         <i dropdownToggle class="icon-options pd cp font-20"></i>
@@ -69,7 +69,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
-                                    <div class="form-group">
+                                    <div>
                                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                                             [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
                                             [placeholder]="commonLocaleData?.app_select_entity" [fixedValue]="currentBranch?.alias">
