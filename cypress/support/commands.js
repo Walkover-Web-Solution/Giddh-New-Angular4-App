@@ -209,7 +209,7 @@ Cypress.Commands.add("SignUp", (email, password) => {
     createNewCompanyPage.nextButton().then(()=>{
         cy.wait(1500)
         createNewCompanyPage.submitButton()  .then(()=>{
-            cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+            cy.xpath('//div[@id=\'toast-container\']', {timeout: 15000}).should('be.visible')
         })
     })
 })
