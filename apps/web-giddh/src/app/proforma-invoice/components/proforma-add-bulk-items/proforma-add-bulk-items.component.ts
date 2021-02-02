@@ -50,7 +50,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
             // this.filteredData = this.normalData.filter(item => {
             // 	return item.name.toLowerCase().includes(res.toLowerCase()) || item.uniqueName.toLowerCase().includes(res.toLowerCase());
             // });
-            if (res && res.length > 1) {
+            if (res) {
                 this.onSearchQueryChanged(res, 1);
             }
         });
