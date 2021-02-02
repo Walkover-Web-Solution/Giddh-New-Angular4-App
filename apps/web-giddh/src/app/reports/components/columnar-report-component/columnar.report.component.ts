@@ -382,6 +382,9 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
                 }
             });
