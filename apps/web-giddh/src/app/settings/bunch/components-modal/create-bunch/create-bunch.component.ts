@@ -49,8 +49,8 @@ export class CreateBunchModalComponent implements OnChanges {
         let control = this.addBunchForm.get('name');
         let uniqueControl = this.addBunchForm.get('uniqueName');
         let unqName = control.value;
-        unqName = unqName.replace(/ |,|\//g, '');
-        unqName = unqName.toLowerCase();
+        unqName = unqName?.replace(/ |,|\//g, '');
+        unqName = unqName?.toLowerCase();
         if (unqName.length >= 1) {
             let unq = '';
             let text = '';
