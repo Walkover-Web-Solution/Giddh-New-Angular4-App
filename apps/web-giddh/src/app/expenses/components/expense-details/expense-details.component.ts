@@ -522,11 +522,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
      * Returns true, if the account belongs to cash or bank account
      *
      * @private
-     * @param {*} uniqueName Account unique name
+     * @param {string} uniqueName Account unique name
      * @returns {Promise<any>} Promise to carry out further operations
      * @memberof ExpenseDetailsComponent
      */
-    private async isCashBankAccount(uniqueName): Promise<any> {
+    private async isCashBankAccount(uniqueName: string): Promise<any> {
         try {
             const response = await this.accountService.GetAccountDetailsV2(uniqueName).toPromise();
             if (response?.body) {
