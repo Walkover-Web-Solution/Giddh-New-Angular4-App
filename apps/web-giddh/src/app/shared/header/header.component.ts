@@ -1008,6 +1008,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         let combined = cloneDeep([...menuList, ...acList]);
         this.store.dispatch(this._generalActions.setSmartList(combined));
+        if (!this.activeCompanyForDb) {
+            this.activeCompanyForDb = new CompAidataModel();
+        }
         this.activeCompanyForDb.aidata = {
             menus: menuList,
             groups: groupList,
