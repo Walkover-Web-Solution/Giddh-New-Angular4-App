@@ -154,10 +154,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.isAllChecked = isAllChecked;
 
             entries.forEach((entry) => {
-                let indexOfEntry = this.selectedItems.indexOf(entry.uniqueName);
+                let indexOfEntry = this.selectedItems.indexOf(entry?.uniqueName);
                 if (isAllChecked) {
                     if (indexOfEntry === -1) {
-                        this.selectedItems.push(entry.uniqueName);
+                        this.selectedItems.push(entry?.uniqueName);
                     }
                 } else if (indexOfEntry > -1) {
                     this.selectedItems.splice(indexOfEntry, 1);
@@ -408,9 +408,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
     public toggleSelection(ev, item: AccountFlat) {
         let isChecked = ev.target.checked;
-        let indexOfEntry = this.selectedItems.indexOf(item.uniqueName);
+        let indexOfEntry = this.selectedItems.indexOf(item?.uniqueName);
         if (isChecked && indexOfEntry === -1) {
-            this.selectedItems.push(item.uniqueName);
+            this.selectedItems.push(item?.uniqueName);
         } else {
             this.selectedItems.splice(indexOfEntry, 1);
             this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
@@ -433,7 +433,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             accountsUnqList = [];
             p.forEach((item: AccountFlat) => {
                 if (item.isSelected) {
-                    accountsUnqList.push(item.uniqueName);
+                    accountsUnqList.push(item?.uniqueName);
                 }
             });
         });
