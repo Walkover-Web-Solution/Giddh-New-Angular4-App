@@ -1042,7 +1042,7 @@
                                             <div class="flex-grow-1">
                                                 <div class="wrap-td-data"><span
                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
-                                                    </span>{{transaction.amount | giddhCurrency}}</div>
+                                                    </span>{{(transaction.amount ? transaction.amount : '0') | giddhCurrency}}</div>
                                             </div>
                                         </div>
                                         <div class="differ-currency"
@@ -1916,7 +1916,7 @@
                                                 <label class="card-label">Amount</label>
                                                 <p> <span
                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
-                                                    </span>{{transaction.amount | giddhCurrency}}</p>
+                                                    </span>{{(transaction.amount ? transaction.amount : '0') | giddhCurrency}}</p>
 
                                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                                     <span>{{baseCurrencySymbol}}</span>
