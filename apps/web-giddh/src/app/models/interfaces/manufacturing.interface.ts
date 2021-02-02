@@ -2,7 +2,9 @@ import { INameUniqueName } from '../api-models/Inventory';
 
 // some common interface used in module everywhere
 export interface IOnlyUniqueName {
-	uniqueName: string;
+    uniqueName: string;
+    name?: string;
+    defaultName?: string;
 }
 
 export interface IOnlyAmount {

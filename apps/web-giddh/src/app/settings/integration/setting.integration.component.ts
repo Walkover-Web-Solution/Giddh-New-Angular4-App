@@ -1447,6 +1447,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = data.body.page;
+                        this.defaultAccountPaginationData.totalPages = data.body.totalPages;
                     }
                 }
             });
