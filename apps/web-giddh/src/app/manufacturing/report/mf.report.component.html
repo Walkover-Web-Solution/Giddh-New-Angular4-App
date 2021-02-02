@@ -118,6 +118,29 @@
                                 </span>
                             </td>
                         </tr>
+                        <!-- <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)" class="cp">
+                            <td>{{item.date}}</td>
+                            <td>{{item.voucherNumber}}</td>
+                            <td>{{item.stockName}}</td>
+                            <td colspan="3" class="">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td width="40%">&nbsp;</td>
+                                            <td width="20%">{{item.manufacturingQuantity}} {{item.manufacturingUnit}}
+                                            </td>
+                                            <td width="40%">&nbsp;</td>
+                                        </tr>
+                                        <tr *ngFor="let row of item.linkedStocks">
+                                            <td>{{row.stockName}}</td>
+                                            <td>&nbsp;</td>
+                                            <td>{{row.manufacturingQuantity}} {{row.manufacturingUnit}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr> -->
+
                     </tbody>
                 </table>
                 <div *ngIf="reportData?.totalPages > 1" class="pagination-wrapper">
