@@ -1,7 +1,7 @@
 class TrialBalancePage {
 
     searchIcon(timeOut){
-        return cy.xpath('//i[@class=\'icon-search2\']', {timeout: 20000})
+        return cy.xpath('//i[@class=\'icon-search2\']', {timeout: 40000})
     }
 
     typeSearchValue(searchValue){
