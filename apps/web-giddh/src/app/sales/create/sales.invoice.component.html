@@ -962,12 +962,12 @@
                                                                                     (blur)="txnChangeOccurred()"
                                                                                     placeholder="Amount"
                                                                                     name="depositAmount"
-                                                                                    class="form-control amount-field text-right pull-right max100"
+                                                                                    class="form-control amount-field text-right pull-right max-width-100"
                                                                                     [(ngModel)]="depositAmount"
                                                                                     [readonly]='isCashInvoice'
                                                                                     [ngClass]='{"amount-filed-cash": isCashInvoice}' />
                                                                                 <span *ngIf="isCashInvoice"
-                                                                                    class="amount-field pull-right max100"
+                                                                                    class="amount-field pull-right max-width-100"
                                                                                     [ngClass]='{"amount-filed-cash": isCashInvoice}'>{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</span>
 
                                                                                 <label class="pull-right">Amount</label>
