@@ -168,21 +168,6 @@ export class SettingTaxesComponent implements OnInit {
         });
     }
 
-    // public getFlattenAccounts(value) {
-    //     let query = value || '';
-    //     // get flattern accounts
-    //     this._accountService.getFlattenAccounts(query, '').pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(data => {
-    //         if (data.status === 'success') {
-    //             let accounts: IOption[] = [];
-    //             data.body.results.map(d => {
-    //                 accounts.push({label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName});
-    //                 // `${d.name} (${d.uniqueName})`
-    //             });
-    //             this.accounts$ = accounts;
-    //         }
-    //     });
-    // }
-
     public customAccountFilter(term: string, item: IOption) {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
     }
