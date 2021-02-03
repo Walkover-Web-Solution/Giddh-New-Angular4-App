@@ -8,6 +8,7 @@ import * as moment from 'moment/moment';
 import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";
 import { DEFAULT_DATE_RANGE_PICKER_RANGES, DatePickerDefaultRangeEnum } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { subDays } from 'date-fns';
 
 /**
  * Keeping Track of the CompanyState
@@ -51,8 +52,8 @@ const initialState: CurrentCompanyState = {
             customRangeLabel: 'Custom range'
         },
         ranges: DEFAULT_DATE_RANGE_PICKER_RANGES,
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        startDate: subDays(new Date(), 30),
+        endDate: new Date()
     },
     account: null,
     isTaxCreationInProcess: false,

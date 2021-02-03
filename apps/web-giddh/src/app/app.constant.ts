@@ -1,4 +1,16 @@
-import * as moment from 'moment';
+import {
+    endOfMonth,
+    endOfQuarter,
+    endOfYear,
+    startOfMonth,
+    startOfQuarter,
+    startOfWeek,
+    startOfYear,
+    subDays,
+    subMonths,
+    subQuarters,
+    subYears,
+} from 'date-fns';
 
 export const Configuration = {
     AppUrl: AppUrl,
@@ -97,104 +109,104 @@ export enum DatePickerDefaultRangeEnum {
  */
 export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     {
-        name: DatePickerDefaultRangeEnum.Today, value: [moment(), moment()]
+        name: DatePickerDefaultRangeEnum.Today, value: [new Date(), new Date()]
     },
     {
-        name: DatePickerDefaultRangeEnum.Yesterday, value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+        name: DatePickerDefaultRangeEnum.Yesterday, value: [subDays(new Date(), 1), subDays(new Date(), 1)]
     },
     {
-        name: DatePickerDefaultRangeEnum.Last7Days, value: [moment().subtract(6, 'days'), moment()]
+        name: DatePickerDefaultRangeEnum.Last7Days, value: [subDays(new Date(), 6), new Date()]
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+        name: DatePickerDefaultRangeEnum.ThisMonth, value: [startOfMonth(new Date()), endOfMonth(new Date())]
     },
     {
         name: DatePickerDefaultRangeEnum.LastMonth, value: [
-            moment().subtract(1, 'month').startOf('month'),
-            moment().subtract(1, 'month').endOf('month')
+            startOfMonth(subMonths(new Date(), 1)),
+            endOfMonth(subMonths(new Date(), 1))
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisWeek, ranges: [{
-            name: DatePickerDefaultRangeEnum.SunToToday, value: [moment().startOf('week'), moment()]
-        }, { name: DatePickerDefaultRangeEnum.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()] }]
+            name: DatePickerDefaultRangeEnum.SunToToday, value: [startOfWeek(new Date()), new Date()]
+        }, { name: DatePickerDefaultRangeEnum.MonToToday, value: [startOfWeek(new Date(), { weekStartsOn: 1 }), new Date()] }]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
-            moment().quarter(moment().quarter()).startOf('quarter'),
-            moment()
+            startOfQuarter(new Date()),
+            new Date()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
-            moment().startOf('year').subtract(9, 'year'),
-            moment()
+            subYears(startOfYear(new Date()), 9),
+            new Date()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisYearToDate, value: [
-            moment().startOf('year'),
-            moment()
+            startOfYear(new Date()),
+            new Date()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastQuarter, value: [
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+            startOfQuarter(subQuarters(new Date(), 1)),
+            endOfQuarter(subQuarters(new Date(), 1))
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastFinancialYear, value: [
-            moment().startOf('year').subtract(10, 'year'),
-            moment().endOf('year').subtract(10, 'year')
+            subYears(startOfYear(new Date()), 10),
+            subYears(endOfYear(new Date()), 10)
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastYear, value: [
-            moment().subtract(1, 'year').startOf('year'),
-            moment().subtract(1, 'year').endOf('year')
+            startOfYear(subYears(new Date(), 1)),
+            endOfYear(subYears(new Date(), 1))
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.AllTime, value: [
-            moment().startOf('year').subtract(10, 'year'),
-            moment()
+            subYears(startOfYear(new Date()), 10),
+            new Date()
         ]
     }
 ];
 
 export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
-        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+        name: DatePickerDefaultRangeEnum.ThisMonth, value: [startOfMonth(new Date()), endOfMonth(new Date())]
     },
     {
         name: DatePickerDefaultRangeEnum.LastMonth, value: [
-            moment().subtract(1, 'month').startOf('month'),
-            moment().subtract(1, 'month').endOf('month')
+            startOfMonth(subMonths(new Date(), 1)),
+            endOfMonth(subMonths(new Date(), 1))
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
-            moment().quarter(moment().quarter()).startOf('quarter'),
-            moment()
+            startOfQuarter(new Date()),
+            new Date()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
-            moment().startOf('year').subtract(9, 'year'),
-            moment()
+            subYears(startOfYear(new Date()), 9),
+            new Date()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastQuarter, value: [
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+            startOfQuarter(subQuarters(new Date(), 1)),
+            endOfQuarter(subQuarters(new Date(), 1))
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.AllTime, value: [
-            moment().startOf('year').subtract(10, 'year'),
-            moment()
+            subYears(startOfYear(new Date()), 10),
+            new Date()
         ]
     }
 ];
