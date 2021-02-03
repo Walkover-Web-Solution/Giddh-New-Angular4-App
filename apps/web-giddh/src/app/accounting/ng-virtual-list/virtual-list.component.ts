@@ -49,6 +49,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Input() public showList: boolean = false;
     @Input() public filterText: string = '';
     @Input() public keydownUpInput: KeyboardEvent;
+    /** True when pagination should be enabled */
+    @Input() isPaginationEnabled: boolean;
 
     @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
     @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
@@ -62,6 +64,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Output() public noOptionsFound = new EventEmitter<boolean>();
     @Output() public noResultsClicked = new EventEmitter<null>();
     @Output() public viewInitEvent = new EventEmitter<any>();
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     public rows: IOption[] = [];
     public isOpen: boolean = true;
     public filter: string = '';
@@ -411,9 +415,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                 this.filter = this.selectedValues[0] ? this.selectedValues[0].label : '';
                 this.hide();
             }
-        }
-        if ('filterText' in changes && changes.filterText.currentValue !== changes.filterText.previousValue) {
-            this.updateFilter(changes.filterText.currentValue);
         }
         if ('keydownUpInput' in changes && changes.keydownUpInput.currentValue !== changes.keydownUpInput.previousValue) {
             this.keydownUp(changes.keydownUpInput.currentValue);
