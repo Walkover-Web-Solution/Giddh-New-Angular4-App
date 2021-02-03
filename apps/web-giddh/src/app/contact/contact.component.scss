@@ -371,7 +371,6 @@ button.btn.btn-filter span.icon-cross {
 }
 .customer-form-inline {
     display: flex;
-    align-items: center;
     justify-content: space-between;
 }
 .linked-entities {
@@ -457,7 +456,7 @@ button.btn.btn-filter span.icon-cross {
     .position-relative.word-wrap .icon-dots-three-vertical {
         transform: rotate(0deg);
     }
-    .onDesktopView.btn-group {
+    .on-desktop-view.btn-group {
         display: none;
     }
     .customer-right-wrap {
@@ -622,7 +621,7 @@ button.btn.btn-filter span.icon-cross {
     .on-mobile-view.btn-group {
         display: none;
     }
-    .onDesktopView.btn-group {
+    .on-desktop-view.btn-group {
         display: block;
     }
 }
