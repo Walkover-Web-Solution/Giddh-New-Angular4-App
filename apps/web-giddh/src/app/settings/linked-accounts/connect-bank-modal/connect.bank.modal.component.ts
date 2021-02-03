@@ -301,7 +301,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit {
         this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).subscribe(res => {
             if (res.status === 'success') {
                 this._toaster.successToast(res.body);
-                let providerId = res.body.replace(/[^0-9]+/ig, '');
+                let providerId = res.body?.replace(/[^0-9]+/ig, '');
                 if (providerId) {
                     this.cancelRequest = false;
                     this.getBankSyncStatus(providerId);

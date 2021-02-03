@@ -426,7 +426,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handleHighLightedItemEvent(item: any): void {
         // no need to do anything in the function
-        this.highlightedItem = item.loop;
+        this.highlightedItem = item?.loop;
     }
 
     /**
