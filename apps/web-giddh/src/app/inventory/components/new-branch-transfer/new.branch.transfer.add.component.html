@@ -117,7 +117,7 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <textarea [disabled]="branchTransfer?.sources[0]?.warehouse?.uniqueName" class="form-control" name="sourceAddress" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
+                                <textarea [disabled]="branchTransfer?.sources[0]?.warehouse?.uniqueName" class="form-control" rows="3" name="sourceAddress" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
                             </div>
                         </div>
                         <div class="row mr-b2" *ngIf="transferType !== 'senders'">
@@ -159,7 +159,7 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <textarea [disabled]="branchTransfer?.destinations[0]?.warehouse?.uniqueName" class="form-control" name="destinationAddress" [(ngModel)]="branchTransfer.destinations[0].warehouse.address"></textarea>
+                                <textarea [disabled]="branchTransfer?.destinations[0]?.warehouse?.uniqueName" class="form-control" rows="3" name="destinationAddress" [(ngModel)]="branchTransfer.destinations[0].warehouse.address"></textarea>
                             </div>
                         </div>
                     </div>
@@ -246,7 +246,7 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <textarea [disabled]="branchTransfer?.sources[0]?.warehouse?.uniqueName" class="form-control" name="sourceAddress" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
+                                <textarea [disabled]="branchTransfer?.sources[0]?.warehouse?.uniqueName" class="form-control" rows="3" name="sourceAddress" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
                             </div>
                         </div>
                         <div class="row mr-b2">
@@ -293,7 +293,7 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <textarea [disabled]="branchTransfer?.destinations[0]?.warehouse?.uniqueName" class="form-control" name="destinationAddress" [(ngModel)]="branchTransfer.destinations[0].warehouse.address" (blur)="focusSelectDropdown(0);"></textarea>
+                                <textarea [disabled]="branchTransfer?.destinations[0]?.warehouse?.uniqueName" class="form-control" rows="3" name="destinationAddress" [(ngModel)]="branchTransfer.destinations[0].warehouse.address" (blur)="focusSelectDropdown(0);"></textarea>
                             </div>
                         </div>
                     </div>
