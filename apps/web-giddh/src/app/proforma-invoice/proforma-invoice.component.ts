@@ -3707,14 +3707,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.startLoader(false);
             return;
         }
-        /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
-        if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
-            if (this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment() < 0) {
-                this.isAdjustAdvanceReceiptModalOpen();
-                this.startLoader(false);
-                return;
-            }
-        }
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
@@ -5451,6 +5443,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private handleGenerateResponse(response: BaseResponse<any, GenericRequestForGenerateSCD | PurchaseRecordRequest>, form: NgForm): void {
         if (response.status === 'success') {
+            this.customerAcList$ = observableOf(_.orderBy(this.defaultCustomerSuggestions, 'label'));
+            this.salesAccounts$ = observableOf(_.orderBy(this.defaultItemSuggestions, 'label'));
             // reset form and other
             this.resetInvoiceForm(form);
 
@@ -5818,6 +5812,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        if (searchType === SEARCH_TYPE.CUSTOMER) {
+                            this.defaultCustomerResultsPaginationData.page = data.body.page;
+                            this.defaultCustomerResultsPaginationData.totalPages = data.body.totalPages;
+                        } else if (searchType === SEARCH_TYPE.ITEM) {
+                            this.defaultItemResultsPaginationData.page = data.body.page;
+                            this.defaultItemResultsPaginationData.totalPages = data.body.totalPages;
+                        }
                     }
                 }
             });
@@ -6571,7 +6573,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * when voucher is changed
      *
      * @private
-     * @memberof LedgerComponent
+     * @memberof ProformaInvoiceComponent
      */
     private loadDefaultSearchSuggestions(): void {
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.CUSTOMER, (response) => {
@@ -6757,7 +6759,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public selectAddress(data: any, address: any, isCompanyAddress: false): void {
         if(data && address) {
             data.address[0] = address.address;
-            
             if(!data.state) {
                 data.state = {};
             }

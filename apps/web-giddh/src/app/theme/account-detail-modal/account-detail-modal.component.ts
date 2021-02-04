@@ -81,7 +81,7 @@ export class AccountDetailModalComponent implements OnChanges {
             value: '%s_AN',
         },
     ];
-    public accInfo: IFlattenAccountsResultItem;
+    @Input() public accInfo: IFlattenAccountsResultItem;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _companyServices: CompanyService,
@@ -90,8 +90,9 @@ export class AccountDetailModalComponent implements OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
+        if (!this.accInfo && changes['accountUniqueName'] && changes['accountUniqueName'].currentValue
             && (changes['accountUniqueName'].currentValue !== changes['accountUniqueName'].previousValue)) {
+            // Call the API only when the account info is not passed to avoid multiple API calls
             this.getAccountDetails(changes['accountUniqueName'].currentValue);
         }
     }
@@ -204,7 +205,7 @@ export class AccountDetailModalComponent implements OnChanges {
             params: {
                 from: this.from,
                 to: this.to,
-                groupUniqueName: this.accInfo.parentGroups[this.accInfo.parentGroups.length - 1].uniqueName
+                groupUniqueName: this.accInfo.parentGroups[this.accInfo.parentGroups.length - 1].uniqueName || this.accInfo.parentGroups[this.accInfo.parentGroups.length - 1]
             }
         };
 

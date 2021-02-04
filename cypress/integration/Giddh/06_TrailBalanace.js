@@ -1,5 +1,7 @@
 import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
+
 describe('This is TrialBalance Search Test', () => {
+
     let testData = "";
     let entryUniqueName = "";
     before(() => {
@@ -9,6 +11,7 @@ describe('This is TrialBalance Search Test', () => {
                 testData = data
             })
     });
+
     before(() => {
         let allAccountName = ['cash', 'uitest', "invoiceaccount"];
         allAccountName.forEach((accName) => {
@@ -17,18 +20,21 @@ describe('This is TrialBalance Search Test', () => {
         cy.viewport(1366, 768)
         cy.loginWithEmail(testData.Email, testData.Password);
     })
+
     afterEach(()=>{
-        let allAccountName = ['cash', 'uitest', "invoiceaccount"];
+        let allAccountName = ['cash', 'uitest', 'invoiceaccount','vendoraccount'];
         allAccountName.forEach((accName) => {
             cy.deleteAllLedgersAPI(accName)
         })
     })
+
     beforeEach(()=>{
-        let allAccountName = ['cash', 'uitest', "invoiceaccount"];
+        let allAccountName = ['cash', 'uitest', 'invoiceaccount','vendoraccount'];
         allAccountName.forEach((accName) => {
             cy.deleteAllLedgersAPI(accName)
         })
     })
+
     it('Verify Trial Balance Amount after Create Entry', () => {
         cy.createLedgerAPI('uitest').then((response) => {
             if (response.status === 201){
@@ -37,16 +43,20 @@ describe('This is TrialBalance Search Test', () => {
             cy.searchOnTrialBalance('uitest', '199.99')
         })
     });
-    it('Verify Profit & Loss Amount after Create Entry', () => {
+
+    xit('Verify Profit & Loss Amount after Create Entry', () => {
         cy.createLedgerAPI('uitest').then((response) => {
             if (response.status === 201){
                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
+
             }
             cy.wait(2000)
             cy.navigateToTrialBalanceOptions('Profit & Loss');
-            cy.searchOnPLAndBS('.profit-loss > .clearfix > .col-4 > strong', 'Sales', '169')
+            cy.searchOnPLAndBS('.profitLoss > .clearfix > .col-4 > strong', 'Sales', '169')
         })
     });
+
+
     it('Verify Balance Sheet Amount after Create Entry', () => {
         cy.createLedgerAPI('uitest').then((response) => {
             if (response.status === 201){
@@ -57,4 +67,5 @@ describe('This is TrialBalance Search Test', () => {
             cy.searchOnPLAndBS(':nth-child(3) > :nth-child(2) > strong', 'uitest', '199')
         })
     });
+
 })
