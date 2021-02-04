@@ -48,8 +48,8 @@
     justify-content: flex-end;
     a{
         display: flex;
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
         justify-content: center;
         align-items: center;
         background-color: $white;
@@ -107,6 +107,23 @@
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     cursor: pointer;
+}
+@media(max-width:1099px) and (min-width:1019px){
+    .financial-select-year{
+        margin-bottom: 15px;
+        .company-branch-dropdown{
+            width: 158px;
+        }
+        .expand-collapse-icon{
+            position: absolute;
+            bottom: -36px;
+            right: 15px;
+        }
+    }
+    .download-data-icon{
+        padding-right: 60px !important;
+    }
+
 }
 @media (min-width: 768px) {
     .form-inline.financial-select-year .form-group {
