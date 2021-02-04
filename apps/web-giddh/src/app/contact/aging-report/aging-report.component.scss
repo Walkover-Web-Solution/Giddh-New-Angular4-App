@@ -106,7 +106,7 @@ tr.aging-table-top td {
 }
 
 .name-width{
-    width: 210px; 
+    width: 210px;
 }
 
 // responsive
@@ -259,14 +259,21 @@ tr.aging-table-top td {
     .customer-right table tr td h3 {
         font-size: 14px;
     }
-}
-@media (max-width: 575px) {
-    .top-aging-table-top {
-        padding: 8px 3px !important;
-        font-size: 14px;
+    .aging-form-inline{
+        flex-direction: column;
+        display: flex;
+        .linked-entities{
+            margin-right: 0;
+            margin-bottom: 0;
+            width: 100%;
+        }
+        .btn-group{
+            width: 100%;
+            .btn{
+                width: 100%;
+            }
+        }
     }
-}
-@media (max-width: 575px) {
     .wrap-searching-aging .max-width-250 {
         max-width: 250px;
         width: 100%;
@@ -283,6 +290,15 @@ tr.aging-table-top td {
         justify-content: space-between;
         margin-bottom: 15px;
     }
+}
+@media (max-width: 575px) {
+    .top-aging-table-top {
+        padding: 8px 3px !important;
+        font-size: 14px;
+    }
+}
+@media (max-width: 575px) {
+
     .btn-group.plus-btn {
         float: none;
         width: 100%;
@@ -292,6 +308,13 @@ tr.aging-table-top td {
         width: 100%;
     }
     .aging-form-inline{
+        flex-direction: column;
+        display: flex;
+        .linked-entities{
+            margin-right: 0;
+            margin-bottom: 0;
+            width: 100%;
+        }
         .btn-group{
             width: 100%;
             .btn{
