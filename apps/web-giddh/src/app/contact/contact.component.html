@@ -8,7 +8,7 @@
 
             <div class="top-bar customer-top-bar clearfix" [ngClass]="{'vendor-top-bar': activeTab === 'vendor'}">
                 <div class="customer-form-inline">
-                    <div>
+                    <div class="wrap-search-entity">
                         <div class="dis mr-r15 pull-left">
 
                             <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'right'">
@@ -93,7 +93,7 @@
                                 </sh-select>
                             </div>
                         </div>
-                        <div class="pull-left header-left">
+                        <div class="pull-left header-left" [ngClass]="{'on-company': currentCompanyBranches?.length <= 2 }">
                             <div class="form-group max-width-250 search-field" *ngIf="activeTab !== 'aging'">
                                 <input type="text" placeholder="Name/Email/Mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                                 <span class="input-addon">
