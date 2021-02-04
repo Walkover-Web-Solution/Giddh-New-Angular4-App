@@ -81,9 +81,17 @@
         }
     }
 }
+@media(min-width:1020px) and (max-width:1199px){
+    .clear-filter{
+        width: 80%;
+    }
+}
 @media(max-width:991px){
     .invoice-footer{
         padding: 15px 0;
+    }
+    .clear-filter{
+        width: 50%;
     }
 }
 @media only screen and (max-width: 767px) {
