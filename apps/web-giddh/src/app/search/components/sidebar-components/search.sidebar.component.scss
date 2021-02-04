@@ -5,3 +5,12 @@
 .entity-dropdown {
     width: 200px;
 }
+@media(min-width:1020px) and (max-width:1099px){
+    .select-entity,
+    .select-group {
+        width: 165px;
+        sh-select, .form-group{
+            width: 100%;
+        }
+    }
+}
