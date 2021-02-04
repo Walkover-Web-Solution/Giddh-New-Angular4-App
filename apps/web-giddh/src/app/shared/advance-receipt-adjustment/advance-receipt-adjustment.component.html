@@ -157,7 +157,7 @@
                     <div class="mt-2">
                         <button *ngIf="!isUpdateMode" type="button" class="btn btn-success mr-r1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Save</button>
                         <button *ngIf="isUpdateMode" type="button" class="btn btn-success mr-r1" [disabled]="isInvalidForm" (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)">Update</button>
-                        <button type="button" class="btn btn-cancel" (click)="onClear()">Reset</button>
+                        <button type="reset" class="btn btn-cancel" (click)="onClear(true)">Reset</button>
                     </div>
                 </div>
 
