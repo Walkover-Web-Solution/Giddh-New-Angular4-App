@@ -5131,7 +5131,7 @@ label {
 } */
 
 .square {
-    border-radius: 0px;
+    border-radius: 0px !important;
 }
 
 .ledger-row
@@ -9580,6 +9580,12 @@ input.mat-input-element{
 .custom-select{
     background-image: none !important;
 }
+.top-bar.aging-top-bar, .top-bar.customer-top-bar{
+    padding-top: 18px !important;
+}
+.top-bar.customer-top-bar.vendor-top-bar{
+    padding-top: 15px !important;
+}
 /* responsive  starts here */
 
 @media (max-width: 1440px) {
@@ -10388,10 +10394,10 @@ input.mat-input-element{
     }
     .page-has-tabs .invoice-generate-container,
     .page-has-tabs .invoice-container{
-        padding-top: 5px !important;
+        padding-top: 15px !important;
     }
-    .page-has-tabs .proforma-container{
-            padding-top: 5px !important;
+    .page-has-tabs .proforma-container, .page-has-tabs .invoice-container{
+            padding-top: 0px !important;
         }
     .page-has-tabs
         #setting-tab
@@ -10699,8 +10705,8 @@ input.mat-input-element{
         box-shadow: none;
         border: none;
     }
-    .wrapAccountSidebar,
-    .wrapAccountSidebar .grp-wrapper {
+    .wrap-account-sidebar,
+    .wrap-account-sidebar .grp-wrapper {
         width: 100% !important;
     }
     .add-manage-group-acc {

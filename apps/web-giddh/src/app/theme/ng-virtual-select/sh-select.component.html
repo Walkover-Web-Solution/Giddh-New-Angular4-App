@@ -24,11 +24,10 @@
 
         <!--region single-->
         <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-        <input type="text" autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null" class="form-control " #inputFilter tabindex="0"
+        <input type="text" autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null" class="form-control pd-r15" #inputFilter tabindex="0"
             *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="showSearchSuggestion ? show($event) : '';"
             (focus)="subscribeToQueryChange()" [attr.style]="borderConfiguration?.style"
-            [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="handleInputChange($event)"
-            style="padding-right: 14px !important;">
+            [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="handleInputChange($event)">
 
         <div (click)="showSearchSuggestion ? show($event) : '';" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
             <ng-container *ngIf="selectedValues?.length">
@@ -38,10 +37,10 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null" class="form-control focused"
+                <input autocomplete="disabled" [attr.readonly]="readonlyInput ? 'readonly' : null" class="form-control focused pd-r15"
                     (focus)="subscribeToQueryChange()" [attr.style]="borderConfiguration?.style"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [disabled]="disabled"
-                    [value]="filter" style="padding-right: 13px !important;" />
+                    [value]="filter" />
             </ng-container>
         </div>
         <!--endregion-->
@@ -52,7 +51,7 @@
     <sh-select-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues"
         [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
         [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()"
-        (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
+        (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" 
         [noResultLinkTemplate]="notFoundLinkTemplate" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText"
         [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
         [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [dropdownMinHeight]="dropdownMinHeight" [showCheckbox]="showCheckbox" [isRequired]="isRequired" [filter]="filter">

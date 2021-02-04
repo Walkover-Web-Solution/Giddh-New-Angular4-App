@@ -667,6 +667,10 @@ aside-menu-account .container-fluid {
     color: $white;
 }
 
+.black-color {
+    color: $black;
+}
+
 .grey-bg {
     background: $gray-95;
     /*min-width:320px;*/
@@ -682,6 +686,10 @@ aside-menu-account .container-fluid {
 
 .min-width-100{
     min-width: 100px;
+}
+
+.width-2000{
+    width: 2000px;
 }
 
 .overflow-hidden {
@@ -1377,31 +1385,20 @@ li:last-child .angular-ui-tree-handle {
 
 /*helpers*/
 
-.max50 {
-    max-width: 50px;
-}
 
-.max100 {
+.max-width-100 {
     max-width: 100px;
 }
 
-.max120 {
-    max-width: 120px;
-}
-
-.max150 {
+.max-width-150 {
     max-width: 150px;
 }
 
-.max200 {
-    max-width: 200px;
-}
-
-.max250 {
+.max-width-250 {
     max-width: 250px;
 }
 
-.max350 {
+.max-width-350 {
     max-width: 350px;
 }
 
@@ -2210,7 +2207,12 @@ i.cls-alert {
 .min150 {
     min-width: 150px;
 }
-
+.min160{
+    min-width: 160px;
+}
+.min-height-100{
+    min-height: 100px;
+}
 .account-card {
     max-width: 300px;
     min-height: 240px;

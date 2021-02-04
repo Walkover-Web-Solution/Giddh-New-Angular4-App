@@ -296,6 +296,9 @@ export class GroupService {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
                 if (params[key] !== undefined) {
+                    if (key === 'branchUniqueName') {
+                        params[key] = params[key] === companyUniqueName ? '' : params[key];
+                    }
                     contextPath += `${delimiter}${key}=${params[key]}`
                 }
             });

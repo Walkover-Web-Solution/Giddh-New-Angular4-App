@@ -150,6 +150,14 @@ body.ununresponsive {
     margin: 0 auto 20px;
 }
 
+.form-inline{
+    width: 80px;
+}
+
+.input-width-mobile{
+    width: calc(100% - 80px);
+}
+
 @keyframes rotate {
     0% {
         transform: rotate(0deg);

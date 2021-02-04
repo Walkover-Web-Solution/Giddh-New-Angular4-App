@@ -60,7 +60,7 @@
                                         </option>
                                     </select>
                                     <ng-container *ngIf="fields.get('id').value === 'image'">
-                                        <img class="img-responsive max150" [src]="base64StringForModel" />
+                                        <img class="img-responsive max-width-150" [src]="base64StringForModel" />
                                         <label>Enter above text</label>
                                         <input [type]="fields.get('type').value" formControlName="value"
                                             [required]="fields.get('isOptional').value === 'false'"

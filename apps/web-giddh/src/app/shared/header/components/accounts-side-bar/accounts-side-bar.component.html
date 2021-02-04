@@ -1,5 +1,5 @@
 <div class="accounts-side-bar grey-bg wrap-account-list" ng-click="$event.stopPropagation()">
-    <div *ngIf="flyAccounts" style="height: 100%" class="wrap-account-list" id="grp_acc_wrapper">
+    <div *ngIf="flyAccounts" class="wrap-account-list h-100" id="grp_acc_wrapper">
         <div class="pd-1 wrap-account-list" *ngIf="(isFlyAccountInProcess$ | async)">
             Loading Accounts...
         </div>
@@ -29,17 +29,17 @@
                             <div class="title  LIB{{item.UniqueName}}"
                                 (click)="toggleGroup(item,i + _startIndex,$event)"
                                 [ngClass]="{'active' : item.isOpen || item.UniqueName === selectedGroupUname}">
-                                <a class="text-ellipsis max250">{{item.Name}} ({{item.UniqueName}})</a>
+                                <a class="text-ellipsis max-width-250">{{item.Name}} ({{item.UniqueName}})</a>
                             </div>
                         </li>
                         <li *ngIf="!item.isGroup" class="inrPrnt cp accountli">
                             <a>
                                 <div class="clearfix" tooltip="{{item.UniqueName}}" container="body">
                                     <strong>
-                                        <span class="text-ellipsis max250" (click)="flyAccounts = false" *ngIf="isRouter"
+                                        <span class="text-ellipsis max-width-250" (click)="flyAccounts = false" *ngIf="isRouter"
                                             [routerLink]="['/ledger',item.UniqueName]">{{item.Name}}
                                             ({{item.UniqueName}})</span>
-                                        <span class="text-ellipsis max250"
+                                        <span class="text-ellipsis max-width-250"
                                             (mousedown)="flyAccounts = true;onSelectItem.emit(item)" *ngIf="!isRouter"
                                             [innerHTML]="item.Name+' ' + '(' + item.UniqueName + ')'"></span>
                                     </strong>

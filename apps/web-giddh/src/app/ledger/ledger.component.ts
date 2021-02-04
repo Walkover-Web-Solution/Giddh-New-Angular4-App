@@ -635,7 +635,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         // branches are loaded
                         if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                            this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                            this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                         } else {
                             currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                             this.currentBranch = {
@@ -807,8 +807,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.arrangeLedgerTransactionsForMobile();
                 }
 
-                if (lt.closingBalance) {
-                    this.closingBalanceBeforeReconcile = lt.closingBalance;
+                if (lt.periodClosingBalance) {
+                    this.closingBalanceBeforeReconcile = lt.periodClosingBalance;
                     this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
                 }
                 if (lt.closingBalanceForBank) {
@@ -1630,6 +1630,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.searchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
                     }
                 }
             });
@@ -1732,7 +1735,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public getReconciliation() {
         this.lc.transactionData$.pipe(take(1)).subscribe((val) => {
             if (val) {
-                this.closingBalanceBeforeReconcile = val.closingBalance;
+                this.closingBalanceBeforeReconcile = val.periodClosingBalance;
                 if (this.closingBalanceBeforeReconcile) {
                     this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
                 }

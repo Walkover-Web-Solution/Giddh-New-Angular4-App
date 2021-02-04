@@ -1,4 +1,4 @@
-<div class="menu" *ngIf="isOpen && _rows" style="background-color: white" [style.min-height.px]="dropdownMinHeight">
+<div class="menu white-bg" *ngIf="isOpen && _rows" [style.min-height.px]="dropdownMinHeight">
     <!--virtual-->
     <virtual-scroll [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()" *ngIf="!showCheckbox" #v [items]="_rows" (update)="viewPortItems = $event" [style.max-height.px]="ItemHeight*4"
         [childHeight]="viewPortItems?.length === 0?41:undefined" [selectedValues]="selectedValues"
