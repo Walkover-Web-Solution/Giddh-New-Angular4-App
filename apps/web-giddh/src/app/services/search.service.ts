@@ -64,6 +64,9 @@ export class SearchService {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
                 if (params[key] !== undefined) {
+                    if (key === 'branchUniqueName') {
+                        params[key] = params[key] === companyUniqueName ? '' : params[key];
+                    }
                     contextPath += `${delimiter}${key}=${params[key]}`
                 }
             });
@@ -86,6 +89,9 @@ export class SearchService {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
                 if (params[key] !== undefined) {
+                    if (key === 'branchUniqueName') {
+                        params[key] = params[key] === companyUniqueName ? '' : params[key];
+                    }
                     contextPath += `${delimiter}${key}=${params[key]}`
                 }
             });
@@ -109,7 +115,10 @@ export class SearchService {
         .replace(':accountUniqueName', encodeURIComponent(uniqueName));
         if (params) {
             Object.keys(params).forEach((key, index) => {
-                const delimiter = index === 0 ? '?' : '&'
+                const delimiter = index === 0 ? '?' : '&';
+                if (key === 'branchUniqueName') {
+                    params[key] = params[key] === companyUniqueName ? '' : params[key];
+                }
                 contextPath += `${delimiter}${key}=${params[key]}`
             });
         }
