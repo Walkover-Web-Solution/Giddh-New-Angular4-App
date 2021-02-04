@@ -16,7 +16,7 @@
     <!-- region ledger table-->
     <div class="ledg-head transactions-page mr-t15 position-relative">
         <!-- region ledger header -->
-        <div class="clearfix row mr-b15">
+        <div class="clearfix row mr-b15" [ngClass]="{'mr-b5' :  currentCompanyBranches?.length > 2}">
             <!-- region currency toggle -->
             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 search-ledger-wrapper">
                 <div class="d-flex search-ledger-field">
