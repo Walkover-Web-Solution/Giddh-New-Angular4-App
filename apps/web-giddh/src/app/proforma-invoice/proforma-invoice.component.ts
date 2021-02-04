@@ -3711,14 +3711,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.startLoader(false);
             return;
         }
-        /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
-        if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
-            if (this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment() < 0) {
-                this.isAdjustAdvanceReceiptModalOpen();
-                this.startLoader(false);
-                return;
-            }
-        }
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
