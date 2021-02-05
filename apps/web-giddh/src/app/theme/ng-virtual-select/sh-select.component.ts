@@ -7,7 +7,7 @@ import { BorderConfiguration, IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { Subject, ReplaySubject } from 'rxjs';
+import { ReplaySubject, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
@@ -73,8 +73,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
     @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
-    /** Subject to emit current searched value */
-    private dynamicSearchQueryChanged: Subject<string> = new Subject<string>();
     /** To unsubscribe from the dynamic search query subscription */
     private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -227,10 +225,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      */
     public handleInputChange(inputText: string): void {
         if(inputText) {
-            if (this.enableDynamicSearch) {
-                console.log('Emitted: ', inputText);
-                this.dynamicSearchQueryChanged.next(inputText);
-            } else {
+            if (!this.enableDynamicSearch) {
                 this.updateFilter(inputText);
             }
         } else {
@@ -480,7 +475,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public ngOnInit() {
         this.selectedValues = [];
-        this.subscribeToQueryChange();
     }
 
     /**
@@ -490,8 +484,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
-            this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
-                this.dynamicSearchedQuery.emit(query);
+            fromEvent(this.inputFilter.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
+                this.dynamicSearchedQuery.emit(event?.target?.value.trim());
             });
         }
     }
@@ -499,6 +493,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public ngAfterViewInit() {
         this.viewInitEvent.emit(true);
+        this.subscribeToQueryChange();
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
