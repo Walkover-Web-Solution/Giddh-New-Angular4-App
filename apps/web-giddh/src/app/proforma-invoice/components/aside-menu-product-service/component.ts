@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AddAccountRequest } from '../../../models/api-models/Account';
 import { AccountService } from '../../../services/account.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'aside-menu-product-service',
@@ -22,7 +24,7 @@ import { ToasterService } from '../../../services/toaster.service';
     ]
 })
 
-export class AsideMenuProductServiceComponent {
+export class AsideMenuProductServiceComponent implements OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public animatePAside: EventEmitter<any> = new EventEmitter();
@@ -35,6 +37,8 @@ export class AsideMenuProductServiceComponent {
     public hideFirstStep: boolean = false;
     /** Aside menu state */
     public accountAsideMenuState: string = "in";
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private accountService: AccountService,
@@ -82,7 +86,7 @@ export class AsideMenuProductServiceComponent {
      * @memberof AsideMenuProductServiceComponent
      */
     public addNewServiceAccount(item: AddAccountRequest): void {
-        this.accountService.CreateAccountV2(item.accountRequest, item.activeGroupUniqueName).subscribe(response => {
+        this.accountService.CreateAccountV2(item.accountRequest, item.activeGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response.status === "success") {
                 this.toasterService.successToast("Account Created Successfully");
                 this.closeAsideEvent.emit();
@@ -90,5 +94,15 @@ export class AsideMenuProductServiceComponent {
                 this.toasterService.errorToast(response.message);
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof AsideMenuProductServiceComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

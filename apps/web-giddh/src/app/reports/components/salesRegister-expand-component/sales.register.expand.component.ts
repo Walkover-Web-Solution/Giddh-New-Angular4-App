@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, OnDestroy } from '@angular/core';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -20,7 +20,7 @@ import { CurrentCompanyState } from '../../../store/Company/company.reducer';
     templateUrl: './sales.register.expand.component.html',
     styleUrls: ['./sales.register.expand.component.scss']
 })
-export class SalesRegisterExpandComponent implements OnInit {
+export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     public SalesRegisteDetailedItems: SalesRegisteDetailedResponse;
     public from: string;
@@ -275,5 +275,15 @@ export class SalesRegisterExpandComponent implements OnInit {
         currentPageObj.name = "Reports > Sales Register";
         currentPageObj.url = this.router.url;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    }
+
+    /**
+     * This function will destroy the subscribers
+     *
+     * @memberof SalesRegisterExpandComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

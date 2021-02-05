@@ -565,7 +565,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let transaction = this.requestObj.transactions[idx];
         if (acc) {
             const formattedCurrentDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-            this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
+            this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
                 if (data && data.body) {
                     this.setAccountCurrentBalance(data.body, idx);
                 }
@@ -1591,7 +1591,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.pendingInvoiceList = [];
         this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
 
-        this.salesService.getInvoiceList(this.pendingInvoicesListParams, moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).subscribe(response => {
+        this.salesService.getInvoiceList(this.pendingInvoicesListParams, moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
                 Object.keys(response.body.results).forEach(key => {
                     this.pendingInvoiceList[response.body.results[key].uniqueName] = [];

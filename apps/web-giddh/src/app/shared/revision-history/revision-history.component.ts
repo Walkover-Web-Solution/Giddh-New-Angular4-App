@@ -1,9 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'aside-revision-history',
@@ -11,7 +13,7 @@ import { PurchaseRecordService } from '../../services/purchase-record.service';
     styleUrls: ['./revision-history.component.scss']
 })
 
-export class RevisionHistoryComponent implements OnInit {
+export class RevisionHistoryComponent implements OnInit, OnDestroy {
     /* Taking PO details as input */
     @Input() public purchaseOrder: any;
     /* Taking PB details as input */
@@ -36,6 +38,8 @@ export class RevisionHistoryComponent implements OnInit {
     public purchaseVersions: any = {};
     /* This will hold if api request is pending */
     public isLoading: boolean = false;
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, private generalService: GeneralService, public purchaseRecordService: PurchaseRecordService, private cdRef: ChangeDetectorRef) {
 
@@ -88,7 +92,7 @@ export class RevisionHistoryComponent implements OnInit {
                 this.purchaseVersionsGetRequest.page = 1;
             }
 
-            this.purchaseOrderService.getAllVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest).subscribe((res) => {
+            this.purchaseOrderService.getAllVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
                         if (res.body) {
@@ -175,7 +179,7 @@ export class RevisionHistoryComponent implements OnInit {
                 this.purchaseVersionsGetRequest.page = 1;
             }
 
-            this.purchaseRecordService.getAllVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest).subscribe((res) => {
+            this.purchaseRecordService.getAllVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
                         if (res.body) {
@@ -202,5 +206,15 @@ export class RevisionHistoryComponent implements OnInit {
                 }
             });
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof RevisionHistoryComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

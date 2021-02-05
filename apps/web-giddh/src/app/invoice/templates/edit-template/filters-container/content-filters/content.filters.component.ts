@@ -96,22 +96,22 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
             this.voucherType = a.voucherType;
             // this.getVoucher(false);
         });
-        this._invoiceUiDataService.templateVoucherType.subscribe((voucherType: string) => {
+        this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
             this.voucherType = _.cloneDeep(voucherType);
         });
-        this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
+        this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = _.cloneDeep(template);
         });
 
-        this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
+        this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
             this.templateUISectionVisibility = _.cloneDeep(info);
         });
 
-        this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {
+        this._invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
             this.showCompanyName = _.cloneDeep(yesOrNo);
         });
 
-        this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
+        this._invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             this.fieldsAndVisibility = _.cloneDeep(obj);
         });
 
@@ -224,8 +224,8 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnDestroy() {
         // this._invoiceUiDataService.customTemplate.unsubscribe();
         // this._invoiceUiDataService.selectedSection.unsubscribe();
-        // this.destroyed$.next(true);
-        // this.destroyed$.complete();
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public onUploadFileOutput(output: UploadOutput): void {

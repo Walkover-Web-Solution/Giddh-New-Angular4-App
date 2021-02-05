@@ -195,7 +195,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.paginationRequest.from = this.filter.from;
         this.paginationRequest.to = this.filter.to;
         this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName').value;
-        this.tallysyncService.getCompletedSync(this.paginationRequest).subscribe((res) => {
+        this.tallysyncService.getCompletedSync(this.paginationRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.results && res.results.length > 0) {
                 this.completedtallySyncDataResponse = res;
                 this.completedData = res.results;
@@ -238,7 +238,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
         this.downloadTallyErrorLogRequest.type = row['type'];
-        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).subscribe((res) => {
+        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 let blobData = this.base64ToBlob(res.body, 'application/xlsx', 512);
                 return saveAs(blobData, `${row.company.name}-error-log.xlsx`);
@@ -352,7 +352,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
      * @memberof CompletedComponent
      */
     private loadBranches(companyUniqueName: string): void {
-        this.settingsBranchService.getBranchByCompany(companyUniqueName).subscribe((response: any) => {
+        this.settingsBranchService.getBranchByCompany(companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
                 this.currentCompanyBranches = response.body.map(branch => ({
                     label: branch.alias,

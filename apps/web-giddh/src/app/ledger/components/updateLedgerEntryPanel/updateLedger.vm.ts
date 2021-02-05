@@ -14,6 +14,7 @@ import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Compa
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { RATE_FIELD_PRECISION, SubVoucher } from '../../../app.constant';
+import { take } from 'rxjs/operators';
 
 export class UpdateLedgerVm {
     public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -327,7 +328,7 @@ export class UpdateLedgerVm {
         let companyTaxes: TaxResponse[] = [];
         let totalTaxes = 0;
 
-        this.companyTaxesList$.subscribe(taxes => companyTaxes = taxes);
+        this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
 
         if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             const amount = (this.isAdvanceReceipt) ? this.advanceReceiptAmount : this.totalAmount;
