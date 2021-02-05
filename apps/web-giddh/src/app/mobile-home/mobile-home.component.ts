@@ -214,7 +214,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.commandKRequestParams.group = "";
         }
 
-        this.commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).subscribe((res) => {
+        this.commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
 
             if (res && res.body && res.body.results && res.body.results.length > 0) {

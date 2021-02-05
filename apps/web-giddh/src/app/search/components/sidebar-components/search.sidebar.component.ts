@@ -329,7 +329,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                 count: API_COUNT_LIMIT,
                 branchUniqueName: this.currentBranch?.uniqueName
             };
-            this.groupService.searchGroups(requestObject).subscribe(data => {
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

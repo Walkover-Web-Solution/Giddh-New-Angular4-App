@@ -536,7 +536,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 q: encodeURIComponent(query),
                 page
             }
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -593,7 +593,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 page,
                 count: API_COUNT_LIMIT
             }
-            this.inventoryService.GetStocks(requestObject).subscribe(data => {
+            this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

@@ -1,8 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../helpers/helperFunctions';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'purchase-order-preview-modal',
@@ -10,7 +12,7 @@ import { base64ToBlob } from '../helpers/helperFunctions';
     styleUrls: ['./purchase-order-preview.component.scss']
 })
 
-export class PurchaseOrderPreviewModalComponent implements OnInit {
+export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
     /* Taking input po unique name */
     @Input() public purchaseOrderUniqueName: any;
     /* Taking input company unique name */
@@ -29,6 +31,9 @@ export class PurchaseOrderPreviewModalComponent implements OnInit {
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
     public pdfPreviewHasError: boolean = false;
+
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService) {
 
@@ -63,7 +68,7 @@ export class PurchaseOrderPreviewModalComponent implements OnInit {
         this.pdfPreviewLoaded = false;
         let getRequest = { companyUniqueName: this.purchaseOrderCompanyUniqueName, accountUniqueName: this.purchaseOrderAccountUniqueName, poUniqueName: this.purchaseOrderUniqueName };
 
-        this.purchaseOrderService.getPdf(getRequest).subscribe(response => {
+        this.purchaseOrderService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                 if(this.pdfViewer) {
@@ -87,5 +92,15 @@ export class PurchaseOrderPreviewModalComponent implements OnInit {
      */
     public pagesLoaded(count: number): void {
         this.pageCount = count;
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseOrderPreviewModalComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

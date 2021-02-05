@@ -160,7 +160,7 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      */
     public getSharedAllModules(): void {
         this.showLoader = true;
-        this.permissionService.getSharedAllModules().subscribe(response => {
+        this.permissionService.getSharedAllModules().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.allModulesList = response.body;
             }

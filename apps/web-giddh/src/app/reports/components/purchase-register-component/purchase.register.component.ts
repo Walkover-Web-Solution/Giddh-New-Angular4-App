@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationStart } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -22,7 +22,7 @@ import { OrganizationType } from '../../../models/user-login-state';
     templateUrl: './purchase.register.component.html',
     styleUrls: ['./purchase.register.component.scss']
 })
-export class PurchaseRegisterComponent implements OnInit {
+export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
     bsValue = new Date();
     public reportRespone: PurchaseReportsModel[];
@@ -306,7 +306,7 @@ export class PurchaseRegisterComponent implements OnInit {
                 interval: interval,
                 branchUniqueName: this.currentBranch.uniqueName
             }
-            this.companyService.getPurchaseRegister(request).subscribe((res) => {
+            this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'error') {
                     this._toaster.errorToast(res.message);
                 } else {
@@ -331,7 +331,7 @@ export class PurchaseRegisterComponent implements OnInit {
                 interval: 'monthly',
                 branchUniqueName: this.currentBranch.uniqueName
             }
-            this.companyService.getPurchaseRegister(request).subscribe((res) => {
+            this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'error') {
                     this._toaster.errorToast(res.message);
                 } else {
@@ -415,5 +415,15 @@ export class PurchaseRegisterComponent implements OnInit {
             this.purchaseRegisterTotal.netPurchase += item.balance.amount;
             this.purchaseRegisterTotal.cumulative = item.closingBalance.amount;
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

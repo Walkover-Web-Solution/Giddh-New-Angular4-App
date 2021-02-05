@@ -252,7 +252,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsBranchAction: SettingsBranchActions,
         private accountsAction: AccountsAction,
         private ledgerAction: LedgerActions,
-        private permissionService: PermissionService,
         public location: Location
     ) {
         // Reset old stored application date
@@ -496,7 +495,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.isMobileSite = s;
             if (this.generalService.companyUniqueName) {
-                this.companyService.getMenuItems().subscribe(response => {
+                this.companyService.getMenuItems().pipe(take(1)).subscribe(response => {
                     if (response && response.body) {
                         let branches = [];
                         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
@@ -604,6 +603,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
                             //this.selectedPage = 'ledger - ' + acc.name;
                             isDestroyed.next(true);
+                            isDestroyed.complete();
                             return this.navigateToUser = false;
                         }
                     });
@@ -657,7 +657,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        this.store.pipe(select(s => s.general.headerTitle)).subscribe(menu => {
+        this.store.pipe(select(s => s.general.headerTitle)).pipe(takeUntil(this.destroyed$)).subscribe(menu => {
             if (menu) {
                 let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                     if (menu.additional && item.additional) {
@@ -685,7 +685,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        this.companyService.CurrencyList().subscribe(response => {
+        this.companyService.CurrencyList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success' && response.body) {
                 this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
             }
@@ -710,7 +710,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public getCurrentCompanyData(): void {
-        this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
+        this.settingsProfileService.GetProfileInfo().pipe(take(1)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.store.dispatch(this.settingsProfileAction.handleCompanyProfileResponse(response));
                 let res = response.body;
@@ -1142,7 +1142,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
         this.setOrganizationDetails(OrganizationType.Branch, details);
-        this.companyService.getStateDetails(this.generalService.companyUniqueName).subscribe(response => {
+        this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
             if (response && response.body) {
                 if (screen.width <= 767 || isCordova) {
                     window.location.href = '/pages/mobile-home';
@@ -1603,12 +1603,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public showNavigationModal() {
         this.navigationModalVisible = true;
-        const _combine = combineLatest(
+        const _combine = combineLatest([
             this.modalService.onShow,
             this.modalService.onShown,
             this.modalService.onHide,
             this.modalService.onHidden
-        ).subscribe(() => this.changeDetection.markForCheck());
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(() => this.changeDetection.markForCheck());
 
         this.subscriptions.push(
             this.modalService.onShow.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
@@ -1637,7 +1637,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     private getElectronAppVersion() {
-        this.authService.GetElectronAppVersion().subscribe((res: string) => {
+        this.authService.GetElectronAppVersion().pipe(take(1)).subscribe((res: string) => {
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
@@ -1763,7 +1763,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             country: (this.activeCompany && this.activeCompany.countryV2) ? this.activeCompany.countryV2.alpha2CountryCode : '',
             formName: 'otherTaxes'
         };
-        this.commonService.getOnboardingForm(request).subscribe((response) => {
+        this.commonService.getOnboardingForm(request).pipe(take(1)).subscribe((response) => {
             if (response && response.status === 'success' && response.body) {
                 this.store.dispatch(this.companyActions.setCompanyTcsTdsApplicability(response.body.isTcsTdsApplicable))
             } else {
@@ -2023,7 +2023,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     private getElectronMacAppVersion(): void {
-        this.authService.getElectronMacAppVersion().subscribe((res: string) => {
+        this.authService.getElectronMacAppVersion().pipe(take(1)).subscribe((res: string) => {
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
