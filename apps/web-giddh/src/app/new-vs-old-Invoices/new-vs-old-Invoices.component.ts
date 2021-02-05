@@ -27,7 +27,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public selectedQuater: string = '';
     public NewVsOldInvoicesData$: Observable<NewVsOldInvoicesResponse>;
 
-    public yearOptions: IOption[] = [{ label: '2014', value: '2014' }, { label: '2015', value: '2015' }, { label: '2016', value: '2016' }, { label: '2017', value: '2017' }, { label: '2018', value: '2018' }, { label: '2019', value: '2019' }, { label: '2020', value: '2020' }];
+    public yearOptions: IOption[] = [];
     public selectedYear: string;
     public NewVsOldInvoicesQueryRequest: NewVsOldInvoicesRequest;
     public columnName: string = '';
@@ -66,6 +66,13 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        let startYear = 2014;
+        let endYear = new Date().getUTCFullYear();
+        
+        for(startYear; startYear <= endYear; startYear++) {
+            this.yearOptions.push({label: String(startYear), value: String(startYear)});
+        }
+
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
@@ -105,6 +112,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         });
 
         this.selectedYear = (new Date()).getFullYear().toString();
+        this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2).toString();
+        this.go();
     }
 
     public ChangingValue(event) {
@@ -113,7 +122,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._NewVsOldInvoicesActions.GetResponseNull());
     }
 
-    public go(form: NgForm) {
+    public go(form?: NgForm) {
         // if (!this.selectedYear) {
         //   this.showErrorToast('please select year');
         //   return;
