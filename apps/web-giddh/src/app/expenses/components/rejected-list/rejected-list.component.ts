@@ -45,7 +45,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
 		this.getPettycashRejectedReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashRejectedReportInprocess), takeUntil(this.destroyed$));
 		this.getPettycashRejectedReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashRejectedReportSuccess), takeUntil(this.destroyed$));
 
-		observableCombineLatest(this.universalDate$, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+		observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
 			if (!Array.isArray(resp[0])) {
 				return;
 			}
@@ -103,7 +103,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
 	public revertActionClicked(item: ExpenseResults) {
 		this.actionPettycashRequest.actionType = 'revert';
 		this.actionPettycashRequest.uniqueName = item.uniqueName;
-		this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).subscribe(res => {
+		this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res.status === 'success') {
 				this._toasty.successToast(res.body);
 				this.getPettyCashRejectedReports(this.pettycashRequest);
@@ -122,7 +122,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
 	public deleteActionClicked(item: ExpenseResults) {
 		this.actionPettycashRequest.actionType = 'delete';
 		this.actionPettycashRequest.uniqueName = item.uniqueName;
-		this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).subscribe(res => {
+		this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res.status === 'success') {
 				this._toasty.successToast(res.body);
 				this.getPettyCashRejectedReports(this.pettycashRequest);
@@ -150,5 +150,15 @@ export class RejectedListComponent implements OnInit, OnChanges {
 		if (!this._cdRf['destroyed']) {
 			this._cdRf.detectChanges();
 		}
-	}
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof RejectedListComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

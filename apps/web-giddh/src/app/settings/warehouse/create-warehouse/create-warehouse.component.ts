@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -34,7 +34,7 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
     ]
 })
 
-export class CreateWarehouseComponent implements OnInit {
+export class CreateWarehouseComponent implements OnInit, OnDestroy {
 
     /** Address aside menu state */
     public addressAsideMenuState: string = 'out';
@@ -228,7 +228,7 @@ export class CreateWarehouseComponent implements OnInit {
             })),
             // linkEntity
         };
-        this.settingsProfileService.createNewWarehouse(requestObj).subscribe(response => {
+        this.settingsProfileService.createNewWarehouse(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
                     this.toastService.successToast('Warehouse created successfully');
@@ -270,7 +270,7 @@ export class CreateWarehouseComponent implements OnInit {
      * @memberof CreateWarehouseComponent
      */
     public loadStates(countryCode: string): void {
-        this.companyService.getAllStates({ country: countryCode }).subscribe(response => {
+        this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
@@ -309,7 +309,7 @@ export class CreateWarehouseComponent implements OnInit {
             linkEntity
         };
 
-        this.settingsProfileService.createNewAddress(requestObj).subscribe((response: any) => {
+        this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response.status === 'success' && response.body) {
                 this.toggleAddressAsidePane();
                 this.addresses.push({
@@ -335,7 +335,7 @@ export class CreateWarehouseComponent implements OnInit {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
-        this.commonService.getOnboardingForm(onboardingFormRequest).subscribe((response: any) => {
+        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === 'success') {
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
@@ -354,7 +354,7 @@ export class CreateWarehouseComponent implements OnInit {
      * @memberof CreateWarehouseComponent
      */
     public loadLinkedEntities(successCallback?: Function): void {
-        this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
+        this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
@@ -393,7 +393,7 @@ export class CreateWarehouseComponent implements OnInit {
      * @memberof CreateWarehouseComponent
      */
     private loadAddresses(method: string, params?: any): void {
-        this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
+        this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
                 this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {

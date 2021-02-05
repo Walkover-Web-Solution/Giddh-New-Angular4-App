@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
@@ -46,7 +48,7 @@ import { SearchService } from '../../services/search.service';
     <ng-content></ng-content>
   `
 })
-export class TlPlGridRowComponent implements OnChanges {
+export class TlPlGridRowComponent implements OnChanges, OnDestroy {
     @Input() public groupDetail: ChildGroup;
     @Input() public search: string;
     @Input() public from: string;
@@ -54,6 +56,9 @@ export class TlPlGridRowComponent implements OnChanges {
     @Input() public padding: string;
     public modalUniqueName: string = null;
     public accountDetails: IFlattenAccountsResultItem;
+
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private cd: ChangeDetectorRef,
@@ -84,7 +89,7 @@ export class TlPlGridRowComponent implements OnChanges {
     }
 
     public accountInfo(acc, e: Event) {
-        this.searchService.loadDetails(acc.uniqueName).subscribe(response => {
+        this.searchService.loadDetails(acc.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 this.accountDetails = response.body;
                 const parentGroups = response.body.parentGroups?.join(', ');
@@ -107,5 +112,15 @@ export class TlPlGridRowComponent implements OnChanges {
 
     public trackByFn(index, item: Account) {
         return item;
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof TlPlGridRowComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

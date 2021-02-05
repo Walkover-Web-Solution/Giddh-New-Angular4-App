@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BorderConfiguration, IOption } from './sh-options.interface';
 import { SalesShSelectMenuComponent } from './sh-select-menu.component';
@@ -26,7 +26,7 @@ const FLATTEN_SEARCH_TERM = 'flatten';
         }
     ]
 })
-export class SalesShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges {
+export class SalesShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
     @Input() public idEl: string = '';
     @Input() public placeholder: string = 'Type to filter';
     @Input() public multiple: boolean = false;
@@ -387,7 +387,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     }
 
     public ngOnInit() {
-        //
+        this.subscribeToQueryChange();
     }
 
     public ngAfterViewInit() {
@@ -538,10 +538,6 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
      */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
-            this.stopDynamicSearch$.next(true);
-            this.stopDynamicSearch$.complete();
-            this.stopDynamicSearch$ = new ReplaySubject(1);
-            this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
                 this.dynamicSearchedQuery.emit(query);
             });
@@ -559,6 +555,16 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
                 (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
             }
         }, 300);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof SalesShSelectComponent
+     */
+    public ngOnDestroy(): void {
+        this.stopDynamicSearch$.next(true);
+        this.stopDynamicSearch$.complete();
     }
 }
 
