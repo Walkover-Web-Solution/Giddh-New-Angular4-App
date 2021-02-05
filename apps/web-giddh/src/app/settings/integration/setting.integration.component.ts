@@ -1337,9 +1337,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+            // this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
+            // this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
+            // this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
         }
     }
 
