@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from '../services/authentication.service';
@@ -10,7 +10,7 @@ import { AuthenticationService } from '../services/authentication.service';
     styleUrls: ['./browserDetect.component.scss'],
     templateUrl: './browserDetect.component.html'
 })
-export class BrowserDetectComponent implements OnInit {
+export class BrowserDetectComponent implements OnInit, OnDestroy {
     public apkVersion: string;
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

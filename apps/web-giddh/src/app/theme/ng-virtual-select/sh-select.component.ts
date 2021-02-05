@@ -615,6 +615,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
     }
 
+    /**
+     * Releases memory
+     *
+     * @memberof ShSelectComponent
+     */
     public ngOnDestroy(): void {
         this.stopDynamicSearch$.next(true);
         this.stopDynamicSearch$.complete();
