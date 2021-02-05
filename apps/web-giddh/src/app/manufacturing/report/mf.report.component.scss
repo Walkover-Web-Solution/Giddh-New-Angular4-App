@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 .mf-stock-search-request-form .col-xs-1 {
     width: 11.33333333%;
 }
@@ -29,6 +31,17 @@
         max-width: 100%;
         padding-left: 40px !important;
         text-align: left;
+    }
+}
+.manufacture-table{
+    .bd-rl{
+        border-left: 1px solid $gainsboro !important;
+    }
+    .bd-rr{
+        border-right: 1px solid $gainsboro !important;
+    }
+    .mobile-td{
+        display: none;
     }
 }
 @media(max-width:1440px){
@@ -63,6 +76,15 @@
         }
         .isActive {
             float:left !important;
+        }
+    }
+    .manufacture-table{
+        td.mobile-td {
+            padding: 0 15px!important;
+            font-size: 16px !important;
+            font-family: 'opensans-semibold';
+            display: block;
+            margin-bottom: 5px;
         }
     }
 }
