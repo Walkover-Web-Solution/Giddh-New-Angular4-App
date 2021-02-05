@@ -12,7 +12,7 @@ export const LEDGER_API = {
     // ledger utility related mail,share
     MAIL_LEDGER: 'company/:companyUniqueName/accounts/:accountUniqueName/mail-ledger?', // post call
     // get call
-    RECONCILE: UNIVERSAL_URI_LEDGER + 'reconcile?from=:from&to=:to&chequeNumber=:chequeNumber',
+    RECONCILE: 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers-v2/reconcile?from=:from&to=:to&chequeNumber=:chequeNumber',
     // DOWNLOAD_INVOICE: 'v2/company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
     DOWNLOAD_INVOICE: 'company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file?fileType=base64', // post call
     DOWNLOAD_ATTACHMENT: 'company/:companyUniqueName/ledger/upload/:fileName', // post call

@@ -18,7 +18,7 @@
 							<span class="position-relative form-group">
 								<select class="form-control" formControlName="queryType" required>
 									<option value="">Select Type</option>
-									<option *ngFor="let queryType of queryTypes" value="{{queryType.uniqueName}}">
+									<option *ngFor="let queryType of queryTypes" value="{{queryType?.uniqueName}}">
 										{{queryType.name}}</option>
 								</select>
 							</span>
@@ -43,7 +43,7 @@
 							<span class="position-relative form-group"
 								*ngIf="item.value.queryType === 'openingBalance'">
 								<select class="form-control" formControlName="openingBalanceType">
-									<option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}
+									<option *ngFor="let type of balType" value="{{type?.uniqueName}}">{{type.name}}
 									</option>
 								</select>
 							</span>
@@ -51,7 +51,7 @@
 							<span class="position-relative form-group"
 								*ngIf="item.value.queryType === 'closingBalance'">
 								<select class="form-control" formControlName="closingBalanceType">
-									<option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}
+									<option *ngFor="let type of balType" value="{{type?.uniqueName}}">{{type.name}}
 									</option>
 								</select>
 							</span>

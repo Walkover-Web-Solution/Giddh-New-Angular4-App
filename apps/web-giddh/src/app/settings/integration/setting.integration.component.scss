@@ -153,7 +153,7 @@
 }
 
 
-@media (max-width:1359px) and (min-width:992px){
+@media (max-width:1400px) and (min-width:992px){
     .payment-col{
         flex: 0 0 33.333333% !important;
         max-width:33.333333% !important;
@@ -161,5 +161,12 @@
     .payment-col1{
         flex: 0 0 25% !important;
         max-width:25% !important;
+    }
+}
+
+@media (max-width:1680px) and (min-width:1401px){
+    .amount-upto{
+        flex: 0 0 20.666667% !important;
+        max-width: 20.666667% !important;
     }
 }

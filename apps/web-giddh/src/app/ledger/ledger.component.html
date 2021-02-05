@@ -38,9 +38,9 @@
                                 (click)="performBulkAction('upload', BulkUploadfileInput)" container="body"
                                 tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                             </button>
-                            <input type="file" #BulkUploadfileInput name="BulkUploadfileInput"
+                            <input type="file" #BulkUploadfileInput class="d-none" name="BulkUploadfileInput"
                                 id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect
-                                [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" class="d-none">
+                                [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                         </div>
                     </div>
                     <!-- [ngClass]="{'class-1':condition1==condition2, 'class-2': condition3==condition4}" -->
@@ -1232,7 +1232,7 @@
             <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm mr-0"
                 (click)="getReconciledBack();">Back
             </button>
-            <div *ngIf="closingBalanceBeforeReconcile  showLoader" class="box balance-detail mr-t2 mr-b2 clearfix text-center">
+            <div *ngIf="closingBalanceBeforeReconcile && !showLoader" class="box balance-detail mr-t2 mr-b2 clearfix text-center">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-12 text-right">Balance as per bank
                         <h3 class="font-20 primary-color">{{reconcileClosingBalanceForBank?.amount}}
@@ -1293,7 +1293,7 @@
                 <div class="col-sm-3 col-xs-12 stat-block">
                     <div class="ledger-state-box">
 
-                        <h1 class="">Net Total</h1>
+                        <h1>Net Total</h1>
 
                         <div class="d-flex justify-content-between">
 

@@ -196,7 +196,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('copyPreviousEstimate', {static: true}) public copyPreviousEstimate: ElementRef;
     @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
-    @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
+    @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: ShSelectComponent;
@@ -593,6 +593,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public companyAddressList: any[] = [];
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
+    /** This will handle if focus should go in customer/vendor dropdown */
+    public allowFocus: boolean = true;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1963,14 +1965,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (selectedState) {
                 this.invFormData.accountDetails[type].stateCode = selectedState.value;
                 this.invFormData.accountDetails[type].state.code = selectedState.value;
-
+                statesEle.disabled = true;
             } else {
+                this._toasty.clearAllToaster();
                 this.invFormData.accountDetails[type].stateCode = null;
                 this.invFormData.accountDetails[type].state.code = null;
-                this._toasty.clearAllToaster();
+                statesEle.disabled = false;
             }
-            statesEle.disabled = true;
-
         } else {
             statesEle.disabled = false;
             this.invFormData.accountDetails[type].stateCode = null;
@@ -2068,6 +2069,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.updateDueDate();
 
         this.ngAfterViewInit();
+        this.allowFocus = true;
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;
         this.fillDeliverToAddress();
@@ -3666,6 +3668,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public addNewAccount() {
+        this.allowFocus = false;
         this.selectedCustomerForDetails = null;
         this.invFormData.voucherDetails.customerName = null;
         this.invFormData.voucherDetails.customerUniquename = null;
@@ -3706,14 +3709,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!requestObject) {
             this.startLoader(false);
             return;
-        }
-        /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
-        if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
-            if (this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment() < 0) {
-                this.isAdjustAdvanceReceiptModalOpen();
-                this.startLoader(false);
-                return;
-            }
         }
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let data = requestObject.voucher;
@@ -5820,6 +5815,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        if (searchType === SEARCH_TYPE.CUSTOMER) {
+                            this.defaultCustomerResultsPaginationData.page = data.body.page;
+                            this.defaultCustomerResultsPaginationData.totalPages = data.body.totalPages;
+                        } else if (searchType === SEARCH_TYPE.ITEM) {
+                            this.defaultItemResultsPaginationData.page = data.body.page;
+                            this.defaultItemResultsPaginationData.totalPages = data.body.totalPages;
+                        }
                     }
                 }
             });

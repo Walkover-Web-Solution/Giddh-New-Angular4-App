@@ -7,15 +7,14 @@ import { Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
-import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
-import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GroupService } from '../../../services/group.service';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
 	selector: 'search-sidebar',
@@ -38,8 +37,6 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 	public groupName: string;
 	public groupUniqueName: string;
 	public dataSource = [];
-	public groupsList$: Observable<GroupsWithAccountsResponse[]>;
-	public typeaheadNoResults: boolean;
 	public datePickerOptions: any = {
 		locale: {
 			applyClass: 'btn-green',
@@ -103,6 +100,25 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     public universalDate$: Observable<any>;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the value of groups */
+    public searchedGroups: IOption[];
+
 	/**
 	 * TypeScript public modifiers
 	 */
@@ -113,25 +129,12 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         private groupService: GroupService,
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions
-    ) {
-		this.groupsList$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
-	}
+    ) {	}
 
 	public ngOnInit() {
 		this.fromDate = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
 		this.toDate = moment().format(GIDDH_DATE_FORMAT);
-
-		// Get source for Group Name Input selection
-		this.groupsList$.subscribe(data => {
-			if (data && data.length) {
-				let accountList = this.flattenGroup(data, []);
-				let groups = [];
-				accountList.map((d: any) => {
-					groups.push({ name: d.name, id: d.uniqueName });
-				});
-				this.dataSource = groups;
-			}
-        });
+        this.loadDefaultGroupsSuggestions();
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
@@ -169,13 +172,13 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -216,18 +219,13 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	public getClosingBalance(isRefresh: boolean, event: any, page?: number, searchReqBody?: any) {
-		if (this.typeaheadNoResults) {
-			this.groupName = '';
-			this.groupUniqueName = '';
-		}
-
 		let searchRequest: SearchRequest = {
 			groupName: this.groupUniqueName,
 			refresh: isRefresh,
 			toDate: this.toDate,
 			fromDate: this.fromDate,
             page: page ? page : 1,
-            branchUniqueName: this.currentBranch.uniqueName
+            branchUniqueName: this.currentBranch?.uniqueName
 		};
 		this.store.dispatch(this.searchActions.GetStocksReport(searchRequest, searchReqBody));
 		if (event) {
@@ -235,41 +233,14 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 		}
 	}
 
-	public changeTypeaheadNoResults(e: boolean): void {
-		this.typeaheadNoResults = e;
-	}
-
 	public ngOnDestroy() {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
 	}
 
-	public OnSelectGroup(g: TypeaheadMatch) {
-		this.groupName = g.item.name;
-		this.groupUniqueName = g.item.id;
-	}
-
-	public flattenGroup(rawList: any[], parents: any[] = []) {
-		let listofUN;
-		listofUN = _.map(rawList, (listItem) => {
-			let newParents;
-			let result;
-			newParents = _.union([], parents);
-			newParents.push({
-				name: listItem.name,
-				uniqueName: listItem.uniqueName
-			});
-			listItem = Object.assign({}, listItem, { parentGroups: [] });
-			listItem.parentGroups = newParents;
-			if (listItem && listItem.groups && listItem.groups.length > 0) {
-				result = this.flattenGroup(listItem.groups, newParents);
-				result.push(_.omit(listItem, 'groups'));
-			} else {
-				result = _.omit(listItem, 'groups');
-			}
-			return result;
-		});
-		return _.flatten(listofUN);
+	public onSelectGroup(group: IOption) {
+		this.groupName = group.label;
+		this.groupUniqueName = group.value;
 	}
 
 	public selectedDate(value: any) {
@@ -335,16 +306,110 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
         this.currentBranchChanged.emit(selectedEntity.value);
-        this.groupService.GetGroupsWithAccounts('', this.currentBranch.uniqueName).subscribe(response => {
-            if (response && response.body && response.body.length) {
-				let accountList = this.flattenGroup(response.body, []);
-				let groups = [];
-				accountList.map((d: any) => {
-					groups.push({ name: d.name, id: d.uniqueName });
-				});
-				this.dataSource = groups;
-			}
-        });
+        this.loadDefaultGroupsSuggestions();
+    }
 
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof SearchSidebarComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT,
+                branchUniqueName: this.currentBranch?.uniqueName
+            };
+            this.groupService.searchGroups(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result?.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.searchedGroups = searchResults;
+                    } else {
+                        this.searchedGroups = [
+                            ...this.searchedGroups,
+                            ...searchResults
+                        ];
+                    }
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof SearchSidebarComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result?.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof SearchSidebarComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result?.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.searchedGroups = [...this.defaultGroupSuggestions];
+        });
     }
 }

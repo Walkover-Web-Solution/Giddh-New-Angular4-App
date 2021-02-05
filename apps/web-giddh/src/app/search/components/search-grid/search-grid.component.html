@@ -78,10 +78,10 @@
                 <tbody>
                     <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
                         <!-- [(ngModel)]="item.isSelected" -->
-                        <td data-title="Select Item"><input type="checkbox" [checked]="selectedItems.indexOf(item.uniqueName) > -1" (change)="toggleSelection($event, item)"></td>
+                        <td data-title="Select Item"><input type="checkbox" [checked]="selectedItems.indexOf(item?.uniqueName) > -1" (change)="toggleSelection($event, item)"></td>
                         <!-- <td>{{i+1}}</td> -->
                         <td data-title="Name">{{item.name}}</td>
-                        <td data-title="Unique Name">{{item.uniqueName}}</td>
+                        <td data-title="Unique Name">{{item?.uniqueName}}</td>
                         <td data-title="Parent">{{item.parent}}</td>
                         <td data-title="Opening Balance" class="text-right">
                             {{item.openingBalance | giddhCurrency }}
@@ -131,7 +131,7 @@
                     <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
                     <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
                     <h1 class="mr-b1">Type message body:</h1>
-                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
+                    <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control resize-none" rows="4" placeholder="start typing your message here"></textarea>
                     <small class="mr-t05 mr-b05 grey">Tip: Click on the tabs below to insert data in your message body.
                         Anything
                         followed by '%s_' represents the position where actual data will be placed.
