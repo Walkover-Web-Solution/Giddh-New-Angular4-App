@@ -49,7 +49,7 @@
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
                         <th width="10%" (click)="sortBranchTransferList('dateOfSupply')">Date <span
-                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'dateOfSupply' || (branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sorting-icon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'dateOfSupply', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'dateOfSupply' || (branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'dateOfSupply' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="20%">Voucher Type</th>
                         <th width="20%">Voucher No.</th>
@@ -114,7 +114,7 @@
                         </th>
                         <th width="10%" (click)="sortBranchTransferList('totalAmount')" class="text-right">Total Amount
                             <span
-                                [ngClass]="{'sortingIcon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'totalAmount' || (branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'desc'}"></span>
+                                [ngClass]="{'sorting-icon icon-pointer': 1 === 1, 'active-text-color' : branchTransferGetRequestParams.sortBy === 'totalAmount', 'icon-sort-asc': branchTransferGetRequestParams.sortBy !== 'totalAmount' || (branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'asc'), 'icon-sort-dsc': branchTransferGetRequestParams.sortBy === 'totalAmount' && branchTransferGetRequestParams.sort === 'desc'}"></span>
                         </th>
                         <th width="10%">Action</th>
                     </tr>
@@ -223,11 +223,11 @@
                     </div>
                 </div>
             </div>
-            <div class="pull-right">
+            <div class="pull-right mr-t1">
                 <button class="btn btn-md btn-success mr-r1" type="button" (click)="search()">
                     Search
                 </button>
-                <button class="btn btn-md btn-cancel" type="button" (click)="refreshTempPostParams(); hideModal(false)">
+                <button class="btn btn-md btn-cancel mr-0" type="button" (click)="refreshTempPostParams(); hideModal(false)">
                     Cancel
                 </button>
             </div>
