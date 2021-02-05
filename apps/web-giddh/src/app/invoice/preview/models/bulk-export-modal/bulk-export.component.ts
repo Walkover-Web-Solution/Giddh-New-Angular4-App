@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvoucherexport.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'invoice-bulk-export',
@@ -10,7 +12,7 @@ import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
     styleUrls: [`./bulk-export.component.scss`]
 })
 
-export class BulkExportModal {
+export class BulkExportModal implements OnDestroy {
     /** Type of voucher */
     @Input() public type: string = "sales";
     /** Selected Vouchers */
@@ -38,9 +40,12 @@ export class BulkExportModal {
     /** Will handle if api call is in process */
     public isLoading: boolean = false;
 
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
     constructor(
-        private bulkVoucherExportService: BulkVoucherExportService, 
-        private generalService: GeneralService, 
+        private bulkVoucherExportService: BulkVoucherExportService,
+        private generalService: GeneralService,
         private toaster: ToasterService) {
 
     }
@@ -63,7 +68,7 @@ export class BulkExportModal {
             getRequest.from = this.dateRange.from;
             getRequest.to = this.dateRange.to;
         }
-        
+
         getRequest.type = this.type;
         getRequest.mail = event;
         getRequest.q = (this.advanceSearch.q) ? this.advanceSearch.q : "";
@@ -103,7 +108,7 @@ export class BulkExportModal {
 
         this.isLoading = true;
 
-        this.bulkVoucherExportService.bulkExport(getRequest, postRequest).subscribe(response => {
+        this.bulkVoucherExportService.bulkExport(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response.status === "success" && response.body) {
                 if(response.body.type === "base64") {
@@ -130,5 +135,15 @@ export class BulkExportModal {
      */
     public closeModal(): void {
         this.closeModelEvent.emit(true);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof BulkExportModal
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

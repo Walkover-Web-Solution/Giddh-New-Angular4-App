@@ -1,10 +1,11 @@
-import { take } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
+import { take, takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { AppState } from '../store/roots';
 import { Store, select } from '@ngrx/store';
 import { CompanyActions } from '../actions/company.actions';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'about',
@@ -24,9 +25,11 @@ import { CompanyActions } from '../actions/company.actions';
     <pre>this.localState = {{ localState | json }}</pre>
   `
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent implements OnInit, OnDestroy {
 
     public localState: any;
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         public route: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions
@@ -36,6 +39,7 @@ export class AboutComponent implements OnInit {
     public ngOnInit() {
         this.route
             .data
+            .pipe(takeUntil(this.destroyed$))
             .subscribe((data: any) => {
                 /**
                  * Your resolved data from route.
@@ -65,6 +69,16 @@ export class AboutComponent implements OnInit {
          * remember that 'es6-promise-loader' is a promise
          */
 
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof AboutComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
 }

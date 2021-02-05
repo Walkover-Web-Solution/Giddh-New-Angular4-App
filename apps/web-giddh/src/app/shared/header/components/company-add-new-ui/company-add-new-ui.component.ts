@@ -233,7 +233,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.socketCompanyRequest.utm_campaign = this._generalService.getUtmParameter('utm_campaign');
         this.socketCompanyRequest.utm_term = this._generalService.getUtmParameter('utm_term');
         this.socketCompanyRequest.utm_content = this._generalService.getUtmParameter('utm_content');
-        this._companyService.SocketCreateCompany(this.socketCompanyRequest).subscribe();
+        this._companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe();
 
         this._generalService.removeUtmParameters();
     }
@@ -454,7 +454,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             branchUniqueName: this.entityDetails.uniqueName,
             name: this.company.name,
             alias: this.company.nameAlias
-        }).subscribe(data => {
+        }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this.closeCompanyModal.emit();

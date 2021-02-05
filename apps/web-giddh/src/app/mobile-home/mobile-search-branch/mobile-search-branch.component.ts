@@ -114,7 +114,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
             }
         };
         this.setOrganizationDetails(OrganizationType.Branch, details);
-        this.companyService.getStateDetails(this.generalService.companyUniqueName).subscribe(response => {
+        this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 if (screen.width <= 767 || isCordova) {
                     window.location.href = '/pages/mobile-home';
@@ -136,7 +136,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
      * @memberof MobileSearchBranchComponent
      */
     public getCurrentCompanyData(): void {
-        this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
+        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.activeCompany = response.body;
             }

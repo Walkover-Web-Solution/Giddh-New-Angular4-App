@@ -65,7 +65,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 	}
 
 	public ngAfterViewInit() {
-		this.invViewService.getActiveView().subscribe(v => {
+		this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
 			this.groupUniqueName = v.groupUniqueName;
 			this.stockUniqueName = v.stockUniqueName;
 		})
@@ -101,7 +101,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 		obj.from = this.fromDate;
         obj.to = this.toDate;
         obj.branchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : '';
-		this.inventoryService.downloadAllInventoryReports(obj)
+		this.inventoryService.downloadAllInventoryReports(obj).pipe(takeUntil(this.destroyed$))
 			.subscribe(res => {
 				if (res.status === 'success') {
 					this._toasty.infoToast(res.body);

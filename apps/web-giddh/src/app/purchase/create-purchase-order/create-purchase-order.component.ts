@@ -922,7 +922,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
-                this.salesService.getStateCode(countryCode).subscribe(resp => {
+                this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                     this.startLoader(false);
                     if (!isCompanyStates) {
                         this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
@@ -1287,7 +1287,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             if (isBulkItem) {
                 txn = this.calculateItemValues(selectedAcc, txn, entry);
             } else {
-                this.searchService.loadDetails(selectedAcc.additional.uniqueName, requestObject).subscribe(data => {
+                this.searchService.loadDetails(selectedAcc.additional.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data && data.body) {
                         // Take taxes of parent group and stock's own taxes
                         const taxes = data.body.taxes || [];
@@ -2159,7 +2159,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         };
 
         if (type === "create") {
-            this.purchaseOrderService.create(getRequestObject, updatedData).subscribe(response => {
+            this.purchaseOrderService.create(getRequestObject, updatedData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
                     this.vendorAcList$ = observableOf(_.orderBy(this.defaultVendorSuggestions, 'label'));
@@ -2171,7 +2171,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
-            this.purchaseOrderService.update(getRequestObject, updatedData).subscribe(response => {
+            this.purchaseOrderService.update(getRequestObject, updatedData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
                     this.toaster.successToast("Purchase order updated succesfully");
@@ -2480,7 +2480,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
         let getRequest = { companyUniqueName: this.selectedCompany.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
 
-        this.purchaseOrderService.get(getRequest).subscribe(response => {
+        this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === "success") {
                     this.purchaseOrderDetails = response.body;
@@ -2813,7 +2813,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getInvoiceSettings(): void {
-        this.invoiceService.GetInvoiceSetting().subscribe(response => {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
                 this.invoiceSettings = _.cloneDeep(response.body);
                 this.inventorySettings = this.invoiceSettings.companyInventorySettings;
@@ -2862,7 +2862,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
                 this.purchaseOrders = [];
 
-                this.purchaseOrderService.getAllPendingPo(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
+                this.purchaseOrderService.getAllPendingPo(purchaseOrderGetRequest, purchaseOrderPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res) {
                         if (res.status === 'success') {
                             if (res.body && res.body.length > 0) {
@@ -2992,7 +2992,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.searchItemResultsPaginationData.query = query;
             }
             const requestObject = this.getSearchRequestObject(query, page, searchType);
-            this.searchAccount(requestObject).subscribe(data => {
+            this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     this.prepareSearchLists(data.body.results, page, searchType);
                     this.noResultsFoundLabel = SearchResultText.NotFound;
