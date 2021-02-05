@@ -197,7 +197,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     /**
      * This function will destroy the subscribers
      *
-     * @memberof VatReportTransactionsComponent
+     * @memberof ReverseChargeReport
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
@@ -208,7 +208,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * This function will change the page of vat report
      *
      * @param {*} event
-     * @memberof VatReportTransactionsComponent
+     * @memberof ReverseChargeReport
      */
     public pageChanged(event: any): void {
         if (this.reverseChargeReportGetRequest.page != event.page) {
@@ -222,7 +222,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * This function will get the data of vat detailed report
      *
      * @param {boolean} resetPage
-     * @memberof VatReportTransactionsComponent
+     * @memberof ReverseChargeReport
      */
     public getReverseChargeReport(resetPage: boolean): void {
         if (this.activeCompany && this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.to) {
@@ -234,7 +234,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
 
             this.reverseChargeReportResults = [];
 
-            this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).subscribe((res) => {
+            this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this.reverseChargeReportResults = res.body;
                     this.cdRef.detectChanges();
@@ -347,7 +347,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      *To show the datepicker
      *
      * @param {*} element
-     * @memberof AuditLogsFormComponent
+     * @memberof ReverseChargeReport
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -362,7 +362,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     /**
      * This will hide the datepicker
      *
-     * @memberof AuditLogsFormComponent
+     * @memberof ReverseChargeReport
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -372,7 +372,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof AuditLogsFormComponent
+     * @memberof ReverseChargeReport
      */
     public dateSelectedCallback(value?: any): void {
         if(value && value.event === "cancel") {

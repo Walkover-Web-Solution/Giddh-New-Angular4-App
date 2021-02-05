@@ -246,6 +246,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**
@@ -323,7 +324,7 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
             typeOfInvoice: invoiceCopy,
             voucherType: this.selectedInvoice.voucherType
         };
-        this.invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+        this.invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res) {
                     if (dataToSend.typeOfInvoice.length > 1) {

@@ -2,6 +2,8 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'company-details-sidebar',
@@ -15,6 +17,9 @@ export class CompanyDetailsSidebarComponent implements OnInit {
     public moment = moment;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private settingsProfileService: SettingsProfileService) {
 
@@ -32,10 +37,20 @@ export class CompanyDetailsSidebarComponent implements OnInit {
      * @memberof CompanyDetailsSidebarComponent
      */
     public getCompanyDetails(): void {
-        this.settingsProfileService.getCompanyDetails(this.selectedCompany.uniqueName).subscribe((response: any) => {
+        this.settingsProfileService.getCompanyDetails(this.selectedCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.selectedCompany = response.body;
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof CompanyDetailsSidebarComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

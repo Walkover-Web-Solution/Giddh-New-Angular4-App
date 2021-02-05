@@ -73,19 +73,19 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 			}
 			this.voucherType = a.voucherType;
 		});
-		this._invoiceUiDataService.templateVoucherType.subscribe((voucherType: string) => {
+		this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
 			this.voucherType = _.cloneDeep(voucherType);
 		});
 
-		this._invoiceUiDataService.fieldsAndVisibility.subscribe((obj) => {
+		this._invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
 			this.fieldsAndVisibility = _.cloneDeep(obj);
 		});
 
-		this._invoiceUiDataService.logoPath.subscribe((path: string) => {
+		this._invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
 			this.logoSrc = _.cloneDeep(path);
 		});
 
-		this._invoiceUiDataService.isLogoVisible.subscribe((yesOrNo: boolean) => {
+		this._invoiceUiDataService.isLogoVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
 			this.showLogo = _.cloneDeep(yesOrNo);
 		});
 
@@ -119,7 +119,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 			}
 		});
 
-		this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {
+		this._invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
 			this.showCompanyName = _.cloneDeep(yesOrNo);
 		});
 
@@ -133,12 +133,12 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 				footer: true
 			};
 		} else {
-			this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
+			this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
 				this.templateUISectionVisibility = _.cloneDeep(info);
 			});
 		}
 
-		this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
+		this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
 			if (this.isPreviewMode) {
 				this.templateUISectionVisibility = {
 					header: true,

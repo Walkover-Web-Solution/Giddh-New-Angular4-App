@@ -358,7 +358,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public checkIsStockEntryAvailable(): any {
         if(this.daybookData$) {
-            this.daybookData$.subscribe(item => {
+            this.daybookData$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
                 this.isEntryExpanded = item.entries.some(entry => {
                     if (entry.isExpanded && entry.otherTransactions) {
                         return entry.otherTransactions.some(otherTrasaction => {

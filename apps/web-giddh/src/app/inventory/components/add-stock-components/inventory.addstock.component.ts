@@ -149,7 +149,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.customStockActions.GetStockUnit());
 
         // subscribe getActiveView parameters
-        this.invViewService.getActiveView().subscribe(v => {
+        this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
             this.groupUniqueName = v.groupUniqueName;
             this.groupName = v.stockName;
             this.stockUniqueName = v.stockUniqueName;
@@ -214,7 +214,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.taxTempArray = [];
 
         // subscribe isFsStock for disabling manufacturingDetails
-        this.addStockForm.controls['isFsStock'].valueChanges.subscribe((v) => {
+        this.addStockForm.controls['isFsStock'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((v) => {
             const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
             if (v) {
                 manufacturingDetailsContorl.enable();
@@ -224,7 +224,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // subscribe enablePurchase checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enablePurchase'].valueChanges.subscribe((isEnable) => {
+        this.addStockForm.controls['enablePurchase'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((isEnable) => {
             const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
             if (isEnable) {
                 purchaseUnitRatesControls.enable();
@@ -235,7 +235,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // subscribe enableSales checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enableSales'].valueChanges.subscribe((isEnable) => {
+        this.addStockForm.controls['enableSales'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((isEnable) => {
             const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
             if (isEnable) {
                 saleUnitRatesControls.enable();
@@ -246,7 +246,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // get purchase accounts
-        this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').subscribe(data => {
+        this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -257,7 +257,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // get sales accounts
-        this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').subscribe(data => {
+        this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let salesAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -837,7 +837,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (formObj.parentGroup) {
             parentSelected = true;
         } else {
-            this.groupsData$.subscribe(p => {
+            this.groupsData$.pipe(takeUntil(this.destroyed$)).subscribe(p => {
                 if (p) {
                     defaultGrpisExist = p.findIndex(q => q.value === 'maingroup') > -1;
                     if (defaultGrpisExist) {
@@ -959,7 +959,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public setActiveGroupOnCreateStock() {  // trying to select active group on create stock
-        this.groupsData$.subscribe(p => {
+        this.groupsData$.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             let selected = p.find(q => q.value === this.groupUniqueName);
             if (selected) {
                 this.addStockForm.get('parentGroup').patchValue({
@@ -988,7 +988,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public groupSelected(event: IOption) {
         let selected;
         // this.generateUniqueName();
-        this.groupsData$.subscribe(p => {
+        this.groupsData$.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             selected = p.find(q => q.value === event.value);
         });
         // this.activeGroup = selected;
@@ -1079,7 +1079,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 if (this.activeGroup) {
                     this.addStockForm.get('parentGroup').patchValue(this.activeGroup.uniqueName);
                 } else {
-                    this.groupsData$.subscribe(p => {
+                    this.groupsData$.pipe(takeUntil(this.destroyed$)).subscribe(p => {
                         if (p) {
                             let defaultGrpisExist = p.findIndex(q => q.value === 'maingroup') > -1;
                             if (defaultGrpisExist) {

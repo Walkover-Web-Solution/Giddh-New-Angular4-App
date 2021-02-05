@@ -81,7 +81,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
-                this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).subscribe(res => {
+                this._authenticationService.getAllUserSubsciptionPlans(companyInfo.countryV2.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                     this.subscriptionPlans = res.body;
 
                     this.totalMultipleCompanyPlans = 0;
@@ -132,7 +132,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 showPlans: true
             }
         });
-        
+
         if (this._generalService.user) {
             this.logedInUser = this._generalService.user;
         }
@@ -200,7 +200,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public patchProfile(obj) {
-        this.settingsProfileService.PatchProfile(obj).subscribe(response => {
+        this.settingsProfileService.PatchProfile(obj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response && response.status === "error") {
                 this.toasty.errorToast(response.message);
             } else {

@@ -71,6 +71,7 @@ export class SelectDropdownComponent
                 }
             }
         });
+        this.subscribeToQueryChange();
 	}
 
 	public ngOnChanges(changes: any) {
@@ -88,6 +89,8 @@ export class SelectDropdownComponent
         if (this.scrollListener) {
             this.scrollListener();
         }
+        this.stopDynamicSearch$.next(true);
+        this.stopDynamicSearch$.complete();
     }
 
 	public ngAfterViewInit() {
@@ -118,7 +121,6 @@ export class SelectDropdownComponent
 	}
 
 	public onSingleFilterFocus() {
-        this.subscribeToQueryChange();
 		this.singleFilterFocus.emit(null);
 	}
 
@@ -198,10 +200,6 @@ export class SelectDropdownComponent
      */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
-            this.stopDynamicSearch$.next(true);
-            this.stopDynamicSearch$.complete();
-            this.stopDynamicSearch$ = new ReplaySubject(1);
-            this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
                 this.dynamicSearchedQuery.emit(query);
             });

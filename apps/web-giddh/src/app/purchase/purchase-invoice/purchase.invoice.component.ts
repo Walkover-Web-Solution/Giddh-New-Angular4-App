@@ -468,7 +468,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
             let data = _.cloneDeep(this.allPurchaseInvoices.items);
             let selectedRow = data[indx];
             let selectedAccName = selectedRow.account.uniqueName;
-            this.accountService.GetAccountDetailsV2(selectedAccName).subscribe((accDetails) => {
+            this.accountService.GetAccountDetailsV2(selectedAccName).pipe(takeUntil(this.destroyed$)).subscribe((accDetails) => {
 
                 let addressesArr = _.cloneDeep(accDetails.body.addresses);
                 let defaultAddressIdx: any = this.getDefaultGstAddress(addressesArr);
@@ -489,7 +489,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
                         accountUniqueName: account.uniqueName
                     };
 
-                    this.accountService.UpdateAccountV2(account, reqObj).subscribe((res) => {
+                    this.accountService.UpdateAccountV2(account, reqObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                         if (res.status === 'success') {
                             const updateIndexDb: IUpdateDbRequest = {
                                 newUniqueName: res.body.uniqueName,
@@ -613,6 +613,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
             this.updateEntryType(this.selectedRowIndex, this.selectedEntryTypeValue);
         }
         this.store.dispatch(this._reconcileActions.ResetGstReconcileState());
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**

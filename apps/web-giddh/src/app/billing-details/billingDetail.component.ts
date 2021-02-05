@@ -267,7 +267,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         }
         if (this.subscriptionPrice && this.UserCurrency) {
-            this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
+            this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 this.isCreateAndSwitchCompanyInProcess = false;
                 if (res.status === 'success') {
                     this.ChangePaidPlanAMT = res.body.amount;
@@ -486,7 +486,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public getCurrentCompanyData(): void {
-        this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
+        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.store.dispatch(this.settingsProfileActions.handleCompanyProfileResponse(response));
                 this.store.dispatch(this.companyActions.setActiveCompanyData(response.body));

@@ -148,7 +148,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public onSelectPaymentMode(event) {
         if (event && event.value) {
-            this.searchService.loadDetails(event.value).subscribe(response => {
+            this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body) {
                     const parentGroups = response.body.parentGroups;
                     if (parentGroups[1] === 'bankaccounts') {
@@ -250,7 +250,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public getCurrencyRate(from, to) {
         if (from && to) {
             let date = moment().format(GIDDH_DATE_FORMAT);
-            this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+            this._ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
                     this.originalExchangeRate = rate;
@@ -271,7 +271,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public loadPaymentModes() {
         const paymentMode: IOption[] = [];
-        this.salesService.getAccountsWithCurrency('cash, bankaccounts').subscribe(data => {
+        this.salesService.getAccountsWithCurrency('cash, bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body && data.body.results) {
                 data.body.results.forEach(account => {
                     paymentMode.push({

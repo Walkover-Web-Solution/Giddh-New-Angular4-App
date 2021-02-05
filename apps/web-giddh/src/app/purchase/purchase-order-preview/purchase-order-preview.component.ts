@@ -203,7 +203,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         this.pdfPreviewLoaded = false;
         this.isLoading = true;
         let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrderUniqueName };
-        this.purchaseOrderService.get(getRequest).subscribe(response => {
+        this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response) {
                 if (response.status === "success") {
@@ -305,7 +305,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public deleteItem(): void {
         let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrder.uniqueName };
 
-        this.purchaseOrderService.delete(getRequest).subscribe((res) => {
+        this.purchaseOrderService.delete(getRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 if (res.status === 'success') {
                     this.closeConfirmationPopup();
@@ -339,7 +339,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName };
             let postRequest = { purchaseNumber: this.purchaseOrder.number, action: action };
 
-            this.purchaseOrderService.statusUpdate(getRequest, postRequest).subscribe((res) => {
+            this.purchaseOrderService.statusUpdate(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
                         this.getPurchaseOrder();
@@ -423,7 +423,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         let bulkUpdateGetParams = { action: "create_purchase_bill", companyUniqueName: this.purchaseOrder.company.uniqueName };
         let bulkUpdatePostParams = { purchaseNumbers: purchaseNumbers };
 
-        this.purchaseOrderService.bulkUpdate(bulkUpdateGetParams, bulkUpdatePostParams).subscribe((res) => {
+        this.purchaseOrderService.bulkUpdate(bulkUpdateGetParams, bulkUpdatePostParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 if (res.status === 'success') {
                     this.toaster.successToast(res.body);
@@ -442,7 +442,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public getPdf(): void {
         let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
 
-        this.purchaseOrderService.getPdf(getRequest).subscribe(response => {
+        this.purchaseOrderService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
                 let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                 this.attachedDocumentBlob = blob;

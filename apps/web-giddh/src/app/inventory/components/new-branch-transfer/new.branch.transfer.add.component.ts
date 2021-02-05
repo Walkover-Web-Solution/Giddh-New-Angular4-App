@@ -623,7 +623,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public getWarehouseDetails(type, index): void {
         if (this.branchTransfer[type][index].warehouse && this.branchTransfer[type][index].warehouse.uniqueName !== null) {
-            this._warehouseService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
+            this._warehouseService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res && res.body) {
                     this.branchTransfer[type][index].warehouse.name = res.body.name;
                     if (res.body.addresses && res.body.addresses.length) {
@@ -993,7 +993,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.branchTransfer.transferType = this.transferType;
 
         if (this.editBranchTransferUniqueName) {
-            this.inventoryService.updateNewBranchTransfer(this.branchTransfer).subscribe((res) => {
+            this.inventoryService.updateNewBranchTransfer(this.branchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
 
                 if (res) {
@@ -1013,7 +1013,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 }
             });
         } else {
-            this.inventoryService.createNewBranchTransfer(this.branchTransfer).subscribe((res) => {
+            this.inventoryService.createNewBranchTransfer(this.branchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
                 if (res) {
                     if (res.status === 'success') {
@@ -1091,7 +1091,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public getBranchTransfer(): void {
         this.isUpdateMode = true;
-        this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).subscribe((response) => {
+        this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response.status === "success") {
                 this.branchTransfer.dateOfSupply = response.body.dateOfSupply;
                 this.branchTransfer.challanNo = response.body.challanNo;

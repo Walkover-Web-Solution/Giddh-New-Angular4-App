@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -27,7 +27,7 @@ import { OrganizationType } from '../../models/user-login-state';
     templateUrl: 'aging-report.component.html',
     styleUrls: ['aging-report.component.scss']
 })
-export class AgingReportComponent implements OnInit {
+export class AgingReportComponent implements OnInit, OnDestroy {
     public totalDueSelectedOption: string = '0';
     public totalDueAmount: number = 0;
     public includeName: boolean = false;
@@ -321,5 +321,15 @@ export class AgingReportComponent implements OnInit {
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
         this.getDueReport();
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof AgingReportComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
