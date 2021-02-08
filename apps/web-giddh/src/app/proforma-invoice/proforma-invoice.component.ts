@@ -594,6 +594,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public companyAddressList: any[] = [];
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
+    /** This will handle if focus should go in customer/vendor dropdown */
+    public allowFocus: boolean = true;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -2068,6 +2070,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.updateDueDate();
 
         this.ngAfterViewInit();
+        this.allowFocus = true;
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;
         this.fillDeliverToAddress();
@@ -3666,6 +3669,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public addNewAccount() {
+        this.allowFocus = false;
         this.selectedCustomerForDetails = null;
         this.invFormData.voucherDetails.customerName = null;
         this.invFormData.voucherDetails.customerUniquename = null;
@@ -3706,14 +3710,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!requestObject) {
             this.startLoader(false);
             return;
-        }
-        /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
-        if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
-            if (this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment() < 0) {
-                this.isAdjustAdvanceReceiptModalOpen();
-                this.startLoader(false);
-                return;
-            }
         }
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let data = requestObject.voucher;
