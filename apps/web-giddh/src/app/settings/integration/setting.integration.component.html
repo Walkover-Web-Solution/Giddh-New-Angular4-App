@@ -770,8 +770,8 @@
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
                     <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
                         <div class="row">
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <div class="">
+                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
+                                <div>
                                     <label>Corporate ID <span class="required">*</span></label>
                                     <br>
                                     <input type="text" placeholder="Enter Corporate ID" class="form-control" formControlName="corpId" name="corpId" autocomplete="off" />
@@ -802,7 +802,7 @@
                         <ng-container formArrayName="userAmountRanges">
                             <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
                                 <div class="row">
-                                    <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col" *ngIf="item.get('maxBankLimit').value ==='max'">
+                                    <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col amount-upto" *ngIf="item.get('maxBankLimit').value ==='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
                                         <div class="custom-select max select-caret position-relative">
@@ -813,7 +813,7 @@
                                         </div>
                                         <p class="error-msg text-right"></p>
                                     </div>
-                                    <div class="form-group col-sm-6  col-xl-2 col-md-6 payment-col" *ngIf="item.get('maxBankLimit').value!=='max'">
+                                    <div class="form-group col-sm-6  col-xl-2 col-md-6 payment-col amount-upto" *ngIf="item.get('maxBankLimit').value!=='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
                                         <div class="d-flex">
