@@ -115,81 +115,44 @@
             <div class="col-12 col-sm-12 table-responsive">
                 <table class="table basic table-bordered giddh-table on-mobile-view manufacture-table">
                     <thead>
-                        <!-- <tr class="top-table-head">
-                            <th colspan="2"></th>
-                            <th class="bg-color-gray bd-rl" colspan="1"></th>
-                            <th class="bg-color-gray">Raw Material</th>
-                            <th class="bg-color-gra" colspan="1"></th>
-                            <th class="bg-color-gray  bd-rl" colspan="1"></th>
-                            <th class="bg-color-gray ">Final Product</th>
-                            <th class="bg-color-gray bd-rr" colspan="1"></th>
-                            <th>&nbsp;</th>
-                        </tr> -->
                         <tr>
                             <th>Date</th>
                             <th>Voucher Number</th>
                             <th>Finished Product</th>
                             <th>Qty Outwards</th>
                             <th>Unit</th>
-                            <th>Material Used</th>
-                            <th>Qty Inwards</th>
-                            <th>Unit</th>
+                            <th class="regular-font">Material Used</th>
+                            <th class="regular-font">Qty Inwards</th>
+                            <th class="regular-font">Unit</th>
                             <th>Warehouse</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)">
                             <td data-title="Date">{{item.date}}</td>
                             <td data-title="Voucher Number">{{item.voucherNumber}}</td>
-                            <td data-title="Product Name">-</td>
-                            <td data-title="Qty Outwards">-</td>
-                            <td data-title="Unit">-</td>
+                            <td data-title="Product Name">{{item.stockName}}</td>
+                            <td data-title="Qty Outwards">{{item.manufacturingQuantity}}</td>
+                            <td data-title="Unit">{{item.manufacturingUnit}}</td>
                             <td class="raw-material" data-title="Material Used">
                                 <div class="d-flex flex-column">
-                                    <span> Brown Woods </span>
-                                    <span> Brown Woods </span>
-                                    <span> Brown Woods </span>
-                                    <span> Brown Woods </span>
+                                    <span *ngFor="let row of item.linkedStocks">{{row.stockName}}</span>
                                 </div>
                             </td>
                             <td class="raw-material" data-title="Qty Inwards">
                                 <div class="d-flex flex-column">
-                                    <span> 5 </span>
-                                    <span> 5 </span>
-                                    <span> 5 </span>
+                                    <span *ngFor="let row of item.linkedStocks">{{row.manufacturingQuantity}}</span>
                                 </div>
                             </td>
                             <td class="raw-material" data-title="Unit">
                                 <div class="d-flex flex-column">
-                                    <span>Nos</span>
-                                    <span>Nos</span>
-                                    <span>Nos</span>
+                                    <span *ngFor="let row of item.linkedStocks">{{row.manufacturingUnit}}</span>
                                 </div>
                             </td>
                             <!-- Make it dynamic -->
-                            <td data-title="Warehouse">Wahouse Name</td>
+                            <td data-title="Warehouse">{{item.warehouse?.name}}</td>
                         </tr>
                     </tbody>
-                    <!-- <tbody>
-                        <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)" class="cp">
-                            <td data-title="Date">{{item.date}}</td>
-                            <td data-title="Voucher Number">{{item.voucherNumber}}</td>
-                            <td data-title="Final Product">{{item.stockName}}</td>
-                            <td data-title="Raw Products">{{item.manufacturingQuantity}} {{item.manufacturingUnit}}</td>
-                            <td data-title="Product Inwards">
-                                <span *ngFor="let row of item.linkedStocks">
-                                    {{row.stockName}}
-                                </span>
-                            </td>
-                            <td data-title="Qty Outwards">
-                                <span *ngFor="let row of item.linkedStocks">
-                                    {{row.manufacturingQuantity}} {{row.manufacturingUnit}}
-                                </span>
-                            </td>
-                            make it dynamic
-                            <td data-title="Warehouse">Warehouse name</td>
-                        </tr>
-                    </tbody> -->
                 </table>
                 <div *ngIf="reportData?.totalPages > 1" class="pagination-wrapper">
                     <div class="text-center">
