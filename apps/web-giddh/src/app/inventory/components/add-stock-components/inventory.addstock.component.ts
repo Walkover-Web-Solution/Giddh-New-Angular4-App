@@ -70,7 +70,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public createGroupSuccess$: Observable<boolean>;
     public showOtherDetails: boolean;
     public addNewStock: boolean = false;
-    public manageInProcess$: Observable<any>;
     public companyTaxesList$: Observable<TaxResponse[]>;
     public isManageInventory$: Observable<boolean>;
     public invoiceSetting$: Observable<any>;
@@ -115,7 +114,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.isStockDeleteInProcess$ = this.store.pipe(select(s => s.inventory.isStockDeleteInProcess), takeUntil(this.destroyed$));
         this.showLoadingForStockEditInProcess$ = this.store.pipe(select(s => s.inventory.showLoadingForStockEditInProcess), takeUntil(this.destroyed$));
         this.createGroupSuccess$ = this.store.pipe(select(s => s.inventory.createGroupSuccess), takeUntil(this.destroyed$));
-        this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.invoiceSetting$ = this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$));
@@ -270,6 +268,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         // subscribe active stock if available fill form
         this.activeStock$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && !this.addStock) {
+                this.addStockForm.reset();
                 this.stockUniqueName = a.uniqueName;
                 this.isUpdatingStockForm = true;
                 this.addStockForm.patchValue({
@@ -326,7 +325,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     this.addStockForm.controls['enableSales'].patchValue(false);
                 }
 
-                // if manufacturingDetails is avilable
+                // if manufacturingDetails is available
                 if (a.manufacturingDetails) {
                     this.addStockForm.patchValue({
                         isFsStock: true,
@@ -407,12 +406,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             this.addStockForm.controls['enableSales'].patchValue(false);
             this.addStockForm.controls['enablePurchase'].patchValue(false);
         }, 100);
-
-        this.manageInProcess$.subscribe(s => {
-            if (!s.isOpen) {
-                this.addStockForm.reset();
-            }
-        });
 
         this.invoiceSetting$.subscribe(a => {
             if (a && a.companyInventorySettings) {
