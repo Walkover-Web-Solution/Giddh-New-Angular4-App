@@ -45,8 +45,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public exceedDueAmount: number = 0;
     /** True, if form is reset, used to avoid calculation as required sh-select auto-fills the value if only single option is present  */
     public isFormReset: boolean;
-    /** Default voucher selection */
-    public isDefault: boolean = true;
 
     @ViewChild('tdsTypeBox', {static: true}) public tdsTypeBox: ElementRef;
     @ViewChild('tdsAmountBox', {static: true}) public tdsAmountBox: ElementRef;
@@ -558,13 +556,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
-        if (event && entry && ((this.isDefault && !this.isFormReset) || (!this.isDefault && !this.isFormReset))) {
+        if (event && entry && !this.isFormReset) {
             entry = cloneDeep(event.additional);
             this.formatAdjustmentData([event.additional]);
             this.adjustVoucherForm.adjustments.splice(index, 1, entry);
             this.calculateTax(entry, index);
         }
-        this.isDefault = false;
     }
 
     /**
