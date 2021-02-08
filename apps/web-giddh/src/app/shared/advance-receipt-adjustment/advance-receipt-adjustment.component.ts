@@ -558,7 +558,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
-        if (event && entry && (this.isDefault && !this.isFormReset)) {
+        if (event && entry && ((this.isDefault && !this.isFormReset) || (!this.isDefault && !this.isFormReset))) {
             entry = cloneDeep(event.additional);
             this.formatAdjustmentData([event.additional]);
             this.adjustVoucherForm.adjustments.splice(index, 1, entry);
