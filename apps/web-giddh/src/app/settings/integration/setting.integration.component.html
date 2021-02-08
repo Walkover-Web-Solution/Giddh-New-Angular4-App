@@ -770,7 +770,7 @@
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
                     <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
                         <div class="row">
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
+                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
                                 <div>
                                     <label>Corporate ID <span class="required">*</span></label>
                                     <br>
