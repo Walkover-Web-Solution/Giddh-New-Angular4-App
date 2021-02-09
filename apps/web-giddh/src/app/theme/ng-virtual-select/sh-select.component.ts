@@ -1,13 +1,13 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BorderConfiguration, IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { Subject, ReplaySubject } from 'rxjs';
+import { ReplaySubject, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
@@ -26,7 +26,7 @@ const FLATTEN_SEARCH_TERM = 'flatten';
         }
     ]
 })
-export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges {
+export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
     @Input() public idEl: string = '';
     @Input() public placeholder: string = 'Type to filter';
     @Input() public multiple: boolean = false;
@@ -73,8 +73,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
     @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
-    /** Subject to emit current searched value */
-    private dynamicSearchQueryChanged: Subject<string> = new Subject<string>();
     /** To unsubscribe from the dynamic search query subscription */
     private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -227,9 +225,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      */
     public handleInputChange(inputText: string): void {
         if(inputText) {
-            if (this.enableDynamicSearch) {
-                this.dynamicSearchQueryChanged.next(inputText);
-            } else {
+            if (!this.enableDynamicSearch) {
                 this.updateFilter(inputText);
             }
         } else {
@@ -488,12 +484,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
-            this.stopDynamicSearch$.next(true);
-            this.stopDynamicSearch$.complete();
-            this.stopDynamicSearch$ = new ReplaySubject(1);
-            this.dynamicSearchQueryChanged = new Subject();
-            this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
-                this.dynamicSearchedQuery.emit(query);
+            fromEvent(this.inputFilter.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
+                this.dynamicSearchedQuery.emit(event?.target?.value.trim());
             });
         }
     }
@@ -501,6 +493,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public ngAfterViewInit() {
         this.viewInitEvent.emit(true);
+        this.subscribeToQueryChange();
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -617,6 +610,16 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         if (this.menuEle && this.menuEle.virtualScrollElm) {
             this.menuEle.virtualScrollElm.refresh();
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof ShSelectComponent
+     */
+    public ngOnDestroy(): void {
+        this.stopDynamicSearch$.next(true);
+        this.stopDynamicSearch$.complete();
     }
 }
 

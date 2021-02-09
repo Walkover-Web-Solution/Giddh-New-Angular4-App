@@ -369,7 +369,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         // get entry name and ledger account uniqueName
-        observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
+        observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (resp[0] && resp[1]) {
                 this.entryUniqueName = resp[0];
                 this.accountUniqueName = resp[1];
@@ -385,6 +385,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         // get flatten_accounts list && get transactions list && get ledger account list
         observableCombineLatest([this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$])
+            .pipe(takeUntil(this.destroyed$))
             .subscribe((resp: any[]) => {
                 if (resp[0] && resp[1] && resp[2]) {
                     // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
@@ -852,7 +853,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
                         this.activeAccount ? this.activeAccount.uniqueName : '' :
                         e.additional.uniqueName;
-                    this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
+                    this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                         // directly assign additional property
                         if (data && data.body) {
                             // Take taxes of parent group and stock's own taxes
@@ -936,7 +937,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     });
                 }
             } else {
-                this.searchService.loadDetails(e.value).subscribe(data => {
+                this.searchService.loadDetails(e.value).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     // directly assign additional property
                     if (data && data.body) {
                         // Take taxes of parent group
@@ -1145,7 +1146,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
-        this.ledgerService.DownloadAttachement(fileName).subscribe(d => {
+        this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 return saveAs(blob, d.body.name);
@@ -1161,7 +1162,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         downloadRequest.invoiceNumber = [invoiceName];
         downloadRequest.voucherType = voucherType;
 
-        this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).subscribe(d => {
+        this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.activeAccount.name} - ${invoiceName}.pdf`);
@@ -1291,7 +1292,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             date = moment(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
         this.invoiceList = [];
-        this.ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
+        this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
                 if (response.body.results) {
                     response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
@@ -1606,7 +1607,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 withStocks,
                 accountUniqueName: encodeURIComponent(accountUniqueName)
             }
-            this.searchService.searchAccount(requestObject).subscribe(data => {
+            this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

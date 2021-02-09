@@ -5,7 +5,7 @@ import { ToasterService } from './../../services/toaster.service';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
@@ -28,7 +28,7 @@ import { WarehouseActions } from '../../settings/warehouse/action/warehouse.acti
     styleUrls: [`./mf.edit.component.scss`]
 })
 
-export class MfEditComponent implements OnInit {
+export class MfEditComponent implements OnInit, OnDestroy {
     @ViewChild('manufacturingConfirmationModal', {static: true}) public manufacturingConfirmationModal: ModalDirective;
 
     public stockListDropDown$: Observable<IOption[]>;
@@ -474,7 +474,7 @@ export class MfEditComponent implements OnInit {
     public getStockUnit(selectedItem, itemQuantity) {
         if (selectedItem && itemQuantity && Number(itemQuantity) > 0) {
             let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
-            this._inventoryService.GetStockUniqueNameWithDetail(selectedItem).subscribe((res) => {
+            this._inventoryService.GetStockUniqueNameWithDetail(selectedItem).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
                 if (res.status === 'success') {
                     let unitCode = res.body.stockUnit.code;
@@ -490,7 +490,7 @@ export class MfEditComponent implements OnInit {
                     this.linkedStocks.manufacturingUnit = unitCode;
                     this.linkedStocks.stockUnitCode = unitCode;
 
-                    this._inventoryService.GetRateForStoke(selectedItem, data).subscribe((response) => {
+                    this._inventoryService.GetRateForStoke(selectedItem, data).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                         if (response.status === 'success') {
                             this.linkedStocks.rate = _.cloneDeep(response.body.rate);
                             setTimeout(() => {
@@ -622,7 +622,7 @@ export class MfEditComponent implements OnInit {
                 page,
                 group: encodeURIComponent('operatingcost, indirectexpenses')
             };
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -706,7 +706,7 @@ export class MfEditComponent implements OnInit {
                 page,
                 group: encodeURIComponent('noncurrentassets, currentassets, fixedassets, currentliabilities, noncurrentliabilities, shareholdersfunds')
             }
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -786,5 +786,15 @@ export class MfEditComponent implements OnInit {
                 });
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof MfEditComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

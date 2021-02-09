@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { VoucherAdjustments, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
@@ -21,10 +21,7 @@ const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
     templateUrl: './advance-receipt-adjustment.component.html',
     styleUrls: [`./advance-receipt-adjustment.component.scss`]
 })
-
-
-
-export class AdvanceReceiptAdjustmentComponent implements OnInit {
+export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
     public newAdjustVoucherOptions: IOption[] = [];
     public adjustVoucherOptions: IOption[];
@@ -45,8 +42,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public exceedDueAmount: number = 0;
     /** True, if form is reset, used to avoid calculation as required sh-select auto-fills the value if only single option is present  */
     public isFormReset: boolean;
-    /** Default voucher selection */
-    public isDefault: boolean = true;
 
     @ViewChild('tdsTypeBox', {static: true}) public tdsTypeBox: ElementRef;
     @ViewChild('tdsAmountBox', {static: true}) public tdsAmountBox: ElementRef;
@@ -145,7 +140,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                     subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                 }
             }
-            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).subscribe((response) => {
+            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response && response.body) {
                     this.allAdvanceReceiptResponse = response.body.results;
                     this.adjustVoucherOptions = [];
@@ -310,7 +305,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         if (this.adjustPayment && this.adjustPayment.customerUniquename && this.adjustPayment.voucherDate) {
             this.getAllAdvanceReceiptsRequest.accountUniqueName = this.adjustPayment.customerUniquename;
             this.getAllAdvanceReceiptsRequest.invoiceDate = this.adjustPayment.voucherDate;
-            this.salesService.getAllAdvanceReceiptVoucher(this.getAllAdvanceReceiptsRequest).subscribe(res => {
+            this.salesService.getAllAdvanceReceiptVoucher(this.getAllAdvanceReceiptsRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res.status === 'success') {
                     this.adjustVoucherOptions = [];
                     if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
@@ -558,13 +553,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
-        if (event && entry && (this.isDefault && !this.isFormReset)) {
+        if (event && entry && !this.isFormReset) {
             entry = cloneDeep(event.additional);
             this.formatAdjustmentData([event.additional]);
             this.adjustVoucherForm.adjustments.splice(index, 1, entry);
             this.calculateTax(entry, index);
         }
-        this.isDefault = false;
     }
 
     /**
@@ -785,5 +779,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 }
             });
         }
+    }
+
+    /**
+     * Unsubscribe from all listeners
+     *
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

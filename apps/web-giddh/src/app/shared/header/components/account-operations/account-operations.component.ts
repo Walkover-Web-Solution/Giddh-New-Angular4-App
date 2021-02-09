@@ -390,7 +390,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         });
 
 
-        this.accountsAction.mergeAccountResponse$.subscribe(res => {
+        this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });
     }
@@ -426,7 +426,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
 
-        this.accountService.getFlattenAccounts().subscribe(a => {
+        this.accountService.getFlattenAccounts().pipe(takeUntil(this.destroyed$)).subscribe(a => {
             let accounts: IOption[] = [];
             if (a.status === 'success') {
                 a.body.results.map(acc => {

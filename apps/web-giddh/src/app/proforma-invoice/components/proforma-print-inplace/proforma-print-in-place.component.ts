@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
 import { ProformaDownloadRequest } from '../../../models/api-models/proforma';
@@ -7,6 +7,8 @@ import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { ProformaService } from '../../../services/proforma.service';
 import { ReceiptService } from '../../../services/receipt.service';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'proforma-print-in-place-component',
@@ -14,7 +16,7 @@ import { ReceiptService } from '../../../services/receipt.service';
     styleUrls: ['./proforma-print-in-place.component.scss']
 })
 
-export class ProformaPrintInPlaceComponent implements OnInit {
+export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: { voucherNumber: string, uniqueName: string, blob?: Blob };
     @ViewChild(PdfJsViewerComponent, {static: true}) public pdfViewer: PdfJsViewerComponent;
@@ -22,6 +24,9 @@ export class ProformaPrintInPlaceComponent implements OnInit {
 
     public isVoucherDownloading: boolean = false;
     public isVoucherDownloadError: boolean = false;
+
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _toasty: ToasterService, private _proformaService: ProformaService, private _receiptService: ReceiptService) {
     }
@@ -43,12 +48,12 @@ export class ProformaPrintInPlaceComponent implements OnInit {
             };
             let accountUniqueName: string = this.selectedItem.uniqueName;
             //
-            this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
+            this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result) {
                     this.selectedItem.blob = result;
 
                     if(this.pdfViewer) {
-                        this.pdfViewer.pdfSrc = result;   
+                        this.pdfViewer.pdfSrc = result;
                         this.pdfViewer.showSpinner = true;
                         this.pdfViewer.refresh();
                     }
@@ -75,7 +80,7 @@ export class ProformaPrintInPlaceComponent implements OnInit {
                 request.estimateNumber = this.selectedItem.voucherNumber;
             }
 
-            this._proformaService.download(request, this.voucherType).subscribe(result => {
+            this._proformaService.download(request, this.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result && result.status === 'success') {
                     let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
                     this.pdfViewer.pdfSrc = blob;
@@ -103,5 +108,15 @@ export class ProformaPrintInPlaceComponent implements OnInit {
             this.pdfViewer.refresh();
             this.pdfViewer.startPrint = false;
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof ProformaPrintInPlaceComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

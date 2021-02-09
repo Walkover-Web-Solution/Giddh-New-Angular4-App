@@ -257,7 +257,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         }
         if (!this.isOnBoardingInProgress) {
-            this._companyService.GetAllBusinessNatureList().subscribe((businessNatureResponse) => {
+            this._companyService.GetAllBusinessNatureList().pipe(takeUntil(this.destroyed$)).subscribe((businessNatureResponse) => {
                 if (businessNatureResponse && businessNatureResponse.body) {
                     _.map(businessNatureResponse.body, (businessNature) => {
                         this.businessNatureList.push({ label: businessNature, value: businessNature });
@@ -1024,7 +1024,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public createBranch(): void {
-        this._companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).subscribe(data => {
+        this._companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this._router.navigate(['pages/settings/branch']);

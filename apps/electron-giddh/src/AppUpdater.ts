@@ -1,5 +1,5 @@
 import {autoUpdater} from 'electron-updater';
-import {dialog} from 'electron'
+import {dialog} from 'electron';
 
 let updater;
 export default class AppUpdaterV1 {
@@ -9,6 +9,7 @@ export default class AppUpdaterV1 {
         const log = require('electron-log');
         log.transports.file.level = 'debug';
         autoUpdater.logger = log;
+        autoUpdater.autoDownload = false;
         autoUpdater.on('update-available', () => {
             if (updater) {
                 dialog.showMessageBox({
@@ -49,7 +50,9 @@ export default class AppUpdaterV1 {
                 detail: 'A new version has been downloaded. Restart the application to apply the updates.'
             }
             dialog.showMessageBox(dialogOpts).then((returnValue) => {
-                if (returnValue.response === 0) autoUpdater.quitAndInstall()
+                if (returnValue.response === 0) {
+                    autoUpdater.quitAndInstall();
+                }
             })
         });
 
