@@ -1,7 +1,7 @@
 <hamburger-menu [pageHeading]="'Reports > Reverse Charge'"></hamburger-menu>
 <div class="reverse-table-report">
     <div class="container-fluid">
-        <div class="mr-t15 mr-b15 input-grp-date-range-picker d-flex">
+        <div class="mr-t15 input-grp-date-range-picker d-flex">
             <div class="input-group">
                 <div class="form-group linked-entities mr-r15" *ngIf="currentCompanyBranches?.length > 2">
                     <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
@@ -32,7 +32,7 @@
                     </div>
                 </div>
             </div>
-            <div class="clear-filter width-100 align-items-baseline d-flex justify-content-end"
+            <div class="clear-filter width-100 align-items-baseline d-flex justify-content-start"
                 *ngIf="checkIfFiltersApplied()">
                 <button class="btn btn-filter" (click)="resetFilters()"><span class="icon-cross"></span> Clear
                     Filter</button>

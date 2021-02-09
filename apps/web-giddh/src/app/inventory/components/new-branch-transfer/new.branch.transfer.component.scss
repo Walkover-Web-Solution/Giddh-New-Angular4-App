@@ -451,3 +451,14 @@ tfoot td .table-sec.form-group {
         margin-top: 5px;
     }
 }
+@media(max-width:575px){
+    .branch-transfer-flex{
+        width: 100%;
+        .input-group.linked-entities{
+            width: 100%;
+            sh-select{
+                margin-right: 0;
+            }
+        }
+    }
+}

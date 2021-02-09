@@ -818,6 +818,16 @@ sh-select:focus {
         max-width: 1280px;
     }
 }
+@media(min-width:1020px) and (max-width:1200px){
+    .linked-entities{
+        position: absolute;
+        top: 41px;
+        right: 0;
+    }
+    .mr-b5{
+        margin-bottom: 50px !important;
+    }
+}
 @media(max-width:1190px){
     .date-advance-search{
         &:before, &:after{

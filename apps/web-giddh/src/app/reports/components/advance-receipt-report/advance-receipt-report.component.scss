@@ -171,3 +171,43 @@
         padding: 5px 10px 5px 50% !important;
     }
 }
+@media(max-width:575px){
+    .input-grp-date-range-picker{
+        &.clear-filter-applicable{
+            position: relative;
+            .advance-icon{
+                position: absolute !important;
+                bottom: 0;
+                margin-left: 0 !important;
+            }
+            .custom-datepicker{
+                margin-bottom: 15px;
+                width: 100%;
+                input{
+                    width: 100% !important;
+                    max-width: 100% !important;
+                }
+            }
+            .clear-filter{
+                margin-left: 50px;
+            }
+        }
+
+        .mr-r1{
+            margin-right: 0 !important;
+        }
+
+        .linked-entities{
+            margin-bottom: 15px;
+            margin-right: 0;
+            width: 100%;
+            sh-select{
+                width: 100%;
+            }
+        }
+        .clear-filter{
+            justify-content: end !important;
+        }
+    }
+
+}
