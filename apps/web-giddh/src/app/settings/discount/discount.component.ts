@@ -146,7 +146,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public getDiscountAccounts(): void {
-        this.salesService.getAccountsWithCurrency('discount').subscribe(response => {
+        this.salesService.getAccountsWithCurrency('discount').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 this.accounts = response.body.results.map(discount => {
                     return { label: discount.name, value: discount.uniqueName };

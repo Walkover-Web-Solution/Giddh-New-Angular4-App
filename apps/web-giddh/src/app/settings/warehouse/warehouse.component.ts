@@ -21,7 +21,6 @@ import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
 import { OnBoardingType, PAGINATION_LIMIT } from '../../app.constant';
-import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -370,7 +369,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             warehouseUniqueName: this.selectedWarehouse.uniqueName,
             linkAddresses
         };
-        this.settingsProfileService.updatWarehouseInfo(requestObj).subscribe(response => {
+        this.settingsProfileService.updatWarehouseInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.asideEditWarehousePane = 'out';
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
@@ -563,7 +562,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     private loadAddresses(method: string, successCallback: Function): void {
-        this.settingsProfileService.getCompanyAddresses(method).subscribe((response) => {
+        this.settingsProfileService.getCompanyAddresses(method).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {

@@ -231,7 +231,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 q: encodeURIComponent(query),
                 page
             }
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -315,7 +315,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 page,
                 count: API_COUNT_LIMIT
             }
-            this.groupService.searchGroups(requestObject).subscribe(data => {
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

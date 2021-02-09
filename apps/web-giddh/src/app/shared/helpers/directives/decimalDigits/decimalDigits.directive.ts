@@ -14,7 +14,6 @@ export class DecimalDigitsDirective implements OnDestroy {
     @Input() public minValue: string;
     @Input() public maxValue: string;
 
-    public el: HTMLInputElement;
     private giddhDecimalPlaces: number = 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -35,7 +34,6 @@ export class DecimalDigitsDirective implements OnDestroy {
 
     // tslint:disable-next-line:member-ordering
     constructor(private elemRef: ElementRef, private store: Store<AppState>) {
-        this.el = this.elemRef.nativeElement;
 
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.balanceDecimalPlaces) {
