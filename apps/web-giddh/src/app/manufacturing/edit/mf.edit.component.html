@@ -75,8 +75,7 @@
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group">
                             <label class="d-block">Warehouse</label>
-                            <!-- make it dynamic -->
-                            <sh-select placeholder="Select Warehouse"></sh-select>
+                            <sh-select placeholder="Select Warehouse" [options]="warehouses" [(ngModel)]="manufacturingDetails.warehouseUniqueName" required [isRequired]="true" [defaultValue]="manufacturingDetails?.warehouse?.name"></sh-select>
                         </div>
                     </div>
                 </div>
