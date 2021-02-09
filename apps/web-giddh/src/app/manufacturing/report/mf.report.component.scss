@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 .mf-stock-search-request-form .col-xs-1 {
     width: 11.33333333%;
 }
@@ -31,13 +33,56 @@
         text-align: left;
     }
 }
+.manufacture-table{
+    .bd-rl{
+        border-left: 1px solid $gainsboro !important;
+    }
+    .bd-rr{
+        border-right: 1px solid $gainsboro !important;
+    }
+    td.raw-material {
+        background-color: $gray-95 !important;
+        line-height: 2;
+        color: $matterhorn;
+    }
+}
+@media(min-width:1441px){
+    .manufacturing-head{
+        .col-xl-3{
+            flex: 0 0 16.666667%;
+            max-width: 16.666667%;
+        }
+        .col-xl-6 {
+            flex: 0 0 66.666667%;
+            max-width: 66.666667%;
+        }
+    }
+}
 @media(max-width:1440px){
-    .datepicker-flex, .linked-entities{
-        flex: 0 0 23.666667%;
-        max-width: 23.666667%;
+    .no-branch-head{
+        .col-xl-2{
+            flex: 0 0 21.666667%;
+            max-width: 21.666667%;
+        }
+        .col-xl-10 {
+            flex: 0 0 78.333333%;
+            max-width: 78.333333%;
+        }
     }
     .linked-entities sh-select::ng-deep input{
         padding-right: 6px !important;
+    }
+}
+@media(max-width:1199px){
+    .no-branch-head{
+        .col-xl-2{
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+        }
+        .col-xl-10 {
+            flex: 0 0 66.666667%;
+            max-width: 66.666667%;
+        }
     }
 }
 @media(max-width:991px){
@@ -50,6 +95,15 @@
     .datepicker-flex, .linked-entities{
         flex: 0 0 50%;
         max-width: 50%;
+    }
+    .no-branch-head{
+        .col-xl-2{
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+    .create-btn{
+        margin-top: 15px;
     }
 }
 @media(max-width:767px){
@@ -65,10 +119,22 @@
             float:left !important;
         }
     }
+    .no-branch-head{
+        .col-xl-2{
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
 }
 
 @media (max-width:768px){
     .mobile-none{
         display:none;
     }
+}
+.regular-font {
+    font-family: 'opensans-regular';
+}
+.row-gray-background th {
+    background-color: $medium-gray;
 }

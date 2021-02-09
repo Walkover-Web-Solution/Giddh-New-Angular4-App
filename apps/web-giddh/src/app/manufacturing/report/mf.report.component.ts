@@ -6,7 +6,7 @@ import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, ReplaySubject } from 'rxjs';
-import { distinct, take, takeUntil } from 'rxjs/operators';
+import { distinct, filter, take, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
@@ -20,6 +20,8 @@ import { AppState } from '../../store';
 import { MfStockSearchRequestClass } from '../manufacturing.utility';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../../shared/helpers/defaultDateFormat';
 import { IOption } from './../../theme/ng-select/option.interface';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 
 const filter1 = [
 	{ label: 'Greater', value: 'greaterThan' },
@@ -94,6 +96,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /* this wll store mobile screen size */
+    public isMobileScreen: boolean = true;
+    /* Stores warehouses for a company */
+    public warehouses: Array<any> = [];
 
 	constructor(
         private store: Store<AppState>,
@@ -103,7 +109,9 @@ export class MfReportComponent implements OnInit, OnDestroy {
         public bsConfig: BsDatepickerConfig,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private breakPointObservar: BreakpointObserver,
+        private warehouseActions: WarehouseActions
     ) {
 		this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
 		this.mfStockSearchRequest.product = '';
@@ -113,6 +121,14 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
+
+        this.breakPointObservar.observe([
+            '(max-width: 991px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
+
         this.isInventoryPage = this.router.url.includes('/pages/inventory');
 		this.initializeSearchReqObj();
 		// Refresh the stock list
@@ -203,6 +219,9 @@ export class MfReportComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.initializeWarehouse();
 	}
 
 	public initializeSearchReqObj() {
@@ -347,5 +366,32 @@ export class MfReportComponent implements OnInit, OnDestroy {
             this.mfStockSearchRequest.from = this.fromDate;
 			this.mfStockSearchRequest.to = this.toDate;
         }
+    }
+
+    /**
+     * Intializes the warehouse
+     *
+     * @private
+     * @memberof MfReportComponent
+     */
+    private initializeWarehouse(): void {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            this.warehouses = [];
+            if (warehouses && warehouses.results) {
+                warehouses.results.forEach(warehouse => {
+                    this.warehouses.push({label: warehouse.name, value: warehouse.uniqueName, additional: warehouse});
+                });
+            }
+        });
+    }
+
+    /**
+     * Callback handler for clear warehouse
+     *
+     * @param {*} [event]
+     * @memberof MfReportComponent
+     */
+    public clearWarehouse(): void {
+        this.mfStockSearchRequest.warehouseUniqueName = "";
     }
 }
