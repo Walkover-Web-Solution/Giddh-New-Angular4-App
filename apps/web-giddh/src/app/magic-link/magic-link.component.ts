@@ -99,7 +99,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
                             id: params.id
                         }
                     };
-                    this._magicLinkService.GetMagicLinkData(DataToSend).subscribe((response: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>) => {
+                    this._magicLinkService.GetMagicLinkData(DataToSend).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>) => {
                         if (response.status === 'success') {
                             this.ledgerData = _.cloneDeep(response.body);
                             this.ledgerData.ledgerTransactions.ledgers = this.filterLedgers(response.body.ledgerTransactions.ledgers);
@@ -143,7 +143,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
                 to: this.toDate
             }
         };
-        this._magicLinkService.GetMagicLinkData(DataToSend).subscribe((response: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>) => {
+        this._magicLinkService.GetMagicLinkData(DataToSend).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<IMagicLinkLedgerResponse, IMagicLinkLedgerRequest>) => {
             if (response.status === 'success') {
                 this.ledgerData = _.cloneDeep(response.body);
                 this.ledgerData.ledgerTransactions.ledgers = this.filterLedgers(response.body.ledgerTransactions.ledgers);
@@ -166,7 +166,7 @@ export class MagicLinkComponent implements OnInit, OnDestroy {
     }
 
     public downloadInvoice(invoiceNumber) {
-        this._magicLinkService.DownloadInvoice(this.id, invoiceNumber).subscribe((response: BaseResponse<any, any>) => {
+        this._magicLinkService.DownloadInvoice(this.id, invoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, any>) => {
             if (response.status === 'success') {
                 let blobData;
                 blobData = this.base64ToBlob(response.body, 'application/pdf', 512);

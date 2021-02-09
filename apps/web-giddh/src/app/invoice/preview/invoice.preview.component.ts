@@ -355,7 +355,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
-                this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName).subscribe((res: any) => {
+                this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                     if (res && res.body) {
                         if (res.body.date) {
                             this.invoiceSearchRequest.from = res.body.date;
@@ -880,7 +880,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             const requestObject = {
                 uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : ''
             };
-            this.purchaseRecordService.deletePurchaseRecord(requestObject).subscribe((response) => {
+            this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.selectedItems = [];
                 if (response.status === 'success') {
                     this._toaster.successToast(response.body);
@@ -889,7 +889,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 } else {
                     this._toaster.errorToast(response.message);
                     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-                    this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
+                    this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                         this.parseBalRes(res);
                     });
                 }
@@ -1051,7 +1051,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.lastListingFilters = this.advanceSearchFilter;
             this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.advanceSearchFilter, this.selectedVoucher));
-            this._receiptServices.getAllReceiptBalanceDue(this.advanceSearchFilter, this.selectedVoucher).subscribe(res => {
+            this._receiptServices.getAllReceiptBalanceDue(this.advanceSearchFilter, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.parseBalRes(res);
             });
         } else {
@@ -1070,7 +1070,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.lastListingFilters = this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected);
         if(this.lastListingFilters) {
             this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-            this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).subscribe(res => {
+            this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.parseBalRes(res);
             });
         }
@@ -1097,7 +1097,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
-        this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res => {
+        this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.parseBalRes(res);
         });
     }
@@ -1216,7 +1216,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             typeOfInvoice: invoiceCopy,
             voucherType: this.selectedVoucher
         };
-        this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend)
+        this._invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res) {
 
@@ -1394,7 +1394,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
-        this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res => {
+        this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.parseBalRes(res);
         });
     }
@@ -1493,7 +1493,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let allInvoices = _.cloneDeep(this.voucherData.items);
         this.selectedInvoice = allInvoices.find((o) => o.uniqueName === this.selectedItems[0]);
         this.validateInvoiceobj.invoiceNumber = this.selectedInvoice.voucherNumber;
-        this._invoiceService.validateInvoiceForEwaybill(this.validateInvoiceobj).subscribe(res => {
+        this._invoiceService.validateInvoiceForEwaybill(this.validateInvoiceobj).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
                 if (res.body.errorMessage) {
                     this._toaster.warningToast(res.body.errorMessage);
@@ -1672,7 +1672,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
             });
         }
-        this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName).subscribe(response => {
+        this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
                     this._toaster.successToast(response.body);
@@ -1727,7 +1727,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 invoiceDate: voucherDate
             };
             this.isAccountHaveAdvanceReceipts = false;
-            this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
+            this.salesService.getAllAdvanceReceiptVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
                     if (res.body && res.body.length) {
                         this.voucherForAdjustment = res.body;
