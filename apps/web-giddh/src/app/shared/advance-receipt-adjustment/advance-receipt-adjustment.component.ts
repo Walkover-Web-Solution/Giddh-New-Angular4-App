@@ -243,10 +243,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     /**
      * To clear advance receipt adjustment form
      *
+     * @param {boolean} isFormReset True, if form is reset
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    public onClear(): void {
-        this.isFormReset = true;
+    public onClear(isFormReset?: boolean): void {
+        this.isFormReset = isFormReset;
         this.adjustVoucherForm = {
             tdsTaxUniqueName: '',
             tdsAmount: {
@@ -267,9 +268,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 }
             ]
         };
-        setTimeout(() => {
-            this.isFormReset = false;
-        });
+        if (isFormReset) {
+            setTimeout(() => {
+                this.isFormReset = false;
+            });
+        }
     }
 
     /**

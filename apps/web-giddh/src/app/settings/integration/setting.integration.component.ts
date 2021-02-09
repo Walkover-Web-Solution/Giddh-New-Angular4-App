@@ -1337,9 +1337,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+            // this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
+            // this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
+            // this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
         }
     }
 
@@ -1447,6 +1447,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {
                         successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = data.body.page;
+                        this.defaultAccountPaginationData.totalPages = data.body.totalPages;
                     }
                 }
             });

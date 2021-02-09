@@ -70,11 +70,12 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
 		case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
 			let res: BaseResponse<AccountResponseV2, string> = action.payload;
 			if (res.status === 'success') {
-				return Object.assign({}, state, {
+				return {
+                    ...state,
 					createAccountInProcess: false,
 					createAccountSuccess: true,
 					createdAccountDetails: res.body,
-				});
+				};
 			}
 			return { ...state, updateAccountInProcess: false, updateAccountSuccess: false, createdAccountDetails: null, createAccountInProcess: false };
 		}
