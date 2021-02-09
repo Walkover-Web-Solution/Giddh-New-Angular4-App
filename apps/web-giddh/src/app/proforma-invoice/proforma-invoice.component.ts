@@ -2223,12 +2223,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // replace /n to br for (shipping and billing)
 
-        if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
+        if (data?.accountDetails?.shippingDetails?.address?.length && data?.accountDetails?.shippingDetails?.address[0]?.length > 0) {
             data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].trim();
             data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
         }
-        if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+        if (data?.accountDetails?.billingDetails?.address?.length && data?.accountDetails?.billingDetails?.address[0]?.length > 0) {
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].trim();
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
@@ -4015,12 +4015,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // replace /n to br for (shipping and billing)
 
-        if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
+        if (data?.accountDetails?.shippingDetails?.address?.length && data?.accountDetails?.shippingDetails?.address[0]?.length > 0) {
             data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].trim();
             data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
         }
-        if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+        if (data?.accountDetails?.billingDetails?.address?.length && data?.accountDetails?.billingDetails?.address[0]?.length > 0) {
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].trim();
             data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
             data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
@@ -4736,7 +4736,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
-        voucherClassConversion.accountDetails.billingDetails.address = cloneDeep(result.account.billingDetails.address);
+        voucherClassConversion.accountDetails.billingDetails.address = cloneDeep(result?.account?.billingDetails?.address);
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName;
@@ -4744,7 +4744,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
-        voucherClassConversion.accountDetails.shippingDetails.address = cloneDeep(result.account.shippingDetails.address);
+        voucherClassConversion.accountDetails.shippingDetails.address = cloneDeep(result?.account?.shippingDetails?.address);
         voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber;
         voucherClassConversion.accountDetails.shippingDetails.state.code = this.getNewStateCode(result.account.shippingDetails.stateCode);
         voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
@@ -5039,11 +5039,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     private updateAddressShippingBilling(obj) {
         if (obj) {
-            let shippigAddrss = '';
+            let shippigAddress = '';
             obj.address.forEach(res => {
-                shippigAddrss = shippigAddrss + res + '\n';
+                shippigAddress = shippigAddress + res + '\n';
             });
-            obj.address[0] = shippigAddrss;
+            obj.address[0] = shippigAddress;
         }
         return obj;
     }
@@ -6429,18 +6429,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if(company.billingDetails && company.shippingDetails) {
             this.purchaseBillCompany = {
                 billingDetails: {
-                    address: company.billingDetails.address,
-                    state: {code: company.billingDetails.stateCode, name: company.billingDetails.stateName},
-                    gstNumber: company.billingDetails.gstNumber,
-                    stateName: company.billingDetails.stateName,
-                    stateCode: company.billingDetails.stateCode
+                    address: company?.billingDetails?.address,
+                    state: {code: company?.billingDetails?.stateCode, name: company?.billingDetails?.stateName},
+                    gstNumber: company?.billingDetails?.gstNumber,
+                    stateName: company?.billingDetails?.stateName,
+                    stateCode: company?.billingDetails?.stateCode
                 },
                 shippingDetails: {
-                    address: company.shippingDetails.address,
-                    state: {code: company.shippingDetails.stateCode, name: company.shippingDetails.stateName},
-                    gstNumber: company.shippingDetails.gstNumber,
-                    stateName: company.shippingDetails.stateName,
-                    stateCode: company.shippingDetails.stateCode
+                    address: company?.shippingDetails?.address,
+                    state: {code: company?.shippingDetails?.stateCode, name: company?.shippingDetails?.stateName},
+                    gstNumber: company?.shippingDetails?.gstNumber,
+                    stateName: company?.shippingDetails?.stateName,
+                    stateCode: company?.shippingDetails?.stateCode
                 }
             }
 
@@ -6470,14 +6470,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (currentBranch && currentBranch.addresses) {
                     const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
-                    this.purchaseBillCompany.billingDetails.address = [];
-                    this.purchaseBillCompany.billingDetails.address.push(defaultAddress.address);
-                    this.purchaseBillCompany.billingDetails.state.code = defaultAddress.stateCode;
-                    this.purchaseBillCompany.billingDetails.state.name = defaultAddress.stateName;
-                    this.purchaseBillCompany.billingDetails.stateCode = defaultAddress.stateCode;
-                    this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
-                    this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.taxNumber;
-                    this.isDeliverAddressFilled = true;
+                    if(defaultAddress) {
+                        this.purchaseBillCompany.billingDetails.address = [];
+                        this.purchaseBillCompany.billingDetails.address.push(defaultAddress.address);
+                        this.purchaseBillCompany.billingDetails.state.code = defaultAddress.stateCode;
+                        this.purchaseBillCompany.billingDetails.state.name = defaultAddress.stateName;
+                        this.purchaseBillCompany.billingDetails.stateCode = defaultAddress.stateCode;
+                        this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
+                        this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.taxNumber;
+                        this.isDeliverAddressFilled = true;
+                    }
                 }
             }
         });
