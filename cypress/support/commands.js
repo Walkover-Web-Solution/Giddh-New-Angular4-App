@@ -115,7 +115,7 @@ Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>
         // cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').click()
         ledgerPage.enterAmount().clear().type(amount)
         ledgerPage.saveButton().click().then(()=>{
-            cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+            cy.xpath('//div[@id=\'toast-container\']', {timeout: 10000}).should('be.visible')
         })
     })
 
