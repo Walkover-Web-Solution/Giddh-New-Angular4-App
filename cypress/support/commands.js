@@ -30,6 +30,7 @@ import HeaderPage from "./pageObjects/HeaderPage";
 import DashboardPage from "./pageObjects/DashboardPage";
 import GlobalSearchPage from "./pageObjects/GlobalSearchPage";
 import TrialBalancePage from "./pageObjects/TrialBalancePage";
+import PLAndBSPage from "./pageObjects/PLAndBSPage";
 import LedgerPage from "./pageObjects/LedgerPage";
 import SignUpPage from "./pageObjects/SignUpPage";
 import CreateNewCompanyPage from "./pageObjects/CreateNewCompanyPage";
@@ -39,6 +40,7 @@ const headerPage = new HeaderPage()
 const ledgerPage = new LedgerPage()
 const globalSearchPage = new GlobalSearchPage()
 const trialBalancePage = new TrialBalancePage()
+const plAndBSPage = new PLAndBSPage();
 const createNewCompanyPage = new CreateNewCompanyPage();
 
 
@@ -96,8 +98,8 @@ Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) =>
 
 
 Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>{
-    ledgerPage.clickAccount().click()
-    ledgerPage.inputAccount().type(accountName, {delay:300})
+    ledgerPage.clickAccount().click({force:true})
+    ledgerPage.inputAccount().type(accountName, {delay:500})
     cy.wait(2000)
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
@@ -106,14 +108,14 @@ Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>
     cy.get('body').type('{pageup}')
     cy.scrollTo(10, 10);
     cy.scrollTo('top')
-   // cy.get('.ledger-section')
+    // cy.get('.ledger-section')
     cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView( { easing: 'linear' }).should('be.visible').then(()=>{
         cy.wait(1000)
         cy.get(accountElementPath).click({force : true})
         // cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').click()
         ledgerPage.enterAmount().clear().type(amount)
         ledgerPage.saveButton().click().then(()=>{
-            cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+            cy.xpath('//div[@id=\'toast-container\']', {timeout: 10000}).should('be.visible')
         })
     })
 
@@ -122,7 +124,7 @@ Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>
 Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, amount)=>{
     cy.log("This is for testing")
     ledgerPage.clickAccount().click()
-    ledgerPage.inputAccount().type(accountName, {delay:300})
+    ledgerPage.inputAccount().type(accountName, {delay:500})
     cy.wait(2000)
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
@@ -207,7 +209,7 @@ Cypress.Commands.add("SignUp", (email, password) => {
     createNewCompanyPage.nextButton().then(()=>{
         cy.wait(1500)
         createNewCompanyPage.submitButton()  .then(()=>{
-            cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+            cy.xpath('//div[@id=\'toast-container\']', {timeout: 15000}).should('be.visible')
         })
     })
 })
@@ -249,7 +251,7 @@ Cypress.Commands.add("searchOnTrialBalance", (accountUniqueName, expectedAmount)
     trialBalancePage.searchIcon(80000).click({force:true}).then(()=>{
         trialBalancePage.typeSearchValue(accountUniqueName)
     }).then(()=>{
-        trialBalancePage.searchAccountName().then((elementText) => {
+        trialBalancePage.searchAccountName().first().then((elementText) => {
             cy.wait(5000).then(() =>{
                 const text = elementText.text();
                 expect(text).to.eq(accountUniqueName)
@@ -266,7 +268,7 @@ Cypress.Commands.add("searchOnTrialBalance", (accountUniqueName, expectedAmount)
 })
 
 Cypress.Commands.add("searchOnBalanceSheet", (accountUniqueName, expectedAmount)=>{
-    // trialBalancePage.refreshIcon().click({force:true})
+    trialBalancePage.refreshIcon().click({force:true})
     cy.wait(3000)
 
 })
@@ -274,12 +276,37 @@ Cypress.Commands.add("searchOnBalanceSheet", (accountUniqueName, expectedAmount)
 Cypress.Commands.add("navigateToTrialBalanceOptions", (optionName)=>{
     // trialBalancePage.refreshIcon().click({force:true})
     headerPage.trialBalanceOptions().each(($el, index, $list)=>{
-        if ($el === optionName){
+        const text = $el.text();
+        cy.log(text)
+        if (text.toLowerCase() === optionName.toLowerCase()){
+            cy.log("In If ")
             $el.click()
         }
     })
     cy.wait(3000)
 
+})
+
+Cypress.Commands.add("searchOnPLAndBS", (xpath, accountUniqueName, expectedAmount)=>{
+    trialBalancePage.refreshIcon().click({force:true})
+    cy.wait(3000)
+    trialBalancePage.searchIcon(80000).click({force:true}).then(()=>{
+        trialBalancePage.typeSearchValue(accountUniqueName)
+    }).then(()=>{
+        trialBalancePage.searchAccountName().first().then((elementText) => {
+            cy.wait(5000).then(() =>{
+                const text = elementText.text();
+                expect(text).to.eq(accountUniqueName)
+            })
+            plAndBSPage.searchAccountAmount(xpath).then((elementText) => {
+                cy.wait(5000).then(() =>{
+                    const text = elementText.text();
+                    expect(text).to.eq(expectedAmount)
+                })
+            })
+
+        })
+    })
 })
 
 
