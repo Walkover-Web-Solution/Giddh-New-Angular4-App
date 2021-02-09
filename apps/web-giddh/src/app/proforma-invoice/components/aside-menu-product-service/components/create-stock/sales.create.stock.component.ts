@@ -155,7 +155,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.store.dispatch(this.customStockActions.GetStockUnit());
 
         // subscribe getActiveView parameters
-        this.invViewService.getActiveView().subscribe(v => {
+        this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
             this.groupUniqueName = v.groupUniqueName;
             this.groupName = v.stockName;
             this.stockUniqueName = v.stockUniqueName;

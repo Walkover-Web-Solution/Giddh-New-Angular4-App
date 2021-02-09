@@ -193,17 +193,6 @@ export class AccountingComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-        this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
-            if (a && a !== '') {
-                this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data.status === 'success') {
-                        this.flattenAccounts = data.body.results;
-                        this._tallyModuleService.setFlattenAccounts(data.body.results);
-                    }
-                });
-            }
-        });
-
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
     }
 

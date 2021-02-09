@@ -182,7 +182,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         })), takeUntil(this.destroyed$)).subscribe();
 
         // get view from sidebar while clicking on group/stock
-        this.invViewService.getActiveView().subscribe(activeViewData => {
+        this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(activeViewData => {
             if (activeViewData.view) {
                 this.activeView = activeViewData.view;
             } else {
@@ -458,7 +458,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof InventoryComponent
      */
     private loadInventoryTab(successCallback: Function): void {
-        this.inventoryService.getLinkedStocks().subscribe((response) => {
+        this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 if (response.status === 'success' && response.body && response.body.results) {
                     this.branchesWithWarehouse = response.body.results;

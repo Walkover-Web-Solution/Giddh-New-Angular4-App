@@ -173,7 +173,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -358,7 +358,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public checkIsStockEntryAvailable(): any {
         if(this.daybookData$) {
-            this.daybookData$.subscribe(item => {
+            this.daybookData$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
                 this.isEntryExpanded = item.entries.some(entry => {
                     if (entry.isExpanded && entry.otherTransactions) {
                         return entry.otherTransactions.some(otherTrasaction => {

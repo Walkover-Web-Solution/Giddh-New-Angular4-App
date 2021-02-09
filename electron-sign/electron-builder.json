@@ -1,6 +1,6 @@
 {
     "appId": "com.giddh.prod",
-    "electronVersion": "7.1.7",
+    "electronVersion": "7.1.9",
     "publish": [
         {
             "provider": "s3",
