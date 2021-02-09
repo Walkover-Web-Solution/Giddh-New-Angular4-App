@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { select, Store } from '@ngrx/store';
@@ -11,7 +11,6 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { LoaderService } from '../../../../loader/loader.service';
 import { INVOICE_API } from '../../../../services/apiurls/invoice';
 import { Configuration } from '../../../../app.constant';
-import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { BulkUpdateInvoiceNote, BulkUpdateInvoiceImageSignature, BulkUpdateInvoiceTemplates, BulkUpdateInvoiceDueDates, BulkUpdateInvoiceSlogan, BulkUpdateInvoiceShippingDetails, BulkUpdateInvoiceCustomfields } from 'apps/web-giddh/src/app/models/api-models/Contact';
 import { InvoiceBulkUpdateService } from 'apps/web-giddh/src/app/services/invoice.bulkupdate.service';
 import { NgForm } from '@angular/forms';
@@ -26,7 +25,7 @@ import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
     styleUrls: ['./invoiceBulkUpdateModal.component.scss']
 })
 
-export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
+export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public voucherType: string = '';
     @Input() public selectedInvoices;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -386,7 +385,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
 
             if (requestModel.voucherNumbers && requestModel.voucherType) {
                 this.updateInProcess = true;
-                this._invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).subscribe(response => {
+                this._invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
 
                     if (response.status === "success") {
                         this._toaster.successToast(response.body);
@@ -424,4 +423,13 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Releases memory
+     *
+     * @memberof InvoiceBulkUpdateModalComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

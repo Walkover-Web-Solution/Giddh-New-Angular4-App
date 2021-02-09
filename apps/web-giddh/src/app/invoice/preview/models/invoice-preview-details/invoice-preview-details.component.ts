@@ -363,7 +363,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     voucherNumber: [this.selectedItem.voucherNumber]
                 };
                 let accountUniqueName: string = this.selectedItem.account.uniqueName;
-                this._receiptService.DownloadVoucher(model, accountUniqueName, false).subscribe(result => {
+                this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result) {
                         this.selectedItem.blob = result;
                         if(this.pdfViewer) {
@@ -387,7 +387,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 accountUniqueName: this.selectedItem.account.uniqueName,
                 purchaseRecordUniqueName: this.selectedItem.uniqueName
             };
-            this.purchaseRecordService.downloadAttachedFile(requestObject).subscribe((data) => {
+            this.purchaseRecordService.downloadAttachedFile(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
                 if (data && data.body) {
                     this.shouldShowUploadAttachment = false;
                     if (data.body.fileType) {
@@ -435,7 +435,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
             let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem.account.uniqueName, uniqueName: this.selectedItem.uniqueName };
 
-            this.purchaseRecordService.getPdf(getRequest).subscribe(response => {
+            this.purchaseRecordService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.status === "success" && response.body) {
                     let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                     this.attachedDocumentBlob = blob;
@@ -462,13 +462,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     request.estimateNumber = this.selectedItem.voucherNumber;
                 }
 
-                this._proformaService.download(request, this.selectedItem.voucherType).subscribe(result => {
+                this._proformaService.download(request, this.selectedItem.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result && result.status === 'success') {
                         let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
                         this.selectedItem.blob = blob;
 
                         if(this.pdfViewer) {
-                            this.pdfViewer.pdfSrc = blob;    
+                            this.pdfViewer.pdfSrc = blob;
                             this.pdfViewer.showSpinner = true;
                             this.pdfViewer.refresh();
                         }
@@ -593,7 +593,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     uniqueName: this.selectedItem.uniqueName,
                     attachedFiles: [response.uniqueName]
                 };
-                this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).subscribe(() => {
+                this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).pipe(takeUntil(this.destroyed$)).subscribe(() => {
                     this.downloadVoucher('base64');
                 }, () => this._toasty.errorToast('Something went wrong! Try again'));
             } else {
@@ -662,7 +662,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 accountUniqueName: customerUniqueName,
                 invoiceDate: voucherDate
             };
-            this.salesService.getAllAdvanceReceiptVoucher(requestObject).subscribe(res => {
+            this.salesService.getAllAdvanceReceiptVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
                     if (res.body && res.body.length) {
                         this.isAccountHaveAdvanceReceipts = true;
@@ -764,7 +764,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public getLinkedPurchaseOrders(): void {
         this.purchaseOrderNumbers = [];
         if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
-            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).subscribe((res: any) => {
+            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 if (res && res.body) {
                     this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
                 }

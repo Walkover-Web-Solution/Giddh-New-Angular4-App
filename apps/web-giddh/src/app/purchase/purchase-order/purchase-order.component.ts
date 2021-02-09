@@ -285,7 +285,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 this.purchaseOrderGetRequest.page = 1;
             }
 
-            this.purchaseOrderService.getAll(this.purchaseOrderGetRequest, this.purchaseOrderPostRequest).subscribe((res) => {
+            this.purchaseOrderService.getAll(this.purchaseOrderGetRequest, this.purchaseOrderPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     this.isLoading = false;
                     if (res.status === 'success') {
@@ -543,7 +543,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public deleteItem(): void {
         let getRequest = { companyUniqueName: this.purchaseOrderGetRequest.companyUniqueName, poUniqueName: this.selectedItem };
 
-        this.purchaseOrderService.delete(getRequest).subscribe((res) => {
+        this.purchaseOrderService.delete(getRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
                 if (res.status === 'success') {
                     this.getAllPurchaseOrders(false);
@@ -605,7 +605,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         if (purchaseNumbers.length > 0) {
             this.bulkUpdatePostParams.purchaseNumbers = purchaseNumbers;
 
-            this.purchaseOrderService.bulkUpdate(this.bulkUpdateGetParams, this.bulkUpdatePostParams).subscribe((res) => {
+            this.purchaseOrderService.bulkUpdate(this.bulkUpdateGetParams, this.bulkUpdatePostParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
 

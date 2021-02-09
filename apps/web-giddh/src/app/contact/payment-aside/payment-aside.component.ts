@@ -278,7 +278,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 urn: this.mode.iciciCorporateDetails.URN
             }
         };
-        this._companyService.getOTP(request).subscribe((res) => {
+        this._companyService.getOTP(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 this.OTPsent = true;
             } else {
@@ -300,7 +300,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.timerOn = true
         this.startTimer(40);
         this.receivedOtp = null;
-        this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId).subscribe((response) => {
+        this._companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
 
                 this.isPayClicked = true;
@@ -324,7 +324,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isRequestInProcess = true;
         bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
-        this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).subscribe((res) => {
+        this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === 'success') {
                 this.closePaymentModel(true);
                 this.openModalWithClass(this.successTemplate);
@@ -423,7 +423,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.paymentRequestId = '';
         this.otpReceiverNameMessage = '';
         this.isRequestInProcess = true;
-        this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).subscribe(response => {
+        this._companyService.bulkVendorPayment(this.companyUniqueName, this.requestObjectToGetOTP).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isRequestInProcess = false;
             if (response && response.status === 'success') {
                 this.isPayClicked = true;
@@ -640,5 +640,15 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public allowOnlyNumbers(event: any): boolean {
         return this.generalService.allowOnlyNumbers(event);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PaymentAsideComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

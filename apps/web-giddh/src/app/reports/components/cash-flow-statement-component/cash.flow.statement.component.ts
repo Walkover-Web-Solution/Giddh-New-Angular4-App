@@ -167,7 +167,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         this.downloadRequest.to = this.toDate;
         this.isLoading = true;
 
-        this.cashFlowStatementService.downloadReport(this.downloadRequest).subscribe((res) => {
+        this.cashFlowStatementService.downloadReport(this.downloadRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
             if(res) {
                 if (res.status === "success") {
