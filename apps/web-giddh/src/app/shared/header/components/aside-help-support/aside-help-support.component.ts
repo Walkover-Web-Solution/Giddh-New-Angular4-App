@@ -1,15 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output, HostListener } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, HostListener, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 @Component({
     selector: 'aside-help-support',
     templateUrl: './aside-help-support.component.html',
     styleUrls: [`./aside-help-support.component.scss`],
 })
 
-export class AsideHelpSupportComponent implements OnInit {
+export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     //Event emitter to close the Aside panel
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -17,6 +19,8 @@ export class AsideHelpSupportComponent implements OnInit {
     public apkVersion: string;
     /** Version of lated mac app  */
     public macAppVersion: string;
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private generalActions: GeneralActions, private authService: AuthenticationService) {
 
@@ -79,7 +83,7 @@ export class AsideHelpSupportComponent implements OnInit {
      * @memberof AsideSettingComponent
      */
     private getElectronAppVersion(): void {
-        this.authService.GetElectronAppVersion().subscribe((res: string) => {
+        this.authService.GetElectronAppVersion().pipe(takeUntil(this.destroyed$)).subscribe((res: string) => {
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
@@ -105,12 +109,22 @@ export class AsideHelpSupportComponent implements OnInit {
      * @memberof AsideHelpSupportComponent
      */
     private getElectronMacAppVersion(): void {
-        this.authService.getElectronMacAppVersion().subscribe((res: string) => {
+        this.authService.getElectronMacAppVersion().pipe(takeUntil(this.destroyed$)).subscribe((res: string) => {
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
                 this.macAppVersion = versNum;
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof AsideHelpSupportComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

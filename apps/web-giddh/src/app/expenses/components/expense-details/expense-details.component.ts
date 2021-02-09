@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
@@ -42,7 +42,7 @@ import { cloneDeep } from '../../../lodash-optimized';
     ]
 })
 
-export class ExpenseDetailsComponent implements OnInit, OnChanges {
+export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
     public modalRef: BsModalRef;
     public approveEntryModalRef: BsModalRef;
@@ -270,7 +270,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
             ledgerRequest.attachedFileName = this.imgAttachedFileName;
         }
 
-        this.expenseService.actionPettycashReports(actionType, { ledgerRequest }).subscribe(res => {
+        this.expenseService.actionPettycashReports(actionType, { ledgerRequest }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
                 this.hideApproveConfirmPopup(false);
@@ -304,7 +304,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     }
 
     public pettyCashAction(actionType: ActionPettycashRequest) {
-        this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).subscribe(res => {
+        this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
                 this._toasty.successToast(res.body);
                 this.closeDetailsMode();
@@ -460,5 +460,15 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
 
     private isCashBankAccount(uniqueName) {
         return this.cashAndBankAccountsOptions.some(s => s.value === uniqueName);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

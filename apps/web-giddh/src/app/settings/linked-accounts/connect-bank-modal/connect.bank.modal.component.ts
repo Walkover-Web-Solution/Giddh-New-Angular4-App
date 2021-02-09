@@ -1,5 +1,5 @@
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, of, ReplaySubject, Subject, merge } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
@@ -36,7 +36,7 @@ import { IForceClear } from '../../../models/api-models/Sales';
     `]
 })
 
-export class ConnectBankModalComponent implements OnChanges, OnInit {
+export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
 
     @Input() public sourceOfIframe: string;
     @Output() public modalCloseEvent: EventEmitter<boolean> = new EventEmitter(false);
@@ -147,7 +147,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit {
         this._settingsLinkedAccountsService.SearchBank(this.selectedProvider.name).pipe(catchError(e => {
             this.searchResults = [];
             return [];
-        })).subscribe(response => {
+        }), takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.searchResults = response.body.provider.map(result => ({
                     ...result,
@@ -281,7 +281,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit {
      */
     public getProviderLoginForm(providerId) {
         this.loginForm.reset();
-        this._settingsLinkedAccountsService.GetLoginForm(providerId).subscribe(a => {
+        this._settingsLinkedAccountsService.GetLoginForm(providerId).pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.status === 'success') {
                 let response = _.cloneDeep(a.body.loginForm[0]);
                 this.createLoginForm(response);
@@ -298,10 +298,10 @@ export class ConnectBankModalComponent implements OnChanges, OnInit {
             loginForm: []
         };
         objToSend.loginForm.push(this.loginForm.value);
-        this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).subscribe(res => {
+        this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
                 this._toaster.successToast(res.body);
-                let providerId = res.body.replace(/[^0-9]+/ig, '');
+                let providerId = res.body?.replace(/[^0-9]+/ig, '');
                 if (providerId) {
                     this.cancelRequest = false;
                     this.getBankSyncStatus(providerId);
@@ -320,7 +320,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit {
      */
     public getBankSyncStatus(providerId) {
         let validateProvider;
-        this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).subscribe(res => {
+        this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
                 this.bankSyncInProgress = true;
                 validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
@@ -407,4 +407,13 @@ export class ConnectBankModalComponent implements OnChanges, OnInit {
         this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
     }
 
+    /**
+     * Releases memory
+     *
+     * @memberof ConnectBankModalComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

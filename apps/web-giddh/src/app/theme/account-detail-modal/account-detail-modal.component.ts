@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
@@ -18,7 +19,7 @@ import { AppState } from '../../store';
     styleUrls: ['./account-detail-modal.component.scss']
 })
 
-export class AccountDetailModalComponent implements OnChanges {
+export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     @Input() public isModalOpen: boolean = false;
     @Input() public accountUniqueName: string;
     @Input() public from: string;
@@ -104,7 +105,7 @@ export class AccountDetailModalComponent implements OnChanges {
      * @memberof AccountDetailModalComponent
      */
     public getAccountDetails(accountUniqueName: string): void {
-        this._accountService.GetAccountDetailsV2(accountUniqueName).subscribe(response => {
+        this._accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.accInfo = response.body;
                 this.changeDetectorRef.detectChanges();
@@ -210,14 +211,14 @@ export class AccountDetailModalComponent implements OnChanges {
         };
 
         if (this.messageBody.btn.set === 'Send Email') {
-            return this._companyServices.sendEmail(request)
+            return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
                     r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
                 });
         } else if (this.messageBody.btn.set === 'Send Sms') {
             let temp = request;
             delete temp.data['subject'];
-            return this._companyServices.sendSms(temp)
+            return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
                     r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
                 });
@@ -248,5 +249,15 @@ export class AccountDetailModalComponent implements OnChanges {
         }else {
             (window as any).open(url);
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof AccountDetailModalComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

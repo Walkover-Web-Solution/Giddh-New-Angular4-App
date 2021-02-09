@@ -124,7 +124,8 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnDestroy() {
-		//
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
 	}
 
 	public emitTemplateData(data: any) {
@@ -135,7 +136,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 		this.isCustDtlCollapsed = false;
 
 		if (this.CreateInvoiceForm.valid) {
-			this._createHttpService.Generate(data).subscribe(response => {
+			this._createHttpService.Generate(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
 				if (response.status === 'success') {
 					this.base64Data = this._sanitizer.bypassSecurityTrustResourceUrl('data:application/pdf;base64,' + response.body);
 					this.invoicePreviewModal.show();

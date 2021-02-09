@@ -54,5 +54,5 @@ jobs:
       - run: npx cypress install
       - run: npx cypress cache list
       # and run Cypress tests
-      - run: npm run cy:run
+      - run: npm run cy:run1
       # Cypress binary will be cached after successful workflow finish
