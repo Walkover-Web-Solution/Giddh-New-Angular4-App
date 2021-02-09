@@ -1,10 +1,10 @@
 <hamburger-menu [pageHeading]="'Reports > Cash Flow Statement'"></hamburger-menu>
 <section class="clearfix text-center pt-5">
     <div class="container-fluid">
-        <p class="mb-15">{{activeCompany?.name}}</p>
+        <p class="mr-b15">{{activeCompany?.name}}</p>
         <h5 class="bold mb-2">Cash Flow Statement</h5>
         <div class="d-flex align-items-center justify-content-center mb-2">
-            <label class="mr-05 font-14">As on</label>
+            <label class="mr-r05 font-14">As on</label>
             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                 <i class="icon-calender calendar-addon"></i>
                 <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"

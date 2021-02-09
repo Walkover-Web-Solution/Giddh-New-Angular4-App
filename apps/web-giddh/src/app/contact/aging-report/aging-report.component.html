@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="top-bar aging-top-bar clearfix">
         <div class="aging-form-inline">
-            <div class="form-group mr-15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+            <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
                 <div class="form-group">
                     <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                         [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
@@ -10,15 +10,13 @@
                             <ng-container>
                                 <a href="javascript:void(0)" class="list-item d-flex">
                                     <span class="entity-icon">
-                                        <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch"
+                                        <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
                                             tooltip="Branch"></i>
-                                        <i class="icon-branch-icon pull-right"
-                                            *ngIf="!option.parentBranch && !option.isCompany" tooltip="HO Branch"></i>
                                         <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
                                     </span>
                                     <span class="entity-details">
                                         <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                        <div class="item-unq giddh-limit single-line-clamp">
+                                        <div class="item-unique giddh-limit single-line-clamp">
                                             {{ option.name || '-' }}
                                         </div>
                                     </span>
@@ -29,9 +27,9 @@
                 </div>
             </div>
             <div class="pull-left d-flex wrap-searching-aging">
-                <div class="form-group search-field max250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
-                    <input type="text" placeholder="Name/amount" class="form-control" [(ngModel)]="searchStr"
-                        (ngModelChange)="searchStr$.next($event)" style="width:210px" />
+                <div class="form-group search-field max-width-250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
+                    <input type="text" placeholder="Name/amount" class="form-control name-width" [(ngModel)]="searchStr"
+                        (ngModelChange)="searchStr$.next($event)" />
                     <span class="input-addon">
                         <i class="icon-search"></i>
                     </span>
@@ -48,14 +46,14 @@
                 </div>
             </div>
             <div class="btn-group  pull-right">
-                <button class="btn btn-sky-blue" style="margin-right: 5px" (click)="creteNewCustomerEvent.emit(true)">
+                <button class="btn btn-sky-blue mr-0" (click)="creteNewCustomerEvent.emit(true)">
                     + New Customer
                 </button>
             </div>
         </div>
     </div>
     <div class="contact-main agingPage ">
-        <div class=" pdB2 mr-b1 on-mobile-view mobile-card-wrapper">
+        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper">
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet='mainTable'></ng-container>
             </div>
@@ -74,10 +72,10 @@
         <div>
             <div class="customer-right-wrap">
                 <div class="text-right total-result xs-left pl-2 pr-2">
-                    <h4 class="mb-1 pr-1">Result Total </h4>
+                    <h4 class="mr-b1 pr-1">Result Total </h4>
                 </div>
-                <div class="bg-white customer-right clearfix" style="width: 100%;">
-                    <table style="float: right; width: auto;" class="text-right">
+                <div class="bg-white customer-right clearfix w-100">
+                    <table class="text-right float-right w-auto">
                         <tr>
                             <td>
                                 <p>Upcoming</p>
@@ -109,12 +107,12 @@
 <ng-template #sortingTemplate let-col>
     <div class="icon-pointer cp">
         <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'asc')" *ngIf="key !== col"
-            [ngClass]="{'activeTextColor': key === col && order === 'asc'}"></div>
+            [ngClass]="{'active-text-color': key === col && order === 'asc'}"></div>
         <div class="icon-sort-asc text-light-2 d-block font-xxs" (click)="sort(col, 'desc')"
-            *ngIf="key === col && order === 'asc'" [ngClass]="{'activeTextColor': key === col && order === 'asc'}">
+            *ngIf="key === col && order === 'asc'" [ngClass]="{'active-text-color': key === col && order === 'asc'}">
         </div>
         <div class="icon-sort-dsc text-light-2 d-block font-xxs" *ngIf="key === col && order === 'desc'"
-            (click)="sort(col, 'asc')" [ngClass]="{'activeTextColor': key === col && order === 'desc'}"></div>
+            (click)="sort(col, 'asc')" [ngClass]="{'active-text-color': key === col && order === 'desc'}"></div>
     </div>
 </ng-template>
 <!-- endregion -->
@@ -215,9 +213,9 @@
             </ng-container>
         </tbody>
     </table>
-    <div *ngIf="(dueAmountReportData$ | async)?.totalItems>=20" class="paginationWrapper">
+    <div *ngIf="(dueAmountReportData$ | async)?.totalItems>=20" class="pagination-wrapper">
         <div class="xs-pl-0">
-            <div class="alC" style="text-align: center;">
+            <div class="text-center">
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
             </div>
         </div>

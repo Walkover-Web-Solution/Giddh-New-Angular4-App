@@ -20,15 +20,13 @@
                                                     <ng-container>
                                                         <a href="javascript:void(0)" class="list-item d-flex">
                                                             <span class="entity-icon">
-                                                                <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch"
+                                                                <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
                                                                     tooltip="Branch"></i>
-                                                                <i class="icon-branch-icon pull-right"
-                                                                    *ngIf="!option.parentBranch && !option.isCompany" tooltip="HO Branch"></i>
                                                                 <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
                                                             </span>
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq giddh-limit single-line-clamp">
+                                                                <div class="item-unique giddh-limit single-line-clamp">
                                                                     {{ option.name || '-' }}
                                                                 </div>
                                                             </span>
@@ -50,7 +48,8 @@
                                             [defaultValue]="taxNumber"
                                             placeholder="Select TRN"
                                             [showClear]="false" [multiple]="false"
-                                            [ItemHeight]="67">
+                                            [ItemHeight]="67"
+                                            [isRequired]="true">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -58,7 +57,7 @@
                                     <div class="d-flex align-items-center tax-engine">
                                         <span class="d-inline-block mr-2">VAT Report for period</span>
 
-                                        <div class="advanceSearchByDate date-advance-search">
+                                        <div class="advance-search-by-date date-advance-search">
                                             <span class="input-wrapper">
                                                 <div class="btn-group dropdown" dropdown [autoClose]="false"
                                                     (isOpenChange)="onOpenChange($event)" #periodDropdown="bs-dropdown"
@@ -76,8 +75,6 @@
                                                         </ng-container>
                                                         <span class="caret"></span>
                                                     </button>
-
-
                                                     <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu" role="menu"
                                                         aria-labelledby="button-nested">
                                                         <li role="menuitem" dropdown placement="right" [autoClose]="false"

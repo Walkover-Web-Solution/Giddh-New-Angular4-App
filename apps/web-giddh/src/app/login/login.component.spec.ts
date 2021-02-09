@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoginActions } from '../actions/login.action';
@@ -124,7 +124,7 @@ describe('Login Component', () => {
     let store: MockStore<AppState>;
     let authService: AuthService;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [LoginComponent],
             imports: [
@@ -359,9 +359,9 @@ describe('Login Component', () => {
                 htmlEl.click();
             });
 
-            it('should display login heading text in h1', async(() => {
+            it('should display login heading text in h1', waitForAsync(() => {
                 expect(
-                    fixture.debugElement.query(By.css('h1.mrB3')).nativeElement.innerText
+                    fixture.debugElement.query(By.css('h1.mr-b3')).nativeElement.innerText
                 ).toContain('Login to your secure accounting space');
             }));
 
@@ -511,11 +511,11 @@ describe('Login Component', () => {
         });
 
         describe('showForgotPasswordModal method', () => {
-            it('should display login heading text in h1', async(() => {
+            it('should display login heading text in h1', waitForAsync(() => {
                 component.showForgotPasswordModal();
 
                 expect(
-                    fixture.debugElement.query(By.css('h1.mrB3')).nativeElement.innerText
+                    fixture.debugElement.query(By.css('h1.mr-b3')).nativeElement.innerText
                 ).toContain('Login to your secure accounting space');
             }));
 

@@ -164,6 +164,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                 // }
             }
         });
+        if (this.taxRenderData?.length) {
+            this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+        }
     }
 
     public toggleTaxPopup(action: boolean) {
@@ -226,7 +229,8 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                 // In case of advance receipt only a single tax is allowed in addition to CESS
                 // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
                 // except CESS taxes
-                const atleastSingleTaxSelected: boolean = this.taxRenderData.filter((tax) => tax.isChecked && tax.type !== 'gstcess').length !== 0;
+                let singleSelectedTax = this.taxRenderData.filter((tax) => tax.isChecked && tax.type !== 'gstcess');
+                const atleastSingleTaxSelected: boolean = singleSelectedTax && singleSelectedTax.length !== 0;
                 if (atleastSingleTaxSelected) {
                     this.taxRenderData.map((taxesApplied => {
                         if ('gstcess' !== taxesApplied.type && !taxesApplied.isChecked) {
@@ -237,15 +241,21 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
                 }
             }
         }
+        setTimeout(() => {
+            if (this.taxRenderData?.length) {
+                this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
+            }
+        });
 
         this.taxAmountSumEvent.emit(this.sum);
         this.selectedTaxEvent.emit(this.selectedTaxes);
 
         let diff: boolean;
         if (this.selectedTaxes && this.selectedTaxes.length > 0) {
-            diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
+            let taxDifference = _.difference(this.selectedTaxes, this.applicableTaxes);
+            diff = taxDifference && taxDifference.length > 0;
         } else {
-            diff = this.applicableTaxes.length > 0;
+            diff = this.applicableTaxes && this.applicableTaxes.length > 0;
         }
 
         if (diff) {

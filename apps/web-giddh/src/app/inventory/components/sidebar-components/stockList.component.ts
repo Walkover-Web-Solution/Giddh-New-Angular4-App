@@ -9,20 +9,21 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InvViewService } from '../../inv.view.service';
 import { takeUntil } from 'rxjs/operators';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'stock-list',
     styleUrls: ['stockList.component.scss'],
     template: `
     <ul class="list-unstyled stock-items clearfix" [hidden]="!Groups.isOpen">
-      <li class="clearfix " *ngFor="let item of Groups.stocks" style="padding: 0px">
+      <li class="clearfix p-0" *ngFor="let item of Groups.stocks">
         <div class="in-list" [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">
-          <a (click)="OpenStock(item, $event)" style="display: flex;align-items: center;flex: 1;color: black;justify-content: space-between" class="d-flex">
+          <a (click)="OpenStock(item, $event)" class="d-flex align-items-center flex-fill justify-content-between black-color">
             <span class="span">{{item.name}}</span>
-            <span class="d-block" *ngIf="item.count" style="margin-right: 12px;" [hidden]="(activeStockUniqueName$ | async) === item.uniqueName">
+            <span class="d-block mr-r1" *ngIf="item.count" [hidden]="(activeStockUniqueName$ | async) === item.uniqueName">
          {{item.count}}</span>
           </a>
-          <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="(activeStockUniqueName$ | async) === item.uniqueName">
+          <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="!isMobileScreen && (activeStockUniqueName$ | async) === item.uniqueName">
             <i class="icon-edit-pencil"> </i>
           </button>
         </div>
@@ -41,9 +42,17 @@ export class StockListComponent implements OnInit, OnDestroy {
     @Input()
     public Groups: IGroupsWithStocksHierarchyMinItem;
     public stockUniqueName: string;
+    /* True, if mobile screen */
+    public isMobileScreen: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute, private inventoryAction: InventoryAction, private sideBarAction: SidebarAction, private invViewService: InvViewService) {
+    constructor(
+        private store: Store<AppState>,
+        private route: ActivatedRoute,
+        private inventoryAction: InventoryAction,
+        private sideBarAction: SidebarAction,
+        private invViewService: InvViewService,
+        private breakPointObserver: BreakpointObserver) {
         this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
         this.activeStockUniqueName$ = this.store.pipe(select(p => p.inventory.activeStockUniqueName), takeUntil(this.destroyed$));
     }
@@ -51,6 +60,11 @@ export class StockListComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.sub = this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.groupUniqueName = params['groupUniqueName'];
+        });
+        this.breakPointObserver.observe([
+            '(max-width:1024px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
         });
     }
 

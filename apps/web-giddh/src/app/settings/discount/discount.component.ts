@@ -3,13 +3,12 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { Observable, ReplaySubject } from 'rxjs';
-import { GroupService } from '../../services/group.service';
-import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SalesService } from '../../services/sales.service';
 
 @Component({
     selector: 'setting-discount',
@@ -35,7 +34,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
         { label: 'As per value', value: 'FIX_AMOUNT' },
         { label: 'As per percent', value: 'PERCENTAGE' }
     ];
-    public accounts$: IOption[];
+    public accounts: IOption[];
     public createRequest: CreateDiscountRequest = new CreateDiscountRequest();
     public deleteRequest: string = null;
     public discountList$: Observable<IDiscountList[]>;
@@ -51,9 +50,11 @@ export class DiscountComponent implements OnInit, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _settingsDiscountAction: SettingsDiscountActions,
-        private _groupService: GroupService, private store: Store<AppState>) {
-        this.getFlattenAccounts();
+    constructor(
+        private _settingsDiscountAction: SettingsDiscountActions,
+        private salesService: SalesService,
+        private store: Store<AppState>) {
+        this.getDiscountAccounts();
 
         this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
         this.isDiscountListInProcess$ = this.store.pipe(select(s => s.settings.discount.isDiscountListInProcess), takeUntil(this.destroyed$));
@@ -86,7 +87,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
             if (yes) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getFlattenAccounts();
+                    this.getDiscountAccounts();
                 }
             }
         });
@@ -140,29 +141,18 @@ export class DiscountComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Fetches the discount accounts
      *
+     * @memberof DiscountComponent
      */
-    public getFlattenAccounts() {
-        this._groupService.GetGroupsWithAccounts('').subscribe(result => {
-            if (result) {
-                let operatingCost = null;
-                if (result.body) {
-                    operatingCost = result.body.find(b => b.uniqueName === 'operatingcost');
-                }
-                let discount: GroupsWithAccountsResponse = null;
-                if (operatingCost) {
-                    discount = operatingCost.groups.find(f => f.uniqueName === 'discount');
-
-                    if (discount) {
-                        this.accounts$ = discount.accounts.map(dis => {
-                            return { label: dis.name, value: dis.uniqueName };
-                        });
-                    } else {
-                        this.accounts$ = [];
-                    }
-                } else {
-                    this.accounts$ = [];
-                }
+    public getDiscountAccounts(): void {
+        this.salesService.getAccountsWithCurrency('discount').subscribe(response => {
+            if (response?.body?.results) {
+                this.accounts = response.body.results.map(discount => {
+                    return { label: discount.name, value: discount.uniqueName };
+                });
+            } else {
+                this.accounts = [];
             }
         });
     }

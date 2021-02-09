@@ -5,29 +5,29 @@
 }
 
 .input-err {
-    border-color: #ce1b1b;
+    border-color: $scarlet;
 }
 
 .input-warn {
-    border-color: #f2e200;
+    border-color: $bright-yellow;
 }
 
 .btn-generate {
     margin-top: 4px;
-    color: #fff;
+    color: $white;
 }
 
 .btn-generate:disabled {
-    background: #e5e5e5;
+    background: $silver;
 }
 
 .search-form .input-group-btn {
     width: 35px;
     font-size: inherit;
-    border: 1px solid #d6d6d6;
+    border: 1px solid $gainsboro;
     text-align: center;
-    color: #999999;
-    background: #fff;
+    color: $nobel;
+    background: $white;
     border-right: 0;
     vertical-align: middle;
     line-height: 32px;
@@ -47,7 +47,7 @@
 }
 
 .dd-options:hover {
-    color: rgb(211, 95, 41);
+    color: $orange;
 }
 
 .bt-border-1px {
@@ -59,14 +59,14 @@
 }
 
 .return-body .main-wrapper {
-    background-color: #f5f5f5;
+    background-color: $gray-95;
     padding: 0;
-    border-right: 1px solid #eee;
+    border-right: 1px solid $gainsboro;
 }
 
 .return-content {
     padding: 31px 4% 15px;
-    background-color: #fff;
+    background-color: $white;
 }
 
 .btn-primary,
@@ -93,7 +93,7 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    color: #fff;
+    color: $white;
     background-color: #ea795b;
     border-color: #ea795b;
 }
@@ -137,7 +137,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .return-content .return-filed {
-    background-color: #00b177;
+    background-color: $jade-color;
 }
 
 .text-uppercase {
@@ -145,7 +145,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .text-muted {
-    color: #777;
+    color: $dark-gray;
 }
 
 .return-content .content-graph {
@@ -173,7 +173,7 @@ svg.icon.gstr-icon {
 
 .return-content .line {
     margin: 5px 18px;
-    border-bottom: 1px solid #ededed;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .return-content .line::before {
@@ -182,14 +182,14 @@ svg.icon.gstr-icon {
     width: 9px;
     height: 9px;
     border-radius: 5px;
-    background-color: #ededed;
+    background-color: $whisper-light;
     position: relative;
     top: 5px;
     right: 19px;
 }
 
 .return-content .count a {
-    color: #0f6bde;
+    color: $primary;
 }
 
 .font-xxxlarge {
@@ -197,7 +197,7 @@ svg.icon.gstr-icon {
 }
 
 .return-content .count a {
-    color: #0f6bde;
+    color: $primary;
 }
 
 .bottom-action,
@@ -242,14 +242,14 @@ svg.icon.icon-xxlg-md {
 }
 
 .btn-default {
-    color: #333;
-    background-color: #f5f5f5;
-    border-color: #ddd;
+    color: $night-rider;
+    background-color: $gray-95;
+    border-color: $gainsboro;
 }
 
 .return-body .notification {
     padding-top: 25px;
-    background: #fff;
+    background: $white;
 }
 
 .filing-demo-video {
@@ -278,13 +278,13 @@ svg.icon.icon-xxlg-md {
 }
 
 .label-default {
-    background-color: #999;
+    background-color: $nobel;
 }
 
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid $gainsboro;
 }
 
 .filing-due-date {
@@ -293,7 +293,7 @@ hr {
 
 .filing-due-date .return-details {
     margin-top: 10px;
-    border: 1px solid #eee;
+    border: 1px solid $gainsboro;
     border-radius: 4px;
 }
 
@@ -315,7 +315,7 @@ hr {
     display: inline-block;
     margin-right: 6px;
     vertical-align: middle;
-    background-color: #41aaff;
+    background-color: $vivid-blue;
 }
 
 .filing-due-date .return-details > table > tbody > tr > td:last-child {
@@ -329,7 +329,7 @@ hr {
 
 .return-body .notification .notify-title {
     font-size: 13px;
-    color: #999;
+    color: $nobel;
 }
 
 .return-body .notification .activity-graph {
@@ -348,14 +348,14 @@ hr {
     left: 4px;
     bottom: 5px;
     height: 75%;
-    border-left: 1px solid #e4e4e4;
+    border-left: 1px solid $gainsboro;
 }
 
 .return-body .notification .activity-graph .notify-circle {
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: #2a85fb;
+    background-color: $primary;
     display: inline-block;
     margin-right: 15px;
     margin-top: 4px;
@@ -374,12 +374,12 @@ hr {
 
 .notify label.font-xs.text-muted strong {
     font-weight: 600;
-    color: #777 !important;
+    color: $gray !important;
 }
 
 .font-normal {
     font-size: 13px;
-    color: #777;
+    color: $gray;
 }
 
 .return-body .notification .faq-list {
@@ -388,25 +388,25 @@ hr {
 
 .return-body .notification .faq-list li {
     padding: 6px 10px;
-    color: #428bca;
+    color: $curious-blue;
     font-size: 13px;
 }
 
 .return-body .notification .faq-list li a:hover {
-    color: #005bd0;
+    color: $primary;
 }
 
 #c-tab ::ng-deep .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
-    color: #555;
+    color: $dark-gray;
     cursor: default;
-    background-color: #fff;
-    border: 2px solid #ddd;
+    background-color: $white;
+    border: 2px solid $gainsboro;
     border-right: 0 !important;
     border-left: 0 !important;
     border-top: 0 !important;
-    border-bottom-color: #025cff;
+    border-bottom-color: $primary;
 }
 
 .daterangePicker {
@@ -425,4 +425,17 @@ hr {
 
 .rotate-90 {
     transform: rotate(-90deg);
+}
+
+.calendar-dropdown-menu{
+    z-index:10; 
+    min-height:290px;
+}
+
+.width-200{
+    width: 200px;
+}
+
+.span-btn-between{
+    margin: 5px 10px;
 }

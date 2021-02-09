@@ -53,7 +53,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
     @ViewChild('inventoryStaticTabs', {static: true}) public inventoryStaticTabs: TabsetComponent;
     /** Warehouse filter instance */
-    @ViewChild('warehouseFilter', {static: true}) warehouseFilter: ShSelectComponent;
+    @ViewChild('warehouseFilter', {static: false}) warehouseFilter: ShSelectComponent;
 
     public dataSyncOption = IsyncData;
     public currentBranch: string = null;
@@ -221,6 +221,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
+        this.saveLastState();
         if (!this.isMobileScreen) {
             this.setDefaultGroup();
         }
@@ -294,9 +295,13 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         setTimeout(() => {
             if (activeTabIndex) {
-                this.inventoryStaticTabs.tabs[activeTabIndex].active = true;
+                if(this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[activeTabIndex]) {
+                    this.inventoryStaticTabs.tabs[activeTabIndex].active = true;
+                }
             } else {
-                this.inventoryStaticTabs.tabs[this.activeTabIndex].active = true;
+                if(this.inventoryStaticTabs && this.inventoryStaticTabs.tabs && this.inventoryStaticTabs.tabs[this.activeTabIndex]) {
+                    this.inventoryStaticTabs.tabs[this.activeTabIndex].active = true;
+                }
             }
         });
     }

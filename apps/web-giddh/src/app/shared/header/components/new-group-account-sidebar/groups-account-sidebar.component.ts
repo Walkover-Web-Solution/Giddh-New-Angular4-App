@@ -1,7 +1,7 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../store/roots';
@@ -23,7 +23,8 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
     styleUrls: ['./groups-account-sidebar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy, AfterViewChecked {
+
+export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public ScrollToElement = false;
     public viewPortItems: IGroupOrAccount[];
@@ -53,7 +54,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     @Output() public resetSearchString: EventEmitter<boolean> = new EventEmitter();
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private navigateStack: any[] = [];
     /** Active group observable */
     private activeGroup$: Observable<any>;
     public currentGroup: any;
@@ -61,6 +61,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     public isGroupMoved: boolean = false;
     /* This will hold if group is deleted */
     public isGroupDeleted: boolean = false;
+    /** This will hold the search string */
+    public searchString: string = "";
 
     // tslint:disable-next-line:no-empty
     constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
@@ -99,10 +101,6 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                 }
             }
         }
-    }
-
-    public ngAfterViewInit() {
-        //
     }
 
     public ngAfterViewChecked() {
@@ -164,6 +162,10 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                 this.isGroupDeleted = true;
                 this.getGroupDetails();
             }
+        });
+
+        this.store.pipe(select(state => state.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$)).subscribe(response => {
+            this.searchString = response;
         });
     }
 
@@ -251,7 +253,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(a => activeGroup = a);
 
         if (this.isSearchingGroups) {
-            if (grps.length > 0) {
+            if (grps && grps.length > 0) {
                 let newCOL = new ColumnGroupsAccountVM(null);
                 let allGrps = [];
                 let allAccount = [];

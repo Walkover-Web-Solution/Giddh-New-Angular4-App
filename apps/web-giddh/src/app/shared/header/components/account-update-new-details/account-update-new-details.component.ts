@@ -51,6 +51,7 @@ import { digitsOnly } from '../../../helpers';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'account-update-new-details',
@@ -91,7 +92,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
         = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
-    @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
+    @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
@@ -151,12 +152,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public accountInheritedDiscounts: any[] = [];
     /** company custom fields list */
     public companyCustomFields: any[] = [];
-    /** This will handle if we need to disable country selection */
-    public disableCountrySelection: boolean = false;
+    /** This will handle if we need to disable currency selection */
+    public disableCurrencySelection: boolean = false;
     /** To check applied taxes modified  */
     public isTaxesSaveDisable$: Observable<boolean> = observableOf(true);
     /** To check applied discounts modified  */
     public isDiscountSaveDisable$: Observable<boolean> = observableOf(true);
+    /** This will hold active parent group */
+    public activeParentGroup: string = "";
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction, private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
         this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
@@ -318,7 +321,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
 
                 this.toggleStateRequired();
-                this.disableCountryIfSundryCreditor();
             }
 
         });
@@ -487,7 +489,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         for (const el of groupList) {
             if (el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
+                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses' || this.isDebtorCreditor)) {
                     result = true;
                     break;
                 }
@@ -607,7 +609,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             openingBalance: [''],
             mobileNo: [''],
             mobileCode: [''],
-            email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+            email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
             description: [''],
@@ -940,8 +942,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
-            let currencyCode = this.countryCurrency[event.value];
-            this.addAccountForm.get('currency').setValue(currencyCode);
+
+            if(!this.disableCurrencyIfSundryCreditor()) {
+                let currencyCode = this.countryCurrency[event.value];
+                this.addAccountForm.get('currency').setValue(currencyCode);
+            }
+
             this.getStates(event.value);
             this.getOnboardingForm(event.value);
             this.toggleStateRequired();
@@ -966,13 +972,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (parent[1]) {
                 this.isParentDebtorCreditor(parent[1].uniqueName);
             }
-            this.isGroupSelected.emit(event.value);
+            this.isGroupSelected.emit(event);
         }
     }
 
     public isParentDebtorCreditor(activeParentgroup: string) {
-        this.disableCountryIfSundryCreditor(activeParentgroup);
-
+        this.activeParentGroup = activeParentgroup;
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -1106,10 +1111,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (res.country.currency) {
                         this.selectedCountryCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
-                        if (selectedAcountCurrency) {
+                        if(selectedAcountCurrency && !this.disableCurrencyIfSundryCreditor()) {
                             this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
                             this.selectedCurrency = selectedAcountCurrency;
-                        } else {
+                        } else if(!this.disableCurrencyIfSundryCreditor()) {
                             this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
                         }
@@ -1208,7 +1213,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeAccount$.pipe(take(1)).subscribe(p => {
             activeAccount = p;
             if (!this.showBankDetail) {
-                if (p.parentGroups) {
+                if (p && p.parentGroups) {
                     p.parentGroups.forEach(grp => {
                         this.showBankDetail = grp.uniqueName === "sundrycreditors" ? true : false;
                         return;
@@ -1580,16 +1585,28 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * This will disable country field if selected group or parent group is sundry creditor
+     * This will disable currency field if selected group or parent group is sundry creditor
      *
      * @param {string} [groupName]
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public disableCountryIfSundryCreditor(groupName?: string): void {
-        if((groupName && groupName === "sundrycreditors") || this.activeGroupUniqueName === "sundrycreditors") {
-            this.disableCountrySelection = true;
+    public get disableCurrency(): boolean {
+        return this.disableCurrencyIfSundryCreditor();
+    }
+
+    /**
+     * This will disable currency field if selected group or parent group is sundry creditor
+     *
+     * @returns {boolean}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public disableCurrencyIfSundryCreditor(): boolean {
+        let groupName = (this.addAccountForm && this.addAccountForm.get('activeGroupUniqueName')) ? this.addAccountForm.get('activeGroupUniqueName').value : "";
+        if(groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") {
+            this.addAccountForm.get('currency').setValue(this.companyCurrency);
+            return true;
         } else {
-            this.disableCountrySelection = false;
+            return false;
         }
     }
 

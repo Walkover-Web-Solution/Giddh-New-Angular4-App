@@ -36,7 +36,7 @@ import { userLoginStateEnum, OrganizationType } from '../../models/user-login-st
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { RESTRICTED_BRANCH_ROUTES, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -82,6 +82,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('navigationModal', {static: true}) public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('dateRangePickerCmp', {static: true}) public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown', {static: true}) public companyDropdown: BsDropdownDirective;
+    /** Switch branch dropdown */
+    @ViewChild('subBranchDropdown', {static: false}) public subBranchDropdown: BsDropdownDirective;
     @ViewChild('supportTab', {static: true}) public supportTab: TabsetComponent;
     @ViewChild('searchCmpTextBox', {static: true}) public searchCmpTextBox: ElementRef;
     @ViewChild('expiredPlan', {static: true}) public expiredPlan: ModalDirective;
@@ -276,12 +278,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                if((this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")) && !this.generalService.getSessionStorage("previousPage")) {
+                if ((event.url.includes("/pages/settings") || event.url.includes("/pages/user-details")) && !this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
                 }
 
-                if(!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && this.generalService.getSessionStorage("previousPage")) {
+                if(!event.url.includes("/pages/settings") && !event.url.includes("/pages/user-details") && this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.removeSessionStorage("previousPage");
+                }
+                if (this.subBranchDropdown) {
+                    this.subBranchDropdown.hide();
                 }
                 this.addClassInBodyIfPageHasTabs();
             }
@@ -370,6 +375,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
                             this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            if (!this.activeCompanyForDb) {
+                                this.activeCompanyForDb = new CompAidataModel();
+                            }
                             this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
                             this.activeCompanyForDb.uniqueName = this.currentBranch ? this.currentBranch.uniqueName : ''
                         }
@@ -946,6 +954,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             e.stopPropagation();
         }
         this.companyDropdown.isOpen = false;
+        if (this.subBranchDropdown) {
+            this.subBranchDropdown.hide();
+        }
         this.forceOpenNavigation = false;
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
@@ -1008,6 +1019,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         e.preventDefault();
         e.stopPropagation();
+        if (this.subBranchDropdown) {
+            this.subBranchDropdown.hide();
+        }
         this.onItemSelected(acc);
     }
 
@@ -1190,6 +1204,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (response && response.body) {
                 if (screen.width <= 767 || isCordova) {
                     window.location.href = '/pages/mobile-home';
+                } else if (isElectron) {
+                    this.router.navigate([response.body.lastState]);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 200);
                 } else {
                     window.location.href = response.body.lastState;
                 }
@@ -1420,35 +1439,36 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (this.modelRef) {
             this.modelRef.hide();
         }
-
-        if (item && item.type === 'MENU') {
-            if (item.additional && item.additional.tab) {
-                if (item.uniqueName.includes('?')) {
-                    item.uniqueName = item.uniqueName.split('?')[0];
-                }
-                this.router.navigate([item.uniqueName], {
-                    queryParams: {
-                        tab: item.additional.tab,
-                        tabIndex: item.additional.tabIndex
+        setTimeout(() => {
+            if (item && item.type === 'MENU') {
+                if (item.additional && item.additional.tab) {
+                    if (item.uniqueName.includes('?')) {
+                        item.uniqueName = item.uniqueName.split('?')[0];
                     }
-                });
+                    this.router.navigate([item.uniqueName], {
+                        queryParams: {
+                            tab: item.additional.tab,
+                            tabIndex: item.additional.tabIndex
+                        }
+                    });
+                } else {
+                    this.router.navigate([item.uniqueName]);
+                }
             } else {
-                this.router.navigate([item.uniqueName]);
+                // direct account scenario
+                let url = `ledger/${item.uniqueName}`;
+                // if (!this.isLedgerAccSelected) {
+                //   this.navigateToUser = true;
+                // }
+                if (!isCtrlClicked) {
+                    this.router.navigate([url]); // added link in routerLink
+                }
             }
-        } else {
-            // direct account scenario
-            let url = `ledger/${item.uniqueName}`;
-            // if (!this.isLedgerAccSelected) {
-            //   this.navigateToUser = true;
-            // }
-            if (!isCtrlClicked) {
-                this.router.navigate([url]); // added link in routerLink
-            }
-        }
-        // save data to db
-        item.time = +new Date();
-        let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
-        this.doEntryInDb(entity, item, fromInvalidState);
+            // save data to db
+            item.time = +new Date();
+            let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
+            this.doEntryInDb(entity, item, fromInvalidState);
+        }, 200);
     }
 
     public filterCompanyList(ev) {

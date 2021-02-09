@@ -30,6 +30,9 @@ import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interf
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
+import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'account-add-new-details',
@@ -50,9 +53,42 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public showBankDetail: boolean = false;
     @Input() public showVirtualAccount: boolean = false;
     @Input() public isDebtorCreditor: boolean = true;
+    /** True when this component is used in ledger, required as ledger skips the
+     * top level hierarchy groups for creation of new account
+     */
+    @Input() public isLedgerModule: boolean;
+    /** True, if new service is created through this component.
+     * Used to differentiate between new customer/vendor creation and service creation
+     * as they both need the groups to be shown in a particular category,
+     * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+     * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+     * 'sundrycreditors'.
+     * If a new service is created, then if the service is created in Invoice then it will have
+     * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+     * So if isServiceCreation is true, then directly 'selectedGroupUniqueName' will be
+     * used to fetch groups
+    */
+   @Input() public isServiceCreation: boolean;
+   /** True, if new customer/vendor account is created through this component.
+    * Used to differentiate between new customer/vendor creation and service creation
+    * as they both need the groups to be shown in a particular category,
+    * for eg. If a new customer/vendor is created in Sales invoice then all the groups shown in the dropdown
+    * should be of category 'sundrydebtors'. Similarly, for PO/PB the group category should be
+    * 'sundrycreditors'.
+    * If a new service is created, then if the service is created in Invoice then it will have
+    * categroy 'revenuefromoperations' and if it is in PO/PB then category will be 'operatingcost'.
+    * So if isCustomerCreation is true, then directly 'selectedGrpUniqueName' will be
+    * used to fetch groups
+   */
+   @Input() public isCustomerCreation: boolean;
+    /** True, if the module doesn't depend on flatten APIs */
+    @Input() public isFlattenRemoved: boolean;
+    /** True if bank category account is selected */
+    @Input() public isBankAccount: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
-    @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
+    @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
 
     public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public showOtherDetails: boolean = false;
@@ -90,8 +126,27 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public companyCustomFields: any[] = [];
     /** Observable for selected active group  */
     private activeGroup$: Observable<any>;
-    /** This will handle if we need to disable country selection */
-    public disableCountrySelection: boolean = false;
+    /** This will handle if we need to disable currency selection */
+    public disableCurrencySelection: boolean = false;
+    /** This will hold active parent group */
+    public activeParentGroup: string = "";
+
+    /** Stores the search results pagination details for group dropdown */
+    public groupsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for group dropdown */
+    public defaultGroupSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for group dropdown */
+    public preventDefaultGroupScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for group dropdown */
+    public defaultGroupPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
 
     constructor(
         private _fb: FormBuilder,
@@ -125,8 +180,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }
-
-        this.disableCountryIfSundryCreditor();
 
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
@@ -279,32 +332,36 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public getAccount() {
-        this.flattenGroups$.subscribe(flattenGroups => {
-            if (flattenGroups) {
-                let items: IOption[] = flattenGroups.filter(grps => {
-                    return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-                }).map((m: any) => ({value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups}));
-                this.flatGroupsOptions = items;
-                if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
-                    let selectedGroupDetails;
+        if (this.isLedgerModule || this.isFlattenRemoved) {
+            this.loadDefaultGroupsSuggestions();
+        } else {
+            this.flattenGroups$.subscribe(flattenGroups => {
+                if (flattenGroups) {
+                    let items: IOption[] = flattenGroups.filter(grps => {
+                        return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
+                    }).map((m: any) => ({value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups}));
+                    this.flatGroupsOptions = items;
+                    if (this.flatGroupsOptions.length > 0 && this.activeGroupUniqueName) {
+                        let selectedGroupDetails;
 
-                    this.flatGroupsOptions.forEach(res => {
-                        if (res.value === this.activeGroupUniqueName) {
-                            selectedGroupDetails = res;
-                        }
-                    })
-                    if (selectedGroupDetails) {
-                        if (selectedGroupDetails.additional) {
-                            let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
-                            if (parentGroup) {
-                                this.isParentDebtorCreditor(parentGroup.uniqueName);
+                        this.flatGroupsOptions.forEach(res => {
+                            if (res.value === this.activeGroupUniqueName) {
+                                selectedGroupDetails = res;
+                            }
+                        })
+                        if (selectedGroupDetails) {
+                            if (selectedGroupDetails.additional) {
+                                let parentGroup = selectedGroupDetails.additional.length > 1 ? selectedGroupDetails.additional[1] : '';
+                                if (parentGroup) {
+                                    this.isParentDebtorCreditor(parentGroup.uniqueName);
+                                }
                             }
                         }
+                        this.toggleStateRequired();
                     }
-                    this.toggleStateRequired();
                 }
-            }
-        });
+            });
+        }
     }
 
     public setCountryByCompany(company: CompanyResponse) {
@@ -342,7 +399,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             openingBalance: [''],
             mobileNo: [''],
             mobileCode: [''],
-            email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+            email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
             description: [''],
@@ -643,8 +700,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
-            let currencyCode = this.countryCurrency[event.value];
-            this.addAccountForm.get('currency').setValue(currencyCode);
+            if(!this.disableCurrencyIfSundryCreditor()) {
+                let currencyCode = this.countryCurrency[event.value];
+                this.addAccountForm.get('currency').setValue(currencyCode);
+            }
             this.getStates(event.value);
             this.toggleStateRequired();
             this.resetGstStateForm();
@@ -669,18 +728,22 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             // if (parent[1]) {
             //     this.isParentDebtorCreditor(parent[1].uniqueName);
             // }
-            this.isGroupSelected.emit(event.value);
+            this.isParentDebtorCreditor(this.activeGroupUniqueName);
+            this.isGroupSelected.emit(event);
             this.toggleStateRequired();
         }
     }
 
     public isParentDebtorCreditor(activeParentgroup: string) {
-        this.disableCountryIfSundryCreditor(activeParentgroup);
-
+        this.activeParentGroup = activeParentgroup;
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
+
+            if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                this.staticTabs.tabs[0].active = true;
+            }
 
             if (accountAddress.controls.length === 0) {
                 this.addBlankGstForm();
@@ -693,6 +756,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
             this.addAccountForm.get('addresses').reset();
+
+            if(this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
+                this.staticTabs.tabs[0].active = false;
+            }
         }
     }
 
@@ -732,8 +799,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({label: res[key].code, value: res[key].code});
-
                 });
+
                 this.currencySource$ = observableOf(this.currencies);
                 setTimeout(() => {
                     // Timeout is used as value were not updated in form
@@ -1044,16 +1111,147 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * This will disable country field if selected group or parent group is sundry creditor
+     * This will disable currency field if selected group or parent group is sundry creditor
      *
      * @param {string} [groupName]
      * @memberof AccountAddNewDetailsComponent
      */
-    public disableCountryIfSundryCreditor(groupName?: string): void {
-        if((groupName && groupName === "sundrycreditors") || this.activeGroupUniqueName === "sundrycreditors") {
-            this.disableCountrySelection = true;
+    public get disableCurrency(): boolean {
+        return this.disableCurrencyIfSundryCreditor();
+    }
+
+    /**
+     * This will disable currency field if selected group or parent group is sundry creditor
+     *
+     * @returns {boolean}
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public disableCurrencyIfSundryCreditor(): boolean {
+        let groupName = (this.addAccountForm && this.addAccountForm.get('activeGroupUniqueName')) ? this.addAccountForm.get('activeGroupUniqueName').value : "";
+        if(groupName === "sundrycreditors" || this.activeParentGroup === "sundrycreditors") {
+            this.addAccountForm.get('currency').setValue(this.companyCurrency);
+            return true;
         } else {
-            this.disableCountrySelection = false;
+            return false;
         }
+    }
+
+    /**
+     * Search query change handler for group
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.groupsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultGroupScrollApiCall &&
+            (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                count: API_COUNT_LIMIT,
+            }
+            if (this.isLedgerModule) {
+                // Remove the top hierarchy of groups
+                requestObject.removeTop = true;
+            }
+            if (this.isServiceCreation) {
+                // Group requires the group uniquename whose child groups will be fetched from API
+                // The result will not include this group but will only include its children
+                requestObject.group = this.activeGroupUniqueName;
+            }
+            if (this.isCustomerCreation) {
+                // Group requires the group uniquename whose child groups will be fetched from API
+                requestObject.group = this.activeGroupUniqueName;
+                // Include the parent group provided in 'group' param in fetched results
+                // The result will include this group and its children
+                requestObject.includeSearchedGroup = true;
+            }
+            this.groupService.searchGroups(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name}`,
+                            additional: result.parentGroups
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.flatGroupsOptions = searchResults;
+                    } else {
+                        this.flatGroupsOptions = [
+                            ...this.flatGroupsOptions,
+                            ...searchResults
+                        ];
+                    }
+                    this.groupsSearchResultsPaginationData.page = data.body.page;
+                    this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+            this.groupsSearchResultsPaginationData.page = this.defaultGroupPaginationData.page;
+            this.groupsSearchResultsPaginationData.totalPages = this.defaultGroupPaginationData.totalPages;
+            this.preventDefaultGroupScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultGroupScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for group dropdown
+     *
+     * @returns null
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public handleGroupScrollEnd(): void {
+        if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
+            this.onGroupSearchQueryChanged(
+                this.groupsSearchResultsPaginationData.query,
+                this.groupsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.groupsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name}`,
+                                additional: result.parentGroups
+                            }
+                        }) || [];
+                        this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
+                        this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+                        this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default group list for advance search
+     *
+     * @private
+     * @memberof AccountAddNewDetailsComponent
+     */
+    private loadDefaultGroupsSuggestions(): void {
+        this.onGroupSearchQueryChanged('', 1, (response) => {
+            this.defaultGroupSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name}`,
+                    additional: result.parentGroups
+                }
+            }) || [];
+            this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
+            this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
+            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+        });
     }
 }

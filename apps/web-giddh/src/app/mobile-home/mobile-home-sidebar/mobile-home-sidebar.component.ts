@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/cor
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ReplaySubject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../services/general.service';
-import { CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { cloneDeep } from '../../lodash-optimized';
 import { LoginActions } from '../../actions/login.action';
 import { AuthService } from '../../theme/ng-social-login-module/index';
+import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'mobile-home-sidebar',
@@ -28,6 +29,10 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the email of user */
     public userEmail: any;
+    /** Stores the details of the current branch */
+    public currentBranch: any;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
 
     constructor(private store: Store<AppState>, private loginAction: LoginActions, private socialAuthService: AuthService, private generalService: GeneralService) {
 
@@ -39,6 +44,7 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
      * @memberof MobileHomeSidebarComponent
      */
     public ngOnInit(): void {
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany) {
                 this.selectedCompany = cloneDeep(activeCompany);
@@ -52,6 +58,31 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.companyInitials = companyInitials.join(" ");
+            }
+        });
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            if (organization && organization.details && organization.details.branchDetails) {
+                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
+                this.generalService.currentOrganizationType = organization.type;
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                        }
+                    });
+                }
+            } else {
+                this.generalService.currentOrganizationType = OrganizationType.Company;
+            }
+        });
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentBranch = response.find(branch =>
+                        (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                } else {
+                    this.currentBranch = '';
+                }
             }
         });
 

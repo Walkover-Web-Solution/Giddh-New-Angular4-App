@@ -1,5 +1,7 @@
+@import "../../../../assets/css/color.scss";
+
 header {
-    background: #27273b;
+    background: $valhalla;
     padding: 10px 0;
     .navbar-brand {
         height: auto;
@@ -12,7 +14,7 @@ header {
         margin-top: 2px;
         li {
             a {
-                color: #fff;
+                color: $white;
                 padding: 10px 15px;
                 &:hover {
                     border-radius: 2px;

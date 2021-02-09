@@ -51,7 +51,7 @@ const fileGstrOptions = [
 @Component({
     selector: 'invoice-purchase',
     templateUrl: './purchase.invoice.component.html',
-    styleUrls: ['purchase.invoice.component.css'],
+    styleUrls: ['purchase.invoice.component.scss'],
     providers: [
         {
             provide: BsDropdownConfig, useValue: { autoClose: true },

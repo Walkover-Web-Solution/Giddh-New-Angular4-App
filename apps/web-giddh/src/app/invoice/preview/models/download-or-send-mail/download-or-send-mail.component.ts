@@ -16,20 +16,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'download-or-send-mail-invoice',
     templateUrl: './download-or-send-mail.component.html',
-    styles: [`
-    .dropdown-menu {
-      width: 400px;
-    }
-
-    .dropdown-menu .form-group {
-      padding: 20px;
-      margin-bottom: 0
-    }
-
-    .dropdown-menu.open {
-      display: block
-    }
-  `]
+    styleUrls: ['./download-or-send-mail.component.scss']
 })
 
 export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
@@ -39,7 +26,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
     @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
     @Output() public downloadInvoiceEvent: EventEmitter<object> = new EventEmitter();
-    @ViewChild('pdfViewer', {static: true}) public pdfViewer;
+    @ViewChild('pdfViewer', {static: false}) public pdfViewer;
 
     public showEmailTextarea: boolean = false;
     public base64StringForModel: any;
@@ -106,7 +93,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
                     this.base64Data = this.base64StringForModel;
                     const blob = b64toBlob(e.srcElement.result.split(',')[1], 'application/pdf');
-                    if (this.isElectron) {
+                    if (this.isElectron && this.pdfViewer) {
                         this.pdfViewer.pdfSrc = blob; // pdfSrc can be Blob or Uint8Array
                         this.pdfViewer.refresh();
                     }

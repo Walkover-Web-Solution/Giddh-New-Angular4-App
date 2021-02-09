@@ -268,6 +268,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** True if stock report API is in progress */
+    public stockReportInProcess: boolean = false;
 
     /**
      * TypeScript public modifiers
@@ -331,6 +333,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             this.initReport();
         }
 
+        this.store.pipe(select(appsStore => appsStore.inventory.stockReportInProcess), takeUntil(this.destroyed$)).subscribe(res => {
+            this.stockReportInProcess = res;
+        });
 
         // get view from sidebar while clicking on group/stock
         this.invViewService.getActiveView().subscribe(viewActiveStock => {
@@ -927,12 +932,16 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     /**
-     * Hide's modal
+     * Hide modal
      *
+     * @param {boolean} isNoteCreatedSuccessfully True, if new note was created successfully, load the inventory report
      * @memberof InventoryStockReportComponent
      */
-    public hideModal(): void {
+    public hideModal(isNoteCreatedSuccessfully?: boolean): void {
         this.modalRef.hide();
+        if (isNoteCreatedSuccessfully) {
+            this.getStockReport(true);
+        }
     }
 
     /**

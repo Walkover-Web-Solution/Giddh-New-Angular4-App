@@ -109,7 +109,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         date: null,
         voucherNo: null,
         senderReceiver: null,
-        warehouseName: null
+        warehouseName: null,
+        sender: null,
+        receiver: null
     };
     public branchTransferTempPostRequestParams: any = {
         amountOperator: null,
@@ -304,7 +306,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public openModal(): void {
         this.modalRef = this.modalService.show(
             this.branchtransfertemplate,
-            Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pt-85' })
+            Object.assign({}, { class: 'modal-lg receipt-note-modal  mb-0 pd-t85' })
         );
     }
 
@@ -374,6 +376,10 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.branchTransferPostRequestParams.voucherType = null;
         this.branchTransferPostRequestParams.amountOperator = null;
         this.branchTransferPostRequestParams.amount = null;
+        this.branchTransferPostRequestParams.sender = null;
+        this.branchTransferPostRequestParams.receiver = null;
+        this.branchTransferPostRequestParams.fromWarehouse = null;
+        this.branchTransferPostRequestParams.toWarehouse = null;
         this.branchTransferTempPostRequestParams.voucherType = null;
         this.branchTransferTempPostRequestParams.amountOperator = null;
         this.branchTransferTempPostRequestParams.amount = null;
@@ -385,7 +391,15 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public checkIfFiltersApplied(): boolean {
-        if (this.branchTransferPostRequestParams.senderReceiver || this.branchTransferPostRequestParams.warehouseName || this.branchTransferPostRequestParams.voucherType || this.branchTransferPostRequestParams.amountOperator || this.branchTransferPostRequestParams.amount) {
+        if (
+            this.branchTransferPostRequestParams.senderReceiver ||
+            this.branchTransferPostRequestParams.fromWarehouse ||
+            this.branchTransferPostRequestParams.toWarehouse ||
+            this.branchTransferPostRequestParams.sender ||
+            this.branchTransferPostRequestParams.receiver ||
+            this.branchTransferPostRequestParams.voucherType ||
+            this.branchTransferPostRequestParams.amountOperator ||
+            this.branchTransferPostRequestParams.amount) {
             return true;
         } else {
             return false;

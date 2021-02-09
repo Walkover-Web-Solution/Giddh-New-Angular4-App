@@ -98,8 +98,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public selectedGroupForCreateAcc: 'sundrydebtors' | 'sundrycreditors' = 'sundrydebtors';
     public cashFreeAvailableBalance: number;
     public payoutForm: CashfreeClass;
-    public bankAccounts$: Observable<IOption[]>;
-    public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
     public payoutObj: CashfreeClass = new CashfreeClass();
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
     public moment = moment;
@@ -192,7 +190,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     ];
     public selectedItems: string[] = [];
     public totalSales: number = 0;
-    public totalDue: number = 0;
     public totalReceipts: number = 0;
     /** Total customers */
     public totalCustomers = 0;
@@ -249,6 +246,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** Stores the current branch data */
     public currentBranchData: any;
+    /** This will hold opening balance object */
+    public openingBalance: any;
+    /** This will hold closing balance amount */
+    public closingBalance: number = 0;
 
     constructor(
         private store: Store<AppState>,
@@ -272,7 +273,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-        this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
                 this.dueAmountReportRequest.page = data.page;
@@ -362,22 +362,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.toggleAccountAsidePane();
                     this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 }
-            }
-        });
-
-        this.flattenAccountsStream$.subscribe(data => {
-
-            if (data) {
-                let accounts: IOption[] = [];
-                let bankAccounts: IOption[] = [];
-                forEach(data, (item) => {
-                    accounts.push({ label: item.name, value: item.uniqueName });
-                    let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
-                    if (findBankIndx !== -1) {
-                        bankAccounts.push({ label: item.name, value: item.uniqueName });
-                    }
-                });
-                this.bankAccounts$ = observableOf(accounts);
             }
         });
 
@@ -471,7 +455,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                         };
                     }
                     this.currentBranchData = _.cloneDeep(this.currentBranch);
-                    this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : "") + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                    this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : "") + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
                 }
             } else {
                 if (this._generalService.companyUniqueName) {
@@ -835,7 +819,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             params: {
                 from: this.fromDate,
                 to: this.toDate,
-                groupUniqueName: groupsUniqueName
+                groupUniqueName: groupsUniqueName,
+                sortBy: this.key,
+                sort: this.order
             }
         };
         // uncomment it
@@ -1067,7 +1053,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             params: {
                 from: this.fromDate,
                 to: this.toDate,
-                groupUniqueName: this.groupUniqueName
+                groupUniqueName: this.groupUniqueName,
+                sortBy: this.key,
+                sort: this.order
             },
             branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
         };
@@ -1130,7 +1118,30 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).subscribe((res) => {
             if (res && res.body && res.status === 'success') {
-                this.totalDue = Number(Math.abs(res.body.debitTotal - res.body.creditTotal).toFixed(this.giddhDecimalPlaces)) || 0;
+                this.openingBalance = res.body.openingBalance;
+
+                if(this.activeTab === "customer" && this.openingBalance) {
+                    if(this.openingBalance.type === "CREDIT") {
+                        this.closingBalance = Number("-"+this.openingBalance.amount) || 0;
+                    } else if(this.openingBalance.type === "DEBIT") {
+                        this.closingBalance = Number(this.openingBalance.amount) || 0;
+                    }
+                }
+
+                if(this.activeTab === "vendor" && this.openingBalance) {
+                    if(this.openingBalance.type === "CREDIT") {
+                        this.closingBalance = Number(this.openingBalance.amount) || 0;
+                    } else if(this.openingBalance.type === "DEBIT") {
+                        this.closingBalance = Number("-"+this.openingBalance.amount) || 0;
+                    }
+                }
+
+                if(this.activeTab === "customer") {
+                    this.closingBalance = Number((this.closingBalance + (res.body.debitTotal - res.body.creditTotal)).toFixed(this.giddhDecimalPlaces)) || 0;
+                } else {
+                    this.closingBalance = Number((this.closingBalance + (res.body.creditTotal - res.body.debitTotal)).toFixed(this.giddhDecimalPlaces)) || 0;
+                }
+
                 this.totalSales = (this.activeTab === 'customer' ? res.body.debitTotal : res.body.creditTotal) || 0;
                 this.totalReceipts = (this.activeTab === 'customer' ? res.body.creditTotal : res.body.debitTotal) || 0;
 

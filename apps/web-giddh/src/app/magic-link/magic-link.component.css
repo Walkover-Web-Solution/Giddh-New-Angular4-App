@@ -19,7 +19,7 @@
     font-weight: regular;
 }
 
-.account_name {
+.account-name {
     font-weight: 300;
     font-size: 14px;
 }
@@ -37,15 +37,15 @@
     color: #000;
 }
 
-.bg-f9 {
+.light-gray-bg {
     background: #f9f9f9;
 }
 
-.bg-gr {
+.gray-bg {
     background: #ccc;
 }
 
-.bg-wh {
+.white-bg {
     background: #fff;
 }
 
@@ -57,7 +57,7 @@
     width: 50%;
 }
 
-.bg-bl {
+.blue-bg {
     background: #27273b;
 }
 
@@ -78,8 +78,8 @@ table th[class*="col-"] {
     padding: 8px;
 }
 
-.compoundEntry td,
-.compoundEntry td .form-control {
+.compound-entry td,
+.compound-entry td .form-control {
     background: #fddfa4 !important;
     border-left: 1px solid #ccc;
 }
@@ -104,7 +104,7 @@ table th[class*="col-"] {
     border: 0;
 }
 
-.pd350 {
+.pd-t350 {
     padding-bottom: 350px;
 }
 
@@ -141,8 +141,8 @@ table th[class*="col-"] {
 
 /*footer style start*/
 
-#contact p.mrT3,
-.mrT3 {
+#contact p.mr-t3,
+.mr-t3 {
     margin-top: 30px;
 }
 
@@ -156,7 +156,7 @@ table th[class*="col-"] {
     /* font-family: 'Arvo', serif; */
 }
 
-.headerline {
+.header-line {
     font-size: 30px;
     /* font-family: 'Arvo', serif; */
     color: white;
@@ -364,7 +364,7 @@ h4 {
         line-height: 28px;
     }
 
-    :host ::ng-deep .headerline {
+    :host ::ng-deep .header-line {
         font-size: 18px;
     }
 
@@ -453,7 +453,7 @@ h4 {
         font-size: 16 !important;
     }
 
-    .headerline {
+    .header-line {
         font-size: 22px !important;
     }
 }

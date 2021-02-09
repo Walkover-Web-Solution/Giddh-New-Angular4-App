@@ -1,7 +1,7 @@
 <hamburger-menu [pageHeading]="'GST'"></hamburger-menu>
 <div class="column content-column gst-filing-container navs-list">
     <div class="tax-engine">
-        <div class="hidden-print gstr-summary-head"> <span class="font-xlarge d-inline-block pr-15"> <a href="javascript:void(0);"
+        <div class="hidden-print gstr-summary-head"> <span class="font-xlarge d-inline-block pd-r15"> <a href="javascript:void(0);"
                     [routerLink]="['/gstfiling']" id="ember2007" class="ember-view cursor-pointer"> <svg id="Layer_1"
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon icon-lg text-middle">
                         <path
@@ -50,8 +50,8 @@
                         <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false" (clickOutside)="downloadReport.hide()" [attachOutsideOnClick]="true">
                             <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue"> <i
                                     class="icon-download"></i> Download</button>
-                            <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-triggers-manual" style="min-width: 350px;">
-                                <div class="pdL2 pdR2 pd-1">
+                            <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-triggers-manual">
+                                <div class="pd-l2 pd-r2 pd-1">
                                     <div class="form-group">
                                         <label>Email Id <i class='fa fa-info-circle' tooltip-placement="top"
                                                 tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
@@ -160,7 +160,7 @@
                     <!---->
                 </div>
                 <div class="summary-content">
-                    <table border="1" style="width: 100%" class="table gstr-3b-user font-medium">
+                    <table border="1" class="table gstr-3b-user font-medium w-100">
                         <tbody>
                             <tr>
                                 <td width="2%"><b>1.</b></td>
@@ -179,7 +179,7 @@
                     <h4>3.1 Details of Outward Supplies and inward supplies liable to reverse charge</h4>
                     <table border="1 " class="table gstr-3b-report">
                         <thead>
-                            <tr style="background-color:#e5e5e5; color:black; " class="text-muted ">
+                            <tr class="text-muted bg-thead">
                                 <td> Nature of Supply </td>
                                 <td class="text-right "> Taxable Value </td>
                                 <td class="text-right "> Integrated Tax </td>
@@ -189,8 +189,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="background-color:#e5e5e5; color:black; ">
-                                <td style="padding-right:120px; " class="text-center ">1</td>
+                            <tr class="bg-thead">
+                                <td class="text-center pd-r120">1</td>
                                 <td class="text-center ">2</td>
                                 <td class="text-center ">3</td>
                                 <td class="text-center ">4</td>
@@ -264,16 +264,16 @@
                     <h4>3.2 Of the supplies shown in 3.1 (a) above, details of inter-State supplies made to unregistered persons, composition taxable persons and UIN holders</h4>
                     <table border="1 " class="table gstr-3b-report ">
                         <thead>
-                            <tr style="background:#f7f8fa; color:black; " class="text-muted ">
-                                <td style="width:250px; "></td>
+                            <tr class="text-muted bg-thead-dark">
+                                <td width="250px"></td>
                                 <td class="text-center "> Place Of Supply </td>
                                 <td class="text-right "> Taxable Value </td>
                                 <td class="text-right "> Integrated Tax </td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="background-color:#e5e5e5; color:black; ">
-                                <td style="padding-right:15px; " class="text-center ">1</td>
+                            <tr class="bg-thead">
+                                <td class="text-center pd-r15">1</td>
                                 <td class="text-center ">2</td>
                                 <td class="text-center ">3</td>
                                 <td class="text-center ">4</td>
@@ -282,7 +282,7 @@
                                 <td colspan="4 "> Supplies made to Unregistered Persons </td>
                             </tr>
                             <ng-container *ngIf="gstr3BData?.inter_sup?.unreg_details">
-                                <tr style="pointer-events:none;" *ngFor="let item of gstr3BData?.inter_sup?.unreg_details">
+                                <tr class="pointer-none" *ngFor="let item of gstr3BData?.inter_sup?.unreg_details">
                                     <td class="text-right">&nbsp;</td>
                                     <td class="text-center">{{item?.pos | giddhCurrency}}</td>
                                     <td class="text-right">{{item?.txval | giddhCurrency}}</td>
@@ -293,7 +293,7 @@
                                 <td colspan="4 "> Supplies made to Composition Taxable Persons </td>
                             </tr>
                             <ng-container *ngIf="gstr3BData?.inter_sup?.comp_details">
-                                <tr style="pointer-events:none;" *ngFor="let item of gstr3BData?.inter_sup?.comp_details">
+                                <tr class="pointer-none" *ngFor="let item of gstr3BData?.inter_sup?.comp_details">
                                     <td class="text-right">&nbsp;</td>
                                     <td class="text-center">{{item?.pos | giddhCurrency}}</td>
                                     <td class="text-right">{{item?.txval | giddhCurrency}}</td>
@@ -304,7 +304,7 @@
                                 <td colspan="4 "> Supplies made to UIN holders </td>
                             </tr>
                             <ng-container *ngIf="gstr3BData?.inter_sup?.uin_details">
-                                <tr style="pointer-events:none;" *ngFor="let item of gstr3BData?.inter_sup?.uin_details">
+                                <tr class="pointer-none" *ngFor="let item of gstr3BData?.inter_sup?.uin_details">
                                     <td class="text-right">&nbsp;</td>
                                     <td class="text-center">{{item?.pos | giddhCurrency}}</td>
                                     <td class="text-right">{{item?.txval | giddhCurrency}}</td>
@@ -318,7 +318,7 @@
                     <h4>4. Eligible ITC</h4>
                     <table border="1 " class="table gstr-3b-report ">
                         <thead>
-                            <tr style="color:black; background-color:#e5e5e5; " class="text-muted ">
+                            <tr class="text-muted bg-thead">
                                 <td> Details </td>
                                 <td class="text-right "> Integrated Tax </td>
                                 <td class="text-right "> Central Tax </td>
@@ -327,8 +327,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="background-color:#e5e5e5; color:black; ">
-                                <td style="padding-right:160px; " class="text-center ">1</td>
+                            <tr class="bg-thead">
+                                <td class="text-center pd-r160">1</td>
                                 <td class="text-center ">2</td>
                                 <td class="text-center ">3</td>
                                 <td class="text-center ">4</td>
@@ -459,15 +459,15 @@
                     <h4>5. Values of exempt, nil-rated and non-GST inward supplies </h4>
                     <table border="1 " class="table gstr-3b-report ">
                         <thead>
-                            <tr style="color:black; background-color:#e5e5e5; " class="text-muted ">
+                            <tr class="text-muted bg-thead">
                                 <td class="text-left "> Nature of Supply </td>
                                 <td class="text-right "> Inter-State Supplies </td>
                                 <td class="text-right "> Intra-State Supplies </td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="background-color:#e5e5e5; color:black; ">
-                                <td style="padding-right:190px; " class="text-center ">1</td>
+                            <tr class="bg-thead">
+                                <td class="text-center pd-r190">1</td>
                                 <td class="text-center ">2</td>
                                 <td class="text-center ">3</td>
                             </tr>
@@ -528,9 +528,9 @@
 
             </div> -->
             <div class="transactions-overview" *ngIf="selectedGstr3BTab==='filing'">
-                <div class="gstr-transactions-summary mr-t4 mrB4 text-center">
+                <div class="gstr-transactions-summary mr-t4 mr-b4 text-center">
 
-                    <div class="gstReturnDate">
+                    <div class="gst-return-date">
                         <img src="assets/images/return-date.svg">
                         <!-- <h3>File your GST Return of April 2019 till date</h3> -->
                         <p>Click below to proceed</p>

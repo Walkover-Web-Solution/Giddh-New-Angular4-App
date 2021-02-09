@@ -18,7 +18,6 @@ import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 
 export class LedgerVM {
-    public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
     public activeAccount: AccountResponse | AccountResponseV2;
     public currencies: ICurrencyResponse[] = [];
@@ -193,7 +192,7 @@ export class LedgerVM {
             /** Voucher type in case of advance receipt should be 'rcpt' but to differentiate the drop down values 'advance-receipt' is used */
             requestObj.voucherType = 'rcpt';
         }
-        if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid.length) {
+        if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid && requestObj.invoicesToBePaid.length) {
             requestObj.invoicesToBePaid = [];
         } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
             requestObj.invoiceNumberAgainstVoucher = '';
@@ -236,11 +235,19 @@ export class LedgerVM {
         }
 
         if (data) {
-            data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
-            data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+            if(data.balanceText && data.balanceText.cr) {
+                data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+            }
+            if(data.balanceText && data.balanceText.dr) {
+                data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+            }
 
-            data.text.dr = data.text.dr.replace('<accountName>', accountName);
-            data.text.cr = data.text.cr.replace('<accountName>', accountName);
+            if(data.text && data.text.dr) {
+                data.text.dr = data.text.dr.replace('<accountName>', accountName);
+            }
+            if(data.text && data.text.cr) {
+                data.text.cr = data.text.cr.replace('<accountName>', accountName);
+            }
             this.ledgerUnderStandingObj = _.cloneDeep(data);
         }
     }
@@ -255,7 +262,7 @@ export class LedgerVM {
      * @returns {bankTransactionsData} array
      */
     public getReadyBankTransactionsForUI(data: IELedgerResponse[], isCompany?: boolean) {
-        if (data.length > 0) {
+        if (data && data.length > 0) {
             this.bankTransactionsData = [];
             this.showEledger = true;
             forEach(data, (txn: IELedgerResponse) => {
@@ -354,6 +361,7 @@ export class BlankLedgerVM {
     public isBankTransaction?: boolean;
     public transactionId?: string;
     public invoiceNumberAgainstVoucher: string;
+    public voucherNumber?: string;
     public invoicesToBePaid?: string[];
     public tagNames?: string[];
     public eledgerId?: number | string;
@@ -413,6 +421,7 @@ export class TransactionVM {
     public advanceReceiptAmount?: number = 0;
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
+    public showDropdown?: boolean = false;
 }
 
 export interface IInventory {

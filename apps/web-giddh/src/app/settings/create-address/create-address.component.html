@@ -13,19 +13,18 @@
                 <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
                 <div class="aside-body">
-                    <div class="aside-pane-form">
+                    <div class="aside-pane-form" [ngClass]="{'edit-branch-mode': addressConfiguration.type === 'editBranch'}">
                         <section
                             *ngIf="addressConfiguration.type !== 'editBranch' && addressConfiguration.type !== 'editWarehouse'"
                             class="clearfix margin-child-label">
-                            <div *ngIf="companyName" class="font-14">
+                            <div *ngIf="companyName" class="font-14 mr-b15">
                                 All the information will save in <strong>{{companyName}}</strong>
                             </div>
-                            <br>
                             <div class="form-bg-aside clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control"
                                             placeholder="Enter name">
@@ -53,7 +52,7 @@
                                         <label>State <sup>*</sup></label>
                                         <sh-select #states
                                             [disabled]="addressConfiguration?.type === 'editAddress' && addressToUpdate?.taxNumber && addressConfiguration?.tax?.name && addressConfiguration?.tax?.name === 'GSTIN'"
-                                            [options]="addressConfiguration.stateList" required [isFilterEnabled]="true" formControlName="state" class="w-100"
+                                            [options]="addressConfiguration.stateList" required [isRequired]="true" [isFilterEnabled]="true" formControlName="state" class="w-100"
                                             [useInBuiltFilterForIOptionTypeItems]="true" [forceClearReactive]="forceClear$ | async">
                                         </sh-select>
                                     </div>
@@ -65,7 +64,7 @@
                                                 *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressConfiguration?.tax && addressConfiguration?.tax?.name === 'GSTIN'">*</sup></label>
                                         <textarea
                                             [class.error-box]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required"
-                                            name="name" class="form-control" formControlName="address" placeholder="Enter Address"
+                                            name="name" class="form-control min-height-100" formControlName="address" placeholder="Enter Address"
                                             [attr.required]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressConfiguration?.tax && addressConfiguration?.tax?.name === 'GSTIN'"></textarea>
                                         <span class="danger"
                                             *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required">
@@ -92,28 +91,25 @@
                                                                     [value]="option.value"></span>&nbsp;
                                                             <span class="entity-icon">
                                                                 <i class="icon-branch-icon pull-right"
-                                                                    *ngIf="option.entity === 'BRANCH' && !option.isHeadQuarter"
+                                                                    *ngIf="option.entity === 'BRANCH'"
                                                                     tooltip="Branch"></i>
-                                                                <i class="icon-branch-icon pull-right"
-                                                                    *ngIf="option.entity === 'BRANCH' && option.isHeadQuarter"
-                                                                    tooltip="HO Branch"></i>
                                                                 <i class="icon-warehouse-icon pull-right"
                                                                     *ngIf="option.entity === 'WAREHOUSE'"
                                                                     tooltip="Warehouse"></i>
                                                             </span>
                                                             <span class="entity-details">
                                                                 <div class="item">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq">
+                                                                <div class="item-unique">
                                                                     {{ option.name || '-' }}
                                                                 </div>
                                                             </span>
                                                             <span class="default-entity">
                                                                 <i (click)="setDefault(option, $event)"
                                                                     *ngIf="!option.isDefault"
-                                                                    class="icon-no-selected mr-05"></i>
+                                                                    class="icon-no-selected mr-r05"></i>
                                                                 <i (click)="setDefault(option, $event)"
                                                                     *ngIf="option.isDefault"
-                                                                    class="icon-favorite-selected mr-05"></i>
+                                                                    class="icon-favorite-selected mr-r05"></i>
                                                             </span>
                                                         </a>
                                                     </ng-container>
@@ -131,7 +127,7 @@
                                     <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
                                     <div hidden class="form-group col-12">
                                         <label>Branch Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control" placeholder="Enter">
                                         <span class="danger"
@@ -144,7 +140,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 form-group">
                                         <label>Branch Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="50"
                                             [class.error-box]="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.invalid"
                                             type="text" formControlName="alias" class="form-control"
                                             placeholder="Enter alias">
@@ -159,7 +155,7 @@
                                     <div class="form-group col-12 linked-entities linked-add create">
                                         <label>Linked Address/es</label>
                                         <div class="form-group">
-                                            <sh-select [options]="addressConfiguration?.linkedEntities"
+                                            <sh-select class="linked-address" [options]="addressConfiguration?.linkedEntities"
                                                 name="linkedEntities" formControlName="linkedEntity"
                                                 (clearSingleItem)="handleFinalSelection($event)" [ItemHeight]="200"
                                                 [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity">
@@ -172,7 +168,7 @@
                                                                     [value]="option.value"></span>&nbsp;
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq">
+                                                                <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>
@@ -181,10 +177,10 @@
                                                             <span class="default-entity">
                                                                 <i (click)="setDefault(option, $event)"
                                                                     *ngIf="!option.isDefault"
-                                                                    class="icon-no-selected mr-05"></i>
+                                                                    class="icon-no-selected mr-r05"></i>
                                                                 <i (click)="setDefault(option, $event)"
                                                                     *ngIf="option.isDefault"
-                                                                    class="icon-favorite-selected mr-05"></i>
+                                                                    class="icon-favorite-selected mr-r05"></i>
                                                             </span>
                                                         </a>
                                                     </ng-container>
@@ -206,7 +202,7 @@
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
-                                        <input
+                                        <input maxlength="100"
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control"
                                             placeholder="Enter name" required>
@@ -231,7 +227,7 @@
                                                             class="list-item d-flex">
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
-                                                                <div class="item-unq">
+                                                                <div class="item-unique">
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>
@@ -254,7 +250,7 @@
 
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 text-left">
-                                <div class="mt-5 pl-05 pr-05">
+                                <div class="mt-5">
                                     <button [ladda]="showLoader" [disabled]="addressForm?.invalid" type="submit"
                                         class="btn btn-success">
                                         <ng-container

@@ -9,7 +9,6 @@ import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '.
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import * as  _ from '../../../lodash-optimized';
-import { AccountService } from '../../../services/account.service';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import { IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
@@ -22,6 +21,7 @@ import { TaxResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../../actions/company.actions';
 import { InvViewService } from '../../inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from '../../../app.constant';
+import { SalesService } from '../../../services/sales.service';
 
 @Component({
     selector: 'inventory-add-stock',
@@ -92,7 +92,19 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public forceClearSalesStock$: Observable<IForceClear> = of({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private sideBarAction: SidebarAction, private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService, private customStockActions: CustomStockUnitAction, private _toasty: ToasterService, private _inventoryService: InventoryService, private companyActions: CompanyActions, private invViewService: InvViewService, private cdr: ChangeDetectorRef) {
+    constructor(
+        private store: Store<AppState>,
+        private sideBarAction: SidebarAction,
+        private _fb: FormBuilder,
+        private inventoryAction: InventoryAction,
+        private salesService: SalesService,
+        private customStockActions: CustomStockUnitAction,
+        private _toasty: ToasterService,
+        private _inventoryService: InventoryService,
+        private companyActions: CompanyActions,
+        private invViewService: InvViewService,
+        private cdr: ChangeDetectorRef
+    ) {
         this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
         this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(s => s.inventory.activeGroup), takeUntil(this.destroyed$));
@@ -234,7 +246,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // get purchase accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['operatingcost', 'indirectexpenses'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').subscribe(data => {
             if (data.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -245,7 +257,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // get sales accounts
-        this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['revenuefromoperations', 'otherincome'] }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').subscribe(data => {
             if (data.status === 'success') {
                 let salesAccounts: IOption[] = [];
                 data.body.results.map(d => {
@@ -745,7 +757,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public submit() {
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
-        if (uniqueName.value) {
+        if (uniqueName && uniqueName.value) {
             uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
@@ -855,7 +867,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public update() {
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
-        if (uniqueName.value) {
+        if (uniqueName && uniqueName.value) {
             uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();

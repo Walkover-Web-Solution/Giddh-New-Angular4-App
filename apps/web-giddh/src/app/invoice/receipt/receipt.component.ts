@@ -65,7 +65,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     public receiptData: ReciptResponse;
     public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
     public counts: IOption[] = COUNTS;
-    public accounts$: Observable<IOption[]>;
     public moment = moment;
     public startDate: Date;
     public endDate: Date;
@@ -142,7 +141,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     private universalDate: Date[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private isUniversalDateApplicable: boolean = false;
-    private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     private routeEvent: Observable<Event>;
 
     constructor(
@@ -156,7 +154,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         this.receiptSearchRequest.page = 1;
         this.receiptSearchRequest.count = 25;
         this.receiptSearchRequest.entryTotalBy = '';
-        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
         this.isGetAllRequestInProcess$ = this.store.pipe(select(p => p.receipt.isGetAllRequestInProcess), takeUntil(this.destroyed$));
     }
 
@@ -171,16 +168,6 @@ export class ReceiptComponent implements OnInit, OnDestroy {
         });
 
         this.getInvoiceReceipts();
-
-        this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
-            let accounts: IOption[] = [];
-            _.forEach(data, (item) => {
-                if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
-                    accounts.push({ label: item.name, value: item.uniqueName });
-                }
-            });
-            this.accounts$ = observableOf(orderBy(accounts, 'label'));
-        });
 
         this.store.pipe(select(p => p.receipt.vouchers), takeUntil(this.destroyed$)).subscribe((o: ReciptResponse) => {
             if (o) {
@@ -417,7 +404,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
     }
 
     public itemStateChanged(uniqueName: string) {
-        let index = this.selectedItems.findIndex(f => f === uniqueName);
+        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === uniqueName) : -1;
 
         if (index > -1) {
             this.selectedItems = this.selectedItems.filter(f => f !== uniqueName);

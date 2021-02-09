@@ -6,7 +6,6 @@ import { ILedgersInvoiceResult, InvoicePaymentRequest } from '../../../../models
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { IFlattenAccountsResultItem } from '../../../../models/interfaces/flattenAccountsResultItem.interface';
 import { AppState } from '../../../../store';
 import { SettingsTagActions } from '../../../../actions/settings/tag/settings.tag.actions';
 import { select, Store } from '@ngrx/store';
@@ -14,9 +13,10 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 import { orderBy } from '../../../../lodash-optimized';
 import { LedgerService } from "../../../../services/ledger.service";
 import { ReceiptItem } from "../../../../models/api-models/recipt";
-import { AccountService } from "../../../../services/account.service";
 import { INameUniqueName } from "../../../../models/api-models/Inventory";
 import { GeneralService } from "../../../../services/general.service";
+import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
+import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 
 @Component({
     selector: 'invoice-payment-model',
@@ -36,7 +36,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public showDatePicker: boolean = false;
     public showClearanceDatePicker: boolean = false;
     public paymentMode: IOption[] = [];
-    public flattenAccountsStream$: Observable<IFlattenAccountsResultItem[]>;
     public isBankSelected: boolean = false;
     public tags: IOption[] = [];
     public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
@@ -66,12 +65,9 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         private store: Store<AppState>,
         private _settingsTagActions: SettingsTagActions,
         private _ledgerService: LedgerService,
-        private _accountService: AccountService,
-        private _generalService: GeneralService
+        private salesService: SalesService,
+        private searchService: SearchService
     ) {
-        this.loadPaymentModes();
-        this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
-
         this.paymentActionFormObj = new InvoicePaymentRequest();
         this.paymentActionFormObj.paymentDate = moment().toDate();
         this.isActionSuccess$ = this.store.pipe(select(s => s.invoice.invoiceActionUpdated), takeUntil(this.destroyed$));
@@ -81,22 +77,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.companyCurrencyName = profile.baseCurrency;
-            }
-        });
-        this.flattenAccountsStream$.subscribe(data => {
-            if (data) {
-                let paymentMode: IOption[] = [];
-                data.forEach((item) => {
-                    let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
-                    if (findBankIndx !== -1) {
-                        paymentMode.push({ label: item.name, value: item.uniqueName, additional: { parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol: item.currencySymbol } });
-                    }
-                });
-                this.paymentMode = paymentMode;
-                this.originalPaymentMode = paymentMode;
-            } else {
-                this.paymentMode = [];
-                this.originalPaymentMode = [];
             }
         });
     }
@@ -134,11 +114,11 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
-        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-            if (value === 'loadPaymentModes') {
-                this.loadPaymentModes();
-            }
-        });
+        // this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+        //     if (value === 'loadPaymentModes') {
+        //         this.loadPaymentModes();
+        //     }
+        // });
     }
 
     public onConfirmation(formObj) {
@@ -168,21 +148,30 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public onSelectPaymentMode(event) {
         if (event && event.value) {
+            this.searchService.loadDetails(event.value).subscribe(response => {
+                if (response && response.body) {
+                    const parentGroups = response.body.parentGroups;
+                    if (parentGroups[1] === 'bankaccounts') {
+                        this.isBankSelected = true;
+                    } else {
+                        this.isBankSelected = false;
+                        this.paymentActionFormObj.chequeClearanceDate = '';
+                        this.paymentActionFormObj.chequeNumber = '';
+                    }
+                } else {
+                    this.paymentActionFormObj.accountUniqueName = '';
+                    this.isBankSelected = false;
+                    this.paymentActionFormObj.chequeClearanceDate = '';
+                    this.paymentActionFormObj.chequeNumber = '';
+                }
+            })
             this.paymentActionFormObj.accountUniqueName = event.value;
-            if (event.additional.parentUniqueName === 'bankaccounts') {
-                this.isBankSelected = true;
-            } else {
-                this.isBankSelected = false;
-                this.paymentActionFormObj.chequeClearanceDate = '';
-                this.paymentActionFormObj.chequeNumber = '';
-            }
         } else {
             this.paymentActionFormObj.accountUniqueName = '';
             this.isBankSelected = false;
             this.paymentActionFormObj.chequeClearanceDate = '';
             this.paymentActionFormObj.chequeNumber = '';
         }
-
     }
 
     public onTagSelected(ev) {
@@ -209,7 +198,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnChanges(c: SimpleChanges) {
-        if (c.selectedInvoiceForPayment.currentValue) {
+        if (c.selectedInvoiceForPayment.currentValue && c.selectedInvoiceForPayment.currentValue !== c.selectedInvoiceForPayment.previousValue) {
             this.loadPaymentModes();
             let paymentModeChanges: IOption[] = [];
             this.originalPaymentMode.forEach(payMode => {
@@ -281,26 +270,20 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public loadPaymentModes() {
-        this._accountService.getFlattenAccounts().subscribe((res) => {
-            if (res.status === 'success') {
-                let arr = res.body.results;
-                arr.map((item: any) => {
-                    let o: any = this.provideStrings(item.parentGroups);
-                    item.nameStr = o.nameStr;
-                    item.uNameStr = o.uNameStr;
-                    return item;
+        const paymentMode: IOption[] = [];
+        this.salesService.getAccountsWithCurrency('cash, bankaccounts').subscribe(data => {
+            if (data && data.body && data.body.results) {
+                data.body.results.forEach(account => {
+                    paymentMode.push({
+                        label: account.name,
+                        value: account.uniqueName,
+                        additional: { currency: account.currency?.code || this.companyCurrencyName, currencySymbol: account.currency?.symbol || this.baseCurrencySymbol }
+                    });
                 });
-
-                let paymentMode: IOption[] = [];
-                arr.forEach((item) => {
-                    let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts' || grp.uniqueName === 'cash');
-                    if (findBankIndx !== -1) {
-                        paymentMode.push({ label: item.name, value: item.uniqueName, additional: { parentUniqueName: item.parentGroups[1].uniqueName, currency: item.currency, currencySymbol: item.currencySymbol } });
-                    }
-                });
-
-                this.paymentModes$ = observableOf(paymentMode);
             }
+            this.paymentModes$ = observableOf(paymentMode);
+            this.paymentMode = paymentMode;
+            this.originalPaymentMode = paymentMode;
         });
     }
 }

@@ -1,18 +1,22 @@
-.previuos-estimate-wrapper {
+@import "../../../../assets/css/color.scss";
+
+.previous-estimate-wrapper {
     ul {
-        background-color: #fff;
+        list-style: none !important;
+        background-color: $white;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         padding: 5px;
-        height: 210px;
+        height: auto;
+        max-height: calc(210px);
         overflow-y: auto;
 
         li {
             font-size: 12px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid $gainsboro;
             padding-right: 12px;
 
             &:hover {
-                background-color: #e5e5e5;
+                background-color: $whisper;
             }
 
             &:last-child {

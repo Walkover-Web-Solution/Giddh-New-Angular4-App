@@ -2,7 +2,7 @@
     <i><img src="assets/images/custom-calender.svg"></i>
     <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
 </div> -->
-<div class="audit-form-wrap mt-15">
+<div class="audit-form-wrap mr-t15">
     <div class="clearfix form-field">
         <label>Entity <sup class="text-danger">*</sup></label>
         <sh-select [options]="auditLogFormVM.entities" #selectEntity [isFilterEnabled]="true" [placeholder]="'Select Option'" (selected)="selectedEntityType($event)" [(ngModel)]="auditLogFormVM.selectedEntity" [forceClearReactive]="forceClearEntity$ | async"></sh-select>
@@ -15,12 +15,14 @@
 
     <div class="clearfix form-field" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='ENTRY' || auditLogFormVM.selectedEntity ==='LEDGER'">
         <label>Account</label>
-        <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedAccountUniqueName" [forceClearReactive]="forceClearAccount$ | async"></sh-select>
+        <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+        (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)" [(ngModel)]="auditLogFormVM.selectedAccountUniqueName" [forceClearReactive]="forceClearAccount$ | async"></sh-select>
     </div>
 
     <div class="clearfix form-field" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='GROUP'">
         <label>Group</label>
-        <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedGroupUniqueName" [forceClearReactive]="forceClearGroup$ | async"></sh-select>
+        <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+        (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)" [(ngModel)]="auditLogFormVM.selectedGroupUniqueName" [forceClearReactive]="forceClearGroup$ | async"></sh-select>
     </div>
 
 
