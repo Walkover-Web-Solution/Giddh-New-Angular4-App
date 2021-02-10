@@ -238,7 +238,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	}
 
 	public getReports() {
-		this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
+        let data = _.cloneDeep(this.mfStockSearchRequest);
+        data.from = this.fromDate;
+        data.to = this.toDate;
+		this.store.dispatch(this.manufacturingActions.GetMfReport(data));
 		// this.mfStockSearchRequest = new MfStockSearchRequestClass();
 		// if (this.isUniversalDateApplicable && this.universalDate) {
 		//   this.mfStockSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
