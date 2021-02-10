@@ -326,10 +326,13 @@ a[type="button"] {
             text-align: right;
             padding-bottom: 7px;
             display: table-cell;
+
         }
         .figure-cell {
             width: 140px;
             padding-right: 0;
+            display: flex;
+            justify-content: flex-end;
             input {
                 max-width: 130px;
                 float: right;
