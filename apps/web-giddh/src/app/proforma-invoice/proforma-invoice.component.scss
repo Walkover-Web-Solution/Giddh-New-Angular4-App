@@ -245,6 +245,11 @@ $greyClr: #6d6d6d;
     width:100% !important;
 }
 
+a[type="button"] {
+    -webkit-appearance: initial;
+    cursor: pointer;
+}
+
 // collapse
 .collapse-pane {
     padding: 0 0;
