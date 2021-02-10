@@ -113,7 +113,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             { label: "Max limit as per Bank", value: "max" },
             { label: "Custom", value: "custom" },
         ];
-    public approvalNameList: IOption[] = [];
+    // public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
     /** update bank form validation for amount */
@@ -319,36 +319,36 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(resp => {
-            if (resp) {
-                let data = _.cloneDeep(resp);
-                let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
-                let arr: IOption[] = [];
-                forIn(sortedArr, (value) => {
-                    if (value[0].emailId === this.loggedInUserEmail) {
-                        value[0].isLoggedInUser = true;
-                    }
-                    // arr.push({ name: value[0].userName, rows: value });
-                    arr.push({ label: value[0].userName, value: value[0].userUniqueName, additional: value });
-                });
-                let sortedArray = [];
-                arr.forEach(item => {
-                    if (item.additional[0].mobileVerified) {
-                        sortedArray.push(item);
-                    }
-                });
-                arr.forEach(item => {
-                    if (!item.additional[0].mobileVerified) {
-                        sortedArray.push(item);
-                    }
-                });
-                this.approvalNameList = sortedArray;
-                // this.approvalNameList = _.sortBy(sortedArray, ['label']);
-            }
-        });
+        // this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(resp => {
+        //     if (resp) {
+        //         let data = _.cloneDeep(resp);
+        //         let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
+        //         let arr: IOption[] = [];
+        //         forIn(sortedArr, (value) => {
+        //             if (value[0].emailId === this.loggedInUserEmail) {
+        //                 value[0].isLoggedInUser = true;
+        //             }
+        //             arr.push({ label: value[0].userName, value: value[0].userUniqueName, additional: value });
+        //         });
+        //         let sortedArray = [];
+        //         arr.forEach(item => {
+        //             if (item.additional[0].mobileVerified) {
+        //                 sortedArray.push(item);
+        //             }
+        //         });
+        //         arr.forEach(item => {
+        //             if (!item.additional[0].mobileVerified) {
+        //                 sortedArray.push(item);
+        //             }
+        //         });
+        //         this.approvalNameList = sortedArray;
+        //     }
+        // });
+
         if (this.selectedCompanyUniqueName) {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
         }
+
         this.isPaymentUpdationSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.isBankUpdateInEdit = null;
