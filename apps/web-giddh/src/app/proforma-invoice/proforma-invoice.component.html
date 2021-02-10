@@ -1551,8 +1551,18 @@
                                         <div class="table-row">
                                             <div class="table-cell">Total Amount</div>
                                             <div class="table-cell figure-cell">
-                                                <span
-                                                    *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.subTotal | giddhCurrency}}
+                                                <span>
+                                                    <amount-field *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" [amount]="invFormData?.voucherDetails?.subTotal"
+                                                        [currencySymbol]="invFormData?.accountDetails?.currencySymbol"
+                                                        [currencyCode]="invFormData?.accountDetails?.currency?.code">
+                                                    </amount-field>
+                                                </span>
+                                                <span>
+                                                    <amount-field *ngIf="!isMulticurrencyAccount && !isPurchaseInvoice" [amount]="invFormData?.voucherDetails?.subTotal"
+                                                        [currencySymbol]="false"
+                                                        [currencyCode]="false">
+                                                    </amount-field>
+                                                </span>
                                             </div>
                                         </div>
 
