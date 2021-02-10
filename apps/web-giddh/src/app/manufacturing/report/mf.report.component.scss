@@ -96,7 +96,12 @@
         }
     }
 }
-
+.regular-font {
+    font-family: 'opensans-regular';
+}
+.row-gray-background th {
+    background-color: $medium-gray;
+}
 @media(min-width:1441px){
     .manufacturing-head{
         .col-xl-3{
@@ -204,10 +209,8 @@
     .mobile-none{
         display:none;
     }
-}
-.regular-font {
-    font-family: 'opensans-regular';
-}
-.row-gray-background th {
-    background-color: $medium-gray;
+    #mfReportTbl .table td {
+        min-width: auto !important;
+        max-width: inherit !important;
+    }
 }
