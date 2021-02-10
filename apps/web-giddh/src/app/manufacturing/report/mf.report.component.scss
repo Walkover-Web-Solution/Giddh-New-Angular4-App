@@ -65,8 +65,16 @@
         border-right: 1px solid $gainsboro !important;
     }
     td.raw-material {
+        background-color: $gray-95;
         line-height: 2;
         color: $matterhorn;
+    }
+    tr{
+        &:hover{
+            td.raw-material{
+                background-color: rgba(221, 225, 230, 0.5);
+            }
+        }
     }
 }
 .material-head{
