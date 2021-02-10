@@ -273,7 +273,7 @@
         </table>
     </div>
 
-    <div *ngIf="ledgersData?.totalItems > 20" class="pagination-wrapper">
+    <div *ngIf="ledgersData?.totalItems > 20" [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)" class="pagination-wrapper">
         <div class="text-center">
             <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5"
                 class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"

@@ -77,7 +77,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public isCompany: boolean;
     /** Current branches */
     public branches: Array<any>;
-
+    /** True if api call to get recurring invoices in progress */
+    public isLoading: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
@@ -93,6 +94,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
                 });
 
                 this.recurringVoucherDetails = items;
+                this.isLoading = false;
             }
         });
     }
@@ -159,14 +161,14 @@ export class RecurringComponent implements OnInit, OnDestroy {
     }
 
     public pageChanged({ page }) {
-        //removed for resolution of G0-438 by shehbaz
-        //this.cdr.detach();
+        this.isLoading = true;
         this.currentPage = page;
         this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(undefined, page));
     }
 
     public toggleRecurringAsidePane(toggle?: string): void {
         if (toggle) {
+            this.isLoading = true;
             this.asideMenuStateForRecurringEntry = toggle;
             this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
         } else {
@@ -304,8 +306,10 @@ export class RecurringComponent implements OnInit, OnDestroy {
             filter.lastInvoiceDate = moment(filter.lastInvoiceDate).format(GIDDH_DATE_FORMAT);
         }
         if (Object.keys(filter).some(p => filter[p])) {
+            this.isLoading = true;
             this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(filter));
         } else {
+            this.isLoading = true;
             this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
         }
     }
