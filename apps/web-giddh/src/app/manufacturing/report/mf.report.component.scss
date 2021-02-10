@@ -11,8 +11,15 @@
 }
 
 #mfReportTbl .table td {
+    &:first-child{
+        min-width: 100px;
+    }
     vertical-align: top !important;
     text-transform: capitalize;
+    min-width: 140px;
+    max-width: 220px;
+    white-space: normal !important;
+    word-break: break-word;
 }
 
 #mfReportTbl .table td.noBdr {
@@ -46,6 +53,13 @@
         color: $matterhorn;
     }
 }
+.regular-font {
+    font-family: 'opensans-regular';
+}
+.row-gray-background th {
+    background-color: $medium-gray;
+}
+
 @media(min-width:1441px){
     .manufacturing-head{
         .col-xl-3{
@@ -131,10 +145,8 @@
     .mobile-none{
         display:none;
     }
-}
-.regular-font {
-    font-family: 'opensans-regular';
-}
-.row-gray-background th {
-    background-color: $medium-gray;
+    #mfReportTbl .table td {
+        min-width: auto !important;
+        max-width: inherit !important;
+    }
 }
