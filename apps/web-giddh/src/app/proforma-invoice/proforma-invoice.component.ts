@@ -114,6 +114,7 @@ import { SearchService } from '../services/search.service';
 import { PURCHASE_ORDER_STATUS } from '../shared/helpers/purchaseOrderStatus';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
+import { AmountFieldComponent } from '../shared/amount-field';
 
 const THEAD_ARR_READONLY = [
     {
@@ -227,6 +228,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
 
     @ViewChild('dateChangeConfirmationModel', {static: true}) public dateChangeConfirmationModel: ModalDirective;
+    @ViewChild('AmountFieldComponent', { static: true }) public amountField: ElementRef;
+
     public showAdvanceReceiptAdjust: boolean = false;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
