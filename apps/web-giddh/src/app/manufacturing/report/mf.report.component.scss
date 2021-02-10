@@ -10,7 +10,6 @@
     padding: 1px 0;
 }
 
-<<<<<<< HEAD
 #mfReportTbl .table {
     th{
        &:first-child{
@@ -32,18 +31,6 @@
         white-space: normal !important;
         word-break: break-word;
     }
-=======
-#mfReportTbl .table td {
-    &:first-child{
-        min-width: 100px;
-    }
-    vertical-align: top !important;
-    text-transform: capitalize;
-    min-width: 140px;
-    max-width: 220px;
-    white-space: normal !important;
-    word-break: break-word;
->>>>>>> 73f2aafbc3... shalinee | TEST | makes table correct of manufacturing
 }
 
 #mfReportTbl .table td.noBdr {
@@ -78,8 +65,16 @@
         border-right: 1px solid $gainsboro !important;
     }
     td.raw-material {
+        background-color: $gray-95;
         line-height: 2;
         color: $matterhorn;
+    }
+    tr{
+        &:hover{
+            td.raw-material{
+                background-color: rgba(221, 225, 230, 0.5);
+            }
+        }
     }
 }
 .material-head{
