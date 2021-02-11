@@ -5,7 +5,7 @@ import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { distinct, filter, take, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
@@ -22,6 +22,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../../shared/help
 import { IOption } from './../../theme/ng-select/option.interface';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
+import { IForceClear } from '../../models/api-models/Sales';
 
 const filter1 = [
 	{ label: 'Greater', value: 'greaterThan' },
@@ -32,8 +33,7 @@ const filter1 = [
 ];
 
 const filter2 = [
-	{ label: 'Quantity Inward', value: 'quantityInward' },
-	// { name: 'Quantity Outward', uniqueName: 'quantityOutward' },
+	{ label: 'Quantity Outward', value: 'quantityOutward' },
 	{ label: 'Voucher Number', value: 'voucherNumber' }
 ];
 
@@ -82,7 +82,6 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public isInventoryPage: boolean = false;
 	public activeStockGroup: string;
 	private universalDate: Date[];
-	private isUniversalDateApplicable: boolean = false;
 	private lastPage: number = 0;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -100,6 +99,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = true;
     /* Stores warehouses for a company */
     public warehouses: Array<any> = [];
+    /* This will clear the select value in sh-select */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
 	constructor(
         private store: Store<AppState>,
@@ -166,7 +167,6 @@ export class MfReportComponent implements OnInit, OnDestroy {
 			if (dateObj) {
 				this.universalDate = _.cloneDeep(dateObj);
 				this.mfStockSearchRequest.dateRange = this.universalDate;
-				this.isUniversalDateApplicable = true;
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -243,7 +243,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         data.to = this.toDate;
 		this.store.dispatch(this.manufacturingActions.GetMfReport(data));
 		// this.mfStockSearchRequest = new MfStockSearchRequestClass();
-		// if (this.isUniversalDateApplicable && this.universalDate) {
+		// if (this.universalDate) {
 		//   this.mfStockSearchRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
 		//   this.mfStockSearchRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 		//   this.mfStockSearchRequest.dateRange =  this.universalDate;
@@ -301,7 +301,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	 * setActiveStockGroup
 	 */
 	public setActiveStockGroup(event) {
-		this.activeStockGroup = event.additional.uniqueName;
+		this.activeStockGroup = event?.additional?.uniqueName;
     }
 
     /**
@@ -396,5 +396,21 @@ export class MfReportComponent implements OnInit, OnDestroy {
      */
     public clearWarehouse(): void {
         this.mfStockSearchRequest.warehouseUniqueName = "";
+    }
+
+    /**
+     * This will clear filters
+     *
+     * @memberof MfReportComponent
+     */
+    public clearFilters(): void {
+        this.mfStockSearchRequest.warehouseUniqueName = "";
+        this.mfStockSearchRequest.product = '';
+		this.mfStockSearchRequest.searchBy = '';
+        this.mfStockSearchRequest.searchOperation = '';
+        this.mfStockSearchRequest.searchValue = "";
+        this.mfStockSearchRequest.dateRange = [];
+        this.forceClear$ = observableOf({ status: true });
+        this.getReports();
     }
 }
