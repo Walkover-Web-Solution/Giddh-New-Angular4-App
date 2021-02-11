@@ -405,12 +405,25 @@ export class MfReportComponent implements OnInit, OnDestroy {
      */
     public clearFilters(): void {
         this.mfStockSearchRequest.warehouseUniqueName = "";
-        this.mfStockSearchRequest.product = '';
-		this.mfStockSearchRequest.searchBy = '';
-        this.mfStockSearchRequest.searchOperation = '';
+        this.mfStockSearchRequest.product = "";
+		this.mfStockSearchRequest.searchBy = "";
+        this.mfStockSearchRequest.searchOperation = "";
         this.mfStockSearchRequest.searchValue = "";
-        this.mfStockSearchRequest.dateRange = [];
         this.forceClear$ = observableOf({ status: true });
         this.getReports();
+    }
+
+    /**
+     * This will show/hide clear filter button
+     *
+     * @returns {boolean}
+     * @memberof MfReportComponent
+     */
+    public showClearFilter(): boolean {
+        if(this.mfStockSearchRequest.warehouseUniqueName || this.mfStockSearchRequest.product ||  this.mfStockSearchRequest.searchBy || this.mfStockSearchRequest.searchOperation || this.mfStockSearchRequest.searchValue) {
+            return true;
+        }
+
+        return false;
     }
 }
