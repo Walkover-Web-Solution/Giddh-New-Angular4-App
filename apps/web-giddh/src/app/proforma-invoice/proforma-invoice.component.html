@@ -1,9 +1,4 @@
-<div class="no-data mr-t2 loader-main" *ngIf="showLoader">
-    <div class="spinner2">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
-    </div>
-</div>
+<giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
 <div *ngIf="!showLoader">
     <!-- region page change menu -->
     <div class="d-flex border-bottom mobile-view-padding">
@@ -45,13 +40,7 @@
     <!-- region update mode loader-->
     <ng-container *ngIf="isUpdateDataInProcess">
         <div class="loader-class">
-            <div class="no-data mr-t2 loader-main">
-                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                <div class="spinner2">
-                    <div class="cube1"></div>
-                    <div class="cube2"></div>
-                </div>
-            </div>
+            <giddh-page-loader></giddh-page-loader>
         </div>
     </ng-container>
     <!--endregion-->

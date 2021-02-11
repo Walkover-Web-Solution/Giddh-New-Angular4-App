@@ -1,10 +1,5 @@
 <hamburger-menu [pageHeading]="'Daybook'"></hamburger-menu>
-<div class="no-data mr-t2 loader-main" *ngIf="showLoader">
-    <div class="spinner2">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
-    </div>
-</div>
+<giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
 <ng-container *ngIf="!showLoader">
 <div class="transactions-page pd-t15 position-relative clearfix">
 

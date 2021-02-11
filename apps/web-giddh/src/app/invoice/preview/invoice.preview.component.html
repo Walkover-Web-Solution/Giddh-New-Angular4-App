@@ -581,13 +581,7 @@
                 <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
                     <tr>
                         <td colspan="8">
-                            <!--loading-->
-                            <div class="no-data mr-t2 loader-main">
-                                <div class="spinner2">
-                                    <div class="cube1"></div>
-                                    <div class="cube2"></div>
-                                </div>
-                            </div>
+                            <giddh-page-loader></giddh-page-loader>
                         </td>
                     </tr>
                 </tbody>
