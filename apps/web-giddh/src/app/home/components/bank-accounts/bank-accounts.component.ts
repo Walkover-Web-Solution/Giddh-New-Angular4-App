@@ -25,6 +25,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /* This will hold local JSON data */
     public localeData: any = {};
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(private store: Store<AppState>, private _contactService: ContactService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
@@ -53,12 +55,14 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     }
 
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
+        this.isLoading = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
         this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 this.bankAccounts = res.body.results;
             }
+            this.isLoading = false;
         });
     }
 
