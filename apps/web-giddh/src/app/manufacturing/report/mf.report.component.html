@@ -2,6 +2,11 @@
     <!-- page Title -->
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
     <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
+        <div class="mr-r15">
+            <!-- add clear functionality on button -->
+            <label class="d-none">&nbsp;</label>
+            <button class="no-btn clear-filter">Clear Filter</button>
+        </div>
         <div>
             <label class="d-none">&nbsp;</label>
             <button *ngIf="!isCompany" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()"
@@ -47,11 +52,18 @@
                         </div>
                     </div>
                     <div class="col-md-6" [ngClass]="currentCompanyBranches?.length > 2 ? 'col-xl-6 col-lg-4' : 'col-xl-10 col-lg-8'" *ngIf="!isMobileScreen">
-                        <div>
-                            <label class="d-block">&nbsp;</label>
-                            <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()"
-                                type="button">Create
-                                Manufacture</button>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <!-- add clear functionality on button -->
+                                <label class="d-block">&nbsp;</label>
+                                <button class="no-btn clear-filter">Clear Filter</button>
+                            </div>
+                            <div>
+                                <label class="d-block">&nbsp;</label>
+                                <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()"
+                                    type="button">Create
+                                    Manufacture</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -118,37 +130,51 @@
                     <thead>
                         <tr class="row-gray-background">
                             <th>Date</th>
-                            <th>Voucher Number</th>
+                            <th>Voucher No.</th>
                             <th>Finished Product</th>
                             <th>Qty Outwards</th>
                             <th>Unit</th>
-                            <th class="regular-font">Material Used</th>
-                            <th class="regular-font">Qty Inwards</th>
-                            <th class="regular-font">Unit</th>
+                            <th class="material-head">
+                                <table class="table">
+                                    <tr>
+                                        <th class="regular-font">Material Used</th>
+                                        <th class="regular-font">Qty Inwards</th>
+                                        <th class="regular-font">Unit</th>
+                                    </tr>
+
+                                </table>
+                            </th>
+
                             <th>Warehouse</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)">
                             <td data-title="Date">{{moment(item.date, 'DD-MM-YYYY') | date: 'd MMM y'}}</td>
-                            <td data-title="Voucher Number">{{item.voucherNumber}}</td>
+                            <!-- On click it, edit mode will be open -->
+                            <td data-title="Voucher Number" class="cursor-pointer">{{item.voucherNumber}}</td>
                             <td data-title="Product Name">{{item.stockName}}</td>
                             <td data-title="Qty Outwards">{{item.manufacturingQuantity}}</td>
                             <td data-title="Unit">{{item.manufacturingUnit}}</td>
-                            <td class="raw-material" data-title="Material Used">
-                                <div class="d-flex flex-column">
-                                    <span *ngFor="let row of item.linkedStocks">{{row.stockName}}</span>
+                            <td class="material-data">
+                                <div class="d-flex flex-column data-title-td">
+                                    <div *ngFor="let row of item.linkedStocks" class="mr-b15">
+                                        <div>Material Used</div>
+                                        <div>Qty Inwards</div>
+                                        <div>Unit</div>
+                                    </div>
+
                                 </div>
-                            </td>
-                            <td class="raw-material" data-title="Qty Inwards">
-                                <div class="d-flex flex-column">
-                                    <span *ngFor="let row of item.linkedStocks">{{row.manufacturingQuantity}}</span>
+                                <div>
+                                    <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of item.linkedStocks">
+                                        <div class="d-flex flex-column"> <span>{{row.stockName}}</span>  </div>
+                                        <div class="d-flex flex-column"> <span>{{row.manufacturingQuantity}}</span> </div>
+                                        <div class="d-flex flex-column">
+                                            <span>{{row.manufacturingUnit}}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </td>
-                            <td class="raw-material" data-title="Unit">
-                                <div class="d-flex flex-column">
-                                    <span *ngFor="let row of item.linkedStocks">{{row.manufacturingUnit}}</span>
-                                </div>
+
                             </td>
                             <td data-title="Warehouse">{{item.warehouse?.name}}</td>
                         </tr>
