@@ -53,6 +53,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This will hold bifurcation of clients content */
     public bifurcationClients: string = "";
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions, private _companyActions: CompanyActions,
         private _toasty: ToasterService) {
@@ -129,6 +131,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         //   this.showErrorToast('please select quater');
         //   return;
         // }
+        this.isLoading = true;
         this.NewVsOldInvoicesQueryRequest.type = this.selectedType;
         if (this.NewVsOldInvoicesQueryRequest.type === 'month') {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedmonth + '-' + this.selectedYear;
@@ -167,6 +170,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
             this.isRequestSuccess$.subscribe(s => {
                 if (s) {
+                    this.isLoading = false;
                     if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
                         this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth).label;
                     } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {

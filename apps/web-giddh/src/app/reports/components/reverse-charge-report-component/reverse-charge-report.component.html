@@ -112,7 +112,7 @@
                         </tr>
                     </thead>
                     <tbody
-                        *ngIf="reverseChargeReportResults && reverseChargeReportResults.items && reverseChargeReportResults.items.length > 0">
+                        *ngIf="!isLoading && reverseChargeReportResults && reverseChargeReportResults.items && reverseChargeReportResults.items.length > 0">
                         <tr *ngFor="let reverseCharge of reverseChargeReportResults.items; let i = index;">
                             <td data-title="#" class="text-center">
                                 {{ ((reverseChargeReportGetRequest.page - 1) * paginationLimit) + (i + 1) }} </td>
@@ -130,16 +130,21 @@
                                 {{ reverseCharge.taxAmount | giddhCurrency }}</td>
                         </tr>
                     </tbody>
-                    <tbody
-                        *ngIf="!reverseChargeReportResults || !reverseChargeReportResults.items || reverseChargeReportResults.items.length === 0">
+                    <tbody *ngIf="!isLoading && (!reverseChargeReportResults || !reverseChargeReportResults.items || reverseChargeReportResults.items.length === 0)">
                         <tr>
-                            <td *ngIf="!isLoading" colspan="10" align="center">{{commonLocaleData?.app_no_records_found}}</td>
-                            <td *ngIf="isLoading" colspan="10">&nbsp;</td>
+                            <td colspan="10" align="center">{{commonLocaleData?.app_no_records_found}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="isLoading">
+                        <tr>
+                            <td colspan="10">
+                                <giddh-page-loader></giddh-page-loader>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="pagination-wrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
+            <div class="pagination-wrapper" [hidden]="isLoading" *ngIf="reverseChargeReportResults.totalPages > 1">
                 <pagination [totalItems]="reverseChargeReportResults.totalItems"
                     [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true"
                     [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>

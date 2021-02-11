@@ -30,35 +30,18 @@
                                     </ul>
                                 </div>
                             </div>
-
                         </div>
                         <div class="panel-body pl-0 pr-0 position-relative">
                             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
-                                <div class="no-data mr-t2 loader-main">
-                                    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                                    <div class="spinner2">
-                                        <div class="cube1"></div>
-                                        <div class="cube2"></div>
-                                    </div>
-                                </div>
-
+                                <giddh-page-loader></giddh-page-loader>
                             </div>
-                            <div class="panel-body pl-0 pr-0 pos-rel">
-                                <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                                    <div class="no-data mr-t2 loader-main">
-                                        <div class="spinner2">
-                                            <div class="cube1"></div>
-                                            <div class="cube2"></div>
-                                        </div>
+                            <div class="chart-div" google-chart chart="myChartObject">
+                                <perfect-scrollbar [scrollIndicators]="true">
+                                    <div id="leftIncomeChart">
+                                        <!-- <chart [chart]="options"></chart> -->
+                                        <highcharts-chart *ngIf="chartOptions" [Highcharts]="revenueChart" [options]="chartOptions"></highcharts-chart>
                                     </div>
-                                </div>
-                                <div class="chart-div" google-chart chart="myChartObject">
-                                    <perfect-scrollbar [scrollIndicators]="true">
-                                        <div id="leftIncomeChart">
-                                            <highcharts-chart *ngIf="chartOptions" [Highcharts]="revenueChart" [options]="chartOptions"></highcharts-chart>
-                                        </div>
-                                    </perfect-scrollbar>
-                                </div>
+                                </perfect-scrollbar>    
                             </div>
                         </div>
                     </div>
