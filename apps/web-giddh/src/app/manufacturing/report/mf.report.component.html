@@ -1,6 +1,10 @@
 <section id="manufacture" class="clearfix">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
     <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
+        <div class="mr-r15" *ngIf="showClearFilter()">
+            <label class="d-none">&nbsp;</label>
+            <button type="button" class="no-btn clear-filter" (click)="clearFilters()">Clear Filter</button>
+        </div>
         <div>
             <label class="d-none">&nbsp;</label>
             <button *ngIf="!isCompany" class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()"
@@ -46,11 +50,18 @@
                         </div>
                     </div>
                     <div class="col-md-6" [ngClass]="currentCompanyBranches?.length > 2 ? 'col-xl-6 col-lg-4' : 'col-xl-10 col-lg-8'" *ngIf="!isMobileScreen">
-                        <div>
-                            <label class="d-block">&nbsp;</label>
-                            <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()"
-                                type="button">Create
-                                Manufacture</button>
+                        <div class="d-flex"
+                        [ngClass]="showClearFilter() ? 'justify-content-between' : 'justify-content-end'">
+                            <div *ngIf="showClearFilter()">
+                                <label class="d-block">&nbsp;</label>
+                                <button type="button" class="no-btn clear-filter" (click)="clearFilters()">Clear Filter</button>
+                            </div>
+                            <div>
+                                <label class="d-block">&nbsp;</label>
+                                <button *ngIf="!isCompany" class="btn isActive pull-right mr-0 mobile-none" (click)="goToCreateNewPage()"
+                                    type="button">Create
+                                    Manufacture</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -68,24 +79,24 @@
                         <label class="d-block">Final Product</label>
                         <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required
                             [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown"
-                            [ItemHeight]="33" (selected)="setActiveStockGroup($event)"></sh-select>
+                            [ItemHeight]="33" (selected)="setActiveStockGroup($event)" [forceClearReactive]="forceClear$ | async"></sh-select>
                     </div>
                     <div class="form-group col-xl-2 col-lg-3 col-md-6 col-12">
                         <label class="d-block">Warehouse</label>
-                        <sh-select placeholder="--Select Warehouse--" [options]="warehouses" [(ngModel)]="mfStockSearchRequest.warehouseUniqueName" (onClear)="clearWarehouse()"></sh-select>
+                        <sh-select placeholder="--Select Warehouse--" [options]="warehouses" [(ngModel)]="mfStockSearchRequest.warehouseUniqueName" (onClear)="clearWarehouse()" [forceClearReactive]="forceClear$ | async"></sh-select>
                     </div>
 
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                             <label class="d-block">Search By</label>
                             <sh-select placeholder="--Select--" name="searchBy"
                                 [(ngModel)]="mfStockSearchRequest.searchBy" [options]="filtersForSearchBy"
-                                [ItemHeight]="33"></sh-select>
+                                [ItemHeight]="33" [forceClearReactive]="forceClear$ | async"></sh-select>
                     </div>
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Operation</label>
                         <sh-select placeholder="--Select--" name="searchOperation"
                             [(ngModel)]="mfStockSearchRequest.searchOperation" [options]="filtersForSearchOperation"
-                            [ItemHeight]="33"></sh-select>
+                            [ItemHeight]="33" [forceClearReactive]="forceClear$ | async"></sh-select>
                     </div>
                     <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Value</label>
@@ -117,37 +128,50 @@
                     <thead>
                         <tr class="row-gray-background">
                             <th>Date</th>
-                            <th>Voucher Number</th>
+                            <th>Voucher No.</th>
                             <th>Finished Product</th>
                             <th>Qty Outwards</th>
                             <th>Unit</th>
-                            <th class="regular-font">Material Used</th>
-                            <th class="regular-font">Qty Inwards</th>
-                            <th class="regular-font">Unit</th>
+                            <th class="material-head">
+                                <table class="table">
+                                    <tr>
+                                        <th class="regular-font">Material Used</th>
+                                        <th class="regular-font">Qty Inwards</th>
+                                        <th class="regular-font">Unit</th>
+                                    </tr>
+
+                                </table>
+                            </th>
+
                             <th>Warehouse</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)">
                             <td data-title="Date">{{moment(item.date, 'DD-MM-YYYY') | date: 'd MMM y'}}</td>
-                            <td data-title="Voucher Number">{{item.voucherNumber}}</td>
+                            <td data-title="Voucher No." class="cursor-pointer">{{item.voucherNumber}}</td>
                             <td data-title="Product Name">{{item.stockName}}</td>
                             <td data-title="Qty Outwards">{{item.manufacturingQuantity}}</td>
                             <td data-title="Unit">{{item.manufacturingUnit}}</td>
-                            <td class="raw-material" data-title="Material Used">
-                                <div class="d-flex flex-column">
-                                    <span *ngFor="let row of item.linkedStocks">{{row.stockName}}</span>
+                            <td class="material-data">
+                                <div class="d-flex flex-column data-title-td">
+                                    <div *ngFor="let row of item.linkedStocks" class="mr-b15">
+                                        <div>Material Used</div>
+                                        <div>Qty Inwards</div>
+                                        <div>Unit</div>
+                                    </div>
+
                                 </div>
-                            </td>
-                            <td class="raw-material" data-title="Qty Inwards">
-                                <div class="d-flex flex-column">
-                                    <span *ngFor="let row of item.linkedStocks">{{row.manufacturingQuantity}}</span>
+                                <div>
+                                    <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of item.linkedStocks">
+                                        <div class="d-flex flex-column"> <span>{{row.stockName}}</span>  </div>
+                                        <div class="d-flex flex-column"> <span>{{row.manufacturingQuantity}}</span> </div>
+                                        <div class="d-flex flex-column">
+                                            <span>{{row.manufacturingUnit}}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </td>
-                            <td class="raw-material" data-title="Unit">
-                                <div class="d-flex flex-column">
-                                    <span *ngFor="let row of item.linkedStocks">{{row.manufacturingUnit}}</span>
-                                </div>
+
                             </td>
                             <td data-title="Warehouse">{{item.warehouse?.name}}</td>
                         </tr>

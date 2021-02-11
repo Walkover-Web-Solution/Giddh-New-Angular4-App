@@ -10,16 +10,27 @@
     padding: 1px 0;
 }
 
-#mfReportTbl .table td {
-    &:first-child{
-        min-width: 100px;
+#mfReportTbl .table {
+    th{
+       &:first-child{
+            min-width: 100px;
+        }
+        vertical-align: top !important;
+        text-transform: capitalize;
+        min-width: 140px;
+        max-width: 220px;
     }
-    vertical-align: top !important;
-    text-transform: capitalize;
-    min-width: 140px;
-    max-width: 220px;
-    white-space: normal !important;
-    word-break: break-word;
+    td {
+        &:first-child{
+            min-width: 100px;
+        }
+        vertical-align: top !important;
+        text-transform: capitalize;
+        min-width: 140px;
+        max-width: 220px;
+        white-space: normal !important;
+        word-break: break-word;
+    }
 }
 
 #mfReportTbl .table td.noBdr {
@@ -40,6 +51,12 @@
         text-align: left;
     }
 }
+.no-btn.clear-filter{
+    text-decoration: underline;
+    font-family: 'opensans-semibold';
+    color: $davy-grey;
+    padding: 6px 0;
+}
 .manufacture-table{
     .bd-rl{
         border-left: 1px solid $gainsboro !important;
@@ -48,7 +65,6 @@
         border-right: 1px solid $gainsboro !important;
     }
     td.raw-material {
-        background-color: $gray-95;
         line-height: 2;
         color: $matterhorn;
     }
@@ -65,6 +81,33 @@
 }
 .row-gray-background th {
     background-color: $medium-gray;
+}
+.material-head{
+    min-width: 20% !important;
+    max-width: 20% !important;
+    th:first-child{
+        min-width: 110px !important;
+    }
+    th:nth-child(2), th:last-child {
+        min-width: 110px !important;
+        max-width: 110px !important;
+    }
+    th{
+        border: none !important;
+        padding: 0;
+    }
+}
+.material-data{
+    background-color: $gray-95;
+    .data-title-td{
+        display: none !important;
+    }
+     .nested-div{
+        div{
+            min-width: 34%;
+            max-width: 50%;
+        }
+    }
 }
 
 @media(min-width:1441px){
@@ -125,6 +168,9 @@
     }
     .create-btn{
         margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
     }
 }
 @media(max-width:767px){
@@ -149,6 +195,25 @@
 }
 
 @media (max-width:768px){
+    .material-data{
+        display: flex;
+        width: 100%;
+        padding: 10px 15px  0 !important;
+        background-color: $gray-95;
+        line-height: 1.8;
+        .data-title-td{
+            width: 50%;
+            display: flex !important;
+        }
+        .nested-div{
+            flex-direction: column !important;
+            margin-bottom: 10px;
+            div{
+                min-width: 100%;
+                max-width: 100%;
+            }
+        }
+    }
     .mobile-none{
         display:none;
     }
