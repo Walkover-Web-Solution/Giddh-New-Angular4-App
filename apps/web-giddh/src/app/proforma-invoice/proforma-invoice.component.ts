@@ -6872,7 +6872,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 this.createEmbeddedViewAtIndex(entryIndex);
             }
-            currentIndex += ITEMS_RENDERED_AT_ONCE;
+            currentIndex += (ITEMS_RENDERED_AT_ONCE + 1);
         }, INTERVAL_IN_MS);
     }
 
