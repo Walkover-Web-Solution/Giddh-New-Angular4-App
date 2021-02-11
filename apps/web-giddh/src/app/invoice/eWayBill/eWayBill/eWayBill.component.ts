@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { AppState } from '../../../store';
@@ -28,7 +28,7 @@ import { GeneralService } from '../../../services/general.service';
     styleUrls: [`./eWayBill.component.scss`]
 })
 
-export class EWayBillComponent implements OnInit {
+export class EWayBillComponent implements OnInit, OnDestroy {
     @ViewChild('cancelEwayForm', {static: true}) public cancelEwayForm: NgForm;
     @ViewChild('updateVehicleForm', {static: true}) public updateVehicleForm: NgForm;
 
@@ -314,7 +314,7 @@ export class EWayBillComponent implements OnInit {
         }).pipe(catchError(e => {
             this.searchResults = [];
             return [];
-        })).subscribe(response => {
+        }), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.searchResults = response.map(item => ({
                     ...item,
@@ -327,7 +327,7 @@ export class EWayBillComponent implements OnInit {
 
     public onSelectEwayDownload(eway: Result) {
         this.selectedEway = _.cloneDeep(eway);
-        this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).subscribe(d => {
+        this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
 
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
@@ -340,7 +340,7 @@ export class EWayBillComponent implements OnInit {
 
     public onSelectEwayDetailedDownload(ewayItem: Result) {
         this.selectedEway = _.cloneDeep(ewayItem);
-        this._invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).subscribe(d => {
+        this._invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
@@ -524,5 +524,15 @@ export class EWayBillComponent implements OnInit {
             this.EwayBillfilterRequest.toDate = this.toDate;
             this.getAllFilteredInvoice();
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof EWayBillComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

@@ -106,9 +106,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public branchToUpdate: any;
     /** True, if loader is to be displayed */
     public showLoader: boolean;
-    
+
     public imgPath: string = '';
-    
+
     /** Stores the selected branch details */
     private branchDetails: any;
 
@@ -212,7 +212,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this._breakPointObservar.observe([
             '(max-width:768px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             this.changeBranchViewType('card')
         });
@@ -494,7 +494,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             branchUniqueName: this.branchDetails.uniqueName,
             linkAddresses
         };
-        this.settingsProfileService.updateBranchInfo(requestObj).subscribe(response => {
+        this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.closeAddressSidePane = 'out';
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
@@ -547,7 +547,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 uniqueName: entity.uniqueName
             };
         }
-        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(() => {
+        this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
         });
     }
@@ -571,7 +571,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     private loadAddresses(method: string, successCallback: Function): void {
-        this.settingsProfileService.getCompanyAddresses(method).subscribe((response) => {
+        this.settingsProfileService.getCompanyAddresses(method).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {

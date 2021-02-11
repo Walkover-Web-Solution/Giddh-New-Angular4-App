@@ -33,7 +33,7 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
     ]
 })
 
-export class CreateBranchComponent implements OnInit {
+export class CreateBranchComponent implements OnInit, OnDestroy {
     /** Aside menu pane status */
     public addressAsideMenuState: string = 'out';
     /** Stores the current company details */
@@ -235,7 +235,7 @@ export class CreateBranchComponent implements OnInit {
                 isDefault: filteredAddress.isDefault
             }))
         };
-        this.settingsProfileService.createNewBranch(requestObj).subscribe(response => {
+        this.settingsProfileService.createNewBranch(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
                     this.toastService.successToast('Branch created successfully');
@@ -277,7 +277,7 @@ export class CreateBranchComponent implements OnInit {
      * @memberof CreateBranchComponent
      */
     public loadStates(countryCode: string): void {
-        this.companyService.getAllStates({ country: countryCode }).subscribe(response => {
+        this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
@@ -316,7 +316,7 @@ export class CreateBranchComponent implements OnInit {
             linkEntity
         };
 
-        this.settingsProfileService.createNewAddress(requestObj).subscribe((response: any) => {
+        this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response.status === 'success' && response.body) {
                 this.toggleAddressAsidePane();
                 this.addresses.push({
@@ -342,7 +342,7 @@ export class CreateBranchComponent implements OnInit {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
-        this.commonService.getOnboardingForm(onboardingFormRequest).subscribe((response: any) => {
+        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === 'success') {
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
@@ -361,7 +361,7 @@ export class CreateBranchComponent implements OnInit {
      * @memberof CreateBranchComponent
      */
     public loadLinkedEntities(successCallback: Function): void {
-        this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
+        this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
@@ -400,7 +400,7 @@ export class CreateBranchComponent implements OnInit {
      * @memberof CreateBranchComponent
      */
     private loadAddresses(method: string, params?: any): void {
-        this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
+        this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
                 this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {
@@ -411,6 +411,16 @@ export class CreateBranchComponent implements OnInit {
                     }));
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof CreateBranchComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
 }

@@ -349,7 +349,7 @@ export class ReceiptComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this._receiptService.DownloadVoucher(this.downloadVoucherRequestObject, this.selectedReceipt.account.uniqueName)
+        this._receiptService.DownloadVoucher(this.downloadVoucherRequestObject, this.selectedReceipt.account.uniqueName).pipe(takeUntil(this.destroyed$))
             .subscribe(s => {
                 if (s) {
                     return saveAs(s, `Receipt-${this.selectedReceipt.account.uniqueName}.pdf`);
