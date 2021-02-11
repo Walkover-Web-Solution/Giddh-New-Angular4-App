@@ -15,6 +15,7 @@
             [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName">Download
             report</button>
     </div>
+    <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
 </section>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">

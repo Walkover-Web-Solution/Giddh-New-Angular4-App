@@ -53,5 +53,5 @@
     <pagination [totalItems]="columnarReportResponse.totalItems" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paginationCount" (pageChanged)="pageChanged($event)"></pagination>
 </div>
 <div *ngIf="isLoading && isShowColumnarReport">
-    <giddh-page-loader></giddh-page-loader>
+    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
 </div>

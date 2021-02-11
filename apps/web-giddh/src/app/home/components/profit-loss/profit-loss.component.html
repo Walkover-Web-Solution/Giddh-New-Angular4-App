@@ -13,7 +13,7 @@
 
         <div class="card-body position-relative">
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
-                <giddh-page-loader></giddh-page-loader>
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
                 <!-- <chart [chart]="profitLossChart" *ngIf="dataFound" #currentRatio></chart> -->

@@ -184,7 +184,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="!(getAgingReportRequestInProcess$ | async)">
             <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
                 <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
                     <td data-title="Name">{{ entry.name }}</td>
@@ -211,6 +211,13 @@
                     </td>
                 </tr>
             </ng-container>
+        </tbody>
+        <tbody *ngIf="(getAgingReportRequestInProcess$ | async)">
+            <tr>
+                <td colspan="8">
+                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                </td>
+            </tr>
         </tbody>
     </table>
     <div *ngIf="(dueAmountReportData$ | async)?.totalItems>=20" class="pagination-wrapper">
