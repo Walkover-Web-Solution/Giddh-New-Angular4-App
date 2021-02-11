@@ -15,7 +15,7 @@ import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
-    selector: 'toal-overdues-chart',
+    selector: 'total-overdues-chart',
     templateUrl: 'total-overdues-chart.component.html',
     styleUrls: ['../../home.component.scss', './total-overdues-chart.component.scss'],
 })
