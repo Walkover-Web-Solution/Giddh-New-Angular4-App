@@ -11,8 +11,15 @@
 }
 
 #mfReportTbl .table td {
+    &:first-child{
+        min-width: 100px;
+    }
     vertical-align: top !important;
     text-transform: capitalize;
+    min-width: 140px;
+    max-width: 220px;
+    white-space: normal !important;
+    word-break: break-word;
 }
 
 #mfReportTbl .table td.noBdr {
@@ -41,11 +48,25 @@
         border-right: 1px solid $gainsboro !important;
     }
     td.raw-material {
-        background-color: $gray-95 !important;
+        background-color: $gray-95;
         line-height: 2;
         color: $matterhorn;
     }
+    tr{
+        &:hover{
+            td.raw-material{
+                background-color: rgba(221, 225, 230, 0.5);
+            }
+        }
+    }
 }
+.regular-font {
+    font-family: 'opensans-regular';
+}
+.row-gray-background th {
+    background-color: $medium-gray;
+}
+
 @media(min-width:1441px){
     .manufacturing-head{
         .col-xl-3{
@@ -131,10 +152,8 @@
     .mobile-none{
         display:none;
     }
-}
-.regular-font {
-    font-family: 'opensans-regular';
-}
-.row-gray-background th {
-    background-color: $medium-gray;
+    #mfReportTbl .table td {
+        min-width: auto !important;
+        max-width: inherit !important;
+    }
 }

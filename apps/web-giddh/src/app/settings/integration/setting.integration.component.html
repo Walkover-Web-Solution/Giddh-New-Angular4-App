@@ -426,7 +426,7 @@
                                         </sh-select>
                                     </div>
                                 </div>
-                                <ng-container formArrayName="userAmountRanges">
+                                <!-- <ng-container formArrayName="userAmountRanges">
                                     <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
                                         <div class="row">
                                             <div class="form-group col-xl-2 col-md-6 payment-col" *ngIf="item.get('maxBankLimit').value ==='max'">
@@ -506,7 +506,7 @@
                                 </ng-container>
                                 <div>
                                     <a href="javascript:void(0)" (click)="addUserAmountRangesForm();checkFormValidations(addBankForm.value)" class="btn btn-link pl-0">+ Add New Row</a>
-                                </div>
+                                </div> -->
                                 <!-- <div class="clearfix">
                             <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
                         </div> -->
@@ -557,7 +557,7 @@
                                 </div>
                             </div>
                             <!-- Added this new row make it dynamic -->
-                            <ng-container *ngFor="let item of regAcc.userAmountRanges; let index = index; let firstIndex = first; let lastIndex = last">
+                            <!-- <ng-container *ngFor="let item of regAcc.userAmountRanges; let index = index; let firstIndex = first; let lastIndex = last">
                                 <div class="row">
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="item.maxBankLimit ==='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
@@ -616,7 +616,7 @@
 
                             <div *ngIf="isBankUpdateInEdit === parentIndex">
                                 <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)" class="btn btn-link pl-0 pt-0">+ Add New Row</a>
-                            </div>
+                            </div> -->
                             <!-- New code -->
                             <div>
                                 <div class="form-group update-btn-wrapper">
@@ -799,7 +799,7 @@
                                 </sh-select>
                             </div>
                         </div>
-                        <ng-container formArrayName="userAmountRanges">
+                        <!-- <ng-container formArrayName="userAmountRanges">
                             <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
                                 <div class="row">
                                     <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col amount-upto" *ngIf="item.get('maxBankLimit').value ==='max'">
@@ -879,7 +879,7 @@
                         </ng-container>
                         <div>
                             <a href="javascript:void(0)" (click)="addUserAmountRangesForm()" class="btn btn-link pl-0 pt-0">+ Add New Row</a>
-                        </div>
+                        </div> -->
                         <!-- <div class="clearfix">
                             <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
                         </div> -->
