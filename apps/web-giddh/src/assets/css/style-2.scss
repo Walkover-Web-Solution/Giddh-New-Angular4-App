@@ -7950,7 +7950,7 @@ div#getGroupModal {
 
 .invoice-footer {
     display: flex;
-    padding: 20px;
+    padding: 20px 15px;
     background: $white;
     margin-top: 60px;
     position: fixed;
@@ -7964,7 +7964,7 @@ div#getGroupModal {
 .menu_open .invoice-footer {
     left: 215px;
     display: flex;
-    padding: 20px;
+    padding: 20px 15px;
     background: $white;
     margin-top: 60px;
     position: fixed;
@@ -9581,7 +9581,12 @@ input.mat-input-element{
 .custom-select{
     background-image: none !important;
 }
-
+.top-bar.aging-top-bar, .top-bar.customer-top-bar{
+    padding-top: 18px !important;
+}
+.top-bar.customer-top-bar.vendor-top-bar{
+    padding-top: 15px !important;
+}
 /* responsive  starts here */
 
 @media (max-width: 1440px) {

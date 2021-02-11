@@ -61,7 +61,6 @@ describe('This is TrialBalance Search Test', () => {
         cy.createLedgerAPI('uitest').then((response) => {
             if (response.status === 201){
                 cy.globalSearch('.active.nav-item > .nav-link > span', 'trial balance', 'Trial Balance')
-
             }
             cy.wait(2000)
             cy.navigateToTrialBalanceOptions('Balance Sheet');

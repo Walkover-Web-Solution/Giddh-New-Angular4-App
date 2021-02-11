@@ -1,15 +1,17 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReceiptService } from '../../../services/receipt.service';
 import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
 import { ToasterService } from '../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'preview-download-receipt-component',
     templateUrl: 'preview-download-receipt.component.html'
 })
 
-export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
+export class PreviewDownloadReceiptComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public request: any;
     @Output() public openUpdateReceiptModel: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() public closeModelEvent: EventEmitter<string> = new EventEmitter();
@@ -17,6 +19,9 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
     public isRequestInProcess: boolean = false;
     public isError: boolean = false;
     @Input() public activatedInvoice: string;
+
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _receiptService: ReceiptService, private _toasty: ToasterService,
         private sanitizer: DomSanitizer, private _cdRef: ChangeDetectorRef) {
@@ -35,7 +40,7 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
         let accountUniqueName: string = this.request.accountUniqueName;
         //
         this.isRequestInProcess = true;
-        this._receiptService.DownloadVoucher(model, accountUniqueName, false)
+        this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$))
             .subscribe(s => {
                 if (s) {
                     this.isRequestInProcess = false;
@@ -70,5 +75,15 @@ export class PreviewDownloadReceiptComponent implements OnInit, OnChanges {
     public editButtonClicked() {
         this.openUpdateReceiptModel.emit(true);
         this.closeModelEvent.emit();
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PreviewDownloadReceiptComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

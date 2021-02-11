@@ -527,4 +527,14 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
     public openBranchTransferPopup(transferType) {
         this._generalService.invokeEvent.next(["openbranchtransferpopup", transferType]);
     }
+
+    /**
+     * Releases memory
+     *
+     * @memberof BranchTransferNoteComponent
+     */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

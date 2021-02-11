@@ -218,7 +218,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.commandKRequestParams.group = "";
         }
 
-        this._commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).subscribe((res) => {
+        this._commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
 
             if (res && res.body && res.body.results && res.body.results.length > 0) {
@@ -426,7 +426,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public handleHighLightedItemEvent(item: any): void {
         // no need to do anything in the function
-        this.highlightedItem = item.loop;
+        this.highlightedItem = item?.loop;
     }
 
     /**
@@ -517,6 +517,6 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 term = (term) ? term.trim() : "";
                 this.searchSubject.next(term);
             }
-        }, 100);    
+        }, 100);
     }
 }

@@ -10,13 +10,13 @@
                     <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
                 </a>
             </div>
-            <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
+            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">+ Add Address</button>
         </div>
         <!-- branch profile element start -->
         <div *ngIf="organizationType === 'BRANCH'"
             class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top">
             <div class="font-14">List of all the addresses created</div>
-            <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
+            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">+ Add Address</button>
         </div>
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="w-100">
