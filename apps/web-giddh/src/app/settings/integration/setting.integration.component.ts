@@ -292,6 +292,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
                 if (this.addBankForm) {
                     this.addBankForm.reset();
+                    this.addBankForm = this.createBankIntegrationForm();
                 }
                 this.isBankUpdateInEdit = null;
             }

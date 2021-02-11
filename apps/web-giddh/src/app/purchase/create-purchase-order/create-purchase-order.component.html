@@ -4,7 +4,7 @@
 
 <form #poForm="ngForm" novalidate autocomplete="off"
     [ngClass]="{'create-purchase-order-form': true, 'customer-purchase-order' : !purchaseOrder.voucherDetails.customerName, 'for-multi-currency' : isMulticurrencyAccount  } "
-    *ngIf="!showLoader">
+    [ngStyle]="{'display': !showLoader ? 'block' : 'none'}">
     <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
         <div class="clearfix wrapper-customer-table  pd-t2">
             <div class="customer-purchase-table">
@@ -474,11 +474,24 @@
                     </th>
                 </tr>
             </thead>
-            <tbody
-                *ngFor="let entry of purchaseOrder.entries; let entryIdx = index; let first = first; let last = last;"
-                (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
-                <ng-container *ngFor="let transaction of entry.transactions;">
-                    <tr (click)="setActiveIndex(entryIdx);$event.stopPropagation()" [hidden]="activeIndex === entryIdx"
+            <tbody [hidden]="showBulkLoader" (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
+                <ng-container #itemsContainer></ng-container>
+            </tbody>
+            <tbody *ngIf="showBulkLoader">
+                <tr>
+                    <td colspan="8">
+                        <div class="col-12 no-data mr-t2 loader-main">
+                            <div class="spinner2">
+                                <div class="cube1"></div>
+                                <div class="cube2"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <ng-template #entry let-entry let-entryIdx="entryIdx" let-transaction="transaction">
+                <!-- <ng-container *ngFor="let transaction of entry.transactions;"> -->
+                    <tr (click)="setActiveIndex(entryIdx);$event.stopPropagation()" *ngIf="activeIndex !== entryIdx"
                         class="entriesTr set-active"
                         [ngClass]="{'is-other-tax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
                         <td>{{ entryIdx + 1 }}</td>
@@ -602,7 +615,7 @@
                                 </div>
                             </div>
 
-                            <div class="trash-icon-delete" (click)="removeTransaction(entryIdx)">
+                            <div class="trash-icon-delete" (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
                                 <span class="cp">
                                     <i class="icon-trash" aria-hidden="true"></i>
                                 </span>
@@ -614,7 +627,7 @@
 
                     <!-- region dynamic entries-->
                     <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                    <tr [hidden]="activeIndex !== entryIdx" class="entriesTr default-active"
+                    <tr *ngIf="activeIndex === entryIdx" class="entriesTr default-active"
                         (click)="$event.stopPropagation();">
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
@@ -623,7 +636,7 @@
                                     <sh-select [options]="salesAccounts$ | async" #selectAccount
                                         [(ngModel)]="transaction.fakeAccForSelect2"
                                         name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                                        (selected)="onSelectSalesAccount($event, transaction, entry)"
+                                        (selected)="onSelectSalesAccount($event, transaction, entry, false, entryIdx)"
                                         [placeholder]="'Select A/c'" [notFoundLink]="true"
                                         [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
                                         (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
@@ -796,7 +809,7 @@
                                         [applicableTaxes]="transaction.applicableTaxes"
                                         [exceptTaxTypes]="exceptTaxTypes"
                                         [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
-                                        [rootClass]="'sales-invoice-table'"
+                                        [rootClass]="'sales-invoice-table'" (selectedTaxEvent)="transaction.applicableTaxes = $event"
                                         (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                                         (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
                                         [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
@@ -872,7 +885,7 @@
 
                             </div>
 
-                            <div class="trash-icon-delete" (click)="removeTransaction(entryIdx)">
+                            <div class="trash-icon-delete" (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
                                 <span class="cp">
                                     <i class="icon-trash" aria-hidden="true"></i>
                                 </span>
@@ -880,13 +893,13 @@
                         </td>
                     </tr>
                     <!-- endregion -->
-                </ng-container>
-            </tbody>
+                <!-- </ng-container> -->
+            </ng-template>
             <!-- region add bulk items -->
             <div class="p-1 aqua-color add-line-bulk-item">
                 <a href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
                 <span class="font-14"> | </span>
-                <a (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void(0)">+ Add
+                <a (click)="bulkItemsModal.show()" href="javascript:void(0)">+ Add
                     Bulk
                     Entries</a>
             </div>
@@ -1050,7 +1063,7 @@
     <!-- region mobile view -->
     <div class="show-in-mobile" *ngIf="isMobileScreen">
         <div class="card-invoice-table-wrapper"
-            *ngFor="let entry of purchaseOrder.entries; let entryIdx = index; let first = first; let last = last">
+            *ngFor="let entry of purchaseOrder.entries; let entryIdx = index;">
             <ng-container *ngFor="let transaction of entry.transactions;">
                 <div class="card-invoice-table" [hidden]="activeIndex === entryIdx">
                     <div class="row">
@@ -1188,7 +1201,7 @@
                     <div class="edit-card" (click)="setActiveIndex(entryIdx);$event.stopPropagation()">
                         <img src="assets/images/edit-pencilicon.svg">
                     </div>
-                    <div class="del-card" (click)="removeTransaction(entryIdx)">
+                    <div class="del-card" (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
                         <i class="icon-trash" aria-hidden="true"></i>
                     </div>
                 </div>
@@ -1206,7 +1219,7 @@
                                             <sh-select [options]="salesAccounts$ | async"
                                                 [(ngModel)]="transaction.fakeAccForSelect2"
                                                 name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                                                (selected)="onSelectSalesAccount($event,transaction, entry)"
+                                                (selected)="onSelectSalesAccount($event,transaction, entry, false, entryIdx)"
                                                 [placeholder]="'Select A/cc'" [notFoundLink]="true"
                                                 [forceClearReactive]="forceClear$ | async"
                                                 [multiple]="false"
@@ -1434,7 +1447,7 @@
                                             [applicableTaxes]="transaction.applicableTaxes"
                                             [exceptTaxTypes]="exceptTaxTypes"
                                             [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
-                                            [rootClass]="'sales-invoice-table'"
+                                            [rootClass]="'sales-invoice-table'" (selectedTaxEvent)="transaction.applicableTaxes = $event"
                                             (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
                                             (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
                                             [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
@@ -1520,7 +1533,7 @@
                     <div class="save-card-data pointer" (click)="handleOutsideClick()">
                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </div>
-                    <div class="del-card pointer" (click)="removeTransaction(entryIdx)">
+                    <div class="del-card pointer" (click)="removeTransaction(entryIdx);$event.preventDefault();$event.stopPropagation()">
                         <i class="icon-trash" aria-hidden="true"></i>
                     </div>
 
@@ -1743,9 +1756,9 @@
     (closeAsideEvent)="onNoResultsClicked()"></aside-menu-product-service>
 
 <!-- region bulk items -->
-<div bsModal #bulkItemsModal="bs-modal" (onHidden)="showBulkItemModal = false" tabindex="-1" class="modal fade" role="dialog"
+<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
     [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
-    <ng-container *ngIf="showBulkItemModal">
+    <ng-container *ngIf="bulkItemsModal?.isShown">
         <proforma-add-bulk-items-component [invoiceType]="invoiceType" (saveItemsEvent)="addBulkStockItems($event)"
             (closeEvent)="bulkItemsModal.hide()"></proforma-add-bulk-items-component>
     </ng-container>
