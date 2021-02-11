@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf, combineLatest } from 'rxjs';
@@ -140,6 +140,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
     /* Tax Control instance */
     @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
+    /** Container element for all the entries */
+    @ViewChild('itemsContainer', { read: ViewContainerRef, static: false }) container: ViewContainerRef;
+    /** Template reference for each entry */
+    @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold if it's multi currency account */
@@ -272,8 +276,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public selectedSuffixForCurrency: string = '';
     /* Fetched converted rate */
     public fetchedConvertedRate: number = 0;
-    /* This will hold if we need to show bulk item modal */
-    public showBulkItemModal: boolean = false;
     /* Stores the unique name of default warehouse of a company */
     public defaultWarehouse: string;
     /* Stores the unique name of selected warehouse */
@@ -374,6 +376,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     };
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
+    /** True, when bulk items are added */
+    public showBulkLoader: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -396,7 +400,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         private invoiceService: InvoiceService,
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private ngZone: NgZone
     ) {
         this.getInvoiceSettings();
         // this.store.dispatch(this.generalActions.getFlattenAccount());
@@ -451,6 +456,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     this.setCurrentPageTitle("Edit Purchase Order");
                     this.isUpdateMode = true;
                     this.autoFillVendorShipping = false;
+                }
+                if (!this.isUpdateMode) {
+                    setTimeout(() => {
+                        this.createEmbeddedViewAtIndex(0);
+                    });
                 }
             }
         });
@@ -638,7 +648,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === stock.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === stock.uniqueName);
                 if (result && !_.isUndefined(this.innerEntryIndex)) {
                     this.purchaseOrder.entries[this.innerEntryIndex].transactions[0].fakeAccForSelect2 = result.value;
-                    this.onSelectSalesAccount(result, this.purchaseOrder.entries[this.innerEntryIndex].transactions[0], this.purchaseOrder.entries[this.innerEntryIndex]);
+                    this.onSelectSalesAccount(result, this.purchaseOrder.entries[this.innerEntryIndex].transactions[0], this.purchaseOrder.entries[this.innerEntryIndex], false, this.innerEntryIndex);
                 }
             }
         });
@@ -1273,10 +1283,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @param {*} selectedAcc
      * @param {SalesTransactionItemClass} txn
      * @param {SalesEntryClass} entry
+     * @param {boolean} isBulkItem True, if bulk item entry is performed
+     * @param {number} entryIndex Index of current entry
      * @returns {*}
      * @memberof CreatePurchaseOrderComponent
      */
-    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false): any {
+    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, entryIndex: number): any {
+        this.purchaseOrder.entries[entryIndex] = entry;
+        this.purchaseOrder.entries[entryIndex].transactions[0] = txn;
         if ((selectedAcc.value || isBulkItem) && selectedAcc.additional.uniqueName) {
             let requestObject;
             if (selectedAcc.additional.stock) {
@@ -1739,6 +1753,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
         if (isNaN(calculatedGrandTotal)) {
             calculatedGrandTotal = 0;
+        } else {
+            calculatedGrandTotal = +calculatedGrandTotal;
         }
 
         //Save the Grand Total for Edit
@@ -1882,6 +1898,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.onBlurDueDate(this.activeIndex);
             }, 200);
         }
+        this.createEmbeddedViewAtIndex(this.purchaseOrder.entries.length - 1);
     }
 
     /**
@@ -1894,7 +1911,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (this.activeIndex === entryIdx) {
             this.activeIndex = null;
         }
-        this.purchaseOrder.entries = cloneDeep(this.purchaseOrder.entries.filter((entry, index) => entryIdx !== index));
+        for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
+            const viewRef: any = this.container.get(index);
+            viewRef.context.entryIdx -= 1;
+        }
+        if (this.container) {
+            this.container.remove(entryIdx);
+        }
+        this.purchaseOrder.entries.splice(entryIdx, 1);
         this.calculateAffectedThingsFromOtherTaxChanges();
         if (this.purchaseOrder.entries.length === 0) {
             this.addBlankRow(null);
@@ -1926,6 +1950,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateAffectedThingsFromOtherTaxChanges(): void {
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
         this.calculateTcsTdsTotal();
         this.calculateGrandTotal();
     }
@@ -2294,27 +2321,39 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public addBulkStockItems(items: SalesAddBulkStockItems[]): void {
-        for (const item of items) {
-            // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
-            item.additional['quantity'] = item.quantity;
-            let lastIndex = -1;
-            let blankItemIndex = this.purchaseOrder.entries.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
+        const startIndex = this.purchaseOrder.entries.length;
+        let isBlankItemPresent;
+        this.ngZone.runOutsideAngular(() => {
+            for (const item of items) {
+                // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
+                item.additional['quantity'] = item.quantity;
+                let lastIndex = -1;
+                let blankItemIndex = this.purchaseOrder.entries.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
+                let isBlankItemInBetween;
+                if (blankItemIndex > -1) {
+                    lastIndex = blankItemIndex;
+                    this.purchaseOrder.entries[lastIndex] = new SalesEntryClass();
+                    isBlankItemInBetween = true;
+                    isBlankItemPresent = true;
+                } else {
+                    this.purchaseOrder.entries.push(new SalesEntryClass());
+                    lastIndex = this.purchaseOrder.entries.length - 1;
+                    isBlankItemInBetween = false;
+                }
 
-            if (blankItemIndex > -1) {
-                lastIndex = blankItemIndex;
-                this.purchaseOrder.entries[lastIndex] = new SalesEntryClass();
-            } else {
-                this.purchaseOrder.entries.push(new SalesEntryClass());
-                lastIndex = this.purchaseOrder.entries.length - 1;
+                this.activeIndex = lastIndex;
+                this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
+                this.purchaseOrder.entries[lastIndex].isNewEntryInUpdateMode = true;
+                if (isBlankItemInBetween) {
+                    // Update the context of blank items found in between of list of entries
+                    const viewRef: any = this.container.get(lastIndex);
+                    viewRef.context.$implicit = this.purchaseOrder.entries[lastIndex];
+                    viewRef.context.transaction = this.purchaseOrder.entries[lastIndex].transactions[0];
+                }
+                this.onSelectSalesAccount(item, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex], true, lastIndex);
             }
-
-            this.activeIndex = lastIndex;
-            this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
-            this.purchaseOrder.entries[lastIndex].isNewEntryInUpdateMode = true;
-            this.onSelectSalesAccount(item, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex], true);
-            this.calculateStockEntryAmount(this.purchaseOrder.entries[lastIndex].transactions[0]);
-            this.calculateWhenTrxAltered(this.purchaseOrder.entries[lastIndex], this.purchaseOrder.entries[lastIndex].transactions[0]);
-        }
+        });
+        this.buildBulkData(this.purchaseOrder.entries.length, startIndex, isBlankItemPresent);
     }
 
     /**
@@ -2343,6 +2382,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public resetForm(): void {
+        if (this.container) {
+            this.container.clear();
+        }
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.purchaseOrder = new PurchaseOrder();
         this.resetVendor();
@@ -2354,6 +2396,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.initializeWarehouse();
         this.fillCompanyAddress("reset");
         this.assignDates();
+        this.createEmbeddedViewAtIndex(0);
     }
 
     /**
@@ -2501,7 +2544,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                             clearInterval(this.interval);
                             this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
                             this.showLoaderUntilDataPrefilled = false;
-                            this.startLoader(false);
+                            this.buildBulkData(this.purchaseOrder.entries.length, 0);
                         }
                     }, 500);
 
@@ -3340,5 +3383,81 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.calculateStockEntryAmount(transaction);
         this.calculateWhenTrxAltered(entry, transaction);
         return transaction;
+    }
+
+    /**
+     * Creates the view progressively for bulk entries
+     *
+     * @private
+     * @param {number} length Total length of the entries formed after bulk items are added
+     * @param {number} startIndex Start index of the bulk items (the index from which progressive rendering will start)
+     * @param {boolean} [isBlankItemInBetween] True, if any blank item is found in between
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private buildBulkData(length: number, startIndex: number, isBlankItemInBetween?: boolean): void {
+        const ITEMS_RENDERED_AT_ONCE = 20;
+        const INTERVAL_IN_MS = 50;
+
+        let currentIndex = startIndex;
+
+        const interval = setInterval(() => {
+            const nextIndex = currentIndex + ITEMS_RENDERED_AT_ONCE;
+
+            for (let entryIndex = currentIndex; entryIndex <= nextIndex; entryIndex++) {
+                if (entryIndex >= length) {
+                    // Last element is rendered, stop the loader
+                    this.startLoader(false);
+                    this.activeIndex = null;
+                    clearInterval(interval);
+                    if (isBlankItemInBetween) {
+                        this.loadTaxesAndDiscounts(0);
+                    } else {
+                        this.loadTaxesAndDiscounts(startIndex);
+                    }
+                    break;
+                }
+                this.createEmbeddedViewAtIndex(entryIndex);
+            }
+            currentIndex += ITEMS_RENDERED_AT_ONCE;
+        }, INTERVAL_IN_MS);
+    }
+
+    /**
+     * Loads the taxes and discounts for each entry for progressive calculation
+     * loops around the item to fetch the values in template
+     *
+     * @private
+     * @param {number} startIndex Start index for the calculation
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private loadTaxesAndDiscounts(startIndex: number): void {
+        this.showBulkLoader = true;
+        setTimeout(() => {
+            this.showBulkLoader = false;
+        }, 50);
+        for (let index = startIndex; index < this.purchaseOrder.entries.length; index++) {
+            setTimeout(() => {
+                this.activeIndex = index;
+            }, 30);
+        }
+    }
+
+    /**
+     * Creates the embedded view at specific index
+     *
+     * @private
+     * @params entryIndex {number} Index of current entry
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private createEmbeddedViewAtIndex(entryIndex: number): void {
+        const context = {
+            $implicit: this.purchaseOrder.entries[entryIndex],
+            transaction: this.purchaseOrder.entries[entryIndex].transactions[0],
+            entryIdx: entryIndex
+        };
+        if (this.template) {
+            const view = this.template.createEmbeddedView(context);
+            this.container.insert(view);
+        }
     }
 }
