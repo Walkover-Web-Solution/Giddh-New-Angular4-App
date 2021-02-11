@@ -131,7 +131,8 @@ export class OverviewSummaryComponent implements OnInit, OnChanges, AfterViewIni
 	}
 
 	public ngOnDestroy() {
-		this.destroyed$.next(true);
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
 	}
 
 	public mapResponseData(data: GstOverViewSummary[], sequencingList: SequenceConfig[]): GstOverViewSummary[] {

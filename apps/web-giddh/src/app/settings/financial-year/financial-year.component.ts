@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { Store, select } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store/roots';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import * as _ from '../../lodash-optimized';
@@ -28,7 +28,7 @@ export interface IGstObj {
     styleUrls: ['./financial-year.component.scss']
 })
 
-export class FinancialYearComponent implements OnInit {
+export class FinancialYearComponent implements OnInit, OnDestroy {
     public financialYearObj: IFinancialYearResponse;
     public currentCompanyFinancialYearUN: string;
     public currentCompanyName: string;
@@ -152,4 +152,13 @@ export class FinancialYearComponent implements OnInit {
         }
     }
 
+    /**
+     * Releases memory
+     *
+     * @memberof FinancialYearComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

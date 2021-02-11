@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import * as _ from '../../../../../lodash-optimized';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Store, select } from '@ngrx/store';
@@ -31,7 +31,7 @@ export class TemplateDesignUISectionVisibility {
     styleUrls: ['design.filters.component.scss']
 })
 
-export class DesignFiltersContainerComponent implements OnInit {
+export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     @Input() public design: boolean;
     @Input() public mode: string = 'create';
     public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
@@ -120,7 +120,7 @@ export class DesignFiltersContainerComponent implements OnInit {
 
     public ngOnInit() {
 
-        this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
+        this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = _.cloneDeep(template);
 
             this.setFontAndFontSize();
@@ -319,7 +319,7 @@ export class DesignFiltersContainerComponent implements OnInit {
 
             data = this.newLineToBR(data);
 
-            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
+            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this._toasty.successToast('Template Updated Successfully.');
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
@@ -445,5 +445,15 @@ export class DesignFiltersContainerComponent implements OnInit {
                 });
             }
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof DesignFiltersContainerComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

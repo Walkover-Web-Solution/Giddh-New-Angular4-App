@@ -66,7 +66,7 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.getPettycashReportInprocess$ = this.store.pipe(select(p => p.expense.getPettycashReportInprocess), takeUntil(this.destroyed$));
         this.getPettycashReportSuccess$ = this.store.pipe(select(p => p.expense.getPettycashReportSuccess), takeUntil(this.destroyed$));
 
-        observableCombineLatest(this.universalDate$, this.todaySelected$).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+        observableCombineLatest([this.universalDate$, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
 			if (!Array.isArray(resp[0])) {
 				return;
 			}

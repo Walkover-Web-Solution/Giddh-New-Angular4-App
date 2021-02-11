@@ -338,7 +338,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
 
         // get view from sidebar while clicking on group/stock
-        this.invViewService.getActiveView().subscribe(viewActiveStock => {
+        this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(viewActiveStock => {
             this.initVoucherType();
             this.groupUniqueName = viewActiveStock.groupUniqueName;
             this.stockUniqueName = viewActiveStock.stockUniqueName;
@@ -850,7 +850,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         obj.to = this.toDate;
         obj.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
         obj.branchUniqueName = this.currentBranchAndWarehouse.branch;
-        this.inventoryService.downloadAllInventoryReports(obj)
+        this.inventoryService.downloadAllInventoryReports(obj).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res.status === 'success') {
                     this._toasty.infoToast(res.body);

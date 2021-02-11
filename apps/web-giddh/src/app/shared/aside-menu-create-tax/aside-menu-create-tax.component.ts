@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -18,8 +18,7 @@ import { SalesService } from '../../services/sales.service';
     templateUrl: './aside-menu-create-tax.component.html',
     styleUrls: [`./aside-menu-create-tax.component.scss`]
 })
-
-export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
+export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Input() public tax: TaxResponse;
     @Input() public asidePaneState: string;
@@ -231,5 +230,16 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges {
                 this.linkedAccountsOption = accounts;
             }
         });
+    }
+
+
+    /**
+     * Unsubscribe from all listeners
+     *
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
