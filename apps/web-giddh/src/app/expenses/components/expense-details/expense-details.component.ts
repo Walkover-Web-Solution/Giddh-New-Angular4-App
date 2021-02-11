@@ -490,7 +490,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
      * @memberof ExpenseDetailsComponent
      */
     private async prepareEntryAgainstObject(res: PettyCashResonse): Promise<any> {
-        this.cashOrBankEntry = res?.particular?.uniqueName ? await this.isCashBankAccount(res.particular.uniqueName) : false;
+        this.cashOrBankEntry = res?.particular ? this.isCashBankAccount(res.particular) : false;
         this.pettyCashEntryType = res.pettyCashEntryStatus.entryType;
         if (res.pettyCashEntryStatus.entryType === 'sales') {
             this.entryAgainstObject.base = this.cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
@@ -524,20 +524,15 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
      * Returns true, if the account belongs to cash or bank account
      *
      * @private
-     * @param {string} uniqueName Account unique name
-     * @returns {Promise<any>} Promise to carry out further operations
+     * @param {any} particular Account unique name
+     * @returns {boolean} Promise to carry out further operations
      * @memberof ExpenseDetailsComponent
      */
-    private async isCashBankAccount(uniqueName: string): Promise<any> {
-        try {
-            const response = await this.accountService.GetAccountDetailsV2(uniqueName).toPromise();
-            if (response?.body) {
-                const accountDetails = response.body;
-                return accountDetails.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
-            }
-        } catch(error) {
-            return false;
+    private isCashBankAccount(particular: any): boolean {
+        if (particular) {
+            return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
         }
+        return false;
     }
 
     /**
