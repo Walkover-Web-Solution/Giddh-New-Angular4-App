@@ -3418,7 +3418,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
                 this.createEmbeddedViewAtIndex(entryIndex);
             }
-            currentIndex += ITEMS_RENDERED_AT_ONCE;
+            currentIndex += (ITEMS_RENDERED_AT_ONCE + 1);
         }, INTERVAL_IN_MS);
     }
 
