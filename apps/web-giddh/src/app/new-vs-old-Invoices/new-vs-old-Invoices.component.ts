@@ -133,6 +133,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         //   this.showErrorToast('please select quater');
         //   return;
         // }
+        this.isLoading = true;
         this.NewVsOldInvoicesQueryRequest.type = this.selectedType;
         if (this.NewVsOldInvoicesQueryRequest.type === 'month') {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedmonth + '-' + this.selectedYear;
@@ -171,6 +172,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
             this.isRequestSuccess$.subscribe(s => {
                 if (s) {
+                    this.isLoading = false;
                     if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
                         this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth).label;
                     } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {

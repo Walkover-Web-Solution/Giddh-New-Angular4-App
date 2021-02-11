@@ -391,14 +391,9 @@
         </div>
     </ng-container>
 
-    <!-- <div *ngIf="(isGetPurchaseDetailsInProcess$ | async)">
-        <div class="no-data mr-t2 loader-main">
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
-        </div>
-    </div> -->
+    <div *ngIf="(isGetPurchaseDetailsInProcess$ | async)">
+        <giddh-page-loader></giddh-page-loader>
+    </div>
 
     <!-- region sorting template -->
     <ng-template #sortingTemplate let-col>
