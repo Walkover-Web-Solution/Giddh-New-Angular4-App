@@ -51,7 +51,8 @@
                         </div>
                     </div>
                     <div class="col-md-6" [ngClass]="currentCompanyBranches?.length > 2 ? 'col-xl-6 col-lg-4' : 'col-xl-10 col-lg-8'" *ngIf="!isMobileScreen">
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex"
+                        [ngClass]="showClearFilter() ? 'justify-content-between' : 'justify-content-end'">
                             <div *ngIf="showClearFilter()">
                                 <label class="d-block">&nbsp;</label>
                                 <button type="button" class="no-btn clear-filter" (click)="clearFilters()">Clear Filter</button>
