@@ -27,14 +27,7 @@ import { ToasterService } from '../../../services/toaster.service';
     ></tb-pl-bs-filter>
     <div *ngIf="(showLoader | async)">
       <!-- loader -->
-      <div class="loader">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <h1>loading balance sheet</h1>
-      </div>
+      <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
     <div *ngIf="(!(showLoader | async) && data)">
       <bs-grid #bsGrid

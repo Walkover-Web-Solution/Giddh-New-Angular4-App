@@ -30,6 +30,8 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     public isShowMultipleDataIndex: number = null;
     /** To destroy observers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(private store: Store<AppState>, private auditLogsActions: AuditLogsActions) {
         this.loadMoreInProcess$ = this.store.pipe(select(state => state.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
@@ -45,7 +47,9 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsTableComponent
      */
     public ngOnInit(): void {
-        // this.getFilteredLogs();
+        this.store.pipe(select(state => state.auditlog.getLogInProcess)).subscribe(response => {
+            this.isLoading = response;
+        });
     }
 
     /**

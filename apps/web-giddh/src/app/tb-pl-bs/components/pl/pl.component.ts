@@ -29,14 +29,7 @@ import { ToasterService } from '../../../services/toaster.service';
               [showLabels]="true"
       ></tb-pl-bs-filter>
       <div *ngIf="(showLoader | async)">
-          <div class="loader">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <h1>loading profit & loss </h1>
-          </div>
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
       </div>
       <div *ngIf="(!(showLoader | async) && data)">
           <pl-grid #plGrid

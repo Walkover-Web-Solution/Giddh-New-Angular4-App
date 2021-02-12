@@ -323,7 +323,7 @@
                     <div class="invoice-image-section">
                         <div class="relative">
                             <div class="position-relative" *ngIf="isVoucherDownloading || isFileUploading">
-                                <div class="loader"></div>
+                                <giddh-page-loader [cssClass]="'mb-0 mt-0'"></giddh-page-loader>
                             </div>
 
                         <div *ngIf="isVoucherDownloadError && (!isVoucherDownloading || !isFileUploading)"
