@@ -161,6 +161,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public activeCompany: any;
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
@@ -222,6 +224,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.dispatch(this.generalAction.setAppTitle('/pages/reports/receipt'));
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(uniqueName => this.activeCompanyUniqueName = uniqueName);
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((applicationDate) => {
@@ -266,7 +269,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     let currentBranchUniqueName;
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
