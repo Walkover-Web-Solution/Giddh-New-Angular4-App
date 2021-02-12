@@ -5,7 +5,7 @@
     "filter_data" : "Filter Data",
     "approve" : "Approve",
     "reject" : "Reject",
-    "created_by" : "by {{CREATED_BY}}",
+    "created_by" : "by [CREATED_BY]",
     "expenses" : "Expenses",
     "confirm_transaction_approve" : "Are you sure to approve above transaction and add into your books ?",
     "description_placeholder" : "Add Description",
