@@ -140,7 +140,7 @@
                                                                             [(ngModel)]="purchaseOrder.account.billingDetails.gstNumber"
                                                                             class="form-control input-custom"
                                                                             (blur)="autoFillShippingDetails('vendor')"
-                                                                            (change)="getStateCode('billingDetails', vendorStatesBilling, 'vendor')"
+                                                                            (change)="getStateCode('billingDetails', 'vendor')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
                                                                 </div>
@@ -211,7 +211,7 @@
                                                                             type="text" name="vendorShippingDetailsTax"
                                                                             [(ngModel)]="purchaseOrder.account.shippingDetails.gstNumber"
                                                                             class="form-control input-custom"
-                                                                            (change)="getStateCode('shippingDetails', vendorStatesShipping, 'vendor')"
+                                                                            (change)="getStateCode('shippingDetails', 'vendor')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
 
