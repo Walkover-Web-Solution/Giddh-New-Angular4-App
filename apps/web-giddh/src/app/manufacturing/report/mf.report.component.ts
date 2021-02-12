@@ -101,6 +101,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public warehouses: Array<any> = [];
     /* This will clear the select value in sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
 	constructor(
         private store: Store<AppState>,
@@ -122,7 +124,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
-
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.breakPointObservar.observe([
             '(max-width: 991px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -194,13 +196,13 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches.length > 2;
+                this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches.length > 2;
                 let currentBranchUniqueName;
                 if (!this.currentBranch.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
