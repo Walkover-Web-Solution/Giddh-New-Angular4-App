@@ -529,12 +529,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         gstForm.get('stateCode').patchValue(currentState.value);
                         gstForm.get('state').get('code').patchValue(currentState.value);
                     } else {
-                        if (this.isIndia) {
-                            gstForm.get('stateCode').patchValue(null);
-                            gstForm.get('state').get('code').patchValue(null);
-                        }
                         this._toaster.clearAllToaster();
                         if (this.formFields['taxName'] && !gstForm.get('gstNumber')?.valid) {
+                            if (this.isIndia) {
+                                gstForm.get('stateCode').patchValue(null);
+                                gstForm.get('state').get('code').patchValue(null);
+                            }
                             this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
                         }
                     }
