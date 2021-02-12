@@ -6,7 +6,8 @@
     </div>
     <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
     <div class="aside-body">
-        <div class="aside-pane-form" *ngIf="purchaseVersions && purchaseVersions.results && purchaseVersions.results.length > 0">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
+        <div class="aside-pane-form" *ngIf="!isLoading && purchaseVersions && purchaseVersions.results && purchaseVersions.results.length > 0">
             <ng-container *ngFor="let result of purchaseVersions.results;">
                 <div class="single-history-block" *ngFor="let change of result.changes;">
                     <p><span class="text-gray">{{result.versionTime | date: 'dd/MM/yyyy, hh:mm aa' }}</span></p>
