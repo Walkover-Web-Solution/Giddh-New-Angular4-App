@@ -1,10 +1,10 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
@@ -21,7 +21,8 @@ import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 @Component({
 	selector: 'app-manage-groups-accounts',
 	templateUrl: './manage-groups-accounts.component.html',
-	styleUrls: ['./manage-groups-accounts.component.scss']
+    styleUrls: ['./manage-groups-accounts.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
 	@Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -40,7 +41,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	public searchLoad: Observable<boolean>;
     /** model reference */
     public modalRef: BsModalRef;
-	public groupList$: Observable<GroupsWithAccountsResponse[]>;
+	public groupList$: Observable<GroupsWithAccountsResponse[]> = of([]);
 	public currentColumns: GroupAccountSidebarVM;
 	public psConfig: PerfectScrollbarConfigInterface;
 	public groupAndAccountSearchString$: Observable<string>;
@@ -82,10 +83,19 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public isCustomFormValid: boolean = true;
 
 	// tslint:disable-next-line:no-empty
-    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,private breakPointObservar: BreakpointObserver,
-        private renderer: Renderer2, private _generalService: GeneralService, private modalService: BsModalService, private groupService: GroupService, private toasterService: ToasterService) {
+    constructor(
+        private store: Store<AppState>,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private formBuilder: FormBuilder,
+        private cdRef: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver,
+        private renderer: Renderer2,
+        private _generalService: GeneralService,
+        private modalService: BsModalService,
+        private groupService: GroupService,
+        private toasterService: ToasterService
+    ) {
 		this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
-		this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.groupswithaccounts), takeUntil(this.destroyed$));
 		this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
 		this.psConfig = { maxScrollbarLength: 80 };
 	}
@@ -124,7 +134,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	// tslint:disable-next-line:no-empty
 	public ngOnInit() {
-
+        this.loadDefaultGroups();
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -136,7 +146,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 		this.groupSearchTerms.pipe(
 			debounceTime(700), takeUntil(this.destroyed$))
 			.subscribe(term => {
-				this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                if (term) {
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                }
 			});
 
 		this.groupAndAccountSearchString$.subscribe(s => {
@@ -156,13 +168,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 			}
         });
 
-        this.groupList$.subscribe(response => {
-            if(this.keyupInitialized) {
-                setTimeout(() => {
-                    this.groupSrch.nativeElement.focus();
-                }, 200);
-            }
-        });
 	}
 
 	public ngAfterViewChecked() {
@@ -423,4 +428,26 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
     }
 
+    /**
+     * Loads the default groups
+     *
+     * @private
+     * @memberof ManageGroupsAccountsComponent
+     */
+    private loadDefaultGroups(): void {
+        const requestObject: any = {
+            q: '',
+            onlyTop: true
+        }
+        this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data?.body?.results) {
+                this.groupList$ = of(data.body.results);
+                if (this.keyupInitialized) {
+                    setTimeout(() => {
+                        this.groupSrch.nativeElement.focus();
+                    }, 200);
+                }
+            }
+        });
+    }
 }
