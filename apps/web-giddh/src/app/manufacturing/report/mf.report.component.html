@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-12" [ngClass]="currentCompanyBranches?.length > 2 ? 'manufacturing-head' : 'no-branch-head'">
                 <div class="row">
-                    <div class="col-xl-3 col-lg-4 col-md-6 mr-b15" *ngIf="currentCompanyBranches?.length > 2">
+                    <div class="col-xl-3 col-lg-4 col-md-6 mr-b15" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <div class="link-entity-dropdown"><label class="d-block pb-1 font-14">Entity</label>
                             <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
                                 name="entityDropdown" [showClear]="false" [ItemHeight]="33" width="100%"
