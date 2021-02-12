@@ -66,7 +66,7 @@ export const ROUTES: Routes = [
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
-    { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice', pathMatch: 'full' },
+    { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     { path: 'select-plan', component: SelectPlanComponent },
     { path: 'billing-detail', component: BillingDetailComponent },
