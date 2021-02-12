@@ -447,7 +447,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
      * @memberof MfReportComponent
      */
     public getWarehouses(): void {
-        this.store.pipe(select(s => s.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
+        this.store.pipe(select(state => state.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
             if (branches) {
                 if (branches.results?.length) {
                     this.allWarehouses = [];
