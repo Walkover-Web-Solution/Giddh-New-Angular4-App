@@ -22,7 +22,7 @@ export class TranslateDirective implements OnInit {
     @Output() public translationComplete: EventEmitter<boolean> = new EventEmitter();
 
     /* Initializing the current language */
-    private currentLanguage: string = "en";
+    private currentLanguage: string = "hi";
 
     constructor(private localeService: LocaleService, private store: Store<AppState>) {
         
