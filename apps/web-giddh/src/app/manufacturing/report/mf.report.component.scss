@@ -110,7 +110,8 @@
     }
 }
 
-@media(min-width:1441px){
+
+@media(min-width:1441px) and (max-width:1920px){
     .manufacturing-head{
         .col-xl-3{
             flex: 0 0 16.666667%;
@@ -119,6 +120,10 @@
         .col-xl-6 {
             flex: 0 0 66.666667%;
             max-width: 66.666667%;
+        }
+        .col-xl-9 {
+            flex: 0 0 83%;
+            max-width: 83%;
         }
     }
 }
