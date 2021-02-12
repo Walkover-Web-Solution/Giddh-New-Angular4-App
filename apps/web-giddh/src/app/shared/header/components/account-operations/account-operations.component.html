@@ -46,7 +46,7 @@
         <!--account add component-->
 
         <account-add-new-details *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
-            [flatGroupsOptions]="groupsList" (isGroupSelected)="isGroupSelected($event)" [createAccountIsSuccess$]="createAccountIsSuccess$" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)"
+            [isFlattenRemoved]="true" (isGroupSelected)="isGroupSelected($event)" [createAccountIsSuccess$]="createAccountIsSuccess$" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)"
             [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor">
         </account-add-new-details>
 
