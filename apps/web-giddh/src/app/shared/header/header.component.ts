@@ -1074,7 +1074,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public showManageGroupsModal() {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         this.loadAddManageComponent();
         this.manageGroupsAccountsModal.show();
     }
