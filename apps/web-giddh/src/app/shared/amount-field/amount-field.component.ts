@@ -11,6 +11,7 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     @Input() public amount: any;
     @Input() public currencySymbol: string;
     @Input() public currencyCode: string;
+    @Input() public ratePrecision: boolean = true;
     public direction: string = "ltr";
 
     constructor(private generalService: GeneralService) {

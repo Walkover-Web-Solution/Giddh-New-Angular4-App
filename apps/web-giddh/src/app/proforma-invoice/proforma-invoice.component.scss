@@ -331,8 +331,8 @@ a[type="button"] {
         .figure-cell {
             width: 140px;
             padding-right: 0;
-            display: flex;
-            justify-content: flex-end;
+            // display: flex;
+            // justify-content: flex-end;
             input {
                 max-width: 130px;
                 float: right;
@@ -419,6 +419,7 @@ textarea:focus {
     display: block;
     font-size: 26px;
     line-height: 1.2;
+    font-family: 'opensans-semibold';
 }
 
 .sp-rupees span.icon-rupees {
@@ -1564,6 +1565,8 @@ strong {
 
 .edit-card-invoice-table .differ-currency {
     text-align: right;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .proforma-sales-time ul {
