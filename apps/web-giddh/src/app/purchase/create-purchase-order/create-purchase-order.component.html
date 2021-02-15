@@ -1354,7 +1354,7 @@
                                                 {{purchaseOrder.accountDetails.currencySymbol}}</span>
                                             {{transaction.rate | giddhCurrency: ratePrecision:true}} -->
 
-                                            <span class="d-flex justify-content-end">
+                                            <span>
                                                 <amount-field [amount]="transaction.rate"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported)?purchaseOrder.accountDetails.currencySymbol:false" [currencyCode]="purchaseOrder.accountDetails?.currency?.code" [ratePrecision]="true">
                                                 </amount-field>
@@ -1366,7 +1366,7 @@
                                             <!-- <span>{{baseCurrencySymbol}}</span>
                                             <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span> -->
 
-                                            <span class="d-flex justify-content-end">
+                                            <span>
                                                 <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="false">
@@ -1390,7 +1390,7 @@
                                             {{purchaseOrder.accountDetails.currencySymbol}}
                                         </span>{{transaction.amount | giddhCurrency}} -->
 
-                                    <span class="d-flex justify-content-end">
+                                    <span>
                                         <amount-field [amount]="transaction.amount"
                                             [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported)?purchaseOrder.accountDetails.currencySymbol:false"
                                             [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
@@ -1403,7 +1403,7 @@
                                         <!-- <span>{{baseCurrencySymbol}}</span>
                                         <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
                                                 [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="false">
@@ -1423,7 +1423,7 @@
                                         <!-- <span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                             {{purchaseOrder.accountDetails.currencySymbol}}</span>{{ entry.discountSum }} -->
 
-                                            <span class="d-flex justify-content-end">
+                                            <span>
                                                 <amount-field [amount]="entry.discountSum" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
                                                     [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
                                                 </amount-field>
@@ -1433,7 +1433,7 @@
                                         <!-- <span>{{baseCurrencySymbol}}</span>
                                         <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="entry.discountSum * exchangeRate"
                                                 [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="false">
@@ -1456,7 +1456,7 @@
                                             {{purchaseOrder.accountDetails.currencySymbol}}</span>
                                             {{entry.taxSum}} % -->
 
-                                            <span class="d-flex justify-content-end">
+                                            <span>
                                                 <amount-field [amount]="entry.taxSum" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
                                                     [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
                                                 </amount-field>
@@ -1466,7 +1466,7 @@
                                         <!-- <span>{{baseCurrencySymbol}}</span>
                                         <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
                                                 [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="false">
@@ -1485,7 +1485,7 @@
                                         <!-- <span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                             {{purchaseOrder.accountDetails.currencySymbol}}</span>{{transaction.total | giddhCurrency}} -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="transaction.total"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
                                                 [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
@@ -1497,7 +1497,7 @@
                                         <!-- <span>{{baseCurrencySymbol}}</span>
                                         <span>{{transaction.total * exchangeRate | giddhCurrency}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="transaction.total * exchangeRate"
                                                 [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="false">
@@ -1682,7 +1682,7 @@
                                         <!-- <span>{{baseCurrencySymbol}}</span>
                                         <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)" [currencySymbol]="baseCurrencySymbol"
                                             [currencyCode]="false" [ratePrecision]="true">
                                             </amount-field>
@@ -1717,7 +1717,7 @@
                                         <!-- <span>{{baseCurrencySymbol}}</span>
                                         <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
                                                 [currencySymbol]="baseCurrencySymbol" [currencyCode]="false" [ratePrecision]="true">
                                             </amount-field>
@@ -1751,7 +1751,7 @@
                                         <!-- <span>{{baseCurrencySymbol}}</span>
                                         <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="entry.discountSum * exchangeRate " [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="false" [ratePrecision]="true">
                                             </amount-field>
@@ -1789,7 +1789,7 @@
                                         <!-- <span>{{baseCurrencySymbol}}</span>
                                         <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate" [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="false" [ratePrecision]="true">
                                             </amount-field>
@@ -1856,7 +1856,7 @@
                                         <span>{{baseCurrencySymbol}}</span> :
                                         <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="entry.otherTaxSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="false">
                                             </amount-field>
@@ -1867,7 +1867,7 @@
                                         <!-- <span>{{baseCurrencySymbol}}</span>
                                         <span>{{transaction.total * exchangeRate | giddhCurrency}}</span> -->
 
-                                        <span class="d-flex justify-content-end">
+                                        <span>
                                             <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
                                                 [currencyCode]="false">
                                             </amount-field>
