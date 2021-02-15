@@ -777,7 +777,7 @@ export class GeneralService {
     public getFileExtension(path: string): string {
         return (path && path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop() : 'null';
     }
-
+    /** this will store currency code */
     public isRtlCurrency(currencyCode: string): boolean {
         const rtlCurrencyCodes = ['AED'];
 
