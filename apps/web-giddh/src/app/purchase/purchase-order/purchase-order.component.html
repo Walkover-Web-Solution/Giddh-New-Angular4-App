@@ -200,7 +200,12 @@
                         {{item.vendor?.name}}
                     </td>
                     <td data-title="Total Amt.">
-                        {{item.grandTotal?.amountForAccount | giddhCurrency}}
+                        <span class="d-flex justify-content-end">
+                            <amount-field [amount]="item.grandTotal?.amountForAccount " [currencySymbol]="baseCurrencySymbol"
+                                [currencyCode]="false">
+                            </amount-field>
+                        </span>
+
                     </td>
                     <td data-title="Expected Delivery">
                         <span [ngClass]="{'ontime-delivery': item.dueDays > 0, 'late-delivery': item.dueDays < 0}" *ngIf="item.dueDays && item.dueDays <= 7">{{item.dueDays > 0 ? 'Delivery in ' + item.dueDays + ((item.dueDays === 1) ? ' day ' : ' days') : 'Delayed by ' + formatNumber(item.dueDays) + ' days' }}</span>

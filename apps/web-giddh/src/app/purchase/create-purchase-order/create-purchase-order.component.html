@@ -518,7 +518,7 @@
                                     <div class="col-xs-12" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                         <div class="hsn-code">
                                             <label>HSN/SAC:</label>
-                                            <span>
+                                            <span class="d-flex justify-content-end">
                                                 {{(inventorySettings?.manageInventory || !transaction.sacNumberExists) ? transaction.hsnNumber : transaction.sacNumber}}
                                                 <span class="edit-icon cp">
                                                     <img src="assets/images/edit-pencilicon.svg">
@@ -538,16 +538,31 @@
                             <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                 <div class="td-wrapper">
                                     <div>
-                                        <div class="wrap-td-data"> <span
+                                        <div class="wrap-td-data">
+                                            <!-- <span
                                                 *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                                 {{purchaseOrder.accountDetails.currencySymbol}}</span>
-                                            {{transaction.rate | giddhCurrency: ratePrecision:true}}
+                                                {{transaction.rate | giddhCurrency: ratePrecision:true}} -->
+                                                <span class="d-flex justify-content-end">
+                                                    <amount-field [amount]="transaction.rate"
+                                                        [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol:false"
+                                                        [currencyCode]="purchaseOrder.accountDetails.currency?.code" [ratePrecision]="true">
+                                                    </amount-field>
+                                                </span>
                                         </div>
                                     </div>
                                 </div>
                                 <div *ngIf="isMulticurrencyAccount && isMultiCurrencySupported" class="differ-currency">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
+                                    <!-- <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span> -->
+
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
+                                            [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="false" [ratePrecision]="true">
+                                        </amount-field>
+                                    </span>
+
                                 </div>
                             </div>
                         </td>
@@ -555,68 +570,146 @@
                             <div class="td-wrapper">
                                 <div>
                                     <div class="wrap-td-data">
-                                        <span
-                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{transaction.amount | giddhCurrency}}
+                                        <!-- <span
+                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                            {{purchaseOrder.accountDetails.currencySymbol}}</span>
+                                            {{transaction.amount | giddhCurrency}} -->
+                                            <span class="d-flex justify-content-end">
+                                                <amount-field [amount]="transaction.amount"
+                                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol:false"
+                                                    [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                                </amount-field>
+                                            </span>
                                     </div>
                                 </div>
                             </div>
                             <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                <span>{{baseCurrencySymbol}}</span>
-                                <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                <!-- <span>{{baseCurrencySymbol}}</span>
+                                <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span> -->
+
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
+                                        [currencySymbol]="baseCurrencySymbol"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </div>
                         </td>
                         <td class="item-discount">
                             <div class=" text-right td-wrapper">
                                 <div>
-                                    <div class="wrap-td-data"> <span
+                                    <div class="wrap-td-data">
+                                        <!-- <span
                                             *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
-                                        </span>{{ entry.discountSum | giddhCurrency}}</div>
+                                        </span>{{ entry.discountSum | giddhCurrency}} -->
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="entry.discountSum"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol:false"
+                                                [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                            </amount-field>
+                                        </span>
+
+                                    </div>
                                 </div>
                             </div>
                             <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                <span>{{baseCurrencySymbol}}</span>
-                                <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
+                                <!-- <span>{{baseCurrencySymbol}}</span>
+                                <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span> -->
+
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="entry.discountSum * exchangeRate"
+                                        [currencySymbol]="baseCurrencySymbol"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
+
                             </div>
                         </td>
                         <td [class.error-box]="transaction.requiredTax" class="text-right item-tax"
                             (focus)="transaction.requiredTax = false;">
                             <div class="td-wrapper">
                                 <div>
-                                    <div class="wrap-td-data"><span
-                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
-                                        </span>{{(entry.taxSum + entry.cessSum) | giddhCurrency}}</div>
+                                    <div class="wrap-td-data">
+                                        <!-- <span
+                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                            {{purchaseOrder.accountDetails.currencySymbol}}
+                                        </span>{{(entry.taxSum + entry.cessSum) | giddhCurrency}} -->
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="entry.taxSum + entry.cessSum"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbo : false"
+                                                [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                            </amount-field>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                <span>{{baseCurrencySymbol}}</span>
-                                <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
+                                <!-- <span>{{baseCurrencySymbol}}</span>
+                                <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span> -->
+
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                        [currencySymbol]="baseCurrencySymbol"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </div>
                         </td>
                         <td class="text-right item-tax delete-btn-absolute">
                             <div class="td-wrapper">
                                 <div>
                                     <div class="wrap-td-data">
-                                        <span><span
-                                                *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
-                                            </span>{{transaction.total | giddhCurrency}}</span>
+                                        <span>
+                                            <!-- <span
+                                                *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                                {{purchaseOrder.accountDetails.currencySymbol}}
+                                            </span>{{transaction.total | giddhCurrency}} -->
+                                            <span class="d-flex justify-content-end">
+                                                <amount-field [amount]="transaction.total" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                    [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                                </amount-field>
+                                            </span>
+                                        </span>
                                         <br>
                                         <span *ngIf="entry.isOtherTaxApplicable">
-                                            {{ entry.otherTaxModal?.appliedOtherTax?.name }} : <span
-                                                *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
-                                            </span>{{ entry.otherTaxSum }}
+                                            {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
+                                            <!-- <span
+                                                *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                                {{purchaseOrder.accountDetails.currencySymbol}}
+                                            </span>{{ entry.otherTaxSum }} -->
+                                            <span class="d-flex justify-content-end">
+                                                <amount-field [amount]="entry.otherTaxSum"
+                                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                    [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                                </amount-field>
+                                            </span>
                                         </span>
                                     </div>
                                     <div class="tax-incurrency"
                                         *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported">
                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="entry.otherTaxSum * exchangeRate"
+                                                [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+
                                     </div>
                                 </div>
 
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                    <!-- <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span> -->
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+
                                 </div>
                             </div>
 
@@ -764,8 +857,15 @@
                                         [customDecimalPlaces]="highPrecisionRate" />
                                 </div>
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
+                                    <!-- <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span> -->
+
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)" [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="false" [ratePrecision]="true">
+                                        </amount-field>
+                                    </span>
+
                                 </div>
                             </div>
                         </td>
@@ -781,8 +881,15 @@
                                         [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                 </div>
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                    <!-- <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span> -->
+
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
+                                            [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+
                                 </div>
                             </div>
                         </td>
@@ -800,8 +907,15 @@
                                     </discount-control-component>
                                 </div>
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
+                                    <!-- <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span> -->
+
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="entry.discountSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+
                                 </div>
                             </div>
                         </td>
@@ -823,8 +937,15 @@
                                 </div>
 
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
+                                    <!-- <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span> -->
+
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate" [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+
                                 </div>
                             </div>
                         </td>
@@ -876,12 +997,26 @@
                                 <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported"
                                     class="tax-incurrency">
                                     {{ entry.otherTaxModal?.appliedOtherTax?.name }}
-                                    <span>{{baseCurrencySymbol}}</span> :
-                                    <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
+                                    <!-- <span>{{baseCurrencySymbol}}</span> :
+                                    <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span> -->
+
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="entry.otherTaxSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+
                                 </div>
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                    <!-- <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span> -->
+
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+
                                 </div>
 
 
@@ -964,40 +1099,83 @@
                             <div class="table-row">
                                 <div class="table-cell">Total Amount</div>
                                 <div class="table-cell figure-cell">
-                                    <span
-                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.subTotal | giddhCurrency}}
+                                    <!-- <span
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                        {{purchaseOrder.accountDetails.currencySymbol}}</span>
+                                        {{purchaseOrder.voucherDetails.subTotal | giddhCurrency}} -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="purchaseOrder.voucherDetails.subTotal"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            </amount-field>
+                                        </span>
                                 </div>
                             </div>
 
                             <div class="table-row">
                                 <div class="table-cell">Discount</div>
                                 <div class="table-cell figure-cell">
-                                    <span
-                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>
-                                    {{purchaseOrder.voucherDetails.totalDiscount * -1 | giddhCurrency}}
+                                    <!-- <span
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                        {{purchaseOrder.accountDetails.currencySymbol}}</span>
+                                        {{purchaseOrder.voucherDetails.totalDiscount * -1 | giddhCurrency}} -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="purchaseOrder.voucherDetails.totalDiscount * -1"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            </amount-field>
+                                        </span>
                                 </div>
                             </div>
 
                             <div class="table-row">
                                 <div class="table-cell">Taxable Value</div>
                                 <div class="table-cell figure-cell">
-                                    <span
-                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.totalTaxableValue | giddhCurrency}}
+                                    <!-- <span
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                        {{purchaseOrder.accountDetails.currencySymbol}}</span>
+                                        {{purchaseOrder.voucherDetails.totalTaxableValue | giddhCurrency}} -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="purchaseOrder.voucherDetails.totalTaxableValue"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            </amount-field>
+                                        </span>
+
                                 </div>
                             </div>
 
                             <div class="table-row" *ngIf="!excludeTax">
                                 <div class="table-cell">Tax</div>
                                 <div class="table-cell figure-cell">
-                                    <span
-                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.gstTaxesTotal | giddhCurrency}}
+                                    <!-- <span
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.gstTaxesTotal | giddhCurrency}} -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="purchaseOrder.voucherDetails.gstTaxesTotal"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            </amount-field>
+                                        </span>
+
                                 </div>
                             </div>
 
                             <div class="table-row" *ngIf="!excludeTax">
                                 <div class="table-cell">CESS</div>
-                                <div class="table-cell figure-cell"><span
-                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.cessTotal | giddhCurrency}}
+                                <div class="table-cell figure-cell">
+                                    <!-- <span
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.cessTotal | giddhCurrency}} -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="purchaseOrder.voucherDetails.cessTotal"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            </amount-field>
+                                        </span>
                                 </div>
                             </div>
                             <div class="table-row"
@@ -1008,9 +1186,20 @@
                                 </div>
 
                                 <div class="table-cell figure-cell">
-                                    <strong> <span
-                                            *ngIf="isMulticurrencyAccount">{{purchaseOrder.accountDetails.currencySymbol}}</span>
-                                        {{calculatedRoundOff | giddhCurrency}}</strong>
+                                    <strong>
+                                        <!-- <span
+                                            *ngIf="isMulticurrencyAccount">{{purchaseOrder.accountDetails.currencySymbol}}
+                                        </span>
+                                        {{calculatedRoundOff | giddhCurrency}} -->
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="calculatedRoundOff"
+                                                [currencySymbol]="isMulticurrencyAccount ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            </amount-field>
+                                        </span>
+
+                                    </strong>
+
                                 </div>
 
                             </div>
@@ -1018,13 +1207,27 @@
                             <div class="table-row ">
 
                                 <div class="table-cell bigger-dollar">
-                                    <strong>Total <span
-                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span></strong>
+                                    <strong>Total
+                                        <span
+                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                            {{purchaseOrder.accountDetails.currencySymbol}}
+                                        </span>
+                                        </strong>
                                 </div>
 
                                 <div class="table-cell figure-cell">
-                                    <strong><span
-                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.grandTotal | giddhCurrency}}
+                                    <strong>
+                                        <!-- <span
+                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                            {{purchaseOrder.accountDetails.currencySymbol}}</span>
+                                            {{purchaseOrder.voucherDetails.grandTotal | giddhCurrency}} -->
+
+                                            <span class="d-flex justify-content-end">
+                                                <amount-field [amount]="purchaseOrder.voucherDetails.grandTotal"
+                                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                </amount-field>
+                                            </span>
                                     </strong>
                                 </div>
 
@@ -1046,15 +1249,34 @@
 
                             <div class="table-row" *ngIf="purchaseOrder.voucherDetails.tcsTotal > 0">
                                 <div class="table-cell">TCS</div>
-                                <div class="table-cell figure-cell"><span
-                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>
-                                    {{purchaseOrder.voucherDetails.tcsTotal | giddhCurrency}}</div>
+                                <div class="table-cell figure-cell">
+                                    <!-- <span
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
+                                    </span>
+                                    {{purchaseOrder.voucherDetails.tcsTotal | giddhCurrency}} -->
+
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="purchaseOrder.voucherDetails.tcsTotal"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                            [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                        </amount-field>
+                                    </span>
+
+                                </div>
                             </div>
 
                             <div class="table-row" *ngIf="purchaseOrder.voucherDetails.tdsTotal > 0">
                                 <div class="table-cell">TDS</div>
-                                <div class="table-cell figure-cell"><span
-                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.tdsTotal | giddhCurrency}}
+                                <div class="table-cell figure-cell">
+                                    <!-- <span
+                                        *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.tdsTotal | giddhCurrency}} -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="ppurchaseOrder.voucherDetails.tdsTotal "
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            </amount-field>
+                                        </span>
                                 </div>
                             </div>
                         </section>
@@ -1080,9 +1302,15 @@
                                         to Select
                                         Account</label>
                                     <p>{{transaction.accountName}}</p>
-                                    <span
-                                        *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}}
-                                        )</span>
+                                    <!-- <span
+                                        *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="transaction.stockDetails?.name"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
                                 </div>
 
                                 <p class="description">
@@ -1122,14 +1350,29 @@
                                 <div class="card-rate">
                                     <label class="card-label">Rate</label>
                                     <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
-                                        <p> <span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                         <p>
+                                            <!-- <span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                                 {{purchaseOrder.accountDetails.currencySymbol}}</span>
-                                            {{transaction.rate | giddhCurrency: ratePrecision:true}}
+                                            {{transaction.rate | giddhCurrency: ratePrecision:true}} -->
+
+                                            <span class="d-flex justify-content-end">
+                                                <amount-field [amount]="transaction.rate"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported)?purchaseOrder.accountDetails.currencySymbol:false" [currencyCode]="purchaseOrder.accountDetails?.currency?.code" [ratePrecision]="true">
+                                                </amount-field>
+                                            </span>
+
                                         </p>
                                         <div *ngIf="isMulticurrencyAccount && isMultiCurrencySupported"
                                             class="differ-currency">
-                                            <span>{{baseCurrencySymbol}}</span>
-                                            <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
+                                            <!-- <span>{{baseCurrencySymbol}}</span>
+                                            <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span> -->
+
+                                            <span class="d-flex justify-content-end">
+                                                <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
+                                                    [currencySymbol]="baseCurrencySymbol"
+                                                    [currencyCode]="false">
+                                                </amount-field>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -1142,13 +1385,32 @@
                             <div class="single-card-row">
                                 <div class="card-amount">
                                     <label class="card-label">Amount</label>
-                                    <p> <span
-                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
-                                        </span>{{transaction.amount | giddhCurrency}}</p>
+                                     <p>
+                                        <!-- <span
+                                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                            {{purchaseOrder.accountDetails.currencySymbol}}
+                                        </span>{{transaction.amount | giddhCurrency}} -->
+
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field [amount]="transaction.amount"
+                                            [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported)?purchaseOrder.accountDetails.currencySymbol:false"
+                                            [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                        </amount-field>
+                                    </span>
+
+                                    </p>
 
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
+                                                [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+
                                     </div>
                                 </div>
                             </div>
@@ -1158,12 +1420,27 @@
                             <div class="single-card-row">
                                 <div class="card-discount">
                                     <label class="card-label">Discount</label>
-                                    <p> <span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                            {{purchaseOrder.accountDetails.currencySymbol}}</span>{{ entry.discountSum }}
+                                    <p>
+                                        <!-- <span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                            {{purchaseOrder.accountDetails.currencySymbol}}</span>{{ entry.discountSum }} -->
+
+                                            <span class="d-flex justify-content-end">
+                                                <amount-field [amount]="entry.discountSum" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                </amount-field>
+                                            </span>
                                     </p>
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="entry.discountSum * exchangeRate"
+                                                [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+
                                     </div>
                                 </div>
                             </div>
@@ -1175,13 +1452,27 @@
                             <div class="single-card-row">
                                 <div class="card-tax">
                                     <label class="card-label">Tax</label>
-                                    <p><span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                            {{purchaseOrder.accountDetails.currencySymbol}}</span>{{entry.taxSum}}
-                                        %
+                                    <p>
+                                        <!-- <span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                            {{purchaseOrder.accountDetails.currencySymbol}}</span>
+                                            {{entry.taxSum}} % -->
+
+                                            <span class="d-flex justify-content-end">
+                                                <amount-field [amount]="entry.taxSum" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                </amount-field>
+                                            </span>
                                     </p>
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                                [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -1191,12 +1482,28 @@
                             <div class="single-card-row">
                                 <div class="card-total">
                                     <label class="card-label">Total</label>
-                                    <p><span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                            {{purchaseOrder.accountDetails.currencySymbol}}</span>{{transaction.total | giddhCurrency}}
+                                    <p>
+                                        <!-- <span *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
+                                            {{purchaseOrder.accountDetails.currencySymbol}}</span>{{transaction.total | giddhCurrency}} -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="transaction.total"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            </amount-field>
+                                        </span>
+
                                     </p>
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{transaction.total * exchangeRate | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="transaction.total * exchangeRate"
+                                                [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
 
                                     </div>
                                 </div>
@@ -1373,8 +1680,15 @@
                                     </div>
                                     <!-- please add condition for show and hide -->
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)" [currencySymbol]="baseCurrencySymbol"
+                                            [currencyCode]="false" [ratePrecision]="true">
+                                            </amount-field>
+                                        </span>
+
                                     </div>
                                 </div>
 
@@ -1401,8 +1715,14 @@
                                             [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                     </div>
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="false" [ratePrecision]="true">
+                                            </amount-field>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -1429,8 +1749,15 @@
 
                                     </div>
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="entry.discountSum * exchangeRate " [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="false" [ratePrecision]="true">
+                                            </amount-field>
+                                        </span>
+
                                     </div>
                                 </div>
 
@@ -1460,8 +1787,15 @@
                                         </tax-control>
                                     </div>
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate" [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="false" [ratePrecision]="true">
+                                            </amount-field>
+                                        </span>
+
                                     </div>
 
                                 </div>
@@ -1519,13 +1853,27 @@
                                     </div>
                                     <div class="tax-in-currency text-right"
                                         *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported">
-                                        {{ entry.otherTaxModal?.appliedOtherTax?.name }}
+                                        <!-- {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                         <span>{{baseCurrencySymbol}}</span> :
-                                        <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
+                                        <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="entry.otherTaxSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+
                                     </div>
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                        <!-- <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{transaction.total * exchangeRate | giddhCurrency}}</span> -->
+
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+
                                     </div>
 
                                     <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
@@ -1609,40 +1957,80 @@
                 <div class="table-row">
                     <div class="table-cell">Total Amount</div>
                     <div class="table-cell figure-cell">
-                        <span
-                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.subTotal | giddhCurrency}}
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
+                        </span>{{purchaseOrder.voucherDetails.subTotal | giddhCurrency}} -->
+
+                        <span class="d-flex justify-content-end">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.subTotal" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                            </amount-field>
+                        </span>
+
                     </div>
                 </div>
 
                 <div class="table-row">
                     <div class="table-cell">Discount</div>
                     <div class="table-cell figure-cell">
-                        <span
-                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.totalDiscount * -1 | giddhCurrency}}
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>
+                            {{purchaseOrder.voucherDetails.totalDiscount * -1 | giddhCurrency}} -->
+
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="purchaseOrder.voucherDetails.subTotal"
+                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                </amount-field>
+                            </span>
+
                     </div>
                 </div>
 
                 <div class="table-row">
                     <div class="table-cell">Taxable Value</div>
                     <div class="table-cell figure-cell">
-                        <span
-                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.totalTaxableValue | giddhCurrency}}
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.totalTaxableValue | giddhCurrency}} -->
+
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="purchaseOrder.voucherDetails.totalTaxableValue"
+                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                </amount-field>
+                            </span>
                     </div>
                 </div>
 
                 <div class="table-row">
                     <div class="table-cell">Tax</div>
                     <div class="table-cell figure-cell">
-                        <span
-                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.gstTaxesTotal | giddhCurrency}}
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.gstTaxesTotal | giddhCurrency}} -->
+
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="purchaseOrder.voucherDetails.gstTaxesTotal"
+                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                </amount-field>
+                            </span>
+
                     </div>
                 </div>
 
                 <div class="table-row">
                     <div class="table-cell">CESS</div>
                     <div class="table-cell figure-cell">
-                        <span
-                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.cessTotal | giddhCurrency}}
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.cessTotal | giddhCurrency}} -->
+
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="purchaseOrder.voucherDetails.cessTotal"
+                                    [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                </amount-field>
+                            </span>
+
                     </div>
                 </div>
                 <div class="table-row">
@@ -1653,9 +2041,17 @@
 
                     <div class="table-cell figure-cell">
                         <strong>
-                            <span
+                            <!-- <span
                                 *ngIf="isMulticurrencyAccount">{{purchaseOrder.accountDetails.currencySymbol}}</span>
-                            {{calculatedRoundOff | giddhCurrency}}
+                            {{calculatedRoundOff | giddhCurrency}} -->
+
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="calculatedRoundOff"
+                                    [currencySymbol]="isMulticurrencyAccount ? purchaseOrder.accountDetails.currencySymbol : false"
+                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                </amount-field>
+                            </span>
+
                         </strong>
                     </div>
 
@@ -1671,8 +2067,16 @@
 
                     <div class="table-cell figure-cell">
                         <strong>
-                            <span
-                                *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{purchaseOrder.voucherDetails.grandTotal | giddhCurrency}}
+                            <!-- <span
+                                *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>
+                                {{purchaseOrder.voucherDetails.grandTotal | giddhCurrency}} -->
+
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="purchaseOrder.voucherDetails.grandTotal"
+                                        [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                        [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                    </amount-field>
+                                </span>
                         </strong>
                     </div>
                 </div>
@@ -1695,7 +2099,14 @@
                 <div class="table-row" *ngIf="purchaseOrder.voucherDetails.tcsTotal > 0">
                     <div class="table-cell">TCS</div>
                     <div class="table-cell figure-cell">
-                        {{purchaseOrder.voucherDetails.tcsTotal | giddhCurrency}}
+                        <!-- {{purchaseOrder.voucherDetails.tcsTotal | giddhCurrency}} -->
+
+                        <span class="d-flex justify-content-end">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.tcsTotal"
+                                [currencySymbol]="false"
+                                [currencyCode]="false">
+                            </amount-field>
+                        </span>
 
                     </div>
                 </div>
@@ -1703,7 +2114,11 @@
                 <div class="table-row" *ngIf="purchaseOrder.voucherDetails.tdsTotal > 0">
                     <div class="table-cell">TDS</div>
                     <div class="table-cell figure-cell">
-                        {{purchaseOrder.voucherDetails.tdsTotal | giddhCurrency}}
+                        <!-- {{purchaseOrder.voucherDetails.tdsTotal | giddhCurrency}} -->
+                        <span class="d-flex justify-content-end">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.tdsTotal" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
                     </div>
                 </div>
             </section>
