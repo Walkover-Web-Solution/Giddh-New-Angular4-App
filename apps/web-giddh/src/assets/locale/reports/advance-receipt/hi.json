@@ -1,21 +1,24 @@
 {
-    "receipt_no_label" : "Receipt #",
-    "receipt_no_placeholder" : "Search Receipt",
-    "customer_name_label" : "Customer Name",
-    "customer_name_placeholder" : "Search Customer",
-    "payment_mode_label" : "Payment Mode",
-    "payment_mode_placeholder" : "Search Payment Mode",
-    "invoice_no_label" : "Invoice #",
-    "invoice_no_placeholder" : "Search Invoice No.",
-    "unused_amount" : "Unused Amount",
-    "advanced_receipts" : "Advance Receipts",
-    "normal_receipts" : "Normal Receipts",
-    "total_receipts" : "Total Receipts",
-    "unused_receipts" : "Unused Receipts",
-    "adjustment_voucher_label" : "Adjustment Voucher",
-    "adjustment_voucher_placeholder" : "Select Account",
-    "receipt_types" : {
-        "normal_receipts" : "Normal Receipts",
-        "advance_receipts" : "Advance Receipts"
-    }
+    "page_heading": "रिपोर्ट्स > रसीद (beta)",
+    "receipt_no_label": "रसीद #",
+    "receipt_no_placeholder": "रसीद खोजें",
+    "customer_name_label": "ग्राहक का नाम",
+    "customer_name_placeholder": "ग्राहक खोजें",
+    "payment_mode_label": "भुगतान का प्रकार",
+    "payment_mode_placeholder": "भुगतान मोड खोजें",
+    "invoice_no_label": "बिल #",
+    "invoice_no_placeholder": "खोज चालान संख्या",
+    "unused_amount": "अप्रयुक्त राशि",
+    "advanced_receipts": "अग्रिम प्राप्तियां",
+    "normal_receipts": "सामान्य रसीदें",
+    "total_receipts": "कुल प्राप्तियां",
+    "unused_receipts": "अप्रयुक्त रसीदें",
+    "adjustment_voucher_label": "समायोजन वाउचर",
+    "adjustment_voucher_placeholder": "खाता चुनें",
+    "receipt_types": {
+        "normal_receipts": "सामान्य रसीदें",
+        "advance_receipts": "अग्रिम प्राप्तियां"
+    },
+    "entry_date": "प्रवेश की तिथि",
+    "suppliers_name": "आपूर्तिकर्ता का नाम"
 }

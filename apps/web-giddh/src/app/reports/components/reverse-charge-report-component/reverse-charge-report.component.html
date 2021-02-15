@@ -116,17 +116,17 @@
                         <tr *ngFor="let reverseCharge of reverseChargeReportResults.items; let i = index;">
                             <td data-title="#" class="text-center">
                                 {{ ((reverseChargeReportGetRequest.page - 1) * paginationLimit) + (i + 1) }} </td>
-                            <td data-title="{{localeData?.entry_date}}">{{ reverseCharge.entryDate }}</td>
-                            <td data-title="{{localeData?.suppliers_name}}">{{ reverseCharge.supplierName }}</td>
-                            <td data-title="{{localeData?.app_voucher_type}}">{{ reverseCharge.voucherType }}</td>
-                            <td data-title="{{commonLocaleData?.app_invoice_no}}">{{ (reverseCharge.invoiceNumber) ? reverseCharge.invoiceNumber : '-' }}</td>
-                            <td data-title="{{localeData?.suppliers_invoice_date}}">
+                            <td [attr.data-title]="localeData?.entry_date">{{ reverseCharge.entryDate }}</td>
+                            <td [attr.data-title]="localeData?.suppliers_name">{{ reverseCharge.supplierName }}</td>
+                            <td [attr.data-title]="localeData?.app_voucher_type">{{ reverseCharge.voucherType }}</td>
+                            <td [attr.data-title]="commonLocaleData?.app_invoice_no">{{ (reverseCharge.invoiceNumber) ? reverseCharge.invoiceNumber : '-' }}</td>
+                            <td [attr.data-title]="localeData?.suppliers_invoice_date">
                                 {{ (reverseCharge.supplierInvoiceDate) ? reverseCharge.supplierInvoiceDate : '-' }}</td>
-                            <td data-title="{{localeData?.suppliers_country}}">{{ reverseCharge.suppliersCountry }}</td>
-                            <td data-title="{{commonLocaleData?.app_taxable_value}}">{{activeCompany.baseCurrencySymbol}}
+                            <td [attr.data-title]="localeData?.suppliers_country">{{ reverseCharge.suppliersCountry }}</td>
+                            <td [attr.data-title]="commonLocaleData?.app_taxable_value">{{activeCompany.baseCurrencySymbol}}
                                 {{ reverseCharge.taxableValue | giddhCurrency }}</td>
-                            <td data-title="{{commonLocaleData?.app_tax_rate}}">{{ reverseCharge.taxRate }}%</td>
-                            <td data-title="{{commonLocaleData?.app_tax_amount}}">{{activeCompany.baseCurrencySymbol}}
+                            <td [attr.data-title]="commonLocaleData?.app_tax_rate">{{ reverseCharge.taxRate }}%</td>
+                            <td [attr.data-title]="commonLocaleData?.app_tax_amount">{{activeCompany.baseCurrencySymbol}}
                                 {{ reverseCharge.taxAmount | giddhCurrency }}</td>
                         </tr>
                     </tbody>

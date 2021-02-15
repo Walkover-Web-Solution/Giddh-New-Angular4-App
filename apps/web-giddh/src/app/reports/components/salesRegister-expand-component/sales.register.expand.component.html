@@ -220,9 +220,9 @@
                                 let item of (salesRegisteDetailedResponse$ | async)
                                     .items
                             ">
-                            <td data-title="{{commonLocaleData?.app_date}}">{{ item.date }}</td>
+                            <td [attr.data-title]="commonLocaleData?.app_date">{{ item.date }}</td>
 
-                            <td data-title="{{commonLocaleData?.app_account}}" (dblclick)="modalUniqueName = item.uniqueName"
+                            <td [attr.data-title]="commonLocaleData?.app_account" (dblclick)="modalUniqueName = item.uniqueName"
                                 class="cp no-dbl-click-select " (clickOutside)="modalUniqueName = ''">
                                 {{ item.account.name }}
                                 <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
@@ -236,13 +236,13 @@
                                     </ng-container>
                                 </ng-container>
                             </td>
-                            <td data-title="{{commonLocaleData?.app_voucher_type}}" *ngIf="showFieldFilter.voucherType" class="verticle-align-top">
+                            <td [attr.data-title]="commonLocaleData?.app_voucher_type" *ngIf="showFieldFilter.voucherType" class="verticle-align-top">
                                 {{ item.voucherType }}
                             </td>
-                            <td data-title="{{commonLocaleData?.app_voucher_no}}" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top">
+                            <td [attr.data-title]="commonLocaleData?.app_voucher_no" *ngIf="showFieldFilter.voucherNo" class="verticle-align-top">
                                 {{ item.voucherNumber }}
                             </td>
-                            <td data-title="{{commonLocaleData?.app_sales}}" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
+                            <td [attr.data-title]="commonLocaleData?.app_sales" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
                                 class="text-right ">
                                 {{ item.creditTotal | giddhCurrency }}
                                 <ng-container *ngIf="expand">
@@ -251,11 +251,11 @@
                                     </ng-container>
                                 </ng-container>
                             </td>
-                            <td data-title="{{commonLocaleData?.app_return}}" *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal"
+                            <td [attr.data-title]="commonLocaleData?.app_return" *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal"
                                 class="text-right ">
                                 {{ item.debitTotal | giddhCurrency }}
                             </td>
-                            <td data-title="{{commonLocaleData?.app_quantity_unit}}" class="text-right "
+                            <td [attr.data-title]="commonLocaleData?.app_quantity_unit" class="text-right "
                                 *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal">
                                 -
                                 <ng-container *ngIf="expand">
@@ -267,7 +267,7 @@
                                     </ng-container>
                                 </ng-container>
                             </td>
-                            <td data-title="{{commonLocaleData?.app_rate}}" class="text-right "
+                            <td [attr.data-title]="commonLocaleData?.app_rate" class="text-right "
                                 *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal">
                                 -
                                 <ng-container *ngIf="expand">
@@ -276,17 +276,17 @@
                                     </ng-container>
                                 </ng-container>
                             </td>
-                            <td data-title="{{commonLocaleData?.app_discount}}"
+                            <td [attr.data-title]="commonLocaleData?.app_discount"
                                 *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal"
                                 class="text-right ">
                                 {{ item.discountTotal | giddhCurrency }}
                             </td>
-                            <td data-title="{{commonLocaleData?.app_tax}}"
+                            <td [attr.data-title]="commonLocaleData?.app_tax"
                                 *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
                                 class="text-right ">
                                 {{ item.taxTotal | giddhCurrency }}
                             </td>
-                            <td data-title="{{commonLocaleData?.app_net_sales}}" class="text-right ">
+                            <td [attr.data-title]="commonLocaleData?.app_net_sales" class="text-right ">
                                 {{ item.netTotal | giddhCurrency }}
                             </td>
                         </tr>
