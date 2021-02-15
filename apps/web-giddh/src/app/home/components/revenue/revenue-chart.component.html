@@ -22,7 +22,7 @@
 
                                 <div class="refresh-btn">
                                     <i class="icon-refresh pull-right pd-l15" (click)="refreshChart()"></i>
-                                    <span class="this-week pull-right"><span class="icon-collapse-icon mr-l1" tooltip="Expand"
+                                    <span class="this-week pull-right"><span class="icon-collapse-icon mr-l1" [tooltip]="commonLocaleData?.app_expand"
                                             (click)="showLineChart()"></span> </span>
                                     <ul class="dashboard-option pull-right">
                                         <li class="secondary-dark-bg"> <span></span> {{commonLocaleData?.app_last_week}}</li>
@@ -108,7 +108,7 @@
                 <div class="col-lg-4 col-md-12">
                     <div class="page-title">
                         <div class="collapse-close" (click)="showColumnChart()">
-                            <span class="icon-collapse-icon" tooltip="{{commonLocaleData?.app_collapse}}"></span>
+                            <span class="icon-collapse-icon" [tooltip]="commonLocaleData?.app_collapse"></span>
                         </div>
                         <h1>{{commonLocaleData?.app_total}} {{activeGraphType['displayName']}}</h1>
                     </div>

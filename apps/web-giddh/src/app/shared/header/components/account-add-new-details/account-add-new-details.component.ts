@@ -41,10 +41,6 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    /* This will hold local JSON data */
-    @Input() public localeData: any = {};
-    /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -152,6 +148,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         totalPages: 0,
         query: ''
     };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** This will hold placeholder for tax */
     public taxNamePlaceholder: string = "";
 
@@ -297,28 +297,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.autoFocus.nativeElement.focus();
             }, 50);
         }
-        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                if (res.fields) {
-                    this.formFields = [];
-                    Object.keys(res.fields).forEach(key => {
-                        if (res.fields[key]) {
-                            this.formFields[res.fields[key].name] = [];
-                            this.formFields[res.fields[key].name] = res.fields[key];
-                        }
-                    });
-                }
-                if (this.formFields['taxName'] && this.formFields['taxName'].label) {
-                    this.GSTIN_OR_TRN = this.formFields['taxName'].label;
-                } else {
-                    this.GSTIN_OR_TRN = '';
-                }
-                this.taxNamePlaceholder = this.commonLocaleData.app_enter_tax_name;
-                this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName'].label);
-            }
-        });
-        this.getCurrency();
 
+        this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();
     }
 
@@ -547,8 +527,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                                 gstForm.get('state').get('code').patchValue(null);
                             }
                             
-                            let invalidTaxName = this.commonLocaleData.app_invalid_tax_name;
-                            invalidTaxName = invalidTaxName.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                            let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
+                            invalidTaxName = invalidTaxName?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                             this._toaster.errorToast(invalidTaxName);
                         }
                     }
@@ -1003,14 +983,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (type === 'bankAccountNo') {
             if (this.selectedCountryCode === 'IN') {
                 if (element && element.value && element.value.length < 9) {
-                    this._toaster.errorToast(this.commonLocaleData.app_invalid_bank_account_number);
+                    this._toaster.errorToast(this.commonLocaleData?.app_invalid_bank_account_number);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
                 }
             } else {
                 if (element && element.value && element.value.length < 23) {
-                    this._toaster.errorToast(this.commonLocaleData.app_invalid_iban);
+                    this._toaster.errorToast(this.commonLocaleData?.app_invalid_iban);
                     element.classList.add('error-box');
                 } else {
                     element.classList.remove('error-box');
@@ -1018,7 +998,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         } else if (type === 'swiftCode') {
             if (element && element.value && element.value.length < 8) {
-                this._toaster.errorToast(this.commonLocaleData.app_invalid_swift_code);
+                this._toaster.errorToast(this.commonLocaleData?.app_invalid_swift_code);
                 element.classList.add('error-box');
             } else {
                 element.classList.remove('error-box');
@@ -1280,5 +1260,36 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
             this.flatGroupsOptions = [...this.defaultGroupSuggestions];
         });
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+                if (res) {
+                    if (res.fields) {
+                        this.formFields = [];
+                        Object.keys(res.fields).forEach(key => {
+                            if (res.fields[key]) {
+                                this.formFields[res.fields[key].name] = [];
+                                this.formFields[res.fields[key].name] = res.fields[key];
+                            }
+                        });
+                    }
+                    if (this.formFields['taxName'] && this.formFields['taxName'].label) {
+                        this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                    } else {
+                        this.GSTIN_OR_TRN = '';
+                    }
+                    this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
+                    this.taxNamePlaceholder = this.taxNamePlaceholder?.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                }
+            });
+        }
     }
 }

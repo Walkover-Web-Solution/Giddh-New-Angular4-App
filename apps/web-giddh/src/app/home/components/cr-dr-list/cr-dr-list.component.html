@@ -26,12 +26,12 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let account of drAccounts">
-                                <td data-title="{{localeData?.debtors}}">{{account.name}}</td>
-                                <td data-title="{{localeData?.invoiced_on}}"><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span *ngIf="!account.latestInvoiceDate">-</span></td>
-                                <td data-title="{{localeData?.bill_amount}}" class="text-right" *ngIf="account.latestBillAmount">
+                                <td [attr.data-title]="localeData?.debtors">{{account.name}}</td>
+                                <td [attr.data-title]="localeData?.invoiced_on"><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span *ngIf="!account.latestInvoiceDate">-</span></td>
+                                <td [attr.data-title]="localeData?.bill_amount" class="text-right" *ngIf="account.latestBillAmount">
                                     {{account.latestBillAmount.symbol}} {{account.latestBillAmount.amount | giddhCurrency}}</td>
-                                <td data-title="{{commonLocaleData?.app_due_as_on}}" class="text-right" *ngIf="!account.latestBillAmount">-</td>
-                                <td data-title="{{commonLocaleData?.app_due_as_on}}" class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount | giddhCurrency }}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right" *ngIf="!account.latestBillAmount">-</td>
+                                <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount | giddhCurrency }}</td>
                             </tr>
                             <tr *ngIf="drAccounts.length === 0">
                                 <td colspan="4" class="no-entries">
@@ -51,12 +51,12 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let account of crAccounts">
-                                <td data-title="{{localeData?.creditors}})">{{account.name}}</td>
-                                <td data-title="{{localeData?.invoiced_on}}"><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span *ngIf="!account.latestInvoiceDate">-</span></td>
-                                <td data-title="{{localeData?.bill_amount}}" class="text-right" *ngIf="account.latestBillAmount">
+                                <td [attr.data-title]="localeData?.creditors">{{account.name}}</td>
+                                <td [attr.data-title]="localeData?.invoiced_on"><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span *ngIf="!account.latestInvoiceDate">-</span></td>
+                                <td [attr.data-title]="localeData?.bill_amount" class="text-right" *ngIf="account.latestBillAmount">
                                     {{account.latestBillAmount.symbol}} {{account.latestBillAmount.amount | giddhCurrency}}</td>
-                                <td data-title="{{commonLocaleData?.app_due_as_on}}" class="text-right" *ngIf="!account.latestBillAmount">-</td>
-                                <td data-title="{{commonLocaleData?.app_due_as_on}}" class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount | giddhCurrency }}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right" *ngIf="!account.latestBillAmount">-</td>
+                                <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount | giddhCurrency }}</td>
                             </tr>
                         </tbody>
                     </table>

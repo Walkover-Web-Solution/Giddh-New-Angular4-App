@@ -98,25 +98,25 @@
                     <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
                         class="daybook-table-tbody">
                         <tr>
-                            <td data-title="{{commonLocaleData?.app_date}}">{{ entry.entryDate }}</td>
-                            <td data-title="{{commonLocaleData?.app_particular}}">{{ entry.particular.name }}</td>
-                            <td data-title="{{localeData?.voucher_name}}">{{ entry.voucherName }}</td>
-                            <td class="text-right" data-title="{{localeData?.voucher_no}}">{{ entry.voucherNo }}</td>
-                            <td class="text-right" data-title="{{localeData?.debit_amount}}">{{ entry.debitAmount || 0 |giddhCurrency }}</td>
-                            <td class="text-right" data-title="{{localeData?.credit_amount}}">{{ entry.creditAmount || 0 |giddhCurrency}}</td>
+                            <td [attr.data-title]="commonLocaleData?.app_date">{{ entry.entryDate }}</td>
+                            <td [attr.data-title]="commonLocaleData?.app_particular">{{ entry.particular.name }}</td>
+                            <td [attr.data-title]="localeData?.voucher_name">{{ entry.voucherName }}</td>
+                            <td class="text-right" [attr.data-title]="localeData?.voucher_no">{{ entry.voucherNo }}</td>
+                            <td class="text-right" [attr.data-title]="localeData?.debit_amount">{{ entry.debitAmount || 0 |giddhCurrency }}</td>
+                            <td class="text-right" [attr.data-title]="localeData?.credit_amount">{{ entry.creditAmount || 0 |giddhCurrency}}</td>
                             <td *ngIf="isEntryExpanded" colspan="7"> </td>
                         </tr>
                         <ng-container *ngIf="entry !== undefined && entry.isExpanded">
                             <tr *ngFor="let details of entry.otherTransactions">
                                 <td class="hide-td"></td>
-                                <td data-title="{{commonLocaleData?.app_particular}}">{{ details.particular.name }}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_particular">{{ details.particular.name }}</td>
                                 <td class="hide-td"></td>
                                 <td class="hide-td"></td>
-                                <td class="text-right" data-title="{{localeData?.debit_amount}}">
+                                <td class="text-right" [attr.data-title]="localeData?.debit_amount">
                                     <span *ngIf="details.type === 'DEBIT'">{{ details.amount || 0 |giddhCurrency}}</span>
                                     <span *ngIf="details.type !== 'DEBIT'">-</span>
                                 </td>
-                                <td class="text-right" data-title="{{localeData?.credit_amount}}">
+                                <td class="text-right" [attr.data-title]="localeData?.credit_amount">
                                     <span *ngIf="details.type === 'CREDIT'">{{ details.amount|| 0  |giddhCurrency}}</span>
                                     <span *ngIf="details.type !== 'CREDIT'">-</span>
                                 </td>

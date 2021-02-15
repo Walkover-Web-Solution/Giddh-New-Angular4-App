@@ -1,4 +1,4 @@
-<div class="responsive table-responsive" appTranslate [file]="'reports/sales-register'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<div class="responsive table-responsive">
     <table class="table basic giddh-table on-mobile-view">
         <thead>
             <tr>
@@ -63,15 +63,15 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
-                <td data-title="{{commonLocaleData?.app_particular}}"><a [class.cursor-pointer]="item.reportType !== 'combined'" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
-                <td data-title="{{commonLocaleData?.app_sales}}" class="text-right">{{item.sales | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_return}}" *ngIf="salesRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_tax}}" *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_discount}}" *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_tcs}}" *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_tds}}" *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_net_sales}}" *ngIf="salesRegisterTotal.netSales" class="text-right">{{item.netSales | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_cumulative}}" *ngIf="salesRegisterTotal.cumulative" class="text-right">{{item.cumulative | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_particular"><a [class.cursor-pointer]="item.reportType !== 'combined'" (click)="GotoDetailedSales(item)">{{item.particular}}</a></td>
+                <td [attr.data-title]="commonLocaleData?.app_sales" class="text-right">{{item.sales | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_return" *ngIf="salesRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_tax" *ngIf="salesRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_discount" *ngIf="salesRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_tcs" *ngIf="isTcsTdsApplicable && salesRegisterTotal.tcsTotal" class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_tds" *ngIf="isTcsTdsApplicable && salesRegisterTotal.tdsTotal" class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_net_sales" *ngIf="salesRegisterTotal.netSales" class="text-right">{{item.netSales | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_cumulative" *ngIf="salesRegisterTotal.cumulative" class="text-right">{{item.cumulative | giddhCurrency}}</td>
             </tr>
         </tbody>
 

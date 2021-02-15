@@ -63,10 +63,6 @@ import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
-    /* This will hold local JSON data */
-    @Input() public localeData: any = {};
-    /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
     public addAccountForm: FormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -164,6 +160,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isDiscountSaveDisable$: Observable<boolean> = observableOf(true);
     /** This will hold active parent group */
     public activeParentGroup: string = "";
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** This will hold placeholder for tax */
     public taxNamePlaceholder: string = "";
 
@@ -424,26 +424,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }, 50);
         }
 
-        this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                if (res.fields) {
-                    this.formFields = [];
-                    Object.keys(res.fields).forEach(key => {
-                        if (res.fields[key]) {
-                            this.formFields[res.fields[key].name] = [];
-                            this.formFields[res.fields[key].name] = res.fields[key];
-                        }
-                    });
-                }
-                if (this.formFields['taxName'] && this.formFields['taxName'].label) {
-                    this.GSTIN_OR_TRN = this.formFields['taxName'].label;
-                } else {
-                    this.GSTIN_OR_TRN = '';
-                }
-                this.taxNamePlaceholder = this.commonLocaleData.app_enter_tax_name;
-                this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName'].label);
-            }
-        });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
@@ -1639,5 +1619,36 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public discountSelected(): void {
         this.isDiscountSaveDisable$ = observableOf(false);
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+                if (res) {
+                    if (res.fields) {
+                        this.formFields = [];
+                        Object.keys(res.fields).forEach(key => {
+                            if (res.fields[key]) {
+                                this.formFields[res.fields[key].name] = [];
+                                this.formFields[res.fields[key].name] = res.fields[key];
+                            }
+                        });
+                    }
+                    if (this.formFields['taxName'] && this.formFields['taxName'].label) {
+                        this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                    } else {
+                        this.GSTIN_OR_TRN = '';
+                    }
+                    this.taxNamePlaceholder = this.commonLocaleData.app_enter_tax_name;
+                    this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                }
+            });
+        }
     }
 }

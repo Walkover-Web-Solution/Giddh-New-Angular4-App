@@ -74,10 +74,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public isMobileScreen: boolean = true;
     public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
-    public localeData: any = {};
-    /* This will hold common JSON data */
-    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>,
         private _toasty: ToasterService,
@@ -240,9 +236,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             request.mobileNumber = this.phoneNumber;
             this.store.dispatch(this.loginAction.AddNewMobileNo(request));
         } else {
-            if(this.localeData && this.localeData.mobile_number) {
-                this._toasty.errorToast(this.localeData.mobile_number.mobile_number_validation_error);
-            }
+            this._toasty.errorToast('Please enter number in format: 9998899988');
         }
     }
 

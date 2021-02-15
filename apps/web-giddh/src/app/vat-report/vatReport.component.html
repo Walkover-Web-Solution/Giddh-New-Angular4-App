@@ -151,13 +151,13 @@
                                                     <td class="invoice-preview">
                                                         <a href="javascript:void(0)" class="text-light invoice-preview" *ngIf="reportSections.toolTip" tooltip="{{reportSections.toolTip}}"><span class="icon-info text-light"></span></a>
                                                     </td>
-                                                    <td data-title="{{commonLocaleData?.app_amount}} ({{activeCompany.baseCurrencySymbol}})"
+                                                    <td [attr.data-title]="commonLocaleData?.app_amount + ' (' + activeCompany.baseCurrencySymbol + ')'"
                                                         class="text-right">{{activeCompany.baseCurrencySymbol}}
                                                         {{reportSections.amount | giddhCurrency}}</td>
-                                                    <td data-title="{{localeData?.vat_amount}} ({{activeCompany.baseCurrencySymbol}})"
+                                                    <td [attr.data-title]="localeData?.vat_amount + ' (' + activeCompany.baseCurrencySymbol + ')'"
                                                         class="text-right">{{activeCompany.baseCurrencySymbol}}
                                                         {{reportSections.vatAmount | giddhCurrency}}</td>
-                                                    <td data-title="{{localeData?.adjustment}} ({{activeCompany.baseCurrencySymbol}})"
+                                                    <td [attr.data-title]="localeData?.adjustment + ' (' + activeCompany.baseCurrencySymbol + ')'"
                                                         class="text-right">{{activeCompany.baseCurrencySymbol}}
                                                         {{reportSections.adjustmentAmount | giddhCurrency}}</td>
                                                 </tr>
