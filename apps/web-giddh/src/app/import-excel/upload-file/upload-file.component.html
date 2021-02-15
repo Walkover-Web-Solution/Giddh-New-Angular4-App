@@ -1,7 +1,7 @@
 <!-- upload And Map Content start-->
 <div class="upload-and-map-content">
     <h2 class="text-center"> {{localeData?.import}} {{ title | titlecase}}</h2>
-    <div *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries'" class="form-group max-width-500 center-block">
+    <div *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && currentOrganizationType === 'COMPANY'" class="form-group max-width-500 center-block">
         <!-- Currently only import entries is only visible for branch as API doesn't support permission.
         Import is only allowed for 'entries' and not for other options ('inventory', 'account', 'trial-balance', 'groups')
         on branch level and for company level other options are supported but not entries -->

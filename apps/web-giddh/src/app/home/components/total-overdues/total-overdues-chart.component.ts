@@ -234,7 +234,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
      * @memberof TotalOverduesChartComponent
      */
     public getTotalOverduesData(group: string): void {
-        this._dashboardService.getClosingBalance(group, this.toRequest.from, this.toRequest.to, this.toRequest.refresh).subscribe(response => {
+        this._dashboardService.getClosingBalance(group, this.toRequest.from, this.toRequest.to, this.toRequest.refresh).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success' && response.body && response.body[0]) {
                 this.dataFound = true;
 

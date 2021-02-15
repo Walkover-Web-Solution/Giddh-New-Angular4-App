@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -49,6 +49,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Input() public showList: boolean = false;
     @Input() public filterText: string = '';
     @Input() public keydownUpInput: KeyboardEvent;
+    /** True when pagination should be enabled */
+    @Input() isPaginationEnabled: boolean;
 
     @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
     @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
@@ -62,6 +64,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Output() public noOptionsFound = new EventEmitter<boolean>();
     @Output() public noResultsClicked = new EventEmitter<null>();
     @Output() public viewInitEvent = new EventEmitter<any>();
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     public rows: IOption[] = [];
     public isOpen: boolean = true;
     public filter: string = '';
@@ -81,7 +85,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         DOWN: 40
     };
 
-    constructor(private element: ElementRef, private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
+    constructor(private cdRef: ChangeDetectorRef) {
     }
 
     get options(): IOption[] {
@@ -411,9 +415,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                 this.filter = this.selectedValues[0] ? this.selectedValues[0].label : '';
                 this.hide();
             }
-        }
-        if ('filterText' in changes && changes.filterText.currentValue !== changes.filterText.previousValue) {
-            this.updateFilter(changes.filterText.currentValue);
         }
         if ('keydownUpInput' in changes && changes.keydownUpInput.currentValue !== changes.keydownUpInput.previousValue) {
             this.keydownUp(changes.keydownUpInput.currentValue);

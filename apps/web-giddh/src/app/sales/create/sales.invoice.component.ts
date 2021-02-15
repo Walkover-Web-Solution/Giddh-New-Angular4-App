@@ -1521,7 +1521,8 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
                         catchError(err => {
                             this.fetchedConvertedRate = 0;
                             return err;
-                        })
+                        }),
+                        takeUntil(this.destroyed$)
                     )
                     .subscribe((res: any) => {
                         let rate = res.body;

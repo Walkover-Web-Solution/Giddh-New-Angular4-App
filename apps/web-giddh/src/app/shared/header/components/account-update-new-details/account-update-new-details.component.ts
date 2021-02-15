@@ -227,10 +227,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
                 if (accountDetails.uniqueName) {
                     this.accountInheritedDiscounts = [];
-                    accountDetails.inheritedDiscounts.forEach(item => {
-                        this.accountInheritedDiscounts.push(...item.applicableDiscounts);
-                    });
-                    this._accountService.GetApplyDiscount(accountDetails.uniqueName).subscribe(response => {
+                    if (accountDetails && accountDetails.inheritedDiscounts) {
+                        accountDetails.inheritedDiscounts.forEach(item => {
+                            this.accountInheritedDiscounts.push(...item.applicableDiscounts);
+                        });
+                    }
+                    this._accountService.GetApplyDiscount(accountDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         this.selectedDiscounts = [];
                         this.forceClearDiscount$ = observableOf({ status: true });
                         if (response.status === 'success') {
@@ -443,7 +445,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
-        this.accountsAction.mergeAccountResponse$.subscribe(res => {
+        this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });
         this.isTaxableAccount$ = this.store.pipe(select(createSelector([
@@ -752,12 +754,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         gstForm.get('state').get('code').patchValue(currentState.value);
 
                     } else {
-                        if (this.isIndia) {
-                            gstForm.get('stateCode').patchValue(null);
-                            gstForm.get('state').get('code').patchValue(null);
-                        }
                         this._toaster.clearAllToaster();
                         if (this.formFields['taxName'] && !gstForm.get('gstNumber')?.valid) {
+                            if (this.isIndia) {
+                                gstForm.get('stateCode').patchValue(null);
+                                gstForm.get('state').get('code').patchValue(null);
+                            }
+                            
                             let invalidTaxName = this.commonLocaleData.app_invalid_tax_name;
                             invalidTaxName = invalidTaxName.replace("[TAX_NAME]", this.formFields['taxName'].label);
                             this._toaster.errorToast(invalidTaxName);
@@ -1226,7 +1229,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
 
-        this.accountService.getFlattenAccounts().subscribe(a => {
+        this.accountService.getFlattenAccounts().pipe(takeUntil(this.destroyed$)).subscribe(a => {
             let accounts: IOption[] = [];
             if (a.status === 'success') {
                 a.body.results.map(acc => {
@@ -1512,7 +1515,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public getCompanyCustomField(): void {
-        this.groupService.getCompanyCustomField().subscribe(response => {
+        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body;
                 this.createDynamicCustomFieldForm(this.companyCustomFields);

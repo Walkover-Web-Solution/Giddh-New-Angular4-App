@@ -449,7 +449,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             grant_type: 'authorization_code',
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
-        this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
+        this._authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 this._toasty.successToast('Gmail account added successfully.', 'Success');
             } else {

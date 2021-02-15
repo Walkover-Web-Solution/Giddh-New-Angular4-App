@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, NavigationStart } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -22,7 +22,7 @@ import { OrganizationType } from '../../../models/user-login-state';
     templateUrl: './purchase.register.component.html',
     styleUrls: ['./purchase.register.component.scss']
 })
-export class PurchaseRegisterComponent implements OnInit {
+export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
     bsValue = new Date();
     public reportRespone: PurchaseReportsModel[];
@@ -100,6 +100,8 @@ export class PurchaseRegisterComponent implements OnInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private router: Router,
@@ -113,6 +115,7 @@ export class PurchaseRegisterComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.router.events.pipe(
             filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/purchase-register') || event.url.includes('/reports/purchase-detailed-expand')))),
             takeUntil(this.destroyed$)).subscribe(() => {
@@ -142,9 +145,9 @@ export class PurchaseRegisterComponent implements OnInit {
                 });
                 let currentBranchUniqueName;
                 if (!this.currentBranch.uniqueName) {
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -308,7 +311,7 @@ export class PurchaseRegisterComponent implements OnInit {
                 interval: interval,
                 branchUniqueName: this.currentBranch.uniqueName
             }
-            this.companyService.getPurchaseRegister(request).subscribe((res) => {
+            this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'error') {
                     this._toaster.errorToast(res.message);
                 } else {
@@ -333,7 +336,7 @@ export class PurchaseRegisterComponent implements OnInit {
                 interval: 'monthly',
                 branchUniqueName: this.currentBranch.uniqueName
             }
-            this.companyService.getPurchaseRegister(request).subscribe((res) => {
+            this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'error') {
                     this._toaster.errorToast(res.message);
                 } else {
@@ -429,5 +432,15 @@ export class PurchaseRegisterComponent implements OnInit {
         if(event) {
             this.monthNames = [this.commonLocaleData.app_months_full.january, this.commonLocaleData.app_months_full.february, this.commonLocaleData.app_months_full.march, this.commonLocaleData.app_months_full.april, this.commonLocaleData.app_months_full.may, this.commonLocaleData.app_months_full.june, this.commonLocaleData.app_months_full.july, this.commonLocaleData.app_months_full.august, this.commonLocaleData.app_months_full.september, this.commonLocaleData.app_months_full.october, this.commonLocaleData.app_months_full.november, this.commonLocaleData.app_months_full.december];
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

@@ -111,7 +111,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public getFinancialYears(): void {
-        this.settingsFinancialYearService.GetAllFinancialYears().subscribe(res => {
+        this.settingsFinancialYearService.GetAllFinancialYears().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.body && res.body.financialYears) {
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
@@ -161,7 +161,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 this.exportRequest.page = this.getColumnarRequestModel.page;
                 this.exportRequest.count = this.getColumnarRequestModel.count;
             }
-            this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).subscribe((res) => {
+            this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
                 this.isShowColumnarReport = false;
                 if (res.status === "success") {
@@ -365,7 +365,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 page,
                 count: API_COUNT_LIMIT,
             }
-            this.groupService.searchGroups(requestObject).subscribe(data => {
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

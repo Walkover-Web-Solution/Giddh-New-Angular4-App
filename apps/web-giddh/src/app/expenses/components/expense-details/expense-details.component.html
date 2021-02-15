@@ -64,6 +64,9 @@
                                 #entryAgainstAccountDropDown [options]="entryAgainstObject.dropDownOption"
                                 [(ngModel)]="entryAgainstObject.model" (selected)="onSelectEntryAgainstAccount($event)"
                                 [placeholder]="commonLocaleData?.app_select_account" [notFoundLink]="false"
+                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                (scrollEnd)="handleAccountScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                [defaultValue]="entryAgainstObject.name" [fixedValue]="entryAgainstObject.name"
                                 [forceClearReactive]="forceClear$ | async" [multiple]="false" [ItemHeight]="33"
                                 [useInBuiltFilterForIOptionTypeItems]="true">
                                 <ng-template #optionTemplate1 let-option="option">

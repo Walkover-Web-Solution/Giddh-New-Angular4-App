@@ -142,7 +142,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.transporterFilterRequest.page = 1;
         this.transporterFilterRequest.count = 10;
-        this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
+        this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
                 this.isUserlogedIn = true;
                 if (res.body && res.body.gstIn) {
@@ -154,7 +154,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
-    
+
         this.transporterListDetails$.subscribe(op => {
             this.transporterListDetails = op;
         })
@@ -205,7 +205,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     // generate Eway
     public onSubmitEwaybill(generateBillform: NgForm) {
-        this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
+        this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
                 this.isUserlogedIn = true;
             } else {

@@ -339,7 +339,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.entryDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         this.getTransactionData();
         // Después del éxito de la entrada. llamar para transacciones bancarias
-        this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+        this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((data: AccountResponse) => {
             this.getBankTransactions();
         });
     }
@@ -376,7 +376,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
             this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
             e.additional.uniqueName;
-        this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
+        this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
                 txn.showTaxationDiscountBox = false;
                 // Take taxes of parent group and stock's own taxes
@@ -612,7 +612,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        if (this.generalService.currentOrganizationType === OrganizationType.Company) {
+        if (this.currentOrganizationType === OrganizationType.Company) {
             this.showBranchSwitcher = true;
             this.currentCompanyBranches$.subscribe(response => {
                 if (response && response.length) {
@@ -633,9 +633,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         // Assign the current branch only when it is not selected. This check is necessary as
                         // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                         // branches are loaded
-                        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        if (this.currentOrganizationType === OrganizationType.Branch) {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                            this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                            this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                         } else {
                             currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                             this.currentBranch = {
@@ -647,7 +647,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     this.trxRequest.branchUniqueName = this.currentBranch.uniqueName;
                     this.advanceSearchRequest.branchUniqueName = this.currentBranch.uniqueName;
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch ||
+                    if (this.currentOrganizationType === OrganizationType.Branch ||
                         (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
                         // Add the blank transaction only if it is branch mode or company with single branch
                         this.lc.blankLedger.transactions = [
@@ -791,7 +791,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.lc.transactionData$.subscribe((lt: any) => {
+        this.lc.transactionData$.pipe(takeUntil(this.destroyed$)).subscribe((lt: any) => {
             if (lt) {
                 // set date picker to and from date, as what we got from api in case of today selected from universal date
                 if (lt.from && lt.to && this.todaySelected) {
@@ -874,7 +874,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
                 // After the success of the entrance call for bank transactions
-                this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+                this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((data: AccountResponse) => {
                     this._loaderService.show();
                     this.getBankTransactions();
                 });
@@ -938,7 +938,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.isBankTransactionLoading = true;
 
             let getRequest = {accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page}
-            this._ledgerService.GetBankTranscationsForLedger(getRequest).subscribe(res => {
+            this._ledgerService.GetBankTranscationsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.isBankTransactionLoading = false;
                 if (res.status === 'success') {
                     if(res.body) {
@@ -946,7 +946,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankTransactionsResponse.totalPages = res.body.totalPages;
                         this.bankTransactionsResponse.page = res.body.page;
 
-                        this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.generalService.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
+                        this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                     }
                 }
             });
@@ -1007,7 +1007,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
             this.invoiceList = [];
-            this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
+            this._ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body && response.body.results) {
                     response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
                 }
@@ -1049,7 +1049,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         if (from && to) {
             let date = moment().format(GIDDH_DATE_FORMAT);
-            this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+            this._ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
                     this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
@@ -1091,7 +1091,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
-        this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
+        this._ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 download(d.body.name, blob, `image/${d.body.fileType}`)
@@ -1109,7 +1109,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         downloadRequest.invoiceNumber = [invoiceName];
         downloadRequest.voucherType = voucherType;
 
-        this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
+        this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
                 download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
@@ -1122,7 +1122,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public resetBlankTransaction() {
         this.lc.blankLedger = {
             transactions:
-                (this.generalService.currentOrganizationType === OrganizationType.Branch ||
+                (this.currentOrganizationType === OrganizationType.Branch ||
                     (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
                 this.lc.addNewTransaction('DEBIT'),
                 this.lc.addNewTransaction('CREDIT')
@@ -1458,7 +1458,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.hideUpdateLedgerModal();
             }
             if (this.updateLedgerComponentInstance.activeAccount$) {
-                this.updateLedgerComponentInstance.activeAccount$.subscribe(res => {
+                this.updateLedgerComponentInstance.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                     this.activeAccountParentGroupsUniqueName = res.parentGroups[1].uniqueName;
                 });
             }
@@ -1498,7 +1498,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 withStocks,
                 stockAccountUniqueName: encodeURIComponent(accountUniqueName) || undefined
             }
-            this.searchService.searchAccount(requestObject).subscribe(data => {
+            this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -1840,7 +1840,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * deleteBankTxn
      */
     public deleteBankTxn(transactionId) {
-        this._ledgerService.DeleteBankTransaction(transactionId).subscribe((res: BaseResponse<any, string>) => {
+        this._ledgerService.DeleteBankTransaction(transactionId).pipe(takeUntil(this.destroyed$)).subscribe((res: BaseResponse<any, string>) => {
             if (res.status === 'success') {
                 this._toaster.successToast(this.localeData.bank_transaction_deleted);
             }
@@ -1893,7 +1893,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getInvoiveLists(request) {
         this.invoiceList = [];
-        this._ledgerService.GetInvoiceList(request).subscribe((res: any) => {
+        this._ledgerService.GetInvoiceList(request).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
             _.map(res.body.invoiceList, (o) => {
                 this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
             });
@@ -2283,7 +2283,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public translationComplete(event?: any): void {
-        observableCombineLatest(this.lc.activeAccount$, this.lc.companyProfile$).subscribe(data => {
+        observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
 
             if (data[0] && data[1]) {
                 let profile = cloneDeep(data[1]);
@@ -2303,7 +2303,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let accountDetails: AccountResponse | AccountResponseV2 = data[0];
                 let parentOfAccount = accountDetails.parentGroups[0];
 
-                this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name, accountDetails.parentGroups, this.localeData);
+                this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name, accountDetails.parentGroups);
                 this.accountUniquename = accountDetails.uniqueName;
 
                 if (this.advanceSearchComp) {

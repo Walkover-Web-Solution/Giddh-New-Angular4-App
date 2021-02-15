@@ -129,7 +129,7 @@ export class BunchComponent implements OnDestroy {
 	 * getAllBunch
 	 */
 	public getAllBunch() {
-		this._settingsBunchService.GetAllBunches().subscribe(res => {
+		this._settingsBunchService.GetAllBunches().pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res && res.status === 'success') {
 				this.allBunches = _.cloneDeep(res.body.bunchResources);
 			}
@@ -140,7 +140,7 @@ export class BunchComponent implements OnDestroy {
 	 * createBunch
 	 */
 	public createBunch(data) {
-		this._settingsBunchService.CreateBunch(data).subscribe(res => {
+		this._settingsBunchService.CreateBunch(data).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res && res.status === 'success') {
 				this.allBunches.push(res.body);
 				this.hideBunchModal();
@@ -173,7 +173,7 @@ export class BunchComponent implements OnDestroy {
 	 * updateBunch
 	 */
 	public updateBunch(data) {
-		this._settingsBunchService.UpdateBunch(data, data.uniqueName).subscribe(res => {
+		this._settingsBunchService.UpdateBunch(data, data.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res && res.status === 'success') {
 				this._toasterService.successToast(res.status);
 				this.getAllBunch();
@@ -187,7 +187,7 @@ export class BunchComponent implements OnDestroy {
 	 */
 	public deleteBunch(bunchUniqueName) {
 		let uniqueName = _.cloneDeep(bunchUniqueName);
-		this._settingsBunchService.RemoveBunch(uniqueName).subscribe(res => {
+		this._settingsBunchService.RemoveBunch(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res && res.status === 'success') {
 				this._toasterService.successToast(res.body);
 				this.getAllBunch();
@@ -202,7 +202,7 @@ export class BunchComponent implements OnDestroy {
 	 */
 	public getBunchCompany(bunch) {
 		this.selectedBunch = bunch;
-		this._settingsBunchService.GetCompanies(_.cloneDeep(bunch.uniqueName)).subscribe(res => {
+		this._settingsBunchService.GetCompanies(_.cloneDeep(bunch.uniqueName)).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res && res.status === 'success') {
 				if (res.body.companies && res.body.companies.length) {
 					this.selectedBunchCompany = res.body;
@@ -219,7 +219,7 @@ export class BunchComponent implements OnDestroy {
 	 */
 	public AddBunchCompany(data) {
 		if (data.length) {
-			this._settingsBunchService.AddCompanies(data, this.selectedBunch.uniqueName).subscribe(res => {
+			this._settingsBunchService.AddCompanies(data, this.selectedBunch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 				if (res && res.status === 'success') {
 					this._toasterService.successToast(res.body);
 					this.hideAddCompanyModal();
@@ -235,7 +235,7 @@ export class BunchComponent implements OnDestroy {
 	 */
 	public RemoveCompany(data) {
 		if (data.length) {
-			this._settingsBunchService.RemoveCompanies(data, this.selectedBunch.uniqueName).subscribe(res => {
+			this._settingsBunchService.RemoveCompanies(data, this.selectedBunch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
 				if (res && res.status === 'success') {
 					this._toasterService.successToast(res.body);
 					this.hideGetBunchCompanyModal();

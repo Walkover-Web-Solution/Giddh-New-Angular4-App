@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="top-bar aging-top-bar clearfix">
         <div class="aging-form-inline">
-            <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+            <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                 <div class="form-group">
                     <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                         [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"

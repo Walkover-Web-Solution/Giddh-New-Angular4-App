@@ -9,7 +9,7 @@
 
                     <div class="top-bar customer-top-bar clearfix" [ngClass]="{'vendor-top-bar': activeTab === 'vendor'}">
                         <div class="customer-form-inline">
-                            <div>
+                            <div class="wrap-search-entity">
                                 <div class="dis mr-r15 pull-left">
 
                                     <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="localeData?.filter_toggle" [placement]="'right'">
@@ -68,7 +68,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+                                <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                                     <div>
                                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                                             [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
@@ -93,7 +93,8 @@
                                         </sh-select>
                                     </div>
                                 </div>
-                                <div class="pull-left header-left">
+                                <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
+                                <div class="pull-left header-left" [ngClass]="{'on-company': currentCompanyBranches?.length <= 2 }">
                                     <div class="form-group max-width-250 search-field" *ngIf="activeTab !== 'aging'">
                                         <input type="text" [placeholder]="localeData?.name_email_mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                                         <span class="input-addon">

@@ -228,7 +228,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public getFormFilter(): void {
-        this.auditLogsService.getAuditLogFormFilters().subscribe((response) => {
+        this.auditLogsService.getAuditLogFormFilters().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 if (response.body) {
                     this.auditLogFilterForm = response.body;
@@ -359,7 +359,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                 q: encodeURIComponent(query),
                 page
             }
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -443,7 +443,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                 page,
                 count: API_COUNT_LIMIT
             }
-            this.groupService.searchGroups(requestObject).subscribe(data => {
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

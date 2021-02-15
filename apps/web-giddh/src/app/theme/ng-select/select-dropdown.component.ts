@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ReplaySubject, Subject } from 'rxjs';
+import { fromEvent, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { Option } from './option';
@@ -52,8 +52,6 @@ export class SelectDropdownComponent
     /** To unsubscrible the listener */
     public scrollListener: any;
 
-    /** Subject to emit current searched value */
-    private dynamicSearchQueryChanged: Subject<string> = new Subject<string>();
     /** To unsubscribe from the dynamic search query subscription */
     private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -88,13 +86,16 @@ export class SelectDropdownComponent
         if (this.scrollListener) {
             this.scrollListener();
         }
+        this.stopDynamicSearch$.next(true);
+        this.stopDynamicSearch$.complete();
     }
 
 	public ngAfterViewInit() {
 		this.moveHighlightedIntoView();
 		if ((!this.multiple && !this.isTypeAheadMode) && this.filterEnabled) {
 			this.filterInput.nativeElement.focus();
-		}
+        }
+        this.subscribeToQueryChange();
 	}
 
 	public onOptionsListClick() {
@@ -106,9 +107,7 @@ export class SelectDropdownComponent
 	}
 
 	public onSingleFilterInput(event: any) {
-        if (this.enableDynamicSearch) {
-            this.handleInputChange(event.target.value);
-        } else {
+        if (!this.enableDynamicSearch) {
             this.singleFilterInput.emit(event.target.value);
         }
 	}
@@ -118,7 +117,6 @@ export class SelectDropdownComponent
 	}
 
 	public onSingleFilterFocus() {
-        this.subscribeToQueryChange();
 		this.singleFilterFocus.emit(null);
 	}
 
@@ -182,28 +180,14 @@ export class SelectDropdownComponent
     }
 
     /**
-     * Input change handler
-     *
-     * @param {string} inputText Current input text
-     * @memberof SelectComponent
-     */
-    public handleInputChange(inputText: string): void {
-        this.dynamicSearchQueryChanged.next(inputText);
-    }
-
-    /**
      * Subscribes to query change for dynamic search
      *
      * @memberof SelectComponent
      */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
-            this.stopDynamicSearch$.next(true);
-            this.stopDynamicSearch$.complete();
-            this.stopDynamicSearch$ = new ReplaySubject(1);
-            this.dynamicSearchQueryChanged = new Subject();
-            this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
-                this.dynamicSearchedQuery.emit(query);
+            fromEvent(this.filterInput.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
+                this.dynamicSearchedQuery.emit(event?.target?.value?.trim());
             });
         }
     }

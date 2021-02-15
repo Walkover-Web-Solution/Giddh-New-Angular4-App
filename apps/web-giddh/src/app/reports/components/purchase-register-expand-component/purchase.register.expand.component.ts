@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
@@ -17,7 +17,7 @@ import { CurrentCompanyState } from '../../../store/Company/company.reducer';
     styleUrls: ['./purchase.register.expand.component.scss']
 })
 
-export class PurchaseRegisterExpandComponent implements OnInit {
+export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
     public from: string;
     public to: string;
@@ -254,5 +254,15 @@ export class PurchaseRegisterExpandComponent implements OnInit {
 
             this.getCurrentMonthYear();
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

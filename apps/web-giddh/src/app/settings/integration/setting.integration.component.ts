@@ -113,7 +113,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             { label: "Max limit as per Bank", value: "max" },
             { label: "Custom", value: "custom" },
         ];
-    public approvalNameList: IOption[] = [];
+    // public approvalNameList: IOption[] = [];
     public selectedCompanyUniqueName: string;
     public isCreateInvalid: boolean = false;
     /** update bank form validation for amount */
@@ -166,7 +166,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private searchService: SearchService,
         private salesService: SalesService
     ) {
-        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
         this.isSellerAdded = this.store.pipe(select(s => s.settings.amazonState.isSellerSuccess), takeUntil(this.destroyed$));
         this.isSellerUpdate = this.store.pipe(select(s => s.settings.amazonState.isSellerUpdated), takeUntil(this.destroyed$));
@@ -253,13 +253,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             ])
         });
 
-        this.isSellerAdded.subscribe(a => {
+        this.isSellerAdded.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.addAmazonSellerRow();
             }
         });
 
-        this.isSellerUpdate.subscribe(a => {
+        this.isSellerUpdate.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.amazonEditItemIdx = null;
                 this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
@@ -292,6 +292,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
                 if (this.addBankForm) {
                     this.addBankForm.reset();
+                    this.addBankForm = this.createBankIntegrationForm();
                 }
                 this.isBankUpdateInEdit = null;
             }
@@ -319,36 +320,36 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(resp => {
-            if (resp) {
-                let data = _.cloneDeep(resp);
-                let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
-                let arr: IOption[] = [];
-                forIn(sortedArr, (value) => {
-                    if (value[0].emailId === this.loggedInUserEmail) {
-                        value[0].isLoggedInUser = true;
-                    }
-                    // arr.push({ name: value[0].userName, rows: value });
-                    arr.push({ label: value[0].userName, value: value[0].userUniqueName, additional: value });
-                });
-                let sortedArray = [];
-                arr.forEach(item => {
-                    if (item.additional[0].mobileVerified) {
-                        sortedArray.push(item);
-                    }
-                });
-                arr.forEach(item => {
-                    if (!item.additional[0].mobileVerified) {
-                        sortedArray.push(item);
-                    }
-                });
-                this.approvalNameList = sortedArray;
-                // this.approvalNameList = _.sortBy(sortedArray, ['label']);
-            }
-        });
+        // this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(resp => {
+        //     if (resp) {
+        //         let data = _.cloneDeep(resp);
+        //         let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
+        //         let arr: IOption[] = [];
+        //         forIn(sortedArr, (value) => {
+        //             if (value[0].emailId === this.loggedInUserEmail) {
+        //                 value[0].isLoggedInUser = true;
+        //             }
+        //             arr.push({ label: value[0].userName, value: value[0].userUniqueName, additional: value });
+        //         });
+        //         let sortedArray = [];
+        //         arr.forEach(item => {
+        //             if (item.additional[0].mobileVerified) {
+        //                 sortedArray.push(item);
+        //             }
+        //         });
+        //         arr.forEach(item => {
+        //             if (!item.additional[0].mobileVerified) {
+        //                 sortedArray.push(item);
+        //             }
+        //         });
+        //         this.approvalNameList = sortedArray;
+        //     }
+        // });
+
         if (this.selectedCompanyUniqueName) {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
         }
+
         this.isPaymentUpdationSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.isBankUpdateInEdit = null;
@@ -724,7 +725,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public getShopifyVerifyStatus(ecommerceUniqueName: string): void {
         const requestObj = { source: "shopify" };
-        this.ecommerceService.isShopifyConnected(requestObj, ecommerceUniqueName).subscribe(response => {
+        this.ecommerceService.isShopifyConnected(requestObj, ecommerceUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success' && response.body === 'VERIFIED') {
                     this.isEcommerceShopifyUserVerified = true;
@@ -739,7 +740,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
-                const t = ipcRenderer.send("authenticate", provider);
+                const t = ipcRenderer.send("authenticate-send-email", provider);
                 ipcRenderer.once('take-your-gmail-token', (sender, arg: any) => {
                     // this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                     const dataToSave = {
@@ -747,7 +748,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         "expires_in": arg.expiry_date,
                         "refresh_token": arg.refresh_token
                     };
-                    this._authenticationService.saveGmailToken(dataToSave).subscribe((res) => {
+                    this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
                         if (res.status === 'success') {
                             this.toasty.successToast('Gmail account added successfully.', 'Success');
@@ -1105,7 +1106,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public getValidationForm(bankType: string): void {
         if (this.selectedCompanyUniqueName && bankType) {
-            this.settingsIntegrationService.getValidationFormForBank(this.selectedCompanyUniqueName, bankType).subscribe(response => {
+            this.settingsIntegrationService.getValidationFormForBank(this.selectedCompanyUniqueName, bankType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.status === 'success') {
                     if (response.body) {
                         this.maxLimit = String(response.body.maxAmount).length;
@@ -1337,9 +1338,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+            // this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
+            // this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
+            // this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
         }
     }
 
@@ -1426,7 +1427,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 q: encodeURIComponent(query),
                 page
             }
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -1518,7 +1519,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     private loadDefaultBankAccountsSuggestions(): void {
-        this.salesService.getAccountsWithCurrency('bankaccounts').subscribe(response => {
+        this.salesService.getAccountsWithCurrency('bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
                     label: account.name,
@@ -1527,5 +1528,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.bankAccounts$ = observableOf(bankAccounts);
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

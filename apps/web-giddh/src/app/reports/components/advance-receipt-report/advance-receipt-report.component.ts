@@ -157,6 +157,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
@@ -226,6 +228,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.dispatch(this.generalAction.setAppTitle('/pages/reports/receipt'));
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(uniqueName => this.activeCompanyUniqueName = uniqueName);
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((applicationDate) => {
@@ -270,9 +273,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     let currentBranchUniqueName;
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -347,7 +350,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 totalAmountOperation: data.totalAmountFilter.selectedValue,
                 unUsedAmount: data.unusedAmountFilter.amount,
                 unUsedAmountOperation: data.unusedAmountFilter.selectedValue
-            }).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+            }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
             this.receiptAdvanceSearchModalContainer.hide();
         });
         this.receiptAdvanceSearchModalContainer.show();
@@ -398,7 +401,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public onReceiptTypeChanged(currentlySelectedReceipt: string): void {
         this.showClearFilter = true;
         this.searchQueryParams.receiptTypes = [currentlySelectedReceipt];
-        this.fetchAllReceipts({ ...this.searchQueryParams }).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        this.fetchAllReceipts({ ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
 
     /**
@@ -421,7 +424,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public onPageChanged(event: any): void {
-        this.fetchAllReceipts({ page: event.page, ...this.searchQueryParams }).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        this.fetchAllReceipts({ page: event.page, ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
 
     /**
@@ -494,7 +497,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.showClearFilter = true;
         this.searchQueryParams.sort = sort;
         this.searchQueryParams.sortBy = sortBy;
-        this.fetchAllReceipts({ ...this.searchQueryParams }).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+        this.fetchAllReceipts({ ...this.searchQueryParams }).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
     }
 
     /**
@@ -520,7 +523,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             fromEvent(this.paymentMode.nativeElement, 'input'),
             fromEvent(this.invoiceNumber.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
                 this.showClearFilter = true;
-                this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
+                this.fetchAllReceipts(this.searchQueryParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
             });
     }
 
@@ -532,7 +535,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     private fetchReceiptsData(): void {
         this.fetchAllReceipts(this.searchQueryParams).subscribe((response) => this.handleFetchAllReceiptResponse(response));
-        this.fetchSummary().subscribe((response) => this.handleSummaryResponse(response));
+        this.fetchSummary().pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleSummaryResponse(response));
     }
 
     /**

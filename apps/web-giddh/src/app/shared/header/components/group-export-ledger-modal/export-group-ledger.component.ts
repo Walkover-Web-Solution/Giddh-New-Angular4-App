@@ -188,4 +188,13 @@ export class ExportGroupLedgerComponent implements OnInit {
         }
     }
 
+    /**
+     * Releases memory
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

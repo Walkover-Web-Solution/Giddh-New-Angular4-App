@@ -440,7 +440,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngAfterViewInit(): void {
-        this.needToReCalculate.subscribe(a => {
+        this.needToReCalculate.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.amountChanged();
                 this.calculateTotal();
@@ -888,7 +888,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         o.accountUniqueName = this.trxRequest.accountUniqueName;
         o.from = (this.trxRequest.from) ? moment(this.trxRequest.from).format(GIDDH_DATE_FORMAT) : "";
         o.to = (this.trxRequest.to) ? moment(this.trxRequest.to).format(GIDDH_DATE_FORMAT) : "";
-        this._ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).subscribe((res) => {
+        this._ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
             if (data.status === 'success') {
                 if (data.body && data.body.length) {
@@ -940,7 +940,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 accountUniqueName: this.trxRequest.accountUniqueName,
                 transactionId: this.blankLedger.transactionId
             };
-            this._ledgerService.MapBankTransactions(model, unqObj).subscribe((res) => {
+            this._ledgerService.MapBankTransactions(model, unqObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     if (typeof (res.body) === 'string') {
                         this._toasty.successToast(res.body);

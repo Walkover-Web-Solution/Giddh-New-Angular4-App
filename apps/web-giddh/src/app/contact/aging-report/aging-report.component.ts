@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, Input, OnDestroy } from '@angular/core';
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -27,7 +27,7 @@ import { OrganizationType } from '../../models/user-login-state';
     styleUrls: ['aging-report.component.scss']
 })
 
-export class AgingReportComponent implements OnInit {
+export class AgingReportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -80,6 +80,8 @@ export class AgingReportComponent implements OnInit {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -131,6 +133,7 @@ export class AgingReportComponent implements OnInit {
     }
 
     public ngOnInit() {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
@@ -193,9 +196,9 @@ export class AgingReportComponent implements OnInit {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -326,5 +329,15 @@ export class AgingReportComponent implements OnInit {
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
         this.getDueReport();
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof AgingReportComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

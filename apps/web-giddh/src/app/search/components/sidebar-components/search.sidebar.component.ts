@@ -122,6 +122,8 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     };
     /** Stores the value of groups */
     public searchedGroups: IOption[];
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
 	/**
 	 * TypeScript public modifiers
@@ -136,6 +138,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     ) {	}
 
 	public ngOnInit() {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
 		this.fromDate = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
 		this.toDate = moment().format(GIDDH_DATE_FORMAT);
         this.loadDefaultGroupsSuggestions();
@@ -176,13 +179,13 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -229,7 +232,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 			toDate: this.toDate,
 			fromDate: this.fromDate,
             page: page ? page : 1,
-            branchUniqueName: this.currentBranch.uniqueName
+            branchUniqueName: this.currentBranch?.uniqueName
 		};
 		this.store.dispatch(this.searchActions.GetStocksReport(searchRequest, searchReqBody));
 		if (event) {
@@ -331,13 +334,13 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                 q: encodeURIComponent(query),
                 page,
                 count: API_COUNT_LIMIT,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             };
-            this.groupService.searchGroups(requestObject).subscribe(data => {
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -385,7 +388,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -407,7 +410,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];

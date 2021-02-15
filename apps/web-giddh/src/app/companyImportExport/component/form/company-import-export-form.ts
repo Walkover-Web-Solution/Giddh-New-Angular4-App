@@ -69,6 +69,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	constructor(
@@ -92,6 +94,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 		    { label: this.localeData.file_types.master, value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS.toString() }
         ];
 
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
 		this.isExportSuccess$.subscribe(s => {
 			if (s) {
 				this.backButtonPressed();
@@ -130,7 +133,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                     parentBranch: branch.parentBranch
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
-                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
                 if (!this.currentBranch.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime

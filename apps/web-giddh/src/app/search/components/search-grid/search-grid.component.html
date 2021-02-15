@@ -75,20 +75,22 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
-                        <td data-title="{{localeData?.select_item}}"><input type="checkbox" [checked]="selectedItems.indexOf(item.uniqueName) > -1" (change)="toggleSelection($event, item)"></td>
-                        <td data-title="{{commonLocaleData?.app_name}}">{{item.name}}</td>
-                        <td data-title="{{localeData?.unique_name}}">{{item.uniqueName}}</td>
-                        <td data-title="{{localeData?.parent}}">{{item.parent}}</td>
-                        <td data-title="{{localeData?.opening_balance}}" class="text-right">
+                        <!-- [(ngModel)]="item.isSelected" -->
+                        <td [attr.data-title]="localeData?.select_item"><input type="checkbox" [checked]="selectedItems.indexOf(item?.uniqueName) > -1" (change)="toggleSelection($event, item)"></td>
+                        <!-- <td>{{i+1}}</td> -->
+                        <td [attr.data-title]="commonLocaleData?.app_name">{{item.name}}</td>
+                        <td [attr.data-title]="localeData?.unique_name">{{item?.uniqueName}}</td>
+                        <td [attr.data-title]="localeData?.parent">{{item.parent}}</td>
+                        <td [attr.data-title]="localeData?.opening_balance" class="text-right">
                             {{item.openingBalance | giddhCurrency }}
                             <span *ngIf="item.openingBalance > 0">
                                 <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">{{localeData?.balance_type.dr}}</span>
                                 <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">{{localeData?.balance_type.cr}}</span>
                             </span>
                         </td>
-                        <td data-title="{{localeData?.dr_total}}" class="text-right">{{item.debitTotal | giddhCurrency }}</td>
-                        <td data-title="{{localeData?.cr_total}}" class="text-right">{{item.creditTotal | giddhCurrency}}</td>
-                        <td data-title="{{localeData?.closing_balance}}" class="text-right">
+                        <td [attr.data-title]="localeData?.dr_total" class="text-right">{{item.debitTotal | giddhCurrency }}</td>
+                        <td [attr.data-title]="localeData?.cr_total" class="text-right">{{item.creditTotal | giddhCurrency}}</td>
+                        <td [attr.data-title]="localeData?.closing_balance" class="text-right">
                             {{item.closingBalance | giddhCurrency }}
                             <span *ngIf="item.closingBalance > 0">
                                 <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">{{localeData?.balance_type.dr}}</span>

@@ -1,12 +1,12 @@
 <section appTranslate [file]="'vat-report'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="relative">
-        <hamburger-menu [pageHeading]="localeData?.tab_heading"></hamburger-menu>
+        <hamburger-menu></hamburger-menu>
         <div class="invoice-control w-100">
             <div class="row mr-0 ml-0">
                 <div class="vat-report w-100" id="setting-tab">
                     <tabset #staticTabs>
                         <tab heading="{{commonLocaleData?.tab_heading}}">
-                            <div *ngIf="currentCompanyBranches?.length > 2" class="row mb-3 mt-3">
+                            <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'" class="row mb-3 mt-3">
                                 <div class="tax-heading col-md-3 col-sm-3 col-12">
                                     <label>{{commonLocaleData?.entity}}:</label>
                                 </div>
@@ -19,8 +19,9 @@
                                                 <ng-container>
                                                     <a href="javascript:void(0)" class="list-item d-flex">
                                                         <span class="entity-icon">
-                                                            <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany" tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                                            <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="{{commonLocaleData?.app_company}}"></i>
+                                                            <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
+                                                                [tooltip]="commonLocaleData?.app_branch"></i>
+                                                            <i class="icon-company-profile pull-right" *ngIf="option.isCompany" [tooltip]="commonLocaleData?.app_company"></i>
                                                         </span>
                                                         <span class="entity-details">
                                                             <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>

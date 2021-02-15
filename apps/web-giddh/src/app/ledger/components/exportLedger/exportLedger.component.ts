@@ -86,7 +86,7 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
         exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
 
-        this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body.dataToSend, exportByInvoiceNumber).subscribe(response => {
+        this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 if (response.body) {
                     if (response.body.status === "success") {
@@ -147,7 +147,7 @@ export class ExportLedgerComponent implements OnInit {
             emailRequestParams.sort = this.order;
             emailRequestParams.withInvoice = this.withInvoiceNumber;
             emailRequestParams.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
-            this._ledgerService.MailLedger(sendData, this.accountUniqueName, emailRequestParams).subscribe(sent => {
+            this._ledgerService.MailLedger(sendData, this.accountUniqueName, emailRequestParams).pipe(takeUntil(this.destroyed$)).subscribe(sent => {
                 if (sent.status === 'success') {
                     this._toaster.successToast(sent.body, sent.status);
                     this.emailData = '';

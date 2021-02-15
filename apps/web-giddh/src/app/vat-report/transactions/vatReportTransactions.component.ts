@@ -117,7 +117,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
 
             this.vatReportTransactions = [];
 
-            this.vatService.getVatReportTransactions(this.activeCompany.uniqueName, this.vatReportTransactionsRequest).subscribe((res) => {
+            this.vatService.getVatReportTransactions(this.activeCompany.uniqueName, this.vatReportTransactionsRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this.vatReportTransactions = res.body;
                     this.cdRef.detectChanges();

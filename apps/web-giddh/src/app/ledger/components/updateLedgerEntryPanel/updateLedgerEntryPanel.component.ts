@@ -152,7 +152,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isDeleteTrxEntrySuccess$: Observable<boolean>;
     public isTxnUpdateInProcess$: Observable<boolean>;
     public isTxnUpdateSuccess$: Observable<boolean>;
-    public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public selectedLedgerStream$: Observable<LedgerResponse>;
     public companyProfile$: Observable<any>;
     public activeAccount$: Observable<AccountResponse>;
@@ -275,7 +274,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.editAccUniqueName$ = this.store.pipe(select(p => p.ledger.selectedAccForEditUniqueName), takeUntil(this.destroyed$));
         this.selectedLedgerStream$ = this.store.pipe(select(p => p.ledger.transactionDetails), takeUntil(this.destroyed$));
         this.companyProfile$ = this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$));
-        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
         this.vm.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
@@ -406,7 +404,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         // get entry name and ledger account uniqueName
-        observableCombineLatest(this.entryUniqueName$, this.editAccUniqueName$).subscribe((resp: any[]) => {
+        observableCombineLatest([this.entryUniqueName$, this.editAccUniqueName$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (resp[0] && resp[1]) {
                 this.entryUniqueName = resp[0];
                 this.accountUniqueName = resp[1];
@@ -422,16 +420,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         // get flatten_accounts list && get transactions list && get ledger account list
         observableCombineLatest([this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$])
+            .pipe(takeUntil(this.destroyed$))
             .subscribe((resp: any[]) => {
                 if (resp[0] && resp[1] && resp[2]) {
                     // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
                     if (this.isPettyCash && this.accountUniqueName && resp[1].status !== 'success') {
                         return;
                     }
-
-                    //#region flatten group list assign process
-                    // TODO: Prateek
-                    // this.vm.flatternAccountList = resp[0];
                     this.baseAccountDetails = resp[0];
                     this.activeAccount = cloneDeep(resp[1].body);
                     // Decides whether to show the RCM entry
@@ -455,24 +450,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     if (this.isPettyCash) {
                         // this.loadDefaultSearchSuggestions();
                         if (resp[0].othersCategory) {
-                            // check we already have others account in flatten account, then don't do anything
-                            const isThereOthersAcc = this.vm.flatternAccountList.some(d => d.uniqueName === 'others');
-                            if (!isThereOthersAcc) {
-                                // add new dummy account in flatten account array
-                                this.vm.flatternAccountList.push({
-                                    name: 'Others', uniqueName: 'others', applicableTaxes: [],
-                                    parentGroups: [], isFixed: false, isDummy: true, mergedAccounts: ''
-                                });
-                            }
+                            this.checkForOtherAccount();
                         }
+                        this.prepareMultiCurrencyObject(this.activeAccount);
                     }
-
-                    // TODO: Prateek start
-                    // let stockListFormFlattenAccount: IFlattenAccountsResultItem;
-                    // if (this.vm.flatternAccountList && this.vm.flatternAccountList.length && this.activeAccount) {
-                    //     stockListFormFlattenAccount = resp[0].find((acc) => acc.uniqueName === this.activeAccount.uniqueName);
-                    // }
-                    // TODO: Prateek end
 
                     let isStockableAccount: boolean = false;
 
@@ -498,90 +479,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
 
                     this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name, this.localeData);
-                    // TODO: Prateek start
-                    // let accountsArray: IOption[] = [];
-                    // let accountsForBaseAccountArray: IOption[] = [];
-                    // if (isStockableAccount) {
-                    //     // stocks from ledger account
-                    //     this.vm.flatternAccountList.map(acc => {
-                    //         // normal entry
-                    //         accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-
-                    //         // normal merge account entry
-                    //         if (acc.mergedAccounts && acc.mergedAccounts !== '') {
-                    //             let mergeAccs = acc.mergedAccounts.split(',');
-                    //             mergeAccs.map(m => m.trim()).forEach(ma => {
-                    //                 accountsArray.push({
-                    //                     value: ma,
-                    //                     label: ma,
-                    //                     additional: acc
-                    //                 });
-                    //             });
-                    //         }
-
-                    //         // check if taxable or round off account then don't assign stocks
-                    //         let notRoundOff = acc.uniqueName === 'roundoff';
-                    //         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
-                    //         if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
-                    //             stockListFormFlattenAccount.stocks.map(as => {
-                    //                 // stock entry
-                    //                 accountsArray.push({
-                    //                     value: `${acc.uniqueName}#${as.uniqueName}`,
-                    //                     label: acc.name + '(' + as.uniqueName + ')',
-                    //                     additional: Object.assign({}, acc, { stock: as })
-                    //                 });
-                    //                 // normal merge account entry
-                    //                 if (acc.mergedAccounts && acc.mergedAccounts !== '') {
-                    //                     let mergeAccs = acc.mergedAccounts.split(',');
-                    //                     mergeAccs.map(m => m.trim()).forEach(ma => {
-                    //                         accountsArray.push({
-                    //                             value: `${ma}#${as.uniqueName}`,
-                    //                             label: ma + '(' + as.uniqueName + ')',
-                    //                             additional: Object.assign({}, acc, { stock: as })
-                    //                         });
-                    //                     });
-                    //                 }
-                    //             });
-                    //         }
-
-                    //         // add current account entry in base account array
-                    //         accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-                    //     });
-
-                    // } else {
-                    //     this.vm.flatternAccountList.map(acc => {
-                    //         if (acc.stocks) {
-                    //             acc.stocks.map(as => {
-                    //                 accountsArray.push({
-                    //                     value: `${acc.uniqueName}#${as.uniqueName}`,
-                    //                     label: `${acc.name} (${as.uniqueName})`,
-                    //                     additional: Object.assign({}, acc, { stock: as })
-                    //                 });
-                    //             });
-                    //             accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-                    //         } else {
-                    //             accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-
-                    //             // add current account entry in base account array
-                    //             accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-                    //         }
-                    //         // normal merge account entry
-                    //         if (acc.mergedAccounts && acc.mergedAccounts !== '') {
-                    //             let mergeAccs = acc.mergedAccounts.split(',');
-                    //             mergeAccs.map(m => m.trim()).forEach(ma => {
-                    //                 accountsArray.push({
-                    //                     value: ma,
-                    //                     label: ma,
-                    //                     additional: acc
-                    //                 });
-                    //             });
-                    //         }
-                    //     });
-                    // }
-
-                    // this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'label'));
-                    // this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'label');
-                    // TODO: Prateek end
 
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[0];
@@ -697,29 +594,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             }
                         }
                         if (t.inventory) {
-                            // TODO: Prateek start
-                            // let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
-                            // if (findStocks) {
-                            //     let findUnitRates = findStocks.additional.stock;
-                            //     if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
-                            //         let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
-                            //         tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
-                            //         t.unitRate = tempUnitRates;
-                            //     } else {
-                            //         t.unitRate = [{
-                            //             code: t.inventory.unit.code,
-                            //             rate: t.inventory.rate,
-                            //             stockUnitCode: t.inventory.unit.code
-                            //         }];
-                            //     }
-                            // } else {
-                            //     t.unitRate = [{
-                            //         code: t.inventory.unit.code,
-                            //         rate: t.inventory.rate,
-                            //         stockUnitCode: t.inventory.unit.code
-                            //     }];
-                            // }
-                            // TODO: Prateek end
                             const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
                             if (unitRates && unitRates.length) {
                                 unitRates.forEach(rate => rate.code = rate.stockUnitCode);
@@ -761,7 +635,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             }});
                         }
                     });
-                    // this.vm.flatternAccountList4Select = observableOf(orderBy(initialAccounts, 'label'));
                     initialAccounts.push(...this.defaultSuggestions);
                     this.searchResults = orderBy(uniqBy(initialAccounts, 'value'), 'label');
                     this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
@@ -800,15 +673,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             });
 
-        observableCombineLatest(this.activeAccountSubject, this.flattenAccountListStream$).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response[0] && response[1]) {
-                this.vm.flatternAccountList = response[1];
-                // let stockListFormFlattenAccount: IFlattenAccountsResultItem;
-                // if (this.vm.flatternAccountList && this.vm.flatternAccountList.length && this.activeAccount) {
-                //     stockListFormFlattenAccount = response[1].find((acc) => acc.uniqueName === this.activeAccount.uniqueName);
-                // }
-                let accountsArray: IOption[] = [];
-                let accountsForBaseAccountArray: IOption[] = [];
+        observableCombineLatest([this.activeAccountSubject]).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response[0]) {
                 let isStockableAccount: boolean = false;
                 // check if current account category is type 'income' or 'expenses'
                 let parentAcc = (this.activeAccount && this.activeAccount.parentGroups && this.activeAccount.parentGroups.length > 0) ? this.activeAccount.parentGroups[0].uniqueName : "";
@@ -818,132 +684,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
                 // set account details for multi currency account
                 this.prepareMultiCurrencyObject(this.vm.selectedLedger);
-                // end multi currency assign
-                // if (isStockableAccount) {
-                //     // stocks from ledger account
-                //     this.vm.flatternAccountList.map(acc => {
-                //         // normal entry
-                //         accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-
-                //         // normal merge account entry
-                //         if (acc.mergedAccounts && acc.mergedAccounts !== '') {
-                //             let mergeAccs = acc.mergedAccounts.split(',');
-                //             mergeAccs.map(m => m.trim()).forEach(ma => {
-                //                 accountsArray.push({
-                //                     value: ma,
-                //                     label: ma,
-                //                     additional: acc
-                //                 });
-                //             });
-                //         }
-
-                //         // check if taxable or round off account then don't assign stocks
-                //         let notRoundOff = acc.uniqueName === 'roundoff';
-                //         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
-                //         if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
-                //             stockListFormFlattenAccount.stocks.map(as => {
-                //                 // stock entry
-                //                 accountsArray.push({
-                //                     value: `${acc.uniqueName}#${as.uniqueName}`,
-                //                     label: acc.name + '(' + as.uniqueName + ')',
-                //                     additional: Object.assign({}, acc, { stock: as })
-                //                 });
-                //                 // normal merge account entry
-                //                 if (acc.mergedAccounts && acc.mergedAccounts !== '') {
-                //                     let mergeAccs = acc.mergedAccounts.split(',');
-                //                     mergeAccs.map(m => m.trim()).forEach(ma => {
-                //                         accountsArray.push({
-                //                             value: `${ma}#${as.uniqueName}`,
-                //                             label: ma + '(' + as.uniqueName + ')',
-                //                             additional: Object.assign({}, acc, { stock: as })
-                //                         });
-                //                     });
-                //                 }
-                //             });
-                //         }
-
-                //         // add current account entry in base account array
-                //         accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-                //     });
-
-                // } else {
-                //     this.vm.flatternAccountList.map(acc => {
-                //         if (acc.stocks) {
-                //             acc.stocks.map(as => {
-                //                 accountsArray.push({
-                //                     value: `${acc.uniqueName}#${as.uniqueName}`,
-                //                     label: `${acc.name} (${as.uniqueName})`,
-                //                     additional: Object.assign({}, acc, { stock: as })
-                //                 });
-                //             });
-                //             accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-                //         } else {
-                //             accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-
-                //             // add current account entry in base account array
-                //             accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-                //         }
-                //         // normal merge account entry
-                //         if (acc.mergedAccounts && acc.mergedAccounts !== '') {
-                //             let mergeAccs = acc.mergedAccounts.split(',');
-                //             mergeAccs.map(m => m.trim()).forEach(ma => {
-                //                 accountsArray.push({
-                //                     value: ma,
-                //                     label: ma,
-                //                     additional: acc
-                //                 });
-                //             });
-                //         }
-                //     });
-                // }
-                // this.vm.selectedLedger.transactions.map(t => {
-                //     if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
-                //         let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
-                //         if (this.vm.isValidCategory(category)) {
-                //             /**
-                //              * replace transaction amount with the actualAmount key that we got in response of get-ledger
-                //              * because of ui and api follow different calculation pattern,
-                //              * so transaction amount of income/ expenses account differ from both the side
-                //              * so overcome this issue api provides the actual amount which was added by user while creating entry
-                //              */
-                //             t.amount = this.vm.selectedLedger.actualAmount;
-                //             // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
-                //             if (t.inventory) {
-                //                 t.inventory.amount = this.vm.selectedLedger.actualAmount;
-                //                 t.inventory.rate = this.vm.selectedLedger.actualRate;
-                //             }
-                //         }
-                //     }
-
-                //     // if (t.inventory) {
-                //     //     // TODO: Prateek start
-                //     //     let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
-                //     //     if (findStocks) {
-                //     //         let findUnitRates = findStocks.additional.stock;
-                //     //         if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
-                //     //             let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
-                //     //             tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
-                //     //             t.unitRate = tempUnitRates;
-                //     //         } else {
-                //     //             t.unitRate = [{
-                //     //                 code: t.inventory.unit.code,
-                //     //                 rate: t.inventory.rate,
-                //     //                 stockUnitCode: t.inventory.unit.code
-                //     //             }];
-                //     //         }
-                //     //     } else {
-                //     //         t.unitRate = [{
-                //     //             code: t.inventory.unit.code,
-                //     //             rate: t.inventory.rate,
-                //     //             stockUnitCode: t.inventory.unit.code
-                //     //         }];
-                //     //     }
-                //     //     // TODO: Prateek end
-                //     //     t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
-                //     // }
-                // });
-                //this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'label'));
-                // this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'label');
             }
         });
 
@@ -984,11 +724,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private prepareMultiCurrencyObject(accountDetails: any) {
         if (this.isPettyCash) {
             // In case of petty cash account unique name will be received
-            this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === accountDetails.uniqueName));
+            this.multiCurrencyAccDetails = {
+                currency: String(accountDetails?.currency || '')
+            };
         } else {
             // In other cases account will be received
             this.multiCurrencyAccDetails = {
-                currency: String(accountDetails.particular.currency.code)
+                currency: String(accountDetails?.particular?.currency?.code || '')
             };
         };
 
@@ -1153,7 +895,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
                         this.activeAccount ? this.activeAccount.uniqueName : '' :
                         e.additional.uniqueName;
-                    this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
+                    this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                         // directly assign additional property
                         if (data && data.body) {
                             // Take taxes of parent group and stock's own taxes
@@ -1237,7 +979,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     });
                 }
             } else {
-                this.searchService.loadDetails(e.value).subscribe(data => {
+                this.searchService.loadDetails(e.value).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     // directly assign additional property
                     if (data && data.body) {
                         // Take taxes of parent group
@@ -1354,7 +1096,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // remove dummy others account from transaction.particular.uniqueName
         // added because we want to handle others account case in petty cash entry
         if (this.isPettyCash) {
-            let isThereOthersDummyAcc = this.vm.flatternAccountList.some(d => d.uniqueName === 'others' && d.isDummy);
+            let isThereOthersDummyAcc = this.vm.otherAccountList.some(d => d.uniqueName === 'others' && d.isDummy);
             if (isThereOthersDummyAcc) {
                 let isThereDummyOtherTrx = requestObj.transactions.some(s => s.particular.uniqueName === 'others');
                 if (isThereDummyOtherTrx) {
@@ -1446,7 +1188,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
-        this.ledgerService.DownloadAttachement(fileName).subscribe(d => {
+        this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 return saveAs(blob, d.body.name);
@@ -1462,7 +1204,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         downloadRequest.invoiceNumber = [invoiceName];
         downloadRequest.voucherType = voucherType;
 
-        this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).subscribe(d => {
+        this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.activeAccount.name} - ${invoiceName}.pdf`);
@@ -1594,7 +1336,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             date = moment(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
         this.invoiceList = [];
-        this.ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
+        this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
                 if (response.body.results) {
                     response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
@@ -1911,7 +1653,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 withStocks,
                 accountUniqueName: encodeURIComponent(accountUniqueName)
             }
-            this.searchService.searchAccount(requestObject).subscribe(data => {
+            this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -2403,5 +2145,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         adjustVoucher = adjustVoucher.replace("[VOUCHER_TYPE]", (this.vm.selectedLedger.voucher.shortCode === 'sal' ? this.commonLocaleData.app_voucher_types.sales : this.vm.selectedLedger.voucher.shortCode === 'pur' ? this.commonLocaleData.app_voucher_types.purchase : this.vm.selectedLedger.voucher.shortCode === 'credit note' ? this.commonLocaleData.app_voucher_types.credit_note : this.vm.selectedLedger.voucher.shortCode === 'debit note' ? this.commonLocaleData.app_voucher_types.debit_note : this.vm.selectedLedger.voucher.shortCode === 'pay' ? this.commonLocaleData.app_voucher_types.payment : ''));
 
         return adjustVoucher;
+    }
+
+    /**
+     * Check for other account existence
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private checkForOtherAccount(): void {
+        // check we already have others account in flatten account, then don't do anything
+        this.searchService.searchAccountV2({q: 'others'}).subscribe(response => {
+            const isThereOthersAcc = !!response?.body?.results?.length;
+            if (!isThereOthersAcc) {
+                // add new dummy account in flatten account array
+                this.vm.otherAccountList.push({
+                    name: 'Others', uniqueName: 'others', applicableTaxes: [],
+                    parentGroups: [], isFixed: false, isDummy: true, mergedAccounts: ''
+                });
+            }
+        });
     }
 }

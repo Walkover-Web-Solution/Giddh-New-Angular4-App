@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { WindowRef } from '../shared/helpers/window.object';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -21,7 +21,7 @@ import { SUPPORT_TEAM_NUMBERS } from '../app.constant';
 
 })
 
-export class OnboardingComponent implements OnInit, AfterViewInit {
+export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('talkSalesModal', {static: true}) public talkSalesModal: ModalDirective;
     @ViewChild('supportTab', {static: true}) public supportTab: TabsetComponent;
     public sideMenu: { isopen: boolean } = { isopen: true };
@@ -131,5 +131,15 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
     }
     public openScheduleCalendlyModel() {
         this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof OnboardingComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

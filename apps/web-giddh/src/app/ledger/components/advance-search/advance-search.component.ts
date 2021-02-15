@@ -601,7 +601,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
             }
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -688,7 +688,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
             }
-            this.inventoryService.GetStocks(requestObject).subscribe(data => {
+            this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -745,7 +745,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
             }
-            this._groupService.searchGroups(requestObject).subscribe(data => {
+            this._groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

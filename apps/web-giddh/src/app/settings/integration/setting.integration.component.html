@@ -132,7 +132,7 @@
                                     <label>Link Account</label>
                                     <div class="input-group">
                                         <sh-select class="linked-account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)" [forceClearReactive]="forceClearLinkAccount$ | async"
-                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)" >
+                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)" [fixedValue]="razorPayObj?.account?.name" [defaultValue]="razorPayObj?.account?.name">
                                         </sh-select>
                                         <div class="input-group-addon cp" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
                                             <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
@@ -164,7 +164,7 @@
 
 
             <!-- <h3 class="section-head mr-t2">Cashfree Integration</h3> -->
-            <div class="clearfix mb-2">
+            <div class="clearfix mb-2" *ngIf="false">
 
                 <div class="box clearfix mb-2">
                     <h3 class="font-20 bold mb-2">Smart Payout</h3>
@@ -426,7 +426,7 @@
                                         </sh-select>
                                     </div>
                                 </div>
-                                <ng-container formArrayName="userAmountRanges">
+                                <!-- <ng-container formArrayName="userAmountRanges">
                                     <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
                                         <div class="row">
                                             <div class="form-group col-xl-2 col-md-6 payment-col" *ngIf="item.get('maxBankLimit').value ==='max'">
@@ -506,7 +506,7 @@
                                 </ng-container>
                                 <div>
                                     <a href="javascript:void(0)" (click)="addUserAmountRangesForm();checkFormValidations(addBankForm.value)" class="btn btn-link pl-0">+ Add New Row</a>
-                                </div>
+                                </div> -->
                                 <!-- <div class="clearfix">
                             <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
                         </div> -->
@@ -557,7 +557,7 @@
                                 </div>
                             </div>
                             <!-- Added this new row make it dynamic -->
-                            <ng-container *ngFor="let item of regAcc.userAmountRanges; let index = index; let firstIndex = first; let lastIndex = last">
+                            <!-- <ng-container *ngFor="let item of regAcc.userAmountRanges; let index = index; let firstIndex = first; let lastIndex = last">
                                 <div class="row">
                                     <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col" *ngIf="item.maxBankLimit ==='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
@@ -616,7 +616,7 @@
 
                             <div *ngIf="isBankUpdateInEdit === parentIndex">
                                 <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)" class="btn btn-link pl-0 pt-0">+ Add New Row</a>
-                            </div>
+                            </div> -->
                             <!-- New code -->
                             <div>
                                 <div class="form-group update-btn-wrapper">
@@ -770,8 +770,8 @@
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
                     <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
                         <div class="row">
-                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
-                                <div class="">
+                            <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col amount-upto">
+                                <div>
                                     <label>Corporate ID <span class="required">*</span></label>
                                     <br>
                                     <input type="text" placeholder="Enter Corporate ID" class="form-control" formControlName="corpId" name="corpId" autocomplete="off" />
@@ -799,10 +799,10 @@
                                 </sh-select>
                             </div>
                         </div>
-                        <ng-container formArrayName="userAmountRanges">
+                        <!-- <ng-container formArrayName="userAmountRanges">
                             <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
                                 <div class="row">
-                                    <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col" *ngIf="item.get('maxBankLimit').value ==='max'">
+                                    <div class="form-group col-sm-6 col-xl-2 col-md-6 payment-col amount-upto" *ngIf="item.get('maxBankLimit').value ==='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
                                         <div class="custom-select max select-caret position-relative">
@@ -813,7 +813,7 @@
                                         </div>
                                         <p class="error-msg text-right"></p>
                                     </div>
-                                    <div class="form-group col-sm-6  col-xl-2 col-md-6 payment-col" *ngIf="item.get('maxBankLimit').value!=='max'">
+                                    <div class="form-group col-sm-6  col-xl-2 col-md-6 payment-col amount-upto" *ngIf="item.get('maxBankLimit').value!=='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
                                         <div class="d-flex">
@@ -879,7 +879,7 @@
                         </ng-container>
                         <div>
                             <a href="javascript:void(0)" (click)="addUserAmountRangesForm()" class="btn btn-link pl-0 pt-0">+ Add New Row</a>
-                        </div>
+                        </div> -->
                         <!-- <div class="clearfix">
                             <a href="javascript:void" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" (click)="openNewRegistartionForm()" class="btn btn-link pl-0">Add More ID</a>
                         </div> -->

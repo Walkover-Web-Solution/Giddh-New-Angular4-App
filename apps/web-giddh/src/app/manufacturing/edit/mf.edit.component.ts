@@ -1,11 +1,11 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { ToasterService } from './../../services/toaster.service';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
@@ -21,13 +21,14 @@ import { CurrentPage } from '../../models/api-models/Common';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
+import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 
 @Component({
     templateUrl: './mf.edit.component.html',
     styleUrls: [`./mf.edit.component.scss`]
 })
 
-export class MfEditComponent implements OnInit {
+export class MfEditComponent implements OnInit, OnDestroy {
     @ViewChild('manufacturingConfirmationModal', {static: true}) public manufacturingConfirmationModal: ModalDirective;
 
     public stockListDropDown$: Observable<IOption[]>;
@@ -107,6 +108,8 @@ export class MfEditComponent implements OnInit {
     };
     /** Stores the list of accounts */
     public liabilitiesAssetAccounts: IOption[];
+    /* Stores warehouses for a company */
+    public warehouses: Array<any> = [];
 
     constructor(
         private store: Store<AppState>,
@@ -117,7 +120,8 @@ export class MfEditComponent implements OnInit {
         private _inventoryService: InventoryService,
         private generalAction: GeneralActions,
         private _toasty: ToasterService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private warehouseActions: WarehouseActions
     ) {
 
         this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
@@ -148,6 +152,7 @@ export class MfEditComponent implements OnInit {
                     if (!this.initialQuantityObj.length) {
                         this.initialQuantityObj = manufacturingObj.linkedStocks;
                     }
+                    manufacturingObj.warehouseUniqueName = manufacturingObj?.warehouse?.uniqueName;
                     // manufacturingObj.activeStockGroupUniqueName = o.activeStockGroup;
                     this.manufacturingDetails = manufacturingObj;
                     if (this.manufacturingDetails.date && typeof this.manufacturingDetails.date === 'object') {
@@ -237,6 +242,7 @@ export class MfEditComponent implements OnInit {
                     manufacturingDetailsObj.linkedStocks = [];
                     manufacturingDetailsObj.multipleOf = null;
                 }
+                manufacturingDetailsObj.warehouseUniqueName = manufacturingDetailsObj?.warehouse?.uniqueName;
                 this.manufacturingDetails = manufacturingDetailsObj;
                 this.onQuantityChange(1);
             }
@@ -244,6 +250,8 @@ export class MfEditComponent implements OnInit {
 
         this.loadExpenseAccounts();
         this.loadAssetsLiabilitiesAccounts();
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.initializeWarehouse();
     }
 
     public getStocksWithRate(data) {
@@ -354,6 +362,7 @@ export class MfEditComponent implements OnInit {
         if (dataToSave.date && typeof dataToSave.date === 'object') {
             dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
+        delete dataToSave.warehouse;
         dataToSave.linkedStocks.forEach((obj) => {
             obj.manufacturingUnit = obj.stockUnitCode;
             obj.manufacturingQuantity = obj.quantity;
@@ -371,6 +380,7 @@ export class MfEditComponent implements OnInit {
         if (dataToSave.date && typeof dataToSave.date === 'object') {
             dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
+        delete dataToSave.warehouse;
         // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
         // dataToSave.multipleOf = dataToSave.quantity;
         // dataToSave.manufacturingUniqueName =
@@ -464,7 +474,7 @@ export class MfEditComponent implements OnInit {
     public getStockUnit(selectedItem, itemQuantity) {
         if (selectedItem && itemQuantity && Number(itemQuantity) > 0) {
             let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
-            this._inventoryService.GetStockUniqueNameWithDetail(selectedItem).subscribe((res) => {
+            this._inventoryService.GetStockUniqueNameWithDetail(selectedItem).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
                 if (res.status === 'success') {
                     let unitCode = res.body.stockUnit.code;
@@ -480,7 +490,7 @@ export class MfEditComponent implements OnInit {
                     this.linkedStocks.manufacturingUnit = unitCode;
                     this.linkedStocks.stockUnitCode = unitCode;
 
-                    this._inventoryService.GetRateForStoke(selectedItem, data).subscribe((response) => {
+                    this._inventoryService.GetRateForStoke(selectedItem, data).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                         if (response.status === 'success') {
                             this.linkedStocks.rate = _.cloneDeep(response.body.rate);
                             setTimeout(() => {
@@ -612,7 +622,7 @@ export class MfEditComponent implements OnInit {
                 page,
                 group: encodeURIComponent('operatingcost, indirectexpenses')
             };
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -696,7 +706,7 @@ export class MfEditComponent implements OnInit {
                 page,
                 group: encodeURIComponent('noncurrentassets, currentassets, fixedassets, currentliabilities, noncurrentliabilities, shareholdersfunds')
             }
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -759,5 +769,32 @@ export class MfEditComponent implements OnInit {
                     }
             });
         }
+    }
+
+    /**
+     * Intializes the warehouse
+     *
+     * @private
+     * @memberof MfEditComponent
+     */
+    private initializeWarehouse(): void {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            this.warehouses = [];
+            if (warehouses && warehouses.results) {
+                warehouses.results.forEach(warehouse => {
+                    this.warehouses.push({label: warehouse.name, value: warehouse.uniqueName, additional: warehouse});
+                });
+            }
+        });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof MfEditComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

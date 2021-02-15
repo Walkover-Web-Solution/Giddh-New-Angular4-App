@@ -196,7 +196,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this._generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
                     } else {
@@ -253,7 +253,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             this.branchTransferGetRequestParams.page = 1;
         }
 
-        this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferPostRequestParams).subscribe((response) => {
+        this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferPostRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response.status === "success") {
                 this.branchTransferResponse = response.body;
             } else {
@@ -329,7 +329,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public deleteNewBranchTransfer(): void {
         this.hideBranchTransferModal();
-        this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).subscribe((response) => {
+        this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response.status === "success") {
                 this._toasty.successToast(response.body);
                 this.getBranchTransferList(false);
@@ -428,7 +428,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
         downloadBranchTransferRequest.uniqueName = item.uniqueName;
 
-        this.inventoryService.downloadBranchTransfer(this.activeCompany.uniqueName, downloadBranchTransferRequest).subscribe((res) => {
+        this.inventoryService.downloadBranchTransfer(this.activeCompany.uniqueName, downloadBranchTransferRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === "success") {
                 let blob = this._generalService.base64ToBlob(res.body, 'application/pdf', 512);
                 return saveAs(blob, item.voucherNo + `.pdf`);

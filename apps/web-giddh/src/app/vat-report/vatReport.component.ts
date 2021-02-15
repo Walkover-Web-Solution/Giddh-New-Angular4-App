@@ -64,6 +64,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -80,6 +82,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.currentOrganizationType = this._generalService.currentOrganizationType;
         this.loadTaxDetails();
         this.saveLastState(this._generalService.companyUniqueName);
         this.currentPeriod = {
@@ -122,7 +125,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this._generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
                     } else {
@@ -164,7 +167,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
             this.vatReport = [];
 
-            this.vatService.getVatReport(vatReportRequest).subscribe((res) => {
+            this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if(res) {
                     if (res.status === 'success') {
                         this.vatReport = res.body.sections;
@@ -183,7 +186,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.to = this.toDate;
         vatReportRequest.taxNumber = this.taxNumber;
         vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
-        this.vatService.downloadVatReport(vatReportRequest).subscribe((res) => {
+        this.vatService.downloadVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === "success") {
                 let blob = this._generalService.base64ToBlob(res.body, 'application/xls', 512);
                 return saveAs(blob, `VatReport.xlsx`);
@@ -303,7 +306,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     private loadTaxDetails(): void {
         this.isTaxApiInProgress = true;
-        this.gstReconcileService.getTaxDetails().subscribe(response => {
+        this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 this.taxes = response.body.map(tax => ({
                     label: tax,

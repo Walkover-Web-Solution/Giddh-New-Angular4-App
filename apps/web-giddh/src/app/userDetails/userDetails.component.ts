@@ -175,7 +175,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.authenticateTwoWay$.subscribe(s => this.twoWayAuth = s);
         this.store.dispatch(this.loginAction.FetchUserDetails());
-        this._loginService.GetAuthKey().subscribe(a => {
+        this._loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a.status === 'success') {
                 this.userAuthKey = a.body.authKey;
             } else {
@@ -223,7 +223,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.selectTab(val.tabIndex);
             }
         });
-        
+
         if(document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
             document.getElementsByClassName('nav-item')[3].addEventListener('click', (event) => {
                 this.onTabChanged("subscription");
@@ -255,7 +255,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public changeTwoWayAuth() {
-        this._loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).subscribe(res => {
+        this._loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
                 this._toasty.successToast(res.body);
             } else {
@@ -265,7 +265,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public regenerateKey() {
-        this._loginService.RegenerateAuthKey().subscribe(a => {
+        this._loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a.status === 'success') {
                 this.userAuthKey = a.body.authKey;
             } else {

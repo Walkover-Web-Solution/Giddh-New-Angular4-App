@@ -222,7 +222,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     public submitCustomFields(value: any, operationType?: string): void {
         this.isSaveCustomInProgress = true;
-        this.groupService.createCompanyCustomField(value.customField).subscribe(response => {
+        this.groupService.createCompanyCustomField(value.customField).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
                     this.customFieldForm.get('customField').reset();
@@ -256,7 +256,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     public getCompanyCustomField(): void {
         this.isGetCustomInProgress = true;
-        this.groupService.getCompanyCustomField().subscribe(response => {
+        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isEnabledIndex = null;
             if (response) {
                 if (response.status === 'success') {

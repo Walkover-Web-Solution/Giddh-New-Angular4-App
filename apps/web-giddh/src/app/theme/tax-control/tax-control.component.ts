@@ -120,7 +120,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue)) &&
-            _.difference(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue).length > -1) {
+            !_.isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
             this.prepareTaxObject();
             this.change();
         }
@@ -201,8 +201,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    public trackByFn(index) {
-        return index; // or item.id
+    public trackByFn(index, tax) {
+        return tax.uniqueName; // or item.id
     }
 
     /**
@@ -223,12 +223,15 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     /**
      * select/deselect tax checkbox
      */
-    public change() {
+    public change(event?: any) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         this.selectedTaxes = [];
         this.taxSum = this.calculateSum();
         this.calculateInclusiveOrExclusiveTaxes();
         this.selectedTaxes = this.generateSelectedTaxes();
-
         if (this.allowedSelection > 0) {
             if (this.selectedTaxes.length >= this.allowedSelection) {
                 this.taxRenderData.map(m => {
@@ -282,22 +285,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             if (this.taxRenderData?.length) {
                 this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
             }
-        });
+        }, 100);
         this.taxAmountSumEvent.emit(this.taxSum);
         this.selectedTaxEvent.emit(this.selectedTaxes);
-
-        // let diff: boolean;
-        // if (this.selectedTaxes.length > 0) {
-        //   diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
-        // } else {
-        //   diff = this.applicableTaxes.length > 0;
-        // }
-        //
-        // if (diff) {
-        //   this.isApplicableTaxesEvent.emit(false);
-        // } else {
-        //   this.isApplicableTaxesEvent.emit(true);
-        // }
     }
 
     public onFocusLastDiv(el) {

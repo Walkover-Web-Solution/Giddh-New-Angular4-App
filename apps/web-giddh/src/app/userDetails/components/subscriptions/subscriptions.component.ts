@@ -114,7 +114,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
         });
 
         this.isPlanShow = false;
-        this.subscriptionService.getSubScribedCompanies().subscribe((res) => {
+        this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;

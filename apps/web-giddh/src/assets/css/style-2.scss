@@ -5854,7 +5854,7 @@ virtual-scroll .scrollable-content .item > a {
     height: 100%;
 }
 virtual-scroll .scrollable-content .item:hover > a {
-    color: $chetwode-blue !important;
+    color: $nero !important;
 }
 virtual-scroll .scrollable-content .item > a .item-unique,
 virtual-scroll .scrollable-content .item > a .item-stock {
@@ -7936,7 +7936,7 @@ div#getGroupModal {
 
 .invoice-footer {
     display: flex;
-    padding: 20px;
+    padding: 20px 15px;
     background: $white;
     margin-top: 60px;
     position: fixed;
@@ -7950,7 +7950,7 @@ div#getGroupModal {
 .menu_open .invoice-footer {
     left: 215px;
     display: flex;
-    padding: 20px;
+    padding: 20px 15px;
     background: $white;
     margin-top: 60px;
     position: fixed;
@@ -9668,6 +9668,14 @@ input.mat-input-element{
             align-items: center;
             border-radius: 40px;
             color: $midnight-blue;
+        }
+    }
+    .link-entity-dropdown{
+        .list-item.d-flex{
+            align-items: center;
+            .entity-icon{
+                padding-right: 5px;
+            }
         }
     }
     .top-bar.aging-top-bar, .top-bar.customer-top-bar{

@@ -2,8 +2,8 @@
     <div>
         <div>
             <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline flex-row flex-nowrap">
-                <div class="form-group mr-r15">
-                    <div class="linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+                <div class="form-group select-entity mr-r15">
+                    <div class="linked-entities" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <label class="d-block">{{commonLocaleData?.app_select_entity}}</label>
                         <div class="form-group">
                             <sh-select [options]="currentCompanyBranches" name="entity" [(ngModel)]="currentBranch.uniqueName"
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group mr-r15">
+                <div class="form-group select-group mr-r15">
                     <label class="d-block">{{localeData?.select_groups_label}}</label>
                     <sh-select [options]="searchedGroups" name="groups" [(ngModel)]="groupName" [showClear]="false"
                         [ItemHeight]="33" width="100%" (selected)="onSelectGroup($event)" [isFilterEnabled]="true" required
