@@ -63,7 +63,12 @@
 
                                     <div class="col-5 col-sm-5">
                                         <div class="invoice-amount pull-right">
-                                            {{item?.grandTotal | giddhCurrency}}
+                                            <!-- {{item?.grandTotal | giddhCurrency}} -->
+
+                                            <amount-field [amount]="item?.grandTotal"
+                                                [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>
+
                                         </div>
                                     </div>
                                 </div>
