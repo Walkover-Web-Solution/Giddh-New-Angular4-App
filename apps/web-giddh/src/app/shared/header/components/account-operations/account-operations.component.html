@@ -45,7 +45,7 @@
 
         <account-add-new-details *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
             [flatGroupsOptions]="groupsList" (isGroupSelected)="isGroupSelected($event)" [createAccountIsSuccess$]="createAccountIsSuccess$" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)"
-            [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+            [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor">
         </account-add-new-details>
 
         <!--account update component-->
@@ -54,7 +54,7 @@
 
         <account-update-new-details *ngIf="(activeAccount$ | async)" [activeAccount$]="activeAccount$" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" [updateAccountInProcess$]="updateAccountInProcess$"
             [flatGroupsOptions]="groupsList" (isGroupSelected)="isGroupSelected($event)" [accountDetails]="accountDetails" [updateAccountIsSuccess$]="updateAccountIsSuccess$" (deleteClicked)="showDeleteAccountModal()" (submitClicked)="updateAccount($event)"
-            [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+            [showBankDetail]="showBankDetail" [showVirtualAccount]="showVirtualAccount" [isDebtorCreditor]="isDebtorCreditor">
         </account-update-new-details>
 
         <!-- move account -->

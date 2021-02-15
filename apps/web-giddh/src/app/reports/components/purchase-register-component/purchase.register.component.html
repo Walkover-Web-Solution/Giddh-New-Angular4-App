@@ -18,8 +18,8 @@
                         <ng-container>
                             <a href="javascript:void(0)" class="list-item d-flex">
                                 <span class="entity-icon">
-                                    <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany" tooltip="{{commonLocaleData?.app_branch}}"></i>
-                                    <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="{{commonLocaleData?.app_company}}"></i>
+                                    <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany" [tooltip]="commonLocaleData?.app_branch"></i>
+                                    <i class="icon-company-profile pull-right" *ngIf="option.isCompany" [tooltip]="commonLocaleData?.app_company"></i>
                                 </span>
                                 <span class="entity-details">
                                     <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
@@ -64,5 +64,5 @@
             </div>
         </div>
         <purchase-register-table-component [currentBranchUniqueName]="currentBranch?.uniqueName" [reportRespone]="reportRespone" [purchaseRegisterTotal]="purchaseRegisterTotal"></purchase-register-table-component>
-    </div>
+    </div>    
 </ng-container>

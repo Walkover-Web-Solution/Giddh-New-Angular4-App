@@ -16,6 +16,11 @@ import { ReplaySubject } from 'rxjs';
 })
 
 export class ReportsTableComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+    
     @Input() public reportRespone: ReportsModel[];
     @Input() public activeFinacialYr: any;
     @Input() salesRegisterTotal: any;
@@ -47,10 +52,6 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
 
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
-    public localeData: any = {};
-    /* This will hold common JSON data */
-    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _groupWithAccountsAction: GroupWithAccountsAction, private _router: Router) {
     }
