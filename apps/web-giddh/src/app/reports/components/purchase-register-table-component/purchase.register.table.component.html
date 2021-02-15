@@ -64,15 +64,15 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of reportRespone" [ngClass]="{'bgChange': item.reportType === 'combined'}">
-                <td data-title="{{commonLocaleData?.app_particular}}"><a [class.cursor-pointer]="item.reportType !== 'combined'" (click)="gotoDetailedPurchase(item)">{{item.particular}}</a></td>
-                <td data-title="{{commonLocaleData?.app_purchase}}" class="text-right">{{item.purchase | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_return}}" *ngIf="purchaseRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_tax}}" *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_discount}}" *ngIf="purchaseRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_tcs}}" *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_tds}}" *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_net_purchase}}" *ngIf="purchaseRegisterTotal.netPurchase" class="text-right">{{item.netPurchase | giddhCurrency}}</td>
-                <td data-title="{{commonLocaleData?.app_cumulative}}" *ngIf="purchaseRegisterTotal.cumulative" class="text-right">{{item.cumulative | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_particular"><a [class.cursor-pointer]="item.reportType !== 'combined'" (click)="gotoDetailedPurchase(item)">{{item.particular}}</a></td>
+                <td [attr.data-title]="commonLocaleData?.app_purchase" class="text-right">{{item.purchase | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_return" *ngIf="purchaseRegisterTotal.returns" class="text-right">{{item.returns | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_tax" *ngIf="purchaseRegisterTotal.taxTotal" class="text-right">{{item.taxTotal | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_discount" *ngIf="purchaseRegisterTotal.discountTotal" class="text-right">{{item.discountTotal | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_tcs" *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="text-right">{{item.tcsTotal | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_tds" *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="text-right">{{item.tdsTotal | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_net_purchase" *ngIf="purchaseRegisterTotal.netPurchase" class="text-right">{{item.netPurchase | giddhCurrency}}</td>
+                <td [attr.data-title]="commonLocaleData?.app_cumulative" *ngIf="purchaseRegisterTotal.cumulative" class="text-right">{{item.cumulative | giddhCurrency}}</td>
             </tr>
         </tbody>
         <tfoot class="purchase-footer bold">
