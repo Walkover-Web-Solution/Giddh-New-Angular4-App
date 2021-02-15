@@ -114,6 +114,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
+        this.loadPaymentModes();
+
         // this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
         //     if (value === 'loadPaymentModes') {
         //         this.loadPaymentModes();
@@ -199,7 +201,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public ngOnChanges(c: SimpleChanges) {
         if (c.selectedInvoiceForPayment.currentValue && c.selectedInvoiceForPayment.currentValue !== c.selectedInvoiceForPayment.previousValue) {
-            this.loadPaymentModes();
             let paymentModeChanges: IOption[] = [];
             this.originalPaymentMode.forEach(payMode => {
                 if (!payMode.additional.currencySymbol || payMode.additional.currencySymbol === this.baseCurrencySymbol || payMode.additional.currencySymbol === c.selectedInvoiceForPayment.currentValue.accountCurrencySymbol) {
