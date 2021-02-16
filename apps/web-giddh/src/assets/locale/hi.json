@@ -22,7 +22,7 @@
     "app_search": "खोज",
     "app_cancel": "रद्द करना",
     "app_update": "अपडेट करें",
-    "app_delete": "अपडेट करें",
+    "app_delete": "हटाओ",
     "app_view": "राय",
     "app_admin": "व्यवस्थापक",
     "app_name": "नाम",
@@ -466,7 +466,7 @@
     "app_inclusive_tax": "समावेशी कर",
     "app_giddh": "गिद्ध",
     "app_datatype_list": {
-        "string": "तार",
+        "string": "तार / स्ट्रिंग",
         "number": "संख्या",
         "boolean": "बूलियन"
     }
