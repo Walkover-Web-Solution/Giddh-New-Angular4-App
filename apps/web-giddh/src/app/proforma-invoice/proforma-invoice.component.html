@@ -1316,14 +1316,22 @@
                                                             </div>
 
                                                             <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
-                                                                <label>HSN/SAC</label>
-                                                                <input type="text" maxLength="10" placeholder="HSN/SAC Number"
+                                                                <span>
+                                                                    <input type="radio" name="hsnCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
+                                                                    <label for="hsnCodeType{{entryIdx}}">HSN Code</label>
+                                                                </span>
+                                                                <span>
+                                                                    <input type="radio" name="sacCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
+                                                                    <label for="sacCodeType{{entryIdx}}">SAC Code</label>
+                                                                </span>
+                                                                
+                                                                <input type="text" maxLength="10" placeholder="HSN Number"
                                                                     name="transaction.hsnNumber_{{entryIdx}}"
-                                                                    *ngIf="(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
+                                                                    *ngIf="transaction.showCodeType === 'hsn'"
                                                                     [(ngModel)]="transaction.hsnNumber" />
-                                                                <input type="text" maxLength="10" placeholder="HSN/SAC Number"
+                                                                <input type="text" maxLength="10" placeholder="SAC Number"
                                                                     name="transaction.hsnNumber_{{entryIdx}}"
-                                                                    *ngIf="!(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
+                                                                    *ngIf="transaction.showCodeType === 'sac'"
                                                                     [(ngModel)]="transaction.sacNumber" />
                                                                 <a>
                                                                 </a>
@@ -2259,8 +2267,8 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-xs-6 col-sm-6 pl-0">
-                                                                <div class="wrap-hsn-box">
+                                                            <div class="col-6 pl-0">
+                                                                <div class="wrap-hsn-box 1">
                                                                     <div class="hsn-code text-right"
                                                                         (click)="toggleHsnSacDropDown(transaction)">
                                                                         <label>HSN/SAC:</label>
@@ -2277,14 +2285,22 @@
                                                                     </div>
 
                                                                     <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
-                                                                        <label>HSN/SAC</label>
-                                                                        <input type="text" maxLength="10" placeholder="HSN/SAC Number"
+                                                                        <span>
+                                                                            <input type="radio" name="hsnCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
+                                                                            <label for="hsnCodeType{{entryIdx}}">HSN Code</label>
+                                                                        </span>
+                                                                        <span>
+                                                                            <input type="radio" name="sacCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
+                                                                            <label for="sacCodeType{{entryIdx}}">SAC Code</label>
+                                                                        </span>
+                                                                        
+                                                                        <input type="text" maxLength="10" placeholder="HSN Number"
                                                                             name="transaction.hsnNumber_{{entryIdx}}"
-                                                                            *ngIf="(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
+                                                                            *ngIf="transaction.showCodeType === 'hsn'"
                                                                             [(ngModel)]="transaction.hsnNumber" />
-                                                                        <input type="text" maxLength="10" placeholder="HSN/SAC Number"
+                                                                        <input type="text" maxLength="10" placeholder="SAC Number"
                                                                             name="transaction.hsnNumber_{{entryIdx}}"
-                                                                            *ngIf="!(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
+                                                                            *ngIf="transaction.showCodeType === 'sac'"
                                                                             [(ngModel)]="transaction.sacNumber" />
                                                                         <a>
                                                                         </a>
