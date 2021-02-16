@@ -29,15 +29,6 @@ import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.co
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
 
-const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' },
-    { label: 'Exclude', value: 'exclude' }
-];
-
 @Component({
     selector: 'advance-search-model',
     templateUrl: './advance-search.component.html',
@@ -154,7 +145,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         private generalService: GeneralService,
         private searchService: SearchService,
     ) {
-        this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
+        
     }
 
     public ngOnInit() {
@@ -314,6 +305,15 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 label: this.commonLocaleData?.app_voucher_types?.credit_note,
                 value: 'credit note'
             }]);
+
+            this.comparisonFilterDropDown$ = observableOf([
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+                { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
+                { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' }
+            ]);
         }
     }
 
