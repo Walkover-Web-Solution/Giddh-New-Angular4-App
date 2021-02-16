@@ -12,7 +12,8 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     @Input() public currencySymbol: string;
     @Input() public currencyCode: string;
     @Input() public ratePrecision: boolean = true;
-
+    @Input() public bankType: { type: string };
+    @Input() public convertedCurrencyCode: string;
     /** this will store direction */
     public direction: string = "ltr";
 
@@ -32,8 +33,8 @@ export class AmountFieldComponent implements OnInit, OnChanges {
 
     /** this will detect direction of the text */
     public detectDirection(): void {
-        if (this.currencyCode) {
-            let isRtlCurrency = this.generalService.isRtlCurrency(this.currencyCode);
+        if (this.currencyCode || this.convertedCurrencyCode) {
+            let isRtlCurrency = this.generalService.isRtlCurrency(this.currencyCode || this.convertedCurrencyCode);
             if (isRtlCurrency) {
                 this.direction = "rtl";
             }
