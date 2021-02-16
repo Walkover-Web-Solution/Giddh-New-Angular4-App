@@ -57,12 +57,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public customFieldForm: FormGroup;
 
     /** List custom row data type  */
-    public dataTypeList: IOption[] =
-        [
-            { label: "String", value: "STRING" },
-            { label: "Number", value: "NUMERIC" },
-            { label: "Boolean", value: "BOOLEAN" }
-        ];
+    public dataTypeList: IOption[] = [];
     /** List of custom row value type */
     public booleanDataTypeList: IOption[] =
         [
@@ -440,4 +435,19 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof ManageGroupsAccountsComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.dataTypeList = [
+                { label: this.commonLocaleData?.app_datatype_list?.string, value: "STRING" },
+                { label: this.commonLocaleData?.app_datatype_list?.number, value: "NUMERIC" },
+                { label: this.commonLocaleData?.app_datatype_list?.boolean, value: "BOOLEAN" }
+            ];
+        }
+    }
 }

@@ -464,5 +464,10 @@
     "app_select_group": "Select Group",
     "app_copy": "Copy",
     "app_inclusive_tax": "Inclusive Tax",
-    "app_giddh": "Giddh"
+    "app_giddh": "Giddh",
+    "app_datatype_list": {
+        "string": "String",
+        "number": "Number",
+        "boolean": "Boolean"
+    }
 }
