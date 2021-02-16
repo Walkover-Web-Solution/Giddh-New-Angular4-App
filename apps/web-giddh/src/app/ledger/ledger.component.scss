@@ -887,6 +887,7 @@ sh-select:focus {
     .debit-credit-amount {
         display: flex !important;
         flex-direction: column;
+        align-items: flex-start;
     }
     .download-invoice-ledger{
         position: absolute !important;
@@ -911,14 +912,14 @@ sh-select:focus {
         width: 100%;
         left: 0;
         bottom: 0;
-        position: relative;
-        box-shadow: 0px 2px 6px #0000001a;
+        position: inherit !important;
+        box-shadow: none !important;
         margin-top: 0;
         padding-top: 20px;
         padding-bottom: 20px;
     }
     .ledger-stat {
-        margin: 15px -15px;
+       margin: 15px -15px !important;
     }
     .ledger-book {
         margin-bottom: 16px;

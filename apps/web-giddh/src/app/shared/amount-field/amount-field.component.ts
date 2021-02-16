@@ -18,6 +18,8 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     @Input() public ratePrecision: boolean = true;
     /** this will store giddhCurrency pipe value */
     @Input() public useGiddhCurrencyPipe: boolean = true;
+    @Input() public bankType: { type: string };
+    @Input() public convertedCurrencyCode: string;
     /** this will store direction */
     public direction: string = "ltr";
 
@@ -51,10 +53,13 @@ export class AmountFieldComponent implements OnInit, OnChanges {
      * @memberof AmountFieldComponent
      */
     public detectDirection(): void {
-        if (this.currencyCode) {
-            let isRtlCurrency = this.generalService.isRtlCurrency(this.currencyCode);
+        if (this.currencyCode || this.convertedCurrencyCode) {
+            let isRtlCurrency = this.generalService.isRtlCurrency(this.currencyCode || this.convertedCurrencyCode);
             if (isRtlCurrency) {
                 this.direction = "rtl";
+            }
+            else {
+                this.direction = "ltr";
             }
         }
     }

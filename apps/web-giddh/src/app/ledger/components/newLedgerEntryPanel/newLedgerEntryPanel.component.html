@@ -62,7 +62,13 @@
                                 (keyup)="isInclusiveEntry = false" class="form-control text-right" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn?.convertedRate | giddhCurrency: ratePrecision: true}}
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="currentTxn?.convertedRate"
+                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
+                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code"
+                                        [ratePrecision]="true">
+                                    </amount-field>
+                                </span>
                             </p>
                         </td>
 
@@ -86,7 +92,12 @@
                                 (keyup)="amountChanged();calculateTotal()" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn?.convertedAmount | giddhCurrency}}
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="currentTxn?.convertedAmount"
+                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
+                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                    </amount-field>
+                                </span>
                             </p>
                         </td>
 
@@ -105,7 +116,12 @@
                             </ledger-discount>
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn?.convertedDiscount | giddhCurrency}}
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="currentTxn?.convertedDiscount"
+                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
+                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                    </amount-field>
+                                </span>
                             </p>
                         </td>
 
@@ -142,7 +158,12 @@
 
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn.convertedTax |giddhCurrency}}
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="currentTxn?.convertedTax"
+                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
+                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                    </amount-field>
+                                </span>
                             </p>
                         </td>
 
@@ -161,7 +182,13 @@
                                 [disabled]="isAdvanceReceipt ? 'disabled' : null" />
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
-                                {{ currentTxn.convertedTotal | giddhCurrency}}
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="currentTxn?.convertedTotal"
+                                        [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
+                                        [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                    </amount-field>
+                                </span>
+
                             </p>
                         </td>
 
@@ -210,7 +237,11 @@
         </div>
         <div [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection" class="pd-b1 in-words"
             *ngIf="currentTxn.total">
-            {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
+            <span class="d-inline-flex">
+                <amount-field [amount]="currentTxn.total | myNumberToWordsPipe | lowercase" [currencySymbol]="false"
+                    [currencyCode]="false">
+                </amount-field>
+            </span>
         </div>
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
@@ -244,8 +275,12 @@
                     <td class="text-right">
                         <span class="primary-color">
                             {{ getTotalInCurrency() }}:
-                            <span>{{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}</span>
-                            {{ blankLedger.compoundTotal | giddhCurrency }}
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="blankLedger.compoundTotal"
+                                    [currencySymbol]="selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol"
+                                    [currencyCode]="selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code">
+                                </amount-field>
+                            </span>
                         </span>
                     </td>
                 </tr>
@@ -322,7 +357,13 @@
                                                 </div>
                                                 <div class="item-unique">
                                                     ({{commonLocaleData?.app_due}}:
-                                                    {{ option.additional?.balanceDue.amountForAccount | giddhCurrency }})
+                                                    <span class="d-inline-flex">
+                                                        <amount-field [amount]="option.additional?.balanceDue.amountForAccount" [currencySymbol]="false"
+                                                            [currencyCode]="false">
+                                                        </amount-field>
+                                                    </span>
+                                                    )
+
                                                 </div>
                                             </a>
                                         </ng-template>
@@ -355,7 +396,13 @@
                                 class="cp pd-r1 pt-2" *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount">
                                 <span class="text-gray advance-receipt-edit mr-l05">
                                     <i class="icon-edit-pencil"></i>
-                                    {{localeData?.adjusted_amount}}: {{currentTxn?.voucherAdjustments?.totalAdjustmentAmount}}</span>
+                                    {{localeData?.adjusted_amount}}:
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="currentTxn?.voucherAdjustments?.totalAdjustmentAmount" [currencySymbol]="false"
+                                            [currencyCode]="false">
+                                        </amount-field>
+                                    </span>
+                                </span>
                             </td>
                         </tr>
                     </table>
@@ -424,7 +471,8 @@
                                 <tr *ngFor="let txn of entry.transactions;">
                                     <td>{{entry.entryDate}}</td>
                                     <td>{{txn.particular.name}}</td>
-                                    <td>{{txn.amount | giddhCurrency}}</td>
+                                    <td><amount-field [amount]="txn.amount" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field></td>
                                     <td>{{entry.chequeNumber}}</td>
                                 </tr>
                             </tbody>
@@ -450,9 +498,14 @@
 
                 <div class="pull-right">
                     <div class="clearfix">
-                        <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">{{getTotalInMultiCurrency()}}: {{ selectedCurrency
-              === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }} {{ blankLedger.convertedCompoundTotal
-              | giddhCurrency }}
+                        <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                            {{getTotalInMultiCurrency()}}:
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="blankLedger.convertedCompoundTotal"
+                                    [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
+                                    [currencyCode]="selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code">
+                                </amount-field>
+                            </span>
                         </p>
                     </div>
                 </div>
