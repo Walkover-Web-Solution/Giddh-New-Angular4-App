@@ -83,5 +83,6 @@
         "others": "Others",
         "custom": "Custom"
     },
-    "export_group_ledger": "Export Group Ledger"
+    "export_group_ledger": "Export Group Ledger",
+    "field_type_placeholder": "Type to filter"
 }

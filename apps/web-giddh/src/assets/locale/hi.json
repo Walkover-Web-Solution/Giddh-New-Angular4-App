@@ -464,5 +464,10 @@
     "app_select_group": "समूह का चयन करें",
     "app_copy": "कापी",
     "app_inclusive_tax": "समावेशी कर",
-    "app_giddh": "गिद्ध"
+    "app_giddh": "गिद्ध",
+    "app_datatype_list": {
+        "string": "तार",
+        "number": "संख्या",
+        "boolean": "बूलियन"
+    }
 }

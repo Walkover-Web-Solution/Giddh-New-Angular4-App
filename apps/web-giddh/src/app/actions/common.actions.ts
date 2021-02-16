@@ -28,6 +28,7 @@ export class CommonActions {
     public static ACCOUNT_UPDATED = 'AccountUpdated';
     public static SET_COMMON_LOCALE_DATA = 'SetCommonLocaleData';
     public static GET_COMMON_LOCALE_DATA = 'GetCommonLocaleData';
+    public static SET_ACTIVE_LOCALE = 'SetActiveLocale';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -186,6 +187,20 @@ export class CommonActions {
     public setCommonLocaleData(data: any): CustomActions {
         return {
             type: CommonActions.SET_COMMON_LOCALE_DATA,
+            payload: data
+        }
+    }
+
+    /**
+     * This will set active locale
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public setActiveLocale(data: any): CustomActions {
+        return {
+            type: CommonActions.SET_ACTIVE_LOCALE,
             payload: data
         }
     }

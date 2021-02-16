@@ -793,4 +793,17 @@ export class GeneralService {
             return false;
         }
     }
+
+    /**
+     * This will return supported locales
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getSupportedLocales(): any {
+        return [
+            { label: 'English', value: 'en' },
+            { label: 'Hindi', value: 'hi' }
+        ];
+    }
 }

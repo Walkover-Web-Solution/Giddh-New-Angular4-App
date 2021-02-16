@@ -91,6 +91,7 @@ export interface SessionState {
     activeCompany: any;
     companyUser: any;
     commonLocaleData: any;
+    currentLocale: any;
 }
 
 /**
@@ -151,7 +152,8 @@ const sessionInitialState: SessionState = {
     currentOrganizationDetails: null,
     activeCompany: null,
     companyUser: null,
-    commonLocaleData: null
+    commonLocaleData: null,
+    currentLocale: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -803,6 +805,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CommonActions.SET_COMMON_LOCALE_DATA: {
             return Object.assign({}, state, {
                 commonLocaleData: action.payload
+            });
+        }
+        case CommonActions.SET_ACTIVE_LOCALE: {
+            return Object.assign({}, state, {
+                currentLocale: action.payload
             });
         }
 
