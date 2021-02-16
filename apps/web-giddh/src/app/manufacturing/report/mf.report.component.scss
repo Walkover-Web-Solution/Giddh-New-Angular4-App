@@ -56,6 +56,10 @@
     font-family: 'opensans-semibold';
     color: $davy-grey;
     padding: 6px 0;
+    outline: none !important;
+    &:focus{
+        outline: none !important;
+    }
 }
 .manufacture-table{
     .bd-rl{
@@ -73,7 +77,7 @@
     min-width: 20% !important;
     max-width: 20% !important;
     th:first-child{
-        min-width: 110px !important;
+        min-width: 220px !important;
     }
     th:nth-child(2), th:last-child {
         min-width: 110px !important;
@@ -91,7 +95,11 @@
     }
      .nested-div{
         div{
-            min-width: 34%;
+            &:first-child{
+                min-width: 50% !important;
+                max-width: 300px !important;
+            }
+            min-width: 26%;
             max-width: 50%;
         }
     }
