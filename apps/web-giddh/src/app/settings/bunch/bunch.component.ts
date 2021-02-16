@@ -73,7 +73,6 @@ export class BunchComponent implements OnDestroy {
 
 		this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
 		this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-		this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
 		this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
 			if (companies && companies.length && branches) {

@@ -75,7 +75,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectedCompaniesName: any[] = [];
     public isAllSelected$: Observable<boolean> = observableOf(false);
     public confirmationMessage: string = '';
-    public parentCompanyName: string = null;
     public selectedBranch: string = null;
     public isBranch: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -150,7 +149,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
                 if (branches.length) {
                     this.unFilteredBranchList = _.orderBy(branches, 'name');
@@ -178,15 +177,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                     });
                 });
                 this.companies$ = observableOf(_.orderBy(companiesWithSuperAdminRole, 'name'));
-            }
-            if (parentCompany) {
-                setTimeout(() => {
-                    this.parentCompanyName = parentCompany.name;
-                }, 10);
-            } else {
-                setTimeout(() => {
-                    this.parentCompanyName = null;
-                }, 10);
             }
         })), takeUntil(this.destroyed$)).subscribe();
     }
@@ -384,7 +374,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.showLoader = true;
             this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-            this.store.dispatch(this.settingsBranchActions.GetParentCompany());
             this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
         }
     }
