@@ -50,8 +50,8 @@
     "select_warehouse": "वेयरहाउस का चयन करें",
     "other_tax": "अन्य कर?",
     "taxable_amount": "कर योग्य राशि",
-    "itc_type": "",
-    "more_details": "ITC प्रकार",
+    "itc_type": "ITC प्रकार",
+    "more_details": "अधिक जानकारी",
     "total_in_currency": "[CURRENCY] में कुल",
     "select_vouchers": "वाउचर का चयन करें",
     "select_invoice": "चालान का चयन करें",
@@ -106,45 +106,45 @@
         {
             "accountType": "Debtors",
             "text": {
-                "cr": "Is <accountName> giver?",
-                "dr": "Is <accountName> receiver?"
+                "cr": "क्या <accountName> देने वाला है?",
+                "dr": "क्या <accountName> रिसीवर है?"
             },
             "balanceText": {
-                "cr": "Advance from Debtors",
-                "dr": "Due"
+                "cr": "देनदारों से अग्रिम",
+                "dr": "देय"
             }
         },
         {
             "accountType": "Creditors",
             "text": {
-                "cr": "Is <accountName> giver?",
-                "dr": "Is <accountName> receiver?"
+                "cr": "क्या <accountName> देने वाला है?",
+                "dr": "क्या <accountName> रिसीवर है?"
             },
             "balanceText": {
-                "cr": "Payable to creditors",
-                "dr": "Advance to creditors"
+                "cr": "लेनदारों को देय",
+                "dr": "लेनदारों को अग्रिम"
             }
         },
         {
             "accountType": "Revenue",
             "text": {
-                "cr": "+ <accountName> (Increasing)",
-                "dr": "- <accountName> (Decreasing)"
+                "cr": "+ <accountName> (बढ़ाना)",
+                "dr": "- <accountName> (घटते हुए)"
             },
             "balanceText": {
-                "cr": "Revenue",
-                "dr": "(-) Negative Revenue"
+                "cr": "राजस्व",
+                "dr": "(-) नकारात्मक राजस्व"
             }
         },
         {
             "accountType": "Expense",
             "text": {
-                "cr": "<accountName> ↓  (decreasing)",
+                "cr": "<accountName> ↓  (घटते हुए)",
                 "dr": "<accountName> ↑ (Increasing)"
             },
             "balanceText": {
-                "cr": "Negative Expense (looks strange) ",
-                "dr": "Expense"
+                "cr": "नकारात्मक व्यय (अजीब लगता है) ",
+                "dr": "व्यय"
             }
         },
         {

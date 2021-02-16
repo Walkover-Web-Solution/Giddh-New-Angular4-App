@@ -83,5 +83,6 @@
         "others": "अन्य",
         "custom": "कस्टम"
     },
-    "export_group_ledger": "निर्यात समूह लेजर"
+    "export_group_ledger": "निर्यात समूह लेजर",
+    "field_type_placeholder": "फ़िल्टर करने के लिए टाइप करें"
 }

@@ -1,4 +1,4 @@
-<div id="getGroupModal" class="full-screen-modal get-group-modal manage-group-acc" #myModel keyboardShortcut="esc" (onShortcutPress)="closePopupEvent()" (click)="keyupInitialized = true" appTranslate [file]="'accounts'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<div id="getGroupModal" class="full-screen-modal get-group-modal manage-group-acc" #myModel keyboardShortcut="esc" (onShortcutPress)="closePopupEvent()" (click)="keyupInitialized = true" appTranslate [file]="'accounts'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <!-- start header -->
     <div class="modal-header" #header>
         <span aria-hidden="true" class="close" [style.line-height.px]="64" [style.height.px]="64" data-dismiss="modal" (click)="closePopupEvent()">×</span>
@@ -61,7 +61,7 @@
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
                                             <label *ngIf="first || isMobileScreen">{{localeData?.type}}</label>
-                                            <sh-select [options]="dataTypeList" formControlName="dataType" name="dataType" (selected)="customFieldTypeSelected($event, index)" [disabled]="item.get('uniqueName').value && isEnabledIndex!==index">
+                                            <sh-select [placeholder]="localeData?.field_type_placeholder" [options]="dataTypeList" formControlName="dataType" name="dataType" (selected)="customFieldTypeSelected($event, index)" [disabled]="item.get('uniqueName').value && isEnabledIndex!==index">
                                             </sh-select>
                                         </div>
                                         <div class="col-lg-3 col-sm-3 col-xs-12">
