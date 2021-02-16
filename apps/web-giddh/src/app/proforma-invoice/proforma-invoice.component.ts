@@ -3202,24 +3202,70 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         transaction.sacNumberExists = false;
         transaction.hsnNumber = null;
 
-        if (transaction.stockDetails && transaction.stockDetails.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !transaction.stockDetails.sacNumber)) {
+        if (transaction.stockDetails?.hsnNumber && transaction.stockDetails?.sacNumber) {
+            if(this.inventorySettings?.manageInventory) {
+                transaction.hsnNumber = transaction.stockDetails.hsnNumber;
+                transaction.hsnOrSac = 'hsn';
+                transaction.showCodeType = "hsn"; 
+            } else {
+                transaction.sacNumber = transaction.stockDetails.sacNumber;
+                transaction.sacNumberExists = true;
+                transaction.hsnOrSac = 'sac';
+                transaction.showCodeType = "sac";
+            }
+        } else if (transaction.stockDetails?.hsnNumber && !transaction.stockDetails?.sacNumber) {
             transaction.hsnNumber = transaction.stockDetails.hsnNumber;
             transaction.hsnOrSac = 'hsn';
-        }
-        if (transaction.stockDetails && transaction.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
+            transaction.showCodeType = "hsn";
+        } else if (transaction.stockDetails?.sacNumber && !transaction.stockDetails?.hsnNumber) {
             transaction.sacNumber = transaction.stockDetails.sacNumber;
             transaction.sacNumberExists = true;
             transaction.hsnOrSac = 'sac';
+            transaction.showCodeType = "sac";
+        } else if (!transaction.stockDetails?.sacNumber && !transaction.stockDetails?.hsnNumber) {
+            if(this.inventorySettings?.manageInventory) {
+                transaction.hsnNumber = transaction.stockDetails.hsnNumber;
+                transaction.hsnOrSac = 'hsn';
+                transaction.showCodeType = "hsn";
+            } else {
+                transaction.sacNumber = transaction.stockDetails.sacNumber;
+                transaction.sacNumberExists = true;
+                transaction.hsnOrSac = 'sac';
+                transaction.showCodeType = "sac";
+            }
         }
 
-        if (!o.stock && o.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !o.sacNumber)) {
+        if(!o.stock && o.hsnNumber && o.sacNumber) {
+            if(this.inventorySettings?.manageInventory) {
+                transaction.hsnNumber = o.hsnNumber;
+                transaction.hsnOrSac = 'hsn';
+                transaction.showCodeType = "hsn";
+            } else {
+                transaction.sacNumber = o.sacNumber;
+                transaction.sacNumberExists = true;
+                transaction.hsnOrSac = 'sac';
+                transaction.showCodeType = "sac";
+            }
+        } else if(!o.stock && o.hsnNumber && !o.sacNumber) {
             transaction.hsnNumber = o.hsnNumber;
             transaction.hsnOrSac = 'hsn';
-        }
-        if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
+            transaction.showCodeType = "hsn";
+        } else if(!o.stock && !o.hsnNumber && o.sacNumber) {
             transaction.sacNumber = o.sacNumber;
             transaction.sacNumberExists = true;
             transaction.hsnOrSac = 'sac';
+            transaction.showCodeType = "sac";
+        } else if(!o.stock && !o.hsnNumber && !o.sacNumber) {
+            if(this.inventorySettings?.manageInventory) {
+                transaction.hsnNumber = o.hsnNumber;
+                transaction.hsnOrSac = 'hsn';
+                transaction.showCodeType = "hsn";
+            } else {
+                transaction.sacNumber = o.sacNumber;
+                transaction.sacNumberExists = true;
+                transaction.hsnOrSac = 'sac';
+                transaction.showCodeType = "sac";
+            }
         }
 
         setTimeout(() => {
@@ -6088,12 +6134,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public hideHsnSacEditPopup(transaction: any): void {
-        if (this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        if(!transaction.sacNumberExists || this.inventorySettings?.manageInventory) {
             transaction.hsnNumber = this.editingHsnSac;
-        }
-
-        if (this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        } else if(transaction.sacNumberExists || !this.inventorySettings?.manageInventory) {
             transaction.sacNumber = this.editingHsnSac;
+        } else {
+            transaction.hsnNumber = this.editingHsnSac;
         }
 
         this.hsnDropdownShow = !this.hsnDropdownShow;
