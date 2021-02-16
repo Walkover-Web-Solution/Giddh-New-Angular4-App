@@ -140,7 +140,7 @@
             "accountType": "Expense",
             "text": {
                 "cr": "<accountName> ↓  (घटते हुए)",
-                "dr": "<accountName> ↑ (Increasing)"
+                "dr": "<accountName> ↑ (बढ़ाना)"
             },
             "balanceText": {
                 "cr": "नकारात्मक व्यय (अजीब लगता है) ",
@@ -150,41 +150,41 @@
         {
             "accountType": "Asset",
             "text": {
-                "cr": "<accountName> is Going out (-)",
-                "dr": "<accountName> is Coming in (+)"
+                "cr": "<accountName> बाहर जा रहा है (-)",
+                "dr": "<accountName> (+) में आ रहा है"
             },
             "balanceText": {
-                "cr": "(-) Asset ( ohh no!)",
-                "dr": "Asset value"
+                "cr": "(-) एसेट (ओह नहीं!)",
+                "dr": "संपत्ति की कीमत"
             }
         },
         {
             "accountType": "Liability",
             "text": {
-                "cr": "<accountName> is increasing ↑",
-                "dr": "<accountName> is decreasing ↓"
+                "cr": "<accountName> बढ़ता जा रहा है ↑",
+                "dr": "<accountName> घट रही है ↓"
             },
             "balanceText": {
-                "cr": "Liability Payable",
-                "dr": "Liabilities paid in advance (hurrey!)"
+                "cr": "देयता",
+                "dr": "देयताओं का अग्रिम भुगतान (हुर्रे!)"
             }
         },
         {
             "accountType": "ReverseCharge",
             "text": {
-                "cr": "<accountName> is decreasing ↓",
-                "dr": "<accountName> is increasing ↑"
+                "cr": "<accountName> घट रही है ↓",
+                "dr": "<accountName> बढ़ता जा रहा है ↑"
             },
             "balanceText": {
-                "cr": "(-) Reverse Charge ( ohh no!)",
-                "dr": "Reverse Charge value"
+                "cr": "(-) रिवर्स चार्ज (ओह नहीं!)",
+                "dr": "रिवर्स चार्ज वैल्यू"
             }
         },
         {
             "accountType": "null",
             "text": {
-                "cr": "<accountName> liability is going out",
-                "dr": "<accountName> liability is coming in"
+                "cr": "<accountName> दायित्व बाहर जा रहा है",
+                "dr": "<accountName> दायित्व में आ रहा है"
             },
             "balanceText": {
                 "cr": "",

@@ -52,7 +52,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     public showClearSearch: boolean;
     public request: TrialBalanceRequest = {};
     public expand: boolean = false;
-    public dateOptions: IOption[] = [{label: 'Date Range', value: '1'}, {label: 'Financial Year', value: '0'}];
+    public dateOptions: IOption[] = [];
     public imgPath: string;
     public universalDateICurrent: boolean = false;
     /** Observable to store the branches of current company */
@@ -465,6 +465,21 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
             this.filterData();
+        }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof TbPlBsFilterComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.dateOptions = [
+                {label: this.commonLocaleData?.app_date_range, value: '1'}, 
+                {label: this.commonLocaleData?.app_financial_year, value: '0'}
+            ];
         }
     }
 }
