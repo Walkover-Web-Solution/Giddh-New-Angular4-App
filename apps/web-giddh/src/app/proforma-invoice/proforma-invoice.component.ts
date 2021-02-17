@@ -1188,8 +1188,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         });
 
                         obj.entries = tempObj.entries;
-
-                        let date = _.cloneDeep(this.universalDate);
                         obj.voucherDetails.voucherDate = voucherDate;
                         obj.voucherDetails.dueDate = dueDate;
                     } else {
@@ -4404,6 +4402,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 newTrxObj.hsnNumber = trx.hsnNumber;
                 newTrxObj.sacNumber = trx.sacNumber;
                 newTrxObj.sacNumberExists = (trx.sacNumber) ? true : false;
+                newTrxObj.showCodeType = trx.hsnNumber ? "hsn": "sac";
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
 
@@ -4629,8 +4628,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 transactionClassMul.account.uniqueName = tr.accountUniqueName;
                 transactionClassMul.account.name = tr.accountName;
                 transactionClassMul.amount.amountForAccount = tr.amount;
-                salesEntryClass.hsnNumber = tr.hsnNumber;
-                salesEntryClass.sacNumber = tr.sacNumber;
+                salesEntryClass.hsnNumber = (tr.showCodeType === 'hsn') ? tr.hsnNumber : "";
+                salesEntryClass.sacNumber = (tr.showCodeType === 'sac') ? tr.sacNumber : "";
                 salesEntryClass.description = tr.description;
                 if (tr.isStockTxn) {
                     let saalesAddBulkStockItems = new SalesAddBulkStockItems();
@@ -4709,6 +4708,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesTransactionItemClass.hsnNumber = t.hsnNumber;
                 salesTransactionItemClass.sacNumber = t.sacNumber;
                 salesTransactionItemClass.sacNumberExists = (t.sacNumber) ? true : false;
+                salesTransactionItemClass.showCodeType = t.hsnNumber ? "hsn" : "sac";
                 salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = t.date;
@@ -6936,6 +6936,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.showBulkLoader = true;
         setTimeout(() => {
             this.showBulkLoader = false;
+            this._cdr.detectChanges();
         }, 50);
         for (let index = startIndex; index < this.invFormData.entries.length; index++) {
             setTimeout(() => {
