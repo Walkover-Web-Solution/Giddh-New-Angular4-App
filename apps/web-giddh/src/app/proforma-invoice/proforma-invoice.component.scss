@@ -229,7 +229,7 @@ $greyClr: #6d6d6d;
         li {
             a {
                 &:hover {
-                    background: #f4f5f8;
+                    background: $solitude;
                 }
             }
         }
@@ -310,7 +310,7 @@ a[type="button"] {
     font-size: 12px;
 }
 
-.fs11 {
+.font-11 {
     font-size: 11px;
 }
 
@@ -376,7 +376,7 @@ ng-select.splSales {
 
 .billing-address {
     background: $white;
-    border: 1px solid #d6d6d6;
+    border: 1px solid $light-gray;
     padding: 5px;
     padding-bottom: 10px;
     &.disabled {
@@ -402,10 +402,6 @@ textarea:focus {
 .input-custom {
     border: none;
     border-bottom: 1px solid $gainsboro;
-}
-
-.pl0 {
-    padding-left: 0;
 }
 
 .balance-due {
@@ -510,7 +506,7 @@ textarea:focus {
     z-index: 97;
 }
 
-.search-arrow-image.for_purchase_invoice {
+.search-arrow-image.for-purchase-invoice {
     top: 230px;
 }
 
@@ -612,7 +608,7 @@ textarea:focus {
 }
 
 // my css
-.add-entryAgainst {
+.add-entry-against {
     display: none;
 }
 
@@ -667,13 +663,13 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     padding-left: 0 !important;
 }
 
-.billingaddresFull p {
+.billing-address-full p {
     font-size: 14px;
     color: $dark-gray;
     margin-bottom: 5px;
 }
 
-.wrappAdress {
+.wrap-address {
     margin-top: 8px;
 }
 
@@ -685,11 +681,11 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     color: $primary;
 }
 
-.wrap-invoiceNumberDetails .form-group {
+.wrap-invoice-number-details .form-group {
     display: block !important;
 }
 
-.wrap-invoiceNumberDetails .invoice-date {
+.wrap-invoice-number-details .invoice-date {
     max-width: 100% !important;
 }
 
@@ -699,7 +695,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     margin: 0 0;
 }
 
-.wrap-inputField {
+.wrap-input-field {
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -739,12 +735,12 @@ input[type="text"] {
     height: 36px !important;
 }
 
-a.copyInvoice {
+a.copy-invoice {
     color: $primary;
     margin-left: 10px;
 }
 
-a.copyInvoice img {
+a.copy-invoice img {
     margin-right: 6px;
 }
 
@@ -757,15 +753,8 @@ a.copyInvoice img {
     padding-right: 10px;
 }
 
-.p-0 {
-    padding: 0;
-}
 .shipping-address textarea {
     border-bottom: 1px solid $gainsboro !important;
-}
-
-.mb-0 {
-    margin-bottom: 0 !important;
 }
 
 .entry-date label {
@@ -815,10 +804,10 @@ a.copyInvoice img {
     color: $primary;
 }
 
-.otherDetailTable th,
-.otherDetailTable td,
-.otherDetailTable tr,
-.otherDetailTable tbody {
+.other-detail-table th,
+.other-detail-table td,
+.other-detail-table tr,
+.other-detail-table tbody {
     border-top: none !important;
 }
 
@@ -1303,7 +1292,7 @@ section.newtable {
     z-index: 10;
 }
 
-.gstTreatmentModal {
+.gst-treatment-modal {
     min-width: 240px;
     position: absolute;
     top: 60px;
@@ -1766,7 +1755,7 @@ span.eligible-ITC {
         border-bottom: none;
         margin-bottom: 0;
     }
-    .showInMobile {
+    .show-in-mobile {
         background: $white;
         border-top: 1px solid $gainsboro;
         padding-right: 15px;
@@ -1889,7 +1878,7 @@ span.eligible-ITC {
     #actionPane .btn-danger {
         margin-bottom: 5px;
     }
-    #actionPane .updateMode {
+    #actionPane .update-mode {
         display: flex;
         flex-direction: column;
     }
@@ -1945,7 +1934,7 @@ span.eligible-ITC {
     .balance-due-text {
         text-align: right;
     }
-    #actionPane .updateMode {
+    #actionPane .update-mode {
         justify-content: center;
         align-items: center;
         width: 100%;

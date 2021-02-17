@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-span.monthDropdown {
+span.month-dropdown {
     font-size: 12px;
     color: #666666;
     vertical-align: top;
@@ -31,31 +31,31 @@ span.monthDropdown {
 .gst-dropdown span.icon-arrow-down {
     margin-left: 5px;
 }
-.amountInCash {
+.amount-in-cash {
     font-size: 20px;
     color: #1a237e;
 }
-.amountInCash span.icon-rupees {
+.amount-in-cash span.icon-rupees {
     font-size: 12px;
 }
-.totalGstCode {
+.total-gst-code {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-top: 30px;
 }
-.gstApply {
+.gst-apply {
     font-size: 14px;
     color: $nero;
 }
-.gstApply span.icon-rupees {
+.gst-apply span.icon-rupees {
     font-size: 11px;
 }
-.totalGstCode small {
+.total-gst-code small {
     color: #666666;
     font-size: 14px;
 }
-.dateamount {
+.date-amount {
     color: $nero;
     font-size: 12px;
 }
@@ -68,17 +68,17 @@ span.monthDropdown {
     position: relative;
 }
 
-.addTax {
+.add-tax {
     display: flex;
     justify-content: inherit;
     position: absolute;
     bottom: 20px;
     text-decoration: underline;
 }
-.addTax a {
+.add-tax a {
     color: $nero;
     font-size: 14px;
 }
-.dateamount small {
+.date-amount small {
     font-size: 12px;
 }

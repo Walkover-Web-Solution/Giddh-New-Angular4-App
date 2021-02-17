@@ -101,7 +101,7 @@
                                     </td>
 
                                     <td data-title="Particular" id="{{'debit-id-' + i}}"
-                                        [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
+                                        [ngClass]="{ 'other-account-entry': txn.particular.uniqueName === 'others' }"
                                         class="col-5 position-relative select2-parent select2-ledger">
 
 
@@ -154,7 +154,7 @@
                                                     <ng-template #notFoundLinkTemplate>
 
                                                         <a id="createNewId" [ngClass]="{'active': keydownClassAdded}"
-                                                            class="notfound-option" [keyboardShortcut]="'alt+c'"
+                                                            class="not-found-option" [keyboardShortcut]="'alt+c'"
                                                             (onShortcutPress)="toggleAsidePaneOpen()">
                                                             <span [ngClass]="{'active': keydownClassAdded}">Create
                                                                 New</span>
@@ -287,7 +287,7 @@
 
                                     <td data-title="Particular" id="{{'credit-id-' + i}}"
                                         class="position-relative col-5 select2-parent select2-ledger"
-                                        [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
+                                        [ngClass]="{ other-account-entry: txn.particular.uniqueName === 'others' }">
 
                                         <ng-template [ngIf]="!txn?.isDiscount">
                                             <div class="d-flex update-ledger-account">
@@ -336,7 +336,7 @@
 
                                                     <ng-template #notFoundLinkTemplate>
                                                         <a id="createNewId2" [ngClass]="{'active': keydownClassAdded}"
-                                                            class="notfound-option" [keyboardShortcut]="'alt+c'"
+                                                            class="not-found-option" [keyboardShortcut]="'alt+c'"
                                                             (onShortcutPress)="toggleAsidePaneOpen()">
                                                             <span [ngClass]="{'active': keydownClassAdded}">Create
                                                                 New</span>
@@ -652,7 +652,7 @@
                         </div>
                     </div>
 
-                    <div class="cearfix pd-1 text-right bb-1 pr-0">
+                    <div class="clearfix pd-1 text-right bb-1 pr-0">
                         <span class="inWords font-14">{{vm.grandTotal | myNumberToWordsPipe | lowercase}}</span>
                     </div>
                 </ng-container>
@@ -1062,7 +1062,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end w-100 pd-r15" *ngIf="!isPettyCash">
-                                <div class="file_attached pull-right text-right"
+                                <div class="file-attached pull-right text-right"
                                     *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
                                     <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
                                     <label class="remove cp pl-1 text-danger"

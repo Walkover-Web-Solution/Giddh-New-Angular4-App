@@ -405,7 +405,7 @@
 
                                         <ng-container formArrayName="linkedStocks">
                                             <tr *ngFor="let list of addStockForm.get('manufacturingDetails')['controls']['linkedStocks'].controls;let i = index; let l = last"
-                                                [formGroupName]="i" class="fsstock">
+                                                [formGroupName]="i" class="fs-stock">
                                                 <td>
                                                     <sh-select [options]="stockListDropDown$ | async"
                                                         #manufacturingStockUniqueName formControlName="stockUniqueName"

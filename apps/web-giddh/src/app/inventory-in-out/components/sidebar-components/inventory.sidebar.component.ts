@@ -12,7 +12,7 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
     selector: 'invetory-sidebar',
     templateUrl: './inventory.sidebar.component.html',
     styles: [`
-    .parent-Group > ul > li ul li div {
+    .parent-group > ul > li ul li div {
       color: #8a8a8a;
     }
 

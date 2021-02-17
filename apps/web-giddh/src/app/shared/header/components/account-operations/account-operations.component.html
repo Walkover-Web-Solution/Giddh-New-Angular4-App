@@ -113,7 +113,7 @@
                     </div>
                     <small class="clearfix">This option is risky and can not be undone</small>
 
-                    <ul class="accmerge mr-t1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+                    <ul class="account-merge mr-t1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
                         <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
                             <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
                 {{merged}}

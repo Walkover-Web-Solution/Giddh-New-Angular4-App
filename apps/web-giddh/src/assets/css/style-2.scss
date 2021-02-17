@@ -214,22 +214,6 @@ body{
     border: none !important;
 }
 
-.pt-0 {
-    padding-top: 0px !important;
-}
-
-.pb-0 {
-    padding-bottom: 0px !important;
-}
-
-.pr-0 {
-    padding-right: 0px !important;
-}
-
-.pl-0 {
-    padding-left: 0px !important;
-}
-
 .pd-1 {
     padding: 10px !important;
 }
@@ -553,7 +537,7 @@ input {
     color: $nero !important;
 }
 
-.otherAccountEntry .header {
+.other-account-entry .header {
     border: 1px solid $red !important;
     display: block;
     overflow: hidden;
@@ -1422,10 +1406,6 @@ modal-container.modal {
     padding-top: 85px !important;
 }
 
-.mb-0 {
-    margin-bottom: 0px;
-}
-
 .overlay-cal {
     .modal-body {
         max-width: 1120px !important;
@@ -1933,7 +1913,7 @@ fieldset[disabled] .btn-primary:hover {
     font-weight: 600;
 }
 
-.parent-Group {
+.parent-group {
     padding-top: 10px;
     line-height: normal;
 }
@@ -2023,14 +2003,6 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn-gray:hover {
     color: $white;
-}
-
-.p-t-5 {
-    padding-right: 5px;
-}
-
-.p-t-10 {
-    padding-left: 10px;
 }
 
 .childTab > .nav.nav-tabs {
@@ -2520,14 +2492,6 @@ input[type="checkbox"]:checked:after {
     white-space: normal;
 }
 
-.pd-b1 {
-    padding-bottom: 10px;
-}
-
-.pdB0 {
-    padding-bottom: 0;
-}
-
 .templateInfo {
     position: relative;
     width: 100%;
@@ -2690,16 +2654,16 @@ li.no-click {
     padding: 7px 0;
 }
 
-.subscription_modal .modal-body {
+.subscription-modal .modal-body {
     padding: 0px;
 }
 
-.subscription_modal .modal-content {
+.subscription-modal .modal-content {
     border-radius: 0px;
     box-shadow: 0 5px 15px $black-russian;
 }
 
-.subscription_modal .modal-content .close {
+.subscription-modal .modal-content .close {
     position: absolute;
     right: 10px;
     top: 7px;
@@ -2707,8 +2671,8 @@ li.no-click {
     text-shadow: none;
 }
 
-.subscription_modal .modal-content .table.basic tr td,
-.subscription_modal .modal-content .table.basic tr th {
+.subscription-modal .modal-content .table.basic tr td,
+.subscription-modal .modal-content .table.basic tr th {
     padding: 10px 20px;
 }
 
@@ -3421,7 +3385,7 @@ a.btn.btn-xs.btn-link.pull-right {
     text-transform: capitalize;
 }
 
-.linkstock {
+.link-stock {
     min-height: 200px;
     /* overflow-y: scroll; */
     width: 100%;
@@ -3915,17 +3879,17 @@ select.form-control {
     background-color: $white !important;
 }
 
-.linkStockTbl {
+.link-stock-table {
     border-top: 1px solid $gainsboro;
     border-left: 1px solid $gainsboro;
 }
 
-.linkStockTbl > tbody > tr > td {
+.link-stock-table > tbody > tr > td {
     padding: 10px 15px;
     font-size: 14px;
 }
 
-.linkStockTbl > tbody > tr > td:first-child {
+.link-stock-table > tbody > tr > td:first-child {
     padding-left: 0;
     position: relative;
     text-transform: capitalize;
@@ -4415,19 +4379,19 @@ label {
     width: 100%;
 }
 
-.accmerge {
+.account-merge {
     padding: 0;
     display: block;
 }
 
-.accmerge li {
+.account-merge li {
     list-style: none;
     display: inline-block;
     /* margin-right: 4px; */
     margin: 0px 0 4px 4px;
 }
 
-.accmerge li a {
+.account-merge li a {
     padding: 4px 8px;
     color: $gray;
     background: $whisper-color;
@@ -4435,11 +4399,11 @@ label {
     border-radius: 2px;
 }
 
-.accmerge li a.isActive {
+.account-merge li a.isActive {
     color: $gray;
 }
 
-.accmerge li > a > span {
+.account-merge li > a > span {
     color: $nobel;
     padding-left: 20px;
     font-weight: 500;
@@ -4450,7 +4414,7 @@ label {
     opacity: 0.6;
 }
 
-.accmerge li > a.isActive > span {
+.account-merge li > a.isActive > span {
     color: $white;
 }
 
@@ -4586,7 +4550,7 @@ label {
     clear: both;
 }
 
-.tcaption {
+.th-caption {
     display: table-caption;
 }
 
@@ -4625,13 +4589,13 @@ label {
     border-bottom: 1px solid $gainsboro;
 }
 
-#manufacture .source .linkstock {
+#manufacture .source .link-stock {
     height: auto;
     color: $dark-gray;
 }
 
-#manufacture .source .linkstock thead th,
-#manufacture .source .linkstock tfoot tr th {
+#manufacture .source .link-stock thead th,
+#manufacture .source .link-stock tfoot tr th {
     color: $night-rider;
     font-weight: 100;
 }
@@ -4647,13 +4611,13 @@ label {
 }
 
 #manufacture .source table thead th,
-#manufacture .source .linkStockTbl > tbody > tr > td:first-child,
+#manufacture .source .link-stock-table > tbody > tr > td:first-child,
 #manufacture .source table tfoot th {
     padding: 10px 15px;
     font-size: 14px;
 }
 
-#manufacture .source .linkStockTbl {
+#manufacture .source .link-stock-table {
     border: 0;
 }
 
@@ -4869,7 +4833,7 @@ label {
     display: inline-block !important;
 }
 
-.onHover {
+.on-hover {
     position: relative;
     transition: all 0.3s ease;
 }
@@ -5494,21 +5458,21 @@ input[type="checkbox"][disabled] {
     vertical-align: top;
 }
 
-.subHead {
+.sub-head {
     font-size: 105%;
     color: $night-rider;
     padding-bottom: 10px;
 }
 
-.bank-account .subHead button {
+.bank-account .sub-head button {
     padding: 0 0;
 }
 
-.bank-account .subHead {
+.bank-account .sub-head {
     margin-bottom: 7px;
 }
 
-.reconnectDiv .vertical-align-middle {
+.reconnect-div .vertical-align-middle {
     top: 50%;
     transform: translateY(-50%);
     position: absolute;
@@ -5547,8 +5511,7 @@ datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
     color: $white;
 }
 
-datepicker-inner
-.well
+datepicker-inner .well
 table
 tbody
 tr
@@ -5558,16 +5521,14 @@ button.btn.btn-default.btn-info
     color: $green !important;
 }
 
-datepicker-inner
-.well
+datepicker-inner .well
 table
 tbody
 tr
 td
 button.btn.btn-default.btn-info:hover
 .text-success,
-datepicker-inner
-.well
+datepicker-inner .well
 table
 tbody
 tr
@@ -5721,7 +5682,7 @@ input[type="checkbox"][disabled]:after {
     padding-left: 7px !important;
 }
 
-.table-container .profitLoss section div > div {
+.table-container .profit-loss section div > div {
     border-right: 0;
 }
 
@@ -5961,46 +5922,9 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     display: none;
 }
 
-.dblock {
-    display: block !important;
-    margin: auto;
-}
-
-.m-t-50 {
-    margin-top: 50px;
-}
-
-.m-t-41 {
-    margin-top: 41px;
-}
-
-.m-b-20 {
-    margin-bottom: 20px !important;
-}
-
-.m-t-20 {
-    margin-top: 20px !important;
-}
-
-.m-t-10 {
-    margin-top: 10px !important;
-}
-
-.m-t-30 {
-    margin-top: 30px !important;
-}
-
-.m-t-40 {
-    margin-top: 40px !important;
-}
-
 .p-lr-15 {
     padding-left: 15px;
     padding-right: 15px;
-}
-
-.m-t-37 {
-    margin-top: 37px !important;
 }
 
 .company-form-body {
@@ -6417,7 +6341,7 @@ table td[class*=col-]:last-child {
     right: 15px;
 }
 
-.sh-form_control .form-control {
+.sh-form-control .form-control {
     width: 100% !important;
 }
 
@@ -6554,7 +6478,7 @@ table td[class*=col-]:last-child {
     display: block;
 }
 
-.parent-Group > .stock-grp-list:first-child {
+.parent-group > .stock-grp-list:first-child {
     max-height: 100vh;
     min-height: 100vh;
     overflow: auto;
@@ -6626,7 +6550,7 @@ table td[class*=col-]:last-child {
     vertical-align: -webkit-baseline-middle;
 }
 
-.max900 {
+.max-width-900 {
     max-width: 900px;
 }
 
@@ -6647,7 +6571,7 @@ table td[class*=col-]:last-child {
     border-radius: 3px;
 }
 
-.m-r-15 {
+.mr-r15 {
     margin-right: 15px;
 }
 
@@ -6661,7 +6585,7 @@ table td[class*=col-]:last-child {
     margin: 0 auto;
 }
 
-.condition_tag {
+.condition-tag {
     position: absolute;
     top: 2px;
     right: -48px;
@@ -6672,7 +6596,7 @@ table td[class*=col-]:last-child {
     font-size: 12px;
 }
 
-.condition_tag:before {
+.condition-tag:before {
     content: " ";
     position: absolute;
     height: 41px;
@@ -6687,7 +6611,7 @@ table td[class*=col-]:last-child {
     margin: 0 6px;
 }
 
-.query-list:nth-last-child(3) .condition_tag:after {
+.query-list:nth-last-child(3) .condition-tag:after {
     content: " ";
     position: absolute;
     height: 2px;
@@ -6757,23 +6681,23 @@ panel.sFthanks.fieldset {
     max-width: 16px;
 }
 
-.unit_action .btn {
+.unit-action .btn {
     margin-right: 0;
     border: 1px solid $gainsboro;
     opacity: 0.5;
 }
 
-.unit_action .btn:nth-child(1) {
+.unit-action .btn:nth-child(1) {
     background: url(../images/divide-ico.svg) no-repeat center center;
     background-size: 16px;
 }
 
-.unit_action .btn:nth-child(2) {
+.unit-action .btn:nth-child(2) {
     background: url(../images/multiply.svg) no-repeat center center;
     background-size: 12px;
 }
 
-.unit_action .isSelected {
+.unit-action .isSelected {
     opacity: 1;
     background-color: $white !important;
 }
@@ -7671,10 +7595,6 @@ app-header {
     padding-top: 26px;
 }
 
-.ml-0 {
-    margin-left: 0px !important;
-}
-
 .error-box {
     border: 2px solid $red;
 }
@@ -7891,7 +7811,7 @@ div#getGroupModal {
     z-index: 999;
 }
 
-.mailbox .sendMailForm label {
+.mailbox .send-mail-form label {
     line-height: 2;
 }
 
@@ -8196,7 +8116,7 @@ span.red-text {
 
 .multicurrencyTooltipInfo,
 .invoice-preview,
-.sidebarTooltip {
+.sidebar-tooltip {
     .tooltip-inner {
         white-space: normal;
     }
@@ -8698,7 +8618,7 @@ p.remvBrnchName {
     color: $chetwode-blue;
 }
 
-.mobileNumberWidth .menu {
+.mobile-number-width .menu {
     min-width: 90px !important;
 }
 
@@ -8712,7 +8632,7 @@ p.remvBrnchName {
     margin-bottom: 10px;
 }
 
-.contact-form .mobileNumberWidth input {
+.contact-form .mobile-number-width input {
     padding-right: 0 !important;
 }
 

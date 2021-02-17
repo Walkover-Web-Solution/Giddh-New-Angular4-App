@@ -1,11 +1,7 @@
 @import '../../../assets/css/color.scss';
 
-.mx-300 {
+.max-width-300 {
     max-width: 300px;
-}
-
-.mx-350 {
-    max-width: 350px;
 }
 
 .appearance-none:focus {
@@ -32,11 +28,11 @@
     line-height: 24px;
 }
 
-.mx-300 label {
+.max-width-300 label {
     width: 130px;
 }
 
-.mx-350 label {
+.max-width-350 label {
     width: 160px;
 }
 

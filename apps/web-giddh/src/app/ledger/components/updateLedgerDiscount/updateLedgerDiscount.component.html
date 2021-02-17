@@ -45,7 +45,7 @@
 			<ul class="discount-list">
 				<ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
 					<li *ngIf="idx > 0" class="discount-item">
-						<label class="checkbox overflow-hidden width-100 p0 m0" (click)="$event.stopPropagation()">
+						<label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
 							<input class="pull-left" id="{{'update-ledger-discount-checkbox-' + idx }}" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
 								(change)="change()" (click)="$event.stopPropagation()" />
 							<span class="pull-left text-ellipsis">{{discount.name}}</span>

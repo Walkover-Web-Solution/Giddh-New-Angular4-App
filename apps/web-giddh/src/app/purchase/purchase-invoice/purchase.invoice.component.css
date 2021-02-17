@@ -409,7 +409,7 @@ hr {
     border-bottom-color: #025cff;
 }
 
-.daterangePicker {
+.date-range-picker {
     position: absolute;
     opacity: 0;
     right: -160px;

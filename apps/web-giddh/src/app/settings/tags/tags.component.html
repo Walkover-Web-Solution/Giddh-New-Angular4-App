@@ -51,7 +51,7 @@
                                         <input *ngIf="updateIndex === i" type="text" class="form-control"
                                             name="name_of_{{i}}" [(ngModel)]="tag.name" />
                                     </td>
-                                    <td data-title="Tags Desciption">
+                                    <td data-title="Tags Description">
                                         <div *ngIf="updateIndex !== i">{{tag.description}}</div>
                                         <textarea *ngIf="updateIndex === i" class="form-control"
                                             name="description_of_{{i}}" [(ngModel)]="tag.description"></textarea>

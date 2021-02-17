@@ -340,10 +340,10 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <div class="hsn-code-dropdown skuNumberDropdown" *ngIf="skuNumberPopupShow && activeRow == i">
+                                            <div class="hsn-code-dropdown sku-number-dropdown" *ngIf="skuNumberPopupShow && activeRow == i">
                                                 <label>SKU Code:</label>
                                                 <input type="text" maxlength="50" placeholder="SKU Code" name="productSkuCode{{i}}" #productSkuCode [(ngModel)]="skuNumber" />
-                                                <div class="btn-group m-t-10">
+                                                <div class="btn-group mr-t1">
                                                     <button class="btn btn-sm btn-success" type="button" (click)="saveSkuNumberPopup(product)">Save</button>
                                                     <button class="btn btn-sm btn-primary" type="button" (click)="hideSkuNumberPopup()">Cancel</button>
                                                 </div>
@@ -371,7 +371,7 @@
                                         <div class="hsn-code-dropdown" *ngIf="hsnPopupShow && activeRow == i">
                                             <label>HSN/SAC Code</label>
                                             <input type="text" maxlength="8" placeholder="HSN/SAC Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
-                                            <div class="btn-group m-t-10 d-block">
+                                            <div class="btn-group mr-t1 d-block">
                                                 <button class="btn btn-sm btn-success" type="button" (click)="saveHsnNumberPopup(product)">Save</button>
                                                 <button class="btn btn-sm btn-primary" type="button" (click)="hideHsnNumberPopup()">Cancel</button>
                                             </div>
@@ -536,7 +536,7 @@
                                                 <sh-select #transCompany placeholder="Transport Company" name="transporterId" [isFilterEnabled]="true" (keydown)="keydownPressed($event)" [forceClearReactive]="forceClear$ | async" [options]="transporterDropdown$ | async" [(ngModel)]="branchTransfer.transporterDetails.transporterId"
                                                     [notFoundLink]="true" [multiple]="false" [ItemHeight]="33" (selected)="focusTransporterMode()">
                                                     <ng-template #notFoundLinkTemplate>
-                                                        <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
+                                                        <a [ngClass]="{'active': keydownClassAdded}" class="not-found-option" [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
                                                             <span (click)="toggleTransporterModel()" [ngClass]="{'active': keydownClassAdded}">Create
                                                                 New</span>
                                                         </a>
@@ -600,14 +600,14 @@
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                 <div class="form-group">
                     <label for="transporterName">Transporter Name <span class="text-danger">*</span></label>
-                    <input #Transportersname="ngModel" type="text" class="form-control" [ngClass]="{'hasError': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}" required placeholder="Mention name" pattern="[a-zA-Z0-9^ .&]{5,100}"
+                    <input #Transportersname="ngModel" type="text" class="form-control" [ngClass]="{'has-error': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}" required placeholder="Mention name" pattern="[a-zA-Z0-9^ .&]{5,100}"
                         name="transporterName" [(ngModel)]="generateNewTransporter.transporterName">
                     <small class="text-danger" *ngIf="Transportersname.invalid && Transportersname.touched && Transportersname.dirty && Transportersname.value">Transporter
                         name should contain atleast 5 characters and should not contain any special character.</small>
                 </div>
                 <div class="form-group">
                     <label for="transporterId">Transporter ID <span class="text-danger">*</span></label>
-                    <input #TransportersID="ngModel" type="number" pattern="[0-9^ .&]{4,15}" minlength="4" class="form-control" onKeyPress="if(this.value.length==15) return false;" [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
+                    <input #TransportersID="ngModel" type="number" pattern="[0-9^ .&]{4,15}" minlength="4" class="form-control" onKeyPress="if(this.value.length==15) return false;" [ngClass]="{'has-error': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
                         name="transporterId" [(ngModel)]="generateNewTransporter.transporterId" required placeholder="Mention number">
                     <small class="text-danger" *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty && TransportersID.value">Transporter
                         id should contain atleast 4 characters and should contain digit only.</small>

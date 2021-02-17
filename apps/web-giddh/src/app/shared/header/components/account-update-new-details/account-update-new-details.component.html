@@ -199,7 +199,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Mobile Number</label>
-                            <div class="d-flex mobileNumberWidth">
+                            <div class="d-flex mobile-number-width">
                                 <sh-select [placeholder]="'+91'" [options]="countryPhoneCode" formControlName="mobileCode" class="contact-number-select"></sh-select>
                                 <input type="text" pattern="[0-9]*" class="form-control pull-right" placeholder="98XXXXXXXX" formControlName="mobileNo" id="contactNo" autocomplete="off" (blur)="isValidMobileNumber(mobileNoEl)" #mobileNoEl />
                                 <small class="clearfix error-msg" *ngIf="addAccountForm.get('mobileNo').value && !addAccountForm.get('mobileCode').value">Phone
@@ -472,7 +472,7 @@
                     </div>
                     <small class="clearfix">This option is risky and can not be undone</small>
 
-                    <ul class="accmerge mr-t1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+                    <ul class="account-merge mr-t1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
                         <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
                             <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
                                 {{merged}}

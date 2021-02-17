@@ -76,7 +76,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     color: $gray;
 }
 
-.notfound-option.active {
+.not-found-option.active {
     background: $lavender !important;
     padding: 2px 5px !important;
 }
@@ -398,7 +398,7 @@ p.edit-message{
     .advanced input {
         width: 200px !important;
     }
-    .file_attached span {
+    .file-attached span {
         white-space: initial;
         word-break: break-word;
         width: 100%;

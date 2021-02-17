@@ -93,8 +93,8 @@
                 <!-- right column / add more resources -->
                 <div class="col-md-12 col-lg-6 source resources-table">
                     <h1 class="section-head">Source(Consumption)</h1>
-                    <section class="linkstock">
-                        <table class="col-xs-12 col-sm-12 linkStockTbl" *ngIf="manufacturingDetails">
+                    <section class="link-stock">
+                        <table class="col-xs-12 col-sm-12 link-stock-table" *ngIf="manufacturingDetails">
                             <thead>
                                 <tr>
                                     <th colspan="2">Product Name</th>
@@ -176,7 +176,7 @@
                             <p class="col-xs-3 col-sm-3 text-right">{{ getTotal('linkedStocks', 'amount') | number:'1.0-2' }}</p>
                         </div>
                         <table class="width-100">
-                            <thead class="tcaption">
+                            <thead class="th-caption">
                                 <tr>
                                     <td class="cp btn-link" (click)="onToggleAddExpensesBlock(toggleAddExpenses);" tooltip="Add A/C where expense entries will be done." placement="top" colspan="5"><i class="icon-plus" aria-hidden="true"></i> Add Expense
                                     </td>

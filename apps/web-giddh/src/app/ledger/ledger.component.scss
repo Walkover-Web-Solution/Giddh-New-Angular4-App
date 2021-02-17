@@ -61,7 +61,7 @@
 input {
     color: $nero;
 }
-.notfound-option {
+.not-found-option {
     display: flex;
     justify-content: space-between;
 }
@@ -374,7 +374,7 @@ tr[vr-item]:focus {
 sh-select:focus {
     outline: 1px $cinnabar-orange solid;
 }
-.notfound-option.active {
+.not-found-option.active {
     background: $lavender !important;
     padding: 2px 5px !important;
 }

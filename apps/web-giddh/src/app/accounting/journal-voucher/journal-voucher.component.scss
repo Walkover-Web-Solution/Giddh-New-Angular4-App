@@ -1,5 +1,5 @@
 @import "../../../assets/css/color.scss";
-:host ::ng-deep .parent-Group {
+:host ::ng-deep .parent-group {
     padding-left: 0;
 }
 
@@ -29,17 +29,17 @@
     background: $gray-95;
 }
 
-.entry_table thead th {
+.entry-table thead th {
     font-weight: normal;
     padding: 8px 6px;
 }
 
-.entry_table tbody tr td {
+.entry-table tbody tr td {
     padding: 0;
     border: 0;
 }
 
-.entry_table tbody tr td .form-control {
+.entry-table tbody tr td .form-control {
     background: transparent !important;
     border: 0;
     border-radius: 0 !important;
@@ -48,7 +48,7 @@
     padding: 0 6px !important;
 }
 
-.entry_table tbody tr td .form-control.focus:focus {
+.entry-table tbody tr td .form-control.focus:focus {
     background: $very-light-gray !important;
 }
 

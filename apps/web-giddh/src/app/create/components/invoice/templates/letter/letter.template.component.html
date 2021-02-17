@@ -113,7 +113,7 @@
                                     <label>Country</label>
                                     <!-- <input placeholder="Customer name" type="text" formControlName="userCompanyName" class="form-control" [ngClass]="{'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('userCompanyName').invalid }"
 /> -->
-                                    <sh-select class="sh-form_control" formControlName="countryCode"
+                                    <sh-select class="sh-form-control" formControlName="countryCode"
                                         [options]="countrySource"
                                         [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }" [isRequired]="true">
                                     </sh-select>
@@ -255,7 +255,7 @@
 
         <div class="form-group col-xs-6" formGroupName="userDetails">
             <label>Country <sup>*</sup></label>
-            <sh-select class="sh-form_control" formControlName="countryCode" [options]="countrySource" [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }"></sh-select>
+            <sh-select class="sh-form-control" formControlName="countryCode" [options]="countrySource" [ngClass]="{ 'has-error': isFormSubmitted && CreateInvoiceForm.controls['userDetails'].get('countryCode').invalid }"></sh-select>
         </div>
         <ng-container formGroupName="companyDetails">
             <div class="form-group col-xs-12">

@@ -1241,7 +1241,7 @@
                                                                     [(ngModel)]="transaction.sacNumber" />
                                                                 <a>
                                                                 </a>
-                                                                <div class="btn-group m-t-10">
+                                                                <div class="btn-group mr-t1">
                                                                     <button class="btn btn-sm btn-success" type="button"
                                                                         (click)="hsnDropdownShow=!hsnDropdownShow">Save
                                                                     </button>
@@ -1810,7 +1810,7 @@
                 <!-- endregion -->
 
                 <!-- region mobile view -->
-                <div class="showInMobile" *ngIf="isMobileScreen">
+                <div class="show-in-mobile" *ngIf="isMobileScreen">
                     <div class="card-invoice-table-wrapper"
                         *ngFor="let entry of invFormData.entries; let entryIdx = index;">
                         <ng-container *ngFor="let transaction of entry.transactions;">
@@ -2087,7 +2087,7 @@
                                                                             [(ngModel)]="transaction.sacNumber" />
                                                                         <a>
                                                                         </a>
-                                                                        <div class="btn-group m-t-10">
+                                                                        <div class="btn-group mr-t1">
                                                                             <button class="btn btn-sm btn-success" type="button"
                                                                                 (click)="hsnDropdownShow=!hsnDropdownShow">
                                                                                 Save
@@ -2598,7 +2598,7 @@
                     <div class="col-12">
 
                         <!-- region generate mode -->
-                        <div class="pull-right pr updateMode" *ngIf="!isUpdateMode">
+                        <div class="pull-right position-relative update-mode" *ngIf="!isUpdateMode">
                             <button type="button" (click)="resetInvoiceForm(invoiceForm)"
                                 class="btn btn-danger d-inline-block v-align-middle">Clear
                             </button>
@@ -2788,7 +2788,7 @@
 
     <!-- region gst treatment modal-->
     <ng-template #gstTreatmentModal let-show>
-        <div *ngIf="show" class="gstTreatmentModal">
+        <div *ngIf="show" class="gst-treatment-modal">
             <proforma-gst-treatment-component (closeEvent)="showGstTreatmentModal = false">
             </proforma-gst-treatment-component>
         </div>

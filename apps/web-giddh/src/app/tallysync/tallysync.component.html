@@ -1,7 +1,7 @@
 <hamburger-menu [pageHeading]="'Import Data From TALLY'"></hamburger-menu>
 
-<section class="m-l-20 m-r-20 m-t-15">
-    <div class="m-t-15">
+<section class="mr-l2 mr-t2 mr-t15">
+    <div class="mr-t15">
         <button class="btn btn-default" [ngClass]="{'active': activeTab === 'inprogress'}"
             (click)="tabChanged('inprogress')">
             In-Progress
@@ -11,7 +11,7 @@
             Completed
         </button>
     </div>
-    <div class="m-t-15" id="Tab">
+    <div class="mr-t15" id="Tab">
         <ng-container *ngIf="activeTab === 'inprogress'">
             <app-inprogress-preview></app-inprogress-preview>
         </ng-container>

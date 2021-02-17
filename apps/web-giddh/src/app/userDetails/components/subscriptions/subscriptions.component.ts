@@ -486,7 +486,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     //    this.getCompanyTransactions(company.uniqueName);
     //   this.modalRef = this.modalService.show(
     //     template,
-    //     Object.assign({}, { class: 'subscription_modal' })
+    //     Object.assign({}, { class: 'subscription-modal' })
     //   );
     //   let cont = {
     //     subscription,

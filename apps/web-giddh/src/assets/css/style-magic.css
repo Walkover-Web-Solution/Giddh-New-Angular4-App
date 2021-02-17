@@ -2200,7 +2200,7 @@ z-index: 9;
     display: none;
 }
 
-.profitLoss.table-container > div > section {
+.profit-loss.table-container > div > section {
     border-left: 1px solid #e0e0e0;
 }
 
@@ -3375,7 +3375,7 @@ ul.pills li {
     resize: none;
 }
 
-.reconnectDiv {
+.reconnect-div {
     background: rgba(0, 0, 0, 0.7);
     position: absolute;
     height: 100%;
@@ -3755,7 +3755,7 @@ tr.db-bnk-account {
     position: relative;
 }
 
-tr.db-bnk-account > td.reconnectDiv {
+tr.db-bnk-account > td.reconnect-div {
     position: absolute;
 }
 
@@ -4566,11 +4566,11 @@ border-bottom: 1px solid #e0e0e0;
     /* background-color: rgb(220, 220, 220); */
 }
 
-.parent-Group > .stock-grp-list > li {
+.parent-group > .stock-grp-list > li {
     padding: 6px 15px;
 }
 
-.parent-Group > .stock-grp-list > li > div {
+.parent-group > .stock-grp-list > li > div {
     text-transform: uppercase;
 }
 
@@ -5054,7 +5054,7 @@ bs-datepicker-container {
     margin-top: 20px;
 }
 
-.p0 {
+.p-0 {
     padding: 0;
 }
 
@@ -5155,7 +5155,7 @@ perfect-scrollbar.ps-show-active
     user-select: none;
 }
 
-.m0 {
+.m-0 {
     margin: 0 !important;
 }
 

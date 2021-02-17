@@ -30,14 +30,14 @@
         <div class="mt-1">
             <!-- ================= saltedge accounts =================
       <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
-          <h3 class="subHead bd-rb">
+          <h3 class="sub-head bd-rb">
               <button class="no-btn font-20" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, acc.accounts[0])"><i class="icon-trash"></i></button> {{acc.siteName}}
               <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.accounts[accIdx])"><i class="icon-refresh"></i> Refresh</button>
           </h3>
           <aside class="body">
               <aside [attachOutsideOnClick]="true" (clickOutside)="card.isDatePickerOpen = false" class="account-card" *ngFor="let card of acc.accounts; let i = index">
                   <aside class="title">{{card.name}}</aside>
-                  <div class="reconnectDiv text-center" *ngIf="card.reconnect">
+                  <div class="reconnect-div text-center" *ngIf="card.reconnect">
                       <div class="vertical-align-middle">
                           <button class="btn btn-sm btn-default" (click)="onReconnectAccount(card)">Reconnect</button>
                           <button class="btn btn-sm btn-danger" (click)="onDeleteAddedBank(acc.siteName, card)">Delete</button>
@@ -77,7 +77,7 @@
       ================= saltedge accounts ================= -->
 
             <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
-                <h3 class="subHead bd-rb">
+                <h3 class="sub-head bd-rb">
                     {{acc.siteName}}
                     <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.yodleeAccounts[0], false)" *ngIf="acc.status !== 'FAILED'">
                         <i class="icon-refresh"></i> Refresh

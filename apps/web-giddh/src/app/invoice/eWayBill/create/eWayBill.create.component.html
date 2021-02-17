@@ -81,7 +81,7 @@
 
                             <ng-template #notFoundLinkTemplate>
 
-                                <a [ngClass]="{'active': keydownClassAdded}" class="notfound-option"
+                                <a [ngClass]="{'active': keydownClassAdded}" class="not-found-option"
                                     [keyboardShortcut]="'alt+c'" (onShortcutPress)="keydownPressed()">
                                     <span (click)="OpenTransporterModel()"
                                         [ngClass]="{'active': keydownClassAdded}">Create New</span>
@@ -186,7 +186,7 @@
                     <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
 
                         <input #name="ngModel" type="text" name="vehicleNo" required
-                            [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}"
+                            [ngClass]="{'has-error': name.invalid && name.touched && name.dirty, 'has-success':name.valid}"
                             placeholder="Mention Number" pattern="[a-zA-Z0-9]{7,11}" maxlength="11" minlength="7"
                             [(ngModel)]="generateEwayBillform.vehicleNo" class="form-control input " />
 
@@ -298,7 +298,7 @@
                 <div class="form-group">
                     <label for="transporterName">Transporter Name <span class="text-danger">*</span></label>
                     <input #Transportersname="ngModel" type="text" class="form-control"
-                        [ngClass]="{'hasError': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}"
+                        [ngClass]="{'has-error': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}"
                         required placeholder="Mention name" pattern="[a-zA-Z0-9^ .&]{5,100}" name="transporterName"
                         [(ngModel)]="generateNewTransporter.transporterName">
 
@@ -313,7 +313,7 @@
                     <label for="transporterId">Transporter ID <span class="text-danger">*</span></label>
                     <input #TransportersID="ngModel" type="number" pattern="[0-9^ .&]{4,15}" minlength="4"
                         class="form-control" onKeyPress="if(this.value.length==15) return false;"
-                        [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
+                        [ngClass]="{'has-error': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
                         name="transporterId" [(ngModel)]="generateNewTransporter.transporterId" required
                         placeholder="Mention number">
                     <small class="text-danger"

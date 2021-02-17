@@ -2031,7 +2031,7 @@ table.borderless th {
     display: none;
 }
 
-.profitLoss.table-container > div > section {
+.profit-loss.table-container > div > section {
     border-left: 1px solid $whisper-color;
 }
 
@@ -3156,7 +3156,7 @@ ul.pills li {
     resize: none;
 }
 
-.reconnectDiv {
+.reconnect-div {
     background: rgba(0, 0, 0, 0.7);
     position: absolute;
     height: 100%;
@@ -3534,7 +3534,7 @@ tr.db-bnk-account {
     position: relative;
 }
 
-tr.db-bnk-account > td.reconnectDiv {
+tr.db-bnk-account > td.reconnect-div {
     position: absolute;
 }
 
@@ -3607,10 +3607,6 @@ tr.db-bnk-account > td.reconnectDiv {
 .padding-0 {
     padding-left: 0;
     padding-right: 0;
-}
-
-.pd-l-0 {
-    padding-left: 0;
 }
 
 .custom-tabset {
@@ -4331,11 +4327,11 @@ border-bottom: 1px solid $whisper-color;
     /* background-color: rgb(220, 220, 220); */
 }
 
-.parent-Group > .stock-grp-list > li {
+.parent-group > .stock-grp-list > li {
     padding: 6px 15px;
 }
 
-.parent-Group > .stock-grp-list > li > div {
+.parent-group > .stock-grp-list > li > div {
     text-transform: uppercase;
 }
 
@@ -4813,18 +4809,6 @@ bs-datepicker-container {
     outline: 0;
 }
 
-.mt10 {
-    margin-top: 10px;
-}
-
-.mt20 {
-    margin-top: 20px;
-}
-
-.p0 {
-    padding: 0;
-}
-
 .input-group {
     z-index: 1;
 }
@@ -4912,10 +4896,6 @@ perfect-scrollbar.ps-show-active
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.m0 {
-    margin: 0 !important;
 }
 
 .custom-item:hover , .discount-item:hover {
@@ -5031,7 +5011,7 @@ form#groupDetailForm {
 }
 @media(max-width:1024px){
     #inventory-sidebar{
-        .parent-Group {
+        .parent-group {
             >.stock-grp-list {
                 >li {
                     display: block !important;
