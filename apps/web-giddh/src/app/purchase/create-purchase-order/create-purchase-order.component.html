@@ -1159,7 +1159,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="purchaseOrder.voucherDetails.gstTaxesTotal"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: flase">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
 
