@@ -1974,8 +1974,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 statesEle.disabled = true;
             } else {
                 this._toasty.clearAllToaster();
-                this.invFormData.accountDetails[type].stateCode = null;
-                this.invFormData.accountDetails[type].state.code = null;
+                this.checkGstNumValidation(gstVal);
+                if (!this.isValidGstinNumber) {
+                    /* Check for valid pattern such as 9918IND29061OSS through which state can't be determined
+                        and clear the state only when valid number is not provided */
+                    this.invFormData.accountDetails[type].stateCode = null;
+                    this.invFormData.accountDetails[type].state.code = null;
+                }
                 statesEle.disabled = false;
             }
         } else {
