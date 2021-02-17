@@ -68,25 +68,25 @@
             </div>
             <ng-container *ngIf="isHsnSacEnabledAcc">
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 form-group">
-                        <label class="d-block">HSN</label>
+                    <div class="col-xs-6 col-sm-4 form-group">
+                        <!-- <label class="d-block">HSN</label> -->
                         <div class="input-group">
                             <!-- <span class="input-group-addon">
                                 <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
                             </span>
                             <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10"> -->
                             <span class="mr-r15">
-                                <input type="radio" name="showCodeType" id="hsnCodeType" formControlName="showCodeType" value="hsn">
+                                <input type="radio" name="hsnOrSac" id="hsnCodeType" formControlName="hsnOrSac" value="hsn">
                                 <label for="hsnCodeType" class="ml-1">HSN Code</label>
                             </span>
                             <span>
-                                <input type="radio" name="showCodeType" id="sacCodeType" formControlName="showCodeType" value="sac">
+                                <input type="radio" name="hsnOrSac" id="sacCodeType" formControlName="hsnOrSac" value="sac">
                                 <label for="sacCodeType" class="ml-1">SAC Code</label>
                             </span>
                             <input type="text" class="form-control" maxlength="10" decimalDigitsDirective formControlName="hsnNumber"
-                                *ngIf="addGroupForm.get('showCodeType').value === 'hsn'" />
+                                *ngIf="addAccountForm.get('hsnOrSac').value === 'hsn'" />
                             <input type="text" class="form-control" maxlength="10" formControlName="sacNumber" decimalDigitsDirective
-                                *ngIf="addGroupForm.get('showCodeType').value === 'sac'" />
+                                *ngIf="addAccountForm.get('hsnOrSac').value === 'sac'" />
                         </div>
                     </div>
                     <!-- <div class="col-xs-6 col-sm-6 form-group">

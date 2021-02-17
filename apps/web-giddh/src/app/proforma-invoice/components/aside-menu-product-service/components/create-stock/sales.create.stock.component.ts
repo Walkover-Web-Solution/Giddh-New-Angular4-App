@@ -222,6 +222,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
         this.taxTempArray = [];
 
+        this.showOtherDetails = false;
         this.getInvoiceSettings();
 
         // subscribe isFsStock for disabling manufacturingDetails
@@ -1084,7 +1085,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     }
 
     public openShowOtherDetailsSection() {
-        this.showOtherDetails = true;
+        this.toggleOtherDetails();
         setTimeout(() => {
             this.uniqueName.nativeElement.focus();
         }, 200);

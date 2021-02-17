@@ -276,6 +276,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.activeStock$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && !this.addStock) {
                 this.addStockForm.reset();
+                this.showOtherDetails = false;
                 this.stockUniqueName = a.uniqueName;
                 this.isUpdatingStockForm = true;
                 this.addStockForm.patchValue({
