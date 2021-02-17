@@ -229,8 +229,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
 
     @ViewChild('dateChangeConfirmationModel', {static: true}) public dateChangeConfirmationModel: ModalDirective;
-    /** amount filed component */
-    @ViewChild('AmountFieldComponent', { static: true }) public amountField: ElementRef;
     /** Container element for all the entries */
     @ViewChild('itemsContainer', { read: ViewContainerRef, static: false }) container: ViewContainerRef;
     /** Template reference for each entry */
