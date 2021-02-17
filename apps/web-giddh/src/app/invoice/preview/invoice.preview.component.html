@@ -274,7 +274,7 @@
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPurchaseOrderSearch, fieldName: 'purchaseOrderNumbers', formControl: purchaseOrderNumbersInput, title: 'Purchase Order #'}"></ng-container>
                         </th>
                         <th data-title="Amount" width="12%" class="min-wid-amount">
-                            <div class="d-flex">
+                            <div class="d-flex justify-content-end">
                                 <div> Amount</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
@@ -437,8 +437,8 @@
                             <!-- {{item.accountCurrencySymbol}}
                             {{item.grandTotal?.amountForAccount | giddhCurrency}} -->
 
-                            <amount-field [amount]="item.grandTotal?.amountForAccount"
-                                [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="false">
+                            <amount-field [amount]="item.grandTotal?.amountForAccount" class="justify-content-end d-flex"
+                                [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="item?.account?.currency?.code">
                             </amount-field>
 
                         </td>
@@ -452,7 +452,7 @@
                             {{item?.totalBalance?.amountForAccount | giddhCurrency}} -->
 
                             <amount-field [amount]="item?.totalBalance?.amountForAccount" [currencySymbol]="item.accountCurrencySymbol"
-                                [currencyCode]="false">
+                                [currencyCode]="item?.account?.currency?.code">
                             </amount-field>
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
@@ -863,9 +863,10 @@
                     </h3>
                     <h1 class="d-flex">
                         <!-- {{baseCurrencySymbol}}{{ totalSale | giddhCurrency }} -->
+
                         <span>
                             <amount-field [amount]="totalSale"
-                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="baseCurrency">
                             </amount-field>
                         </span>
                         <span
@@ -878,8 +879,10 @@
                     <h3>Total Due:</h3>
                     <h1 class="d-flex">
                         <!-- {{baseCurrencySymbol}}{{ totalDue | giddhCurrency }} -->
+
+
                         <span>
-                            <amount-field [amount]="totalDue" [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                            <amount-field [amount]="totalDue" [currencySymbol]="baseCurrencySymbol" [currencyCode]="baseCurrency">
                             </amount-field>
                         </span>
                         <span *ngIf="baseCurrency==='INR'">/-</span>
