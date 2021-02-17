@@ -742,7 +742,7 @@
                                 <div class="date-hsn-code">
                                     <div>
                                         <div class="col-xs-12">
-                                            <div class="wrap-hsn-box">
+                                            <div class="wrap-hsn-box d-flex justify-content-end text-right">
                                                 <div class="hsn-code"
                                                     (click)="toggleHsnSacDropDown(transaction)">
                                                     <label>{{transaction.showCodeType === 'hsn' ? 'HSN': 'SAC'}}:</label>
@@ -758,15 +758,16 @@
                                                 </div>
 
                                                 <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
-                                                    <span>
-                                                        <input type="radio" name="showCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
-                                                        <label for="hsnCodeType{{entryIdx}}">HSN Code</label>
-                                                    </span>
-                                                    <span>
-                                                        <input type="radio" name="showCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
-                                                        <label for="sacCodeType{{entryIdx}}">SAC Code</label>
-                                                    </span>
-                                                    
+                                                    <div class="d-flex wrap-hsn-sac mb-2">
+                                                        <span>
+                                                            <input type="radio" name="showCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
+                                                            <label for="hsnCodeType{{entryIdx}}">HSN Code</label>
+                                                        </span>
+                                                        <span>
+                                                            <input type="radio" name="showCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
+                                                            <label for="sacCodeType{{entryIdx}}">SAC Code</label>
+                                                        </span>
+                                                    </div>
                                                     <input type="text" maxLength="10" placeholder="HSN Number"
                                                         name="transaction.hsnNumber_{{entryIdx}}"
                                                         *ngIf="transaction.showCodeType === 'hsn'"
@@ -775,13 +776,12 @@
                                                         name="transaction.hsnNumber_{{entryIdx}}"
                                                         *ngIf="transaction.showCodeType === 'sac'"
                                                         [(ngModel)]="transaction.sacNumber" />
-                                                    <a>
-                                                    </a>
-                                                    <div class="btn-group m-t-10">
+
+                                                    <div class="btn-group mt-2 pt-1 d-flex">
                                                         <button class="btn btn-sm btn-success" type="button"
                                                             (click)="hsnSacDropdownShow=!hsnSacDropdownShow">Save
                                                         </button>
-                                                        <button class="btn btn-sm btn-primary" type="button"
+                                                        <button class="btn btn-sm btn-primary mr-0" type="button"
                                                             (click)="hideHsnSacEditPopup(transaction)">
                                                             Cancel
                                                         </button>
@@ -1466,15 +1466,16 @@
                                                             </span>
                                                         </div>
                                                         <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
-                                                            <span>
-                                                                <input type="radio" name="showCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
-                                                                <label for="hsnCodeType{{entryIdx}}">HSN Code</label>
-                                                            </span>
-                                                            <span>
-                                                                <input type="radio" name="showCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
-                                                                <label for="sacCodeType{{entryIdx}}">SAC Code</label>
-                                                            </span>
-                                                            
+                                                            <div class="d-flex wrap-hsn-sac mb-2">
+                                                                <span>
+                                                                    <input type="radio" name="showCodeType{{entryIdx}}" id="hsnCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="hsn">
+                                                                    <label for="hsnCodeType{{entryIdx}}">HSN Code</label>
+                                                                </span>
+                                                                <span>
+                                                                    <input type="radio" name="showCodeType{{entryIdx}}" id="sacCodeType{{entryIdx}}" [(ngModel)]="transaction.showCodeType" value="sac">
+                                                                    <label for="sacCodeType{{entryIdx}}">SAC Code</label>
+                                                                </span>
+                                                            </div>
                                                             <input type="text" maxLength="10" placeholder="HSN Number"
                                                                 name="transaction.hsnNumber_{{entryIdx}}"
                                                                 *ngIf="transaction.showCodeType === 'hsn'"
@@ -1483,14 +1484,12 @@
                                                                 name="transaction.hsnNumber_{{entryIdx}}"
                                                                 *ngIf="transaction.showCodeType === 'sac'"
                                                                 [(ngModel)]="transaction.sacNumber" />
-                                                            <a>
-                                                            </a>
-                                                            <div class="btn-group m-t-10">
+                                                            <div class="d-flex wrap-hsn-sac mb-2">
                                                                 <button class="btn btn-sm btn-success" type="button"
                                                                     (click)="hsnSacDropdownShow=!hsnSacDropdownShow">
                                                                     Save
                                                                 </button>
-                                                                <button class="btn btn-sm btn-primary" type="button"
+                                                                <button class="btn btn-sm btn-primary mr-0" type="button"
                                                                     (click)="hideHsnSacEditPopup(transaction)">
                                                                     Cancel
                                                                 </button>
