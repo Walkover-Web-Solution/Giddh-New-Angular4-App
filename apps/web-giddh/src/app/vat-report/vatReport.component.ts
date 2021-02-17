@@ -60,6 +60,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -76,6 +78,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.currentOrganizationType = this._generalService.currentOrganizationType;
         this.loadTaxDetails();
         this.saveLastState(this._generalService.companyUniqueName);
         this.currentPeriod = {
@@ -118,7 +121,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this._generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
                     } else {
