@@ -3230,11 +3230,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             transaction.showCodeType = "sac";
         } else if (!transaction.stockDetails?.sacNumber && !transaction.stockDetails?.hsnNumber) {
             if(this.inventorySettings?.manageInventory) {
-                transaction.hsnNumber = transaction.stockDetails.hsnNumber;
+                transaction.hsnNumber = "";
                 transaction.hsnOrSac = 'hsn';
                 transaction.showCodeType = "hsn";
             } else {
-                transaction.sacNumber = transaction.stockDetails.sacNumber;
+                transaction.sacNumber = "";
                 transaction.sacNumberExists = true;
                 transaction.hsnOrSac = 'sac';
                 transaction.showCodeType = "sac";
@@ -3263,11 +3263,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             transaction.showCodeType = "sac";
         } else if(!o.stock && !o.hsnNumber && !o.sacNumber) {
             if(this.inventorySettings?.manageInventory) {
-                transaction.hsnNumber = o.hsnNumber;
+                transaction.hsnNumber = "";
                 transaction.hsnOrSac = 'hsn';
                 transaction.showCodeType = "hsn";
             } else {
-                transaction.sacNumber = o.sacNumber;
+                transaction.sacNumber = "";
                 transaction.sacNumberExists = true;
                 transaction.hsnOrSac = 'sac';
                 transaction.showCodeType = "sac";
@@ -5249,11 +5249,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         }
 
-        if (this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        if (transaction.showCodeType === "hsn") {
             this.editingHsnSac = transaction.hsnNumber;
-        }
-
-        if (this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        } else if (transaction.showCodeType === "sac") {
             this.editingHsnSac = transaction.sacNumber;
         }
 
@@ -6149,12 +6147,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public hideHsnSacEditPopup(transaction: any): void {
-        if(!transaction.sacNumberExists || this.inventorySettings?.manageInventory) {
+        if (transaction.showCodeType === "hsn") {
             transaction.hsnNumber = this.editingHsnSac;
-        } else if(transaction.sacNumberExists || !this.inventorySettings?.manageInventory) {
+        } else if (transaction.showCodeType === "sac") {
             transaction.sacNumber = this.editingHsnSac;
-        } else {
-            transaction.hsnNumber = this.editingHsnSac;
         }
 
         this.hsnDropdownShow = !this.hsnDropdownShow;
