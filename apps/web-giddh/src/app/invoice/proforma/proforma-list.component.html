@@ -317,9 +317,10 @@
                             <!-- {{item?.amount?.currencyForAccount?.symbol}}
                             {{item.amount?.amountForAccount | giddhCurrency}} -->
                                 <span class="d-flex justify-content-end">
+
                                     <amount-field [amount]="item.amount?.amountForAccount"
                                         [currencySymbol]="item?.amount?.currencyForAccount?.symbol"
-                                        [currencyCode]="item?.currencyForAccount?.code">
+                                        [currencyCode]="item?.amount?.currencyForAccount?.code">
                                     </amount-field>
                             </span>
                         </td>

@@ -83,10 +83,11 @@
                                         <!-- <span class="sp-rupees" *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}
                                             <strong>{{invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong>
                                         </span> -->
-                                        <span class="sp-rupees d-flex justify-content-end" *ngIf="isMulticurrencyAccount">
+                                        <span class="sp-rupees d-flex justify-content-end"
+                                         *ngIf="isMulticurrencyAccount">
                                             <amount-field [amount]="invFormData.voucherDetails.balanceDue"
-                                                [currencySymbol]="isMulticurrencyAccount ? invFormData.accountDetails?.currencySymbol: false"
-                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                [currencySymbol]="isMulticurrencyAccount ? invFormData.accountDetails ?.currencySymbol: false"
+                                                [currencyCode]="isMulticurrencyAccount ? invFormData.accountDetails?.currency?.code : false">
                                             </amount-field>
                                         </span>
 
@@ -99,7 +100,7 @@
                                         <span class="sp-rupees d-flex justify-content-end" *ngIf='isMulticurrencyAccount'>
                                             <amount-field [amount]="invFormData.voucherDetails.balanceDue * exchangeRat"
                                                 [currencySymbol]="isMulticurrencyAccount ? baseCurrencySymbol: false"
-                                                [currencyCode]="false">
+                                                [currencyCode]="isMulticurrencyAccount ? companyCurrency: false">
                                             </amount-field>
                                         </span>
 
@@ -454,8 +455,8 @@
 
                                     <span class="sp-rupees d-flex justify-content-end" *ngIf="isMulticurrencyAccount">
                                         <amount-field [amount]="adjustPaymentData?.totalAdjustedAmount ? adjustPaymentBalanceDueData: invFormData.voucherDetails.balanceDue"
-                                            [currencySymbol]="isMulticurrencyAccount ? invFormData.accountDetails?.currencySymbol: false"
-                                            [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                            [currencySymbol]="(isMulticurrencyAccount) ? invFormData.accountDetails?.currencySymbol: false"
+                                            [currencyCode]="(isMulticurrencyAccount) ? invFormData.accountDetails?.currency?.code:false">
                                         </amount-field>
                                     </span>
 
@@ -466,26 +467,28 @@
                                     </span> -->
                                     <span class="sp-rupees d-flex justify-content-end" *ngIf='isMulticurrencyAccount'>
                                         <amount-field [amount]="invFormData.voucherDetails.balanceDue * exchangeRate"
-                                            [currencySymbol]="isMulticurrencyAccount ? baseCurrencySymbol: false" [currencyCode]="false">
+                                            [currencySymbol]="(isMulticurrencyAccount) ? baseCurrencySymbol: false"
+                                            [currencyCode]="(isMulticurrencyAccount) ? companyCurrency: flase">
                                         </amount-field>
                                     </span>
 
                                     <!-- <span class="sp-rupees" *ngIf='!isMulticurrencyAccount'>
+
                                         <ng-container *ngIf="adjustPaymentData?.totalAdjustedAmount">
                                             {{adjustPaymentBalanceDueData | giddhCurrency}}</ng-container>
+
                                         <ng-container *ngIf="!adjustPaymentData?.totalAdjustedAmount">
                                             {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</ng-container>
                                     </span> -->
 
                                     <span class="sp-rupees d-flex justify-content-end" *ngIf='!isMulticurrencyAccount'>
                                         <amount-field [amount]="adjustPaymentData?.totalAdjustedAmount ? adjustPaymentBalanceDueData: invFormData.voucherDetails.balanceDue"
-                                            [currencySymbol]="isMulticurrencyAccount ? baseCurrencySymbol: false" [currencyCode]="false">
+                                            [currencySymbol]="(isMulticurrencyAccount) ? baseCurrencySymbol: false"
+                                            [currencyCode]="(isMulticurrencyAccount) ? companyCurrency: false">
                                         </amount-field>
                                     </span>
-
                                 </p>
                             </div>
-
                         </div>
                         <!-- endregion -->
                     </div>
@@ -1034,7 +1037,6 @@
 
                                         <div class="description">
                                             {{transaction.description}}
-
                                         </div>
                                         <p class="small text-muted sku-and-custom-fields" *ngIf="transaction.sku_and_customfields">
                                             {{transaction.sku_and_customfields}}</p>
@@ -1095,7 +1097,8 @@
                                                             <amount-field
                                                                 [amount]="transaction.rate"
                                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ?invFormData.accountDetails?.currencySymbol : false"
-                                                                [currencyCode]="invFormData.accountDetails?.currency?.code" [ratePrecision]="true">
+                                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false"
+                                                                [ratePrecision]="true">
                                                             </amount-field>
                                                         </span>
 
@@ -1106,7 +1109,8 @@
                                                 <span>
                                                     <amount-field *ngIf="isMulticurrencyAccount && !isPurchaseInvoice"
                                                         [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) "
-                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                                        [currencySymbol]="baseCurrencySymbol"
+                                                        [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </span>
                                             </div>
@@ -1132,7 +1136,8 @@
                                                         <amount-field
                                                             [amount]="transaction.amount ? transaction.amount : '0'"
                                                             [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ?invFormData.accountDetails?.currencySymbol : false"
-                                                            [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                            [currencyCode]="
+                                                            (isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code : false">
                                                         </amount-field>
                                                     </span>
 
@@ -1150,13 +1155,13 @@
                                             <span *ngIf="!transaction.isStockTxn">
                                                 <amount-field *ngIf="isMulticurrencyAccount && !isPurchaseInvoice"
                                                     [amount]="transaction.amount * exchangeRate || 0" [currencySymbol]="baseCurrencySymbol"
-                                                    [currencyCode]="false">
+                                                    [currencyCode]="companyCurrency">
                                                 </amount-field>
                                             </span>
                                             <span *ngIf="transaction.isStockTxn">
                                                 <amount-field *ngIf="isMulticurrencyAccount && !isPurchaseInvoice"
                                                     [amount]="(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0))"
-                                                    [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                                    [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                                 </amount-field>
                                             </span>
 
@@ -1175,7 +1180,7 @@
                                                             <amount-field
                                                                 [amount]="entry.discountSum"
                                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ?invFormData.accountDetails?.currencySymbol : false"
-                                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code:false">
                                                             </amount-field>
                                                         </span>
 
@@ -1190,7 +1195,7 @@
                                         <div class="differ-currency d-flex justify-content-end">
                                             <span>
                                                 <amount-field *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" [amount]="entry.discountSum * exchangeRate"
-                                                    [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                                    [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                                 </amount-field>
                                             </span>
                                         </div>
@@ -1209,7 +1214,7 @@
                                                         <amount-field
                                                          [amount]="entry.taxSum + entry.cessSum"
                                                             [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ?invFormData.accountDetails?.currencySymbol : false"
-                                                            [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code : false">
                                                         </amount-field>
                                                     </span>
 
@@ -1225,7 +1230,7 @@
                                             <span>
                                                 <amount-field *ngIf="isMulticurrencyAccount && !isPurchaseInvoice"
                                                     [amount]="(entry.taxSum + entry.cessSum) * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                                    [currencyCode]="false">
+                                                    [currencyCode]="companyCurrency">
                                                 </amount-field>
                                             </span>
                                         </div>
@@ -1243,7 +1248,8 @@
                                                             <amount-field
                                                             [amount]="transaction.total"
                                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ?invFormData.accountDetails?.currencySymbol : false"
-                                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ?
+                                                                invFormData.accountDetails?.currency?.code : false">
                                                             </amount-field>
                                                             <br>
                                                     </span>
@@ -1257,7 +1263,7 @@
                                                             <amount-field *ngIf="isMulticurrencyAccount && !isPurchaseInvoice"
                                                             [amount]="entry.otherTaxSum"
                                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ?invFormData.accountDetails?.currencySymbol : false"
-                                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                                             </amount-field>
                                                     </span>
 
@@ -1273,7 +1279,7 @@
                                                         <amount-field *ngIf="isMulticurrencyAccount && !isPurchaseInvoice"
                                                             [amount]="entry.otherTaxSum * exchangeRate"
                                                             [currencySymbol]="baseCurrencySymbol"
-                                                            [currencyCode]="false">
+                                                            [currencyCode]="companyCurrency">
                                                         </amount-field>
                                                     </span>
 
@@ -1290,7 +1296,7 @@
                                                 <span>
                                                     <amount-field *ngIf="isMulticurrencyAccount && !isPurchaseInvoice"
                                                         [amount]="transaction.convertedTotal" [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="false">
+                                                        [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </span>
                                             </div>
@@ -1473,7 +1479,7 @@
                                                  -->
                                                  <span>
                                                     <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
-                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="false" [ratePrecision]="true">
+                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency" [ratePrecision]="true">
                                                     </amount-field>
                                                 </span>
                                             </div>
@@ -1499,13 +1505,13 @@
 
                                                 <span *ngIf="!transaction.isStockTxn">
                                                     <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
-                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </span>
 
                                                 <span *ngIf="transaction.isStockTxn">
                                                     <amount-field [amount]="(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0))"
-                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </span>
 
@@ -1532,7 +1538,7 @@
                                                 <span>
                                                     <amount-field
                                                         [amount]="entry.discountSum * exchangeRate"
-                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </span>
 
@@ -1566,7 +1572,7 @@
 
                                                 <span>
                                                     <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="false">
+                                                        [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </span>
 
@@ -1627,7 +1633,7 @@
 
                                                 <span>
                                                     <amount-field [amount]="entry.otherTaxSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="false">
+                                                        [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </span>
 
@@ -1639,7 +1645,7 @@
 
                                                 <span>
                                                     <amount-field [amount]="transaction.convertedTotal" [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="false">
+                                                        [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </span>
 
@@ -1781,8 +1787,8 @@
                                             <div class="table-cell figure-cell">
                                                 <span class="d-flex justify-content-end">
                                                     <amount-field [amount]="invFormData?.voucherDetails?.subTotal"
-                                                        [currencySymbol]="invFormData?.accountDetails?.currencySymbol"
-                                                        [currencyCode]="invFormData?.accountDetails?.currency?.code">
+                                                        [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currencySymbol: false"
+                                                        [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currency?.code : false">
                                                     </amount-field>
                                                 </span>
                                             </div>
@@ -1793,8 +1799,8 @@
                                             <div class="table-cell figure-cell">
                                                 <span class="d-flex justify-content-end">
                                                     <amount-field [amount]="invFormData?.voucherDetails.totalDiscount * -1"
-                                                        [currencySymbol]="invFormData?.accountDetails?.currencySymbol"
-                                                        [currencyCode]="invFormData?.accountDetails?.currency?.code">
+                                                        [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currencySymbol: false"
+                                                        [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currency?.code: false">
                                                     </amount-field>
                                                 </span>
                                             </div>
@@ -1808,8 +1814,8 @@
                                                     <span class="d-flex justify-content-end">
                                                         <amount-field
                                                             [amount]="invFormData?.voucherDetails.totalTaxableValue"
-                                                            [currencySymbol]="invFormData?.accountDetails?.currencySymbol"
-                                                            [currencyCode]="invFormData?.accountDetails?.currency?.code">
+                                                            [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currencySymbol: false"
+                                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currency?.code : false">
                                                         </amount-field>
                                                     </span>
                                             </div>
@@ -1824,8 +1830,8 @@
                                                     <span class="d-flex justify-content-end">
                                                         <amount-field
                                                             [amount]="invFormData?.voucherDetails.gstTaxesTotal"
-                                                            [currencySymbol]="invFormData?.accountDetails?.currencySymbol"
-                                                            [currencyCode]="invFormData?.accountDetails?.currency?.code">
+                                                            [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currencySymbol: false"
+                                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currency?.code: false">
                                                         </amount-field>
                                                     </span>
 
@@ -1840,8 +1846,8 @@
                                                     <span class="d-flex justify-content-end">
                                                         <amount-field
                                                             [amount]="invFormData?.voucherDetails.cessTotal"
-                                                            [currencySymbol]="invFormData?.accountDetails?.currencySymbol"
-                                                            [currencyCode]="invFormData?.accountDetails?.currency?.code">
+                                                            [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currencySymbol: false"
+                                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currency?.code: false">
                                                         </amount-field>
                                                     </span>
                                             </div>
@@ -1862,8 +1868,8 @@
                                                 <span class="d-flex justify-content-end">
                                                     <amount-field
                                                     [amount]="calculatedRoundOff"
-                                                        [currencySymbol]="invFormData?.accountDetails?.currencySymbol"
-                                                        [currencyCode]="invFormData?.accountDetails?.currency?.code">
+                                                        [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currencySymbol: false"
+                                                        [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData?.accountDetails?.currency?.code: false">
                                                     </amount-field>
                                                 </span>
 
@@ -1889,7 +1895,7 @@
 
                                                         <span class="d-flex justify-content-end">
                                                             <amount-field [amount]="invFormData.voucherDetails.grandTotal"
-                                                                [currencySymbol]="invFormData.accountDetails?.currencySymbol" [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                                [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol : false" [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                                             </amount-field>
                                                         </span>
 
@@ -1923,7 +1929,7 @@
                                                 <span class="d-flex justify-content-end">
                                                     <amount-field [amount]="invFormData.voucherDetails.tcsTotal"
                                                         [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
-                                                        [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                        [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                                     </amount-field>
                                                 </span>
 
@@ -1940,10 +1946,9 @@
                                                         <amount-field [amount]="invFormData.voucherDetails.tdsTotal"
                                                             [currencySymbol]="
                                                             (isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
-                                                            [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                                         </amount-field>
                                                     </span>
-
                                             </div>
                                         </div>
 
@@ -2183,7 +2188,8 @@
 
                                                         <amount-field
                                                         [amount]="transaction.rate"
-                                                            [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails.currencySymbol: false"  [currencyCode]="invFormData.accountDetails?.currency?.code" [ratePrecision]="true">
+                                                            [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails.currencySymbol: false"  
+                                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false" [ratePrecision]="true">
                                                         </amount-field>
                                                     </p>
                                                     <div *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" class="differ-currency">
@@ -2191,7 +2197,7 @@
                                                         <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span> -->
 
                                                         <amount-field
-                                                        [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)" [currencySymbol]="baseCurrencySymbol"  [currencyCode]="false" [ratePrecision]="true">
+                                                        [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)" [currencySymbol]="baseCurrencySymbol"  [currencyCode]="companyCurrency" [ratePrecision]="true">
                                                         </amount-field>
 
                                                     </div>
@@ -2213,7 +2219,7 @@
 
                                                     <amount-field
                                                         [amount]="(transaction.amount ? transaction.amount : '0')"
-                                                        [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails.currencySymbol: false"  [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                        [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails.currencySymbol: false"  [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                                     </amount-field>
 
                                                 </p>
@@ -2227,12 +2233,12 @@
                                                     <amount-field *ngIf="!transaction.isStockTxn"
                                                     [amount]="(transaction.amount * exchangeRate || 0)"
                                                         [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="false">
+                                                        [currencyCode]="companyCurrency">
                                                     </amount-field>
 
                                                     <amount-field *ngIf="transaction.isStockTxn"
                                                         [amount]="(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0))"
-                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                                        [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                                     </amount-field>
 
                                                 </div>
@@ -2250,7 +2256,7 @@
                                                         {{ entry.discountSum }} -->
 
                                                         <amount-field [amount]="entry.discountSum"
-                                                            [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails.currencySymbol : false" [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                            [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails.currencySymbol : false" [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                                         </amount-field>
 
                                                 </p>
@@ -2260,7 +2266,7 @@
 
                                                     <amount-field [amount]="entry.discountSum * exchangeRate"
                                                         [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="false">
+                                                        [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </div>
                                             </div>
@@ -2279,7 +2285,7 @@
 
                                                         <amount-field  [amount]="entry.taxSum"
                                                             [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails.currencySymbol : false"
-                                                            [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                                         </amount-field>
 
                                                 </p>
@@ -2289,7 +2295,7 @@
 
                                                     <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
                                                         [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="false">
+                                                        [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </div>
                                             </div>
@@ -2306,7 +2312,7 @@
 
                                                         <amount-field [amount]="transaction.total"
                                                             [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails.currencySymbol : false"
-                                                            [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                                         </amount-field>
                                                 </p>
                                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
@@ -2315,7 +2321,7 @@
 
                                                     <amount-field [amount]="transaction.convertedTotal"
                                                         [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="false">
+                                                        [currencyCode]="companyCurrency">
                                                     </amount-field>
 
                                                 </div>
@@ -2537,7 +2543,7 @@
 
                                                     <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
                                                           [currencySymbol]="baseCurrencySymbol"
-                                                          [currencyCode]="false" [ratePrecision]="true">
+                                                          [currencyCode]="companyCurrency" [ratePrecision]="true">
                                                      </amount-field>
                                                 </div>
                                             </div>
@@ -2572,12 +2578,12 @@
 
                                                     <amount-field *ngIf="!transaction.isStockTxn" [amount]="(transaction.amount * exchangeRate || 0)"
                                                       [currencySymbol]="baseCurrencySymbol"
-                                                      [currencyCode]="false">
+                                                      [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                     <amount-field *ngIf="transaction.isStockTxn"
                                                     [amount]="(transaction.quantity * ((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0))"
                                                           [currencySymbol]="baseCurrencySymbol"
-                                                          [currencyCode]="false">
+                                                          [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </div>
                                             </div>
@@ -2610,7 +2616,7 @@
                                                     <amount-field
                                                       [amount]="entry.discountSum * exchangeRate"
                                                       [currencySymbol]="baseCurrencySymbol"
-                                                      [currencyCode]="false">
+                                                      [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </div>
                                             </div>
@@ -2646,7 +2652,7 @@
 
                                                     <amount-field [amount]="(entry.taxSum + entry.cessSum) *  exchangeRate"
                                                       [currencySymbol]="baseCurrencySymbol"
-                                                      [currencyCode]="false">
+                                                      [currencyCode]="companyCurrency">
                                                     </amount-field>
                                                 </div>
 
@@ -2711,7 +2717,7 @@
                                                             <amount-field
                                                                 [amount]="entry.otherTaxSum * exchangeRate "
                                                                   [currencySymbol]="baseCurrencySymbol"
-                                                                  [currencyCode]="false">
+                                                                  [currencyCode]="companyCurrency">
                                                             </amount-field>
                                                     </span>
                                                 </div>
@@ -2719,7 +2725,7 @@
                                                     <!-- <span>{{baseCurrencySymbol}}</span>
                                                     <span>{{transaction.convertedTotal | giddhCurrency}}</span> -->
 
-                                                    <amount-field [amount]="transaction.convertedTotal" [currencySymbol]="baseCurrencySymbol"  [currencyCode]="false"> </amount-field>
+                                                    <amount-field [amount]="transaction.convertedTotal" [currencySymbol]="baseCurrencySymbol"  [currencyCode]="companyCurrency"> </amount-field>
                                                 </div>
 
                                                 <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
@@ -2831,7 +2837,7 @@
                                             <amount-field
                                             [amount]="invFormData.voucherDetails.subTotal"
                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
-                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
                                 </div>
@@ -2846,7 +2852,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="invFormData.voucherDetails.totalDiscount * -1"
                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
-                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
                                 </div>
@@ -2862,7 +2868,7 @@
                                             <amount-field
                                                 [amount]="invFormData.voucherDetails.totalTaxableValue"
                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
-                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
                                 </div>
@@ -2878,7 +2884,7 @@
                                             <amount-field
                                                 [amount]="invFormData.voucherDetails.gstTaxesTotal"
                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
-                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
                                 </div>
@@ -2893,7 +2899,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="invFormData.voucherDetails.cessTotal"
                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
-                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
 
@@ -2915,7 +2921,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="calculatedRoundOff"
                                                 [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
-                                                [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
                                     </strong>
@@ -2936,7 +2942,7 @@
                                             <span class="d-flex justify-content-end">
                                                 <amount-field [amount]="invFormData.voucherDetails.grandTotal"
                                                     [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
-                                                    [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                    [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                                 </amount-field>
                                             </span>
                                     </strong>
@@ -2962,8 +2968,8 @@
                                     <!-- {{invFormData.voucherDetails.tcsTotal | giddhCurrency}} -->
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="invFormData.voucherDetails.tcsTotal"
-                                            [currencySymbol]="false"
-                                            [currencyCode]="false">
+                                            [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currencySymbol: false"
+                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.accountDetails?.currency?.code: false">
                                         </amount-field>
                                     </span>
                                 </div>
@@ -2974,7 +2980,9 @@
                                 <div class="table-cell figure-cell">
                                     <!-- {{invFormData.voucherDetails.tdsTotal | giddhCurrency}} -->
                                     <span class="d-flex justify-content-end">
-                                        <amount-field [amount]="invFormData.voucherDetails.tdsTotal" [currencySymbol]="false" [currencyCode]="false">
+                                        <amount-field [amount]="invFormData.voucherDetails.tdsTotal"
+                                         [currencySymbol]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.voucherDetails?.currencySymbol: false"
+                                            [currencyCode]="(isMulticurrencyAccount && !isPurchaseInvoice) ? invFormData.voucherDetails?.currency?.code: false">
                                         </amount-field>
                                     </span>
                                 </div>
@@ -3028,7 +3036,8 @@
                                                             {{invFormData.voucherDetails.balanceDue | giddhCurrency}}
                                                        </span> -->
                                                             <amount-field [amount]="invFormData.voucherDetails.balanceDue" [currencySymbol]="
-                                                            isMulticurrencyAccount ? invFormData.accountDetails?.currencySymbol:false" [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                            isMulticurrencyAccount ? invFormData.accountDetails?.currencySymbol:false"
+                                                            [currencyCode]="isMulticurrencyAccount ? invFormData.accountDetails?.currency?.code: false">
                                                             </amount-field>
                                                         </span>
                                                     <label class="pull-right pt-1">Amount</label>
@@ -3043,14 +3052,14 @@
 
                                                         <span>
                                                             <amount-field [amount]="invFormData.voucherDetails.balanceDue"
-                                                                [currencySymbol]="isMulticurrencyAccount ? invFormData.accountDetails?.currencySymbol:false" [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                                                [currencySymbol]="isMulticurrencyAccount ? invFormData.accountDetails?.currencySymbol:false"
+                                                                [currencyCode]="isMulticurrencyAccount ? invFormData.accountDetails?.currency?.code: false">
                                                             </amount-field>
                                                         </span>
 
                                                     </strong>
                                                     <strong class="pull-right">Balance Due</strong>
                                                 </li>
-
                                             </ul>
                                         </div>
 
@@ -3069,7 +3078,7 @@
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="invFormData.voucherDetails.balanceDue"
                                             [currencySymbol]="false"
-                                            [currencyCode]="false">
+                                            [currencyCode]="companyCurrency">
                                         </amount-field>
                                     </span>
                                 </div>

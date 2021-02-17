@@ -66,7 +66,7 @@
                                             <!-- {{item?.grandTotal | giddhCurrency}} -->
 
                                             <amount-field [amount]="item?.grandTotal"
-                                                [currencySymbol]="false" [currencyCode]="false">
+                                                [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="item?.account?.currency?.code">
                                             </amount-field>
 
                                         </div>
