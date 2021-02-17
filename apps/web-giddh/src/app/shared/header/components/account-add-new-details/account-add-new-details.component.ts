@@ -33,6 +33,7 @@ import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwit
 import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 
 @Component({
     selector: 'account-add-new-details',
@@ -148,6 +149,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         totalPages: 0,
         query: ''
     };
+    /** This will hold inventory settings */
+    public inventorySettings: any;
 
     constructor(
         private _fb: FormBuilder,
@@ -156,7 +159,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
         private groupService: GroupService,
-        private groupWithAccountsAction: GroupWithAccountsAction) {
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private invoiceService: InvoiceService) {
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup),takeUntil(this.destroyed$));
         this.getCountry();
@@ -201,11 +205,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
-                sac.reset();
+                //sac.reset();
                 hsn.enable();
                 sac.disable();
             } else {
-                hsn.reset();
+                //hsn.reset();
                 sac.enable();
                 hsn.disable();
             }
@@ -410,8 +414,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }),
             hsnOrSac: [''],
             currency: [''],
-            hsnNumber: [{value: '', disabled: false}],
-            sacNumber: [{value: '', disabled: false}],
+            hsnNumber: [''],
+            sacNumber: [''],
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
@@ -427,6 +431,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });
+        this.getInvoiceSettings();
     }
 
     public initialGstDetailsForm(): FormGroup {
@@ -643,7 +648,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete accountRequest['hsnOrSac'];
             delete accountRequest['hsnNumber'];
             delete accountRequest['sacNumber'];
-
         }
 
         if (!this.showBankDetail) {
@@ -659,6 +663,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
+
+        accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
+        accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
         // if (this.showVirtualAccount && (!accountRequest.mobileNo || !accountRequest.email)) {
         //   this._toaster.errorToast('Mobile no. & email Id is mandatory');
@@ -1256,6 +1263,26 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
             this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
             this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+        });
+    }
+
+    /**
+     * This will get invoice settings
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = _.cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if(this.inventorySettings?.manageInventory) {
+                    this.addAccountForm.get("hsnOrSac").patchValue("hsn");
+                } else {
+                    this.addAccountForm.get("hsnOrSac").patchValue("sac");
+                }
+            }
         });
     }
 }

@@ -52,6 +52,7 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 
 @Component({
     selector: 'account-update-new-details',
@@ -160,8 +161,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isDiscountSaveDisable$: Observable<boolean> = observableOf(true);
     /** This will hold active parent group */
     public activeParentGroup: string = "";
+    /** This will hold inventory settings */
+    public inventorySettings: any;
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction, private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
+    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction, private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService, private invoiceService: InvoiceService) {
         this.discountList$ = this.store.pipe(select(s => s.settings.discount.discountList), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
@@ -296,12 +299,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 // hsn/sac enable disable
                 if (acc.hsnNumber) {
-                    this.addAccountForm.get('sacNumber').disable();
-                    this.addAccountForm.get('hsnNumber').enable();
                     this.addAccountForm.get('hsnOrSac').patchValue('hsn');
                 } else if (acc.sacNumber) {
-                    this.addAccountForm.get('hsnNumber').disable();
-                    this.addAccountForm.get('sacNumber').enable();
                     this.addAccountForm.get('hsnOrSac').patchValue('sac');
                 }
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
@@ -328,11 +327,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
             if (a === 'hsn') {
-                sac.reset();
+                //sac.reset();
                 hsn.enable();
                 sac.disable();
             } else {
-                hsn.reset();
+                //hsn.reset();
                 sac.enable();
                 hsn.disable();
             }
@@ -619,8 +618,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }),
             hsnOrSac: [''],
             currency: [''],
-            hsnNumber: [{ value: '', disabled: false }],
-            sacNumber: [{ value: '', disabled: false }],
+            hsnNumber: [''],
+            sacNumber: [''],
             accountBankDetails: this._fb.array([
                 this._fb.group({
                     bankName: [''],
@@ -638,8 +637,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }),
             closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
-            customFields: this._fb.array([]),
+            customFields: this._fb.array([])
         });
+        this.getInvoiceSettings();
     }
 
     public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
@@ -908,6 +908,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('currency').patchValue(this.selectedCurrency, { onlySelf: true });
             accountRequest.currency = this.selectedCurrency;
         }
+
+        accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
+        accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
+
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest
@@ -1631,4 +1635,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.isDiscountSaveDisable$ = observableOf(false);
     }
 
+    /**
+     * This will get invoice settings
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = _.cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if(this.inventorySettings?.manageInventory) {
+                    this.addAccountForm.get("hsnOrSac").patchValue("hsn");
+                } else {
+                    this.addAccountForm.get("hsnOrSac").patchValue("sac");
+                }
+            }
+        });
+    }
 }
