@@ -544,7 +544,7 @@
                                                 <span class="d-flex justify-content-end">
                                                     <amount-field [amount]="transaction.rate"
                                                         [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol:false"
-                                                        [currencyCode]="purchaseOrder.accountDetails.currency?.code" [ratePrecision]="true">
+                                                        [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code:false" [ratePrecision]="true">
                                                     </amount-field>
                                                 </span>
                                         </div>
@@ -557,7 +557,7 @@
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
                                             [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="false" [ratePrecision]="true">
+                                            [currencyCode]="companyCurrency" [ratePrecision]="true">
                                         </amount-field>
                                     </span>
 
@@ -575,7 +575,7 @@
                                             <span class="d-flex justify-content-end">
                                                 <amount-field [amount]="transaction.amount"
                                                     [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol:false"
-                                                    [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code: false">
                                                 </amount-field>
                                             </span>
                                     </div>
@@ -588,7 +588,7 @@
                                 <span class="d-flex justify-content-end">
                                     <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
                                         [currencySymbol]="baseCurrencySymbol"
-                                        [currencyCode]="false">
+                                        [currencyCode]="companyCurrency">
                                     </amount-field>
                                 </span>
                             </div>
@@ -603,7 +603,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="entry.discountSum"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol:false"
-                                                [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code:false">
                                             </amount-field>
                                         </span>
 
@@ -617,7 +617,7 @@
                                 <span class="d-flex justify-content-end">
                                     <amount-field [amount]="entry.discountSum * exchangeRate"
                                         [currencySymbol]="baseCurrencySymbol"
-                                        [currencyCode]="false">
+                                        [currencyCode]="companyCurrency">
                                     </amount-field>
                                 </span>
 
@@ -635,7 +635,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="entry.taxSum + entry.cessSum"
                                             [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbo : false"
-                                                [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code: false">
                                             </amount-field>
                                         </span>
                                     </div>
@@ -648,7 +648,7 @@
                                 <span class="d-flex justify-content-end">
                                     <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
                                         [currencySymbol]="baseCurrencySymbol"
-                                        [currencyCode]="false">
+                                        [currencyCode]="companyCurrency">
                                     </amount-field>
                                 </span>
                             </div>
@@ -663,8 +663,9 @@
                                                 {{purchaseOrder.accountDetails.currencySymbol}}
                                             </span>{{transaction.total | giddhCurrency}} -->
                                             <span class="d-flex justify-content-end">
-                                                <amount-field [amount]="transaction.total" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                    [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                                <amount-field [amount]="transaction.total"
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code:false">
                                                 </amount-field>
                                             </span>
                                         </span>
@@ -678,7 +679,7 @@
                                             <span class="d-flex justify-content-end">
                                                 <amount-field [amount]="entry.otherTaxSum"
                                                     [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                    [currencyCode]="purchaseOrder.accountDetails.currency?.code">
+                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currency?.code: false">
                                                 </amount-field>
                                             </span>
                                         </span>
@@ -692,7 +693,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="entry.otherTaxSum * exchangeRate"
                                                 [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="false">
+                                                [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -704,7 +705,7 @@
                                     <span>{{transaction.total * exchangeRate | giddhCurrency}}</span> -->
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="false">
+                                            [currencyCode]="companyCurrency">
                                         </amount-field>
                                     </span>
 
@@ -860,7 +861,7 @@
 
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="false" [ratePrecision]="true">
+                                            [currencyCode]="companyCurrency" [ratePrecision]="true">
                                         </amount-field>
                                     </span>
 
@@ -884,7 +885,7 @@
 
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
-                                            [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                            [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency">
                                         </amount-field>
                                     </span>
 
@@ -910,7 +911,7 @@
 
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="entry.discountSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="false">
+                                            [currencyCode]="companyCurrency">
                                         </amount-field>
                                     </span>
 
@@ -940,7 +941,7 @@
 
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="false">
+                                            [currencyCode]="companyCurrency">
                                         </amount-field>
                                     </span>
 
@@ -1000,7 +1001,7 @@
 
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="entry.otherTaxSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="false">
+                                            [currencyCode]="companyCurrency">
                                         </amount-field>
                                     </span>
 
@@ -1011,7 +1012,7 @@
 
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="false">
+                                            [currencyCode]="companyCurrency">
                                         </amount-field>
                                     </span>
 
@@ -1106,7 +1107,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="purchaseOrder.voucherDetails.subTotal"
                                             [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
                                 </div>
@@ -1114,6 +1115,7 @@
 
                             <div class="table-row">
                                 <div class="table-cell">Discount</div>
+
                                 <div class="table-cell figure-cell">
                                     <!-- <span
                                         *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
@@ -1123,7 +1125,8 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="purchaseOrder.voucherDetails.totalDiscount * -1"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code:false">
+                                                {{purchaseOrder.accountDetails?.currency?.code}}
                                             </amount-field>
                                         </span>
                                 </div>
@@ -1140,7 +1143,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="purchaseOrder.voucherDetails.totalTaxableValue"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
 
@@ -1156,7 +1159,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="purchaseOrder.voucherDetails.gstTaxesTotal"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: flase">
                                             </amount-field>
                                         </span>
 
@@ -1172,7 +1175,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="purchaseOrder.voucherDetails.cessTotal"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
                                 </div>
@@ -1192,18 +1195,18 @@
                                         {{calculatedRoundOff | giddhCurrency}} -->
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="calculatedRoundOff"
-                                                [currencySymbol]="isMulticurrencyAccount ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported ) ? purchaseOrder.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
-
+                                        {{purchaseOrder.accountDetails?.currency?.code}}
                                     </strong>
 
                                 </div>
 
                             </div>
 
-                            <div class="table-row ">
+                            <div class="table-row">
 
                                 <div class="table-cell bigger-dollar">
                                     <strong>Total
@@ -1224,8 +1227,9 @@
                                             <span class="d-flex justify-content-end">
                                                 <amount-field [amount]="purchaseOrder.voucherDetails.grandTotal"
                                                     [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
                                                 </amount-field>
+
                                             </span>
                                     </strong>
                                 </div>
@@ -1257,7 +1261,7 @@
                                     <span class="d-flex justify-content-end">
                                         <amount-field [amount]="purchaseOrder.voucherDetails.tcsTotal"
                                             [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                            [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code:false">
                                         </amount-field>
                                     </span>
 
@@ -1273,7 +1277,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="ppurchaseOrder.voucherDetails.tdsTotal "
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol :false"
-                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ?purchaseOrder.accountDetails?.currency?.code:false">
                                             </amount-field>
                                         </span>
                                 </div>
@@ -1307,7 +1311,7 @@
                                         <span class="d-flex justify-content-end">
                                             <amount-field [amount]="transaction.stockDetails?.name"
                                                 [currencySymbol]="false"
-                                                [currencyCode]="false">
+                                                [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
                                 </div>
@@ -1356,7 +1360,7 @@
 
                                             <span>
                                                 <amount-field [amount]="transaction.rate"
-                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported)?purchaseOrder.accountDetails.currencySymbol:false" [currencyCode]="purchaseOrder.accountDetails?.currency?.code" [ratePrecision]="true">
+                                                [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported)?purchaseOrder.accountDetails.currencySymbol:false" [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ?purchaseOrder.accountDetails?.currency?.code:false" [ratePrecision]="true">
                                                 </amount-field>
                                             </span>
 
@@ -1369,7 +1373,7 @@
                                             <span>
                                                 <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)"
                                                     [currencySymbol]="baseCurrencySymbol"
-                                                    [currencyCode]="false">
+                                                    [currencyCode]="companyCurrency">
                                                 </amount-field>
                                             </span>
                                         </div>
@@ -1393,7 +1397,7 @@
                                     <span>
                                         <amount-field [amount]="transaction.amount"
                                             [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported)?purchaseOrder.accountDetails.currencySymbol:false"
-                                            [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                            [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                         </amount-field>
                                     </span>
 
@@ -1406,7 +1410,7 @@
                                         <span>
                                             <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
                                                 [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="false">
+                                                [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1425,7 +1429,7 @@
 
                                             <span>
                                                 <amount-field [amount]="entry.discountSum" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code:false">
                                                 </amount-field>
                                             </span>
                                     </p>
@@ -1436,7 +1440,7 @@
                                         <span>
                                             <amount-field [amount]="entry.discountSum * exchangeRate"
                                                 [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="false">
+                                                [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1458,7 +1462,7 @@
 
                                             <span>
                                                 <amount-field [amount]="entry.taxSum" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
                                                 </amount-field>
                                             </span>
                                     </p>
@@ -1469,7 +1473,7 @@
                                         <span>
                                             <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
                                                 [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="false">
+                                                [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
                                     </div>
@@ -1488,7 +1492,7 @@
                                         <span>
                                             <amount-field [amount]="transaction.total"
                                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                             </amount-field>
                                         </span>
 
@@ -1500,7 +1504,7 @@
                                         <span>
                                             <amount-field [amount]="transaction.total * exchangeRate"
                                                 [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="false">
+                                                [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1684,7 +1688,7 @@
 
                                         <span>
                                             <amount-field [amount]="((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0)" [currencySymbol]="baseCurrencySymbol"
-                                            [currencyCode]="false" [ratePrecision]="true">
+                                            [currencyCode]="companyCurrency" [ratePrecision]="true">
                                             </amount-field>
                                         </span>
 
@@ -1719,7 +1723,7 @@
 
                                         <span>
                                             <amount-field [amount]="(transaction.amount * exchangeRate || 0)"
-                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="false" [ratePrecision]="true">
+                                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="companyCurrency" [ratePrecision]="true">
                                             </amount-field>
                                         </span>
                                     </div>
@@ -1753,7 +1757,7 @@
 
                                         <span>
                                             <amount-field [amount]="entry.discountSum * exchangeRate " [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="false" [ratePrecision]="true">
+                                                [currencyCode]="companyCurrency" [ratePrecision]="true">
                                             </amount-field>
                                         </span>
 
@@ -1791,7 +1795,7 @@
 
                                         <span>
                                             <amount-field [amount]="(entry.taxSum + entry.cessSum) * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="false" [ratePrecision]="true">
+                                                [currencyCode]="companyCurrency" [ratePrecision]="true">
                                             </amount-field>
                                         </span>
 
@@ -1858,7 +1862,7 @@
 
                                         <span>
                                             <amount-field [amount]="entry.otherTaxSum * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="false">
+                                                [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1869,7 +1873,7 @@
 
                                         <span>
                                             <amount-field [amount]="transaction.total * exchangeRate" [currencySymbol]="baseCurrencySymbol"
-                                                [currencyCode]="false">
+                                                [currencyCode]="companyCurrency">
                                             </amount-field>
                                         </span>
 
@@ -1956,13 +1960,14 @@
                 <div class="table-row">
                     <div class="table-cell">Total Amount</div>
                     <div class="table-cell figure-cell">
-                        <!-- <span
+                        <span
                             *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
-                        </span>{{purchaseOrder.voucherDetails.subTotal | giddhCurrency}} -->
+                        </span>{{purchaseOrder.voucherDetails.subTotal | giddhCurrency}} shal
 
                         <span class="d-flex justify-content-end">
-                            <amount-field [amount]="purchaseOrder.voucherDetails.subTotal" [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.subTotal"
+                                 [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
+                                [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                             </amount-field>
                         </span>
 
@@ -1971,6 +1976,7 @@
 
                 <div class="table-row">
                     <div class="table-cell">Discount</div>
+
                     <div class="table-cell figure-cell">
                         <!-- <span
                             *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>
@@ -1979,7 +1985,7 @@
                             <span class="d-flex justify-content-end">
                                 <amount-field [amount]="purchaseOrder.voucherDetails.subTotal"
                                     [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code : false">
                                 </amount-field>
                             </span>
 
@@ -1995,7 +2001,7 @@
                             <span class="d-flex justify-content-end">
                                 <amount-field [amount]="purchaseOrder.voucherDetails.totalTaxableValue"
                                     [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                 </amount-field>
                             </span>
                     </div>
@@ -2010,7 +2016,7 @@
                             <span class="d-flex justify-content-end">
                                 <amount-field [amount]="purchaseOrder.voucherDetails.gstTaxesTotal"
                                     [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                 </amount-field>
                             </span>
 
@@ -2026,7 +2032,7 @@
                             <span class="d-flex justify-content-end">
                                 <amount-field [amount]="purchaseOrder.voucherDetails.cessTotal"
                                     [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                    [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                 </amount-field>
                             </span>
 
@@ -2047,7 +2053,7 @@
                             <span class="d-flex justify-content-end">
                                 <amount-field [amount]="calculatedRoundOff"
                                     [currencySymbol]="isMulticurrencyAccount ? purchaseOrder.accountDetails.currencySymbol : false"
-                                    [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                    [currencyCode]="isMulticurrencyAccount ? purchaseOrder.accountDetails?.currency?.code : false">
                                 </amount-field>
                             </span>
 
@@ -2073,7 +2079,7 @@
                                 <span class="d-flex justify-content-end">
                                     <amount-field [amount]="purchaseOrder.voucherDetails.grandTotal"
                                         [currencySymbol]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails.currencySymbol : false"
-                                        [currencyCode]="purchaseOrder.accountDetails?.currency?.code">
+                                        [currencyCode]="(isMulticurrencyAccount && isMultiCurrencySupported) ? purchaseOrder.accountDetails?.currency?.code: false">
                                     </amount-field>
                                 </span>
                         </strong>
@@ -2103,7 +2109,7 @@
                         <span class="d-flex justify-content-end">
                             <amount-field [amount]="purchaseOrder.voucherDetails.tcsTotal"
                                 [currencySymbol]="false"
-                                [currencyCode]="false">
+                                [currencyCode]="companyCurrency">
                             </amount-field>
                         </span>
 
@@ -2115,7 +2121,7 @@
                     <div class="table-cell figure-cell">
                         <!-- {{purchaseOrder.voucherDetails.tdsTotal | giddhCurrency}} -->
                         <span class="d-flex justify-content-end">
-                            <amount-field [amount]="purchaseOrder.voucherDetails.tdsTotal" [currencySymbol]="false" [currencyCode]="false">
+                            <amount-field [amount]="purchaseOrder.voucherDetails.tdsTotal" [currencySymbol]="false" [currencyCode]="companyCurrency">
                             </amount-field>
                         </span>
                     </div>

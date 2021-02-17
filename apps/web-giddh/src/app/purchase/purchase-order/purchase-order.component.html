@@ -150,7 +150,7 @@
                     </th>
 
                     <th width="15%" class="min-wid-amt">
-                        <div class="d-flex">
+                        <div class="d-flex justify-content-end">
                             <div> Total Amt.</div>
                             <div class="icon-pointer">
                                 <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
@@ -201,7 +201,7 @@
                     </td>
                     <td data-title="Total Amt.">
                         <span class="d-flex justify-content-end">
-                            <amount-field [amount]="item.grandTotal?.amountForAccount " [currencySymbol]="baseCurrencySymbol"
+                            <amount-field [amount]="item.grandTotal?.amountForAccount" [currencySymbol]="false"
                                 [currencyCode]="false">
                             </amount-field>
                         </span>
