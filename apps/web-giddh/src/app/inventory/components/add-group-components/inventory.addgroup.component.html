@@ -27,18 +27,18 @@
                             </div>
                             <div class="row">
 								<div class="form-group col-xs-6 col-sm-6">
-									<span>
+									<span class="mr-r15">
                                         <input type="radio" name="showCodeType" id="hsnCodeType" formControlName="showCodeType" value="hsn">
-                                        <label for="hsnCodeType">HSN Code</label>
+                                        <label for="hsnCodeType"  class="ml-1">HSN Code</label>
                                     </span>
                                     <span>
                                         <input type="radio" name="showCodeType" id="sacCodeType" formControlName="showCodeType" value="sac">
-                                        <label for="sacCodeType">SAC Code</label>
+                                        <label for="sacCodeType"  class="ml-1">SAC Code</label>
                                     </span>
 									<input type="text" class="form-control" maxlength="10" decimalDigitsDirective
                                         formControlName="hsnNumber" *ngIf="addGroupForm.get('showCodeType').value === 'hsn'" />
                                     <input type="text" class="form-control" maxlength="10" formControlName="sacNumber"
-                                        decimalDigitsDirective *ngIf="addGroupForm.get('showCodeType').value === 'sac'" />    
+                                        decimalDigitsDirective *ngIf="addGroupForm.get('showCodeType').value === 'sac'" />
 								</div>
 							</div>
 							<div class="row">
