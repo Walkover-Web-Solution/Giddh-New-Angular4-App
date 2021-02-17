@@ -9684,6 +9684,32 @@ input.mat-input-element{
     .top-bar.customer-top-bar.vendor-top-bar{
         padding-top: 15px !important;
     }
+    .wrap-hsn-box{
+            .hsn-code-dropdown{
+                padding: 20px !important;
+                max-width: 250px;
+            }
+        input{
+            border: 1px solid $whisper-light;
+            background-color: $whisper-light;
+            height: 36px !important;
+        }
+        .wrap-hsn-sac{
+            span{
+                display: flex;
+                width: 50%;
+                flex-wrap: wrap;
+                flex-direction: row;
+                align-items: center;
+                input[type="radio"]{
+                    width: 18px !important;
+                    padding: 20px !important;
+                    margin-right: 5px;
+                    height: 18px !important;
+                }
+            }
+        }
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
