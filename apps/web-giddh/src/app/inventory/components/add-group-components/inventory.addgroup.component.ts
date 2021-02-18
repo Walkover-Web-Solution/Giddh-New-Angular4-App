@@ -292,7 +292,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
 
-        if(stockRequest.taxes?.length <= 0) {
+        if(!stockRequest.taxes) {
             stockRequest.taxes = [];
         }
 
