@@ -65,12 +65,21 @@
                         <div *ngIf="transferType === 'senders'" class="row mr-b2">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
-                                    HSN/SAC Code
+                                    <div class="d-flex wrap-hsn-sac mb-2">
+                                        <span>
+                                            <input type="radio" name="showCodeType" id="hsnCodeType" [(ngModel)]="branchTransfer.products[0].showCodeType" value="hsn">
+                                            <label for="hsnCodeType">HSN Code</label>
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="showCodeType" id="sacCodeType" [(ngModel)]="branchTransfer.products[0].showCodeType" value="sac">
+                                            <label for="sacCodeType">SAC Code</label>
+                                        </span>
+                                    </div>
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(inventorySettings?.manageInventory || !branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].hsnNumber">
-                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(!inventorySettings?.manageInventory && branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].sacNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="branchTransfer.products[0].showCodeType === 'hsn'" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="branchTransfer.products[0].showCodeType === 'sac'" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
                         <div class="row mr-b2">
@@ -199,12 +208,21 @@
                         <div *ngIf="transferType === 'senders'" class="row mr-b2">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
-                                    HSN/SAC Code
+                                    <div class="d-flex wrap-hsn-sac mb-2">
+                                        <span>
+                                            <input type="radio" name="showCodeType" id="hsnCodeType" [(ngModel)]="branchTransfer.products[0].showCodeType" value="hsn">
+                                            <label for="hsnCodeType">HSN Code</label>
+                                        </span>
+                                        <span>
+                                            <input type="radio" name="showCodeType" id="sacCodeType" [(ngModel)]="branchTransfer.products[0].showCodeType" value="sac">
+                                            <label for="sacCodeType">SAC Code</label>
+                                        </span>
+                                    </div>
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(inventorySettings?.manageInventory || !branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].hsnNumber">
-                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(!inventorySettings?.manageInventory && branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].sacNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="branchTransfer.products[0].showCodeType === 'hsn'" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="branchTransfer.products[0].showCodeType === 'sac'" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
                         <div class="row mr-b2" *ngIf="transferType !== 'senders'">
@@ -355,23 +373,34 @@
                                     <div *ngIf="activeRow !== i">
                                         <div *ngIf="product.name">{{product.name}}</div>
                                         <div *ngIf="product.skuCode">SKU Code: {{product.skuCode}}</div>
-                                        <div *ngIf="product.hsnNumber && (inventorySettings?.manageInventory || !product.sacNumber)">HSN/SAC Code: {{product.hsnNumber}}</div>
-                                        <div *ngIf="(!inventorySettings?.manageInventory && product.sacNumber)">HSN/SAC Code: {{product.sacNumber}}</div>
+                                        <div *ngIf="product.showCodeType === 'hsn'">HSN Code: {{product.hsnNumber}}</div>
+                                        <div *ngIf="product.showCodeType === 'sac'">SAC Code: {{product.sacNumber}}</div>
                                         <div *ngIf="product.description">{{product.description}}</div>
                                         <div *ngIf="(!product?.name && !product?.description && !(product?.hsnNumber || product?.sacNumber) && !product?.skuCode)" class="placeholder-for-table">Enter product details</div>
                                     </div>
                                     <div class="position-relative">
                                         <div class="hsn-code text-right" (click)="focusHsnNumber();" *ngIf="activeRow == i">
-                                            <label>HSN/SAC Code: </label>
-                                            <span>{{ (inventorySettings?.manageInventory || !product.sacNumber) ? product.hsnNumber : product.sacNumber}}
+                                            <label>{{product.showCodeType === 'hsn' ? "HSN" : "SAC"}} Code: </label>
+                                            <span>{{product.showCodeType === 'hsn' ? product.hsnNumber : product.sacNumber}}
                                                 <span class="edit-icon cp">
                                                     <img src="assets/images/edit-pencilicon.svg">
                                                 </span>
                                             </span>
                                         </div>
                                         <div class="hsn-code-dropdown" *ngIf="hsnPopupShow && activeRow == i">
-                                            <label>HSN/SAC Code</label>
-                                            <input type="text" maxlength="8" placeholder="HSN/SAC Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
+                                            <label>
+                                                <div class="d-flex wrap-hsn-sac mb-2">
+                                                    <span>
+                                                        <input type="radio" name="showCodeType" id="hsnCodeType" [(ngModel)]="product.showCodeType" value="hsn" (ngModelChange)="focusHsnNumber()">
+                                                        <label for="hsnCodeType">HSN Code</label>
+                                                    </span>
+                                                    <span>
+                                                        <input type="radio" name="showCodeType" id="sacCodeType" [(ngModel)]="product.showCodeType" value="sac" (ngModelChange)="focusHsnNumber()">
+                                                        <label for="sacCodeType">SAC Code</label>
+                                                    </span>
+                                                </div>
+                                            </label>
+                                            <input type="text" maxlength="8" placeholder="{{product.showCodeType === 'hsn' ? 'HSN' : 'SAC'}} Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
                                             <div class="btn-group m-t-10 d-block">
                                                 <button class="btn btn-sm btn-success" type="button" (click)="saveHsnNumberPopup(product)">Save</button>
                                                 <button class="btn btn-sm btn-primary" type="button" (click)="hideHsnNumberPopup()">Cancel</button>
