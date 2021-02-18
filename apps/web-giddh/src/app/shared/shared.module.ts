@@ -180,8 +180,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
-        AmountFieldComponent,
-        CurrencyModule
+        AmountFieldComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -223,7 +222,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        PdfJsViewerModule
+        PdfJsViewerModule,
+        CurrencyModule
     ],
     exports: [
         CommonModule,
