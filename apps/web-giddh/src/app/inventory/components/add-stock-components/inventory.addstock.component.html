@@ -56,12 +56,12 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-12">
                                     <span class="mr-r15">
-                                        <input type="radio" name="showCodeType" id="hsnCodeType" formControlName="showCodeType" value="hsn">
-                                        <label for="hsnCodeType" class="ml-1">HSN Code</label>
+                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType" id="hsnCodeType" formControlName="showCodeType" value="hsn">
+                                        <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
                                     </span>
                                     <span>
-                                        <input type="radio" name="showCodeType" id="sacCodeType" formControlName="showCodeType" value="sac">
-                                        <label for="sacCodeType" class="ml-1">SAC Code</label>
+                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType" id="sacCodeType" formControlName="showCodeType" value="sac">
+                                        <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
                                     </span>
 									<input type="text" class="form-control" maxlength="10" decimalDigitsDirective
                                         formControlName="hsnNumber" *ngIf="addStockForm.get('showCodeType').value === 'hsn'" />

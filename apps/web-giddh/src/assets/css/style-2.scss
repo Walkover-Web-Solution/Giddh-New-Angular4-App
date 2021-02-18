@@ -9709,6 +9709,12 @@ input.mat-input-element{
             }
         }
     }
+    .wrap-hsn-sac{
+        input{
+            width: 18px !important;
+            height: 18px !important;
+        }
+    }
     /* responsive  starts here*/
 
     @media (max-width: 1440px) {
