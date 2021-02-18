@@ -51,6 +51,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold bifurcation of clients content */
     public bifurcationClients: string = "";
 
     constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions, private _companyActions: CompanyActions,
@@ -181,8 +182,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                         this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater).label;
                     }
     
-                    this.bifurcationClients = this.localeData.bifurcation_clients;
-                    this.bifurcationClients = this.bifurcationClients.replace("[COLUMN_NAME]", this.columnName);
+                    this.bifurcationClients = this.localeData.bifurcation_clients.replace("[COLUMN_NAME]", this.columnName);
                 }
             });
         }
