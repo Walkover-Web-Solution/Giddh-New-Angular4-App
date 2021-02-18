@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
@@ -13,41 +13,15 @@ import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'bs',
-    template: `
-    <tb-pl-bs-filter
-      #filter
-      [selectedCompany]="selectedCompany"
-      (onPropertyChanged)="filterData($event)"
-      [showLoader]="showLoader | async"
-      [showLabels]="true"
-      (seachChange)="searchChanged($event)"
-      (expandAll)="expandAllEvent($event)"
-      [BsExportXLS]="true"
-      (plBsExportXLSEvent)="exportXLS($event)"
-    ></tb-pl-bs-filter>
-    <div *ngIf="(showLoader | async)">
-      <!-- loader -->
-      <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-    </div>
-    <div *ngIf="(!(showLoader | async) && data)">
-      <bs-grid #bsGrid
-               [search]="search"
-               [from]="from"
-               [to]="to"
-               (searchChange)="searchChanged($event)"
-               [expandAll]="expandAll"
-               [bsData]="data"
-      ></bs-grid>
-    </div>
-    <div *ngIf="(!(showLoader | async) && !(data))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
-      <div class="d-flex">
-        <h2>No Data Available For This Filter</h2>
-      </div>
-    </div>
-  `,
+    templateUrl: './bs.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class BsComponent implements AfterViewInit, OnDestroy {
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     public get selectedCompany(): CompanyResponse {
         return this._selectedCompany;

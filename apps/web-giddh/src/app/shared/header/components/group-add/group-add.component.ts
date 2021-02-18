@@ -15,6 +15,10 @@ import { digitsOnly } from '../../../helpers';
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Input() public path: string[] = [];
 	public activeGroupUniqueName$: Observable<string>;
 	public groupDetailForm: FormGroup;

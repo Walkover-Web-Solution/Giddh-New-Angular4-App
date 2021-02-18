@@ -50,6 +50,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public previousDateRangePickerValue: Date[] = [];
     /** True if chart changed */
     public chartChanged: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private _generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());

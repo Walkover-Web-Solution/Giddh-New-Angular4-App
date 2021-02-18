@@ -15,6 +15,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
+import { InvoiceService } from '../../../services/invoice.service';
 
 @Component({
     selector: 'inventory-add-group',
@@ -48,13 +49,15 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public taxTempArray: any[] = [];
     /** Observable for company taxes */
     public companyTaxesList$: Observable<TaxResponse[]>;
+    /** This will hold inventory settings */
+    public inventorySettings: any;
 
     /**
      * TypeScript public modifiers
      */
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
         private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
-        private router: Router) {
+        private router: Router, private invoiceService: InvoiceService) {
         this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingGrpUniqueName), takeUntil(this.destroyed$));
         this.isGroupNameAvailable$ = this.store.pipe(select(state => state.inventory.isGroupNameAvailable), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.inventory.activeGroup), takeUntil(this.destroyed$));
@@ -74,6 +77,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public ngOnInit() {
         // get all groups
         this.getParentGroupData();
+        this.getInvoiceSettings();
         // subscribe to url
         this.sub = this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.groupUniqueName = params['groupUniqueName'];
@@ -87,7 +91,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             sacNumber: [''],
             parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
             isSubGroup: [false],
-            taxes: [[]]
+            taxes: [[]],
+            showCodeType: ['']
         });
         this.taxTempArray = [];
 
@@ -142,6 +147,12 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 this.addGroupForm.patchValue(updGroupObj);
                 if (account.parentStockGroup) {
                     this.addGroupForm.patchValue({ parentStockGroupUniqueName: account.parentStockGroup.uniqueName });
+                }
+
+                if(account.hsnNumber) {
+                    this.addGroupForm.get("showCodeType").patchValue("hsn");
+                } else if(account.sacNumber) {
+                    this.addGroupForm.get("showCodeType").patchValue("sac");
                 }
 
             } else {
@@ -282,6 +293,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         if(uniqueNameField && uniqueNameField.value) {
             uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
         }
+
+        if(this.addGroupForm.get("showCodeType").value === "hsn") {
+            this.addGroupForm.get('sacNumber').patchValue("");
+        } else {
+            this.addGroupForm.get('hsnNumber').patchValue("");
+        }
+
         stockRequest = this.addGroupForm.value as StockGroupRequest;
         if (this.addGroupForm.value.isSubGroup && this.selectedGroup) {
             stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
@@ -293,6 +311,11 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
+
+        if(!stockRequest.taxes) {
+            stockRequest.taxes = [];
+        }
+
         this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
     }
 
@@ -306,6 +329,12 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
         }
 
+        if(this.addGroupForm.get("showCodeType").value === "hsn") {
+            this.addGroupForm.get('sacNumber').patchValue("");
+        } else {
+            this.addGroupForm.get('hsnNumber').patchValue("");
+        }
+
         stockRequest = this.addGroupForm.value as StockGroupRequest;
         if (this.addGroupForm.value.isSubGroup) {
             stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
@@ -314,6 +343,11 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
+
+        if(!stockRequest.taxes) {
+            stockRequest.taxes = [];
+        }
+
         this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
         this.store.pipe(select(p => p.inventory.isUpdateGroupInProcess), distinctUntilChanged(), filter(p => !p), takeUntil(this.destroyed$)).subscribe((a) => {
             this.activeGroup$.pipe(take(1)).subscribe(b => activeGroup = b);
@@ -466,6 +500,28 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         
         taxToMap.map((tax, index) => {
             this.selectTax(event, tax);
+        });
+    }
+
+    /**
+     * This will get invoice settings
+     *
+     * @memberof InventoryAddGroupComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = _.cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if(!this.addGroupForm.get("showCodeType").value) {
+                    if(this.inventorySettings?.manageInventory) {
+                        this.addGroupForm.get("showCodeType").patchValue("hsn");
+                    } else {
+                        this.addGroupForm.get("showCodeType").patchValue("sac");
+                    }
+                }
+            }
         });
     }
 }

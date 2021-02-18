@@ -88,6 +88,9 @@ import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-
 import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
+import { TranslateDirective } from '../theme/translate/translate.directive';
+import { AmountFieldComponent } from './amount-field/amount-field.component';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -179,7 +182,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
-        GiddhPageLoaderComponent
+        GiddhPageLoaderComponent,
+        TranslateDirective,
+        AmountFieldComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -221,7 +226,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        PdfJsViewerModule
+        PdfJsViewerModule,
+        CurrencyModule
     ],
     exports: [
         CommonModule,
@@ -274,7 +280,10 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
-        GiddhPageLoaderComponent
+        GiddhPageLoaderComponent,
+        TranslateDirective,
+        AmountFieldComponent,
+        CurrencyModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

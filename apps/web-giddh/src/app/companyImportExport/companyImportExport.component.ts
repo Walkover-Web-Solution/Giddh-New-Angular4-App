@@ -15,6 +15,10 @@ import { CompanyActions } from '../actions/company.actions';
 export class CompanyImportExportComponent implements OnInit {
     public mode: 'import' | 'export' = 'export';
     public isFirstScreen: boolean = true;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
         

@@ -5,7 +5,6 @@ import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
 	selector: 'ledger-discount',
@@ -17,8 +16,10 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
 	public get defaultDiscount(): LedgerDiscountClass {
 		return this.discountAccountsDetails[0];
-	}
-
+    }
+    
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Input() public discountAccountsDetails: LedgerDiscountClass[];
 	@Input() public ledgerAmount: number = 0;
 	@Output() public discountTotalUpdated: EventEmitter<{discountTotal: number, isActive: any, discount: any }> = new EventEmitter();

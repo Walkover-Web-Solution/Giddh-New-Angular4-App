@@ -777,4 +777,28 @@ export class GeneralService {
     public getFileExtension(path: string): string {
         return (path && path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop() : 'null';
     }
+
+    /** this will store currency code */
+    public isRtlCurrency(currencyCode: string): boolean {
+        const rtlCurrencyCodes = ['AED'];
+
+        if (rtlCurrencyCodes.indexOf(currencyCode) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This will return supported locales
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getSupportedLocales(): any {
+        return [
+            { label: 'English', value: 'en' },
+            { label: 'Hindi', value: 'hi' }
+        ];
+    }
 }

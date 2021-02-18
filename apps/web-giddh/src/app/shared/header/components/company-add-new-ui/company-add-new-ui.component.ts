@@ -107,6 +107,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public isProdMode: boolean = false;
     /** Stores active company details */
     public activeCompanyDetails: any;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(private socialAuthService: AuthService, private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions, private _route: Router, private _loginAction: LoginActions, private _companyService: CompanyService, private _generalActions: GeneralActions, private _generalService: GeneralService, private _toaster: ToasterService, private commonActions: CommonActions
     ) {
@@ -205,18 +207,23 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 // Branch update mode
                 this.updateBranch();
             } else {
+                this.isLoading = true;
                 let companies = null;
                 this.companies$.pipe(take(1)).subscribe(c => companies = c);
                 this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
                 this.company.isBranch = this.createBranch;
                 this._generalService.createNewCompany = this.company;
                 this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
-                this.closeCompanyModal.emit();
-                this._route.navigate(['welcome']);
                 if (this.isProdMode && companies) {
                     if (companies.length === 0) {
                         this.fireSocketCompanyCreateRequest();
+                    } else {
+                        this.closeCompanyModal.emit();
+                        this._route.navigate(['welcome']);
                     }
+                } else {
+                    this.closeCompanyModal.emit();
+                    this._route.navigate(['welcome']);
                 }
             }
         }
@@ -233,7 +240,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.socketCompanyRequest.utm_campaign = this._generalService.getUtmParameter('utm_campaign');
         this.socketCompanyRequest.utm_term = this._generalService.getUtmParameter('utm_term');
         this.socketCompanyRequest.utm_content = this._generalService.getUtmParameter('utm_content');
-        this._companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe();
+        this._companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.closeCompanyModal.emit();
+            this._route.navigate(['welcome']);
+        });
 
         this._generalService.removeUtmParameters();
     }

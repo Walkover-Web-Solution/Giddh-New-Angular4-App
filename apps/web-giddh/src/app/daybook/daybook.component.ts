@@ -85,6 +85,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * by user and not when the user visits the page
      */
     public isAdvanceSearchOpened: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
 

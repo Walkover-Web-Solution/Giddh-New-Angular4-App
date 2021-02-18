@@ -1,7 +1,8 @@
 {
+    "page_heading": "Permissions",
     "add_new_role" : "+ Add New Role",
     "permission_error" : "You do not have permission to access this module",
-    "role_delete_content" : "Are you sure you want to delete {{ROLE}} ?",
+    "role_delete_content" : "Are you sure you want to delete [ROLE] ?",
     "add_role" : "Add Role",
     "new_role" : "New Role",
     "copy_permission" : "Copy Permission",
@@ -22,9 +23,10 @@
         "gst_filing" : "GST Filing"
     },
     "select_pages" : "Select Pages",
+    "option_select_pages" : "--Select Pages--",
     "role_name_label" : "Role Name",
     "role_name_placeholder" : "Role Name",
-    "role_type" : "Role Type",
+    "role_type_label" : "Role Type",
     "fresh_start" : "Fresh Start",
     "copy_other_role" : "Copy From Other Role",
     "close_list" : "Close list"

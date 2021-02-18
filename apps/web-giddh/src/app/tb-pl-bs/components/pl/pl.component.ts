@@ -13,43 +13,14 @@ import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'pl',
-    template: `
-      <tb-pl-bs-filter
-              #filter
-              [selectedCompany]="selectedCompany"
-              (onPropertyChanged)="filterData($event)"
-              [showLoader]="showLoader | async"
-              (seachChange)="searchChanged($event)"
-              (expandAll)="expandAllEvent($event)"
-              [tbExportCsv]="false"
-              [tbExportPdf]="false"
-              [tbExportXLS]="false"
-              [plBsExportXLS]="true"
-              (plBsExportXLSEvent)="exportXLS($event)"
-              [showLabels]="true"
-      ></tb-pl-bs-filter>
-      <div *ngIf="(showLoader | async)">
-        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-      </div>
-      <div *ngIf="(!(showLoader | async) && data)">
-          <pl-grid #plGrid
-                   [search]="search"
-                   [from]="from"
-                   [to]="to"
-                   (searchChange)="searchChanged($event)"
-                   [expandAll]="expandAll"
-                   [plData]="data"
-                   [cogsData]="cogsData"
-          ></pl-grid>
-      </div>
-      <div *ngIf="(!(showLoader | async) && !(data))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
-          <div class="d-flex">
-              <h2>No Data Available For This Filter</h2>
-          </div>
-      </div>
-  `
+    templateUrl: './pl.component.html'
 })
+
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     public from: string;
     public to: string;
 

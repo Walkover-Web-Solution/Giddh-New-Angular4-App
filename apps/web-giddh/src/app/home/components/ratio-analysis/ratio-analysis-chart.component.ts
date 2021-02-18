@@ -36,6 +36,8 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public rationResponse$: Observable<any>;
     public ratioObj: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
         this.rationResponse$ = this.store.pipe(select(p => p.home.RatioAnalysis), takeUntil(this.destroyed$));
