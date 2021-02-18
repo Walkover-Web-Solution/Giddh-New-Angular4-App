@@ -23,6 +23,7 @@ import { IOption } from './../../theme/ng-select/option.interface';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { IForceClear } from '../../models/api-models/Sales';
+import { LinkedStocksResponse } from '../../models/api-models/BranchTransfer';
 
 const filter1 = [
 	{ label: 'Greater', value: 'greaterThan' },
@@ -101,6 +102,12 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public warehouses: Array<any> = [];
     /* This will clear the select value in sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /* This will clear the select value in warehouse sh-select */
+    public forceClearWarehouse$: Observable<IForceClear> = observableOf({ status: false });
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** This will hold warehouses list based on branch */
+    public allWarehouses: any[] = [];
 
 	constructor(
         private store: Store<AppState>,
@@ -122,13 +129,16 @@ export class MfReportComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+        if(this.currentOrganizationType === OrganizationType.Company) {
+            this.getWarehouses();
+        }
 
         this.breakPointObservar.observe([
             '(max-width: 991px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
-
 
         this.isInventoryPage = this.router.url.includes('/pages/inventory');
 		this.initializeSearchReqObj();
@@ -194,13 +204,13 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches.length > 2;
+                this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches.length > 2;
                 let currentBranchUniqueName;
                 if (!this.currentBranch.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
@@ -312,6 +322,9 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
         this.mfStockSearchRequest.branchUniqueName = selectedEntity.value;
+
+        this.forceClearWarehouse$ = observableOf({ status: true });
+        this.warehouses = this.allWarehouses[selectedEntity.value];
     }
 
 	public ngOnDestroy() {
@@ -410,6 +423,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.mfStockSearchRequest.searchOperation = "";
         this.mfStockSearchRequest.searchValue = "";
         this.forceClear$ = observableOf({ status: true });
+        this.forceClearWarehouse$ = observableOf({ status: true });
         this.getReports();
     }
 
@@ -425,5 +439,33 @@ export class MfReportComponent implements OnInit, OnDestroy {
         }
 
         return false;
+    }
+
+    /**
+     * This will get warehouses list based on branch
+     *
+     * @memberof MfReportComponent
+     */
+    public getWarehouses(): void {
+        this.store.pipe(select(state => state.inventoryBranchTransfer.linkedStocks), takeUntil(this.destroyed$)).subscribe((branches: LinkedStocksResponse) => {
+            if (branches) {
+                if (branches.results?.length) {
+                    this.allWarehouses = [];
+                    branches.results.forEach(branch => {
+                        if(!this.allWarehouses[branch?.uniqueName]) {
+                            this.allWarehouses[branch?.uniqueName] = [];
+                        }
+
+                        if(branch?.warehouses?.length > 0) {
+                            branch?.warehouses.forEach(warehouse => {
+                                this.allWarehouses[branch?.uniqueName].push({label: warehouse?.name, value: warehouse?.uniqueName, additional: warehouse?.taxNumber});
+                            });
+                        }
+                    });
+                }
+            } else {
+                this.store.dispatch(this.inventoryAction.GetAllLinkedStocks());
+            }
+        });
     }
 }

@@ -612,7 +612,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        if (this.generalService.currentOrganizationType === OrganizationType.Company) {
+        if (this.currentOrganizationType === OrganizationType.Company) {
             this.showBranchSwitcher = true;
             this.currentCompanyBranches$.subscribe(response => {
                 if (response && response.length) {
@@ -633,7 +633,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         // Assign the current branch only when it is not selected. This check is necessary as
                         // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                         // branches are loaded
-                        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        if (this.currentOrganizationType === OrganizationType.Branch) {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                             this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                         } else {
@@ -647,7 +647,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     this.trxRequest.branchUniqueName = this.currentBranch.uniqueName;
                     this.advanceSearchRequest.branchUniqueName = this.currentBranch.uniqueName;
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch ||
+                    if (this.currentOrganizationType === OrganizationType.Branch ||
                         (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
                         // Add the blank transaction only if it is branch mode or company with single branch
                         this.lc.blankLedger.transactions = [
@@ -1058,7 +1058,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankTransactionsResponse.totalPages = res.body.totalPages;
                         this.bankTransactionsResponse.page = res.body.page;
 
-                        this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.generalService.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
+                        this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                     }
                 }
             });
@@ -1234,7 +1234,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public resetBlankTransaction() {
         this.lc.blankLedger = {
             transactions:
-                (this.generalService.currentOrganizationType === OrganizationType.Branch ||
+                (this.currentOrganizationType === OrganizationType.Branch ||
                     (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
                 this.lc.addNewTransaction('DEBIT'),
                 this.lc.addNewTransaction('CREDIT')
