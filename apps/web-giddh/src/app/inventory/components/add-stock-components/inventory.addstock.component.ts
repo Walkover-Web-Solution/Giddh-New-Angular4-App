@@ -93,6 +93,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /** This will handle if we can reset sales/purchase account information */
+    public allowReset: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -274,6 +276,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
         // subscribe active stock if available fill form
         this.activeStock$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            this.allowReset = false;
             if (a && !this.addStock) {
                 this.addStockForm.reset();
                 this.showOtherDetails = false;
@@ -361,6 +364,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                     this.mapSavedTaxes(a.taxes);
                 }
                 this.store.dispatch(this.inventoryAction.hideLoaderForStock());
+                this.allowReset = true;
                 // this.addStockForm.controls['parentGroup'].disable();
             } else {
                 this.isUpdatingStockForm = false;
@@ -816,7 +820,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         }
 
         stockObj.isFsStock = formObj.isFsStock;
-        stockObj.taxes = formObj.taxes;
+        stockObj.taxes = (formObj.taxes) ? formObj.taxes : [];
 
         if (stockObj.isFsStock) {
             formObj.manufacturingDetails.linkedStocks = this.removeBlankLinkedStock(formObj.manufacturingDetails.linkedStocks);
@@ -889,7 +893,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         stockObj.openingQuantity = formObj.openingQuantity || 0;
         stockObj.hsnNumber = (this.addStockForm.get("showCodeType").value === "hsn") ? formObj.hsnNumber : "";
         stockObj.sacNumber = (this.addStockForm.get("showCodeType").value === "sac") ? formObj.sacNumber : "";
-        stockObj.taxes = formObj.taxes;
+        stockObj.taxes = (formObj.taxes) ? formObj.taxes : [];
         stockObj.skuCode = formObj.skuCode;
         stockObj.skuCode = formObj.skuCode;
         stockObj.skuCodeHeading = formObj.skuCodeHeading;
@@ -1241,13 +1245,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public resetPurchaseInformation(): void {
-        const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
-        this.addStockForm.get('purchaseAccountUniqueName').patchValue(null);
-        this.forceClearPurchaseAccount$ = of({ status: true });
-        this.forceClearPurchaseStock$ = of({ status: true });
-        for (let control of purchaseUnitRatesControls.controls) {
-            control.get('stockUnitCode').patchValue(null);
-            control.get('rate').patchValue(null);
+        if(this.addStock || (!this.addStock && this.allowReset)) {
+            const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
+            this.addStockForm.get('purchaseAccountUniqueName').patchValue(null);
+            this.forceClearPurchaseAccount$ = of({ status: true });
+            this.forceClearPurchaseStock$ = of({ status: true });
+            for (let control of purchaseUnitRatesControls.controls) {
+                control.get('stockUnitCode').patchValue(null);
+                control.get('rate').patchValue(null);
+            }
         }
     }
 
@@ -1257,13 +1263,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public resetSalesInformation(): void {
-        const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
-        this.addStockForm.get('salesAccountUniqueName').patchValue(null);
-        this.forceClearSalesAccount$ = of({ status: true });
-        this.forceClearSalesStock$ = of({ status: true });
-        for (let control of saleUnitRatesControls.controls) {
-            control.get('stockUnitCode').patchValue(null);
-            control.get('rate').patchValue(null);
+        if(this.addStock || (!this.addStock && this.allowReset)) {
+            const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
+            this.addStockForm.get('salesAccountUniqueName').patchValue(null);
+            this.forceClearSalesAccount$ = of({ status: true });
+            this.forceClearSalesStock$ = of({ status: true });
+            for (let control of saleUnitRatesControls.controls) {
+                control.get('stockUnitCode').patchValue(null);
+                control.get('rate').patchValue(null);
+            }
         }
     }
 
