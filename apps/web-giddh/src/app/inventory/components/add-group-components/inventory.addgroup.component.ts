@@ -265,6 +265,11 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
+
+        if(stockRequest.taxes?.length <= 0) {
+            stockRequest.taxes = [];
+        }
+
         this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
     }
 
@@ -286,6 +291,11 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
+
+        if(stockRequest.taxes?.length <= 0) {
+            stockRequest.taxes = [];
+        }
+
         this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
         this.store.pipe(select(p => p.inventory.isUpdateGroupInProcess), distinctUntilChanged(), filter(p => !p), takeUntil(this.destroyed$)).subscribe((a) => {
             this.activeGroup$.pipe(take(1)).subscribe(b => activeGroup = b);
