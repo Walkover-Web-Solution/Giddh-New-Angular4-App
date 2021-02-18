@@ -69,7 +69,7 @@
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody *ngIf="availableTriggers.length">
+                    <tbody *ngIf="!isLoading && availableTriggers.length">
                         <tr *ngFor="let trigger of availableTriggers; let i = index">
                             <td data-title="#">{{i+1}}</td>
                             <td data-title="Name">
@@ -122,10 +122,17 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tbody *ngIf="!availableTriggers.length" class="on-mobile-view no-records">
+                    <tbody *ngIf="!isLoading && !availableTriggers.length" class="on-mobile-view no-records">
                         <tr>
                             <td colspan="11" class="text-center empty-table">
                                 <h1>No Record Found !! {{availableTriggers}}</h1>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="isLoading">
+                        <tr>
+                            <td colspan="11" class="text-center empty-table">
+                                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
                             </td>
                         </tr>
                     </tbody>
