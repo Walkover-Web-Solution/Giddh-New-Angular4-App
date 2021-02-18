@@ -50,14 +50,13 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
 					this.selectedType = 'accounts';
                 }
                 
-                this.importedCountMessage = this.localeData.imported_count_message;
-                this.importedCountMessage = this.importedCountMessage.replace("[SUCCESS_COUNT]", String(this.UploadExceltableResponse.successCount));
-                this.importedCountMessage = this.importedCountMessage.replace("[COUNT]", String(this.UploadExceltableResponse.failureCount + this.UploadExceltableResponse.successCount));
-                this.importedCountMessage = this.importedCountMessage.replace("[SELECTED_TYPE]", this.selectedType);
-                this.importedCountMessage = this.importedCountMessage.replace("[IS_ARE]", this.isAre);
+                this.importedCountMessage = this.localeData.imported_count_message
+                                            .replace("[SUCCESS_COUNT]", String(this.UploadExceltableResponse.successCount))
+                                            .replace("[COUNT]", String(this.UploadExceltableResponse.failureCount + this.UploadExceltableResponse.successCount))
+                                            .replace("[SELECTED_TYPE]", this.selectedType)
+                                            .replace("[IS_ARE]", this.isAre);
 
-                this.failedReportMessage = this.localeData.failed_report_message;
-                this.failedReportMessage = this.failedReportMessage.replace("[SELECTED_TYPE]", this.selectedType);
+                this.failedReportMessage = this.localeData.failed_report_message.replace("[SELECTED_TYPE]", this.selectedType);
 			}
 		});
     }

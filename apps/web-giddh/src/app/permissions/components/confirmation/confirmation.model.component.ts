@@ -14,9 +14,14 @@ export class DeleteRoleConfirmationModelComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
     @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-
+    /** This will hold confirmation message */
     public confirmationMessage: string = "";
 
+    /**
+     * Initializes the component
+     *
+     * @memberof DeleteRoleConfirmationModelComponent
+     */
     public ngOnInit(): void {
         this.confirmationMessage = this.localeData.role_delete_content;
 
