@@ -274,7 +274,7 @@
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPurchaseOrderSearch, fieldName: 'purchaseOrderNumbers', formControl: purchaseOrderNumbersInput, title: 'Purchase Order #'}"></ng-container>
                         </th>
                         <th data-title="Amount" width="12%" class="min-wid-amount">
-                            <div class="d-flex">
+                            <div class="d-flex justify-content-end">
                                 <div> Amount</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
@@ -433,16 +433,27 @@
                         <!-- Total Amt. -->
                         <td width="10%" data-title="Total Amount"
                             [tooltip]="(selectedVoucher !== 'purchase') ? grandTotalPopupTemplate : ''" container="body"
-                            containerClass="invoice-preview">{{item.accountCurrencySymbol}}
-                            {{item.grandTotal?.amountForAccount | giddhCurrency}}
+                            containerClass="invoice-preview">
+                            <!-- {{item.accountCurrencySymbol}}
+                            {{item.grandTotal?.amountForAccount | giddhCurrency}} -->
+
+                            <amount-field [amount]="item.grandTotal?.amountForAccount" class="justify-content-end d-flex"
+                                [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="item?.account?.currency?.code">
+                            </amount-field>
+
                         </td>
                         <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
                         </ng-template>
 
                         <!-- Balance Due -->
 
-                        <td width="12%" data-title="Total Amount" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
-                            {{item.accountCurrencySymbol}} {{item?.totalBalance?.amountForAccount | giddhCurrency}}
+                        <td width="12%" data-title="Balance Due" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
+                            <!-- {{item.accountCurrencySymbol}}
+                            {{item?.totalBalance?.amountForAccount | giddhCurrency}} -->
+
+                            <amount-field [amount]="item?.totalBalance?.amountForAccount" [currencySymbol]="item.accountCurrencySymbol"
+                                [currencyCode]="item?.account?.currency?.code">
+                            </amount-field>
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
                         </ng-template>
@@ -844,20 +855,37 @@
 
         <!--total sale & Total Due-->
         <div class=" mt-5 invoice-footer" *ngIf="!selectedInvoiceForDetails">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
-                <div class="col-sm-6 total-due-sale">
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
+                <div class="col-sm-6 total-due-sale d-flex">
                     <h3>
                         Total
                         {{!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? (selectedVoucher === 'purchase') ? ' Purchases:' : ' Sale:' : ':' }}
                     </h3>
-                    <h1>{{baseCurrencySymbol}}{{ totalSale | giddhCurrency }}<span
-                            *ngIf="baseCurrency==='INR'">/-</span>
+                    <h1 class="d-flex">
+                        <!-- {{baseCurrencySymbol}}{{ totalSale | giddhCurrency }} -->
+
+                        <span>
+                            <amount-field [amount]="totalSale"
+                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="baseCurrency">
+                            </amount-field>
+                        </span>
+                        <span
+                            *ngIf="baseCurrency==='INR'">/-
+                        </span>
                     </h1>
                 </div>
                 <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'purchase')"
-                    class="col-sm-6 total-due-sale">
+                    class="col-sm-6 total-due-sale d-flex">
                     <h3>Total Due:</h3>
-                    <h1>{{baseCurrencySymbol}}{{ totalDue | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
+                    <h1 class="d-flex">
+                        <!-- {{baseCurrencySymbol}}{{ totalDue | giddhCurrency }} -->
+
+
+                        <span>
+                            <amount-field [amount]="totalDue" [currencySymbol]="baseCurrencySymbol" [currencyCode]="baseCurrency">
+                            </amount-field>
+                        </span>
+                        <span *ngIf="baseCurrency==='INR'">/-</span>
                     </h1>
                 </div>
             </div>
