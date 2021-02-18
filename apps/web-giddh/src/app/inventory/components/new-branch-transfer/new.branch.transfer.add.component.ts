@@ -118,8 +118,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public isLoading: boolean = false;
     public hsnNumber: any = '';
     public sacNumber: any = '';
-    /** This will hold if hsn/sac will show */
-    public showCodeType: string = '';
     public skuNumber: any = '';
     public myCurrentCompany: string = '';
     public innerEntryIndex: number;
