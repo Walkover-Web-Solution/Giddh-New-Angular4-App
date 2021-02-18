@@ -69,24 +69,38 @@
             </div>
             <ng-container *ngIf="isHsnSacEnabledAcc">
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 form-group">
-                        <label class="d-block">{{commonLocaleData?.app_hsn}}</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input type="radio" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
+                    <div class="col-8 col-sm-8 form-group">
+                        <!-- <label class="d-block">HSN</label> -->
+                        <div class="input-group d-flex">
+                            <!-- <span class="input-group-addon">
+                                <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
                             </span>
-                            <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10">
+                            <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10"> -->
+                             <div class="d-flex">
+                                <span class="mr-r15">
+                                    <input type="radio" class="radio-custom radio-theme" name="hsnOrSac" id="hsnCodeType" formControlName="hsnOrSac" value="hsn">
+                                    <label for="hsnCodeType" class="radio-custom-label">{{commonLocaleData?.app_hsn}}</label>
+                                </span>
+                                <span>
+                                    <input type="radio" class="radio-custom radio-theme" name="hsnOrSac" id="sacCodeType" formControlName="hsnOrSac" value="sac">
+                                    <label for="sacCodeType" class="ml-1 radio-custom-label">{{commonLocaleData?.app_sac}}</label>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control ml-4 bd-rr" maxlength="10" decimalDigitsDirective formControlName="hsnNumber"
+                                *ngIf="addAccountForm.get('hsnOrSac').value === 'hsn'" />
+                            <input type="text" class="form-control ml-4 bd-rr" maxlength="10" formControlName="sacNumber" decimalDigitsDirective
+                                *ngIf="addAccountForm.get('hsnOrSac').value === 'sac'" />
                         </div>
                     </div>
-                    <div class="col-xs-6 col-sm-6 form-group">
-                        <label class="d-block">{{commonLocaleData?.app_sac}}</label>
+                    <!-- <div class="col-xs-6 col-sm-6 form-group">
+                        <label class="d-block">SAC</label>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <input type="radio" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
                             </span>
                             <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </ng-container>
         </div>
