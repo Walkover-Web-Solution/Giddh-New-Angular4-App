@@ -44,7 +44,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** This will hold content for group shared with */
     public groupSharedWith: string = "";
+    /** This will hold content for account shared with */
     public accountSharedWith: string = "";
     public showAddNewAccount$: Observable<boolean>;
     public showAddNewGroup$: Observable<boolean>;
@@ -403,15 +405,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.activeGroupSharedWith$.subscribe(response => {
             if(response) {
-                this.groupSharedWith = this.localeData.shared_with;
-                this.groupSharedWith = this.groupSharedWith.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.groupSharedWith = this.localeData.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
 
         this.activeAccountSharedWith$.subscribe(response => {
             if(response) {
-                this.accountSharedWith = this.localeData.shared_with;
-                this.accountSharedWith = this.accountSharedWith.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.accountSharedWith = this.localeData.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
     }
@@ -698,8 +698,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge.trim();
-        this.deleteMergedAccountModalBody = this.localeData.delete_merged_account_content;
-        this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody.replace("[MERGE]", merge);
+        this.deleteMergedAccountModalBody = this.localeData.delete_merged_account_content.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountModal.show();
     }
@@ -756,9 +755,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public showMoveMergedAccountModal() {
-        this.moveMergedAccountModalBody = this.localeData.move_merged_account_content;
-        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
-        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
+        this.moveMergedAccountModalBody = this.localeData.move_merged_account_content
+                                          .replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
+                                          .replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 
