@@ -813,7 +813,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         }
 
         stockObj.isFsStock = formObj.isFsStock;
-        stockObj.taxes = (formObj.taxes?.length > 0) ? formObj.taxes : [];
+        stockObj.taxes = (formObj.taxes) ? formObj.taxes : [];
 
         if (stockObj.isFsStock) {
             formObj.manufacturingDetails.linkedStocks = this.removeBlankLinkedStock(formObj.manufacturingDetails.linkedStocks);
@@ -884,7 +884,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         stockObj.openingQuantity = formObj.openingQuantity || 0;
         stockObj.hsnNumber = formObj.hsnNumber;
         stockObj.sacNumber = formObj.sacNumber;
-        stockObj.taxes = (formObj.taxes?.length > 0) ? formObj.taxes : [];
+        stockObj.taxes = (formObj.taxes) ? formObj.taxes : [];
         stockObj.skuCode = formObj.skuCode;
         stockObj.skuCode = formObj.skuCode;
         stockObj.skuCodeHeading = formObj.skuCodeHeading;
