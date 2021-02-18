@@ -16,9 +16,9 @@
     },
     "csv" : {
         "group_wise_report" : "ग्रुप वाइज रिपोर्ट",
-        "trial_balance_group_wise_report_file_name": "Trial_Balance_group-wise.csv",
-        "trial_balance_condensed_report_file_name": "Trial_Balance_condensed.csv",
-        "trial_balance_account_wise_report_file_name": "Trial_Balance_account-wise.csv",
+        "trial_balance_group_wise_report_file_name": "ट्रायल-बैलेंस_ग्रुप-वाइज.csv",
+        "trial_balance_condensed_report_file_name": "ट्रायल-बैलेंस_संघनित.csv",
+        "trial_balance_account_wise_report_file_name": "ट्रायल-बैलेंस_खाता-वार.csv",
         "condensed_report" : "संघनित रिपोर्ट",
         "account_wise_report" : "खाता वार रिपोर्ट",
         "trial_balance": {
