@@ -80,6 +80,10 @@ const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make ad
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     public vm: UpdateLedgerVm;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
     @Output() public showQuickAccountModalFromUpdateLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public toggleOtherTaxesAsideMenu: EventEmitter<UpdateLedgerVm> = new EventEmitter();
@@ -300,6 +304,37 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+
+        this.vm.voucherTypeList = [{
+            label: this.commonLocaleData?.app_voucher_types?.sales,
+            value: 'sal'
+        }, {
+            label: this.commonLocaleData?.app_voucher_types?.purchases,
+            value: 'pur'
+        }, {
+            label: this.commonLocaleData?.app_voucher_types?.receipt,
+            value: 'rcpt'
+        }, {
+            label: this.commonLocaleData?.app_voucher_types?.payment,
+            value: 'pay'
+        }, {
+            label: this.commonLocaleData?.app_voucher_types?.journal,
+            value: 'jr'
+        }, {
+            label: this.commonLocaleData?.app_voucher_types?.contra,
+            value: 'cntr'
+        }, {
+            label: this.commonLocaleData?.app_voucher_types?.debit_note,
+            value: 'debit note'
+        }, {
+            label: this.commonLocaleData?.app_voucher_types?.credit_note,
+            value: 'credit note'
+        }, {
+            label: this.commonLocaleData?.app_voucher_types?.advance_receipt,
+            value: 'advance-receipt',
+            subVoucher: SubVoucher.AdvanceReceipt
+        }];
+
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
@@ -443,7 +478,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
                     }
 
-                    this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name);
+                    this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name, this.localeData);
+
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[0];
                     this.formatAdjustments();
@@ -677,6 +713,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
         }
+
+        if(this.localeData) {
+            this.availableItcList[0].label = this.localeData.import_goods;
+            this.availableItcList[1].label = this.localeData.import_services;
+            this.availableItcList[2].label = this.localeData.others;
+        }
     }
 
     private prepareMultiCurrencyObject(accountDetails: any) {
@@ -783,7 +825,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.isFileUploading = false;
                 this.vm.selectedLedger.attachedFile = output.file.response.body.uniqueName;
                 this.vm.selectedLedger.attachedFileName = output.file.response.body.name;
-                this._toasty.successToast('file uploaded successfully');
+                this._toasty.successToast(this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this.vm.selectedLedger.attachedFile = '';
@@ -838,7 +880,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     txn.particular.uniqueName = null;
                     txn.particular.name = null;
                     txn.selectedAccount = null;
-                    this._toasty.warningToast('you can\'t add multiple stock entry');
+                    this._toasty.warningToast(this.localeData?.multiple_stock_entry_error);
                     return;
                 } else {
                     // add unitArrys in txn for stock entry
@@ -1030,7 +1072,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // due to date picker of Tx entry date format need to change
         if (this.vm.selectedLedger.entryDate) {
             if (!moment(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
-                this._toasty.errorToast('Invalid Date Selected.Please Select Valid Date');
+                this._toasty.errorToast(this.localeData?.invalid_date);
                 this._loaderService.hide();
                 return;
             } else {
@@ -1041,7 +1083,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // due to date picker of Tx chequeClearance date format need to change
         if (this.vm.selectedLedger.chequeClearanceDate) {
             if (!moment(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
-                this._toasty.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
+                this._toasty.errorToast(this.localeData?.invalid_cheque_clearance_date);
                 this._loaderService.hide();
                 return;
             } else {
@@ -1058,7 +1100,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (isThereOthersDummyAcc) {
                 let isThereDummyOtherTrx = requestObj.transactions.some(s => s.particular.uniqueName === 'others');
                 if (isThereDummyOtherTrx) {
-                    this._toasty.errorToast('Please select a valid account in transaction');
+                    this._toasty.errorToast(this.localeData?.invalid_account_transaction_error);
                     return;
                 }
             }
@@ -1179,12 +1221,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public changeBaseAccount(acc) {
         this.openDropDown = false;
         if (!acc) {
-            this._toasty.errorToast('Account not changed');
+            this._toasty.errorToast(this.localeData?.account_unchanged);
             this.hideBaseAccountModal();
             return;
         }
         if (acc === this.baseAcc) {
-            this._toasty.errorToast('Account not changed');
+            this._toasty.errorToast(this.localeData?.account_unchanged);
             this.hideBaseAccountModal();
             return;
         }
@@ -1197,7 +1239,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public openBaseAccountModal() {
         if (this.vm.selectedLedger.voucherGenerated) {
-            this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
+            this._toasty.errorToast(this.localeData?.base_account_change_error);
             return;
         }
         if(this.updateBaseAccount) {
@@ -1220,7 +1262,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public getInvoiceListsData(event: any): void {
         if (event.value === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
-                this._toasty.errorToast('Please Select ' + this.pettyCashBaseAccountTypeString + '  for entry..');
+                let message = this.localeData?.account_entry_error;
+                message = message.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
+                this._toasty.errorToast(message);
                 return;
             }
         } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
@@ -1241,7 +1285,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public handleVoucherAdjustment(isUpdateMode?: boolean): void {
         if (!this.vm.selectedLedger.voucherGenerated && this.vm.selectedLedger.voucher.shortCode !== 'pur') {
             // Voucher must be generated for all vouchers except purchase order
-            this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, 'Giddh');
+            this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
             if (this.isAdjustAdvanceReceiptSelected) {
                 this.isAdjustAdvanceReceiptSelected = false;
             } else if (this.isAdjustReceiptSelected) {
@@ -1270,7 +1314,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public checkForGeneratedVoucher(event: any): void {
         if (event && this.vm.selectedLedger.voucher.shortCode !== 'pur' && !this.vm.selectedLedger.voucherGenerated) {
             // Adjustment is not allowed until the voucher is generated
-            this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, 'Giddh');
+            this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, this.localeData?.app_giddh);
             event.preventDefault();
         }
     }
@@ -1332,7 +1376,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public getInvoiveLists() {
         if (this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
-                this._toasty.errorToast('Please Select ' + this.pettyCashBaseAccountTypeString + '  for entry..');
+                let message = this.localeData?.account_entry_error;
+                message = message.replace("[ACCOUNT]", this.pettyCashBaseAccountTypeString);
+                this._toasty.errorToast(message);
                 return;
             }
 
@@ -1389,7 +1435,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.openDropDown = true;
             } else {
                 this.openDropDown = false;
-                this._toasty.errorToast('You are not permitted to change base account. Voucher is already Generated');
+                this._toasty.errorToast(this.localeData?.base_account_change_error);
                 return;
             }
         }
@@ -2052,6 +2098,53 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             });
         }
+    }
+
+    /**
+     * This will return the adjustment notes text
+     *
+     * @returns {string}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getAdjustmentNotes(): string {
+        return this.localeData?.adjustment_notes?.replace("[VOUCHER_NUMBER]", this.vm.selectedLedger?.voucherNumber);
+    }
+
+    /**
+     * This will give text total in currency
+     *
+     * @returns {string}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getTotalInCurrency(): string {
+        let totalInCurrency = this.localeData.total_in_currency;
+        totalInCurrency = totalInCurrency.replace("[CURRENCY]", this.vm.baseCurrencyDetails?.code);
+        return totalInCurrency;
+    }
+
+    /**
+     * This will give text total in multi currency
+     *
+     * @returns {string}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getTotalInMultiCurrency(): string {
+        let totalInCurrency = this.localeData.total_in_currency;
+        totalInCurrency = totalInCurrency.replace("[CURRENCY]", this.vm.foreignCurrencyDetails?.code);
+        return totalInCurrency;
+    }
+
+    /**
+     * This will give text adjust voucher
+     *
+     * @returns {string}
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getAdjustVoucherType(): string {
+        let adjustVoucher = this.localeData.adjust_voucher;
+        adjustVoucher = adjustVoucher.replace("[VOUCHER_TYPE]", (this.vm.selectedLedger.voucher.shortCode === 'sal' ? this.commonLocaleData.app_voucher_types.sales : this.vm.selectedLedger.voucher.shortCode === 'pur' ? this.commonLocaleData.app_voucher_types.purchase : this.vm.selectedLedger.voucher.shortCode === 'credit note' ? this.commonLocaleData.app_voucher_types.credit_note : this.vm.selectedLedger.voucher.shortCode === 'debit note' ? this.commonLocaleData.app_voucher_types.debit_note : this.vm.selectedLedger.voucher.shortCode === 'pay' ? this.commonLocaleData.app_voucher_types.payment : ''));
+
+        return adjustVoucher;
     }
 
     /**

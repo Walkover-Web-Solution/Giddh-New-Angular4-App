@@ -1,26 +1,26 @@
 <div id="share-modal" class="pd-b4 share-grp">
     <div class="modal-header">
-        <h3>Share Account</h3>
+        <h3>{{localeData?.share_account}}</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
     </div>
     <div class="modal-body" id="SharePop">
         <div class="form-group">
-            <h3 class="pd-b1">Share with</h3>
+            <h3 class="pd-b1">{{localeData?.share_with}}</h3>
             <div class="add-mailer">
 
                 <!--share account from-->
                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" class="form-inline clearfix" autocomplete="off">
                     <div class="input-group form-group w-100">
-                        <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID" class="form-control" [pattern]="giddhEmailRegex">
+                        <input name="userEmail" type="email" [(ngModel)]="email" required [placeholder]="commonLocaleData?.app_email_id" class="form-control" [pattern]="giddhEmailRegex">
                         <div class="input-group-btn mr-l1">
                             <select name="selectedPermission" class="form-control selected-permission" [(ngModel)]="selectedPermission" required>
-                                <option value="">-Select permission-</option>
+                                <option value="">{{localeData?.select_permission}}</option>
                                 <option [value]="permission.uniqueName"
                                     *ngFor="let permission of allPermissions$ | async">
                                     {{permission.name}}
                                 </option>
                             </select>
-                            <button class="btn btn-success btn-share ml-0" type="submit" [disabled]="shareAccountForm.invalid" (click)="shareAccount()">Share
+                            <button class="btn btn-success btn-share ml-0" type="submit" [disabled]="shareAccountForm.invalid" (click)="shareAccount()">{{commonLocaleData?.app_share}}
                             </button>
                         </div>
                         <!-- /btn-account -->

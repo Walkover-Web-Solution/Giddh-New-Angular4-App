@@ -1,10 +1,7 @@
 import { select, Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ImportExcelActions } from '../../actions/import-excel/import-excel.actions';
-import { CurrentPage } from '../../models/api-models/Common';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { takeUntil } from 'rxjs/operators';
@@ -25,19 +22,17 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
 
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
-        private _router: Router,
         private _importExcelActions: ImportExcelActions,
-        private _generalActions: GeneralActions,
         private generalService: GeneralService
     ) {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Import Data";
-        currentPageObj.url = this._router.url;
         this.isBranch = this.generalService.currentOrganizationType === OrganizationType.Branch;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
     public ngOnInit() {

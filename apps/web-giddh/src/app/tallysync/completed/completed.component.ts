@@ -111,6 +111,10 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public activeCompany: any;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -184,7 +188,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public getReport() {
         if (this.filterForm.invalid) {
-            this._toaster.errorToast("Please check your filter criteria");
+            this._toaster.errorToast(this.localeData.filter_criteria);
             return;
         }
 

@@ -1,19 +1,23 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { cloneDeep } from '../../../lodash-optimized';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { AppState } from '../../../store/roots';
 
 @Component({
-    selector: 'audit-logs-table',  // <home></home>
+    selector: 'audit-logs-table',
     templateUrl: './audit-logs-table.component.html',
     styleUrls: ['audit-logs-table.component.scss']
 })
-export class AuditLogsTableComponent implements OnInit, OnDestroy {
+
+export class AuditLogsTableComponent implements OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** To toggle multiple line show/hide for address*/
     public showSingleAddress: boolean = false;
     /** Total pages in audit log response*/
@@ -37,15 +41,6 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
         this.page$ = this.store.pipe(select(state => state.auditlog.currentPage), takeUntil(this.destroyed$));
         this.auditLogs$ = this.store.pipe(select(state => state.auditlog.auditLogs), takeUntil(this.destroyed$));
         this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
-    }
-
-    /**
-     *  Component lifecycle call stack
-     *
-     * @memberof AuditLogsTableComponent
-     */
-    public ngOnInit(): void {
-        // this.getFilteredLogs();
     }
 
     /**

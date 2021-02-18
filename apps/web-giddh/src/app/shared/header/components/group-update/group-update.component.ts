@@ -33,6 +33,10 @@ import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models
 })
 
 export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public uniqueName: string = null;
     public totalForTax: number = 0;
     @Input() public blankLedger: BlankLedgerVM;
@@ -60,14 +64,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public isUpdateGroupInProcess$: Observable<boolean>;
     public isUpdateGroupSuccess$: Observable<boolean>;
     public optionsForDropDown: IOption[] = [{ label: 'Vishal', value: 'vishal' }];
-    public taxPopOverTemplate: string = `
-  <div class="popover-content">
-  <label>Tax being inherited from:</label>
-    <ul>
-    <li>@inTax.name</li>
-    </ul>
-  </div>
-  `;
+    public taxPopOverTemplate: string = '';
     public showEditTaxSection: boolean = false;
     public groupsList: IOption[] = [];
     public accountList: any[];
@@ -119,6 +116,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        this.taxPopOverTemplate = '<div class="popover-content"><label>'+this.localeData.tax_inherited+':</label><ul><li>@inTax.name</li></ul></div>';
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.groupDetailForm = this._fb.group({
             name: ['', Validators.required],
