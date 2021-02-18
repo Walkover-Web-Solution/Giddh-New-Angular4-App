@@ -134,7 +134,6 @@ tfoot td .table-sec.form-group {
     max-width: 250px;
     left: auto;
     top: 31px;
-    padding: 8px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     right: 0;
     z-index: 4;
@@ -150,7 +149,6 @@ tfoot td .table-sec.form-group {
 
 .hsn-code-dropdown input {
     width: 100%;
-    height: 28px !important;
     padding: 5px;
     border: 1px solid $gainsboro;
 }
@@ -315,7 +313,7 @@ tfoot td .table-sec.form-group {
     justify-content: center;
     align-items: center;
 }
-.addNewLine.mr-t1 {
+.add-new-line.mr-t1 {
     position: absolute;
     width: 100%;
 }

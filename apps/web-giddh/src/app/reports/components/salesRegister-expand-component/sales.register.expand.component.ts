@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Input, OnDestroy } from '@angular/core';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
@@ -9,19 +8,16 @@ import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operat
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { FormControl } from '@angular/forms';
-import { CurrentPage } from '../../../models/api-models/Common';
-import { GeneralActions } from '../../../actions/general/general.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
-
 
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
     styleUrls: ['./sales.register.expand.component.scss']
 })
-export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
+export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public SalesRegisteDetailedItems: SalesRegisteDetailedResponse;
     public from: string;
     public to: string;
@@ -46,10 +42,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     public voucherNumberInput: FormControl = new FormControl();
     // public customerNameInput: FormControl = new FormControl();
-    public monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
-
+    public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;
     public imgPath: string;
@@ -63,18 +56,18 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         discount: false,
         tax: false
     };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
-
-    bsValue = new Date();
-
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private _generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
     }
 
     ngOnInit() {
-        this.setCurrentPageTitle();
         this.imgPath = (isElectron||isCordova)  ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = 50;
@@ -96,7 +89,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             }
         });
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
-        this.getCurrentMonthYear();
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
@@ -270,11 +262,17 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         }
     }
 
-    public setCurrentPageTitle() {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Reports > Sales Register";
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof SalesRegisterExpandComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.monthNames = [this.commonLocaleData.app_months_full.january, this.commonLocaleData.app_months_full.february, this.commonLocaleData.app_months_full.march, this.commonLocaleData.app_months_full.april, this.commonLocaleData.app_months_full.may, this.commonLocaleData.app_months_full.june, this.commonLocaleData.app_months_full.july, this.commonLocaleData.app_months_full.august, this.commonLocaleData.app_months_full.september, this.commonLocaleData.app_months_full.october, this.commonLocaleData.app_months_full.november, this.commonLocaleData.app_months_full.december];
+            this.getCurrentMonthYear();
+        }
     }
 
     /**

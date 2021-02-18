@@ -21,12 +21,13 @@ import { OrganizationType } from '../../../models/user-login-state';
 })
 
 export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Input('mode') public mode: 'export' | 'import' = 'export';
 	@Output('backPressed') public backPressed: EventEmitter<boolean> = new EventEmitter();
-	public fileTypes: IOption[] = [
-		{ label: 'Accounting Entries', value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES.toString() },
-		{ label: 'Master Except Accounting Entries', value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS.toString() },
-	];
+	public fileTypes: IOption[] = [];
 	public fileType: string = '';
 	public from: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
 	public to: string = moment().format(GIDDH_DATE_FORMAT);
@@ -88,6 +89,11 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
+        this.fileTypes = [
+            { label: this.localeData.file_types.accounting_entries, value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES.toString() },
+		    { label: this.localeData.file_types.master, value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS.toString() }
+        ];
+
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 		this.isExportSuccess$.subscribe(s => {
 			if (s) {
@@ -145,8 +151,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 	}
 
 	public selectedDate(value: any) {
-		this.from = moment(value.picker.startDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
-		this.to = moment(value.picker.endDate, 'DD-MM-YYYY').format('DD-MM-YYYY');
+		this.from = moment(value.picker.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+		this.to = moment(value.picker.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 	}
 
 	public fileSelected(file: File) {

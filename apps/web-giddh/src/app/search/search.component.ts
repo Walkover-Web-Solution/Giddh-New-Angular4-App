@@ -20,6 +20,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     /** Stores the current branch unique name */
     public currentBranchUniqueName: string;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _searchActions: SearchActions, private companyActions: CompanyActions) {
     }

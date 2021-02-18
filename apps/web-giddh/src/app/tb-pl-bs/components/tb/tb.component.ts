@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
@@ -14,51 +14,14 @@ import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'tb',
-    template: `
-    <tb-pl-bs-filter
-      #filter
-      [selectedCompany]="selectedCompany"
-      [showLoader]="showLoader | async"
-      [showLabels]="true"
-      (seachChange)="searchChanged($event)"
-      (onPropertyChanged)="filterData($event)"
-      (expandAll)="expandAllEvent($event)"
-      (tbExportCsvEvent)="exportCsv($event)"
-      (tbExportPdfEvent)="exportPdf($event)"
-      (tbExportXLSEvent)="exportXLS($event)"
-      [tbExportCsv]="true"
-      [tbExportPdf]="true"
-      [tbExportXLS]="true"
-    ></tb-pl-bs-filter>
-    <div *ngIf="(showLoader | async)">
-      <!-- loader -->
-      <div class="loader">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <h1>loading trial balance</h1>
-      </div>
-    </div>
-    <div *ngIf="(data$ | async) && !(showLoader | async)">
-      <tb-grid #tbGrid
-               [search]="search"
-               [from]="from"
-               [to]="to"
-               (searchChange)="searchChanged($event)"
-               [expandAll]="expandAll"
-               [data$]="data$  | async"
-      ></tb-grid>
-    </div>
-    <div *ngIf="(!(showLoader | async) && !(data$ | async))" style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
-      <div class="d-flex">
-        <h2>No Data Available For This Filter</h2>
-      </div>
-    </div>
-  `
+    templateUrl: './tb.component.html'
 })
+
 export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     public showLoader: Observable<boolean>;
     public data$: Observable<AccountDetails>;
     public request: TrialBalanceRequest;

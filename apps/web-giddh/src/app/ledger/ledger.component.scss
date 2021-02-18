@@ -482,7 +482,7 @@ sh-select:focus {
 .digit-blue {
     color: $midnight-blue;
 }
-.greyTextClr {
+.grey-text-color {
     color: $dark-gray !important;
     font-size: 14px;
 }
@@ -1205,4 +1205,7 @@ sh-select:focus {
 }
 .account-placeholder-text {
     color: $black !important;
+}
+.capitalize {
+    text-transform: capitalize;
 }

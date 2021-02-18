@@ -38,7 +38,7 @@
                         <!-- other details -->
                         <div class="row">
                             <div class="col-12 col-sm-12">
-                                <div class="form-group toggle-btn mr-b05" (click)="showOtherDetails = !showOtherDetails">
+                                <div class="form-group toggle-btn mr-b05" (click)="toggleOtherDetails()">
                                     <label class="cp">
                                         <i class="cp collapse-icons" aria-hidden="true"
                                             [ngClass]="{'icon-minus': showOtherDetails, 'icon-plus': !showOtherDetails}"></i>Other
@@ -55,8 +55,18 @@
                                     <input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective [control]="addStockForm.get('uniqueName')" class="form-control" formControlName="uniqueName">
                                 </div>
                                 <div class="form-group col-sm-4 col-12">
-                                    <label>HSN Code</label>
-                                    <input type="text" class="form-control" maxlength="10" decimalDigitsDirective formControlName="hsnNumber" />
+                                    <span class="mr-r15">
+                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType" id="hsnCodeType" formControlName="showCodeType" value="hsn">
+                                        <label for="hsnCodeType" class="radio-custom-label">HSN Code</label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" class="radio-custom radio-theme" name="showCodeType" id="sacCodeType" formControlName="showCodeType" value="sac">
+                                        <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
+                                    </span>
+									<input type="text" class="form-control" maxlength="10" decimalDigitsDirective
+                                        formControlName="hsnNumber" *ngIf="addStockForm.get('showCodeType').value === 'hsn'" />
+                                    <input type="text" class="form-control" maxlength="10" formControlName="sacNumber"
+                                        decimalDigitsDirective *ngIf="addStockForm.get('showCodeType').value === 'sac'" />
                                 </div>
 
                                 <!--                  <div class="form-group col-4">-->
@@ -125,11 +135,6 @@
                             </div>
 
                             <div class="row sku-row">
-                                <div class="form-group col-sm-4 col-12">
-                                    <label>SAC Code</label>
-                                    <input type="text" class="form-control" maxlength="10" formControlName="sacNumber" decimalDigitsDirective />
-                                </div>
-
 
                                 <!-- SKU Code -->
                                 <div class="form-group col-sm-4 col-12">

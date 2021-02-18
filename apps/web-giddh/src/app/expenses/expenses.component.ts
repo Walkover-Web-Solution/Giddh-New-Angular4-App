@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild, } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
 import { ExpencesAction } from '../actions/expences/expence.action';
@@ -13,8 +13,6 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { CurrentPage } from '../models/api-models/Common';
-import { GeneralActions } from '../actions/general/general.actions';
 import { GeneralService } from '../services/general.service';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
@@ -133,6 +131,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>,
         private _expenceActions: ExpencesAction,
@@ -140,7 +142,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private companyActions: CompanyActions,
         private _cdRf: ChangeDetectorRef,
-        private _generalActions: GeneralActions,
         private _generalService: GeneralService,
         private router: Router) {
 
@@ -343,7 +344,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public tabChanged(tab: string, e) {
-        this.setCurrentPageTitle(this._generalService.capitalizeFirstLetter(tab));
         if (e && !e.target) {
             this.saveLastState(tab);
         }
@@ -390,16 +390,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public setCurrentPageTitle(title) {
-        let currentPageObj = new CurrentPage();
-        currentPageObj.name = "Petty Cash Management > " + title;
-        currentPageObj.url = this.router.url;
-        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
-    }
-
     public getActiveTab() {
         if (this.route.snapshot.queryParams.tab) {
-            this.setCurrentPageTitle(this._generalService.capitalizeFirstLetter(this.route.snapshot.queryParams.tab));
             this.currentSelectedTab = this.route.snapshot.queryParams.tab;
             if (this.currentSelectedTab === "pending") {
                 this.tabset.tabs[0].active = true;

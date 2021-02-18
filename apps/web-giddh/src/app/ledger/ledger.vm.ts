@@ -6,9 +6,7 @@ import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
-import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/api-models/Inventory';
-import { underStandingTextData } from './underStandingTextData';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { TaxControlData } from '../theme/tax-control/tax-control.component';
@@ -16,6 +14,7 @@ import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../m
 import { ICurrencyResponse } from '../models/api-models/Company';
 import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+//import { underStandingTextData } from './underStandingTextData';
 
 export class LedgerVM {
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
@@ -216,39 +215,43 @@ export class LedgerVM {
         };
     }
 
-    public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups) {
-        let data;
-        let isReverseChargeAccount = false;
+    public getUnderstandingText(selectedLedgerAccountType, accountName, parentGroups, localeData?: any) {
+        if(localeData) {
+            let data;
+            let isReverseChargeAccount = false;
 
-        if (parentGroups) {
-            parentGroups.forEach(key => {
-                if (key.uniqueName === "reversecharge") {
-                    isReverseChargeAccount = true;
+            if (parentGroups) {
+                parentGroups.forEach(key => {
+                    if (key.uniqueName === "reversecharge") {
+                        isReverseChargeAccount = true;
+                    }
+                });
+            }
+
+            let underStandingTextData = localeData?.text_data;
+
+            if (isReverseChargeAccount) {
+                data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
+            } else {
+                data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+            }
+
+            if (data) {
+                if(data.balanceText && data.balanceText.cr) {
+                    data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
                 }
-            });
-        }
+                if(data.balanceText && data.balanceText.dr) {
+                    data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+                }
 
-        if (isReverseChargeAccount) {
-            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === "ReverseCharge"));
-        } else {
-            data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
-        }
-
-        if (data) {
-            if(data.balanceText && data.balanceText.cr) {
-                data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+                if(data.text && data.text.dr) {
+                    data.text.dr = data.text.dr.replace('<accountName>', accountName);
+                }
+                if(data.text && data.text.cr) {
+                    data.text.cr = data.text.cr.replace('<accountName>', accountName);
+                }
+                this.ledgerUnderStandingObj = _.cloneDeep(data);
             }
-            if(data.balanceText && data.balanceText.dr) {
-                data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
-            }
-
-            if(data.text && data.text.dr) {
-                data.text.dr = data.text.dr.replace('<accountName>', accountName);
-            }
-            if(data.text && data.text.cr) {
-                data.text.cr = data.text.cr.replace('<accountName>', accountName);
-            }
-            this.ledgerUnderStandingObj = _.cloneDeep(data);
         }
     }
 
