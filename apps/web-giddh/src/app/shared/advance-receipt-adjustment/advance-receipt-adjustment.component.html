@@ -19,9 +19,30 @@
                     </div>
                 </div>
                 <div class="col-md-4 text-right font-14 pt-2 xs-left">
-                    <p>{{adjustedVoucherType === 'rcpt' ? 'Receipt' : (adjustedVoucherType === 'advance-receipt') ? 'Advance Receipt' : 'Invoice'}} Total: <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal | giddhCurrency}}
+                    <p>{{adjustedVoucherType === 'rcpt' ? 'Receipt' : (adjustedVoucherType === 'advance-receipt') ? 'Advance Receipt' : 'Invoice'}} Total: <i class="font-10"></i>
+
+                        <!-- {{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal | giddhCurrency}} -->
+
+                        <span class="d-inline-flex justify-content-end">
+                            <amount-field [amount]="adjustPayment?.grandTotal"
+                                [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
+                                [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
+                            </amount-field>
+                        </span>
                     </p>
-                    <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ? 'Balance' : 'Due'}} <span class="text-light">(Post Adj):</span> <span class="nowrap"><i class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{ getBalanceDue() | giddhCurrency}}</span>
+                    <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ? 'Balance' : 'Due'}}
+                        <span class="text-light">(Post Adj):</span> <span class="nowrap"><i class="font-10"></i>
+                        <!-- {{invoiceFormDetails.accountDetails.currencySymbol}}
+                        {{ getBalanceDue() | giddhCurrency}} -->
+
+                    </span>
+
+                        <span class="d-inline-flex justify-content-end">
+                            <amount-field [amount]="getBalanceDue()"
+                                [currencySymbol]="invoiceFormDetails.accountDetails.currencySymbol"
+                                [currencyCode]="invoiceFormDetails.accountDetails.currency?.code">
+                            </amount-field>
+                        </span>
                     </p>
                 </div>
             </div>
