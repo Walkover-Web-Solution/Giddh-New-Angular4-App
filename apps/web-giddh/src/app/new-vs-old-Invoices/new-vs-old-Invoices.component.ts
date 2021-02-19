@@ -47,6 +47,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -138,6 +140,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         //   this.showErrorToast('please select quater');
         //   return;
         // }
+        this.isLoading = true;
         this.NewVsOldInvoicesQueryRequest.type = this.selectedType;
         if (this.NewVsOldInvoicesQueryRequest.type === 'month') {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedmonth + '-' + this.selectedYear;
@@ -176,6 +179,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
             this.isRequestSuccess$.subscribe(s => {
                 if (s) {
+                    this.isLoading = false;
                     if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
                         this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth).label;
                     } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {

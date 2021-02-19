@@ -5,7 +5,7 @@
         </div>
         <div class="card-body position-relative" *ngIf="localeData">
             <div class="banke-detailsBlock">
-                <perfect-scrollbar [scrollIndicators]="true" *ngIf="bankAccounts.length > 0">
+                <perfect-scrollbar [scrollIndicators]="true" *ngIf="!isLoading && bankAccounts.length > 0">
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detatil" *ngFor="let bankaccount of bankAccounts;">
                             <p class="bank-name "> {{bankaccount.name}} </p>
@@ -19,10 +19,11 @@
                         </div>
                     </div>
                 </perfect-scrollbar>
-                <div class="addBankDetails" *ngIf="bankAccounts.length === 0">
+                <div class="addBankDetails" *ngIf="!isLoading && bankAccounts.length === 0">
                     <p>{{localeData?.no_banks_found}}</p>
                     <a class="connectBnk" [routerLink]="['/pages/settings/linked-accounts']">{{localeData?.connect_bank}}</a>
                 </div>
+                <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <a class="connectBnk" *ngIf="bankAccounts.length > 0"
                 [routerLink]="['/pages/settings/linked-accounts']">{{localeData?.connect_bank}}</a>

@@ -331,12 +331,7 @@
         </div>
     </div>
     <div *ngIf="isSwitchPlanInProcess">
-        <div class="no-data mr-t2 loader-main">
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
-        </div>
+        <giddh-page-loader></giddh-page-loader>
     </div>
     <div #allPlans>
         <div class="box clearfix pd-l3 mr-b15 xs-pd-l15 pd-r3 relative all-plans" *ngIf="showPlans">

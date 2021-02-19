@@ -9,12 +9,7 @@
 
         <div class="card-body position-relative ratio-analysis-panel-body">
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
-                <div class="no-data mr-t2 loader-main">
-                    <div class="spinner2">
-                        <div class="cube1"></div>
-                        <div class="cube2"></div>
-                    </div>
-                </div>
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
                 <div class="row">

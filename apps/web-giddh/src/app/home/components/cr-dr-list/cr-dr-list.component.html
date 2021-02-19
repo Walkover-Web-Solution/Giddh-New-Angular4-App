@@ -24,7 +24,7 @@
                             <th width="20%" class="text-right">{{localeData?.bill_amount}}</th>
                             <th width="40%" class="text-right">{{commonLocaleData?.app_due_as_on}} {{dueDate | date}}</th>
                         </thead>
-                        <tbody>
+                        <tbody *ngIf="!isLoading">
                             <tr *ngFor="let account of drAccounts">
                                 <td [attr.data-title]="localeData?.debtors">{{account.name}}</td>
                                 <td [attr.data-title]="localeData?.invoiced_on"><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span *ngIf="!account.latestInvoiceDate">-</span></td>
@@ -39,6 +39,13 @@
                                 </td>
                             </tr>
                         </tbody>
+                        <tbody *ngIf="isLoading">
+                            <tr>
+                                <td colspan="4">
+                                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div class="table-responsive credtors-table">
@@ -49,7 +56,7 @@
                             <th width="20%" class="text-right">{{localeData?.bill_amount}}</th>
                             <th width="40%" class="text-right">{{commonLocaleData?.app_due_as_on}} {{dueDate | date}}</th>
                         </thead>
-                        <tbody>
+                        <tbody *ngIf="!isLoading">
                             <tr *ngFor="let account of crAccounts">
                                 <td [attr.data-title]="localeData?.creditors">{{account.name}}</td>
                                 <td [attr.data-title]="localeData?.invoiced_on"><span *ngIf="account.latestInvoiceDate">{{account.latestInvoiceDate}}</span><span *ngIf="!account.latestInvoiceDate">-</span></td>
@@ -57,6 +64,13 @@
                                     {{account.latestBillAmount.symbol}} {{account.latestBillAmount.amount | giddhCurrency}}</td>
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right" *ngIf="!account.latestBillAmount">-</td>
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">{{activeCompany.baseCurrencySymbol}} {{ account.closingBalance.amount | giddhCurrency }}</td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="isLoading">
+                            <tr>
+                                <td colspan="4">
+                                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

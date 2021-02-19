@@ -60,7 +60,7 @@
 						</tr>
 					</thead>
 
-					<tbody>
+					<tbody *ngIf="!(isDiscountListInProcess$ | async)">
 						<tr *ngFor="let discount of discountList$ | async; let i = index">
 							<td data-title="#">{{ i + 1 }}</td>
 							<td data-title="Name"> {{ discount.name }}</td>
@@ -75,7 +75,7 @@
 						</tr>
 					</tbody>
 
-					<tbody *ngIf="!(discountList$ | async).length" class="on-mobile-view no-records">
+					<tbody *ngIf="!(isDiscountListInProcess$ | async) && !(discountList$ | async).length" class="on-mobile-view no-records">
 						<tr>
 							<td colspan="3" class="text-center empty-table">
 								<h1>No Discount Found !!</h1>
@@ -83,6 +83,14 @@
 						</tr>
 					</tbody>
 
+                    <tbody *ngIf="(isDiscountListInProcess$ | async)">
+						<tr>
+							<td colspan="3" class="text-center empty-table">
+								<giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+							</td>
+						</tr>
+                    </tbody>
+                    
 				</table>
 
 			</div>

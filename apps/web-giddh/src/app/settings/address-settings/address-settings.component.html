@@ -103,12 +103,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="no-data mrT2 loader-main" *ngIf="shouldShowLoader">
-                    <div class="spinner2">
-                        <div class="cube1"></div>
-                        <div class="cube2"></div>
-                    </div>
-                </div>
+                <giddh-page-loader *ngIf="shouldShowLoader"></giddh-page-loader>
                 <div class="no-data" *ngIf="addresses.length === 0 && !shouldShowLoader">
                     <h1>No addresses found within given criteria.</h1>
                 </div>
