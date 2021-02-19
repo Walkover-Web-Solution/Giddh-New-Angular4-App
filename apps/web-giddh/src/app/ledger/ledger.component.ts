@@ -1240,7 +1240,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.lc.addNewTransaction('CREDIT')
             ] : [],
             voucherType: null,
-            entryDate: this.selectedDateRange.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT),
+            entryDate: this.selectedDateRange?.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT),
             unconfirmedEntry: false,
             attachedFile: '',
             attachedFileName: '',
