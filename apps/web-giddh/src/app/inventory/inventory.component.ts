@@ -493,7 +493,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof InventoryComponent
      */
     private loadBranchWarehouse(selectedBranchUniqueName: string): void {
-        let branchDetails: any = this.branchesWithWarehouse.filter((branch) => branch.uniqueName === selectedBranchUniqueName);
+        let branchDetails: any = this.branchesWithWarehouse?.filter((branch) => branch.uniqueName === selectedBranchUniqueName);
         if (branchDetails && branchDetails.length > 0) {
             branchDetails = branchDetails.pop();
             const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(branchDetails.warehouses);
