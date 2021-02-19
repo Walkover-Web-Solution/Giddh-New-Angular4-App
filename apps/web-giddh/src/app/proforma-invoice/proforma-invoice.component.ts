@@ -380,6 +380,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     //Multi-currency changes
     public exchangeRate = 1;
     public originalExchangeRate = 1;
+    /** Stores the previous exchange rate of previous debtor */
+    public previousExchangeRate = 1;
     public isMulticurrencyAccount = false;
     public invoiceUniqueName: string;
     public showLoader: boolean = true;
@@ -1797,6 +1799,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.getCurrencyRate(this.companyCurrency, item.currency,
                 moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
         } else {
+            this.previousExchangeRate = this.exchangeRate;
             this.originalExchangeRate = 1;
             this.exchangeRate = 1;
             this.recalculateEntriesTotal();
@@ -1926,6 +1929,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 stateCode: ''
             }
         };
+        this.previousExchangeRate = 1;
         this.startLoader(false);
         this.isEntryDateChangeConfirmationDisplayed = false;
         this.isVoucherDateChanged = false;
@@ -2749,7 +2753,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.entries.forEach(entry => {
                 const transaction = entry.transactions[0];
                 if (transaction.isStockTxn) {
-                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    const rate = this.previousExchangeRate >= 1 ? transaction.rate * this.previousExchangeRate : Number((transaction.rate / this.previousExchangeRate).toFixed(this.highPrecisionRate));
+                    transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     this.calculateStockEntryAmount(transaction);
                     this.calculateWhenTrxAltered(entry, transaction)
                 }
@@ -3061,7 +3066,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if(this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = transaction.stockDetails.hsnNumber;
                 transaction.hsnOrSac = 'hsn';
-                transaction.showCodeType = "hsn"; 
+                transaction.showCodeType = "hsn";
             } else {
                 transaction.sacNumber = transaction.stockDetails.sacNumber;
                 transaction.sacNumberExists = true;
@@ -4742,6 +4747,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.exchangeRate = result.exchangeRate;
         this.originalExchangeRate = this.exchangeRate;
+        this.previousExchangeRate = this.exchangeRate;
 
         this.invoiceUniqueName = result.uniqueName;
         this.prepareInvoiceTypeFlags();
@@ -4788,6 +4794,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isMulticurrencyAccount) {
             this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal || 0;
             this.originalExchangeRate = this.exchangeRate;
+            this.previousExchangeRate = this.exchangeRate;
         }
     }
 
@@ -4832,6 +4839,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this._ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
+                    this.previousExchangeRate = this.exchangeRate;
                     this.originalExchangeRate = rate;
                     this.exchangeRate = rate;
                     this._cdr.detectChanges();
