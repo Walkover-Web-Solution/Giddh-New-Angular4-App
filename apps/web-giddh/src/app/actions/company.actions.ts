@@ -81,6 +81,8 @@ export class CompanyActions {
     public static GET_COMPANY_USER = 'GET_COMPANY_USER';
     public static GET_COMPANY_USER_RESPONSE = 'GET_COMPANY_USER_RESPONSE';
 
+    public static SET_STATE_DETAILS_REQUEST = 'SET_STATE_DETAILS_REQUEST';
+
     public createCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_COMPANY),
@@ -146,6 +148,7 @@ export class CompanyActions {
                         stateDetailsObj.lastState = 'home';
                     }
                     if (prevTab !== 'user-details') {
+                        this.store.dispatch(this.setStateDetailsRequest(stateDetailsObj));
                         this.store.dispatch(this.SetStateDetails(stateDetailsObj));
                     }
                 }
@@ -213,6 +216,7 @@ export class CompanyActions {
                         stateDetailsObj.lastState = 'home';
                     }
                     if (prevTab !== 'user-details') {
+                        this.store.dispatch(this.setStateDetailsRequest(stateDetailsObj));
                         this.store.dispatch(this.SetStateDetails(stateDetailsObj));
                     }
                 }
@@ -547,6 +551,20 @@ export class CompanyActions {
             type: CompanyActions.GET_STATE_DETAILS_RESPONSE,
             payload: value
         };
+    }
+
+    /**
+     * This will set the newly created company uniquename and last state in store
+     *
+     * @param {*} value
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public setStateDetailsRequest(value: any): CustomActions {
+        return {
+            type: CompanyActions.SET_STATE_DETAILS_REQUEST,
+            payload: value
+        }
     }
 
     public SetStateDetails(value: StateDetailsRequest): CustomActions {
