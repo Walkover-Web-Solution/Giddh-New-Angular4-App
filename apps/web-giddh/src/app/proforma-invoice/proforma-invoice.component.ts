@@ -891,6 +891,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.focusInCustomerName();
             this.getAllLastInvoices();
             this.fillDeliverToAddress();
+            this.initiateVoucherModule();
         });
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
@@ -966,7 +967,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
 
-        if (!this.isUpdateMode) {
+        if (!this.isUpdateMode && !this.isPendingVoucherType) {
             this.addBlankRow(null);
             this.selectedWarehouse = String(this.defaultWarehouse);
         }
@@ -978,158 +979,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         combineLatest([this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
             .pipe(takeUntil(this.destroyed$), auditTime(700))
             .subscribe(async results => {
-                //this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-                // create mode because voucher details are not available
-                // if (results[0]) {
-                //     this.sundryDebtorsAcList = [];
-                //     this.sundryCreditorsAcList = [];
-                //     this.prdSerAcListForDeb = [];
-                //     this.prdSerAcListForCred = [];
-
-                //     // flattenAccounts.forEach(item => {
-
-                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
-                //     //     //     this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
-                //     //     // }
-
-                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
-                //     //     //     this.sundryCreditorsAcList.push({
-                //     //     //         label: item.name,
-                //     //     //         value: item.uniqueName,
-                //     //     //         additional: item
-                //     //     //     });
-                //     //     // }
-
-                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-                //     //     //     bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
-                //     //     //     if (this.isPurchaseInvoice) {
-                //     //     //         this.sundryCreditorsAcList.push({
-                //     //     //             label: item.name,
-                //     //     //             value: item.uniqueName,
-                //     //     //             additional: item
-                //     //     //         });
-                //     //     //     }
-                //     //     // }
-
-                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'otherincome' || p.uniqueName === 'revenuefromoperations')) {
-                //     //     //     if (item.stocks) {
-                //     //     //         // normal entry
-                //     //     //         this.prdSerAcListForDeb.push({
-                //     //     //             value: item.uniqueName,
-                //     //     //             label: item.name,
-                //     //     //             additional: item
-                //     //     //         });
-
-                //     //     //         // stock entry
-                //     //     //         item.stocks.map(as => {
-                //     //     //             this.prdSerAcListForDeb.push({
-                //     //     //                 value: `${item.uniqueName}#${as.uniqueName}`,
-                //     //     //                 label: `${item.name} (${as.name})`,
-                //     //     //                 additional: Object.assign({}, item, {stock: as})
-                //     //     //             });
-                //     //     //         });
-                //     //     //     } else {
-                //     //     //         this.prdSerAcListForDeb.push({
-                //     //     //             value: item.uniqueName,
-                //     //     //             label: item.name,
-                //     //     //             additional: item
-                //     //     //         });
-                //     //     //     }
-                //     //     // }
-
-                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'operatingcost' || p.uniqueName === 'indirectexpenses')) {
-                //     //     //     if (item.stocks) {
-                //     //     //         // normal entry
-                //     //     //         this.prdSerAcListForCred.push({
-                //     //     //             value: item.uniqueName,
-                //     //     //             label: item.name,
-                //     //     //             additional: item
-                //     //     //         });
-
-                //     //     //         // stock entry
-                //     //     //         item.stocks.map(as => {
-                //     //     //             this.prdSerAcListForCred.push({
-                //     //     //                 value: `${item.uniqueName}#${as.uniqueName}`,
-                //     //     //                 label: `${item.name} (${as.name})`,
-                //     //     //                 additional: Object.assign({}, item, {stock: as})
-                //     //     //             });
-                //     //     //         });
-                //     //     //     } else {
-                //     //     //         this.prdSerAcListForCred.push({
-                //     //     //             value: item.uniqueName,
-                //     //     //             label: item.name,
-                //     //     //             additional: item
-                //     //     //         });
-                //     //     //     }
-                //     //     // }
-                //     // });
-
-                //     // this.makeCustomerList();
-
-                //     /*
-                //       find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
-                //       is not available. if invoice no is there then it should be update mode
-                //     */
-                //     // if (this.accountUniqueName && !this.invoiceNo) {
-                //     //     if (!this.isCashInvoice) {
-                //     //         // this.customerAcList$.pipe(take(1)).subscribe(data => {
-                //     //         //     if (data && data.length) {
-                //     //         //         let item = data.find(f => f.value === this.accountUniqueName);
-                //     //         //         if (item) {
-                //     //         //             this.invFormData.voucherDetails.customerName = item.label;
-                //     //         //             this.invFormData.voucherDetails.customerUniquename = item.value;
-                //     //         //             this.isCustomerSelected = true;
-                //     //         //             this.invFormData.accountDetails.name = '';
-                //     //         //         }
-                //     //         //     }
-                //     //         // });
-                //     //         // this.onSearchQueryChanged(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
-                //     //         const requestObject = this.getSearchRequestObject(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
-                //     //         this.searchAccount(requestObject).subscribe(data => {
-                //     //             if (data && data.body && data.body.results) {
-                //     //                 this.prepareSearchLists([{
-                //     //                     name: this.invFormData.accountDetails.name,
-                //     //                     uniqueName: this.invFormData.accountDetails.uniqueName
-                //     //                 }], 1, SEARCH_TYPE.CUSTOMER);
-                //     //                 this.makeCustomerList();
-                //     //                 this.focusInCustomerName();
-                //     //                 const item = data.body.results.find(result => result.uniqueName === this.accountUniqueName);
-                //     //                 if (item) {
-                //     //                     this.invFormData.voucherDetails.customerName = item.name;
-                //     //                     this.invFormData.voucherDetails.customerUniquename = item.accountUniqueName;
-                //     //                     this.isCustomerSelected = true;
-                //     //                     this.invFormData.accountDetails.name = '';
-                //     //                 }
-                //     //             }
-                //     //         });
-                //     //     } else {
-                //     //         this.prepareSearchLists([{
-                //     //             name: this.invFormData.accountDetails.name,
-                //     //             uniqueName: this.invFormData.accountDetails.uniqueName
-                //     //         }], 1, SEARCH_TYPE.CUSTOMER);
-                //     //         this.makeCustomerList();
-                //     //         this.focusInCustomerName();
-                //     //         this.invFormData.voucherDetails.customerName = this.invFormData.accountDetails.name;
-                //     //         this.invFormData.voucherDetails.customerUniquename = this.invFormData.accountDetails.uniqueName;
-                //     //     }
-                //     // }
-
-                //     // bankaccounts = _.orderBy(bankaccounts, 'label');
-                //     // this.bankAccounts$ = observableOf(bankaccounts);
-
-                //     /** voucher type pending will not be allow as cash type*/
-                //     // if (this.invFormData.accountDetails && !this.isPendingVoucherType) {
-                //     //     if (!this.invFormData.accountDetails.uniqueName) {
-                //     //         this.invFormData.accountDetails.uniqueName = 'cash';
-                //     //     }
-                //     // }
-                //     // this.depositAccountUniqueName = 'cash';
-                //     // this.startLoader(false);
-                //     // this.focusInCustomerName();
-                // }
-
-                // update mode because voucher details is available
-                /** results[1] :- get voucher details response */
                 if (results[0]) {
                     let obj;
 
@@ -1238,7 +1087,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     //  If last invoice copied then no need to add voucherAdjustments as pre-fill ref:- G0-5554
                     if (this.isSalesInvoice || (results[0] && results[0].voucherAdjustments)) {
-                        if (results[0] && results[0].voucherAdjustments && results[0].voucherAdjustments.adjustments && results[0].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
+                        if (results[0]?.voucherAdjustments?.adjustments?.length && !this.isLastInvoiceCopied) {
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
                             this.calculateAdjustedVoucherTotal(results[0].voucherAdjustments.adjustments);
                             this.advanceReceiptAdjustmentData = results[0].voucherAdjustments;
@@ -1339,6 +1188,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.invoiceDataFound = true;
                         if (!obj.accountDetails.currencySymbol) {
                             obj.accountDetails.currencySymbol = '';
+                        }
+                        if (this.isPendingVoucherType) {
+                            obj.accountDetails.name = results[0].account.name;
+                            obj.voucherDetails.customerName = results[0].account.name;
                         }
                         this.invFormData = obj;
                         this.checkVoucherEntries();
@@ -1443,7 +1296,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         // endregion
 
-        this.initiateVoucherModule();
         // listen for newly added stock and assign value
         combineLatest([this.newlyCreatedStockAc$, this.salesAccounts$]).subscribe((resp: any[]) => {
             let o = resp[0];
@@ -1581,7 +1433,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
             is not available. if invoice no is there then it should be update mode
         */
-        if (this.accountUniqueName && !this.invoiceNo) {
+        if (this.accountUniqueName && (!this.invoiceNo || this.isPendingVoucherType)) {
             if (!this.isCashInvoice) {
                 const requestObject = this.getSearchRequestObject(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
                 this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
