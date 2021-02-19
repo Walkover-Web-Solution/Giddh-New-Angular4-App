@@ -115,6 +115,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -192,7 +194,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
             this._toaster.errorToast(this.localeData?.filter_criteria);
             return;
         }
-
+        this.isLoading = true;
         // api call here
         this.filter.from = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[0];
         this.filter.to = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[1];
@@ -229,6 +231,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
                     element['entriesErrorPercent'] = (isNaN(tallyErrorEntries) ? 0 : tallyErrorEntries).toFixed(2) + '%';
                 })
             }
+            this.isLoading = false;
         });
     }
 
