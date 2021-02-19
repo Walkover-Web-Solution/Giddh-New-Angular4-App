@@ -317,9 +317,10 @@
                             <!-- {{item?.amount?.currencyForAccount?.symbol}}
                             {{item.amount?.amountForAccount | giddhCurrency}} -->
                                 <span class="d-flex justify-content-end">
+
                                     <amount-field [amount]="item.amount?.amountForAccount"
                                         [currencySymbol]="item?.amount?.currencyForAccount?.symbol"
-                                        [currencyCode]="item?.currencyForAccount?.code">
+                                        [currencyCode]="item?.amount?.currencyForAccount?.code">
                                     </amount-field>
                             </span>
                         </td>
@@ -427,7 +428,7 @@
                     </tr>
                 </tbody>
 
-                <tfoot *ngIf="voucherData && voucherData?.totalItems > 20 && !(isGetAllInProcess$ | async)">
+                <tfoot *ngIf="voucherData && voucherData?.totalItems > 20" [hidden]="(isGetAllInProcess$ | async)">
                     <tr>
                         <td colspan="100%">
                             <div class="text-center">
@@ -457,14 +458,7 @@
         </div>
 
         <!--loading-->
-        <div class="no-data mr-t2 loader-main" *ngIf="(isGetAllInProcess$ | async)">
-            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-            <div class="spinner2">
-                <div class="cube1"></div>
-                <div class="cube2"></div>
-            </div>
-        </div>
-
+        <giddh-page-loader *ngIf="(isGetAllInProcess$ | async)"></giddh-page-loader>
     </div>
 
     <!-- region search template -->

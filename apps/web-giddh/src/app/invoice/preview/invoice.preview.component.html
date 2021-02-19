@@ -274,7 +274,7 @@
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPurchaseOrderSearch, fieldName: 'purchaseOrderNumbers', formControl: purchaseOrderNumbersInput, title: 'Purchase Order #'}"></ng-container>
                         </th>
                         <th data-title="Amount" width="12%" class="min-wid-amount">
-                            <div class="d-flex">
+                            <div class="d-flex justify-content-end">
                                 <div> Amount</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
@@ -437,8 +437,8 @@
                             <!-- {{item.accountCurrencySymbol}}
                             {{item.grandTotal?.amountForAccount | giddhCurrency}} -->
 
-                            <amount-field [amount]="item.grandTotal?.amountForAccount"
-                                [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="false">
+                            <amount-field [amount]="item.grandTotal?.amountForAccount" class="justify-content-end d-flex"
+                                [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="item?.account?.currency?.code">
                             </amount-field>
 
                         </td>
@@ -452,7 +452,7 @@
                             {{item?.totalBalance?.amountForAccount | giddhCurrency}} -->
 
                             <amount-field [amount]="item?.totalBalance?.amountForAccount" [currencySymbol]="item.accountCurrencySymbol"
-                                [currencyCode]="false">
+                                [currencyCode]="item?.account?.currency?.code">
                             </amount-field>
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
@@ -592,13 +592,7 @@
                 <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
                     <tr>
                         <td colspan="8">
-                            <!--loading-->
-                            <div class="no-data mr-t2 loader-main">
-                                <div class="spinner2">
-                                    <div class="cube1"></div>
-                                    <div class="cube2"></div>
-                                </div>
-                            </div>
+                            <giddh-page-loader></giddh-page-loader>
                         </td>
                     </tr>
                 </tbody>
@@ -753,7 +747,7 @@
                 </table>
             </div>
         </ng-container>
-        <div *ngIf="voucherData && voucherData?.totalItems > paginationLimit" class="pagination-wrapper">
+        <div *ngIf="voucherData && voucherData?.totalItems > paginationLimit" [hidden]="(isGetAllRequestInProcess$ | async)" class="pagination-wrapper">
             <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
                 class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false"
                 previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
@@ -863,9 +857,10 @@
                     </h3>
                     <h1 class="d-flex">
                         <!-- {{baseCurrencySymbol}}{{ totalSale | giddhCurrency }} -->
+
                         <span>
                             <amount-field [amount]="totalSale"
-                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                                [currencySymbol]="baseCurrencySymbol" [currencyCode]="baseCurrency">
                             </amount-field>
                         </span>
                         <span
@@ -878,8 +873,10 @@
                     <h3>Total Due:</h3>
                     <h1 class="d-flex">
                         <!-- {{baseCurrencySymbol}}{{ totalDue | giddhCurrency }} -->
+
+
                         <span>
-                            <amount-field [amount]="totalDue" [currencySymbol]="baseCurrencySymbol" [currencyCode]="false">
+                            <amount-field [amount]="totalDue" [currencySymbol]="baseCurrencySymbol" [currencyCode]="baseCurrency">
                             </amount-field>
                         </span>
                         <span *ngIf="baseCurrency==='INR'">/-</span>

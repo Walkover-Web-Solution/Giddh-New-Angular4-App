@@ -25,6 +25,9 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 })
 
 export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public ScrollToElement = false;
     public viewPortItems: IGroupOrAccount[];

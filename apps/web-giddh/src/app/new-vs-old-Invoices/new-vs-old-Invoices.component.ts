@@ -19,11 +19,11 @@ import { take, takeUntil } from 'rxjs/operators';
 })
 
 export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
-    public GetTypeOptions: IOption[] = [{ label: 'Month', value: 'month' }, { label: 'Quater', value: 'quater' }];
+    public GetTypeOptions: IOption[] = [];
     public selectedType: string = "month";
-    public monthOptions: IOption[] = [{ label: 'January', value: '01' }, { label: 'February', value: '02' }, { label: 'March', value: '03' }, { label: 'April', value: '04' }, { label: 'May', value: '05' }, { label: 'June', value: '06' }, { label: 'July', value: '07' }, { label: 'August', value: '08' }, { label: 'September', value: '09' }, { label: 'October', value: '10' }, { label: 'November', value: '11' }, { label: 'December', value: '12' }];
+    public monthOptions: IOption[] = [];
     public selectedmonth: string;
-    public quaterOptions: IOption[] = [{ label: 'Q1', value: '01' }, { label: 'Q2', value: '02' }, { label: 'Q3', value: '03' }, { label: 'Q4', value: '04' }];
+    public quaterOptions: IOption[] = [];
     public selectedQuater: string = '';
     public NewVsOldInvoicesData$: Observable<NewVsOldInvoicesResponse>;
 
@@ -47,6 +47,14 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** This will hold bifurcation of clients content */
+    public bifurcationClients: string = "";
 
     constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions, private _companyActions: CompanyActions,
         private _toasty: ToasterService) {
@@ -70,16 +78,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = 'new-vs-old-invoices';
 
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-
-        this.isRequestSuccess$.subscribe(s => {
-            if (s) {
-                if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
-                    this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth).label;
-                } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
-                    this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater).label;
-                }
-            }
-        });
 
         this.NewVsOldInvoicesData$.subscribe(s => {
             if (s) {
@@ -142,6 +140,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         //   this.showErrorToast('please select quater');
         //   return;
         // }
+        this.isLoading = true;
         this.NewVsOldInvoicesQueryRequest.type = this.selectedType;
         if (this.NewVsOldInvoicesQueryRequest.type === 'month') {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedmonth + '-' + this.selectedYear;
@@ -163,5 +162,33 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
     public customMonthSorting(a: IOption, b: IOption) {
         return (parseInt(a.value) - parseInt(b.value));
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof NewVsOldInvoicesComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.monthOptions = [{ label: this.commonLocaleData.app_months_full.january, value: '01' }, { label: this.commonLocaleData.app_months_full.february, value: '02' }, { label: this.commonLocaleData.app_months_full.march, value: '03' }, { label: this.commonLocaleData.app_months_full.april, value: '04' }, { label: this.commonLocaleData.app_months_full.may, value: '05' }, { label: this.commonLocaleData.app_months_full.june, value: '06' }, { label: this.commonLocaleData.app_months_full.july, value: '07' }, { label: this.commonLocaleData.app_months_full.august, value: '08' }, { label: this.commonLocaleData.app_months_full.september, value: '09' }, { label: this.commonLocaleData.app_months_full.october, value: '10' }, { label: this.commonLocaleData.app_months_full.november, value: '11' }, { label: this.commonLocaleData.app_months_full.december, value: '12' }];
+            
+            this.GetTypeOptions = [{ label: this.localeData?.get_type_options?.month, value: 'month' }, { label: this.localeData?.get_type_options?.quarter, value: 'quater' }];
+            this.quaterOptions = [{ label: this.localeData?.quarters?.q1, value: '01' }, { label: this.localeData?.quarters?.q2, value: '02' }, { label: this.localeData?.quarters?.q3, value: '03' }, { label: this.localeData?.quarters?.q4, value: '04' }];
+
+            this.isRequestSuccess$.subscribe(s => {
+                if (s) {
+                    this.isLoading = false;
+                    if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
+                        this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth).label;
+                    } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
+                        this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater).label;
+                    }
+    
+                    this.bifurcationClients = this.localeData.bifurcation_clients.replace("[COLUMN_NAME]", this.columnName);
+                }
+            });
+        }
     }
 }

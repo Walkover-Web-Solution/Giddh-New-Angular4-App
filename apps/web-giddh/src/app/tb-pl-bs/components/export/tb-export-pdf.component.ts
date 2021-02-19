@@ -28,7 +28,7 @@ class FormatPdf implements IFormatable {
     private colX: number;
     private colY: number = 20;
 
-    constructor(private request: TrialBalanceRequest) {
+    constructor(private request: TrialBalanceRequest, private localeData) {
         this.colX = 10;
         // this.colY = 50;
     }
@@ -84,27 +84,11 @@ class FormatPdf implements IFormatable {
 }
 
 @Component({
-    selector: 'tb-export-pdf',  // <home></home>
-    template: `
-      <div class="btn-group" dropdown>
-        <a dropdownToggle class="cp"><img src="{{ imgPath }}"/></a>
-        <ul id="dropdown-pdf" *dropdownMenu class="dropdown-menu dropdown-menu-right tbpl-dropdown" role="menu" aria-labelledby="button-basic">
-            <span class="caret"></span>
-            <li><a (click)="downloadPdf('group-wise')" class="cp">Group Wise
-              Report</a>
-            </li>
-            <li><a (click)="downloadPdf('condensed')" class="cp">Condensed
-              Report</a>
-            </li>
-            <li><a (click)="downloadPdf('account-wise')" class="cp">Account Wise
-              Report</a>
-            </li>
-        </ul>
-      </div>
-    <!-- end form-group -->
-  `,
+    selector: 'tb-export-pdf',
+    templateUrl: './tb-export-pdf.component.html',
     providers: [RecTypePipe]
 })
+
 export class TbExportPdfComponent implements OnInit, OnDestroy {
     @Input() public trialBalanceRequest: TrialBalanceRequest;
     @Input() public selectedCompany: CompanyResponse;
@@ -117,6 +101,10 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     private exportData: ChildGroup[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private dataFormatter: DataFormatter;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private recType: RecTypePipe) {
         this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
@@ -161,23 +149,23 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         let pdf = new jsPDF('p', 'pt') as JsPDFAutoTable;
         let columns = [
             {
-                title: 'Particular',
+                title: 'Particular', //this.localeData.pdf.trial_balance.particular,
                 dataKey: 'name'
             },
             {
-                title: 'Opening Balance',
+                title: 'Opening Balance', //this.localeData.pdf.trial_balance.opening_balance,
                 dataKey: 'openingBalance'
             },
             {
-                title: 'Debit',
+                title: 'Debit', //this.localeData.pdf.trial_balance.debit,
                 dataKey: 'debit'
             },
             {
-                title: 'Credit',
+                title: 'Credit', //this.localeData.pdf.trial_balance.credit,
                 dataKey: 'credit'
             },
             {
-                title: 'Closing Balance',
+                title: 'Closing Balance', //this.localeData.pdf.trial_balance.closing_balance,
                 dataKey: 'closingBalance'
             }
         ];
@@ -221,6 +209,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
                 }
                 pdf.text(40, colY += 15, (this.selectedCompany.city || '') + (this.selectedCompany.pincode ? ('-' + this.selectedCompany.pincode) : ''));
                 pdf.text(40, colY += 15, `Trial Balance: ${this.trialBalanceRequest.from} to ${this.trialBalanceRequest.to}`);
+
             }
         });
         let footerX = 40;
@@ -238,14 +227,13 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     }
 
     private downloadPdfCondensed() {
-        //
-        let formatPdf = new FormatPdf(this.trialBalanceRequest);
+        let formatPdf = new FormatPdf(this.trialBalanceRequest, this.localeData);
         this.dataFormatter.formatDataCondensed(formatPdf);
         formatPdf.save('PdfCondensed.pdf');
     }
 
     private downloadPdfAccountWise(): void {
-        let formatPdf = new FormatPdf(this.trialBalanceRequest);
+        let formatPdf = new FormatPdf(this.trialBalanceRequest, this.localeData);
         this.dataFormatter.formatDataAccountWise(formatPdf);
         formatPdf.save('PdfAccountWise.pdf');
     }

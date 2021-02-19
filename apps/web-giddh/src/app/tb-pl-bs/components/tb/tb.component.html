@@ -1,0 +1,19 @@
+<ng-container appTranslate [file]="'trial-profit-balance/trial-balance'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <tb-pl-bs-filter #filter [selectedCompany]="selectedCompany" [showLoader]="showLoader | async" [showLabels]="true"
+        (seachChange)="searchChanged($event)" (onPropertyChanged)="filterData($event)" (expandAll)="expandAllEvent($event)"
+        (tbExportCsvEvent)="exportCsv($event)" (tbExportPdfEvent)="exportPdf($event)" (tbExportXLSEvent)="exportXLS($event)"
+        [tbExportCsv]="true" [tbExportPdf]="true" [tbExportXLS]="true"></tb-pl-bs-filter>
+    <div *ngIf="(showLoader | async)">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+    </div>
+    <div *ngIf="(data$ | async) && !(showLoader | async)">
+        <tb-grid #tbGrid [search]="search" [from]="from" [to]="to" (searchChange)="searchChanged($event)"
+            [expandAll]="expandAll" [data$]="data$ | async"></tb-grid>
+    </div>
+    <div *ngIf="(!(showLoader | async) && !(data$ | async))"
+        style="display: flex; height: 60vh; align-items: center; justify-content: center; font-size: 31px; color: #babec1;">
+        <div class="d-flex">
+            <h2>{{localeData?.no_data_found}}</h2>
+        </div>
+    </div>
+</ng-container>

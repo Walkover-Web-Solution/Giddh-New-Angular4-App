@@ -41,6 +41,8 @@ export class UpdateLedgerTaxData {
     providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnChanges {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Input() public date: string;
     @Input() public taxes: TaxResponse[];
     @Input() public applicableTaxes: any[];

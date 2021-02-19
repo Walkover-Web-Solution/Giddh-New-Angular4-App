@@ -18,6 +18,10 @@ export class ReceiptAdvanceSearchComponent {
     @Output() public cancel: EventEmitter<void> = new EventEmitter();
     /** Search modal input */
     @Input() public searchModel: ReceiptAdvanceSearchModel;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     /** @ignore */
     constructor() {

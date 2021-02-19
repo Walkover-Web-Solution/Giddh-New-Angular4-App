@@ -69,7 +69,7 @@ span.dr-label {
         }
         input{
             border-left: 1px solid $gainsboro !important;
-            border-right: none !important;
+            border-right: none;
             &:focus{
                 border-left: 1px solid $chetwode-blue !important;
             }

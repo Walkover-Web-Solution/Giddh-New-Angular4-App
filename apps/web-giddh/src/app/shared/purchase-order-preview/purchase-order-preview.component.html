@@ -8,7 +8,7 @@
     <div class="row mrB1">
         <div class="col-sm-12 pdf-viewer">
             <div class="position-relative" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
-                <div class="loader"></div>
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
             <div class="error" [hidden]="!pdfPreviewHasError">
                 <span>

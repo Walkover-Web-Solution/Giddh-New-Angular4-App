@@ -1,4 +1,5 @@
 {
+    "page_heading": "Reports > Receipt (Beta)",
     "receipt_no_label" : "Receipt #",
     "receipt_no_placeholder" : "Search Receipt",
     "customer_name_label" : "Customer Name",
@@ -17,5 +18,7 @@
     "receipt_types" : {
         "normal_receipts" : "Normal Receipts",
         "advance_receipts" : "Advance Receipts"
-    }
+    },
+    "entry_date": "Entry Date",
+    "suppliers_name" : "Supplier's Name"
 }

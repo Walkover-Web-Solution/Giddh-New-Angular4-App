@@ -10,7 +10,7 @@
                 <li class="new-btn">
                     <a href="javascript:void(0)" nav-vr-item class="btn-link"
                         *ngIf="!isSearchingGroups || (isSearchingGroups && col.IsCreateNewBtnShowable)"
-                        (click)="ShowAddNewForm(col)">Create new</a>
+                        (click)="ShowAddNewForm(col)">{{localeData?.create_new}}</a>
                 </li>
             </ul>
             <ng-container *ngIf="col.Items">

@@ -51,6 +51,12 @@ export class CrDrComponent implements OnInit, OnDestroy {
     @Input() initializeDateWithUniversalDate: boolean;
     /** True, if date picker initialization with universal date is successful */
     public isDatePickerInitialized: boolean;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private _contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
@@ -79,6 +85,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
     }
 
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
+        this.isLoading = true;
         this.drAccounts = [];
         this.crAccounts = [];
         pageNumber = pageNumber ? pageNumber : 1;
@@ -108,6 +115,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
 
                 this.cdRef.detectChanges();
             }
+            this.isLoading = false;
         });
     }
 

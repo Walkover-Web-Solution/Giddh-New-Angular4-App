@@ -18,6 +18,10 @@ import * as moment from 'moment/moment';
 })
 
 export class RejectedListComponent implements OnInit, OnChanges {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 	public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
 
@@ -151,7 +155,22 @@ export class RejectedListComponent implements OnInit, OnChanges {
 			this._cdRf.detectChanges();
 		}
     }
-
+    
+    /**
+     * This will replace the search field title
+     *
+     * @param {string} title
+     * @returns {string}
+     * @memberof RejectedListComponent
+     */
+    public replaceTitle(title: string): string {
+        if(this.localeData && this.localeData.search_field) {
+            return this.localeData.search_field.replace("[FIELD]", title);
+        } else {
+            return title;
+        }
+    }
+    
     /**
      * Releases memory
      *

@@ -37,6 +37,8 @@ export class ImportProcessComponent {
     @Output() public onBack = new EventEmitter();
     @Input() public isLoading: boolean;
     @Input() public entity: string;
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public options: IOption[];
     public userHeader: string[] = [];

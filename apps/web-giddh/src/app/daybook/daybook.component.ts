@@ -85,6 +85,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * by user and not when the user visits the page
      */
     public isAdvanceSearchOpened: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
 
@@ -124,6 +128,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'daybook';
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
+        this.store.pipe(select(state => state.daybook.showLoader), takeUntil(this.destroyed$)).subscribe(response => {
+            this.showLoader = response;
+        });
+
         this.store.pipe(select(state => state.daybook.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.entries) {
                 this.daybookQueryRequest.page = data.page;
@@ -145,7 +154,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.daybookData$ = observableOf(data);
                 this.checkIsStockEntryAvailable();
             }
-            this.showLoader = false;
             this.changeDetectorRef.detectChanges();
         });
         this.store.pipe(
@@ -200,7 +208,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         let from = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
         let to = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
-            this.showLoader = true;
             this.daybookQueryRequest.from = from;
             this.daybookQueryRequest.to = to;
             this.daybookQueryRequest.page = 0;
@@ -427,7 +434,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
             if ((this.daybookQueryRequest.from !== this.fromDate) || (this.daybookQueryRequest.to !== this.toDate)) {
-                this.showLoader = true;
                 this.daybookQueryRequest.from = this.fromDate;
                 this.daybookQueryRequest.to = this.toDate;
                 this.daybookQueryRequest.page = 0;
