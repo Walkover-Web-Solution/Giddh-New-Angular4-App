@@ -51,6 +51,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
     @Input() initializeDateWithUniversalDate: boolean;
     /** True, if date picker initialization with universal date is successful */
     public isDatePickerInitialized: boolean;
+    /** True if api call in progress */
     public isLoading: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};

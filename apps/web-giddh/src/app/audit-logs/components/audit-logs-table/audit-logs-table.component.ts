@@ -51,7 +51,7 @@ export class AuditLogsTableComponent implements OnDestroy {
      * @memberof AuditLogsTableComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.auditlog.getLogInProcess)).subscribe(response => {
+        this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = response;
         });
     }
