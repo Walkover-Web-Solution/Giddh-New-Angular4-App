@@ -194,7 +194,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         let units = data.results;
 
                         return units.map(unit => {
-                            let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+                            let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
                             if (alreadyPushedElementindx > -1) {
                                 return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
                             } else {
@@ -214,7 +214,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     if (data.results) {
                         let units = data.results;
                         return units.map(unit => {
-                            let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+                            let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
                             if (alreadyPushedElementindx > -1) {
                                 return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
                             } else {
