@@ -114,7 +114,7 @@
     </div>
     <!-- search form end -->
     <section *ngIf="(isReportLoading$ | async)" class="clearfix mr-t100 col-md-12">
-        <p class="lead text-center mr-t4">Loading...</p>
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </section>
     <div class="no-data mr-t100 col-12 col-sm-12"
         *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
