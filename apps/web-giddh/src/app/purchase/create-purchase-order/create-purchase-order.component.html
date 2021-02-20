@@ -479,10 +479,10 @@
             </thead>
             <tbody
                 *ngFor="let entry of purchaseOrder.entries; let entryIdx = index; let first = first; let last = last;"
-                (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
+                (clickOutside)="handleOutsideClick()" [exclude]="'.entries-tr'">
                 <ng-container *ngFor="let transaction of entry.transactions;">
                     <tr (click)="setActiveIndex(entryIdx);$event.stopPropagation()" [hidden]="activeIndex === entryIdx"
-                        class="entriesTr set-active"
+                        class="entries-tr set-active"
                         [ngClass]="{'is-other-tax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
@@ -514,7 +514,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="text-right stockUnit">
+                        <td class="text-right stock-unit">
                             <div class="wrap-td-data">
                                 {{transaction.quantity}} {{transaction.stockUnit}}
                             </div>
@@ -617,7 +617,7 @@
 
                     <!-- region dynamic entries-->
                     <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                    <tr [hidden]="activeIndex !== entryIdx" class="entriesTr default-active"
+                    <tr [hidden]="activeIndex !== entryIdx" class="entries-tr default-active"
                         (click)="$event.stopPropagation();">
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
@@ -722,7 +722,7 @@
                             </div>
                         </td>
 
-                        <td class="text-right stockUnit">
+                        <td class="text-right stock-unit">
                             <input type="text" [disabled]="!transaction.isStockTxn"
                                 (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
                                 decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
@@ -910,7 +910,7 @@
                                     </div>
                                     <div class="ico-head">Other Details</div>
                                 </div>
-                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pd-l3 m-0">
+                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 pd-l3 m-0">
                                     <div class="row">
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                 <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate"
@@ -937,7 +937,7 @@
                         </div>
                         <!-- endregion -->
                         <!-- region note/messages -->
-                        <div class="pt-1 pl-0 max-600">
+                        <div class="pt-1 pl-0 max-width-600">
                             <label class="mr-b1">Note</label>
                             <textarea class="form-control" name="message2"
                                 [(ngModel)]="purchaseOrder.templateDetails.other.message2"></textarea>
@@ -1550,7 +1550,7 @@
                         <div class="ico-head">Other Details</div>
                     </div>
 
-                    <div class="clearfix max-600  m-0" [collapse]="isOthrDtlCollapsed">
+                    <div class="clearfix max-width-600  m-0" [collapse]="isOthrDtlCollapsed">
 
                         <div class="row">
 
@@ -1579,7 +1579,7 @@
 
                 </div>
 
-                <div class="pd-t1 pl0 max-600">
+                <div class="pd-t1 pl-0 max-width-600">
                     <label class="mr-b1">Message</label>
                     <textarea class="form-control" name="message2"
                         [(ngModel)]="purchaseOrder.templateDetails.other.message2"></textarea>

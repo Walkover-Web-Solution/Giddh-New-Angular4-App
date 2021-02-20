@@ -1,3 +1,5 @@
+@import "../../assets/css/color.scss";
+
 .load-bar-wrap {
     position: fixed;
     top: 0;
@@ -12,7 +14,7 @@
     position: relative;
     width: 100%;
     height: 6px;
-    background-color: #fdba2c;
+    background-color: $light-yellow;
 }
 
 .bar {
@@ -26,17 +28,17 @@
 }
 
 .bar:nth-child(1) {
-    background-color: #000;
+    background-color: $black;
     animation: loading 3s linear infinite;
 }
 
 .bar:nth-child(2) {
-    background-color: #3b78e7;
+    background-color: $primary;
     animation: loading 3s linear 1s infinite;
 }
 
 .bar:nth-child(3) {
-    background-color: #fdba2c;
+    background-color: $light-yellow;
     animation: loading 3s linear 2s infinite;
 }
 
