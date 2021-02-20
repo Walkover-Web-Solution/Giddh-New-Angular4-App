@@ -42,7 +42,7 @@
     cursor: pointer;
 }
 
-.icon-pointer.iconSearch {
+.icon-pointer.search-icons {
     top: 30%;
     color: $dim-gray;
 }
@@ -145,7 +145,7 @@ ul.list-unstyled li a {
     }
 }
 
-.transinherit {
+.transform-inherit {
     transform: inherit !important;
 }
 
@@ -348,9 +348,9 @@ span.input-addon {
 
 button.btn.btn-filter {
     background: $whisper-color;
-    border: 1px solid $gainsboro;
+    border: 1px solid $whisper-color;
     font-size: 14px;
-    color: #1a237e;
+    color: $midnight-blue;
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -603,7 +603,7 @@ button.btn.btn-filter span.icon-cross {
     }
     .customer-right table tr td {
         padding: 15px;
-        color: #707070;
+        color: $dark-gray;
         width: 100%;
         display: table;
         text-align: left;

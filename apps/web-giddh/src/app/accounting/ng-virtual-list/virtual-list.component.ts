@@ -14,7 +14,7 @@ const FLATTEN_SEARCH_TERM = 'flatten';
 @Component({
     selector: 'accounting-virtual-list',
     templateUrl: './virtual-list.component.html',
-    styleUrls: ['./virtual-list.component.css'],
+    styleUrls: ['./virtual-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         {

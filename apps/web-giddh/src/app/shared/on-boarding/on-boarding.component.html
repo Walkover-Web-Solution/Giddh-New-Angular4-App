@@ -20,15 +20,15 @@
                 <form name="form" #companyForm="ngForm" class="clearfix" novalidate="" autocomplete="off">
                     <div class="company-form-body row">
 
-                        <div class="col-sm-12 m-t-50">
-                            <div class="input-group form-group d-block m-b-30">
+                        <div class="col-sm-12 mr-t5">
+                            <div class="input-group form-group d-block mr-b3">
                                 <p>Enter your {{onBoardingType?.toLowerCase()}} name to start hassle free accounting
                                     with
                                     Giddh.</p>
                             </div>
                         </div>
                         <div class="col-sm-12 mr-b3">
-                            <label for="name" class="m-t-40">{{onBoardingType}} Name<sup>*</sup></label>
+                            <label for="name" class="mr-t4">{{onBoardingType}} Name<sup>*</sup></label>
                             <input name="name" id="name" #itemName type="text" required placeholder="Name"
                                 (input)="handleOnBoardingNameChange($event?.target?.value)" [(ngModel)]="company.name"
                                 class="form-control"

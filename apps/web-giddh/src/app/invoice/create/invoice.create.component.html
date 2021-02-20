@@ -37,14 +37,14 @@
                     <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date</p>
                 </div>
 
-                <div class="form-group m-r-15">
+                <div class="form-group mr-r15">
              ************* col-xs-2***********
                     <label>Email Id</label>
                     <input type="email" placeholder="someone@example.com" name="accountDetails.email" class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #customeremail="ngModel" [class.invalid-inp]="customeremail.errors && (customeremail.dirty || customeremail.touched)"
                     />
                     <p class="text-danger" *ngIf="customeremail.errors && (customeremail.dirty || customeremail.touched)">Invalid Email</p>
                 </div>
-                <div class="form-group m-r-15">
+                <div class="form-group mr-r15">
                     <label>Mobile No.</label>
                     <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text" name="accountDetails.mobileNumber" class="form-control" [(ngModel)]="invFormData.accountDetails.mobileNumber" />
                 </div>
@@ -342,7 +342,7 @@
                     <td width="65%">
                         <div class="col-xs-6 pl-0">
                             <input type="text" name="attention" placeholder="Attention to"
-                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                                class="form-control attention-to" [(ngModel)]="invFormData.accountDetails.attentionTo" />
                         </div>
 
                     </td>
@@ -357,7 +357,7 @@
                     <td width="65%">
                         <div class="col-xs-6 pl-0">
                             <input type="email" placeholder="someone@example.com" name="accountDetails.email"
-                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email"
+                                class="form-control attention-to" [(ngModel)]="invFormData.accountDetails.email"
                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #customeremail="ngModel"
                                 [class.invalid-inp]="customeremail.errors && (customeremail.dirty || customeremail.touched)" />
                         </div>
@@ -371,7 +371,7 @@
                     <td>
                         <div class="col-xs-6 pl-0">
                             <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text"
-                                name="accountDetails.mobileNumber" class="form-control attentionTo"
+                                name="accountDetails.mobileNumber" class="form-control attention-to"
                                 [(ngModel)]="invFormData.accountDetails.mobileNumber" />
 
                         </div>
@@ -390,7 +390,7 @@
                         </div>
                         <div class="col-6 invoice-date-due-date">
                             <div class="form-inline ">
-                                <div class="form-group m-r-15">
+                                <div class="form-group mr-r15">
 
                                     <label>Invoice Date</label>
 
@@ -405,7 +405,7 @@
 
 
                                 </div>
-                                <div class="form-group mr-l1 m-r-15">
+                                <div class="form-group mr-l1 mr-r15">
                                     <label>{{templateHeader?.dueDate?.label}}</label>
                                     <input type="text" [placeholder]="giddhDateFormat" name="dueDate"
                                         [(ngModel)]="invFormData.voucherDetails.dueDate" [minDate]="maxDueDate"
@@ -730,7 +730,7 @@
                                 </div>
                                 <div class="ico-head">Other Details</div>
                             </div>
-                            <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pd-l3 mr-0">
+                            <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 pd-l3 mr-0">
                                 <div class="row">
                                     <div class="form-group col-4">
                                         <!-- <label>Ship Date</label> -->
@@ -780,7 +780,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pd-t1 pl-0 max-600">
+                    <div class="pd-t1 pl-0 max-width-600">
                         <label class="mr-b1">Message</label>
                         <textarea rows="3" class="form-control" name="message2"
                             [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>

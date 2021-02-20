@@ -243,7 +243,7 @@
                             </div>
                         </th>
                         <!-- in case of all entity with group end -->
-                        <th class="text-right brNone">
+                        <th class="text-right border-right-none">
                             <div class="d-flex">
                                 <div class="flex-fill">Qty</div>
                                 <div class="icon-pointer">
@@ -273,7 +273,7 @@
                                 </div>
                             </div>
                         </th>
-                        <th class="text-right brNone">
+                        <th class="text-right border-right-none">
                             <div class="d-flex">
                                 <div class="flex-fill">Qty</div>
                                 <div class="icon-pointer">
@@ -304,7 +304,7 @@
                                 </div>
                             </div>
                         </th>
-                        <th class="text-right brNone">
+                        <th class="text-right border-right-none">
                             <div class="d-flex">
                                 <div class="flex-fill ">Qty</div>
                                 <div class="icon-pointer">
@@ -335,7 +335,7 @@
                                 </div>
                             </div>
                         </th>
-                        <th class="text-right brNone">
+                        <th class="text-right border-right-none">
                             <div class="d-flex">
                                 <div class="flex-fill">Qty</div>
                                 <div class="icon-pointer">
@@ -384,28 +384,28 @@
                             <!-- in case of all entity with group end -->
                             <td data-title="Opening stock -" class="td-mobile-head"></td>
 
-                            <td class="bd-rb bd-rr text-right brNone" data-title="Qty">
+                            <td class="bd-rb bd-rr text-right border-right-none" data-title="Qty">
                                 <span [ngClass]="{'text-danger': txn.openingBalance?.quantity<0 }">{{txn.openingBalance?.quantity | giddhCurrency}}</span>
                             </td>
                             <td class="bd-rb bd-rr text-right" data-title="Value">{{txn.openingBalance?.amount | giddhCurrency}}</td>
 
                             <td data-title="inwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
-                            <td class="bd-rb bd-rr text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
+                            <td class="bd-rb bd-rr text-right border-right-none" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
                                 <span [ngClass]="{'text-danger': txn.inwards?.quantity<0 }">{{txn.inwards?.quantity | giddhCurrency}}</span>
                             </td>
                             <td class="bd-rb bd-rr text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.inwards?.amount | giddhCurrency}}</td>
 
                             <td data-title="Outwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
-                            <td class="bd-rb bd-rr text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
+                            <td class="bd-rb bd-rr text-right border-right-none" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
                                 {{txn.outwards?.quantity | giddhCurrency}}
                             </td>
                             <td class="bd-rb bd-rr text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.outwards?.amount | giddhCurrency}}</td>
 
                             <td data-title="Closing stock -" class="td-mobile-head"></td>
 
-                            <td class="bd-rb bd-rr text-right brNone" data-title="Qty">
+                            <td class="bd-rb bd-rr text-right border-right-none" data-title="Qty">
                                 <span [ngClass]="{'text-danger': txn.closingBalance?.quantity<0 }">{{txn.closingBalance?.quantity | giddhCurrency}}</span>
                             </td>
                             <td class="bd-rb bd-rr text-right" data-title="Value">{{txn.closingBalance?.amount | giddhCurrency}}</td>
@@ -593,7 +593,7 @@
                         <div class="col-sm-4">Date Range</div>
                         <div class="col-sm-8">
                             <!-- <div class="input-group">
-                                <input type="text" name="daterangeInput1" daterangepicker [options]="datePickerOptions" class="form-control" (applyDaterangepicker)="selectedDate($event, 'advance')" />
+                                <input type="text" name="daterangeInput1"  [options]="datePickerOptions" class="form-control" (applyDaterangepicker)="selectedDate($event, 'advance')" />
                                 <div class="input-group-addon"><span class="icon-calender bg-white"></span></div>
                             </div> -->
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">

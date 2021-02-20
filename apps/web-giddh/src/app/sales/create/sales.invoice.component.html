@@ -135,7 +135,7 @@
                                             <img src="assets/images/new/search_customer_Cash Invoice.svg"
                                                 class="img-responsive search-arrow-image "
                                                 *ngIf="!invFormData.voucherDetails.customerName"
-                                                [ngClass]="{'cash-invoice-tip-Img' : isCashInvoice}" />
+                                                [ngClass]="{'cash-invoice-tip-img' : isCashInvoice}" />
                                         </ng-container>
                                         <div class="row">
                                             <div class="col-6">
@@ -273,7 +273,7 @@
                             <div class="form-group">
                                 <!--col-xs-3 -->
                                 <input type="text" name="accountDetails.attention" placeholder="Attention to"
-                                    class="form-control attentionTo"
+                                    class="form-control attention-to"
                                     [(ngModel)]="invFormData.accountDetails.attentionTo" />
                             </div>
                         </div>
@@ -288,7 +288,7 @@
                             <div class="form-group">
                                 <!--col-xs-3 -->
                                 <input type="email" placeholder="someone@example.com" name="accountDetails.email"
-                                    class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" />
+                                    class="form-control attention-to" [(ngModel)]="invFormData.accountDetails.email" />
                             </div>
                         </div>
 
@@ -301,7 +301,7 @@
                         <div class="col-sm-5">
                             <div class="form-group">
                                 <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text"
-                                    name="accountDetails.mobileNumber" class="form-control attentionTo"
+                                    name="accountDetails.mobileNumber" class="form-control attention-to"
                                     [(ngModel)]="invFormData.accountDetails.contactNumber" />
                             </div>
                         </div>
@@ -314,14 +314,14 @@
                         </div>
                         <div class="col-sm-5">
                             <input type="text" name="accountDetails.invoiceNum"
-                                class="form-control invoice-date attentionTo"
+                                class="form-control invoice-date attention-to"
                                 [ngClass]="{'date-invoice': !isPurchaseInvoice }"
                                 [disabled]="isUpdateMode  || !useCustomInvoiceNumber"
                                 [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                         </div>
                         <div class="col-sm-5 invoice-date-due-date">
                             <div class="form-inline ">
-                                <div class="form-group m-r-15">
+                                <div class="form-group mr-r15">
                                     <!--col-xs-2-->
                                     <label>{{isPurchaseInvoice ? 'Bill Date' : 'Invoice Date' }} </label>
 
@@ -755,7 +755,7 @@
                                                                 <div class="ico-head">Other Details</div>
                                                             </div>
                                                             <div [collapse]="isOthrDtlCollapsed"
-                                                                class="clearfix max-600 pd-l3 m-0">
+                                                                class="clearfix max-width-600 pd-l3 m-0">
                                                                 <div class="row">
                                                                     <div class="form-group col-4">
                                                                         <!-- <label>Ship Date</label> -->
@@ -815,7 +815,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
+                                                    <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
                                                         <label class="mr-b1">Message</label>
                                                         <textarea rows="3" class="form-control"
                                                             name="message2"
@@ -823,7 +823,7 @@
                                                     </div>
                                                     <!-- commented due to presently attachfile key is not available in request
         -->
-                                                    <div class="pd-t1 pl0 max-600 position-relative" *ngIf="isPurchaseInvoice">
+                                                    <div class="pd-t1 pl-0 max-width-600 position-relative" *ngIf="isPurchaseInvoice">
                                                         <label class="mr-b1"><i
                                                                 class="icon-file-path"></i>
                                                             Attachment</label>
@@ -1155,7 +1155,7 @@
                                             <div class="wrap-selected-stocks">
                                                 <div class="single-selected-stock clearfix">
                                                     <div class="pull-left">
-                                                        <div class="stockName">
+                                                        <div class="stock-name">
                                                             <p>Sales (100 POLYSTER NON TEX…)</p>
                                                         </div>
 
@@ -1182,7 +1182,7 @@
                                                 </div>
                                                 <div class="single-selected-stock clearfix">
                                                     <div class="pull-left">
-                                                        <div class="stockName">
+                                                        <div class="stock-name">
                                                             <p>Sales (100 POLYSTER TEX…)</p>
                                                         </div>
 
@@ -1209,7 +1209,7 @@
                                                 </div>
                                                 <div class="single-selected-stock clearfix">
                                                     <div class="pull-left">
-                                                        <div class="stockName">
+                                                        <div class="stock-name">
                                                             <p>Sales (text)</p>
                                                         </div>
 
@@ -1508,11 +1508,11 @@
                         <label>Attention to</label>
                     </td>
                     <td>
-                        <div class="form-group pl0 m-r-15 col-xs-6">
+                        <div class="form-group pl-0 mr-r15 col-xs-6">
                             <!--col-xs-3 -->
 
                             <input type="text" name="accountDetails.attention" placeholder="Attention to"
-                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.attentionTo" />
+                                class="form-control attention-to" [(ngModel)]="invFormData.accountDetails.attentionTo" />
                         </div>
                     </td>
                     <td></td>
@@ -1525,7 +1525,7 @@
                     <td width="65%">
                         <div class="col-xs-6 pl-0">
                             <input type="email" placeholder="someone@example.com" name="accountDetails.email"
-                                class="form-control attentionTo" [(ngModel)]="invFormData.accountDetails.email" />
+                                class="form-control attention-to" [(ngModel)]="invFormData.accountDetails.email" />
                         </div>
 
                     </td>
@@ -1539,7 +1539,7 @@
                     <td>
                         <div class="col-xs-6 pl-0">
                             <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="text"
-                                name="accountDetails.mobileNumber" class="form-control attentionTo"
+                                name="accountDetails.mobileNumber" class="form-control attention-to"
                                 [(ngModel)]="invFormData.accountDetails.contactNumber" />
                         </div>
 
@@ -1554,14 +1554,14 @@
                     <td class="position-relative row">
                         <div class="col-6 pl-0">
                             <input type="text" name="accountDetails.invoiceNum"
-                                class="form-control invoice-date attentionTo"
+                                class="form-control invoice-date attention-to"
                                 [ngClass]="{'date-invoice': !isPurchaseInvoice }"
                                 [disabled]="isUpdateMode  || !useCustomInvoiceNumber"
                                 [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
                         </div>
                         <div class="col-6 invoice-date-due-date">
                             <div class="form-inline">
-                                <div class="form-group m-r-15">
+                                <div class="form-group mr-r15">
                                     <!--col-xs-2-->
                                     <label>Invoice Date</label>
 
@@ -1577,7 +1577,7 @@
 
 
                                 </div>
-                                <div class="form-group mr-l1 m-r-15" *ngIf="isSalesInvoice || isPurchaseInvoice">
+                                <div class="form-group mr-l1 mr-r15" *ngIf="isSalesInvoice || isPurchaseInvoice">
                                     <label> {{isPurchaseInvoice ? 'Bill Due Date' : 'Due Date'}}</label>
 
                                     <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate"

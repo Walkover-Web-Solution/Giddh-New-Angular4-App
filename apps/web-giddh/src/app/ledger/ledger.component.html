@@ -305,7 +305,7 @@
                                                                     <input class="form-control text-right" type="text" id="{{'enter-amount-dr-' + i}}" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()" *ngIf="txn.type === 'DEBIT'" (click)="showBankLedgerPopup(txn, item);">
                                                                 </td>
                                                             </tr>
-                                                            <div class="pos-abs entry-modal"
+                                                            <div class="position-absolute entry-modal"
                                                                 *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'DEBIT'">
                                                                 <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" [isReadOnly]="(currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2)" (moreDetailOpen)="handleOpenMoreDetail($event)" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox" (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)" (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)" [invoiceList]="invoiceList" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)" [isTouristSchemeApplicable]="isTouristSchemeApplicable" (saveOtherTax)="saveOtherTax(item, $event)" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
                                                                 </new-ledger-entry-panel>
@@ -992,7 +992,7 @@
                                         </table>
 
                                         <!--new ledge popup-->
-                                        <div class="pos-abs entry-modal" (click)="shCredit?.hide()"
+                                        <div class="position-absolute entry-modal" (click)="shCredit?.hide()"
                                             (keydown)="$event.stopPropagation()"
                                             *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                                             <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
@@ -1101,7 +1101,7 @@
                     <!-- endregion -->
 
                     <!-- region pagination -->
-                    <div class="text-center mr-t2 page-count pa">
+                    <div class="text-center mr-t2 page-count position-absolute">
                         <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} {{localeData?.transactions}}, </span>
                         <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} {{localeData?.pages}}</span>
                         <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
@@ -1159,9 +1159,9 @@
                                     <span class="digit-blue">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ |
                         async)?.creditTransactionsCount}}</span>
                                 </h1>
-                                <span class=" mr-r2 greyTextClr">{{commonLocaleData?.app_debit}} <span
+                                <span class=" mr-r2 grey-text-color">{{commonLocaleData?.app_debit}} <span
                                         class="digit-blue">{{(lc.transactionData$ | async)?.debitTransactionsCount}}</span></span><br>
-                                <span class=" mr-r2 greyTextClr">{{commonLocaleData?.app_credit}} <span class="digit-blue">
+                                <span class=" mr-r2 grey-text-color">{{commonLocaleData?.app_credit}} <span class="digit-blue">
                                         {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span></span>
                             </div>
                         </div>
@@ -1214,7 +1214,7 @@
 
                                 <div class="d-flex debit-credit-amount">
 
-                                    <h1 class="mr-t05 font16 greyTextClr d-flex flex-column">{{commonLocaleData?.app_debit}}
+                                    <h1 class="mr-t05 font-16 grey-text-color d-flex flex-column">{{commonLocaleData?.app_debit}}
                                         <span class="digit-blue mt-1">
                                             {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}}
                                         </span>
@@ -1223,7 +1223,7 @@
                                         </span>
                                     </h1>
 
-                                    <h1 class="mr-t05 font16 greyTextClr d-flex flex-column">{{commonLocaleData?.app_credit}}
+                                    <h1 class="mr-t05 font-16 grey-text-color d-flex flex-column">{{commonLocaleData?.app_credit}}
                                         <span class="digit-blue mt-1">
                                             {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}}
                                         </span>
@@ -1318,7 +1318,7 @@
 
         <!-- Advance search popup -->
         <div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-xl advanceSearchModal">
+            <div class="modal-dialog modal-xl advance-search-modal">
                 <div class="modal-content">
                     <advance-search-model *ngIf="isAdvanceSearchOpened" #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest"
                         (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>

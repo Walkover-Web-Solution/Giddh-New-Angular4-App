@@ -18,7 +18,7 @@
 
             <!-- invoice num -->
             <div class="clearfix form-inline mr-b05">
-                <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
+                <div class="max-width-350 form-group" [hidden]="isSalesInvoiceSelected">
                     <!-- decimalDigitsDirective -->
                     <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
                         [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance-none invoice-no-width" [disabled]="isSalesInvoiceSelected" />
@@ -28,7 +28,7 @@
 
 
             <!-- party acc name -->
-            <div class="mx-350 clearfix form-inline mr-b05">
+            <div class="max-width-350 clearfix form-inline mr-b05">
                 <div class="form-group">
                     <label>Party A/c Name: <sup>*</sup></label>
                     <!-- #creditor -->
@@ -57,7 +57,7 @@
             <!--  purchase as INVOICE -->
             <div class="clearfix mr-t1" [style.min-height.vh]="61">
                 <div class="table-responsive bd-rt">
-                    <table class="table entry_table">
+                    <table class="table entry-table">
                         <thead>
                             <tr>
                                 <th width="70%">Name of Item</th>

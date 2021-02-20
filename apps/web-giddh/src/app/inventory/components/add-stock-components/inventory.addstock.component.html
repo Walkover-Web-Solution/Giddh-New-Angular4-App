@@ -206,7 +206,7 @@
                                         name="enablePurchase">Purchase Information</label>
                             </div>
                             <div class="form-group">
-                                <label class="boldHead">Account Name</label>
+                                <label class="bold-head">Account Name</label>
                                 <sh-select [options]="purchaseAccountsDropDown$ | async" formControlName="purchaseAccountUniqueName" [placeholder]="'select purchase account'" [multiple]="false" [ItemHeight]="33" [disabled]="!addStockForm.controls['enablePurchase'].value" [forceClearReactive]="forceClearPurchaseAccount$ | async"></sh-select>
                             </div>
 
@@ -299,9 +299,9 @@
                         <div class="pd-l05 pd-r05">
                             <h1 class="section-head bd-rb"><strong>{{addStockForm.controls['name'].value}} (Made
                                     with)</strong></h1>
-                            <table class="no-hover  width-100">
+                            <table class="no-hover width-100">
                                 <tbody formGroupName="manufacturingDetails">
-                                    <tr class="output_row">
+                                    <tr class="output-row">
                                         <td class="form-group">
                                             <label>Output Qty <sup>*</sup></label>
                                             <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" name="manufacturingQuantity" placeholder="Quantity" formControlName="manufacturingQuantity" />

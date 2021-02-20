@@ -235,7 +235,7 @@
 
                                         <ng-container *ngIf="isCashInvoice">
                                             <img src="assets/images/new/search_customer_Cash Invoice.svg"
-                                                class="img-responsive  cash-invoice-tip-Img search-arrow-image "
+                                                class="img-responsive cash-invoice-tip-img search-arrow-image "
                                                 *ngIf="!invFormData.voucherDetails.customerName" />
                                         </ng-container>
                                         <!-- endregion -->
@@ -510,7 +510,7 @@
                                     <div class="pl-0 col-sm-12 col-xl-6 col-lg-10 col-md-10">
 
                                         <input type="text" name="accountDetails.attention" placeholder="Attention to"
-                                            class="form-control attentionTo"
+                                            class="form-control attention-to"
                                             [(ngModel)]="invFormData.accountDetails.attentionTo" />
                                     </div>
                                 </div>
@@ -526,7 +526,7 @@
                                 <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input type="email" placeholder="someone@example.com"
-                                            name="accountDetails.email" class="form-control attentionTo"
+                                            name="accountDetails.email" class="form-control attention-to"
                                             [(ngModel)]="invFormData.accountDetails.email" />
                                     </div>
                                 </div>
@@ -544,7 +544,7 @@
                                 <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                     <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="tel"
-                                            name="accountDetails.mobileNumber" class="form-control attentionTo"
+                                            name="accountDetails.mobileNumber" class="form-control attention-to"
                                             [(ngModel)]="invFormData.accountDetails.mobileNumber" />
                                     </div>
                                 </div>
@@ -735,7 +735,7 @@
                                         <div>
                                             <input *ngIf="(!isCreditNote && !isDebitNote)" type="text"
                                                 name="accountDetails.invoiceNum"
-                                                class="form-control invoice-date attentionTo"
+                                                class="form-control invoice-date attention-to"
                                                 [ngClass]="{'date-invoice': !isPurchaseInvoice }"
                                                 [disabled]="(isUpdateMode && !(isDebitNote || isPurchaseInvoice)) ? 'disabled' : null"
                                                 [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
@@ -916,7 +916,7 @@
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0 ">
                                             <input type="text" name="passportNumber" #passportNumber
-                                                placeholder="Passport Number" class="form-control attentionTo"
+                                                placeholder="Passport Number" class="form-control attention-to"
                                                 (blur)="allowAlphanumericChar(passportNumber)"
                                                 (keypress)="allowAlphanumericChar(passportNumber)"
                                                 [(ngModel)]="invFormData.passportNumber" />
@@ -997,7 +997,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody [hidden]="showBulkLoader" (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
+                        <tbody [hidden]="showBulkLoader" (clickOutside)="handleOutsideClick()" [exclude]="'.entries-tr'">
                             <ng-container #itemsContainer></ng-container>
                         </tbody>
                         <tbody *ngIf="showBulkLoader">
@@ -1018,7 +1018,7 @@
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
                                 <!-- region static entries-->
                                 <tr (click)="setActiveIndx(entryIdx);$event.stopPropagation()" *ngIf="activeIndx !== entryIdx"
-                                    class="entriesTr set-active"
+                                    class="entries-tr set-active"
                                     [ngClass]="{'is-other-tax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
 
                                     <td>{{ entryIdx + 1 }}</td>
@@ -1071,7 +1071,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-right stockUnit">
+                                    <td class="text-right stock-unit">
                                         <div class="wrap-td-data">
                                             {{transaction.quantity | giddhCurrency}} {{transaction.stockUnit}}
                                         </div>
@@ -1118,7 +1118,7 @@
 
                                         </div>
                                     </td>
-                                    <td class="text-right  item-amount height-rate">
+                                    <td class="text-right item-amount height-rate">
                                         <div class="td-wrapper">
                                             <div class="flex-grow-1">
                                                 <div class="wrap-td-data">
@@ -1309,7 +1309,7 @@
 
                                 <!-- region dynamic entries-->
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                                <tr *ngIf="activeIndx === entryIdx" class="entriesTr default-active" (click)="$event.stopPropagation();">
+                                <tr *ngIf="activeIndx === entryIdx" class="entries-tr default-active" (click)="$event.stopPropagation();">
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">{{ entryIdx + 1 }}</td>
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">
 
@@ -1445,7 +1445,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right stockUnit">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right stock-unit">
                                         <input type="text" [disabled]="!transaction.isStockTxn" (blur)="handleQuantityBlur(entry, transaction);"
                                             placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
                                             class="form-control text-right" [(ngModel)]="transaction.quantity" [mask]="inputMaskFormat" />
@@ -1693,7 +1693,7 @@
                                                     <div class="ico-head">Other Details</div>
                                                 </div>
 
-                                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pd-l3 m-0">
+                                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 pd-l3 m-0">
                                                     <div class="row">
                                                     <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                             <giddh-datepicker #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
@@ -1739,7 +1739,7 @@
                                         <!-- endregion -->
 
                                         <!-- region note/messages -->
-                                        <div class="pd-t1 pl-0 max-600" *ngIf="!isPurchaseInvoice">
+                                        <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
 
                                             <label class="mr-b1">Note</label>
                                             <textarea class="form-control textarea-height"
@@ -1749,7 +1749,7 @@
                                         </div>
                                         <!-- endregion -->
 
-                                        <div class="pd-t1 pl-0 max-600 position-relative" *ngIf="isPurchaseInvoice">
+                                        <div class="pd-t1 pl-0 max-width-600 position-relative" *ngIf="isPurchaseInvoice">
 
                                             <label class="mr-b1"><i class="icon-file-path"></i>
                                                 Attachment</label>
@@ -2770,7 +2770,7 @@
                                     <div class="ico-head">Other Details</div>
                                 </div>
 
-                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600  mr-0">
+                                <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 mr-0">
 
                                     <div class="row">
 
@@ -2819,7 +2819,7 @@
 
                             </div>
 
-                            <div class="pd-t1 pl-0 max-600" *ngIf="!isPurchaseInvoice">
+                            <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
                                 <label class="mr-b1">Note</label>
                                 <textarea rows="3" class="form-control" name="message2"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
@@ -3109,7 +3109,7 @@
                     <div class="col-12">
 
                         <!-- region generate mode -->
-                        <div class="pull-right pr updateMode" *ngIf="!isUpdateMode">
+                        <div class="pull-right pr update-mode" *ngIf="!isUpdateMode">
                             <button type="button" (click)="resetInvoiceForm(invoiceForm)"
                                 class="btn btn-danger d-inline-block v-align-middle">Clear
                             </button>
@@ -3299,7 +3299,7 @@
 
     <!-- region gst treatment modal-->
     <ng-template #gstTreatmentModal let-show>
-        <div *ngIf="show" class="gstTreatmentModal">
+        <div *ngIf="show" class="gst-treatment-modal">
             <proforma-gst-treatment-component (closeEvent)="showGstTreatmentModal = false">
             </proforma-gst-treatment-component>
         </div>

@@ -7,7 +7,7 @@
         <!--  tourist scheme template start      -->
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
         <!--        tourist scheme template end-->
-        <div class="basic_detail mr-b1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
+        <div class="basic-detail mr-b1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
             <table class="width-100 total-detail-table">
 
                 <tbody>
@@ -207,7 +207,7 @@
                 </div>
             </div>
         </div>
-        <div [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection" class="pd-b1 inWords"
+        <div [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection" class="pd-b1 in-words"
             *ngIf="currentTxn.total">
             {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
         </div>

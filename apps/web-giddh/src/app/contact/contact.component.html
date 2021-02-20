@@ -322,19 +322,19 @@
 
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
     <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-        <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState" [commonLocaleData]="commonLocaleData" (closeAsideEvent)="toggleAccountAsidePane($event)" (getUpdateList)="getUpdatedList($event)">
+        <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state transform-inherit" [@slideInOut]="accountAsideMenuState" [commonLocaleData]="commonLocaleData" (closeAsideEvent)="toggleAccountAsidePane($event)" (getUpdateList)="getUpdatedList($event)">
         </aside-menu-account>
     </div>
 
     <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-    <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-        <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+    <div class="abc vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
+        <payment-aside class="account-aside-menu-state transform-inherit" [selectedAccForPayment]="selectedAccForPayment" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
         </payment-aside>
     </div>
 
     <ng-template #mainTable>
-        <div class="mobile-card-wrapper table-responsive vendorPage">
-            <table class="table on-mobile-view aging-table marginBottom260 giddh-table" *ngIf="activeTab !== 'aging'">
+        <div class="mobile-card-wrapper table-responsive vendor-page">
+            <table class="table on-mobile-view aging-table mr-b260 giddh-table" *ngIf="activeTab !== 'aging'">
                 <thead>
                     <tr class="aging-table-top">
                         <td></td>
@@ -415,7 +415,7 @@
                                 <div class="flex-fill">
                                     {{commonLocaleData?.app_email}}
                                 </div>
-                                <div class="icon-pointer cursor-pointer iconSearch">
+                                <div class="icon-pointer cursor-pointer search-icons">
                                     <!--                        <i class="icon-search"></i>-->
                                 </div>
                             </div>
@@ -457,7 +457,7 @@
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account)"
                                         [(ngModel)]="account.isSelected"
-                                        [ngClass]="{'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}" />
+                                        [ngClass]="{'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'position-absolute': !selectedCheckedContacts.length}" />
                                 </span>
                                     <span class="account-name-customer"> {{account.name}} </span>
                                     <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
@@ -798,14 +798,14 @@
 
         <div colspan="100%" class="xs-pl-0 pagination-wrapper">
             <div *ngIf="activeTab === 'customer' && sundryDebtorsAccountsBackup.results && sundryDebtorsAccountsBackup.results.length && totalCustomers>=paginationLimit">
-                <div class="text-center  ">
+                <div class="text-center">
                     <pagination [totalItems]="sundryDebtorsAccountsBackup.totalItems" [(ngModel)]="sundryDebtorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryDebtorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                     </pagination>
                 </div>
             </div>
 
             <div *ngIf="activeTab === 'vendor' && sundryCreditorsAccountsBackup.results && sundryCreditorsAccountsBackup.results.length && totalVendors>=paginationLimit">
-                <div class="text-center ">
+                <div class="text-center">
                     <pagination [totalItems]="sundryCreditorsAccountsBackup.totalItems" [(ngModel)]="sundryCreditorsAccountsBackup.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="sundryCreditorsAccountsBackup.count" [rotate]="false" (pageChanged)="pageChanged($event)">
                     </pagination>
                 </div>

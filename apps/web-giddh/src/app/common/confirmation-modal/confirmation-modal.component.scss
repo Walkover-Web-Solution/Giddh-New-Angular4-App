@@ -1,3 +1,5 @@
+@import '../../../assets/css/color.scss';
+
 .custom-confirmation-modal {
     display: inline-block;
     max-width: 630px;
@@ -16,7 +18,7 @@
 
     p {
         font-size: 14px;
-        color: #000;
+        color: $black;
     }
 }
 @media(max-width:1366px){

@@ -5,18 +5,18 @@ p.bankName {
     margin-bottom: 5px;
 }
 
-p.bankBalnc {
+p.bank-balance {
     color: $dark-gray;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
 }
-.single-bank-detatil {
+.single-bank-detail {
     border-bottom: 1px solid $gainsboro;
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
-a.connectBnk {
+a.connect-bank {
     position: absolute;
     bottom: 10px;
     color: $nero;
@@ -37,7 +37,7 @@ a.connectBnk {
     color: $charcoal;
     margin-bottom: 3px;
 }
-.daterang-block .form-control {
+.daterange-block .form-control {
     border: 1px solid $chetwode-blue;
 }
 .date-range-input {
