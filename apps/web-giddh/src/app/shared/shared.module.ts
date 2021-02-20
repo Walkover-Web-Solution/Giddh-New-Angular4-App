@@ -87,6 +87,7 @@ import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
+import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 import { TranslateDirective } from '../theme/translate/translate.directive';
 import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -181,6 +182,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
+        GiddhPageLoaderComponent,
         TranslateDirective,
         AmountFieldComponent
     ],
@@ -278,6 +280,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         HamburgerMenuComponent,
+        GiddhPageLoaderComponent,
         TranslateDirective,
         AmountFieldComponent,
         CurrencyModule

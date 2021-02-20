@@ -161,12 +161,7 @@
         </form>
     </div>
 </div> -->
-<div class="no-data mr-t2 loader-main" *ngIf="(getCompanyProfileInProgress$ | async)">
-    <div class="spinner2">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
-    </div>
-</div>
+<giddh-page-loader *ngIf="(getCompanyProfileInProgress$ | async)"></giddh-page-loader>
 
 <!--Tabs of Company Profile-->
 <div class="settings-profile-tabs">

@@ -69,6 +69,8 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -97,6 +99,8 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                 this.onCancel();
                 this.availableTaxes = _.cloneDeep(o.taxes);
             }
+
+            this.isLoading = o.isTaxesLoading;
         });
 
         this.store

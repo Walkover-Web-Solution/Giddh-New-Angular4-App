@@ -98,12 +98,14 @@ export class RevenueGraphDataResponse {
 
 	public currentHighestClosingBalance: {
 		amount: string;
-		type: string;
+        type: string;
+        dateLabel: string;
 	};
 
 	public currentLowestClosingBalance: {
 		amount: string;
-		type: string;
+        type: string;
+        dateLabel: string;
 	};
 
 	public previousClosingBalance: {
@@ -113,12 +115,14 @@ export class RevenueGraphDataResponse {
 
 	public previousHighestClosingBalance: {
 		amount: string;
-		type: string;
+        type: string;
+        dateLabel: string;
 	};
 
 	public previousLowestClosingBalance: {
 		amount: string;
-		type: string;
+        type: string;
+        dateLabel: string;
 	};
 
 	public balances: [{

@@ -157,6 +157,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
 
@@ -547,6 +549,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private fetchAllReceipts(additionalRequestParameters?: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
+        this.isLoading = true;
         let requestObject: GetAllAdvanceReceiptsRequest = {
             companyUniqueName: this.activeCompanyUniqueName,
             from: this.fromDate,
@@ -605,6 +608,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private handleFetchAllReceiptResponse(response: any): any {
+        this.isLoading = false;
         if (response) {
             if (response.status === 'success' && response.body) {
                 this.pageConfiguration.currentPage = response.body.page;

@@ -117,6 +117,8 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private groupService: GroupService,
@@ -129,7 +131,6 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             let day = i.toString();
             this.days.push({ label: day, value: day });
         }
-
         this.store.dispatch(this._settingsTriggersActions.GetTriggers());
     }
 
@@ -155,6 +156,10 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 });
                 this.groups = _.cloneDeep(groupsRes);
             }
+        });
+
+        this.store.pipe(select(state => state.settings.isGetAllTriggersInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = response;
         });
     }
 

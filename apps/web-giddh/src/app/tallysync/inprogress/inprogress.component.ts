@@ -42,6 +42,8 @@ export class InprogressComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private _toaster: ToasterService,
@@ -73,6 +75,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
     }
 
     public getCurrentData() {
+        this.isLoading = true;
         this.tallysyncService.getInProgressSync(this.paginationRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.results && res.results.length > 0) {
                 this.progressDataResponse = res;
@@ -132,6 +135,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
                         ).toFixed(2) + "%";
                 });
             }
+            this.isLoading = false;
         });
     }
 
