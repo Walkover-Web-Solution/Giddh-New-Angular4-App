@@ -346,7 +346,7 @@
                                                             <input class="form-control text-right" type="text" id="{{'enter-amount-dr-' + i}}" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()" *ngIf="txn.type === 'DEBIT'" (click)="showBankLedgerPopup(txn, item);">
                                                         </td>
                                                     </tr>
-                                                    <div class="pos-abs entry-modal"
+                                                    <div class="position-absolute entry-modal"
                                                         *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'DEBIT'">
                                                         <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                             [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
@@ -1084,7 +1084,7 @@
                                 </table>
 
                                 <!--new ledge popup-->
-                                <div class="pos-abs entry-modal" (click)="shCredit?.hide()"
+                                <div class="position-absolute entry-modal" (click)="shCredit?.hide()"
                                     (keydown)="$event.stopPropagation()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                                     <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
