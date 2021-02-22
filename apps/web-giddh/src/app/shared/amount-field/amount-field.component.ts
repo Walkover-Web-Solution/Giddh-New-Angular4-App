@@ -36,6 +36,8 @@ export class AmountFieldComponent implements OnInit, OnChanges {
             let isRtlCurrency = this.generalService.isRtlCurrency(this.currencyCode);
             if (isRtlCurrency) {
                 this.direction = "rtl";
+            } else {
+                this.direction = "ltr";
             }
         }
     }
