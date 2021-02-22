@@ -49,13 +49,13 @@
 }
 
 #single-role tbody tr td:first-child input[type="checkbox"]:checked:after {
-    background: $light-maroon;
-    border-color: $light-maroon;
+    background: $cinnabar-orange;
+    border-color: $cinnabar-orange;
 }
 
 .head-name {
     padding: 13px;
-    background: $light-maroon;
+    background: $cinnabar-orange;
     color: $white;
     position: relative;
 }
@@ -84,7 +84,7 @@
 
 .new-col {
     background: $white-smoke;
-    border: 1px solid $very-light-gray;
+    border: 1px solid $gainsboro;
 }
 
 .role-head {
@@ -133,8 +133,8 @@
 }
 
 #single-role input[type="checkbox"]:checked:after {
-    background: $light-maroon;
-    border-color: $light-maroon;
+    background: $cinnabar-orange;
+    border-color: $cinnabar-orange;
 }
 
 #headsList {

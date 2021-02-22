@@ -3915,17 +3915,17 @@ select.form-control {
     background-color: $white !important;
 }
 
-.linkStockTbl {
+.link-stock-table {
     border-top: 1px solid $gainsboro;
     border-left: 1px solid $gainsboro;
 }
 
-.linkStockTbl > tbody > tr > td {
+.link-stock-table > tbody > tr > td {
     padding: 10px 15px;
     font-size: 14px;
 }
 
-.linkStockTbl > tbody > tr > td:first-child {
+.link-stock-table > tbody > tr > td:first-child {
     padding-left: 0;
     position: relative;
     text-transform: capitalize;
@@ -4647,13 +4647,13 @@ label {
 }
 
 #manufacture .source table thead th,
-#manufacture .source .linkStockTbl > tbody > tr > td:first-child,
+#manufacture .source .link-stock-table > tbody > tr > td:first-child,
 #manufacture .source table tfoot th {
     padding: 10px 15px;
     font-size: 14px;
 }
 
-#manufacture .source .linkStockTbl {
+#manufacture .source .link-stock-table {
     border: 0;
 }
 
