@@ -633,14 +633,21 @@
                                     <td colspan="12" class="py-2 px-3 font-14">
                                         <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
                                             {{localeData?.cf_balance}}
-                                            <span class="pd-l15 digit-blue" *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt |
-                                                giddhCurrency}}</span>
+                                            <span class="pd-l15 digit-blue d-inline-flex" *ngIf="eLedgType == 'CREDIT'">
+                                                <amount-field  [amount]="eDrBalAmnt"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false">
+                                                </amount-field>
+                                            </span>
                                         </div>
                                     </td>
                                     <td colspan="12" class="bd-rl py-2 px-3 font-14" *ngIf="eLedgType == 'DEBIT'">
                                         <div class="pull-right">
-                                            {{localeData?.cf_balance}} <span class="pd-l15 digit-blue"
-                                                *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
+                                            {{localeData?.cf_balance}}
+                                             <span class="pd-l15 digit-blue d-inline-flex" *ngIf="eLedgType == 'DEBIT'">
+                                                <amount-field [amount]="eCrBalAmnt" [currencySymbol]="false" [currencyCode]="false">
+                                                </amount-field>
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>
@@ -724,8 +731,7 @@
                                                             *ngIf="isLedgerAccountAllowsMultiCurrency">
                                                             <!-- {{ transactions.convertedCurrencySymbol }}
                                                                  { transactions.convertedAmount | giddhCurrency }} -->
-                                                            <amount-field [amount]="transactions.convertedAmount" [currencySymbol]="transactions.convertedCurrencySymbol"
-                                                                [currencyCode]="transactions.convertedCurrencySymbol">
+                                                            <amount-field [amount]="transactions.convertedAmount" [currencySymbol]="transactions.convertedCurrencySymbol" [currencyCode]="transactions.convertedCurrencyCode">
                                                             </amount-field>
                                                         </p>
                                                     </div>
@@ -804,21 +810,21 @@
                                     <td [attr.data-title]="commonLocaleData?.app_amount"
                                         class="col-xs-4 col-md-3 col-lg-3 text-right">
                                         <div class="d-flex flex-column">
+
+
                                             <ng-container *ngIf="(lc.transactionData$ | async)?.page <= 1">
                                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
-
                                                     <!-- {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount  | giddhCurrency }} -->
                                                     <amount-field [amount]="ledgerTxnBalance?.forwardedBalance?.amount" [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                        [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                        [currencyCode]="ledgerTxnBalance?.currencyCode">
                                                     </amount-field>
 
                                                 </span><br>
                                                 <span class="amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                                     <!-- {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}} -->
-
                                                     <amount-field [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
                                                         [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                        [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                                        [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                                     </amount-field>
 
                                                 </span>
@@ -1106,7 +1112,8 @@
                                                     <!-- {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}} -->
 
                                                     <amount-field [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
-                                                        [currencySymbol]="ledgerTxnBalance?.currencySymbol" [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                        [currencySymbol]="ledgerTxnBalance?.currencySymbol"
+                                                        [currencyCode]="ledgerTxnBalance?.currencyCode">
                                                     </amount-field>
 
                                                 </span>
@@ -1115,7 +1122,7 @@
 
                                                     <amount-field [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
                                                         [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                        [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                                        [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                                     </amount-field>
 
                                                 </span>
@@ -1379,7 +1386,7 @@
                                                     <!-- {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.closingBalance?.amount  | giddhCurrency }} -->
                                                     <div class="d-inline-flex">
                                                         <amount-field [amount]="ledgerTxnBalance?.closingBalance?.amount"
-                                                            [currencySymbol]="ledgerTxnBalance?.currencySymbol " [currencyCode]="ledgerTxnBalance?.currencyCode">
+                                                            [currencySymbol]="ledgerTxnBalance?.currencySymbol" [currencyCode]="ledgerTxnBalance?.currencyCode">
                                                         </amount-field>
                                                     </div>
                                                 </span>
@@ -1390,9 +1397,11 @@
                                     <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
                                         <div class="d-flex flex-column">
                                             <span class="bd-rt ng-binding padding-ledger">
+
                                                 <!-- {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningDebitTotal  | giddhCurrency }} -->
-                                                <amount-field [amount]="lc.reckoningDebitTotal" [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                <amount-field [amount]="lc.reckoningDebitTotal"
+                                                    [currencySymbol]="ledgerTxnBalance?.currencySymbol"
+                                                    [currencyCode]="ledgerTxnBalance?.currencyCode">
                                                 </amount-field>
                                             </span>
                                             <span class="bd-rt ng-binding text-gray padding-ledger"
@@ -1400,8 +1409,9 @@
                                                 <!-- {{ ledgerTxnBalance?.convertedCurrencySymbol }}
                                                      {{lc.convertedReckoningDebitTotal  | giddhCurrency }} -->
 
-                                                <amount-field [amount]="lc.convertedReckoningDebitTotal" [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                                <amount-field [amount]="lc.convertedReckoningDebitTotal"
+                                                    [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
+                                                    [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                                 </amount-field>
                                             </span>
                                         </div>
@@ -1422,7 +1432,7 @@
                                             <span class="digit-blue d-inline-flex">
                                                 <!-- {{ ledgerTxnBalance?.currencySymbol }}{{ledgerTxnBalance?.closingBalance?.amount  | giddhCurrency}} -->
                                                 <amount-field [amount]="ledgerTxnBalance?.closingBalance?.amount" [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                    [currencyCode]="ledgerTxnBalance?.currencyCode">
                                                 </amount-field>
                                             </span>
                                         </span>
@@ -1437,16 +1447,18 @@
                                             <span class="bd-rt padding-ledger">
                                                 <!-- {{ ledgerTxnBalance?.currencySymbol }}{{lc.reckoningCreditTotal | giddhCurrency }} -->
 
-                                                <amount-field [amount]="lc.reckoningCreditTotal" [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                <amount-field [amount]="lc.reckoningCreditTotal"
+                                                    [currencySymbol]="ledgerTxnBalance?.currencySymbol"
+                                                    [currencyCode]="ledgerTxnBalance?.currencyCode">
                                                 </amount-field>
                                             </span>
 
                                             <span class="bd-rt text-gray padding-ledger"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency">
                                                 <!-- {{ ledgerTxnBalance?.convertedCurrencySymbol }}{{lc.convertedReckoningCreditTotal | giddhCurrency }} -->
-                                                <amount-field [amount]="lc.convertedReckoningCreditTotal" [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                    [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                                <amount-field [amount]="lc.convertedReckoningCreditTotal"
+                                                    [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
+                                                    [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                                 </amount-field>
                                             </span>
                                         </div>
@@ -1490,22 +1502,23 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-6 col-12 text-right">{{localeData?.balance_bank}}
                                 <h3 class="font-20 primary-color">
-                                    <!-- {{reconcileClosingBalanceForBank?.amount}}
-                                        {{reconcileClosingBalanceForBank?.type}} -->
-
-                                    <amount-field [amount]="reconcileClosingBalanceForBank?.amount" [currencySymbol]="false" [currencyCode]="false"
-                                        [bankType]="reconcileClosingBalanceForBank?.type">
-                                    </amount-field>
+                                    <!-- {{reconcileClosingBalanceForBank?.amount}} -->
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="reconcileClosingBalanceForBank?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                        {{reconcileClosingBalanceForBank?.type}}
+                                    </span>
                                 </h3>
                             </div>
                             <div class="col-md-6 col-sm-6 col-12 text-left">{{localeData?.pending_cheque}}
                                 <h3 class="font-20 primary-color">
-                                    <!-- {{closingBalanceBeforeReconcile?.amount}}
-                                        {{closingBalanceBeforeReconcile?.type}} -->
+                                    <!-- {{closingBalanceBeforeReconcile?.amount}} -->
+                                    <span class="d-inline-flex">
+                                        <amount-field [amount]="closingBalanceBeforeReconcile?.amount" [currencySymbol]="false" [currencyCode]="false">
+                                        </amount-field>
+                                        {{closingBalanceBeforeReconcile?.type}}
+                                    </span>
 
-                                    <amount-field [amount]="closingBalanceBeforeReconcile?.amount" [currencySymbol]="false" [currencyCode]="false"
-                                        [bankType]="closingBalanceBeforeReconcile?.type">
-                                    </amount-field>
                                 </h3>
                             </div>
                         </div>
@@ -1559,11 +1572,11 @@
                         <div class="col-sm-3 col-xs-12 stat-block">
                             <div class="ledger-state-box">
                                 <h1>{{localeData?.opening_balance}}</h1>
-                                <h3 class="digit-blue d-inline-flex">
+                                <h3 class="digit-blue d-flex">
                                     <!-- {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}} -->
                                     <amount-field [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                         [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                        [currencyCode]="ledgerTxnBalance.currencyCode">
+                                        [currencyCode]="ledgerTxnBalance?.currencyCode">
                                     </amount-field>
                                     &nbsp;
                                     {{ ledgerTxnBalance?.forwardedBalance?.amount > 0 ? (ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? localeData?.dr : localeData?.cr) : '' }}
@@ -1573,7 +1586,7 @@
                                     <!-- {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}} -->
                                     <amount-field [amount]="ledgerTxnBalance?.convertedForwardedBalance?.amount"
                                         [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                        [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                        [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                     </amount-field>
 
                                     &nbsp;
@@ -1593,7 +1606,7 @@
                                         <h3 class="digit-blue d-flex">
                                             <!-- {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal | giddhCurrency}} -->
                                             <amount-field [amount]="ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal"
-                                                [currencySymbol]="ledgerTxnBalance?.currencySymbol" [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                [currencySymbol]="ledgerTxnBalance?.currencySymbol" [currencyCode]="ledgerTxnBalance?.currencyCode">
                                             </amount-field>
                                             &nbsp;
                                             <span class="capitalize">{{commonLocaleData?.app_cr}}</span>
@@ -1605,11 +1618,10 @@
 
                                             <amount-field [amount]="ledgerTxnBalance?.convertedCreditTotal - ledgerTxnBalance?.convertedDebitTotal"
                                                 [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                                [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                             </amount-field>
                                             &nbsp;
                                             <span class="capitalize">{{commonLocaleData?.app_cr}}</span>
-
                                         </h3>
                                     </div>
                                 </div>
@@ -1619,7 +1631,7 @@
                                             <!-- {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal - ledgerTxnBalance?.creditTotal | giddhCurrency}} -->
 
                                             <amount-field [amount]="ledgerTxnBalance?.debitTotal - ledgerTxnBalance?.creditTotal"
-                                                [currencySymbol]="ledgerTxnBalance?.currencySymbol" [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                [currencySymbol]="ledgerTxnBalance?.currencySymbol" [currencyCode]="ledgerTxnBalance?.currencyCode">
                                             </amount-field>
                                             &nbsp;
                                             <span class="capitalize">{{commonLocaleData?.app_dr}}</span>
@@ -1628,10 +1640,10 @@
                                         <h3 class="digit-blue sub-total font-12 d-inline-flex"
                                             *ngIf="isLedgerAccountAllowsMultiCurrency">
                                             <!-- {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal - ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}}
-                                                                                 -->
+                                            -->
                                             <amount-field [amount]="ledgerTxnBalance?.convertedDebitTotal - ledgerTxnBalance?.convertedCreditTotal"
                                                 [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                                [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                             </amount-field>
                                             &nbsp;
                                             <span class="capitalize">{{commonLocaleData?.app_dr}}</span>
@@ -1647,7 +1659,7 @@
                                         <span class="digit-blue mt-1 d-inline-flex">
                                             <!-- {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}} -->
                                             <amount-field [amount]="ledgerTxnBalance?.debitTotal" [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                [currencyCode]="ledgerTxnBalance?.currencyCode">
                                             </amount-field>
                                         </span>
                                         <span class="digit-blue font-12 sub-total d-inline-flex"
@@ -1655,7 +1667,7 @@
                                             <!-- {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedDebitTotal | giddhCurrency}} -->
                                             <amount-field [amount]="ledgerTxnBalance?.convertedDebitTotal"
                                                 [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                                [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                             </amount-field>
                                         </span>
                                     </h1>
@@ -1665,14 +1677,14 @@
                                         <span class="digit-blue d-flex mt-1">
                                             <!-- {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}} -->
                                             <amount-field [amount]="ledgerTxnBalance?.creditTotal" [currencySymbol]="ledgerTxnBalance?.currencySymbol"
-                                                [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                [currencyCode]="ledgerTxnBalance?.currencyCode">
                                             </amount-field>
                                         </span>
                                         <span class="digit-blue font-12 sub-total d-flex" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                             <!-- {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedCreditTotal | giddhCurrency}} -->
                                             <amount-field [amount]="ledgerTxnBalance?.convertedCreditTotal"
                                                 [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                                [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                             </amount-field>
                                         </span>
                                     </h1>
@@ -1691,7 +1703,7 @@
                                                 [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)">
                                                 <!-- {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}} -->
                                                 <amount-field [amount]="ledgerTxnBalance?.closingBalance?.amount"
-                                                    [currencySymbol]="ledgerTxnBalance?.currencySymbol" [currencyCode]="ledgerTxnBalance.currencyCode">
+                                                    [currencySymbol]="ledgerTxnBalance?.currencySymbol" [currencyCode]="ledgerTxnBalance?.currencyCode">
                                                 </amount-field>
                                                 &nbsp;
                                                 {{ ledgerTxnBalance?.closingBalance?.amount > 0 ? (ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? localeData?.dr :
@@ -1705,7 +1717,7 @@
                                             <!-- {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedClosingBalance?.amount | giddhCurrency}} -->
                                             <amount-field [amount]="ledgerTxnBalance?.convertedClosingBalance?.amount"
                                                 [currencySymbol]="ledgerTxnBalance?.convertedCurrencySymbol"
-                                                [currencyCode]="ledgerTxnBalance.convertedCurrencyCode">
+                                                [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode">
                                             </amount-field>
                                             &nbsp;
                                             {{ ledgerTxnBalance?.convertedClosingBalance?.amount > 0 ? (ledgerTxnBalance?.convertedClosingBalance?.type === 'DEBIT'

@@ -682,10 +682,6 @@
                     <div class="cearfix pd-1 text-right bb-1 pr-0">
                         <span class="inWords font-14">
                             {{vm.grandTotal | myNumberToWordsPipe | lowercase}}
-                            <amount-field [amount]="vm.grandTotal | myNumberToWordsPipe | lowercase"
-                                [currencySymbol]="false"
-                                [currencyCode]="false">
-                            </amount-field>
                         </span>
                     </div>
                 </ng-container>

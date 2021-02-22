@@ -244,8 +244,7 @@
             *ngIf="currentTxn.total">
             <!-- {{ currentTxn.total | myNumberToWordsPipe | lowercase }} -->
             <span class="d-inline-flex">
-                <amount-field [amount]="currentTxn.total | myNumberToWordsPipe | lowercase " [currencySymbol]="false" [currencyCode]="false"
-                    [ratePrecision]="true">
+                <amount-field [amount]="currentTxn.total | myNumberToWordsPipe | lowercase" [currencySymbol]="false" [currencyCode]="false">
                 </amount-field>
             </span>
         </div>
@@ -281,7 +280,7 @@
                     <td class="text-right">
                         <span class="primary-color">
                             {{ getTotalInCurrency() }}:
-                            {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}:
+                            {{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}:
                             <!-- <span>{{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}</span>
                             {{ blankLedger.compoundTotal | giddhCurrency }} -->
                             <span class="d-inline-flex">
@@ -366,7 +365,7 @@
                                                     ({{commonLocaleData?.app_due}}:
                                                     <!-- {{ option.additional?.balanceDue.amountForAccount | giddhCurrency }} -->
                                                         <span class="d-inline-flex">
-                                                            <amount-field [amount]=" option.additional?.balanceDue.amountForAccount"
+                                                            <amount-field [amount]="option.additional?.balanceDue.amountForAccount"
                                                                 [currencySymbol]="false"
                                                                 [currencyCode]="false">
                                                             </amount-field>
@@ -477,7 +476,6 @@
                                     <td>{{entry.entryDate}}</td>
                                     <td>{{txn.particular.name}}</td>
                                     <td>
-                                        {{txn.amount | giddhCurrency}}
                                         <amount-field [amount]="txn.amount"
                                             [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -509,8 +507,9 @@
                 <div class="pull-right">
                     <div class="clearfix">
                         <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">{{getTotalInMultiCurrency()}}:
-                            {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}:
-                            <!-- {{  selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }} {{ blankLedger.convertedCompoundTotal | giddhCurrency }} -->
+                            {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}:
+                            <!-- {{  selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
+                                 {{ blankLedger.convertedCompoundTotal | giddhCurrency }} -->
                         <span class="d-inline-flex">
                             <amount-field [amount]="blankLedger.convertedCompoundTotal"
                                 [currencySymbol]="selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol"
