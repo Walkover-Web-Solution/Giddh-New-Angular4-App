@@ -280,7 +280,6 @@
                     <td class="text-right">
                         <span class="primary-color">
                             {{ getTotalInCurrency() }}:
-                            {{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}:
                             <!-- <span>{{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}</span>
                             {{ blankLedger.compoundTotal | giddhCurrency }} -->
                             <span class="d-inline-flex">
@@ -507,7 +506,6 @@
                 <div class="pull-right">
                     <div class="clearfix">
                         <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">{{getTotalInMultiCurrency()}}:
-                            {{ selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}:
                             <!-- {{  selectedCurrency === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }}
                                  {{ blankLedger.convertedCompoundTotal | giddhCurrency }} -->
                         <span class="d-inline-flex">
