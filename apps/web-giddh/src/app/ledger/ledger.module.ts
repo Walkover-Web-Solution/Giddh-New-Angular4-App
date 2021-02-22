@@ -70,7 +70,6 @@ import { AmountFieldComponent } from '../shared/amount-field/amount-field.compon
         BaseAccountComponent,
         LedgerColumnarReportTableComponent,
         ImportStatementComponent,
-        AmountFieldComponent
     ],
     exports: [
         LedgerComponent, UpdateLedgerEntryPanelComponent
