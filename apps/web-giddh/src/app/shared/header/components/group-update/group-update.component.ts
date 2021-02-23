@@ -135,7 +135,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             ssnNumber: [''] // this is sac number
         });
 
-        if(this.path && (this.path[0] === "revenuefromoperations" || this.path[0] === "operatingcost")) {
+        if(this.path && this.path[0] === "revenuefromoperations") {
             this.getInvoiceSettings();
             this.isHsnSacEnabledAcc = true;
         } else {
