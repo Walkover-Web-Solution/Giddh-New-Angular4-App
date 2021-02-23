@@ -43,6 +43,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public blankLedger: BlankLedgerVM;
     @Input() public currentTxn: TransactionVM = null;
     @Input() public needToReCalculate: BehaviorSubject<boolean>;
+    /** This will hold breadcrumb path */
     @Input() public path: string[] = [];
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
