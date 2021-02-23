@@ -8,7 +8,6 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { GroupCreateRequest } from '../../../../models/api-models/Group';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { digitsOnly } from '../../../helpers';
-import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 
 @Component({
 	selector: 'group-add',
@@ -27,16 +26,12 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 	public isGroupNameAvailable$: Observable<boolean>;
 	public showAddNewGroup$: Observable<boolean>;
 	public isCreateGroupInProcess$: Observable<boolean>;
-    public isCreateGroupSuccess$: Observable<boolean>;
-    /** True if need to show hsn/sac */
-    public isHsnSacEnabledAcc: boolean = false;
-    /** This will hold inventory settings */
-    public inventorySettings: any;
+	public isCreateGroupSuccess$: Observable<boolean>;
 	@ViewChild('autoFocused', {static: true}) public autoFocus: ElementRef;
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private invoiceService: InvoiceService) {
+	constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
 		this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
 		this.showAddNewGroup$ = this.store.pipe(select(state => state.groupwithaccounts.showAddNewGroup), takeUntil(this.destroyed$));
 		this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingGrpUniqueName), takeUntil(this.destroyed$));
@@ -51,19 +46,9 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 			uniqueName: ['', Validators.required],
 			description: [''],
 			closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
-            closingBalanceTriggerAmountType: ['CREDIT'],
-            hsnOrSac: [''],
-            hsnNumber: [''],
-            ssnNumber: [''] // this is sac number
-        });
+			closingBalanceTriggerAmountType: ['CREDIT']
+		});
 
-        if(this.path && this.path[0] === "revenuefromoperations") {
-            this.getInvoiceSettings();
-            this.isHsnSacEnabledAcc = true;
-        } else {
-            this.isHsnSacEnabledAcc = false;
-        }
-        
 		this.isCreateGroupSuccess$.subscribe(a => {
 			if (a) {
 				this.groupDetailForm.reset();
@@ -87,13 +72,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 	public addNewGroup() {
 		let activeGrpUniqueName: string;
 		let uniqueName = this.groupDetailForm.get('uniqueName');
-        uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
-        
-        if(this.groupDetailForm.get("hsnOrSac").value === "hsn") {
-            this.groupDetailForm.get("ssnNumber").patchValue("");
-        } else {
-            this.groupDetailForm.get("hsnNumber").patchValue("");
-        }
+		uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
 
 		this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGrpUniqueName = a);
 
@@ -115,25 +94,5 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
-    }
-    
-    /**
-     * This will get invoice settings
-     *
-     * @memberof GroupAddComponent
-     */
-    public getInvoiceSettings(): void {
-        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success" && response.body) {
-                let invoiceSettings = _.cloneDeep(response.body);
-                this.inventorySettings = invoiceSettings.companyInventorySettings;
-
-                if(this.inventorySettings?.manageInventory) {
-                    this.groupDetailForm.get("hsnOrSac").patchValue("hsn");
-                } else {
-                    this.groupDetailForm.get("hsnOrSac").patchValue("sac");
-                }
-            }
-        });
-    }
+	}
 }
