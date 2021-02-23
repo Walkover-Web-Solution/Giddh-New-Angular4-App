@@ -30,28 +30,6 @@
                 </div>
             </div>
         </div>
-        <ng-container *ngIf="isHsnSacEnabledAcc">
-            <div class="row">
-                <div class="col-8 col-sm-8 form-group">
-                    <div class="input-group d-flex">
-                        <div class="d-flex">
-                            <span class="mr-r15">
-                                <input type="radio" class="radio-custom radio-theme" name="hsnOrSac" id="hsnCodeType" formControlName="hsnOrSac" value="hsn">
-                                <label for="hsnCodeType" class="radio-custom-label">{{commonLocaleData?.app_hsn}}</label>
-                            </span>
-                            <span>
-                                <input type="radio" class="radio-custom radio-theme" name="hsnOrSac" id="sacCodeType" formControlName="hsnOrSac" value="sac">
-                                <label for="sacCodeType" class="ml-1 radio-custom-label">{{commonLocaleData?.app_sac}}</label>
-                            </span>
-                        </div>
-                        <input type="text" class="form-control ml-4 bd-rr" maxlength="10" decimalDigitsDirective formControlName="hsnNumber"
-                            *ngIf="groupDetailForm.get('hsnOrSac').value === 'hsn'" />
-                        <input type="text" class="form-control ml-4 bd-rr" maxlength="10" formControlName="ssnNumber" decimalDigitsDirective
-                            *ngIf="groupDetailForm.get('hsnOrSac').value === 'sac'" />
-                    </div>
-                </div>
-            </div>
-        </ng-container>
         <div class="form-group clearfix">
             <label>{{localeData?.description_label}}</label>
             <textarea maxlength="200" rows="5" cols="10" class="form-control" [placeholder]="localeData?.description_placeholder"

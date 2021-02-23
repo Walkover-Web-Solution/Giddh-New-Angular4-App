@@ -36,8 +36,8 @@
 
     <!--add/edit group form-->
     <div *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100">
-        <group-add class="form-box" *ngIf="(showAddNewGroup$ | async)" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [path]="breadcrumbUniquePath"></group-add>
-        <group-update *ngIf="(showEditGroup$ | async)" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [path]="breadcrumbUniquePath"></group-update>
+        <group-add class="form-box" *ngIf="(showAddNewGroup$ | async)" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></group-add>
+        <group-update *ngIf="(showEditGroup$ | async)" [localeData]="localeData" [commonLocaleData]="commonLocaleData"></group-update>
     </div>
     <!--add/edit group form-->
 
