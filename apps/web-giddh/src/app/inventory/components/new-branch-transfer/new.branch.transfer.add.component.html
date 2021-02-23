@@ -109,14 +109,16 @@
                                 </sh-select>
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="formFields && formFields['taxName']">
+                        <div class="row mr-b2" *ngIf="(branchTransfer.sources[0].warehouse.taxNumber && branchTransfer.sources[0].warehouse.uniqueName) && formFields && formFields['taxName']">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
                                     Sender's {{formFields['taxName'].label}}
                                 </label>
+
                             </div>
-                            <div class="col-xl-6 col-lg-8">
-                                <input [disabled]="branchTransfer?.sources[0]?.warehouse?.uniqueName" type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber">
+                            <div class="col-xl-6 col-lg-8 position-relative">
+                                <input disabled="[branchTransfer?.sources[0]?.warehouse?.uniqueName]" type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber">
+                                <i class="icon-info" tooltip="Branch transfer is allowed only for same GSTIN numbers or missing GSTIN numbers of both the sender & receiver"></i>
                             </div>
                         </div>
                         <div class="row mr-b2">
@@ -151,14 +153,16 @@
                                     (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0, $event);" required [isRequired]="true" (onClear)="resetWarehouse('destinations', 0)"></sh-select>
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
+                        <div class="row mr-b2" *ngIf="(branchTransfer.destinations[0].warehouse.taxNumber && branchTransfer.destinations[0].warehouse.uniqueName) && transferType !== 'senders' && formFields && formFields['taxName']">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
                                     Receiver's {{formFields['taxName'].label}}
                                 </label>
                             </div>
-                            <div class="col-xl-6 col-lg-8">
+                            <div class="col-xl-6 col-lg-8 position-relative">
                                 <input [disabled]="branchTransfer?.destinations[0]?.warehouse?.uniqueName" type="text" class="form-control" name="destinationTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField (change)="checkTaxNumberValidation(receiverGstNumberField);" [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber">
+
+                                <i class="icon-info" tooltip="Branch transfer is allowed only for same GSTIN numbers or missing GSTIN numbers of both the sender & receiver"></i>
                             </div>
                         </div>
                         <div class="row mr-b2" *ngIf="transferType !== 'senders'">
@@ -247,14 +251,15 @@
                                     required [isRequired]="true" (onClear)="resetWarehouse('sources', 0)"></sh-select>
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
+                        <div *ngIf="(branchTransfer.sources[0].warehouse.taxNumber && branchTransfer.sources[0].warehouse.uniqueName) && transferType !== 'senders' && formFields && formFields['taxName']" class="row mr-b2">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
                                     Sender's {{formFields['taxName'].label}}
                                 </label>
                             </div>
-                            <div class="col-xl-6 col-lg-8">
-                                <input [disabled]="branchTransfer?.sources[0]?.warehouse?.uniqueName" type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber">
+                            <div class="col-xl-6 col-lg-8 position-relative">
+                                <input  [disabled]="branchTransfer?.sources[0]?.warehouse?.uniqueName" type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber">
+                                <i class="icon-info" tooltip="Branch transfer is allowed only for same GSTIN numbers or missing GSTIN numbers of both the sender & receiver"></i>
                             </div>
                         </div>
                         <div class="row mr-b2" *ngIf="transferType !== 'senders'">
@@ -294,14 +299,15 @@
                                     (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0, $event);" (onClear)="resetWarehouse('destinations', 0)" required [isRequired]="true"></sh-select>
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="formFields && formFields['taxName']">
+                        <div class="row mr-b2" *ngIf="(branchTransfer.destinations[0].warehouse.taxNumber && branchTransfer.destinations[0].warehouse.uniqueName ) && formFields && formFields['taxName']">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
                                     Receiver's {{formFields['taxName'].label}}
                                 </label>
                             </div>
-                            <div class="col-xl-6 col-lg-8">
+                            <div class="col-xl-6 col-lg-8 position-relative">
                                 <input [disabled]="branchTransfer?.destinations[0]?.warehouse?.uniqueName" type="text" class="form-control" name="destinationTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField (change)="checkTaxNumberValidation(receiverGstNumberField);" [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber">
+                                <i class="icon-info" tooltip="Branch transfer is allowed only for same GSTIN numbers or missing GSTIN numbers of both the sender & receiver"></i>
                             </div>
                         </div>
                         <div class="row mr-b2">
