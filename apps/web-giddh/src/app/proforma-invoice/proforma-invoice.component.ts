@@ -200,7 +200,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
-    @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: ShSelectComponent;
+    @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: SalesShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
     @ViewChildren('description') public description: QueryList<ElementRef>;
@@ -881,7 +881,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (!this.isUpdateMode) {
-                this.createEmbeddedViewAtIndex(0);
                 if (!this.isPendingVoucherType) {
                     this.resetInvoiceForm(this.invoiceForm);
                     if (!this.isMultiCurrencyModule() && !this.isPurchaseInvoice) {
@@ -898,7 +897,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             this.loadDefaultSearchSuggestions();
-            this.focusInCustomerName();
             this.getAllLastInvoices();
             this.fillDeliverToAddress();
         });
@@ -1894,7 +1892,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isSalesInvoice) {
             this.loadBankCashAccounts(data.currency);
         }
-        this.focusInCustomerName();
         if (this.isInvoiceRequestedFromPreviousPage) {
             this.invFormData.voucherDetails.customerUniquename = data.uniqueName;
             this.invFormData.voucherDetails.customerName = data.name;
@@ -3697,7 +3694,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex], true, false, lastIndex);
             }
         });
-        this.buildBulkData(this.invFormData.entries.length, startIndex, isBlankItemPresent);
+        this.buildBulkData(this.invFormData.entries.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
 
     public addNewSidebarAccount(item: AddAccountRequest) {
@@ -4201,7 +4198,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public calculateOtherTaxes(modal: SalesOtherTaxesModal, entryObj?: SalesEntryClass) {
         let entry: SalesEntryClass;
         entry = entryObj ? entryObj : this.invFormData.entries[this.activeIndx];
-
         let taxableValue = 0;
         let totalTaxes = 0;
 
@@ -5171,6 +5167,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
                 if (firstElementToFocus[0]) {
                     firstElementToFocus[0].focus();
+                    if (this.customerNameDropDown) {
+                        this.customerNameDropDown.show();
+                    }
                 }
             }, 200);
         }
@@ -6650,6 +6649,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             ];
             this.assignSearchResultToList(SEARCH_TYPE.CUSTOMER);
             this.makeCustomerList();
+            this.focusInCustomerName();
         });
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.ITEM, (response) => {
             this.defaultItemSuggestions = response.map(result => {
@@ -6848,6 +6848,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private buildBulkData(length: number, startIndex: number, isBlankItemInBetween?: boolean): void {
+        if (startIndex === 0 && this.container?.length) {
+            this.container.clear();
+        }
         const ITEMS_RENDERED_AT_ONCE = 20;
         const INTERVAL_IN_MS = 50;
 
@@ -6887,6 +6890,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.showBulkLoader = true;
         setTimeout(() => {
             this.showBulkLoader = false;
+            this._cdr.detectChanges();
         }, 50);
         for (let index = startIndex; index < this.invFormData.entries.length; index++) {
             setTimeout(() => {
