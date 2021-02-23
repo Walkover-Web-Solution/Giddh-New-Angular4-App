@@ -25,6 +25,7 @@ import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.c
 import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 
 @Component({
     selector: 'group-update',
@@ -42,6 +43,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public blankLedger: BlankLedgerVM;
     @Input() public currentTxn: TransactionVM = null;
     @Input() public needToReCalculate: BehaviorSubject<boolean>;
+    /** This will hold breadcrumb path */
+    @Input() public path: string[] = [];
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     @ViewChild('discount', {static: true}) public discountControl: LedgerDiscountComponent;
@@ -85,11 +88,14 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public isTaxesSaveDisable$: Observable<boolean> = of(true);
     /** To check applied discounts modified  */
     public isDiscountSaveDisable$: Observable<boolean> = of(true);
-
+    /** True if need to show hsn/sac */
+    public isHsnSacEnabledAcc: boolean = false;
+    /** This will hold inventory settings */
+    public inventorySettings: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions, private settingsDiscountAction: SettingsDiscountActions ) {
+        private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions, private settingsDiscountAction: SettingsDiscountActions, private invoiceService: InvoiceService ) {
         this.groupList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
@@ -123,8 +129,19 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             uniqueName: ['', Validators.required],
             description: [''],
             closingBalanceTriggerAmount: [0, Validators.compose([digitsOnly])],
-            closingBalanceTriggerAmountType: ['CREDIT']
+            closingBalanceTriggerAmountType: ['CREDIT'],
+            hsnOrSac: [''],
+            hsnNumber: [''],
+            ssnNumber: [''] // this is sac number
         });
+
+        if(this.path && this.path[0] === "revenuefromoperations") {
+            this.getInvoiceSettings();
+            this.isHsnSacEnabledAcc = true;
+        } else {
+            this.isHsnSacEnabledAcc = false;
+        }
+
         this.moveGroupForm = this._fb.group({
             moveto: ['', Validators.required]
         });
@@ -141,15 +158,22 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.selectedDiscounts.push(element.uniqueName)
                     });
                 }
-                this.groupDetailForm.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType });
+                this.groupDetailForm.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType, hsnOrSac: (activeGroup.hsnNumber ? "hsn" : "sac"), hsnNumber: activeGroup.hsnNumber, ssnNumber: activeGroup.ssnNumber });
+
                 if (activeGroup.fixed) {
                     this.groupDetailForm.get('name').disable();
                     this.groupDetailForm.get('uniqueName').disable();
                     this.groupDetailForm.get('description').disable();
+                    this.groupDetailForm.get('hsnOrSac').disable();
+                    this.groupDetailForm.get('hsnNumber').disable();
+                    this.groupDetailForm.get('ssnNumber').disable();
                 } else {
                     this.groupDetailForm.get('name').enable();
                     this.groupDetailForm.get('uniqueName').enable();
                     this.groupDetailForm.get('description').enable();
+                    this.groupDetailForm.get('hsnOrSac').enable();
+                    this.groupDetailForm.get('hsnNumber').enable();
+                    this.groupDetailForm.get('ssnNumber').enable();
                 }
             }
         });
@@ -239,13 +263,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 result = false;
             }
             return result;
-
-            this.needToReCalculate.subscribe(a => {
-                if (a) {
-                    this.amountChanged();
-                    this.calculateTotal();
-                }
-            });
         }), takeUntil(this.destroyed$));
 
         this.activeGroupSelected$.subscribe((p) => {
@@ -439,6 +456,12 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let uniqueName = this.groupDetailForm.get('uniqueName');
         uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
 
+        if(this.groupDetailForm.get("hsnOrSac").value === "hsn") {
+            this.groupDetailForm.get("ssnNumber").patchValue("");
+        } else {
+            this.groupDetailForm.get("hsnNumber").patchValue("");
+        }
+
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroupUniqueName));
     }
@@ -603,4 +626,25 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isDiscountSaveDisable$ = of(false);
     }
 
+    /**
+     * This will get invoice settings
+     *
+     * @memberof GroupUpdateComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = _.cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if(!this.groupDetailForm.get("hsnOrSac").value) {
+                    if(this.inventorySettings?.manageInventory) {
+                        this.groupDetailForm.get("hsnOrSac").patchValue("hsn");
+                    } else {
+                        this.groupDetailForm.get("hsnOrSac").patchValue("sac");
+                    }
+                }
+            }
+        });
+    }
 }
