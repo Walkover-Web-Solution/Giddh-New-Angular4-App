@@ -73,7 +73,7 @@
                             <ng-container *ngFor="let transaction of stocksTransaction;let i=index;let l=last">
                                 <ng-container>
                                     <tr
-                                        [ngClass]="{'activeRow': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
+                                        [ngClass]="{'active-row': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
                                         <!-- (blur)="onStockItemBlur($event, qty);" showStockList.next(false)" -->
                                         <td><input onReturn id="first_element_{{i}}_{{i}}" type="text"
                                                 class="form-control select-stock-in-invoice"
@@ -133,7 +133,7 @@
                             <!-- accounts entry -->
                             <!--  -->
                             <ng-container *ngFor="let transaction of accountsTransaction;let i=index;let l=last">
-                                <tr [ngClass]="{'activeRow': isSelectedRow && selectedAccIdx === i}">
+                                <tr [ngClass]="{'active-row': isSelectedRow && selectedAccIdx === i}">
                                     <td colspan="2"><input data-accountlistid="i" onReturn type="text"
                                             class="form-control invoice-account-field" #particular
                                             [(ngModel)]="transaction.selectedAccount.account"

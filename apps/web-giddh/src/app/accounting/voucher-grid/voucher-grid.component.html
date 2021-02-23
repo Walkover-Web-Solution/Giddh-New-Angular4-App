@@ -24,7 +24,7 @@
                         <br />
                         <tbody (clickOutside)="hideListItems()">
                             <tr *ngFor="let transaction of requestObj.transactions;let i=index;let l=last"
-                                [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
+                                [ngClass]="{'active-row': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
                                 <td [style.width.px]="40"><input onReturn type="text" class="form-control text-capitalize byTo"
                                         [disabled]="i === 0 && !isFirstRowDeleted" (ngModel)="transaction.type"
                                         (ngModelChange)="selectEntryType(transaction, $event, i)"
@@ -45,7 +45,7 @@
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last"
-                                                    [ngClass]="{'activeRow': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
+                                                    [ngClass]="{'active-row': isSelectedRow && selectedStockIdx === idx && selectedIdx === i}">
                                                     <td [style.width.px]="250"><input onReturn
                                                             (keydown)="detectKey($event)"
                                                             (keydown.Tab)="addNewEntry(transaction.amount,transaction, i)"
