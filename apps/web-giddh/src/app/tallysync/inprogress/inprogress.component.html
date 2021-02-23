@@ -7,8 +7,8 @@
         <div *ngIf="progressData?.length">
             <div class="panel panel-default" *ngFor="let row of progressData">
                 <div class="panel-heading">
-                    <span class="m-r-15">{{row.type === 'TALLY' ? 'Tally:' : row.type === 'COMPANY_JSON_IMPORT' ? 'Import Json:' : ''}} {{ row.company.name }}</span>
-                    <small class="m-r-15">Last Import on {{ row.dateString }}</small>
+                    <span class="mr-r15">{{row.type === 'TALLY' ? 'Tally:' : row.type === 'COMPANY_JSON_IMPORT' ? 'Import Json:' : ''}} {{ row.company.name }}</span>
+                    <small class="mr-r15">Last Import on {{ row.dateString }}</small>
                     <small class="running"><i class="fa fa-circle"></i> {{ row.status }}</small>
                 </div>
                 <div class="panel-body">
@@ -16,7 +16,7 @@
                         <li class="list-group-item">
                             <div class="clearfix">
                                 <div class="col-sm-2 col-xs-12">
-                                    <img src="{{imgPath}}folder.svg" height="20" class="m-r-10" />
+                                    <img src="{{imgPath}}folder.svg" height="20" class="mr-r1" />
                                     <span>Groups</span>
                                 </div>
                                 <div class="col-sm-6 col-xs-8">
@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
-                                        <small class="m-r-10"><i class="fa fa-check"></i>{{
+                                        <small class="mr-r1"><i class="fa fa-check"></i>{{
                                                 row.groupsPercent
                                             }}
                                             Complete</small>
@@ -53,7 +53,7 @@
                         <li class="list-group-item">
                             <div class="clearfix">
                                 <div class="col-sm-2 col-xs-12">
-                                    <img src="{{imgPath}}folder.svg" height="20" class="m-r-10" />
+                                    <img src="{{imgPath}}folder.svg" height="20" class="mr-r1" />
                                     <span>Accounts</span>
                                 </div>
                                 <div class="col-sm-6 col-xs-8">
@@ -75,7 +75,7 @@
                                 </div>
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
-                                        <small class="m-r-10"><i class="fa fa-check"></i>{{
+                                        <small class="mr-r1"><i class="fa fa-check"></i>{{
                                                 row.accountsPercent
                                             }}
                                             Complete</small>
@@ -90,7 +90,7 @@
                         <li class="list-group-item">
                             <div class="clearfix">
                                 <div class="col-sm-2 col-xs-12">
-                                    <img src="{{imgPath}}folder.svg" height="20" class="m-r-10" />
+                                    <img src="{{imgPath}}folder.svg" height="20" class="mr-r1" />
                                     <span>Entries</span>
                                 </div>
                                 <div class="col-sm-6 col-xs-8">
@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="col-sm-4 col-xs-4 text-success">
                                     <div class="status">
-                                        <small class="m-r-10"><i class="fa fa-check"></i>{{
+                                        <small class="mr-r1"><i class="fa fa-check"></i>{{
                                                 row.entriesPercent
                                             }}
                                             Complete</small>
@@ -130,7 +130,7 @@
                         row.tallyErrorAccounts > 0 ||
                         row.tallyErrorGroups > 0
                     ">
-                    <span class="m-r-15">Error Report:</span>
+                    <span class="mr-r15">Error Report:</span>
                     <a href="javascript:;" class="running" (click)="downloadLog(row)">{{ row.company.name }}-error-log.xlsx</a>
                 </div>
             </div>
