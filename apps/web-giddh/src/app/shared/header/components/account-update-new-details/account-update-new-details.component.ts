@@ -1646,10 +1646,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let invoiceSettings = _.cloneDeep(response.body);
                 this.inventorySettings = invoiceSettings.companyInventorySettings;
 
-                if(this.inventorySettings?.manageInventory) {
-                    this.addAccountForm.get("hsnOrSac").patchValue("hsn");
-                } else {
-                    this.addAccountForm.get("hsnOrSac").patchValue("sac");
+                if(!this.addAccountForm.get("hsnOrSac")?.value) {
+                    if(this.inventorySettings?.manageInventory) {
+                        this.addAccountForm.get("hsnOrSac").patchValue("hsn");
+                    } else {
+                        this.addAccountForm.get("hsnOrSac").patchValue("sac");
+                    }
                 }
             }
         });

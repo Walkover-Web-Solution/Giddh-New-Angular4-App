@@ -3005,8 +3005,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             mobileNo: data.body.mobileNo,
                             nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                             stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
-                            hsnNumber: (selectedAcc.stock) ? selectedAcc.stock.hsnNumber : "",
-                            sacNumber: (!selectedAcc.stock) ? data.body.sacNumber : "",
+                            hsnNumber: selectedAcc.stock?.hsnNumber ? selectedAcc.stock.hsnNumber : data.body.hsnNumber,
+                            sacNumber: selectedAcc.stock?.sacNumber ? selectedAcc.stock.sacNumber : data.body.sacNumber,
                             uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
                         txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
@@ -3235,36 +3235,38 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         }
 
-        if(!o.stock && o.hsnNumber && o.sacNumber) {
-            if(this.inventorySettings?.manageInventory) {
+        if(!transaction.hsnNumber && !transaction.sacNumber) {
+            if(o.hsnNumber && o.sacNumber) {
+                if(this.inventorySettings?.manageInventory) {
+                    transaction.hsnNumber = o.hsnNumber;
+                    transaction.hsnOrSac = 'hsn';
+                    transaction.showCodeType = "hsn";
+                } else {
+                    transaction.sacNumber = o.sacNumber;
+                    transaction.sacNumberExists = true;
+                    transaction.hsnOrSac = 'sac';
+                    transaction.showCodeType = "sac";
+                }
+            } else if(o.hsnNumber && !o.sacNumber) {
                 transaction.hsnNumber = o.hsnNumber;
                 transaction.hsnOrSac = 'hsn';
                 transaction.showCodeType = "hsn";
-            } else {
+            } else if(!o.hsnNumber && o.sacNumber) {
                 transaction.sacNumber = o.sacNumber;
                 transaction.sacNumberExists = true;
                 transaction.hsnOrSac = 'sac';
                 transaction.showCodeType = "sac";
-            }
-        } else if(!o.stock && o.hsnNumber && !o.sacNumber) {
-            transaction.hsnNumber = o.hsnNumber;
-            transaction.hsnOrSac = 'hsn';
-            transaction.showCodeType = "hsn";
-        } else if(!o.stock && !o.hsnNumber && o.sacNumber) {
-            transaction.sacNumber = o.sacNumber;
-            transaction.sacNumberExists = true;
-            transaction.hsnOrSac = 'sac';
-            transaction.showCodeType = "sac";
-        } else if(!o.stock && !o.hsnNumber && !o.sacNumber) {
-            if(this.inventorySettings?.manageInventory) {
-                transaction.hsnNumber = "";
-                transaction.hsnOrSac = 'hsn';
-                transaction.showCodeType = "hsn";
-            } else {
-                transaction.sacNumber = "";
-                transaction.sacNumberExists = true;
-                transaction.hsnOrSac = 'sac';
-                transaction.showCodeType = "sac";
+            } else if(!o.hsnNumber && !o.sacNumber) {
+                if(this.inventorySettings?.manageInventory) {
+                    transaction.hsnNumber = "";
+                    transaction.hsnOrSac = 'hsn';
+                    transaction.showCodeType = "hsn";
+                } else {
+                    transaction.sacNumber = "";
+                    transaction.sacNumberExists = true;
+                    transaction.hsnOrSac = 'sac';
+                    transaction.showCodeType = "sac";
+                }
             }
         }
 
