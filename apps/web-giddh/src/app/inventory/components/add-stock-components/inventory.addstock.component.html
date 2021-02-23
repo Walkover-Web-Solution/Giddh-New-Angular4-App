@@ -201,7 +201,7 @@
                                         name="enablePurchase">Purchase Information</label>
                             </div>
                             <div class="form-group">
-                                <label class="boldHead">Account Name</label>
+                                <label class="bold-head">Account Name</label>
                                 <sh-select [options]="purchaseAccountsDropDown$ | async" formControlName="purchaseAccountUniqueName" [placeholder]="'select purchase account'" [multiple]="false" [ItemHeight]="33" [disabled]="!addStockForm.controls['enablePurchase'].value" [forceClearReactive]="forceClearPurchaseAccount$ | async"></sh-select>
                             </div>
 
