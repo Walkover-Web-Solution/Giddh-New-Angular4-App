@@ -138,7 +138,7 @@
                                                                             [(ngModel)]="purchaseOrder.account.billingDetails.gstNumber"
                                                                             class="form-control input-custom"
                                                                             (blur)="autoFillShippingDetails('vendor')"
-                                                                            (change)="getStateCode('billingDetails', vendorStatesBilling, 'vendor')"
+                                                                            (change)="getStateCode('billingDetails', 'vendor')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
                                                                 </div>
@@ -209,7 +209,7 @@
                                                                             type="text" name="vendorShippingDetailsTax"
                                                                             [(ngModel)]="purchaseOrder.account.shippingDetails.gstNumber"
                                                                             class="form-control input-custom"
-                                                                            (change)="getStateCode('shippingDetails', vendorStatesShipping, 'vendor')"
+                                                                            (change)="getStateCode('shippingDetails', 'vendor')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
 
@@ -299,7 +299,7 @@
                                                                 [showBottomBorderOnly]="true"
                                                                 [options]="companyStatesSource"
                                                                 name="companyBillingDetailsStateCode"
-                                                                [disabled]="(purchaseOrder.company.billingDetails.gstNumber && purchaseOrder.company.billingDetails.gstNumber.length >= 2) ? true : null"
+                                                                [disabled]="(purchaseOrder.company.billingDetails.state.code && purchaseOrder.company.billingDetails.gstNumber && purchaseOrder.company.billingDetails.gstNumber.length >= 2) ? true : null"
                                                                 [(ngModel)]="purchaseOrder.company.billingDetails.state.code">
                                                             </sales-sh-select>
                                                         </div>
@@ -356,7 +356,7 @@
                                                                     [showBottomBorderOnly]="true"
                                                                     [options]="companyStatesSource"
                                                                     name="companyShippingDetailsStateCode"
-                                                                    [disabled]="(purchaseOrder.company.shippingDetails.gstNumber && purchaseOrder.company.shippingDetails.gstNumber.length >= 2) ? true : null"
+                                                                    [disabled]="(purchaseOrder.company.shippingDetails.state.code && purchaseOrder.company.shippingDetails.gstNumber && purchaseOrder.company.shippingDetails.gstNumber.length >= 2) ? true : null"
                                                                     [(ngModel)]="purchaseOrder.company.shippingDetails.state.code">
                                                                 </sales-sh-select>
                                                             </div>
