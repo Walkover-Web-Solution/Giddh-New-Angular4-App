@@ -1177,12 +1177,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     this.purchaseOrder.company[type].state.code = selectedState.value;
                 }
             } else {
-                if (addressType === "vendor") {
-                    this.purchaseOrder.account[type].stateCode = null;
-                    this.purchaseOrder.account[type].state.code = null;
-                } else {
-                    this.purchaseOrder.company[type].stateCode = null;
-                    this.purchaseOrder.company[type].state.code = null;
+                this.checkGstNumValidation(gstVal);
+                if (!this.isValidTaxNumber) {
+                    /* Check for valid pattern such as 9918IND29061OSS through which state can't be determined
+                        and clear the state only when valid number is not provided */
+                    if (addressType === "vendor") {
+                        this.purchaseOrder.account[type].stateCode = null;
+                        this.purchaseOrder.account[type].state.code = null;
+                    } else {
+                        this.purchaseOrder.company[type].stateCode = null;
+                        this.purchaseOrder.company[type].state.code = null;
+                    }
                 }
                 this.toaster.clearAllToaster();
             }
