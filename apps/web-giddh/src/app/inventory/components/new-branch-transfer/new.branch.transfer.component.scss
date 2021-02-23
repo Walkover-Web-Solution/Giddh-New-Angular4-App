@@ -418,6 +418,13 @@ tfoot td .table-sec.form-group {
         margin-right: 8px;
     }
 }
+.position-relative{
+    .icon-info{
+        position: absolute;
+        right: -10px;
+        top: 10px;
+    }
+}
 @media(max-width:991px){
     #table-receipt{
        width: calc(100% - 30px);
