@@ -138,7 +138,7 @@ tfoot td .table-sec.form-group {
     right: 0;
     z-index: 4;
 }
-.skuNumberDropdown {
+.sku-number-dropdown {
     left: 0 !important;
 }
 .hsn-code-dropdown label {
@@ -175,7 +175,7 @@ tfoot td .table-sec.form-group {
     background-color: $success-green;
     color: $white;
 }
-.skuCode,
+.sku-code,
 .hsn-code {
     padding: 5px 0;
 }
@@ -313,7 +313,7 @@ tfoot td .table-sec.form-group {
     justify-content: center;
     align-items: center;
 }
-.addNewLine.mr-t1 {
+.add-new-line.mr-t1 {
     position: absolute;
     width: 100%;
 }

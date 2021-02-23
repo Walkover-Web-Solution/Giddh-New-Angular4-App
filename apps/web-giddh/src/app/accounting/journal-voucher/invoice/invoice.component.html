@@ -18,7 +18,7 @@
 
             <!-- invoice num -->
             <div class="clearfix form-inline mr-b05">
-                <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
+                <div class="max-width-350 form-group" [hidden]="isSalesInvoiceSelected">
                     <!-- decimalDigitsDirective -->
                     <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
                         [(ngModel)]="data.invoiceNumberAgainstVoucher" class="form-control max-height28 appearance-none invoice-no-width" [disabled]="isSalesInvoiceSelected" />
@@ -28,7 +28,7 @@
 
 
             <!-- party acc name -->
-            <div class="mx-350 clearfix form-inline mr-b05">
+            <div class="max-width-350 clearfix form-inline mr-b05">
                 <div class="form-group">
                     <label>Party A/c Name: <sup>*</sup></label>
                     <!-- #creditor -->
@@ -57,7 +57,7 @@
             <!--  purchase as INVOICE -->
             <div class="clearfix mr-t1" [style.min-height.vh]="61">
                 <div class="table-responsive bd-rt">
-                    <table class="table entry_table">
+                    <table class="table entry-table">
                         <thead>
                             <tr>
                                 <th width="70%">Name of Item</th>
@@ -73,7 +73,7 @@
                             <ng-container *ngFor="let transaction of stocksTransaction;let i=index;let l=last">
                                 <ng-container>
                                     <tr
-                                        [ngClass]="{'activeRow': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
+                                        [ngClass]="{'active-row': (isSelectedRow && selectedRowIdx === i) || (!selectedRowIdx && !isSelectedRow && i == 0)}">
                                         <!-- (blur)="onStockItemBlur($event, qty);" showStockList.next(false)" -->
                                         <td><input onReturn id="first_element_{{i}}_{{i}}" type="text"
                                                 class="form-control select-stock-in-invoice"
@@ -133,7 +133,7 @@
                             <!-- accounts entry -->
                             <!--  -->
                             <ng-container *ngFor="let transaction of accountsTransaction;let i=index;let l=last">
-                                <tr [ngClass]="{'activeRow': isSelectedRow && selectedAccIdx === i}">
+                                <tr [ngClass]="{'active-row': isSelectedRow && selectedAccIdx === i}">
                                     <td colspan="2"><input data-accountlistid="i" onReturn type="text"
                                             class="form-control invoice-account-field" #particular
                                             [(ngModel)]="transaction.selectedAccount.account"

@@ -185,7 +185,7 @@ a[vr-item]:focus {
 }
 .left-fixed-header > li > a:hover .label > span,
 .left-fixed-header > li > a:hover .label {
-    color: #01a9f4;
+    color: $deep-sky-blue;
 }
 
 .left-fixed-header > li a.active {
@@ -309,7 +309,7 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: #999;
+    color: $nobel;
     margin-top: 1px;
 }
 

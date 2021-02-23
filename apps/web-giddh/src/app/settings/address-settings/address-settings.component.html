@@ -166,7 +166,7 @@
 <div *ngIf="accountAsideMenuState === 'in' && !closeSidePane" [keyboardShortcut]="'esc'"
     (onShortcutPress)="toggleAccountAsidePane()">
     <div class="aside-overlay"></div>
-    <create-address class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState"
+    <create-address class="account-aside-menu-state  transform-inherit" [@slideInOut]="accountAsideMenuState"
         [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
         [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"
         (saveAddress)="saveAddress($event)" (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"

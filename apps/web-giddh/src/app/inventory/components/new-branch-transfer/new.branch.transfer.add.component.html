@@ -350,7 +350,7 @@
                                     <div *ngIf="activeRow === i">
                                         <sh-select name="productName{{i}}" #selectDropdown [notFoundLink]="true" (noResultsClicked)="onProductNoResultsClicked(i)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="stockList" [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product);"></sh-select>
                                         <div class="position-relative wrap-hsn-box">
-                                            <div class="skuCode" (click)="focusSkuNumber();" *ngIf="activeRow == i && product.uniqueName">
+                                            <div class="sku-code" (click)="focusSkuNumber();" *ngIf="activeRow == i && product.uniqueName">
                                                 <label class="">SKU Code: </label>
                                                 <span>{{product.skuCode}}
                                                     <span class="edit-icon cp">
@@ -358,7 +358,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <div class="hsn-code-dropdown skuNumberDropdown" *ngIf="skuNumberPopupShow && activeRow == i">
+                                            <div class="hsn-code-dropdown sku-number-dropdown" *ngIf="skuNumberPopupShow && activeRow == i">
                                                 <label>SKU Code:</label>
                                                 <input type="text" maxlength="50" placeholder="SKU Code" name="productSkuCode{{i}}" #productSkuCode [(ngModel)]="skuNumber" />
                                                 <div class="btn-group mt-2 pt-1 d-flex">
@@ -545,7 +545,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <div class="addNewLine mr-t1">
+                        <div class="add-new-line mr-t1">
                             <a class="multiple-receivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add
                                 Multiple Receivers</a>
                             <a class="multiple-receivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add
@@ -605,7 +605,7 @@
                 </div>
                 <section id="actionPane" class="text-center clearfix">
                     <div class="col-xs-12">
-                        <div class="pull-right pr">
+                        <div class="pull-right position-relative">
                             <button type="button" class="btn btn-danger d-inline-block v-align-middle" [disabled]="isLoading" (click)="closeBranchTransferPopup()">Cancel</button>
                             <button *ngIf="isBranch || isCompanyWithSingleBranch" type="button" class="btn btn-success-text d-inline-block v-align-middle {{newBranchTransferForm.invalid}}-{{isValidSourceTaxNumber}}-{{isValidDestinationTaxNumber}}" [disabled]="newBranchTransferForm.invalid || !isValidSourceTaxNumber || !isValidDestinationTaxNumber || isLoading"
                                 (click)="submit()">{{editBranchTransferUniqueName ? 'Update' : 'Create'}}</button>
@@ -629,14 +629,14 @@
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                 <div class="form-group">
                     <label for="transporterName">Transporter Name <span class="text-danger">*</span></label>
-                    <input #Transportersname="ngModel" type="text" class="form-control" [ngClass]="{'hasError': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}" required placeholder="Mention name" pattern="[a-zA-Z0-9^ .&]{5,100}"
+                    <input #Transportersname="ngModel" type="text" class="form-control" [ngClass]="{'has-error': Transportersname.invalid && Transportersname.touched && Transportersname.dirty, 'has-success':Transportersname.valid}" required placeholder="Mention name" pattern="[a-zA-Z0-9^ .&]{5,100}"
                         name="transporterName" [(ngModel)]="generateNewTransporter.transporterName">
                     <small class="text-danger" *ngIf="Transportersname.invalid && Transportersname.touched && Transportersname.dirty && Transportersname.value">Transporter
                         name should contain atleast 5 characters and should not contain any special character.</small>
                 </div>
                 <div class="form-group">
                     <label for="transporterId">Transporter ID <span class="text-danger">*</span></label>
-                    <input #TransportersID="ngModel" type="number" pattern="[0-9^ .&]{4,15}" minlength="4" class="form-control" onKeyPress="if(this.value.length==15) return false;" [ngClass]="{'hasError': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
+                    <input #TransportersID="ngModel" type="number" pattern="[0-9^ .&]{4,15}" minlength="4" class="form-control" onKeyPress="if(this.value.length==15) return false;" [ngClass]="{'has-error': TransportersID.invalid && TransportersID.touched && TransportersID.dirty, 'has-success':TransportersID.valid}"
                         name="transporterId" [(ngModel)]="generateNewTransporter.transporterId" required placeholder="Mention number">
                     <small class="text-danger" *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty && TransportersID.value">Transporter
                         id should contain atleast 4 characters and should contain digit only.</small>

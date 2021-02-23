@@ -167,7 +167,7 @@ svg.icon.icon-sm {
 }
 .nav-tabs > li a {
     font-size: 15px;
-    color: #555;
+    color: $zambezi;
     margin-right: 0;
     height: 100%;
     padding: 14px 40px;
@@ -186,8 +186,6 @@ svg.icon.icon-sm {
 }
 .tax-engine .scroll-y {
     -webkit-overflow-scrolling: touch;
-}
-.tax-engine .body {
 }
 .content-column .body {
     padding: 0 20px 50px;
@@ -295,7 +293,7 @@ address {
 }
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
-    background-color: #fff;
+    background-color: $white;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
     padding: 13px;

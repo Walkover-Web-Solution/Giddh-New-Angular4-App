@@ -183,7 +183,7 @@ a {
 
 /*typography*/
 
-/*.bold,.company-name,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .gTblHead, .gTblFoot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
+/*.bold,.company-name,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.bold-head, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .head-block-head, .head-block-foot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
 font-family: Roboto-Bold;
 } */
 
@@ -4566,11 +4566,11 @@ border-bottom: 1px solid #e0e0e0;
     /* background-color: rgb(220, 220, 220); */
 }
 
-.parent-Group > .stock-grp-list > li {
+.parent-group > .stock-grp-list > li {
     padding: 6px 15px;
 }
 
-.parent-Group > .stock-grp-list > li > div {
+.parent-group > .stock-grp-list > li > div {
     text-transform: uppercase;
 }
 
@@ -5054,7 +5054,7 @@ bs-datepicker-container {
     margin-top: 20px;
 }
 
-.p0 {
+.p-0 {
     padding: 0;
 }
 
@@ -5155,7 +5155,7 @@ perfect-scrollbar.ps-show-active
     user-select: none;
 }
 
-.m0 {
+.m-0 {
     margin: 0 !important;
 }
 

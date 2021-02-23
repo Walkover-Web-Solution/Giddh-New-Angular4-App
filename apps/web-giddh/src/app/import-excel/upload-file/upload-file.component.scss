@@ -20,10 +20,10 @@
     max-width: 500px;
 }
 
-.upload_icon {
+.upload-icon {
     font-size: 62px;
     float: none;
-    color: #e2e2e2;
+    color: $whisper-light;
 }
 
 .sample_file-btn {
@@ -51,7 +51,7 @@
     justify-content: flex-end;
     margin: 0 15px;
     border: 1px solid $gainsboro;
-    background: #fafafa;
+    background: $gray-95;
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -71,7 +71,7 @@
 }
 
 .has-error .form-control {
-    border-color: red !important;
+    border-color: $red !important;
 }
 
 #csvUploadInput {
@@ -90,10 +90,10 @@
     top: 0;
     bottom: 0;
     z-index: 9;
-    background: #fff;
+    background: $white;
     text-align: left;
     position: absolute;
-    border: 1px solid #d6d6d6;
+    border: 1px solid $light-gray;
     border-radius: 2px !important;
     padding: 6px 12px !important;
     outline: 0;
@@ -102,7 +102,7 @@
     width: calc(100% - 95px);
 }
 .select-file {
-    color: #089328;
+    color: $light-green;
 }
 .file-upload-panel {
     width: 100%;

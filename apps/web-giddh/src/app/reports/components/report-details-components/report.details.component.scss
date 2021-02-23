@@ -37,7 +37,7 @@
     position: absolute;
     right: 10px;
     top: 14px;
-    color: #a9a9a9;
+    color: $dim-gray;
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
     border-top: 6px dashed;
@@ -66,7 +66,7 @@ ul#dropdown-nested li .caret {
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
     border-top: 6px dashed;
-    color: #a9a9a9;
+    color: $dim-gray;
 }
 .sales-register-menu {
     min-width: 195px !important;

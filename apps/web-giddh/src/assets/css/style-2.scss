@@ -553,13 +553,13 @@ input {
     color: $nero !important;
 }
 
-.otherAccountEntry .header {
+.other-account-entry .header {
     border: 1px solid $red !important;
     display: block;
     overflow: hidden;
 }
 
-.expences-ledger .left-col-new .card-table tr th:last-child {
+.expense-ledger .left-col-new .card-table tr th:last-child {
     border-right: 0px;
 }
 
@@ -618,7 +618,7 @@ input {
 }
 
 .mr-r15 {
-    margin-right: 15px;
+    margin-right: 15px !important;
 }
 
 .company-list button.btn-link {
@@ -1933,7 +1933,7 @@ fieldset[disabled] .btn-primary:hover {
     font-weight: 600;
 }
 
-.parent-Group {
+.parent-group {
     padding-top: 10px;
     line-height: normal;
 }
@@ -3421,7 +3421,7 @@ a.btn.btn-xs.btn-link.pull-right {
     text-transform: capitalize;
 }
 
-.linkstock {
+.link-stock {
     min-height: 200px;
     /* overflow-y: scroll; */
     width: 100%;
@@ -3557,7 +3557,7 @@ a.btn.btn-xs.btn-link.pull-right {
     color: $nero;
 }
 
-.inWords {
+.in-words {
     color:$nero;
     text-align: right;
     text-transform: capitalize;
@@ -3577,7 +3577,7 @@ a.btn.btn-xs.btn-link.pull-right {
     color: $nero;
 }
 
-.w50 {
+.max-width-50 {
     max-width: 50px;
 }
 
@@ -3721,7 +3721,7 @@ a.btn.btn-xs.btn-link.pull-right {
     border: 0 !important;
 }
 
-.Useremail {
+.user-email {
     padding: 0 15px 0 0;
 }
 
@@ -3915,17 +3915,17 @@ select.form-control {
     background-color: $white !important;
 }
 
-.linkStockTbl {
+.link-stock-table {
     border-top: 1px solid $gainsboro;
     border-left: 1px solid $gainsboro;
 }
 
-.linkStockTbl > tbody > tr > td {
+.link-stock-table > tbody > tr > td {
     padding: 10px 15px;
     font-size: 14px;
 }
 
-.linkStockTbl > tbody > tr > td:first-child {
+.link-stock-table > tbody > tr > td:first-child {
     padding-left: 0;
     position: relative;
     text-transform: capitalize;
@@ -4586,7 +4586,7 @@ label {
     clear: both;
 }
 
-.tcaption {
+.th-caption {
     display: table-caption;
 }
 
@@ -4625,13 +4625,13 @@ label {
     border-bottom: 1px solid $gainsboro;
 }
 
-#manufacture .source .linkstock {
+#manufacture .source .link-stock {
     height: auto;
     color: $dark-gray;
 }
 
-#manufacture .source .linkstock thead th,
-#manufacture .source .linkstock tfoot tr th {
+#manufacture .source .link-stock thead th,
+#manufacture .source .link-stock tfoot tr th {
     color: $night-rider;
     font-weight: 100;
 }
@@ -4647,13 +4647,13 @@ label {
 }
 
 #manufacture .source table thead th,
-#manufacture .source .linkStockTbl > tbody > tr > td:first-child,
+#manufacture .source .link-stock-table > tbody > tr > td:first-child,
 #manufacture .source table tfoot th {
     padding: 10px 15px;
     font-size: 14px;
 }
 
-#manufacture .source .linkStockTbl {
+#manufacture .source .link-stock-table {
     border: 0;
 }
 
@@ -4869,7 +4869,7 @@ label {
     display: inline-block !important;
 }
 
-.onHover {
+.on-hover {
     position: relative;
     transition: all 0.3s ease;
 }
@@ -5961,46 +5961,14 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     display: none;
 }
 
-.dblock {
+.d-block {
     display: block !important;
     margin: auto;
-}
-
-.m-t-50 {
-    margin-top: 50px;
-}
-
-.m-t-41 {
-    margin-top: 41px;
-}
-
-.m-b-20 {
-    margin-bottom: 20px !important;
-}
-
-.m-t-20 {
-    margin-top: 20px !important;
-}
-
-.m-t-10 {
-    margin-top: 10px !important;
-}
-
-.m-t-30 {
-    margin-top: 30px !important;
-}
-
-.m-t-40 {
-    margin-top: 40px !important;
 }
 
 .p-lr-15 {
     padding-left: 15px;
     padding-right: 15px;
-}
-
-.m-t-37 {
-    margin-top: 37px !important;
 }
 
 .company-form-body {
@@ -6417,7 +6385,7 @@ table td[class*=col-]:last-child {
     right: 15px;
 }
 
-.sh-form_control .form-control {
+.sh-form-control .form-control {
     width: 100% !important;
 }
 
@@ -6554,7 +6522,7 @@ table td[class*=col-]:last-child {
     display: block;
 }
 
-.parent-Group > .stock-grp-list:first-child {
+.parent-group > .stock-grp-list:first-child {
     max-height: 100vh;
     min-height: 100vh;
     overflow: auto;
@@ -6645,10 +6613,6 @@ table td[class*=col-]:last-child {
 .select-option .form-control {
     width: 100% !important;
     border-radius: 3px;
-}
-
-.m-r-15 {
-    margin-right: 15px;
 }
 
 .go-btn {
@@ -7852,7 +7816,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     width: calc(100% - 1px);
 }
 
-.contact-main.agingPage .ps-content {
+.contact-main.aging-page .ps-content {
     padding-bottom: 0;
 }
 
@@ -8054,7 +8018,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     color: rgba(0, 0, 0, 0.4);
 }
 
-.agingPage .icon-pointer .fa.fa-long-arrow-up {
+.aging-page .icon-pointer .fa.fa-long-arrow-up {
     color: $dim-gray;
 }
 

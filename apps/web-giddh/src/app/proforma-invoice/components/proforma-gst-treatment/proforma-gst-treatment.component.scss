@@ -1,13 +1,13 @@
 @import "../../../../assets/css/color.scss";
 .gst-treatment-wrapper {
-    background-color: #fff;
+    background-color: $white;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
     height: 290px;
 
     .gst-treatment-header {
-        background-color: #e2e2e2;
+        background-color: $whisper;
         padding: 8px 10px;
-        border-bottom: 1px solid #cccccc;
+        border-bottom: 1px solid $gainsboro;
     }
 }
 .gst-treatment-body {
@@ -18,8 +18,8 @@
     margin-bottom: 7px;
 }
 .btn-success {
-    background: #28ab00;
-    color: #fff;
+    background: $success-green;
+    color: $white;
 }
 .aqua-color a {
     color: $deep-sky-blue;

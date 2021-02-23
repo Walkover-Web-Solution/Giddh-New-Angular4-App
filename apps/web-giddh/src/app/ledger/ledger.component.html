@@ -330,7 +330,7 @@
                                                             <tr class="ledger-row row"
                                                                 (mouseenter)="txn.showDropdown = true;"
                                                                 (mouseleave)="txn.showDropdown = false;"
-                                                                [ngClass]="{'compoundEntry': txn.id === lc.selectedBankTxnUniqueName}">
+                                                                [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
                                                                 <td class="col-3 col-md-3 col-lg-3">
                                                                     <div class="d-flex align-items-center">
                                                                         <span class="pd-l05 checkbox-span">
@@ -431,7 +431,7 @@
                                                                         (click)="showBankLedgerPopup(txn, item);">
                                                                 </td>
                                                             </tr>
-                                                            <div class="pos-abs entry-modal"
+                                                            <div class="position-absolute entry-modal"
                                                                 *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'DEBIT'">
                                                                 <new-ledger-entry-panel #newLedPanel
                                                                     [trxRequest]="advanceSearchRequest"
@@ -1332,7 +1332,7 @@
                                         </table>
 
                                         <!--new ledge popup-->
-                                        <div class="pos-abs entry-modal" (click)="shCredit?.hide()"
+                                        <div class="position-absolute entry-modal" (click)="shCredit?.hide()"
                                             (keydown)="$event.stopPropagation()"
                                             *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                                             <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"
@@ -1472,7 +1472,7 @@
                     <!-- endregion -->
 
                     <!-- region pagination -->
-                    <div class="text-center mr-t2 page-count pa">
+                    <div class="text-center mr-t2 page-count position-absolute">
                         <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }}
                             {{localeData?.transactions}}, </span>
                         <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }}
@@ -1550,7 +1550,7 @@
                                             </amount-field>
                                         </span>
                                 </h1>
-                                <span class=" mr-r2 greyTextClr">{{commonLocaleData?.app_debit}}
+                                <span class="mr-r2 grey-text-color">{{commonLocaleData?.app_debit}}
                                     <span class="digit-blue d-inline-flex">
                                         <!-- {{(lc.transactionData$ | async)?.debitTransactionsCount}} -->
                                         <amount-field [amount]="(lc.transactionData$ | async)?.debitTransactionsCount" [currencySymbol]="false"
@@ -1559,8 +1559,8 @@
                                     </span>
 
                                 </span><br>
-                                <span class=" mr-r2 greyTextClr">{{commonLocaleData?.app_credit}}
-                                    <span  class="digit-blue d-inline-flex">
+                                <span class="mr-r2 grey-text-color">{{commonLocaleData?.app_credit}}
+                                    <span class="digit-blue d-inline-flex">
                                         <!-- {{(lc.transactionData$ | async)?.creditTransactionsCount}} -->
                                         <amount-field [amount]="(lc.transactionData$ | async)?.creditTransactionsCount" [currencySymbol]="false"
                                             [currencyCode]="false">
@@ -1654,7 +1654,7 @@
 
                                 <div class="d-flex debit-credit-amount">
 
-                                    <h1 class="mr-t05 font16 greyTextClr d-flex flex-column">
+                                    <h1 class="mr-t05 font-16 grey-text-color d-flex flex-column">
                                         {{commonLocaleData?.app_debit}}
                                         <span class="digit-blue mt-1 d-inline-flex">
                                             <!-- {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}} -->
@@ -1672,7 +1672,7 @@
                                         </span>
                                     </h1>
 
-                                    <h1 class="mr-t05 font16 greyTextClr d-flex flex-column">
+                                    <h1 class="mr-t05 font-16 grey-text-color d-flex flex-column">
                                         {{commonLocaleData?.app_credit}}
                                         <span class="digit-blue d-flex mt-1">
                                             <!-- {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}} -->
@@ -1794,7 +1794,7 @@
 
         <!-- Advance search popup -->
         <div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-xl advanceSearchModal">
+            <div class="modal-dialog modal-xl advance-search-modal">
                 <div class="modal-content">
                     <advance-search-model *ngIf="isAdvanceSearchOpened" #advanceSearchComp
                         [advanceSearchRequest]="advanceSearchRequest"

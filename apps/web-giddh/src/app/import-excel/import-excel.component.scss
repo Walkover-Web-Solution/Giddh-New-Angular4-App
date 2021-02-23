@@ -17,12 +17,12 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid #dcdcdc;
+            border: 2px solid $gainsboro;
             border-radius: 100%;
             transition: background-color 1s;
-            background-color: #ffffff;
+            background-color: $white;
             position: relative;
-            color: #969696;
+            color: $opium;
             line-height: 100%;
             align-items: center;
             display: flex;
@@ -46,7 +46,7 @@
     max-width: 500px;
 }
 
-.uploader_label {
+.uploader-label {
     position: absolute;
     left: 0;
     right: 0;
@@ -59,10 +59,10 @@
     visibility: hidden;
 }
 
-.upload_icon {
+.upload-icon {
     font-size: 62px;
     float: none;
-    color: #e2e2e2;
+    color: $whisper;
 }
 
 .sample_file-btn {

@@ -14,14 +14,14 @@
                 <div class=" clearfix row">
                     <div class="col-12 mr-b2">
                         <ng-container *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemName">
-                            <label for="name" class="m-t-30" *ngIf="!isBranch">Company Name<sup
+                            <label for="name" class="mr-t3" *ngIf="!isBranch">Company Name<sup
                                     class="text-danger">*</sup></label>
                             <!-- Need to show when creat branch  -->
-                            <label for="name" class="m-t-30" *ngIf="isBranch">Branch Name<sup
+                            <label for="name" class="mr-t3" *ngIf="isBranch">Branch Name<sup
                                     class="text-danger">*</sup></label>
                         </ng-container>
                         <ng-template #onBoardingItemName>
-                            <label for="name" class="m-t-30" *ngIf="!isBranch">{{itemOnBoardingDetails?.onBoardingType}}
+                            <label for="name" class="mr-t3" *ngIf="!isBranch">{{itemOnBoardingDetails?.onBoardingType}}
                                 Name<sup class="text-danger">*</sup></label>
                         </ng-template>
                         <input name="name" id="name" type="text" required

@@ -98,7 +98,7 @@
                                     </td>
 
                                     <td [attr.data-title]="commonLocaleData?.app_particular" id="{{'debit-id-' + i}}"
-                                        [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
+                                        [ngClass]="{ 'other-account-entry': txn.particular.uniqueName === 'others' }"
                                         class="col-5 position-relative select2-parent select2-ledger">
 
 
@@ -296,7 +296,7 @@
 
                                     <td [attr.data-title]="commonLocaleData?.app_particular" id="{{'credit-id-' + i}}"
                                         class="position-relative col-5 select2-parent select2-ledger"
-                                        [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
+                                        [ngClass]="{ 'other-account-entry': txn.particular.uniqueName === 'others' }">
 
                                         <ng-template [ngIf]="!txn?.isDiscount">
                                             <div class="d-flex update-ledger-account">
@@ -679,8 +679,8 @@
                         </div>
                     </div>
 
-                    <div class="cearfix pd-1 text-right bb-1 pr-0">
-                        <span class="inWords font-14">
+                    <div class="clearfix pd-1 text-right bb-1 pr-0">
+                        <span class="in-words font-14">
                             {{vm.grandTotal | myNumberToWordsPipe | lowercase}}
                         </span>
                     </div>

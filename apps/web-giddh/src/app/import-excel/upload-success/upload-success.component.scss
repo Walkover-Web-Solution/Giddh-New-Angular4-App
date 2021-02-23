@@ -1,3 +1,5 @@
+@import "../../../assets/css/color.scss";
+
 .imported-file-design {
     height: calc(100vh - 200px);
     display: flex;
@@ -12,19 +14,19 @@
 
 .imported-file-design-box i {
     font-size: 39px;
-    color: #bfbfbf;
+    color: $silver;
     float: left;
 }
 
 .imported-file-design h2 {
     font-size: 28px;
-    color: black;
+    color: $black;
     margin-bottom: 10px;
 }
 
 .imported-file-design h3 {
     font-size: 20px;
-    color: #797979;
+    color: $gray;
 }
 
 .imported-file-design-content {
