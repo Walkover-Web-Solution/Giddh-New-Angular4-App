@@ -1,4 +1,5 @@
 //colors
+@import "../../../../../../assets/css/color.scss";
 @import "../template.variables";
 
 #template-3 {
@@ -74,7 +75,7 @@
             }
         }
     }
-    .inwords {
+    .in-words {
         color: $color_mountain_mist_approx;
     }
     .tax-table {
@@ -242,12 +243,12 @@ $themeClr: #fe5f00;
         right: 0;
         bottom: 0;
         padding: 0 1em;
-        color: #cccccc;
+        color: $very-light-gray;
         pointer-events: none;
     }
     /* Transition */
     &:hover::after {
-        color: #bbbbbb;
+        color: $silver;
     }
     &::after {
         -webkit-transition: 0.25s all ease;
@@ -461,7 +462,7 @@ ng-select.splSales {
     margin-bottom: 80px;
 }
 
-.mt13 {
+.mt-13 {
     margin-top: 13px;
 }
 

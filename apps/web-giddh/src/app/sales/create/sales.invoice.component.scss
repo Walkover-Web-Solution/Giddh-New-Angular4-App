@@ -409,10 +409,6 @@ textarea:focus {
     border-bottom: 1px solid $gainsboro;
 }
 
-.pl0 {
-    padding-left: 0;
-}
-
 .balance-due {
     display: block;
     color: $dark-gray;
@@ -469,7 +465,7 @@ textarea:focus {
     }
 }
 
-.max-600 {
+.max-width-600 {
     max-width: 600px;
 }
 
@@ -1059,7 +1055,7 @@ section.static-invoice-table {
     display: block;
 }
 
-section.sales-invoiceBGwhite {
+section.sales-invoice-bg-white {
     background-color: $white;
 }
 .upper-layer {
@@ -1173,7 +1169,7 @@ section.sales-invoiceBGwhite {
     .forPurchase .invoice-date-due-date input {
         width: 140px !important;
     }
-    .invoice-date-due-date .form-group.m-r-15 {
+    .invoice-date-due-date .form-group.mr-r15 {
         margin-right: 0 !important;
     }
     .wrap-other-tax {
