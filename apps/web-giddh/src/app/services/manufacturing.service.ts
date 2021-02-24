@@ -91,7 +91,10 @@ export class ManufacturingService {
 		this.user = this._generalService.user;
 		this.companyUniqueName = this._generalService.companyUniqueName;
 		// create url conditionally
-		let url = this.config.apiUrl + MANUFACTURING_API.MF_REPORT;
+        let url = this.config.apiUrl + MANUFACTURING_API.MF_REPORT;
+        if ((model.warehouseUniqueName)) {
+			url = url + 'warehouseUniqueName=' + encodeURIComponent(model.warehouseUniqueName) + '&';
+        }
 		if ((model.product)) {
 			url = url + 'product=' + model.product + '&';
 		}

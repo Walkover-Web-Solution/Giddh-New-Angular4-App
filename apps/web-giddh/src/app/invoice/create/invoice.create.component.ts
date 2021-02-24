@@ -18,6 +18,7 @@ import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/re
 import { TaxResponse } from '../../models/api-models/Company';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { NgForm } from '@angular/forms';
 
 let THEAD_ARR_READONLY = [
     {
@@ -100,6 +101,8 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = true;
     public hsnDropdownShow: boolean = false;
     @ViewChild('discountComponent', {static: true}) public discountComponent: DiscountListComponent;
+    /** Form instance */
+    @ViewChild('invoiceForm', {static: true}) invoiceForm: NgForm;
     // public methods above
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -147,7 +150,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
             this.tthead.push(ele);
         });
-        this.store.pipe(select(p => p.receipt.voucher), 
+        this.store.pipe(select(p => p.receipt.voucher),
             takeUntil(this.destroyed$),
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((o: any) => {
@@ -200,7 +203,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
             }
             );
 
-        this.store.pipe(select(p => p.invoice.invoiceTemplateConditions), 
+        this.store.pipe(select(p => p.invoice.invoiceTemplateConditions),
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((o: InvoiceTemplateDetailsResponse) => {
                 if (o) {
@@ -223,7 +226,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.invoice.visitedFromPreview), 
+        this.store.pipe(select(state => state.invoice.visitedFromPreview),
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((val: boolean) => {
                 this.updateMode = val;
@@ -589,9 +592,11 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
                 if (s) {
                     this.invFormData.accountDetails[type].stateCode = s.value;
                 } else {
-                    this.invFormData.accountDetails[type].stateCode = null;
                     this._toasty.clearAllToaster();
-                    this._toasty.warningToast('Invalid GSTIN.');
+                    if (!this.invoiceForm.form.get('gstNumber')?.valid) {
+                        this.invFormData.accountDetails[type].stateCode = null;
+                        this._toasty.warningToast('Invalid GSTIN.');
+                    }
                 }
                 statesEle.disabled = true;
             });

@@ -324,12 +324,21 @@ export class LedgerVM {
             // set transaction.particular to selectedAccount uniqueName
             bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
             // filter taxes uniqueNames
-            bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
+            bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
             // filter discount
             bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
             // delete local id
             delete bl['id'];
         });
+        if (requestObj.voucherType === 'advance-receipt') {
+            /** Voucher type in case of advance receipt should be 'rcpt' but to differentiate the drop down values 'advance-receipt' is used */
+            requestObj.voucherType = 'rcpt';
+        }
+        if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid && requestObj.invoicesToBePaid.length) {
+            requestObj.invoicesToBePaid = [];
+        } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
+            requestObj.invoiceNumberAgainstVoucher = '';
+        }
         return requestObj;
     }
 

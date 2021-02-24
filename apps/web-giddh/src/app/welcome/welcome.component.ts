@@ -501,10 +501,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                         statesEle.setDisabledState(true);
 
                     } else {
-                        this.companyProfileObj.state = '';
                         statesEle.setDisabledState(false);
                         this._toasty.clearAllToaster();
-                        this._toasty.warningToast('Invalid ' + this.formFields['taxName'].label);
+
+                        if (this.formFields['taxName'] && !this.welcomeForm.form.get('gstNumber')?.valid) {
+                            this._toasty.warningToast('Invalid ' + this.formFields['taxName'].label);
+                            this.companyProfileObj.state = '';
+                        }
                     }
                 });
             } else {
