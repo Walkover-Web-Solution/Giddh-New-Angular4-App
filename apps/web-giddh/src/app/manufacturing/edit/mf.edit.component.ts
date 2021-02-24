@@ -1,6 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { ToasterService } from './../../services/toaster.service';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Store, select } from '@ngrx/store';
@@ -21,6 +21,7 @@ import { CurrentPage } from '../../models/api-models/Common';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
+import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 
 @Component({
     templateUrl: './mf.edit.component.html',
@@ -107,6 +108,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
     };
     /** Stores the list of accounts */
     public liabilitiesAssetAccounts: IOption[];
+    /* Stores warehouses for a company */
+    public warehouses: Array<any> = [];
 
     constructor(
         private store: Store<AppState>,
@@ -117,7 +120,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
         private generalAction: GeneralActions,
         private router: Router,
         private _toasty: ToasterService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private warehouseActions: WarehouseActions
     ) {
 
         this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
@@ -148,6 +152,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     if (!this.initialQuantityObj.length) {
                         this.initialQuantityObj = manufacturingObj.linkedStocks;
                     }
+                    manufacturingObj.warehouseUniqueName = manufacturingObj?.warehouse?.uniqueName;
                     // manufacturingObj.activeStockGroupUniqueName = o.activeStockGroup;
                     this.manufacturingDetails = manufacturingObj;
                     if (this.manufacturingDetails.date && typeof this.manufacturingDetails.date === 'object') {
@@ -189,7 +194,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         let units = data.results;
 
                         return units.map(unit => {
-                            let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+                            let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
                             if (alreadyPushedElementindx > -1) {
                                 return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
                             } else {
@@ -209,7 +214,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     if (data.results) {
                         let units = data.results;
                         return units.map(unit => {
-                            let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+                            let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
                             if (alreadyPushedElementindx > -1) {
                                 return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
                             } else {
@@ -237,6 +242,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     manufacturingDetailsObj.linkedStocks = [];
                     manufacturingDetailsObj.multipleOf = null;
                 }
+                manufacturingDetailsObj.warehouseUniqueName = manufacturingDetailsObj?.warehouse?.uniqueName;
                 this.manufacturingDetails = manufacturingDetailsObj;
                 this.onQuantityChange(1);
             }
@@ -244,6 +250,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
         this.loadExpenseAccounts();
         this.loadAssetsLiabilitiesAccounts();
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.initializeWarehouse();
     }
 
     public getStocksWithRate(data) {
@@ -354,6 +362,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         if (dataToSave.date && typeof dataToSave.date === 'object') {
             dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
+        delete dataToSave.warehouse;
         dataToSave.linkedStocks.forEach((obj) => {
             obj.manufacturingUnit = obj.stockUnitCode;
             obj.manufacturingQuantity = obj.quantity;
@@ -371,6 +380,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         if (dataToSave.date && typeof dataToSave.date === 'object') {
             dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
+        delete dataToSave.warehouse;
         // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
         // dataToSave.multipleOf = dataToSave.quantity;
         // dataToSave.manufacturingUniqueName =
@@ -769,5 +779,22 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Intializes the warehouse
+     *
+     * @private
+     * @memberof MfEditComponent
+     */
+    private initializeWarehouse(): void {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            this.warehouses = [];
+            if (warehouses && warehouses.results) {
+                warehouses.results.forEach(warehouse => {
+                    this.warehouses.push({label: warehouse.name, value: warehouse.uniqueName, additional: warehouse});
+                });
+            }
+        });
     }
 }

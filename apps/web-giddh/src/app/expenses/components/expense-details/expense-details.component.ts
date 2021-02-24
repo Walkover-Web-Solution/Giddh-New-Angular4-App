@@ -168,8 +168,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.companyUniqueName = null;
         this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
-        this.comment = res.description;
-        let imgs = res.attachedFileUniqueNames;
+        this.comment = res?.description;
+        let imgs = res?.attachedFileUniqueNames;
         let imgPrefix = ApiUrl + 'company/' + this.companyUniqueName + '/image/';
         this.imageURL = [];
 

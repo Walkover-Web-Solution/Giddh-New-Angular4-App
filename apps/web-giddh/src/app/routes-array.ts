@@ -1,6 +1,9 @@
 export const ROUTES = [
+    { path: 'download' },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404' },
+    { path: 'app-login-success' },
+    { path: 'token-verify' },
     { path: 'create-invoice', loadChildren: () => import('./create/create.module').then(module => module.CreateModule) },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule) },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
@@ -17,6 +20,7 @@ export const ROUTES = [
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy' },
     { path: 'browser-support' },
+    { path: 'proforma-invoice' },
     { path: 'new-user' },
     { path: 'welcome' },
     { path: 'onboarding' },
@@ -36,6 +40,12 @@ export const ROUTES = [
     { path: 'purchase/create', redirectTo: 'pages/purchase/create' },
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports' },
+    { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
+    { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
+    { path: 'select-plan' },
+    { path: 'billing-detail' },
+    { path: 'billing-detail/buy-plan' },
+    //{ path: 'new-inventory/create-group', component: InventoryCreateGroupComponent },
     {
         path: 'pages',
         children: [
