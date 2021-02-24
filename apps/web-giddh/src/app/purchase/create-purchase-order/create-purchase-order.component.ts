@@ -3444,13 +3444,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      */
     private loadTaxesAndDiscounts(startIndex: number): void {
         this.showBulkLoader = true;
-        setTimeout(() => {
-            this.showBulkLoader = false;
-        }, 50);
         for (let index = startIndex; index < this.purchaseOrder.entries.length; index++) {
             setTimeout(() => {
                 this.activeIndex = index;
-            }, 30);
+                if (index === (this.purchaseOrder.entries.length - 1)) {
+                    this.showBulkLoader = false;
+                }
+            }, 30 * index);
         }
     }
 
