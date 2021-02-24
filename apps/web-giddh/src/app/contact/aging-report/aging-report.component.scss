@@ -141,6 +141,9 @@ tr.aging-table-top td {
         padding-bottom: 10px;
         padding: 0 0 10px;
     }
+    .table-aging-report span.justify-content-end {
+        justify-content: flex-start !important;
+    }
 }
 @media (max-width: 767px) {
     .customer-right-wrap{

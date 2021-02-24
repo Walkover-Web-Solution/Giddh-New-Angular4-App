@@ -578,14 +578,32 @@
 
                         <!-- Total Amount with multicurrency for CR/DR note -->
                         <td data-title="Amount" *ngIf="(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" class="text-right"
-                            [tooltip]="grandTotalPopupTemplate">{{item.accountCurrencySymbol}}
-                            {{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
+                            [tooltip]="grandTotalPopupTemplate">
+
+                            <!-- {{item.accountCurrencySymbol}}
+                            {{item.grandTotal?.amountForAccount | giddhCurrency}} -->
+
+                            <span class="d-flex justify-content-md-end justify-content-start">
+                                <amount-field [amount]="item.grandTotal?.amountForAccount" [currencySymbol]="item.accountCurrencySymbol"
+                                    [currencyCode]="item.account?.currency?.code">
+                                </amount-field>
+                            </span>
+
+                        </td>
                         <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
                         </ng-template>
 
                         <!-- Total Amount without multicurrency -->
                         <td data-title="Amount" *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" class="text-right"
-                            >{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
+                            >
+                            <!-- {{item.grandTotal?.amountForAccount | giddhCurrency}} -->
+
+                            <span class="d-flex justify-content-md-end justify-content-start">
+                                <amount-field [amount]="item.grandTotal?.amountForAccount" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
                     </tr>
                 </tbody>
 
