@@ -5167,7 +5167,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
                 if (firstElementToFocus[0]) {
                     firstElementToFocus[0].focus();
-                    if (this.customerNameDropDown) {
+                    if (this.customerNameDropDown && !this.isUpdateMode) {
                         this.customerNameDropDown.show();
                     }
                 }
@@ -6888,14 +6888,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private loadTaxesAndDiscounts(startIndex: number): void {
         this.showBulkLoader = true;
-        setTimeout(() => {
-            this.showBulkLoader = false;
-            this._cdr.detectChanges();
-        }, 50);
         for (let index = startIndex; index < this.invFormData.entries.length; index++) {
             setTimeout(() => {
                 this.activeIndx = index;
-            }, 30);
+                if (index === (this.invFormData.entries.length - 1)) {
+                    this.showBulkLoader = false;
+                }
+                this._cdr.detectChanges();
+            }, 30 * index);
         }
     }
 
