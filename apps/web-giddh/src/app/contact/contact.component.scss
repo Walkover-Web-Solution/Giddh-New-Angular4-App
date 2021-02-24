@@ -506,6 +506,9 @@ button.btn.btn-filter span.icon-cross {
     table.on-mobile-view tbody td:before{
         left: 30px;
     }
+    .aging-table span.justify-content-end {
+        justify-content: flex-start !important;
+    }
 }
 
 @media (max-width: 767px) {
