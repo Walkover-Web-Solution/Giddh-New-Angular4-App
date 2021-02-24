@@ -51,6 +51,7 @@ import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { OrganizationType } from '../../models/user-login-state';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SearchService } from '../../services/search.service';
+import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 
 const THEAD_ARR_READONLY = [
     {
@@ -112,7 +113,7 @@ const SEARCH_TYPE = {
 })
 
 export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
-    @ViewChild('vendorNameDropDown') public vendorNameDropDown: ShSelectComponent;
+    @ViewChild('vendorNameDropDown', { static: false }) public vendorNameDropDown: SalesShSelectComponent;
     /* Billing state instance */
     @ViewChild('vendorBillingState') vendorBillingState: ElementRef;
     /* Shipping state instance */
@@ -2351,7 +2352,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.onSelectSalesAccount(item, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex], true, lastIndex);
             }
         });
-        this.buildBulkData(this.purchaseOrder.entries.length, startIndex, isBlankItemPresent);
+        this.buildBulkData(this.purchaseOrder.entries.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
 
     /**
@@ -2442,6 +2443,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
             if (firstElementToFocus[0]) {
                 firstElementToFocus[0].focus();
+                if (this.vendorNameDropDown && !this.isUpdateMode) {
+                    this.vendorNameDropDown.show();
+                }
             }
         }, 200);
     }
@@ -3357,7 +3361,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             if(this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = transaction.stockDetails.hsnNumber;
                 transaction.hsnOrSac = 'hsn';
-                transaction.showCodeType = "hsn"; 
+                transaction.showCodeType = "hsn";
             } else {
                 transaction.sacNumber = transaction.stockDetails.sacNumber;
                 transaction.sacNumberExists = true;
@@ -3440,6 +3444,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     private buildBulkData(length: number, startIndex: number, isBlankItemInBetween?: boolean): void {
+        if (startIndex === 0 && this.container?.length) {
+            this.container.clear();
+        }
         const ITEMS_RENDERED_AT_ONCE = 20;
         const INTERVAL_IN_MS = 50;
 
