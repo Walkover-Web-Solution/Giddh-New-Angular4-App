@@ -6,7 +6,7 @@
             <!-- Invoice filter section -->
             <div class="mr-r1 d-flex w-100">
                 <div class="d-flex">
-                    <div class="input-group linked-entities mr-r15" *ngIf="currentCompanyBranches?.length > 2">
+                    <div class="input-group linked-entities mr-r15" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                             [ItemHeight]="33" class="entity-dropdown" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
                             placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
