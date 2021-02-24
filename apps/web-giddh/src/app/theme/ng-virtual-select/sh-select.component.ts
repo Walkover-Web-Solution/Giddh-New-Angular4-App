@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BorderConfiguration, IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
@@ -111,7 +111,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         DOWN: 40
     };
 
-    constructor(private element: ElementRef, private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
+    constructor(private element: ElementRef, private cdRef: ChangeDetectorRef) {
     }
 
     get options(): IOption[] {
@@ -328,7 +328,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }, 0);
     }
 
-    public show(e: any) {
+    public show(e?: any) {
         if (this.isOpen || this.disabled) {
             return;
         }
