@@ -5,7 +5,6 @@
 </IfModule>
 <ifModule mod_rewrite.c>
     RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}/index.html [QSA,L,R=301]
+    RewriteCond %{HTTPS} off [NC]
+    RewriteRule (.*) https://%{HTTP_HOST}/index.html [QSA,L,R=301]
 </ifModule>
