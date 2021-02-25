@@ -89,8 +89,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('exportLedgerModal', {static: false}) public exportLedgerModal: ModalDirective;
     @ViewChild('shareLedgerModal', {static: false}) public shareLedgerModal: ModalDirective;
     @ViewChild('advanceSearchModel', {static: false}) public advanceSearchModel: ModalDirective;
-    @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
-    @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
+    @ViewChild('bulkActionConfirmationModal', {static: false}) public bulkActionConfirmationModal: ModalDirective;
+    @ViewChild('bulkActionGenerateVoucherModal', {static: false}) public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
     /** upload bank statement modal instance */
     @ViewChild('importStatementModal', {static: false}) public importStatementModal: ModalDirective;
