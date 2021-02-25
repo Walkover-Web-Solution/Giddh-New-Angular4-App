@@ -8,11 +8,14 @@ import { GeneralService } from '../../services/general.service';
 })
 
 export class AmountFieldComponent implements OnInit, OnChanges {
+    /* amount type will be any */
     @Input() public amount: any;
+    /* currency symbol will be string */
     @Input() public currencySymbol: string;
+    /* currency code will be string */
     @Input() public currencyCode: string;
+    /* true, ratePrecision value */
     @Input() public ratePrecision: boolean = true;
-
     /** this will store direction */
     public direction: string = "ltr";
 
@@ -20,17 +23,31 @@ export class AmountFieldComponent implements OnInit, OnChanges {
 
     }
 
+     /**
+     * detect direction method calling
+     * @param {string} path
+     * @returns {string}
+     * @memberof AmountFieldComponent
+     */
     public ngOnInit(): void {
-        /** detect direction method calling */
         this.detectDirection();
     }
 
+    /**
+    * detect direction method calling
+    * @param {string} path
+    * @returns {string}
+    * @memberof AmountFieldComponent
+    */
     public ngOnChanges(changes: SimpleChanges): void {
-        /** detect direction method calling */
         this.detectDirection();
     }
-
-    /** this will detect direction of the text */
+    /**
+     * this will detect direction of the text
+     * @param {string} path
+     * @returns {string}
+     * @memberof AmountFieldComponent
+     */
     public detectDirection(): void {
         if (this.currencyCode) {
             let isRtlCurrency = this.generalService.isRtlCurrency(this.currencyCode);
