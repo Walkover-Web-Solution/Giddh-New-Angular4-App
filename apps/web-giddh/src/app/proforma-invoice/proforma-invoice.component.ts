@@ -115,7 +115,6 @@ import { SearchService } from '../services/search.service';
 import { PURCHASE_ORDER_STATUS } from '../shared/helpers/purchaseOrderStatus';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
-import { AmountFieldComponent } from '../shared/amount-field';
 
 const THEAD_ARR_READONLY = [
     {
@@ -233,7 +232,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('itemsContainer', { read: ViewContainerRef, static: false }) container: ViewContainerRef;
     /** Template reference for each entry */
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
-    @ViewChild('AmountFieldComponent', { static: true }) public amountField: ElementRef;
 
     public showAdvanceReceiptAdjust: boolean = false;
 
