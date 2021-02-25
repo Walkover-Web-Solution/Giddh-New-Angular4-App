@@ -1323,11 +1323,11 @@
                                                                         <label for="sacCodeType{{entryIdx}}" class="radio-custom-label">SAC Code</label>
                                                                     </span>
                                                                 </div>
-                                                                <input type="text" maxLength="10" placeholder="HSN Number"
+                                                                <input type="text" maxLength="10" decimalDigitsDirective placeholder="HSN Number"
                                                                     name="transaction.hsnNumber_{{entryIdx}}"
                                                                     *ngIf="transaction.showCodeType === 'hsn'"
                                                                     [(ngModel)]="transaction.hsnNumber" />
-                                                                <input type="text" maxLength="10" placeholder="SAC Number"
+                                                                <input type="text" maxLength="10" decimalDigitsDirective placeholder="SAC Number"
                                                                     name="transaction.hsnNumber_{{entryIdx}}"
                                                                     *ngIf="transaction.showCodeType === 'sac'"
                                                                     [(ngModel)]="transaction.sacNumber" />
@@ -2292,11 +2292,11 @@
                                                                                 <label for="sacCodeType{{entryIdx}}" class="radio-custom-label">SAC Code</label>
                                                                             </span>
                                                                         </div>
-                                                                        <input type="text" maxLength="10" placeholder="HSN Number"
+                                                                        <input type="text" maxLength="10" decimalDigitsDirective placeholder="HSN Number"
                                                                             name="transaction.hsnNumber_{{entryIdx}}"
                                                                             *ngIf="transaction.showCodeType === 'hsn'"
                                                                             [(ngModel)]="transaction.hsnNumber" />
-                                                                        <input type="text" maxLength="10" placeholder="SAC Number"
+                                                                        <input type="text" maxLength="10" decimalDigitsDirective placeholder="SAC Number"
                                                                             name="transaction.hsnNumber_{{entryIdx}}"
                                                                             *ngIf="transaction.showCodeType === 'sac'"
                                                                             [(ngModel)]="transaction.sacNumber" />
