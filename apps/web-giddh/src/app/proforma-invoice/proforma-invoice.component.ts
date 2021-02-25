@@ -5819,10 +5819,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (currentPage === 1) {
             this.searchResults = searchResults;
         } else {
-            this.searchResults = [
+            const results = [
                 ...this.searchResults,
                 ...searchResults
             ];
+            this.searchResults = _.uniqBy(results, 'value');
         }
         this.assignSearchResultToList(searchType);
     }
@@ -6549,13 +6550,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     });
                 }
             }
-            this.defaultCustomerSuggestions = response.map(result => {
+            const results = response.map(result => {
                 return {
                     value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
                     label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                     additional: result
                 }
             }) || [];
+            this.defaultCustomerSuggestions = _.uniqBy(results, 'value');
             this.noResultsFoundLabel = SearchResultText.NotFound;
             this.searchResults = [
                 ...this.defaultCustomerSuggestions
