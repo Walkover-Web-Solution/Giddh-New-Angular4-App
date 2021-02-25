@@ -14,7 +14,7 @@ import { ReplaySubject } from 'rxjs';
       padding: 20px;
     }
 
-    section.sales-invoiceBGwhite {
+    section.sales-invoice-bg-white {
       background-color: #fff;
     }
   `],

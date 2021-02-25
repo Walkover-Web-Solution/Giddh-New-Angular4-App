@@ -1513,7 +1513,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public focusDebitCreditAmount(): void {
-        if (this.requestObj.transactions[this.selectedIdx].type === 'by') {
+        if (this.requestObj?.transactions[this.selectedIdx]?.type === 'by') {
             this.byAmountFields.last.nativeElement.focus();
         } else {
             this.toAmountFields.last.nativeElement.focus();
@@ -1715,27 +1715,33 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let invoiceRequired = false;
         let invoiceAmountError = false;
 
-        this.receiptEntries.forEach(receipt => {
-            if (isValid) {
-                if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
-                    isValid = false;
-                } else {
-                    if (receipt.type === AdjustmentTypesEnum.againstReference) {
-                        adjustmentTotal += parseFloat(receipt.amount);
+        if(this.receiptEntries?.length > 0) {
+            this.receiptEntries.forEach(receipt => {
+                if (isValid) {
+                    if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
+                        isValid = false;
                     } else {
-                        receiptTotal += parseFloat(receipt.amount);
+                        if (receipt.type === AdjustmentTypesEnum.againstReference) {
+                            adjustmentTotal += parseFloat(receipt.amount);
+                        } else {
+                            if (receipt.type === AdjustmentTypesEnum.againstReference) {
+                                adjustmentTotal += parseFloat(receipt.amount);
+                            } else {
+                                receiptTotal += parseFloat(receipt.amount);
+                            }
+                        }
+
+                        if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice.uniqueName) {
+                            isValid = false;
+                            invoiceRequired = true;
+                        } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
+                            isValid = false;
+                            invoiceAmountError = true;
+                        }
                     }
                 }
-
-                if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice.uniqueName) {
-                    isValid = false;
-                    invoiceRequired = true;
-                } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
-                    isValid = false;
-                    invoiceAmountError = true;
-                }
-            }
-        });
+            });
+        }
 
         if (isValid) {
             if (receiptTotal != this.adjustmentTransaction.amount || adjustmentTotal > this.adjustmentTransaction.amount) {

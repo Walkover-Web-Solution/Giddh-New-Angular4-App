@@ -276,7 +276,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
         }
     }
 
-    public show(e: any) {
+    public show(e?: any) {
         if (this.isOpen || this.disabled) {
             return;
         }
