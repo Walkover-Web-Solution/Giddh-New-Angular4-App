@@ -100,7 +100,7 @@
                     </div>
 
                 </div>
-                <div class="form-group mr-r15 linked-entities" *ngIf="showBranchSwitcher && currentCompanyBranches?.length > 2 && isMobileScreen">
+                <div class="form-group mr-r15 linked-entities" *ngIf="showBranchSwitcher && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY' && isMobileScreen">
                     <div class="form-group">
                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
                             [borderConfiguration]="branchDropdownBorderConfiguration" [showClear]="false" [ItemHeight]="33" width="100%"
@@ -147,7 +147,7 @@
             <!-- endregion -->
             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-right C-flex-end search-options" *ngIf="!isMobileScreen">
                 <div class="d-flex xs-width-100 ledger-head-top">
-                    <div class="form-group mr-r15 linked-entities" *ngIf="showBranchSwitcher && currentCompanyBranches?.length > 2">
+                    <div class="form-group mr-r15 linked-entities" *ngIf="showBranchSwitcher && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <div class="form-group">
                             <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [borderConfiguration]="branchDropdownBorderConfiguration"
                                 [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
@@ -289,7 +289,7 @@
                                         <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                             <ng-container *ngFor="let txn of item.transactions;">
                                                 <ng-container *ngIf="txn.type === 'DEBIT'">
-                                                    <tr class="ledger-row row" (mouseenter)="txn.showDropdown = true;" (mouseleave)="txn.showDropdown = false;" [ngClass]="{'compoundEntry': txn.id === lc.selectedBankTxnUniqueName}">
+                                                    <tr class="ledger-row row" (mouseenter)="txn.showDropdown = true;" (mouseleave)="txn.showDropdown = false;" [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
                                                         <td class="col-3 col-md-3 col-lg-3">
                                                             <div class="d-flex align-items-center">
                                                                 <span class="pd-l05 checkbox-span">
@@ -346,7 +346,7 @@
                                                             <input class="form-control text-right" type="text" id="{{'enter-amount-dr-' + i}}" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()" *ngIf="txn.type === 'DEBIT'" (click)="showBankLedgerPopup(txn, item);">
                                                         </td>
                                                     </tr>
-                                                    <div class="pos-abs entry-modal"
+                                                    <div class="position-absolute entry-modal"
                                                         *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'DEBIT'">
                                                         <new-ledger-entry-panel #newLedPanel [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                             [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
@@ -1084,7 +1084,7 @@
                                 </table>
 
                                 <!--new ledge popup-->
-                                <div class="pos-abs entry-modal" (click)="shCredit?.hide()"
+                                <div class="position-absolute entry-modal" (click)="shCredit?.hide()"
                                     (keydown)="$event.stopPropagation()"
                                     *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                                     <new-ledger-entry-panel #newLedPanel [blankLedger]="lc.blankLedger"

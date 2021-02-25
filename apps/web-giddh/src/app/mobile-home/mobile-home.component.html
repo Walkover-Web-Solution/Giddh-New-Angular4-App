@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <div class="serach-accounts-groups" *ngIf="hasGroups">
+        <div class="search-accounts-groups" *ngIf="hasGroups">
             <div class="search-groups" *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
                 [hidden]="item.type !== 'GROUP'">
                 <div class="single-search-group cursor-pointer" *ngIf="item.type === 'GROUP'" (click)="itemSelected(item)">
@@ -71,7 +71,7 @@
                 </div>
             </div>
         </div>
-        <div class="serach-accounts-groups" *ngIf="hasAccounts">
+        <div class="search-accounts-groups" *ngIf="hasAccounts">
             <div class="search-groups search-accounts"
                 *ngFor="let item of searchedItems; let i = index; trackBy: trackByFn"
                 [hidden]="item.type !== 'ACCOUNT'">

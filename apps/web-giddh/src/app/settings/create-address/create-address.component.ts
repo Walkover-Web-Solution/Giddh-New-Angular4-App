@@ -231,7 +231,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     } else {
                         this.addressForm.get('state').patchValue(null);
                         this.addressForm.get('state').enable();
-                        if (this.addressConfiguration.tax.name) {
+                        if (this.addressConfiguration?.tax?.name && !this.addressForm.get('taxNumber')?.valid) {
                             this.toasterService.errorToast(`Invalid ${this.addressConfiguration.tax.name}`);
                         }
                     }

@@ -191,7 +191,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         }
 
         this.isBankSelected = false;
-        this.ngOnDestroy();
     }
 
     public ngOnDestroy() {

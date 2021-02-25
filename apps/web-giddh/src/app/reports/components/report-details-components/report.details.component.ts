@@ -98,8 +98,11 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     ngOnInit() {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.router.events.pipe(
             filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/sales-register') || event.url.includes('/reports/sales-detailed-expand')))),
             takeUntil(this.destroyed$)).subscribe(() => {
@@ -128,7 +131,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     });
                     if (!this.currentBranch || !this.currentBranch.uniqueName) {
                         let currentBranchUniqueName;
-                        if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                        if (this.currentOrganizationType === OrganizationType.Branch) {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                             this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                         } else {

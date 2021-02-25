@@ -18,7 +18,7 @@
 
 .add-bulk-item-modal .single-product-wrapper {
     margin-bottom: 20px;
-    padding: 4px;
+    padding: 12px;
 
     &:hover {
         background-color: $lavender;
@@ -30,7 +30,7 @@
     }
 }
 
-.stockName {
+.stock-name {
     max-width: 240px;
     width: 100%;
     vertical-align: middle;
