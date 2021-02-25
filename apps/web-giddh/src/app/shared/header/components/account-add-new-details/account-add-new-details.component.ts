@@ -199,10 +199,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
                     if (parent.length > 1 && parent[1]) {
-                        this.isHsnSacEnabledAcc = (parent[1].parentGroups) ? (parent[1].parentGroups[0]?.uniqueName === 'revenuefromoperations' || parent[1].parentGroups[0]?.uniqueName === 'otherincome' || parent[1].parentGroups[0]?.uniqueName === 'operatingcost' || parent[1].parentGroups[0]?.uniqueName === 'indirectexpenses') : false;
+                        const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
+                        this.isHsnSacEnabledAcc = (parent[1].parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(parent[1].parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(parent[1].uniqueName);
                     } else if (parent.length === 1) {
-                        this.isHsnSacEnabledAcc = (response.parentGroups) ? (response.parentGroups[0]?.uniqueName === 'revenuefromoperations' || response.parentGroups[0]?.uniqueName === 'otherincome' || response.parentGroups[0]?.uniqueName === 'operatingcost' || response.parentGroups[0]?.uniqueName === 'indirectexpenses') : false;
+                        const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
+                        this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response.uniqueName);
                     }
                 }
