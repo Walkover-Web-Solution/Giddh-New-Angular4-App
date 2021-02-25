@@ -404,10 +404,6 @@ textarea:focus {
     border-bottom: 1px solid $gainsboro;
 }
 
-.pl-0 {
-    padding-left: 0;
-}
-
 .balance-due {
     display: block;
     color: $dark-gray;
@@ -483,7 +479,7 @@ textarea:focus {
     box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.1);
 }
 
-.max-600 {
+.max-width-600 {
     max-width: 600px;
 }
 

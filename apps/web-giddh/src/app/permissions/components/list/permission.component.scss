@@ -36,7 +36,7 @@
 }
 
 #single-role thead th {
-    color: #010101 !important;
+    color: $black !important;
     font-weight: 400;
     text-align: center;
 }
@@ -53,7 +53,7 @@
     border-color: $cinnabar-orange;
 }
 
-.headName {
+.head-name {
     padding: 13px;
     background: $cinnabar-orange;
     color: $white;
@@ -73,7 +73,7 @@
     padding-left: 18px;
 }
 
-.role_title {
+.role-title {
     font-size: 2rem;
     position: relative;
     width: calc(100% - 220px);
@@ -82,7 +82,7 @@
     text-align: center;
 }
 
-.new_col {
+.new-col {
     background: $white-smoke;
     border: 1px solid $gainsboro;
 }

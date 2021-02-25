@@ -14,9 +14,11 @@
 .invoice-control {
     position: relative;
 }
-
 .invoice-detail-header {
     padding-top: 25px;
+}
+.relative {
+    height: 100% !important;
 }
 
 .invoice-modal-content {

@@ -1,3 +1,5 @@
+@import "../../../../../assets/css/color.scss";
+
 .e-way-card {
     div {
         height: 186px;
@@ -8,7 +10,7 @@
         align-items: center;
         p {
             text-align: center;
-            color: #333333;
+            color: $night-rider;
             font-size: 16px;
             margin-top: 20px;
         }
@@ -16,7 +18,7 @@
 }
 
 .e-way-card:hover div {
-    background-color: #fffaf8;
+    background-color: $solitude;
 }
 .e-way-card:hover .icon-link {
     .a {

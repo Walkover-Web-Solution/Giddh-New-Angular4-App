@@ -3,7 +3,7 @@
         <div>
             <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline flex-row flex-nowrap">
                 <div class="form-group mr-r15">
-                    <div class="linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+                    <div class="linked-entities" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <label class="d-block">Select Entity</label>
                         <div class="form-group">
                             <sh-select [options]="currentCompanyBranches" name="entity" [(ngModel)]="currentBranch.uniqueName"
