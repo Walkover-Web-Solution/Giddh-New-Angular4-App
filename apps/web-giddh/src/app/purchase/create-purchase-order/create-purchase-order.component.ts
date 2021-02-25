@@ -3192,10 +3192,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (currentPage === 1) {
             this.searchResults = searchResults;
         } else {
-            this.searchResults = [
+            const results = [
                 ...this.searchResults,
                 ...searchResults
             ];
+            this.searchResults = _.uniqBy(results, 'value');
         }
         this.assignSearchResultToList(searchType);
     }
@@ -3221,13 +3222,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     });
                 }
             }
-            this.defaultVendorSuggestions = response.map(result => {
+            const results = response.map(result => {
                 return {
                     value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
                     label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                     additional: result
                 }
             }) || [];
+            this.defaultVendorSuggestions = _.uniqBy(results, 'value');
             this.noResultsFoundLabel = SearchResultText.NotFound;
             this.searchResults = [
                 ...this.defaultVendorSuggestions
