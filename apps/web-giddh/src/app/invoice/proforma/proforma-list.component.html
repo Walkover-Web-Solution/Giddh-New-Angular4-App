@@ -314,8 +314,6 @@
                         <td width="12%" class="text-right"
                             [tooltip]="(voucherType === 'proformas' || voucherType === 'estimates') ? grandTotalPopupTemplate : ''"
                             container="body" containerClass="invoice-preview">
-                            <!-- {{item?.amount?.currencyForAccount?.symbol}}
-                            {{item.amount?.amountForAccount | giddhCurrency}} -->
                                 <span class="d-flex justify-content-end">
 
                                     <amount-field [amount]="item.amount?.amountForAccount"
