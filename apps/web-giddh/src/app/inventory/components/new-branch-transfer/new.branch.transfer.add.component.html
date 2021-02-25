@@ -78,8 +78,8 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <input name="productHsnCode" class="form-control" maxlength="8" decimalDigitsDirective *ngIf="branchTransfer.products[0].showCodeType === 'hsn'" [(ngModel)]="branchTransfer.products[0].hsnNumber">
-                                <input name="productHsnCode" class="form-control" maxlength="8" decimalDigitsDirective *ngIf="branchTransfer.products[0].showCodeType === 'sac'" [(ngModel)]="branchTransfer.products[0].sacNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="10" decimalDigitsDirective *ngIf="branchTransfer.products[0].showCodeType === 'hsn'" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="10" decimalDigitsDirective *ngIf="branchTransfer.products[0].showCodeType === 'sac'" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
                         <div class="row mr-b2">
@@ -221,8 +221,8 @@
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
-                                <input name="productHsnCode" class="form-control" maxlength="8" decimalDigitsDirective *ngIf="branchTransfer.products[0].showCodeType === 'hsn'" [(ngModel)]="branchTransfer.products[0].hsnNumber">
-                                <input name="productHsnCode" class="form-control" maxlength="8" decimalDigitsDirective *ngIf="branchTransfer.products[0].showCodeType === 'sac'" [(ngModel)]="branchTransfer.products[0].sacNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="10" decimalDigitsDirective *ngIf="branchTransfer.products[0].showCodeType === 'hsn'" [(ngModel)]="branchTransfer.products[0].hsnNumber">
+                                <input name="productHsnCode" class="form-control" maxlength="10" decimalDigitsDirective *ngIf="branchTransfer.products[0].showCodeType === 'sac'" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
                         <div class="row mr-b2" *ngIf="transferType !== 'senders'">
@@ -400,7 +400,7 @@
                                                     </span>
                                                 </div>
                                             </label>
-                                            <input type="text" maxlength="8" decimalDigitsDirective placeholder="{{product.showCodeType === 'hsn' ? 'HSN' : 'SAC'}} Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
+                                            <input type="text" maxlength="10" decimalDigitsDirective placeholder="{{product.showCodeType === 'hsn' ? 'HSN' : 'SAC'}} Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
                                             <div class="btn-group mt-2 pt-1 d-flex">
                                                 <button class="btn btn-sm btn-success" type="button" (click)="saveHsnNumberPopup(product)">Save</button>
                                                 <button class="btn btn-sm btn-primary mr-0" type="button" (click)="hideHsnNumberPopup()">Cancel</button>
