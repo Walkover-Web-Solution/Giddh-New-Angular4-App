@@ -198,12 +198,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (response) {
                 if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
+                    const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
                     if (parent.length > 1 && parent[1]) {
-                        const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
                         this.isHsnSacEnabledAcc = (parent[1].parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(parent[1].parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(parent[1].uniqueName);
                     } else if (parent.length === 1) {
-                        const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response.uniqueName);
                     }
