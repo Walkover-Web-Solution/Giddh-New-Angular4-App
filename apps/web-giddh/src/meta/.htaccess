@@ -5,9 +5,7 @@
 </IfModule>
 <ifModule mod_rewrite.c>
     RewriteEngine On
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule (.*) index.html [QSA,L]
+    RewriteRule (.*) https://%{HTTP_HOST}/index.html [QSA,L,R=301]
 </ifModule>
