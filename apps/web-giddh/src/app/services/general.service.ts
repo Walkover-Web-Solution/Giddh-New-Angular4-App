@@ -778,7 +778,12 @@ export class GeneralService {
         return (path && path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop() : 'null';
     }
 
-    /** this will store currency code */
+    /**
+     * this will store currency code
+     *  @param {string} path
+     *  @returns {string}
+     *  @memberof GeneralService
+     */
     public isRtlCurrency(currencyCode: string): boolean {
         const rtlCurrencyCodes = ['AED'];
 
