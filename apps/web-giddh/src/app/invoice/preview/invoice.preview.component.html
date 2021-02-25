@@ -283,7 +283,7 @@
                             </div>
                         </th>
                         <th data-title="Balance Due" width="12%" *ngIf="selectedVoucher !== 'purchase'">
-                            <div class="d-flex">
+                            <div class="d-flex justify-content-end">
                                 <div>Balance Due</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'balanceDue'}">
@@ -434,13 +434,11 @@
                         <td width="10%" data-title="Total Amount"
                             [tooltip]="(selectedVoucher !== 'purchase') ? grandTotalPopupTemplate : ''" container="body"
                             containerClass="invoice-preview">
-                            <!-- {{item.accountCurrencySymbol}}
-                            {{item.grandTotal?.amountForAccount | giddhCurrency}} -->
-
-                            <amount-field [amount]="item.grandTotal?.amountForAccount" class="justify-content-end d-flex"
-                                [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="item?.account?.currency?.code">
-                            </amount-field>
-
+                            <span class="justify-content-end d-flex">
+                                <amount-field [amount]="item.grandTotal?.amountForAccount"
+                                    [currencySymbol]="item.accountCurrencySymbol" [currencyCode]="item?.account?.currency?.code">
+                                </amount-field>
+                            </span>
                         </td>
                         <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
                         </ng-template>
@@ -448,12 +446,11 @@
                         <!-- Balance Due -->
 
                         <td width="12%" data-title="Balance Due" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
-                            <!-- {{item.accountCurrencySymbol}}
-                            {{item?.totalBalance?.amountForAccount | giddhCurrency}} -->
-
-                            <amount-field [amount]="item?.totalBalance?.amountForAccount" [currencySymbol]="item.accountCurrencySymbol"
-                                [currencyCode]="item?.account?.currency?.code">
-                            </amount-field>
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="item?.totalBalance?.amountForAccount" [currencySymbol]="item.accountCurrencySymbol"
+                                    [currencyCode]="item?.account?.currency?.code">
+                                </amount-field>
+                            </span>
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
                         </ng-template>
@@ -856,8 +853,6 @@
                         {{!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? (selectedVoucher === 'purchase') ? ' Purchases:' : ' Sale:' : ':' }}
                     </h3>
                     <h1 class="d-flex">
-                        <!-- {{baseCurrencySymbol}}{{ totalSale | giddhCurrency }} -->
-
                         <span>
                             <amount-field [amount]="totalSale"
                                 [currencySymbol]="baseCurrencySymbol" [currencyCode]="baseCurrency">
@@ -872,9 +867,6 @@
                     class="col-sm-6 total-due-sale d-flex">
                     <h3>Total Due:</h3>
                     <h1 class="d-flex">
-                        <!-- {{baseCurrencySymbol}}{{ totalDue | giddhCurrency }} -->
-
-
                         <span>
                             <amount-field [amount]="totalDue" [currencySymbol]="baseCurrencySymbol" [currencyCode]="baseCurrency">
                             </amount-field>
