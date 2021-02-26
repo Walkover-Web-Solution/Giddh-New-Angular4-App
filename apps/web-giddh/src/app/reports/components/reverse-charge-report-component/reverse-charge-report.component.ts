@@ -84,6 +84,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private store: Store<AppState>,
@@ -106,6 +108,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public ngOnInit(): void {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (!this.activeCompany && activeCompany) {
                 this.activeCompany = activeCompany;
@@ -154,7 +157,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
@@ -200,7 +203,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     /**
      * This function will destroy the subscribers
      *
-     * @memberof VatReportTransactionsComponent
+     * @memberof ReverseChargeReport
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
@@ -211,7 +214,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * This function will change the page of vat report
      *
      * @param {*} event
-     * @memberof VatReportTransactionsComponent
+     * @memberof ReverseChargeReport
      */
     public pageChanged(event: any): void {
         if (this.reverseChargeReportGetRequest.page != event.page) {
@@ -225,7 +228,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * This function will get the data of vat detailed report
      *
      * @param {boolean} resetPage
-     * @memberof VatReportTransactionsComponent
+     * @memberof ReverseChargeReport
      */
     public getReverseChargeReport(resetPage: boolean): void {
         if (this.activeCompany && this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.to) {
@@ -237,7 +240,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
 
             this.reverseChargeReportResults = [];
 
-            this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).subscribe((res) => {
+            this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this.reverseChargeReportResults = res.body;
                     this.cdRef.detectChanges();
@@ -350,7 +353,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      *To show the datepicker
      *
      * @param {*} element
-     * @memberof AuditLogsFormComponent
+     * @memberof ReverseChargeReport
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -365,7 +368,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     /**
      * This will hide the datepicker
      *
-     * @memberof AuditLogsFormComponent
+     * @memberof ReverseChargeReport
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -375,7 +378,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof AuditLogsFormComponent
+     * @memberof ReverseChargeReport
      */
     public dateSelectedCallback(value?: any): void {
         if(value && value.event === "cancel") {

@@ -80,7 +80,7 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
         });
 
         // get groups list
-        this._groupService.GetGroupsWithAccounts('').subscribe((res: any) => {
+        this._groupService.GetGroupsWithAccounts('').pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
             let result: IOption[] = [];
             this.flatAccountWGroupsList$ = observableOf([]);
             if (res.status === 'success' && res.body.length > 0) {
@@ -140,7 +140,7 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
 
     public addAcFormSubmit() {
         let formObj = this.addAcForm.value;
-        this._accountService.CreateAccountV2(formObj, this.activeGroupUniqueName).subscribe((res) => {
+        this._accountService.CreateAccountV2(formObj, this.activeGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === 'success') {
                 this._toasty.successToast('A/c created successfully.');
                 this.closeCreateAcModal();

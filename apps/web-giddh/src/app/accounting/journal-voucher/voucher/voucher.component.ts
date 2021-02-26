@@ -568,7 +568,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * setAccount` in particular, on accountList click
      */
     public setAccount(acc) {
-        this.searchService.loadDetails(acc?.uniqueName).subscribe(response => {
+        this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if ((response?.body?.currency?.code || this.activeCompany.baseCurrency) === this.activeCompany.baseCurrency) {
                 let openChequePopup = false;
                 if (acc && acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts')) {
@@ -1513,7 +1513,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public focusDebitCreditAmount(): void {
-        if (this.requestObj.transactions[this.selectedIdx].type === 'by') {
+        if (this.requestObj?.transactions[this.selectedIdx]?.type === 'by') {
             this.byAmountFields.last.nativeElement.focus();
         } else {
             this.toAmountFields.last.nativeElement.focus();
@@ -1609,7 +1609,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.pendingInvoiceList = [];
         this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
 
-        this.salesService.getInvoiceList(this.pendingInvoicesListParams, moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).subscribe(response => {
+        this.salesService.getInvoiceList(this.pendingInvoicesListParams, moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
                 Object.keys(response.body.results).forEach(key => {
                     this.pendingInvoiceList[response.body.results[key].uniqueName] = [];
@@ -1715,27 +1715,33 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let invoiceRequired = false;
         let invoiceAmountError = false;
 
-        this.receiptEntries.forEach(receipt => {
-            if (isValid) {
-                if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
-                    isValid = false;
-                } else {
-                    if (receipt.type === AdjustmentTypesEnum.againstReference) {
-                        adjustmentTotal += parseFloat(receipt.amount);
+        if(this.receiptEntries?.length > 0) {
+            this.receiptEntries.forEach(receipt => {
+                if (isValid) {
+                    if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
+                        isValid = false;
                     } else {
-                        receiptTotal += parseFloat(receipt.amount);
+                        if (receipt.type === AdjustmentTypesEnum.againstReference) {
+                            adjustmentTotal += parseFloat(receipt.amount);
+                        } else {
+                            if (receipt.type === AdjustmentTypesEnum.againstReference) {
+                                adjustmentTotal += parseFloat(receipt.amount);
+                            } else {
+                                receiptTotal += parseFloat(receipt.amount);
+                            }
+                        }
+
+                        if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice.uniqueName) {
+                            isValid = false;
+                            invoiceRequired = true;
+                        } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
+                            isValid = false;
+                            invoiceAmountError = true;
+                        }
                     }
                 }
-
-                if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice.uniqueName) {
-                    isValid = false;
-                    invoiceRequired = true;
-                } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
-                    isValid = false;
-                    invoiceAmountError = true;
-                }
-            }
-        });
+            });
+        }
 
         if (isValid) {
             if (receiptTotal != this.adjustmentTransaction.amount || adjustmentTotal > this.adjustmentTransaction.amount) {

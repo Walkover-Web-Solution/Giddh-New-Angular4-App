@@ -44,7 +44,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isQuickAccountCreatedSuccessfully$ = this.store.pipe(select(p => p.ledger.isQuickAccountCreatedSuccessfully), takeUntil(this.destroyed$));
         this.groupsArrayStream$ = this.store.pipe(select(p => p.general.groupswithaccounts), takeUntil(this.destroyed$));
 
-        this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').subscribe(result => {
+        this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result.status === 'success') {
                 let groupsListArray: IOption[] = [];
                 result.body.results = this.removeFixedGroupsFromArr(result.body.results);
@@ -135,7 +135,9 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
                 } else {
                     gstForm.get('stateCode').patchValue(null);
                     this._toaster.clearAllToaster();
-                    this._toaster.warningToast('Invalid GSTIN.');
+                    if (!gstForm.get('gstNumber')?.valid) {
+                        this._toaster.warningToast('Invalid GSTIN.');
+                    }
                 }
             });
         } else {

@@ -69,7 +69,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
     public onSearchQueryChanged(query: string, page: number = 1): void {
         this.searchResultsPaginationData.query = query;
         const requestObject = this.getSearchRequestObject(query, page);
-        this.searchAccount(requestObject).subscribe(data => {
+        this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body && data.body.results) {
                 this.prepareSearchLists(data.body.results, page);
                 this.searchResultsPaginationData.page = data.body.page;
@@ -168,7 +168,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         let requestObject = {
             stockUniqueName: item.additional && item.additional.stock ? item.additional.stock.uniqueName : ''
         };
-        this.searchService.loadDetails(item.additional.uniqueName, requestObject).subscribe(data => {
+        this.searchService.loadDetails(item.additional.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
                 const taxes = data.body.taxes || [];

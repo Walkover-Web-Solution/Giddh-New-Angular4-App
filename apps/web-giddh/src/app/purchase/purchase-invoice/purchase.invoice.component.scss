@@ -37,7 +37,7 @@
     border-left: 0;
 }
 
-.open > .pageListDD {
+.open > .page-list-dd {
     display: inline-block;
     min-width: 200px;
     width: 100%;
@@ -94,8 +94,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
     color: $white;
-    background-color: #ea795b;
-    border-color: #ea795b;
+    background-color: $flamingo;
+    border-color: $flamingo;
 }
 
 .btn,

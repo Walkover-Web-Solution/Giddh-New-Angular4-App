@@ -68,7 +68,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2">
+                        <div class="form-group mr-r15 pull-left linked-entities" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                             <div>
                                 <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                                     [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
@@ -327,21 +327,21 @@
 <!--endregion-->
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div class="abc " *ngIf="accountAsideMenuState === 'in'">
+<div class="abc" *ngIf="accountAsideMenuState === 'in'">
     <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state transform-inherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
         (getUpdateList)="getUpdatedList($event)">
     </aside-menu-account>
 </div>
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-<div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
+<div class="abc vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
     <payment-aside class="account-aside-menu-state transform-inherit" [selectedAccForPayment]="selectedAccForPayment">
     </payment-aside>
 </div>
 
 <ng-template #mainTable>
-    <div class="mobile-card-wrapper table-responsive vendorPage">
-        <table class="table on-mobile-view aging-table marginBottom260 giddh-table" *ngIf="activeTab !== 'aging'">
+    <div class="mobile-card-wrapper table-responsive vendor-page">
+        <table class="table on-mobile-view aging-table mr-b260 giddh-table" *ngIf="activeTab !== 'aging'">
             <thead>
                 <tr class="aging-table-top">
                     <td></td>
@@ -465,7 +465,7 @@
                                 <label></label>
                                 <input type="checkbox" (click)="selectAccount($event, account)"
                                     [(ngModel)]="account.isSelected"
-                                    [ngClass]="{'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}" />
+                                    [ngClass]="{'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'position-absolute': !selectedCheckedContacts.length}" />
                             </span>
                                 <span class="account-name-customer"> {{account.name}} </span>
                                 <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">

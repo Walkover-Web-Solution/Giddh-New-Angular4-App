@@ -761,7 +761,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             }
             delete data['uniqueName'];
 
-            this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
+            this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this._toasty.successToast('Template Saved Successfully.');
                     this.templateModal.hide();
@@ -799,7 +799,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontMedium = data.fontSize - 2;
             }
             data = this.newLineToBR(data);
-            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
+            this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     this._toasty.successToast('Template Updated Successfully.');
                     this.confirmationFlag = null;

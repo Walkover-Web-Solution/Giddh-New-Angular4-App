@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
 
 const keyMaps = {
     left: 37,
@@ -14,7 +14,7 @@ const keyMaps = {
     selector: '[navigationWalker]',
     exportAs: 'navigationWalker'
 })
-export class NavigationWalkerDirective implements OnInit {
+export class NavigationWalkerDirective implements OnInit, OnDestroy {
 
     @Input() public navigationWalker: { horizontal: string, vertical: string, ignore: string };
     @Input() public enabled: boolean = true;
@@ -243,5 +243,16 @@ export class NavigationWalkerDirective implements OnInit {
         (this.horizontalTreeWalker[this.horizontalIndex]).currentNode = this._el.nativeElement;
         (this.verticalTreeWalker[this.verticalIndex]).currentNode = this._el.nativeElement;
         this.onReset.emit();
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof NavigationWalkerDirective
+     */
+    public ngOnDestroy(): void {
+        if (this.listener) {
+            this.listener();
+        }
     }
 }

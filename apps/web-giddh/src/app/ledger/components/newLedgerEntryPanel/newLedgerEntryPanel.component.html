@@ -7,7 +7,7 @@
         <!--  tourist scheme template start      -->
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
         <!--        tourist scheme template end-->
-        <div class="basic_detail mr-b1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
+        <div class="basic-detail mr-b1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
             <table class="width-100 total-detail-table">
 
                 <tbody>
@@ -174,14 +174,14 @@
             </table>
         </div>
         <div class="row warehouse-field">
-            <div *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1" class="col-sm-4 col-xs-12">
-                <div class="source-warehouse">
+            <div class="col-md-4">
+                <div class="source-warehouse" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
                     <label>Select Warehouse</label>
                     <sh-select [disabled]="isReadOnly" [class.disabled-ledger]="isReadOnly" id="ledger-select-warehouse" [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
                         [options]="warehouses"></sh-select>
                 </div>
             </div>
-            <div class="col-md-8 col-12" [ngClass]="{'offset-md-4' : !(currentTxn?.selectedAccount?.stock)}">
+            <div class="col-md-8" [ngClass]="{'offset-md-4' : !(currentTxn?.selectedAccount?.stock)}">
                 <div class="text-right mr-b1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
 
                     <ng-container *ngIf="isTcsTdsApplicable">
@@ -211,7 +211,7 @@
                 </div>
             </div>
         </div>
-        <div [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection" class="pd-b1 inWords"
+        <div [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection" class="pd-b1 in-words"
             *ngIf="currentTxn.total">
             {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
         </div>
