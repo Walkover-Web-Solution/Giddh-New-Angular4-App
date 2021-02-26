@@ -1874,4 +1874,16 @@ export class InvoiceActions {
             type: EWAYBILL_ACTIONS.RESET_ALL_TRANSPORTER_RESPONSE
         };
     }
+
+    /**
+     * Resets the pending data of pending invoices section
+     *
+     * @returns {CustomActions}
+     * @memberof InvoiceActions
+     */
+    public resetPendingData(): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.RESET_PENDING_DATA
+        };
+    }
 }
