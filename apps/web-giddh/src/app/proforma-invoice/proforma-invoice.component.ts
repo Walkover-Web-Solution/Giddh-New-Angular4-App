@@ -5533,6 +5533,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this._toasty.errorToast(response.message, response.code);
         }
         this.updateAccount = false;
+        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
     }
 
     /**
@@ -5590,6 +5591,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
             if (settings && settings.companyInventorySettings) {
                 this.inventorySettings = settings.companyInventorySettings;
+            }
+            if (settings?.invoiceSettings) {
+                this.useCustomInvoiceNumber = settings.invoiceSettings.useCustomInvoiceNumber;
             }
         });
     }
