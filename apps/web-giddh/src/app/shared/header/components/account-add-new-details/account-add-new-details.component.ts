@@ -531,12 +531,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         gstForm.get('stateCode').patchValue(currentState.value);
                         gstForm.get('state').get('code').patchValue(currentState.value);
                     } else {
-                        if (this.isIndia) {
-                            gstForm.get('stateCode').patchValue(null);
-                            gstForm.get('state').get('code').patchValue(null);
-                        }
                         this._toaster.clearAllToaster();
-                        if (this.formFields['taxName']) {
+                        if (this.formFields['taxName'] && !gstForm.get('gstNumber')?.valid) {
+                            if (this.isIndia) {
+                                gstForm.get('stateCode').patchValue(null);
+                                gstForm.get('state').get('code').patchValue(null);
+                            }
                             this._toaster.errorToast(`Invalid ${this.formFields['taxName'].label}`);
                         }
                     }
@@ -1033,7 +1033,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public getCompanyCustomField(): void {
-        this.groupService.getCompanyCustomField().subscribe(response => {
+        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body;
                 this.createDynamicCustomFieldForm(this.companyCustomFields);
@@ -1172,7 +1172,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 // The result will include this group and its children
                 requestObject.includeSearchedGroup = true;
             }
-            this.groupService.searchGroups(requestObject).subscribe(data => {
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

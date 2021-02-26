@@ -87,7 +87,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public initSettings(): void {
-        this.invoiceService.GetInvoiceSetting().subscribe(response => {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
                 this.invoiceSettings = _.cloneDeep(response.body);
 
@@ -125,7 +125,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
             formToSave.purchaseBillSettings.lockDate = moment(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
 
-        this.invoiceService.UpdateInvoiceSetting(formToSave).subscribe(response => {
+        this.invoiceService.UpdateInvoiceSetting(formToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
                 this.toaster.successToast(response.body);
             } else {
@@ -193,7 +193,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
             emailAddress: emailAddress
         };
 
-        this.purchaseOrderService.updateSettingsEmail(getRequestObject, postRequestObject).subscribe(response => {
+        this.purchaseOrderService.updateSettingsEmail(getRequestObject, postRequestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
                 this.initSettings();
                 this.toaster.successToast(response.body);
@@ -219,7 +219,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
             redirect_uri: this.getRedirectUrl()
         };
 
-        this.authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
+        this.authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if(res) {
                 if (res.status === 'success') {
                     this.toaster.successToast('Gmail account added successfully.', 'Success');

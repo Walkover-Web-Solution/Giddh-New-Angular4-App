@@ -309,9 +309,12 @@ span.icon-advance-filter {
 }
 @media (max-width: 768px) {
     .invoice-table.on-mobile-view {
-    td{
-        width: 100%;
-    }
+        td{
+            width: 100%;
+            span.justify-content-end{
+                justify-content: flex-start !important;
+            }
+        }
 }
     .select-all-proformas-on-mobile-view{
         display: flex;

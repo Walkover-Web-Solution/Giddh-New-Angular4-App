@@ -2,12 +2,11 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store, select } from '@ngrx/store';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { TaxResponse } from '../../models/api-models/Company';
-import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
@@ -56,7 +55,7 @@ const taxDuration = [
     styleUrls: [`./setting.trigger.component.scss`]
 })
 
-export class SettingTriggerComponent implements OnInit {
+export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     @ViewChild('triggerConfirmationModel', {static: true}) public triggerConfirmationModel: ModalDirective;
 
@@ -308,7 +307,7 @@ export class SettingTriggerComponent implements OnInit {
                 q: encodeURIComponent(query),
                 page
             }
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -366,7 +365,7 @@ export class SettingTriggerComponent implements OnInit {
                 count: API_COUNT_LIMIT,
                 onlyTop: true
             }
-            this.groupService.searchGroups(requestObject).subscribe(data => {
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -498,4 +497,13 @@ export class SettingTriggerComponent implements OnInit {
         });
     }
 
+    /**
+     * Releases memory
+     *
+     * @memberof SettingTriggerComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

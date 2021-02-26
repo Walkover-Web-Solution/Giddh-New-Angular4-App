@@ -91,7 +91,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
         this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
         if (this.subscriptionPrice && this.UserCurrency) {
-            this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
+            this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 if (res.status === 'success') {
                     this.createNewCompanyPreObj.amountPaid = res.body.amount;
                     this.createNewCompanyPreObj.orderId = res.body.id;
@@ -147,7 +147,7 @@ export class SelectPlanComponent implements OnInit, OnDestroy {
     }
 
     public getSubscriptionPlans() {
-        this._authenticationService.getAllUserSubsciptionPlans(this.createNewCompanyPreObj.country).subscribe(res => {
+        this._authenticationService.getAllUserSubsciptionPlans(this.createNewCompanyPreObj.country).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.SubscriptionPlans = res.body;
         });
     }

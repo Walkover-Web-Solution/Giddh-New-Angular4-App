@@ -11,11 +11,11 @@
     <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
 </div>
     <!-- form -->
-    <div class="col-xs-12 col-lg-8 col-md-12 mr-t2">
+    <div class="col-xl-10 col-lg-12 col-md-12">
         <div>
             <form class="mr-b2" name="manufacturingForm" #manufacturingForm="ngForm">
                 <div class="row">
-                    <div class="col-xs-4 col-sm-4">
+                    <div class="col-xs-3 col-sm-3">
                         <div class="form-group">
                             <label class="d-block">Product Name</label>
                             <sh-select [options]="stockListDropDown$ | async" [disabled]="isUpdateCase" defaultValue="{{selectedProductName}}" (selected)="getStocksWithRate($event)" [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" placeholder="--Select product--"
@@ -72,6 +72,12 @@
                             </div>
                         </div> -->
                     </div>
+                    <div class="col-xs-3 col-sm-3">
+                        <div class="form-group">
+                            <label class="d-block">Warehouse</label>
+                            <sh-select placeholder="Select Warehouse" [options]="warehouses" [(ngModel)]="manufacturingDetails.warehouseUniqueName" required [isRequired]="true" [defaultValue]="manufacturingDetails?.warehouse?.name"></sh-select>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -87,7 +93,7 @@
                 <!-- right column / add more resources -->
                 <div class="col-md-12 col-lg-6 source resources-table">
                     <h1 class="section-head">Source(Consumption)</h1>
-                    <section class="linkstock">
+                    <section class="link-stock">
                         <table class="col-xs-12 col-sm-12 link-stock-table" *ngIf="manufacturingDetails">
                             <thead>
                                 <tr>
@@ -170,7 +176,7 @@
                             <p class="col-xs-3 col-sm-3 text-right">{{ getTotal('linkedStocks', 'amount') | number:'1.0-2' }}</p>
                         </div>
                         <table class="width-100">
-                            <thead class="tcaption">
+                            <thead class="th-caption">
                                 <tr>
                                     <td class="cp btn-link" (click)="onToggleAddExpensesBlock(toggleAddExpenses);" tooltip="Add A/C where expense entries will be done." placement="top" colspan="5"><i class="icon-plus" aria-hidden="true"></i> Add Expense
                                     </td>

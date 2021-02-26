@@ -575,7 +575,11 @@ span.icon-export-icon {
     .invoice-table.desktop-table.giddh-table {
         td{
            width: 100%;
+           span.justify-content-end{
+               justify-content: flex-start !important;
+           }
         }
+
     }
     .status-mobile{
         display: flex !important;
@@ -828,8 +832,6 @@ span.icon-export-icon {
         align-items: center;
     }
 }
-
-
 
 @media (min-width:768px){
     .min-wid-status{

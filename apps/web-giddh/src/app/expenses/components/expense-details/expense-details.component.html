@@ -77,7 +77,7 @@
                     </div>
 
                     <!-- <div class="d-inline-block">
-                <span class="mr-1 d-inilne-block font-14">USD</span>
+                <span class="mr-1 d-inline-block font-14">USD</span>
                 <div class="toggle d-inline-block" data-key="disabled">
                     <input type="checkbox" class="toggle-checkbox" id="disabled">
                     <label class="toggle-label" for="disabled">
@@ -100,7 +100,7 @@
             </div>
         </div>
 
-        <div class="expences-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
+        <div class="expense-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
             <update-ledger-entry-panel [isPettyCash]="true" [pettyCashEntry]="accountEntryPettyCash"
                 [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
                 [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"

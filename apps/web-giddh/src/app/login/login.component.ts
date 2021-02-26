@@ -78,7 +78,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     public showForgotPassword: boolean = false;
     public forgotStep: number = 0;
     public retryCount: number = 0;
-    public apkVersion: string;
     private imageURL: string;
     private email: string;
     private name: string;
@@ -171,7 +170,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
-        this.getElectronAppVersion();
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
@@ -481,13 +479,4 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.userUniqueKey = null;
     }
 
-    private getElectronAppVersion() {
-        this._authService.GetElectronAppVersion().subscribe((res: string) => {
-            if (res && typeof res === "string") {
-                let version = res.split("files")[0];
-                let versNum = version.split(" ")[1];
-                this.apkVersion = versNum;
-            }
-        });
-    }
 }

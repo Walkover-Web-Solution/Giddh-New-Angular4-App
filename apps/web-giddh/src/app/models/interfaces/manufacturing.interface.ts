@@ -100,7 +100,9 @@ export class ManufacturingItemRequest {
 	public linkedStocks: ILinkedStockForCreate[];
 	public otherExpenses: IOtherExpensesForCreate[];
 	public voucherNumber?: string;
-	public manufacturingMultipleOf?: number;
+    public manufacturingMultipleOf?: number;
+    public warehouse?: any;
+    public warehouseUniqueName?: any;
 }
 
 /*
@@ -121,6 +123,7 @@ export interface IMfStockSearchRequest {
 	page?: number;
     dateRange?: Date[];
     branchUniqueName?: string;
+    warehouseUniqueName?: any;
 }
 
 /*

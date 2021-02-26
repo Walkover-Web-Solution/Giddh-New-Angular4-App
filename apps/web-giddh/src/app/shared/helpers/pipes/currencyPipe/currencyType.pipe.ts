@@ -18,8 +18,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
     constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
         private _generalService: GeneralService) {
         if (!this._generalService.isCurrencyPipeLoaded) {
-            this._generalService.isCurrencyPipeLoaded = true;
-            this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$), distinctUntilKeyChanged('balanceDisplayFormat')).subscribe((o) => {
+            this.store.pipe(select(p => p.settings.profile), distinctUntilKeyChanged('balanceDisplayFormat'), takeUntil(this.destroyed$)).subscribe((o) => {
                 if (o && o.name) {
                     this._currencyNumberType = o.balanceDisplayFormat ? o.balanceDisplayFormat : 'IND_COMMA_SEPARATED';
                     this.currencyDecimalType = o.balanceDecimalPlaces ? o.balanceDecimalPlaces : 0;
@@ -29,6 +28,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
                     if (this._currencyNumberType) {
                         localStorage.setItem('currencyNumberType', this._currencyNumberType);
                     }
+                    this._generalService.isCurrencyPipeLoaded = true;
                 } else {
                     this.getInitialProfileData();
                 }
