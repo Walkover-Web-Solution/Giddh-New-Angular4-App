@@ -5490,9 +5490,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (settings && settings.companyInventorySettings) {
                 this.inventorySettings = settings.companyInventorySettings;
             }
-            if (settings?.invoiceSettings) {
-                this.useCustomInvoiceNumber = settings.invoiceSettings.useCustomInvoiceNumber;
-            }
         });
     }
 
