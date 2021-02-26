@@ -1,8 +1,8 @@
 <div class="branch-transfer-report pd-t1">
     <div class="container-fluid">
         <div class="d-flex date-advance-search">
-            <div class="d-flex">
-                <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'" class="input-group form-group linked-entities">
+            <div class="d-flex flex-sm-row flex-column branch-transfer-flex">
+                <div  *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'" class="input-group form-group linked-entities mb-0">
                     <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" class="branch-dropdown"
                         [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
                         [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">

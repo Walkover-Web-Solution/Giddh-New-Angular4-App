@@ -5865,9 +5865,8 @@ virtual-scroll .scrollable-content .item > a {
     vertical-align: middle;
     height: 100%;
 }
-
-virtual-scroll .scrollable-content .item:hover>a {
-    color: $chetwode-blue !important;
+virtual-scroll .scrollable-content .item:hover > a {
+    color: $nero !important;
 }
 virtual-scroll .scrollable-content .item > a .item-unique,
 virtual-scroll .scrollable-content .item > a .item-stock {
