@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
+import { takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'import-statement',
@@ -9,7 +11,7 @@ import { GeneralService } from '../../../services/general.service';
     styleUrls: ['./import-statement.component.scss']
 })
 
-export class ImportStatementComponent {
+export class ImportStatementComponent implements OnDestroy {
     /** Account unique name */
     @Input() public accountUniqueName: string = '';
     /** Directives to emit true if API call successful */
@@ -21,11 +23,14 @@ export class ImportStatementComponent {
     /** Object for API post parameters */
     public postRequest: any = {file: '', password: ''};
 
+    /** Subject to release subscription memory */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
     constructor(
-        private ledgerService: LedgerService, 
-        public generalService: GeneralService, 
+        private ledgerService: LedgerService,
+        public generalService: GeneralService,
         private toaster: ToasterService) {
-        
+
     }
 
     /**
@@ -60,8 +65,8 @@ export class ImportStatementComponent {
     public importStatement(): void {
         this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
         this.getRequest.accountUniqueName = this.accountUniqueName;
-        
-        this.ledgerService.importStatement(this.getRequest, this.postRequest).subscribe(response => {
+
+        this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.toaster.successToast("File has been uploaded successfully.");
                 this.closeModal.emit(true);
@@ -69,5 +74,15 @@ export class ImportStatementComponent {
                 this.toaster.errorToast(response.message, response.code);
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof ImportStatementComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

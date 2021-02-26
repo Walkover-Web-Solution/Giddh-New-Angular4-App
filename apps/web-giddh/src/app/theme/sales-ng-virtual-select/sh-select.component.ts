@@ -1,13 +1,13 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnDestroy, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { BorderConfiguration, IOption } from './sh-options.interface';
 import { SalesShSelectMenuComponent } from './sh-select-menu.component';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { Subject, ReplaySubject } from 'rxjs';
+import { ReplaySubject, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
@@ -26,7 +26,7 @@ const FLATTEN_SEARCH_TERM = 'flatten';
         }
     ]
 })
-export class SalesShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges {
+export class SalesShSelectComponent implements ControlValueAccessor, AfterViewInit, OnChanges, OnDestroy {
     @Input() public idEl: string = '';
     @Input() public placeholder: string = 'Type to filter';
     @Input() public multiple: boolean = false;
@@ -97,8 +97,6 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
     @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
-    /** Subject to emit current searched value */
-    private dynamicSearchQueryChanged: Subject<string> = new Subject<string>();
     /** To unsubscribe from the dynamic search query subscription */
     private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -278,7 +276,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         }
     }
 
-    public show(e: any) {
+    public show(e?: any) {
         if (this.isOpen || this.disabled) {
             return;
         }
@@ -386,13 +384,10 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         this.hide();
     }
 
-    public ngOnInit() {
-        //
-    }
-
     public ngAfterViewInit() {
         this.viewInitEvent.emit(true);
         this.openDropdown();
+        this.subscribeToQueryChange();
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -491,7 +486,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
             setTimeout(() => {
                 (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
                 if (this.enableDynamicSearch) {
-                    this.dynamicSearchQueryChanged.next(ev.target.value);
+                    this.dynamicSearchedQuery.emit(ev.target.value?.trim());
                 }
             }, 10);
         }
@@ -524,9 +519,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
      * @memberof SalesShSelectComponent
      */
     public handleInputChange(inputText: string): void {
-        if (this.enableDynamicSearch) {
-            this.dynamicSearchQueryChanged.next(inputText);
-        } else {
+        if (!this.enableDynamicSearch) {
             this.updateFilter(inputText);
         }
     }
@@ -538,12 +531,8 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
      */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
-            this.stopDynamicSearch$.next(true);
-            this.stopDynamicSearch$.complete();
-            this.stopDynamicSearch$ = new ReplaySubject(1);
-            this.dynamicSearchQueryChanged = new Subject();
-            this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
-                this.dynamicSearchedQuery.emit(query);
+            fromEvent(this.inputFilter.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((event: any) => {
+                this.dynamicSearchedQuery.emit(event?.target?.value?.trim());
             });
         }
     }
@@ -559,6 +548,16 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
                 (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
             }
         }, 300);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof SalesShSelectComponent
+     */
+    public ngOnDestroy(): void {
+        this.stopDynamicSearch$.next(true);
+        this.stopDynamicSearch$.complete();
     }
 }
 

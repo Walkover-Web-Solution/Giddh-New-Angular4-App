@@ -68,8 +68,8 @@ span.dr-label {
             border-left: 1px solid $very-light-gray !important;
         }
         input{
-            border-left: 1px solid $very-light-gray !important;
-            border-right: none !important;
+            border-left: 1px solid $gainsboro !important;
+            border-right: none;
             &:focus{
                 border-left: 1px solid $chetwode-blue !important;
             }
@@ -138,6 +138,6 @@ form.gstin-form {
 }
 
 .contact-number-select{
-    width: 60px; 
+    width: 60px;
     margin-right: 10px;
 } 

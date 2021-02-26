@@ -87,6 +87,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * by user and not when the user visits the page
      */
     public isAdvanceSearchOpened: boolean = false;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -117,7 +119,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        // set state details
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();
@@ -173,7 +175,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
@@ -360,7 +362,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public checkIsStockEntryAvailable(): any {
         if(this.daybookData$) {
-            this.daybookData$.subscribe(item => {
+            this.daybookData$.pipe(takeUntil(this.destroyed$)).subscribe(item => {
                 this.isEntryExpanded = item.entries.some(entry => {
                     if (entry.isExpanded && entry.otherTransactions) {
                         return entry.otherTransactions.some(otherTrasaction => {

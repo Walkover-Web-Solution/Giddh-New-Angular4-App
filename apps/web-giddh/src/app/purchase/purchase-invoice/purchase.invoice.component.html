@@ -11,7 +11,7 @@
                             <i class="fa fa-caret-down"></i>
                         </span>
                     </button>
-                    <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                    <ul *dropdownMenu class="dropdown-menu page-list-dd" role="menu">
                         <li (click)="onSelectGstrOption(item);" class="cp dd-options" *ngFor="let item of gstrOptions">
                             {{item.name}}
                         </li>
@@ -146,7 +146,7 @@
         <div class="btn-group btn-block" dropdown>
             <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select-drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
  </button>
-            <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+            <ul *dropdownMenu class="dropdown-menu page-list-dd" role="menu">
                 <li class="cp" *ngFor="let item of purchaseReportOptions">
                     {{item.name}}
                 </li>
@@ -249,7 +249,7 @@
                                     class="form-control text-left btn-block dropdown-toggle"> Filter <span
                                         class="select-drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
                                 </button>
-                                <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                                <ul *dropdownMenu class="dropdown-menu page-list-dd" role="menu">
                                     <li *ngFor="let item of otherFilters">
                                         <label>
                                             <input type="checkbox">

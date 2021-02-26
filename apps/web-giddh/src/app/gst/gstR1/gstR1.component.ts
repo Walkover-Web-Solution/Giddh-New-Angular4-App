@@ -14,10 +14,10 @@ export class FileGstR1Component implements OnInit {
     }
 
     public ngOnInit() {
-        $('.tabs_new a').on('click', function (event) {
+        $('.tabs-new a').on('click', function (event) {
             event.preventDefault();
 
-            $('.tabs_new li').removeClass('active');
+            $('.tabs-new li').removeClass('active');
             $(this).parent().addClass('active');
             $('.tab1div').hide();
             $($(this).attr('href')).show();

@@ -2,7 +2,7 @@ import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 import {debounceTime, take, takeUntil} from 'rxjs/operators';
 import {GIDDH_DATE_FORMAT} from './../../shared/helpers/defaultDateFormat';
 import {select, Store} from '@ngrx/store';
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AppState} from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -46,7 +46,7 @@ const taxDuration = [
     ],
     styleUrls: ['./setting.taxes.component.scss'],
 })
-export class SettingTaxesComponent implements OnInit {
+export class SettingTaxesComponent implements OnInit, OnDestroy {
 
     @ViewChild('taxConfirmationModel', {static: true}) public taxConfirmationModel: ModalDirective;
 
@@ -192,4 +192,13 @@ export class SettingTaxesComponent implements OnInit {
         }
     }
 
+    /**
+     * Releases memory
+     *
+     * @memberof SettingTaxesComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

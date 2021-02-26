@@ -23,9 +23,9 @@ import { TaxResponse } from '../../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../../actions/company.actions';
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../../../../inventory/inv.view.service';
-import { GeneralActions } from '../../../../../actions/general/general.actions';
 import { INVALID_STOCK_ERROR_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
+import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 
 @Component({
     selector: 'sales-create-stock',
@@ -102,6 +102,8 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public customField1: boolean = false;
     public customField2: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will hold inventory settings */
+    public inventorySettings: any;
 
     constructor(
         private store: Store<AppState>,
@@ -115,7 +117,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         private companyActions: CompanyActions,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,
-        private _generalActions: GeneralActions
+        private invoiceService: InvoiceService
     ) {
         this.fetchingStockUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingStockUniqueName), takeUntil(this.destroyed$));
         this.isStockNameAvailable$ = this.store.pipe(select(state => state.inventory.isStockNameAvailable), takeUntil(this.destroyed$));
@@ -161,7 +163,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.store.dispatch(this.customStockActions.GetStockUnit());
 
         // subscribe getActiveView parameters
-        this.invViewService.getActiveView().subscribe(v => {
+        this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
             this.groupUniqueName = v.groupUniqueName;
             this.groupName = v.stockName;
             this.stockUniqueName = v.stockUniqueName;
@@ -221,9 +223,13 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             parentGroup: [''],
             hsnNumber: [''],
             sacNumber: [''],
-            taxes: [[]]
+            taxes: [[]],
+            showCodeType: ['']
         });
         this.taxTempArray = [];
+
+        this.showOtherDetails = false;
+        this.getInvoiceSettings();
 
         // subscribe isFsStock for disabling manufacturingDetails
         this.addStockForm.controls['isFsStock'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe((v) => {
@@ -754,8 +760,8 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         stockObj.stockUnitCode = formObj.stockUnitCode;
         stockObj.openingAmount = formObj.openingAmount;
         stockObj.openingQuantity = formObj.openingQuantity;
-        stockObj.hsnNumber = formObj.hsnNumber;
-        stockObj.sacNumber = formObj.sacNumber;
+        stockObj.hsnNumber = (this.addStockForm.get("showCodeType").value === "hsn") ? formObj.hsnNumber : "";
+        stockObj.sacNumber = (this.addStockForm.get("showCodeType").value === "sac") ? formObj.sacNumber : "";
         stockObj.skuCode = formObj.skuCode;
         stockObj.skuCodeHeading = formObj.skuCodeHeading;
         stockObj.customField1Heading = formObj.customField1Heading;
@@ -828,6 +834,8 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             });
         }
 
+        this.showOtherDetails = false;
+
         if (!formObj.parentGroup) {
             let stockRequest = {
                 name: 'Main Group',
@@ -850,7 +858,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         });
 
     }
-
 
     public getParentGroupData() {
         // parentgroup data
@@ -1090,7 +1097,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     }
 
     public openShowOtherDetailsSection() {
-        this.showOtherDetails = true;
+        this.toggleOtherDetails();
         setTimeout(() => {
             this.uniqueName.nativeElement.focus();
         }, 200);
@@ -1171,5 +1178,40 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             return formEntries.length === 0;
         }
         return true;
+    }
+
+    /**
+     * This will get invoice settings
+     *
+     * @memberof SalesAddStockComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = _.cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+            }
+        });
+    }
+
+    /**
+     * This will toggle other details section
+     *
+     * @memberof SalesAddStockComponent
+     */
+    public toggleOtherDetails(): void {
+        this.showOtherDetails = !this.showOtherDetails;
+
+        if(this.addStockForm.get("hsnNumber").value) {
+            this.addStockForm.get("showCodeType").patchValue("hsn");
+        } else if(this.addStockForm.get("sacNumber").value) {
+            this.addStockForm.get("showCodeType").patchValue("sac");
+        } else {
+            if(this.inventorySettings?.manageInventory) {
+                this.addStockForm.get("showCodeType").patchValue("hsn");
+            } else {
+                this.addStockForm.get("showCodeType").patchValue("sac");
+            }
+        }
     }
 }

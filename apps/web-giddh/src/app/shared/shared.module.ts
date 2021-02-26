@@ -87,6 +87,8 @@ import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
+import { AmountFieldComponent } from './amount-field/amount-field.component';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -176,8 +178,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
+        HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
-        HamburgerMenuComponent
+        AmountFieldComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -219,7 +222,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        PdfJsViewerModule
+        PdfJsViewerModule,
+        CurrencyModule
     ],
     exports: [
         CommonModule,
@@ -271,7 +275,9 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        HamburgerMenuComponent
+        HamburgerMenuComponent,
+        AmountFieldComponent,
+        CurrencyModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

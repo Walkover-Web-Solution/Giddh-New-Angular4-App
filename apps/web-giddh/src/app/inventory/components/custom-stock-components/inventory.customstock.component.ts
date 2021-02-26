@@ -76,7 +76,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             if (!_.isEmpty(profileData)) {
                 this.companyProfile = _.cloneDeep(profileData);
                 this.giddhDecimalPlaces = this.companyProfile.balanceDecimalPlaces || 2;
-                this.inventoryService.getUnitCodeRegex('stockUnit', this.companyProfile.country || '').subscribe((data: any) => {
+                this.inventoryService.getUnitCodeRegex('stockUnit', this.companyProfile.country || '').pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
                     if (data && data.body) {
                         this.stockUnitCodeRegex = data.body.regex;
                     }

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, StatesRequest, SubscriptionRequest } from '../models/api-models/Company';
@@ -78,6 +78,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public liveRazorPayKeyforAuthentication = 'rzp_live_4UTBGkTT0iZmMW';
     public testRazorPayKeyforAuthentication = 'rzp_test_QS3CQB90ukHDIF';
     public razorpayAuthKey = 'rzp_live_4UTBGkTT0iZmMW';
+
+    /** Form instance */
+    @ViewChild('billingForm', {static: true}) billingForm: NgForm;
 
     private activeCompany;
 
@@ -168,6 +171,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.razorpayAuthKey = this.liveRazorPayKeyforAuthentication;
         }
+        this.getOnboardingForm();
+
     }
 
     public getPayAmountForRazorPay(amt: any) {
@@ -218,10 +223,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.billingDetailsObj.stateCode = s.value;
                         statesEle.setDisabledState(true);
                     } else {
-                        this.billingDetailsObj.stateCode = '';
                         statesEle.setDisabledState(false);
                         this._toasty.clearAllToaster();
-                        this._toasty.warningToast('Invalid .' + this.formFields['taxName'].label);
+                        if (this.formFields['taxName'] && !this.billingForm.form.get('gstin')?.valid) {
+                            this.billingDetailsObj.stateCode = '';
+                            this._toasty.warningToast('Invalid .' + this.formFields['taxName'].label);
+                        }
                     }
                 });
             } else {
@@ -260,7 +267,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         }
         if (this.subscriptionPrice && this.UserCurrency) {
-            this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).subscribe((res: any) => {
+            this._companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 this.isCreateAndSwitchCompanyInProcess = false;
                 if (res.status === 'success') {
                     this.ChangePaidPlanAMT = res.body.amount;
@@ -369,6 +376,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.createNewCompany.uniqueName = this.activeCompany.uniqueName;
             this.createNewCompany.address = this.activeCompany.address;
             this.createNewCompany.addresses = this.activeCompany.addresses;
+            this.createNewCompany.businessType = this.activeCompany.businessType;
+            this.createNewCompany.businessNature = this.activeCompany.businessNature;
             this.createNewCompany.subscriptionRequest = new SubscriptionRequest();
             this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails.uniqueName : '';
 
@@ -441,7 +450,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
                 onboardingFormRequest.formName = 'onboarding';
-                onboardingFormRequest.country = this.createNewCompany.country;
+                onboardingFormRequest.country = this.createNewCompany?.country || this.activeCompany?.countryV2?.alpha2CountryCode || '';
                 this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
             }
         });
@@ -477,7 +486,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public getCurrentCompanyData(): void {
-        this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
+        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.store.dispatch(this.settingsProfileActions.handleCompanyProfileResponse(response));
                 this.store.dispatch(this.companyActions.setActiveCompanyData(response.body));

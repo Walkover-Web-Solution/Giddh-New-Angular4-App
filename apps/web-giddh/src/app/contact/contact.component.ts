@@ -250,6 +250,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private store: Store<AppState>,
@@ -333,6 +335,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.currentOrganizationType = this._generalService.currentOrganizationType;
         // localStorage supported
         if (window.localStorage) {
             let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
@@ -443,7 +446,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    if (this._generalService.currentOrganizationType === OrganizationType.Branch) {
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this._generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
                     } else {
@@ -706,7 +709,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public deleteComment(accountUniqueName) {
         setTimeout(() => {
-            this._contactService.deleteComment(accountUniqueName).subscribe(res => {
+            this._contactService.deleteComment(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res.status === 'success') {
                     this.updateCommentIdx = null;
                 }
@@ -760,7 +763,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public addComment(account) {
         setTimeout(() => {
-            this._contactService.addComment(account.comment, account.uniqueName).subscribe(res => {
+            this._contactService.addComment(account.comment, account.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res.status === 'success') {
                     this.updateCommentIdx = null;
                     account.comment = cloneDeep(res.body.description);
@@ -828,7 +831,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         // request.data = Object.assign({} , request.data, this.formattedQuery);
 
         if (this.messageBody.btn.set === 'Send Email') {
-            return this._companyServices.sendEmail(request)
+            return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
                     r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
                     this.checkboxInfo = {
@@ -840,7 +843,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         } else if (this.messageBody.btn.set === 'Send Sms') {
             let temp = request;
             delete temp.data['subject'];
-            return this._companyServices.sendSms(temp)
+            return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
                     r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
                     this.checkboxInfo = {
@@ -1060,7 +1063,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
         };
 
-        this._companyServices.downloadCSV(request).subscribe((res) => {
+        this._companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.searchLoader$ = observableOf(false);
             if (res.status === 'success') {
                 let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
@@ -1116,7 +1119,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         toDate = (toDate) ? toDate : '';
         this.currentPage = pageNumber;
 
-        this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).subscribe((res) => {
+        this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.body && res.status === 'success') {
                 this.openingBalance = res.body.openingBalance;
 
@@ -1393,7 +1396,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public getCompanyCustomField(): void {
-        this.groupService.getCompanyCustomField().subscribe(response => {
+        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.companyCustomFields$ = observableOf(response.body);
                 if (response.body) {

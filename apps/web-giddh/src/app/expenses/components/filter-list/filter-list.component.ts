@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 	styleUrls: ['./filter-list.component.scss'],
 })
 
-export class FilterListComponent implements OnInit, OnChanges {
+export class FilterListComponent implements OnInit, OnChanges, OnDestroy {
 
 	public monthNames = ["January", "February", "March", "April", "May", "June",
 		"July", "August", "September", "October", "November", "December"
@@ -69,5 +69,15 @@ export class FilterListComponent implements OnInit, OnChanges {
 		this.selectedItem = item;
 		this.selectedDetailedRowInput.emit(item);
 		this.store.dispatch(this._expenceActions.getPettycashEntryRequest(item.uniqueName));
-	}
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof FilterListComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }

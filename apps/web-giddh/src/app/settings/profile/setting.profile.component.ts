@@ -780,6 +780,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias;
         this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params? params : this.currentBranchDetails))
+            .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
                     if (response.status === 'success') {
@@ -816,7 +817,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
-        this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
+        this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
@@ -835,7 +836,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadStates(countryCode: string): void {
-        this.companyService.getAllStates({country: countryCode}).subscribe(response => {
+        this.companyService.getAllStates({country: countryCode}).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
@@ -861,7 +862,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
-        this.commonService.getOnboardingForm(onboardingFormRequest).subscribe((response: any) => {
+        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === 'success') {
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
@@ -934,7 +935,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             linkEntity
         };
 
-        this.settingsProfileService.createNewAddress(requestObj).subscribe(response => {
+        this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.closeAddressSidePane = true;
                 if (this.currentOrganizationType === OrganizationType.Company) {
@@ -977,7 +978,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             uniqueName: addressDetails.formValue.uniqueName,
             linkEntity
         };
-        this.settingsProfileService.updateAddress(requestObj).subscribe(response => {
+        this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 this.closeAddressSidePane = true;
                 this.loadAddresses('GET');
@@ -998,7 +999,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleDeleteAddress(addressDetails: any): void {
-        this.settingsProfileService.deleteAddress(addressDetails.uniqueName).subscribe(response => {
+        this.settingsProfileService.deleteAddress(addressDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.loadAddresses('GET');
             this._toasty.successToast('Address deleted successfully');
         });
@@ -1016,7 +1017,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             alias: this.currentBranchDetails.alias,
             linkAddresses: this.currentBranchDetails.addresses.filter(address => address.uniqueName !== addressDetails.uniqueName)
         }
-        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+        this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.store.dispatch(this.settingsProfileActions.getBranchInfo());
             this._toasty.successToast('Address unlinked successfully');
         });
@@ -1047,7 +1048,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 return address;
             })
         }
-        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+        this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.store.dispatch(this.settingsProfileActions.getBranchInfo());
             this._toasty.successToast('Address updated successfully');
         });
@@ -1157,7 +1158,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private loadAddresses(method: string, params?: any): void {
         if (this.currentOrganizationType === OrganizationType.Company) {
             this.shouldShowAddressLoader = true;
-            this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
+            this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.shouldShowAddressLoader = false;
                 if (response && response.body && response.status === 'success') {
                     this.updateAddressPagination(response.body);

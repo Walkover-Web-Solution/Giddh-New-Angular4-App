@@ -154,10 +154,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             this.isAllChecked = isAllChecked;
 
             entries.forEach((entry) => {
-                let indexOfEntry = this.selectedItems.indexOf(entry.uniqueName);
+                let indexOfEntry = this.selectedItems.indexOf(entry?.uniqueName);
                 if (isAllChecked) {
                     if (indexOfEntry === -1) {
-                        this.selectedItems.push(entry.uniqueName);
+                        this.selectedItems.push(entry?.uniqueName);
                     }
                 } else if (indexOfEntry > -1) {
                     this.selectedItems.splice(indexOfEntry, 1);
@@ -306,7 +306,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
             request.data = Object.assign({}, request.data, formattedQuery);
 
-            this._companyServices.downloadCSV(request).subscribe((res) => {
+            this._companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.searchLoader$ = of(false);
                 if (res.status === 'success') {
                     let blobData = this.base64ToBlob(res.body, 'text/csv', 512);
@@ -408,9 +408,9 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
     public toggleSelection(ev, item: AccountFlat) {
         let isChecked = ev.target.checked;
-        let indexOfEntry = this.selectedItems.indexOf(item.uniqueName);
+        let indexOfEntry = this.selectedItems.indexOf(item?.uniqueName);
         if (isChecked && indexOfEntry === -1) {
-            this.selectedItems.push(item.uniqueName);
+            this.selectedItems.push(item?.uniqueName);
         } else {
             this.selectedItems.splice(indexOfEntry, 1);
             this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
@@ -433,7 +433,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             accountsUnqList = [];
             p.forEach((item: AccountFlat) => {
                 if (item.isSelected) {
-                    accountsUnqList.push(item.uniqueName);
+                    accountsUnqList.push(item?.uniqueName);
                 }
             });
         });
@@ -461,7 +461,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             request.data = Object.assign({}, request.data, this.formattedQuery);
 
             if (this.messageBody.btn.set === 'Send Email') {
-                return this._companyServices.sendEmail(request)
+                return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
                         r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
                         this.checkboxInfo = {
@@ -471,7 +471,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             } else if (this.messageBody.btn.set === 'Send Sms') {
                 let temp = request;
                 delete temp.data['subject'];
-                return this._companyServices.sendSms(temp)
+                return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
                         r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
                         this.checkboxInfo = {
