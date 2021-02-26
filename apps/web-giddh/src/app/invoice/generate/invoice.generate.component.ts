@@ -293,6 +293,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.isBulkInvoiceGenerated$.subscribe(result => {
             if (result) {
                 this.toggleAllItems(false);
+                this.getLedgersOfInvoice();
             }
         });
         this.isBulkInvoiceGeneratedWithoutErr$.subscribe(result => {
@@ -726,6 +727,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.toggleAllItems(false);
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.store.dispatch(this.invoiceActions.resetPendingData());
     }
 
     public resetDateSearch() {
