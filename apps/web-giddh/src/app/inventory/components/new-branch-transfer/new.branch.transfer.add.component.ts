@@ -156,7 +156,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.getTransportersList();
         this.getStock();
 
-
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
                 let companyInfo = _.cloneDeep(o);
@@ -275,6 +274,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 name: null,
                 hsnNumber: null,
                 sacNumber: null,
+                showCodeType: null,
                 skuCode: null,
                 uniqueName: null,
                 stockDetails: {
@@ -431,6 +431,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             name: null,
             hsnNumber: null,
             sacNumber: null,
+            showCodeType: null,
             skuCode: null,
             uniqueName: null,
             stockDetails: {
@@ -553,10 +554,28 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.stockDetails.quantity = product.stockDetails.quantity || 1;
             product.skuCode = event.additional.skuCode;
 
-            if (this.inventorySettings.manageInventory || !event.additional.sacNumber) {
+            if (event.additional?.hsnNumber && event.additional?.sacNumber) {
+                if(this.inventorySettings?.manageInventory) {
+                    product.hsnNumber = event.additional.hsnNumber;
+                    product.showCodeType = "hsn";
+                } else {
+                    product.sacNumber = event.additional.sacNumber;
+                    product.showCodeType = "sac";
+                }
+            } else if(event.additional?.hsnNumber && !event.additional?.sacNumber) {
                 product.hsnNumber = event.additional.hsnNumber;
-            } else {
+                product.showCodeType = "hsn";
+            } else if(!event.additional?.hsnNumber && event.additional?.sacNumber) {
                 product.sacNumber = event.additional.sacNumber;
+                product.showCodeType = "sac";
+            } else if(!event.additional?.hsnNumber && !event.additional?.sacNumber) {
+                if(this.inventorySettings?.manageInventory) {
+                    product.hsnNumber = "";
+                    product.showCodeType = "hsn";
+                } else {
+                    product.sacNumber = "";
+                    product.showCodeType = "sac";
+                }
             }
 
             if (this.transferType === 'senders') {
@@ -989,6 +1008,14 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.branchTransfer.entity = this.branchTransferMode;
         this.branchTransfer.transferType = this.transferType;
 
+        this.branchTransfer.products.forEach(product => {
+            if(product.showCodeType === "hsn") {
+                product.sacNumber = "";
+            } else {
+                product.hsnNumber = "";
+            }
+        });
+
         if (this.editBranchTransferUniqueName) {
             this.inventoryService.updateNewBranchTransfer(this.branchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
@@ -1036,7 +1063,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public focusHsnNumber(): void {
         this.hideSkuNumberPopup();
-        this.hsnNumber = ((this.inventorySettings.manageInventory && this.branchTransfer.products[this.activeRow].hsnNumber) || !this.branchTransfer.products[this.activeRow].sacNumber) ? this.branchTransfer.products[this.activeRow].hsnNumber : (this.branchTransfer.products[this.activeRow].sacNumber) ? this.branchTransfer.products[this.activeRow].sacNumber : "";
+        this.hsnNumber = this.branchTransfer.products[this.activeRow].showCodeType === "hsn" ? this.branchTransfer.products[this.activeRow].hsnNumber :  this.branchTransfer.products[this.activeRow].sacNumber;
         this.hsnPopupShow = true;
         setTimeout(() => {
             if(this.productHsnNumber && this.productHsnNumber.nativeElement) {
@@ -1073,10 +1100,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public saveHsnNumberPopup(product): void {
-        if ((this.inventorySettings.manageInventory || !product.sacNumber)) {
+        if (product.showCodeType === "hsn") {
             product.hsnNumber = this.hsnNumber;
+            product.sacNumber = "";
         } else {
             product.sacNumber = this.hsnNumber;
+            product.hsnNumber = "";
         }
         this.hsnPopupShow = false;
     }
@@ -1097,6 +1126,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.sources = response.body.sources;
                 this.branchTransfer.destinations = response.body.destinations;
                 this.branchTransfer.products = response.body.products;
+
+                if(this.branchTransfer.products?.length > 0) {
+                    this.branchTransfer.products.forEach(product => {
+                        if(product.hsnNumber) {
+                            product.showCodeType = "hsn";
+                        } else {
+                            product.showCodeType = "sac";
+                        }
+                    });
+                }
+
                 this.branchTransfer.entity = response.body.entity;
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
                 this.branchTransfer.transporterDetails = response.body.transporterDetails;
