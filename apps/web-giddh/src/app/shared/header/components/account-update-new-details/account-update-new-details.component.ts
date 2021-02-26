@@ -967,6 +967,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public isParentDebtorCreditor(activeParentgroup: string) {
         this.activeParentGroup = activeParentgroup;
+        this.toggleStateRequired();
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -1363,7 +1364,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors')) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors')) {
             return true;
         } else {
             return false;
