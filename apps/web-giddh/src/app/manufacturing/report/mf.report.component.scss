@@ -65,8 +65,16 @@
         border-right: 1px solid $gainsboro !important;
     }
     td.raw-material {
+        background-color: $gray-95;
         line-height: 2;
         color: $matterhorn;
+    }
+    tr{
+        &:hover{
+            td.raw-material{
+                background-color: rgba(221, 225, 230, 0.5);
+            }
+        }
     }
 }
 .material-head{
@@ -96,8 +104,13 @@
         }
     }
 }
-
-@media(min-width:1441px){
+.regular-font {
+    font-family: 'opensans-regular';
+}
+.row-gray-background th {
+    background-color: $medium-gray;
+}
+@media(min-width:1441px) and (max-width:1920px){
     .manufacturing-head{
         .col-xl-3{
             flex: 0 0 16.666667%;
@@ -106,6 +119,10 @@
         .col-xl-6 {
             flex: 0 0 66.666667%;
             max-width: 66.666667%;
+        }
+        .col-xl-9 {
+            flex: 0 0 83%;
+            max-width: 83%;
         }
     }
 }
@@ -204,10 +221,8 @@
     .mobile-none{
         display:none;
     }
-}
-.regular-font {
-    font-family: 'opensans-regular';
-}
-.row-gray-background th {
-    background-color: $medium-gray;
+    #mfReportTbl .table td {
+        min-width: auto !important;
+        max-width: inherit !important;
+    }
 }

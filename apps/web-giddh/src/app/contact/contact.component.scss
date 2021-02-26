@@ -378,20 +378,26 @@ button.btn.btn-filter span.icon-cross {
     width: 200px;
 }
 /*responsive*/
-@media(max-width:800px){
+@media(max-width:1024px){
     .customer-form-inline{
         position: relative;
         display: flex;
         flex-direction: column;
         align-items: initial;
-        .dis {
-            position: absolute;
-            left: 0;
-            top: 0;
+        .wrap-search-entity{
+            display: flex;
+        }
+        .linked-entities{
+            width: 80%;
         }
         .header-left {
             width: calc(100% - 50px);
             margin-left: 45px;
+            &.on-company{
+                width: 100%;
+                margin-left: 0;
+                margin-bottom: 10px;
+            }
             .form-group {
                 vertical-align: bottom !important;
                 margin-bottom: 5px;
@@ -536,6 +542,30 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (max-width: 575px) {
+    .customer-form-inline{
+        .wrap-search-entity{
+            flex-direction: column;
+            .dis {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            .linked-entities{
+                width: calc(100% - 50px);
+                margin-bottom: 15px;
+                margin-left: 50px;
+            }
+            .header-left{
+                width: 100%;
+                margin-left: 0;
+                &.on-company{
+                    width: calc(100% - 50px);
+                    margin-left: 45px;
+                }
+            }
+        }
+
+    }
     .customer-footer-box+.btn-group {
         float: none !important;
         width: 100%;
@@ -549,7 +579,7 @@ button.btn.btn-filter span.icon-cross {
         .customer-inner-box {
             display: flex;
             align-items: center;
-            padding-top: 6px;
+            padding-top: 0;
             h5 {
                 font-size: 16px;
                 .number-total {

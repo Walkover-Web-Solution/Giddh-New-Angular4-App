@@ -95,7 +95,7 @@
         display: none;
     }
 }
-@media (max-width: 575px) {
+@media (max-width: 767px) {
     .expand-collapse-btn.form-group {
         display: none !important;
     }
@@ -103,8 +103,26 @@
         display: inline-block;
     }
     .expand-export {
-        margin-top: 10px;
         float: none;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 15px;
+    }
+    .linked-entities{
+        margin-bottom: 0 !important;
+    }
+}
+@media(max-width:575px){
+    .daybook-filter{
+        clear: both;
+    }
+    .linked-entities{
+        width: 100%;
+    }
+    .advance-icon{
+        margin-left: 21px;
+        margin-right:0;
     }
 }
 @media (min-width: 320px) {
