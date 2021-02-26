@@ -11,6 +11,9 @@ import { ToasterService } from '../services/toaster.service';
 import { NgForm } from '@angular/forms';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { take, takeUntil } from 'rxjs/operators';
+import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import * as moment from 'moment';
 
 @Component({
     selector: 'new-vs-old-invoices',
@@ -57,19 +60,42 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
 
     constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions, private _companyActions: CompanyActions,
-        private _toasty: ToasterService) {
+        private _toasty: ToasterService, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.NewVsOldInvoicesQueryRequest = new NewVsOldInvoicesRequest();
         this.NewVsOldInvoicesData$ = this.store.pipe(select(s => s.newVsOldInvoices.data), takeUntil(this.destroyed$));
         this.isRequestSuccess$ = this.store.pipe(select(s => s.newVsOldInvoices.requestInSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        let startYear = 2014;
-        let endYear = new Date().getUTCFullYear();
-        
-        for(startYear; startYear <= endYear; startYear++) {
-            this.yearOptions.push({label: String(startYear), value: String(startYear)});
-        }
+        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
+
+        this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.startDate && response.endDate) {
+                this.yearOptions = [];
+                let startYear = Number(moment(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
+                let endYear = Number(moment(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
+                
+                for(startYear; startYear <= endYear; startYear++) {
+                    this.yearOptions.push({label: String(startYear), value: String(startYear)});
+                }
+            }
+        });
+
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                let universalEndDate = moment(response[1]).format("YYYY");
+
+                if(moment(response[1]).toDate() >= moment().toDate()) {
+                    this.selectedYear = (new Date()).getFullYear().toString();
+                    this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2).toString();
+                    this.go();
+                } else {
+                    this.selectedYear = universalEndDate;                    
+                    this.selectedmonth = ("0" + (moment(response[1]).format("M"))).slice(-2).toString();
+                    this.go();
+                }
+            }
+        });
 
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
@@ -108,10 +134,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 this.invoiceCountAll = 0;
             }
         });
-
-        this.selectedYear = (new Date()).getFullYear().toString();
-        this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2).toString();
-        this.go();
     }
 
     public ChangingValue(event) {
@@ -181,9 +203,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 if (s) {
                     this.isLoading = false;
                     if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
-                        this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth).label;
+                        this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth)?.label;
                     } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
-                        this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater).label;
+                        this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater)?.label;
                     }
     
                     this.bifurcationClients = this.localeData?.bifurcation_clients.replace("[COLUMN_NAME]", this.columnName);
