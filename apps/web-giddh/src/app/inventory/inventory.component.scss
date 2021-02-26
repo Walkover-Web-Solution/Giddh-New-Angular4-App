@@ -99,26 +99,29 @@
         display: flex;
     }
 }
-
-
-@media (max-width:445px){
-.inventory-control .container-fluid {
-    .branch-warehouse-filter {
-        width: 100%;
-        sh-select{
-            min-width: auto;
-        }
-    }
-    .branch-filter {
-        margin-right: 0px;
-        width: 100% !important;
-    }
-    .warehouse-filter{
-        max-width: auto;
-        width: 100%;
-        margin-left:15px;
+@media(max-width:575px){
+    .wrap-top-inventory{
+        flex-direction: column;
     }
 }
+@media (max-width:445px){
+    .inventory-control .container-fluid {
+        .branch-warehouse-filter {
+            width: 100%;
+            sh-select{
+                min-width: auto;
+            }
+        }
+        .branch-filter {
+            margin-right: 0px;
+            width: 100% !important;
+        }
+        .warehouse-filter{
+            max-width: auto;
+            width: 100%;
+            margin-left:15px;
+        }
+    }
 }
 
 @media(max-width:325px){

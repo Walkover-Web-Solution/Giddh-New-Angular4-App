@@ -42,7 +42,7 @@
                             </sh-select>
                         </div>
                     </div>
-                    <div class="col-md-6 mr-b15 datepicker-flex" [ngClass]="currentCompanyBranches?.length > 2 ? 'col-xl-3 col-lg-4 ' : 'col-xl-2 col-lg-4'">
+                    <div class="col-md-6 mr-b15 datepicker-flex" [ngClass]="(currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY') ? 'col-xl-3 col-lg-4 ' : 'col-xl-3 col-lg-4'">
                         <label class="d-block font-14 pb-1">From - To</label>
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                             <i class="icon-calender calendar-addon"></i>
@@ -50,7 +50,7 @@
                                 class="giddh-datepicker date-range-picker" />
                         </div>
                     </div>
-                    <div class="col-md-6" [ngClass]="currentCompanyBranches?.length > 2 ? 'col-xl-6 col-lg-4' : 'col-xl-10 col-lg-8'" *ngIf="!isMobileScreen">
+                    <div class="col-md-6" [ngClass]="(currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY') ? 'col-xl-6 col-lg-4' : 'col-xl-9 col-lg-8'" *ngIf="!isMobileScreen">
                         <div class="d-flex"
                         [ngClass]="(showClearFilter()) ? 'justify-content-between' : 'justify-content-end'">
                             <div *ngIf="showClearFilter()">
