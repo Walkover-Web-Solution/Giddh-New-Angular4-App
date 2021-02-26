@@ -927,7 +927,7 @@
                                 <img src="assets/images/edit-pencilicon.svg" class="edit-pencil" *ngIf="!autoSaveIcon"
                                     (click)="showCurrencyValue = !showCurrencyValue ; autoSaveIcon = !autoSaveIcon; exchangeRate = originalExchangeRate">
                                 <img src=" assets/images/autosave.svg" class="edit-pencil"
-                                    (click)="originalExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; updateStockEntries(); calculateGrandTotal()"
+                                    (click)="originalExchangeRate = exchangeRate; previousExchangeRate = exchangeRate; autoSaveIcon = !autoSaveIcon; showCurrencyValue= !showCurrencyValue; updateStockEntries(); calculateGrandTotal()"
                                     *ngIf="autoSaveIcon">
                             </span>
 
