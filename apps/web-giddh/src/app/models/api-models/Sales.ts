@@ -236,6 +236,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public requiredTax?: boolean;
     public maxQuantity?: number;
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
+    public showCodeType: string;
 
     constructor() {
         super();
@@ -244,6 +245,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         this.isStockTxn = false;
         this.hsnOrSac = 'hsn';
         this.taxableValue = 0;
+        this.showCodeType = "";
     }
 
     // basic check for valid transaction

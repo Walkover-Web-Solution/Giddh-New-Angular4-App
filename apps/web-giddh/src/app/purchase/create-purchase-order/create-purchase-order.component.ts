@@ -1380,6 +1380,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         transaction.sacNumber = null;
         transaction.hsnNumber = null;
         transaction.sacNumberExists = false;
+        transaction.showCodeType = "";
     }
 
     /**
@@ -1397,11 +1398,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             });
         }
 
-        if (this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        if (transaction.showCodeType === "hsn") {
             this.editingHsnSac = transaction.hsnNumber;
-        }
-
-        if (this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        } else if (transaction.showCodeType === "sac") {
             this.editingHsnSac = transaction.sacNumber;
         }
 
@@ -1415,11 +1414,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public hideHsnSacEditPopup(transaction: any): void {
-        if (this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        if (transaction.showCodeType === "hsn") {
             transaction.hsnNumber = this.editingHsnSac;
-        }
-
-        if (this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+        } else if (transaction.showCodeType === "sac") {
             transaction.sacNumber = this.editingHsnSac;
         }
 
@@ -2246,8 +2243,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 transactionClassMul.account.uniqueName = transaction.accountUniqueName;
                 transactionClassMul.account.name = transaction.accountName;
                 transactionClassMul.amount.amountForAccount = transaction.amount;
-                salesEntryClass.hsnNumber = transaction.hsnNumber;
-                salesEntryClass.sacNumber = transaction.sacNumber;
+                salesEntryClass.hsnNumber = (transaction.showCodeType === "hsn") ? transaction.hsnNumber : "";
+                salesEntryClass.sacNumber = (transaction.showCodeType === "sac") ? transaction.sacNumber : "";
                 salesEntryClass.description = transaction.description;
                 if (transaction.isStockTxn) {
                     let salesAddBulkStockItems = new SalesAddBulkStockItems();
@@ -2621,6 +2618,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 salesTransactionItemClass.hsnNumber = transaction.hsnNumber;
                 salesTransactionItemClass.sacNumber = transaction.sacNumber;
                 salesTransactionItemClass.sacNumberExists = (transaction.sacNumber) ? true : false;
+                salesTransactionItemClass.showCodeType = transaction.hsnNumber ? "hsn" : "sac";
                 salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName;
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = transaction.date;
@@ -3365,24 +3363,70 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         transaction.sacNumberExists = false;
         transaction.hsnNumber = null;
 
-        if (transaction.stockDetails && transaction.stockDetails.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !transaction.stockDetails.sacNumber)) {
+        if (transaction.stockDetails?.hsnNumber && transaction.stockDetails?.sacNumber) {
+            if(this.inventorySettings?.manageInventory) {
+                transaction.hsnNumber = transaction.stockDetails.hsnNumber;
+                transaction.hsnOrSac = 'hsn';
+                transaction.showCodeType = "hsn"; 
+            } else {
+                transaction.sacNumber = transaction.stockDetails.sacNumber;
+                transaction.sacNumberExists = true;
+                transaction.hsnOrSac = 'sac';
+                transaction.showCodeType = "sac";
+            }
+        } else if (transaction.stockDetails?.hsnNumber && !transaction.stockDetails?.sacNumber) {
             transaction.hsnNumber = transaction.stockDetails.hsnNumber;
             transaction.hsnOrSac = 'hsn';
-        }
-        if (transaction.stockDetails && transaction.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
+            transaction.showCodeType = "hsn";
+        } else if (transaction.stockDetails?.sacNumber && !transaction.stockDetails?.hsnNumber) {
             transaction.sacNumber = transaction.stockDetails.sacNumber;
             transaction.sacNumberExists = true;
             transaction.hsnOrSac = 'sac';
+            transaction.showCodeType = "sac";
+        } else if (!transaction.stockDetails?.sacNumber && !transaction.stockDetails?.hsnNumber) {
+            if(this.inventorySettings?.manageInventory) {
+                transaction.hsnNumber = "";
+                transaction.hsnOrSac = 'hsn';
+                transaction.showCodeType = "hsn";
+            } else {
+                transaction.sacNumber = "";
+                transaction.sacNumberExists = true;
+                transaction.hsnOrSac = 'sac';
+                transaction.showCodeType = "sac";
+            }
         }
 
-        if (!additional.stock && additional.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !additional.sacNumber)) {
+        if(!additional.stock && additional.hsnNumber && additional.sacNumber) {
+            if(this.inventorySettings?.manageInventory) {
+                transaction.hsnNumber = additional.hsnNumber;
+                transaction.hsnOrSac = 'hsn';
+                transaction.showCodeType = "hsn";
+            } else {
+                transaction.sacNumber = additional.sacNumber;
+                transaction.sacNumberExists = true;
+                transaction.hsnOrSac = 'sac';
+                transaction.showCodeType = "sac";
+            }
+        } else if(!additional.stock && additional.hsnNumber && !additional.sacNumber) {
             transaction.hsnNumber = additional.hsnNumber;
             transaction.hsnOrSac = 'hsn';
-        }
-        if (!additional.stock && additional.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
+            transaction.showCodeType = "hsn";
+        } else if(!additional.stock && !additional.hsnNumber && additional.sacNumber) {
             transaction.sacNumber = additional.sacNumber;
             transaction.sacNumberExists = true;
             transaction.hsnOrSac = 'sac';
+            transaction.showCodeType = "sac";
+        } else if(!additional.stock && !additional.hsnNumber && !additional.sacNumber) {
+            if(this.inventorySettings?.manageInventory) {
+                transaction.hsnNumber = "";
+                transaction.hsnOrSac = 'hsn';
+                transaction.showCodeType = "hsn";
+            } else {
+                transaction.sacNumber = "";
+                transaction.sacNumberExists = true;
+                transaction.hsnOrSac = 'sac';
+                transaction.showCodeType = "sac";
+            }
         }
 
         setTimeout(() => {
