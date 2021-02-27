@@ -3256,7 +3256,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         for (let index = entryIdx + 1; index < this.invFormData.entries.length; index++) {
             const viewRef: any = this.container.get(index);
-            viewRef.context.entryIdx -= 1;
+            if(viewRef) {
+                viewRef.context.entryIdx -= 1;
+            }
         }
         if (this.container) {
             this.container.remove(entryIdx);
@@ -6155,6 +6157,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public addPoItems(poUniqueName: string, entries: any): void {
         this.startLoader(true);
+
+        let blankItemIndex = this.invFormData.entries.findIndex(entry => !entry.transactions[0].accountUniqueName);
+        let isBlankItemPresent;
+        let startIndex = this.invFormData.entries.length;
+        if (blankItemIndex > -1) {
+            isBlankItemPresent = true;
+        } else {
+            isBlankItemPresent = false;
+        }
+
         entries.forEach(entry => {
             let transactionLoop = 0;
 
@@ -6219,10 +6231,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     transactionLoop++;
                 }
-
             });
         });
         this.startLoader(false);
+        this.buildBulkData(this.invFormData.entries.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
 
     /**
@@ -6802,7 +6814,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private loadTaxesAndDiscounts(startIndex: number): void {
-        this.showBulkLoader = true;
+        if(startIndex < this.invFormData.entries.length) {
+            this.showBulkLoader = true;
+        }
         for (let index = startIndex; index < this.invFormData.entries.length; index++) {
             setTimeout(() => {
                 this.activeIndx = index;
