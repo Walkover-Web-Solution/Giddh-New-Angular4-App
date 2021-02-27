@@ -58,6 +58,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public bifurcationClients: string = "";
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** This will hold report year */
+    public reportYear: string;
 
     constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions, private _companyActions: CompanyActions,
         private _toasty: ToasterService, private settingsFinancialYearActions: SettingsFinancialYearActions) {
@@ -169,6 +171,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         } else {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedQuater + '-' + this.selectedYear;
         }
+
+        this.reportYear = this.selectedYear;
 
         this.store.dispatch(this._NewVsOldInvoicesActions.GetNewVsOldInvoicesRequest(this.NewVsOldInvoicesQueryRequest));
     }
