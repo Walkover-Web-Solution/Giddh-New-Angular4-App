@@ -172,6 +172,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
             this.NewVsOldInvoicesQueryRequest.value = this.selectedQuater + '-' + this.selectedYear;
         }
 
+        this.reportYear = this.selectedYear;
+
         this.store.dispatch(this._NewVsOldInvoicesActions.GetNewVsOldInvoicesRequest(this.NewVsOldInvoicesQueryRequest));
     }
 
