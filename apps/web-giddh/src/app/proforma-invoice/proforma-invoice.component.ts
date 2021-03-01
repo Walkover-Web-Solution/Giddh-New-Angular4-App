@@ -602,6 +602,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public allowFocus: boolean = true;
     /** True, when bulk items are added */
     public showBulkLoader: boolean;
+    /** This will hold how many linked po items added */
+    public linkedPoItemsAdded: number = 0;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -2899,6 +2901,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             txn.maxQuantity = maxQuantity;
 
                             this.calculateWhenTrxAltered(entry, txn);
+
+                            this.linkedPoItemsAdded++;
                         }
                     }
                 }, () => {
@@ -3256,7 +3260,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         for (let index = entryIdx + 1; index < this.invFormData.entries.length; index++) {
             const viewRef: any = this.container.get(index);
-            viewRef.context.entryIdx -= 1;
+            if(viewRef) {
+                viewRef.context.entryIdx -= 1;
+            }
         }
         if (this.container) {
             this.container.remove(entryIdx);
@@ -5431,6 +5437,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this._toasty.errorToast(response.message, response.code);
         }
         this.updateAccount = false;
+        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
     }
 
     /**
@@ -6154,6 +6161,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public addPoItems(poUniqueName: string, entries: any): void {
         this.startLoader(true);
+
+        let blankItemIndex = this.invFormData.entries.findIndex(entry => !entry.transactions[0].accountUniqueName);
+        let isBlankItemPresent;
+        let startIndex = this.invFormData.entries.length;
+        if (blankItemIndex > -1) {
+            isBlankItemPresent = true;
+        } else {
+            isBlankItemPresent = false;
+        }
+
         entries.forEach(entry => {
             let transactionLoop = 0;
 
@@ -6218,10 +6235,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     transactionLoop++;
                 }
-
             });
         });
-        this.startLoader(false);
+        
+        let buildBulkDataStarted = false;
+        let interval = setInterval(() => {
+            if(this.linkedPoItemsAdded === entries.length) {
+                if(!buildBulkDataStarted) {
+                    this.linkedPoItemsAdded = 0;
+                    buildBulkDataStarted = true;
+                    clearInterval(interval);
+                    this.startLoader(false);
+                    this.buildBulkData(this.invFormData.entries.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
+                }
+            }
+        }, 500);
     }
 
     /**
@@ -6801,7 +6829,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private loadTaxesAndDiscounts(startIndex: number): void {
-        this.showBulkLoader = true;
+        if(startIndex < this.invFormData.entries.length) {
+            this.showBulkLoader = true;
+        }
         for (let index = startIndex; index < this.invFormData.entries.length; index++) {
             setTimeout(() => {
                 this.activeIndx = index;

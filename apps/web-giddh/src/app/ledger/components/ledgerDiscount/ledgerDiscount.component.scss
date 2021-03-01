@@ -26,17 +26,21 @@
 .percent-label, .value-label{
     width: 50px;
 }
-.ledger-percent-wrapper{
-    width: 110px;
-    padding-right: 20px !important;
+.percent-wrapper{
+    .form-control{
+        width: 110px;
+        padding-right: 20px !important;
+    }
+   .fa-percent{
+       top: 9px;
+       right: 6px;
+       color: $gray;
+   }
 }
-.ledger-discount-wrapper{
-    width: 110px;
-}
-.fa-percent.pos-abs{
-    top: 9px;
-    right: 6px;
-    color: $gray;
+.value-box{
+    .form-control{
+        width: 110px;
+    }
 }
 .discount-list{
     list-style: none;

@@ -571,6 +571,7 @@
                                                                         [options]="companyStatesSource"
                                                                         name="companyBillingDetailsStateCode"
                                                                         [disabled]="(purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber.length >= 2) ? true : null"
+                                                                        [fixedValue]="purchaseBillCompany.billingDetails.state.name"
                                                                         [(ngModel)]="purchaseBillCompany.billingDetails.state.code">
                                                                     </sales-sh-select>
                                                                 </div>
@@ -629,6 +630,7 @@
                                                                             [options]="companyStatesSource"
                                                                             name="companyShippingDetailsStateCode"
                                                                             [disabled]="(purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber.length >= 2) ? true : null"
+                                                                            [fixedValue]="purchaseBillCompany.shippingDetails.state.name"
                                                                             [(ngModel)]="purchaseBillCompany.shippingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
