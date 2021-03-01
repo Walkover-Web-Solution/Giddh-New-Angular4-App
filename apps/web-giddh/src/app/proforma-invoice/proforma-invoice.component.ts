@@ -604,6 +604,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public allowFocus: boolean = true;
     /** True, when bulk items are added */
     public showBulkLoader: boolean;
+    /** This will hold how many linked po items added */
+    public linkedPoItemsAdded: number = 0;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -3048,6 +3050,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             txn.maxQuantity = maxQuantity;
 
                             this.calculateWhenTrxAltered(entry, txn);
+
+                            this.linkedPoItemsAdded++;
                         }
                     }
                 }, () => {
@@ -6380,8 +6384,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         });
-        this.startLoader(false);
-        this.buildBulkData(this.invFormData.entries.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
+        
+        let buildBulkDataStarted = false;
+        let interval = setInterval(() => {
+            if(this.linkedPoItemsAdded === entries.length) {
+                if(!buildBulkDataStarted) {
+                    this.linkedPoItemsAdded = 0;
+                    buildBulkDataStarted = true;
+                    clearInterval(interval);
+                    this.startLoader(false);
+                    this.buildBulkData(this.invFormData.entries.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
+                }
+            }
+        }, 500);
     }
 
     /**
