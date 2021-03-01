@@ -8,8 +8,8 @@
     "select_month_label": "महीना चुनिए",
     "select_month_placeholder": "महीना खोजें ...",
     "invalid_month": "कृपया महीने का चयन करें",
-    "select_quarter_label": "क्वार्टर का चयन करें",
-    "select_quarter_placeholder": "क्वार्टर खोजें",
+    "select_quarter_label": "तिमाही का चयन करें",
+    "select_quarter_placeholder": "तिमाही खोजें",
     "invalid_quarter": "कृपया चयन करें",
     "sales_from": "से बिक्री",
     "clients": "ग्राहकों",
@@ -18,13 +18,13 @@
     "from_new_clients": "नए ग्राहकों से",
     "from_old_clients": "पुराने ग्राहकों से",
     "quarters": {
-        "q1": "Q1",
-        "q2": "Q2",
-        "q3": "Q3",
-        "q4": "Q4"
+        "q1": "पहला",
+        "q2": "दूसरा",
+        "q3": "तीसरा",
+        "q4": "चौथा"
     },
     "get_type_options": {
         "month": "महीना",
-        "quarter": "क्वार्टर"
+        "quarter": "तिमाही"
     }
 }

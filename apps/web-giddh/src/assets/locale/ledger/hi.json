@@ -16,8 +16,8 @@
     "to": "सेवा",
     "to_balance_bf": "शेष राशि बी / एफ के लिए",
     "download_file": "फ़ाइल डाउनलोड करें",
-    "to_select_accounts": "खातों का चयन करने के लिए",
-    "by_select_accounts": "खातों का चयन करके",
+    "to_select_accounts": "खातों का चयन करें",
+    "by_select_accounts": "खातों का चयन करें",
     "new_account": "नया खाता",
     "by_balance_bf": "शेष बी / एफ द्वारा",
     "bf_balance": "बी / एफ बैलेंस",
@@ -128,7 +128,7 @@
         {
             "accountType": "Revenue",
             "text": {
-                "cr": "+ <accountName> (बढ़ाना)",
+                "cr": "+ <accountName> (बढ़ते हुए)",
                 "dr": "- <accountName> (घटते हुए)"
             },
             "balanceText": {
@@ -140,7 +140,7 @@
             "accountType": "Expense",
             "text": {
                 "cr": "<accountName> ↓  (घटते हुए)",
-                "dr": "<accountName> ↑ (बढ़ाना)"
+                "dr": "<accountName> ↑ (बढ़ते हुए)"
             },
             "balanceText": {
                 "cr": "नकारात्मक व्यय (अजीब लगता है) ",
