@@ -347,7 +347,8 @@
                                 (purchaseRegisteDetailedResponse$ | async).debitTotal
                                     | giddhCurrency
                             }} -->
-                            <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).debitTotal" [currencySymbol]="false"          [currencyCode]="false">
+                            <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).debitTotal"
+                            [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </h4>
                     </div>
@@ -359,8 +360,8 @@
                                 (purchaseRegisteDetailedResponse$ | async).creditTotal
                                     | giddhCurrency
                             }} -->
-                            <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).creditTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                            <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).creditTotal"
+                            [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </h4>
                     </div>
@@ -372,8 +373,8 @@
                                 (purchaseRegisteDetailedResponse$ | async)
                                     .discountTotal | giddhCurrency
                             }} -->
-                            <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).discountTotal" [currencySymbol]="false"
-                                [currencyCode]="false">
+                            <amount-field [amount]="(purchaseRegisteDetailedResponse$ | async).discountTotal"
+                                [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </h4>
                     </div>

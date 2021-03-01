@@ -49,7 +49,7 @@
                             <span *ngIf="isCrDrChecked && columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount > 0"> {{(columnarReportResponse?.grandTotal[item.accountUniqueName]?.type ==='DEBIT')?'-':''}}</span>
                             <!-- {{columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount}} -->
 
-                            <amount-field [amount]="columnarReportResponse?.closingBalance[item.accountUniqueName]?.amount" [currencySymbol]="false"
+                            <amount-field [amount]="columnarReportResponse?.grandTotal[item.accountUniqueName]?.amount" [currencySymbol]="false"
                                 [currencyCode]="false">
                             </amount-field>
 

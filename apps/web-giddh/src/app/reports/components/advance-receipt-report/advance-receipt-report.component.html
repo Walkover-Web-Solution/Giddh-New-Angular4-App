@@ -174,7 +174,7 @@
                             <td [attr.data-title]="commonLocaleData?.app_total_amount">
                                 <!-- {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}} -->
 
-                                <amount-field [amount]="receipt?.totalAmount.amount"
+                                <amount-field [amount]="receipt?.totalAmount?.amount"
                                     [currencySymbol]="receipt?.totalAmount?.symbol"
                                     [currencyCode]="false">
                                 </amount-field>
@@ -182,7 +182,7 @@
                             </td>
                             <td [attr.data-title]="localeData?.unused_amount">
                                 <!-- {{ receipt?.unusedAmount?.symbol }}{{ receipt?.unusedAmount.amount | giddhCurrency}} -->
-                                <amount-field [amount]="receipt?.unusedAmount.amount" [currencySymbol]="receipt?.unusedAmount?.symbol"
+                                <amount-field [amount]="receipt?.unusedAmount?.amount" [currencySymbol]="receipt?.unusedAmount?.symbol"
                                     [currencyCode]="false">
                                 </amount-field>
                             </td>
