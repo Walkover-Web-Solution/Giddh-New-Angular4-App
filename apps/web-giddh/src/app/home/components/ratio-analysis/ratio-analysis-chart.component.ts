@@ -364,10 +364,16 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof RatioAnalysisChartComponent
+     */
     public translationComplete(event: boolean): void {
         if(event) {
-            this.rationResponse$.pipe(skipWhile(p => (isNullOrUndefined(p)))).subscribe(p => {
-                this.ratioObj = p;
+            this.rationResponse$.pipe(skipWhile(response => (isNullOrUndefined(response)))).subscribe(response => {
+                this.ratioObj = response;
                 this.generateCharts();
                 this.requestInFlight = false;
             });
