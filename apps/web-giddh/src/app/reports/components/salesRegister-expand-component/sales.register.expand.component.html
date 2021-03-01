@@ -244,16 +244,29 @@
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_sales" *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
                                 class="text-right ">
-                                {{ item.creditTotal | giddhCurrency }}
+                                <!-- {{ item.creditTotal | giddhCurrency }} -->
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="item.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
+
                                 <ng-container *ngIf="expand">
                                     <ng-container *ngFor="let stock of item.stocks">
-                                        <p>{{ stock.amount | giddhCurrency }}</p>
+                                        <!-- <p>{{ stock.amount | giddhCurrency }}</p> -->
+                                        <span class="d-flex justify-content-end">
+                                            <amount-field [amount]="stock.amount" [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
                                     </ng-container>
                                 </ng-container>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_return" *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal"
                                 class="text-right ">
-                                {{ item.debitTotal | giddhCurrency }}
+                                <!-- {{ item.debitTotal | giddhCurrency }} -->
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="item.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_quantity_unit" class="text-right "
                                 *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal">
@@ -279,15 +292,27 @@
                             <td [attr.data-title]="commonLocaleData?.app_discount"
                                 *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal"
                                 class="text-right ">
-                                {{ item.discountTotal | giddhCurrency }}
+                                <!-- {{ item.discountTotal | giddhCurrency }} -->
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="item.discountTotal" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_tax"
                                 *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
                                 class="text-right ">
-                                {{ item.taxTotal | giddhCurrency }}
+                                <!-- {{ item.taxTotal | giddhCurrency }} -->
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="item.taxTotal" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_net_sales" class="text-right ">
-                                {{ item.netTotal | giddhCurrency }}
+                                <!-- {{ item.netTotal | giddhCurrency }} -->
+                                <span class="d-flex justify-content-end">
+                                    <amount-field [amount]="item.netTotal" [currencySymbol]="false" [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </td>
                         </tr>
                     </tbody>
@@ -319,72 +344,104 @@
                     <div *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="sale-register-box text-right">
                         <p>{{commonLocaleData?.app_sales}}</p>
                         <h4>
-                            {{
+                            <!-- {{
                                 (salesRegisteDetailedResponse$ | async).creditTotal
                                     | giddhCurrency
-                            }}
+                            }} -->
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).creditTotal" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
                         </h4>
                     </div>
                     <div *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="sale-register-box text-right">
                         <p>{{commonLocaleData?.app_return}}</p>
                         <h4>
-                            {{
+                            <!-- {{
                                 (salesRegisteDetailedResponse$ | async).debitTotal
                                     | giddhCurrency
-                            }}
+                            }} -->
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).debitTotal" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
                         </h4>
                     </div>
                     <div class="sale-register-box text-right"
                         *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal">
                         <p>{{commonLocaleData?.app_discount}}</p>
                         <h4>
-                            {{
+                            <!-- {{
                                 (salesRegisteDetailedResponse$ | async)
                                     .discountTotal | giddhCurrency
-                            }}
+                            }} -->
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).discountTotal" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
                         </h4>
                     </div>
                     <div class="sale-register-box text-right"
                         *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tcsTotal">
                         <p>{{commonLocaleData?.app_tcs}}</p>
                         <h4>
-                            {{
+                            <!-- {{
                                 (salesRegisteDetailedResponse$ | async).tcsTotal
                                     | giddhCurrency
-                            }}
+                            }} -->
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).tcsTotal" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
                         </h4>
                     </div>
                     <div class="sale-register-box text-right"
                         *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tdsTotal">
                         <p>{{commonLocaleData?.app_tds}}</p>
                         <h4>
-                            {{
+                            <!-- {{
                                 (salesRegisteDetailedResponse$ | async).tdsTotal
                                     | giddhCurrency
-                            }}
+                            }} -->
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).tdsTotal" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
                         </h4>
                     </div>
                     <div class="sale-register-box text-right"
                         *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async).taxTotal">
                         <p>{{commonLocaleData?.app_tax}}</p>
                         <h4>
-                            {{
+                            <!-- {{
                                 (salesRegisteDetailedResponse$ | async).taxTotal
                                     | giddhCurrency
-                            }}
+                            }} -->
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).taxTotal" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
                         </h4>
                     </div>
 
                     <div class="sale-register-box text-right">
                         <p>{{commonLocaleData?.app_net_sales}}</p>
                         <h4>
-                            {{
+                            <!-- {{
                                 (salesRegisteDetailedResponse$ | async).netTotal
                                     .amount | giddhCurrency
-                            }}
+                            }} -->
+                            <span class="d-flex justify-content-end">
+                                <amount-field [amount]="(salesRegisteDetailedResponse$ | async).netTotal.amount" [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span>
                         </h4>
                     </div>
-
                 </div>
             </div>
         </div>

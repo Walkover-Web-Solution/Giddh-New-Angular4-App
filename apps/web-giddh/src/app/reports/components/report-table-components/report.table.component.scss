@@ -54,3 +54,12 @@
         cursor: auto;
     }
 }
+/* responsive starts here */
+
+@media(max-width:768px){
+    .sales-register-table{
+        .justify-content-end{
+            justify-content: flex-start !important;
+        }
+    }
+}

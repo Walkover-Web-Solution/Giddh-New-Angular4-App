@@ -49,3 +49,9 @@
         cursor: auto;
     }
 }
+/* responsive starts here */
+.purchase-register-table{
+    .justify-content-end{
+        justify-content: flex-start !important;
+    }
+}
