@@ -150,6 +150,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     };
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /** This will hold parent unique name */
+    public activeParentGroupUniqueName: string = '';
 
     constructor(
         private _fb: FormBuilder,
@@ -734,11 +736,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (event) {
             this.activeGroupUniqueName = event.value;
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
-            // let parent = event.additional;
-            // if (parent[1]) {
-            //     this.isParentDebtorCreditor(parent[1].uniqueName);
-            // }
             this.isParentDebtorCreditor(this.activeGroupUniqueName);
+
+            let parent = event.additional;
+            if (parent && parent[1]) {
+                this.activeParentGroupUniqueName = parent[1].uniqueName;
+            }
+
             this.isGroupSelected.emit(event);
             this.toggleStateRequired();
         }
@@ -746,6 +750,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public isParentDebtorCreditor(activeParentgroup: string) {
         this.activeParentGroup = activeParentgroup;
+        this.activeParentGroupUniqueName = activeParentgroup;
         if (activeParentgroup === 'sundrycreditors' || activeParentgroup === 'sundrydebtors') {
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
             this.isShowBankDetails(activeParentgroup);
@@ -927,7 +932,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors')) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroupUniqueName === 'sundrydebtors')) {
             return true;
         } else {
             return false;
