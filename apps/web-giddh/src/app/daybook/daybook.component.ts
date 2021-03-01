@@ -41,7 +41,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('exportDaybookModal', {static: true}) public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
     /** Daybook advance search component reference */
-    @ViewChild('daybookAdvanceSearch', {static: true}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
+    @ViewChild('daybookAdvanceSearch', {static: false}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
     /** Date format type */
@@ -307,7 +307,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public exportDaybook() {
-        this.daybookExportRequestType = 'get';
+        this.daybookExportRequestType = 'post';
         this.exportDaybookModal.show();
     }
 
