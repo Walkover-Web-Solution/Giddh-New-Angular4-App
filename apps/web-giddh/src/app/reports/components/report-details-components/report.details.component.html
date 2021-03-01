@@ -40,7 +40,7 @@
             <div class="inner-button xs-mb-1 pr-5 xs-pr-0" dropdown placement="bottom left">
                 <div class="btn-group xs-pr-0" dropdown [autoClose]="true" container="body">
                     <button id="button-nested" dropdownToggle type="button" class="btn text-capitalize dropdown-toggle"
-                        aria-controls="dropdown-nested"> {{selectedType}}<span class="caret"></span>
+                        aria-controls="dropdown-nested"> {{getSelectedDuration()}}<span class="caret"></span>
                     </button>
                     <ul id="dropdown-nested" *dropdownMenu class="dropdown-menu sales-register-menu" role="menu"
                         aria-labelledby="button-nested">

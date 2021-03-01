@@ -1,4 +1,4 @@
-<div id="live" appTranslate [file]="'home/ratio-analysis'" [requireCommonData]="false" (localeData)="localeData = $event">
+<div id="live" appTranslate [file]="'home/ratio-analysis'" [requireCommonData]="false" (localeData)="localeData = $event" (translationComplete)="translationComplete($event)">
     <div class="card">
         <div class="panel-heading">
             <strong>{{localeData?.chart_title}}</strong>

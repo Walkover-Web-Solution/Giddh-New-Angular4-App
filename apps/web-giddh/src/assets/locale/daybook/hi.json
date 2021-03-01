@@ -1,8 +1,8 @@
 {
     "page_heading": "डेबुक",
     "transaction_report": "लेन-देन की रिपोर्ट",
-    "voucher_name": "Vch। नाम",
-    "voucher_no": "",
+    "voucher_name": "वाउचर नाम",
+    "voucher_no": "वाउचर नंबर",
     "debit_amount": "डेबिट राशि",
     "credit_amount": "क्रेडिट राशि",
     "product_service": "उत्पाद / सेवा",
