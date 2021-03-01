@@ -3,7 +3,7 @@
     <div class="reverse-table-report">
         <div class="container-fluid">
             <div class="mr-t15 input-grp-date-range-picker d-flex flex-sm-row flex-column">
-                <div class="input-group mr-b15">
+                <div class="input-group">
                     <div class="form-group linked-entities mr-r15" *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                         <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName" [showClear]="false"
                             [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)" [isFilterEnabled]="true"
