@@ -172,10 +172,20 @@
                             </td>
                             <td [attr.data-title]="localeData?.invoice_no_label" *ngIf="!receipt?.invoices">-</td>
                             <td [attr.data-title]="commonLocaleData?.app_total_amount">
-                                {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}}
+                                <!-- {{ receipt?.totalAmount?.symbol }}{{ receipt?.totalAmount.amount | giddhCurrency}} -->
+
+                                <amount-field [amount]="receipt?.totalAmount.amount"
+                                    [currencySymbol]="receipt?.totalAmount?.symbol"
+                                    [currencyCode]="false">
+                                </amount-field>
+
                             </td>
                             <td [attr.data-title]="localeData?.unused_amount">
-                                {{ receipt?.unusedAmount?.symbol }}{{ receipt?.unusedAmount.amount | giddhCurrency}}</td>
+                                <!-- {{ receipt?.unusedAmount?.symbol }}{{ receipt?.unusedAmount.amount | giddhCurrency}} -->
+                                <amount-field [amount]="receipt?.unusedAmount.amount" [currencySymbol]="receipt?.unusedAmount?.symbol"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </td>
                         </tr>
                         <tr *ngIf="!allReceipts?.length">
                             <td colspan="10" align="center" class="no-entries">{{commonLocaleData?.app_no_records_found}}</td>
@@ -204,24 +214,49 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6 col-sm-12 total-due-sale">
                         <h3>{{localeData?.advanced_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}}/-
+                        <h1 class="d-inline-flex">
+                            <!-- {{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}} -->
+                            <span>
+                                <amount-field [amount]="receiptsSummaryData?.advance?.amount" [currencySymbol]="receiptsSummaryData?.advance?.symbol"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span> /-
                         </h1>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-sm-12 total-due-sale">
                         <h3>{{localeData?.normal_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount | giddhCurrency}}/-
+                        <h1 class="d-inline-flex">
+                            <!-- {{receiptsSummaryData?.normal?.symbol}}{{receiptsSummaryData?.normal?.amount | giddhCurrency}}/- -->
+                            <span>
+                                <amount-field [amount]="receiptsSummaryData?.normal?.amount"
+                                    [currencySymbol]="receiptsSummaryData?.normal?.symbol" [currencyCode]="false">
+                                </amount-field>
+                            </span> /-
                         </h1>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-sm-12 total-due-sale">
                         <h3>{{localeData?.total_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount | giddhCurrency}}/-</h1>
+                        <h1 class="d-inline-flex">
+                            <!-- {{receiptsSummaryData?.total?.symbol}}{{receiptsSummaryData?.total?.amount | giddhCurrency}}/- -->
+                            <span>
+                                <amount-field [amount]="receiptsSummaryData?.total?.amount" [currencySymbol]="receiptsSummaryData?.total?.symbol" [currencyCode]="false">
+                                </amount-field>
+                            </span> /-
+                        </h1>
                     </div>
 
                     <div class="col-lg-3 col-md-6 col-sm-12 total-due-sale">
                         <h3>{{localeData?.unused_receipts}}</h3>
-                        <h1>{{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount | giddhCurrency}}/-
+                        <h1 class="d-inline-flex">
+                            <!-- {{receiptsSummaryData?.unUsed?.symbol}}{{receiptsSummaryData?.unUsed?.amount | giddhCurrency}}/- -->
+                            <span>
+                                <amount-field [amount]="receiptsSummaryData?.unUsed?.amount" [currencySymbol]="receiptsSummaryData?.unUsed?.symbol"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </span> /-
+
                         </h1>
                     </div>
                 </div>
