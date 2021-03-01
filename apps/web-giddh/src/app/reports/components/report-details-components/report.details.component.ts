@@ -437,6 +437,23 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         if(event) {
             this.monthNames = [this.commonLocaleData.app_months_full.january, this.commonLocaleData.app_months_full.february, this.commonLocaleData.app_months_full.march, this.commonLocaleData.app_months_full.april, this.commonLocaleData.app_months_full.may, this.commonLocaleData.app_months_full.june, this.commonLocaleData.app_months_full.july, this.commonLocaleData.app_months_full.august, this.commonLocaleData.app_months_full.september, this.commonLocaleData.app_months_full.october, this.commonLocaleData.app_months_full.november, this.commonLocaleData.app_months_full.december];
             this.setCurrentFY();
+            this.getSelectedDuration();
+        }
+    }
+
+    /**
+     * This will return duration name
+     *
+     * @returns {string}
+     * @memberof ReportsDetailsComponent
+     */
+    public getSelectedDuration(): string {
+        if(this.selectedType?.toLowerCase() === "monthly") {
+            return this.commonLocaleData?.app_duration?.monthly;
+        } else if(this.selectedType?.toLowerCase() === "quarterly") {
+            return this.commonLocaleData?.app_duration?.quarterly;
+        } else if(this.selectedType?.toLowerCase() === "weekly") {
+            return this.commonLocaleData?.app_duration?.weekly;
         }
     }
 }
