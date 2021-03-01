@@ -302,8 +302,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public pageChanged(event: any): void {
-        this.daybookQueryRequest.page = event.page;
-        this.go(this.searchFilterData);
+        if(this.daybookQueryRequest.page !== event.page) {
+            this.daybookQueryRequest.page = event.page;
+            this.go(this.searchFilterData);
+        }
     }
 
     public exportDaybook() {
