@@ -126,9 +126,19 @@
                             <td [attr.data-title]="localeData?.suppliers_country">{{ reverseCharge.suppliersCountry }}</td>
                             <td [attr.data-title]="commonLocaleData?.app_taxable_value">{{activeCompany.baseCurrencySymbol}}
                                 {{ reverseCharge.taxableValue | giddhCurrency }}</td>
-                            <td [attr.data-title]="commonLocaleData?.app_tax_rate">{{ reverseCharge.taxRate }}%</td>
-                            <td [attr.data-title]="commonLocaleData?.app_tax_amount">{{activeCompany.baseCurrencySymbol}}
-                                {{ reverseCharge.taxAmount | giddhCurrency }}</td>
+                            <td [attr.data-title]="commonLocaleData?.app_tax_rate">
+                                <!-- {{ reverseCharge.taxRate }}% -->
+                                <amount-field [amount]="reverseCharge.taxRate"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false">
+                                </amount-field>
+                            </td>
+                            <td [attr.data-title]="commonLocaleData?.app_tax_amount">
+                                <!-- {{activeCompany.baseCurrencySymbol}}
+                                {{ reverseCharge.taxAmount | giddhCurrency }} -->
+                                <amount-field [amount]="reverseCharge.taxAmount" [currencySymbol]="activeCompany.baseCurrencySymbol" [currencyCode]="false">
+                                </amount-field>
+                            </td>
                         </tr>
                     </tbody>
                     <tbody

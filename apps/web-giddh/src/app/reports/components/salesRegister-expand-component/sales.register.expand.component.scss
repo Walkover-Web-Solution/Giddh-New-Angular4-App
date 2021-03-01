@@ -342,6 +342,13 @@ table th {
         padding-bottom: 50px;
     }
 }
+@media(max-width:768px){
+    .sales-register-table{
+        .justify-content-end{
+            justify-content: flex-start !important;
+        }
+    }
+}
 @media (max-width: 767px) {
     .report-breadcrum{
         position: static !important;
