@@ -1731,24 +1731,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         if (receipt.type === AdjustmentTypesEnum.againstReference) {
                             adjustmentTotal += parseFloat(receipt.amount);
                         } else {
-                            if (receipt.type === AdjustmentTypesEnum.againstReference) {
-                                adjustmentTotal += parseFloat(receipt.amount);
-                            } else {
-                                if (receipt.type === AdjustmentTypesEnum.againstReference) {
-                                    adjustmentTotal += parseFloat(receipt.amount);
-                                } else {
-                                    receiptTotal += parseFloat(receipt.amount);
-                                }
-                            }
-
-                            if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice.uniqueName) {
-                                isValid = false;
-                                invoiceRequired = true;
-                            } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
-                                isValid = false;
-                                invoiceAmountError = true;
-                            }
+                            receiptTotal += parseFloat(receipt.amount);
                         }
+                    }
+
+                    if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice.uniqueName) {
+                        isValid = false;
+                        invoiceRequired = true;
+                    } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
+                        isValid = false;
+                        invoiceAmountError = true;
                     }
                 }
             });
