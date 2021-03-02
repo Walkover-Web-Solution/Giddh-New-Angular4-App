@@ -208,7 +208,11 @@
                         <table class="table nested-table amount-nested-table">
                             <tr *ngFor="let transaction of item.transactions">
                                 <td class="text-right p-0 border-none">
-                                    {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
+                                    <!-- {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }} -->
+                                    <amount-field [amount]="transaction.amount"
+                                        [currencySymbol]="item.accountCurrencySymbol"
+                                        [currencyCode]="invFormData.accountDetails?.currency?.code">
+                                    </amount-field>
                                 </td>
                             </tr>
                         </table>
