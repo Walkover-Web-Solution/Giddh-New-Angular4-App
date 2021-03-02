@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -29,7 +29,6 @@ import { Configuration } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
-import { forIn } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
@@ -37,13 +36,27 @@ import { SettingsIntegrationService } from '../../services/settings.integraion.s
 import { SettingsIntegrationTab } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ESCAPE } from '@angular/cdk/keycodes';
 
 export declare const gapi: any;
 
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
-    styleUrls: ['./setting.integration.component.scss']
+    styleUrls: ['./setting.integration.component.scss'],
+    animations: [
+		trigger('slideInOut', [
+			state('in', style({
+				transform: 'translate3d(0, 0, 0)'
+			})),
+			state('out', style({
+				transform: 'translate3d(100%, 0, 0)'
+			})),
+			transition('in => out', animate('400ms ease-in-out')),
+			transition('out => in', animate('400ms ease-in-out'))
+		]),
+	]
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
@@ -148,6 +161,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     };
     /** Stores the list of accounts */
     public accounts: IOption[];
+    /** This will hold urn for which beneficiary will open */
+    public activeUrn: any;
+    /** Beneficiary aside pan status */
+    public beneficiaryAsideState: string = "out";
 
     constructor(
         private router: Router,
@@ -1538,5 +1555,33 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * This will show beneficiary modal
+     *
+     * @param {*} urn
+     * @memberof SettingIntegrationComponent
+     */
+    public showBeneficiaryModal(urn: any): void {
+        this.activeUrn = urn;
+        this.beneficiaryAsideState = "in";
+    }
+
+    /**
+     * This will hide beneficiary modal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public hideBeneficiaryModal(event?: any): void {
+        this.activeUrn = ''; 
+        this.beneficiaryAsideState = 'out'
+    }
+
+    @HostListener('document:keyup', ['$event'])
+    public handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.keyCode === ESCAPE) {
+            this.hideBeneficiaryModal();
+        }
     }
 }

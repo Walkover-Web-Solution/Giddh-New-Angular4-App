@@ -637,6 +637,7 @@
                                 </div>
                             </div>
                         </div> -->
+                        <a href="javascript:;" class="text-right btn btn-primary" (click)="showBeneficiaryModal(regAcc.URN)"> List Beneficiary </a>
                     </div>
                     <br/>
                 </div>
@@ -906,3 +907,5 @@
         </tab>
     </tabset>
 </div>
+<div class="aside-overlay" *ngIf="beneficiaryAsideState === 'in'"></div>
+<beneficiary *ngIf="beneficiaryAsideState === 'in' && activeUrn" [urn]="activeUrn" (closeAsideEvent)="hideBeneficiaryModal($event)" [class]="beneficiaryAsideState" [@slideInOut]="beneficiaryAsideState"></beneficiary>
