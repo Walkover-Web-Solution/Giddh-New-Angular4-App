@@ -10,7 +10,6 @@ import { ToasterService } from "../../../services/toaster.service";
     templateUrl: './beneficiary.component.html',
     styleUrls: ['./beneficiary.component.scss']
 })
-
 export class BeneficiaryComponent implements OnInit, OnDestroy {
     /** This will hold urn of bank */
     @Input() public urn: any;
