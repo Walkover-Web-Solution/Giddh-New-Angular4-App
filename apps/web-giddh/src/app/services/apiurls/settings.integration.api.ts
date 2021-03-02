@@ -15,5 +15,8 @@ export const SETTINGS_INTEGRATION_API = {
     REMOVE_GMAIL_INTEGRATION: COMMON + 'gmail-token', //DELETE
     REMOVE_ICICI_REQUEST: COMMON + 'bank/deregistration?urn=:urn',
     UPDATE_PAYMENT: COMMON + 'bank/updateDetails',
-    BANK_INTERATION_VALIDATION_FORM: 'ui/bank/integration/form?bankName=:bankName'
+    BANK_INTERATION_VALIDATION_FORM: 'ui/bank/integration/form?bankName=:bankName',
+    BENEFICIARY_REGISTRATION: 'company/:companyUniqueName/bank/bene-registration?urn=:urn',
+    BENEFICIARY_VALIDATION: 'company/:companyUniqueName/bank/bene-validation?urn=:urn&bnfAccNo=:bnfAccNo',
+    GET_BENEFICIARIES: 'company/:companyUniqueName/bank/get-beneficiaries?urn=:urn'
 };
