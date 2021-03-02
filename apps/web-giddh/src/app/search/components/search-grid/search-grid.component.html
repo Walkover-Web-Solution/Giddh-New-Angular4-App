@@ -80,20 +80,36 @@
                         <td [attr.data-title]="localeData?.unique_name">{{item?.uniqueName}}</td>
                         <td [attr.data-title]="localeData?.parent">{{item.parent}}</td>
                         <td [attr.data-title]="localeData?.opening_balance" class="text-right">
-                            {{item.openingBalance | giddhCurrency }}
+                            <!-- {{item.openingBalance | giddhCurrency }} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item?.openingBalance" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
                             <span *ngIf="item.openingBalance > 0">
                                 <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">{{localeData?.balance_type.dr}}</span>
                                 <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">{{localeData?.balance_type.cr}}</span>
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.dr_total" class="text-right">
-                            {{item.debitTotal | giddhCurrency }}
+                            <!-- {{item.debitTotal | giddhCurrency }} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item?.debitTotal" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
                         </td>
                         <td [attr.data-title]="localeData?.cr_total" class="text-right">
-                            {{item.creditTotal | giddhCurrency}}
+                            <!-- {{item.creditTotal | giddhCurrency}} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item?.creditTotal" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
                         </td>
                         <td [attr.data-title]="localeData?.closing_balance" class="text-right">
-                            {{item.closingBalance | giddhCurrency }}
+                            <!-- {{item.closingBalance | giddhCurrency }} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item?.closingBalance" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
                             <span *ngIf="item.closingBalance > 0">
                                 <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">{{localeData?.balance_type.dr}}</span>
                                 <span class="text-danger" *ngIf="item.closeBalanceType === 'CREDIT'">{{localeData?.balance_type.cr}}</span>
