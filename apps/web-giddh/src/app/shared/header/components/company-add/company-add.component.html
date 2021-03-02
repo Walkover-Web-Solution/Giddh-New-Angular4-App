@@ -22,7 +22,7 @@
                     <div class="company-form-body row">
 
                         <div class="col-xs-12 col-sm-12 mr-t5">
-                            <div class="input-group form-group d-block mr-b3 ml-auto mt-auto mb-auto">
+                            <div class="input-group form-group d-block mr-b3">
                                 <p>Enter your new Branch company name to start hassle free accounting with Giddh.</p>
                             </div>
                         </div>
@@ -143,7 +143,7 @@
 
                         <form #createCompanyForm="ngForm" name="createCompForm" novalidate id="createCompForm" class="mr-t05 mr-b1" (submit)="createCompany()">
                             <div>
-                                <div class="input-group form-group d-block mr-b3 ml-auto mt-auto mb-auto">
+                                <div class="input-group form-group d-block mr-b3">
                                     <p>Enter your new Branch company name to start hassle free accounting with Giddh.</p>
                                     <label for="name" class="mr-t4">Company Name <sup>*</sup></label>
                                     <input #name="ngModel" id="name" type="text" [ngClass]="{'has-error': name.invalid && name.touched && name.dirty, 'has-success':name.valid}" [(ngModel)]="company.name" class="form-control" placeholder="Company Name" required name="name" pattern="[a-zA-Z0-9^ .&]{5,100}">
