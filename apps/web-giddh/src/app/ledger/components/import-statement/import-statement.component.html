@@ -5,11 +5,14 @@
     </div>
     <div class="modal-body mr-b4">
         <form name="importStatementForm" novalidate autocomplete="off">
-            <div class="pd-b2 clearfix">
+            <div class="pd-b2 clearfix browse-file-btn">
                 <label class="w100 file-upload-label">{{localeData?.file}} <sup>*</sup></label>
-                <label class="radio-inline p-0">
-                    <input type="file" name="file" class="form-control file-upload-field" [(ngModel)]="selectedFile" (change)="onFileChange($event.target.files)" required accept="application/pdf">
+                <label class="radio-inline p-0 browse-file-label">
+                    Choose File
+                    <input type="file" name="file" class="form-control file-upload-field"
+                    [(ngModel)]="selectedFile" (change)="onFileChange($event.target.files)" required accept="application/pdf">
                 </label>
+               <span class="path-name"> {{ selectedFile }} </span>
             </div>
             <div class="pd-b2 clearfix">
                 <label class="w100">{{localeData?.password}}</label>
