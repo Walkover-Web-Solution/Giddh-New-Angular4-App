@@ -3216,7 +3216,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if(this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = transaction.stockDetails.hsnNumber;
                 transaction.hsnOrSac = 'hsn';
-                transaction.showCodeType = "hsn"; 
+                transaction.showCodeType = "hsn";
             } else {
                 transaction.sacNumber = transaction.stockDetails.sacNumber;
                 transaction.sacNumberExists = true;
@@ -5645,6 +5645,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (settings && settings.companyInventorySettings) {
                 this.inventorySettings = settings.companyInventorySettings;
             }
+            if (settings?.invoiceSettings) {
+                this.useCustomInvoiceNumber = settings.invoiceSettings.useCustomInvoiceNumber;
+            }
         });
     }
 
@@ -6384,7 +6387,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         });
-        
+
         let buildBulkDataStarted = false;
         let interval = setInterval(() => {
             if(this.linkedPoItemsAdded === entries.length) {
