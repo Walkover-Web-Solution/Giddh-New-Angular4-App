@@ -53,6 +53,7 @@ import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 
 @Component({
     selector: 'account-update-new-details',
@@ -119,7 +120,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public countryCurrency: any[] = [];
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
-    public accounts$: Observable<IOption[]>;
+    public accounts: IOption[];
     public stateGstCode: any[] = [];
     public isMobileNumberValid: boolean = true;
     public formFields: any[] = [];
@@ -183,12 +184,28 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public taxNamePlaceholder: string = "";
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
 
     constructor(
         private _fb: FormBuilder,
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        private accountService: AccountService,
+        private searchService: SearchService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private _settingsDiscountAction: SettingsDiscountActions,
         private _accountService: AccountService,
@@ -1175,20 +1192,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             }
         });
-
-        this.accountService.getFlattenAccounts().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            let accounts: IOption[] = [];
-            if (a.status === 'success') {
-                a.body.results.map(acc => {
-                    accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
-                });
-                let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
-                if (accountIndex > -1) {
-                    accounts.splice(accountIndex, 1);
-                }
-            }
-            this.accounts$ = observableOf(accounts);
-        });
+        this.loadDefaultAccountsSuggestions();
     }
 
     public taxHierarchy() {
@@ -1283,18 +1287,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public getAccount() {
         this.loadDefaultGroupsSuggestions();
-        // this.flattenGroups$.subscribe(flattenGroups => {
-        //     if (flattenGroups) {
-        //         let items: IOption[] = flattenGroups.filter(grps => {
-        //             return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-        //         }).map(m => {
-        //             return {
-        //                 value: m.groupUniqueName, label: m.groupName, additional: m.parentGroups
-        //             }
-        //         });
-        //         this.flatGroupsOptions = items;
-        //     }
-        // });
     }
 
     /**
@@ -1744,6 +1736,108 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
             this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
             this.flatGroupsOptions = [...this.defaultGroupSuggestions];
+        });
+    }
+
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AuditLogsFormComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    let activeAccountUniqueName: string;
+                    this.activeAccount$.pipe(take(1)).subscribe(account => activeAccountUniqueName = account.uniqueName);
+                    data.body.results = data.body.results.filter(account => account.uniqueName !== activeAccountUniqueName);
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: `${result.name} (${result.uniqueName})`
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof AuditLogsFormComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: `${result.name} (${result.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof AuditLogsFormComponent
+     */
+    private loadDefaultAccountsSuggestions(): void {
+        this.onAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: `${result.name} (${result.uniqueName})`
+                }
+            }) || [];
+            this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+            this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+            this.accounts = [...this.defaultAccountSuggestions];
         });
     }
 }

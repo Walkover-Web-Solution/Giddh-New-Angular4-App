@@ -402,7 +402,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         private ngZone: NgZone
     ) {
         this.getInvoiceSettings();
-        // this.store.dispatch(this.generalActions.getFlattenAccount());
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));

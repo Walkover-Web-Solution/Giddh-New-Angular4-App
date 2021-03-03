@@ -63,7 +63,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
     public selectedItem: ExpenseResults;
     public rejectReason = new FormControl();
-    public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public selectedPettycashEntry$: Observable<PettyCashResonse>;
     public ispPettycashEntrySuccess$: Observable<boolean>;
     public ispPettycashEntryInprocess$: Observable<boolean>;
@@ -172,7 +171,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.flattenAccountListStream$ = this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$));
         this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.selectedPettycashEntry$ = this.store.pipe(select(p => p.expense.pettycashEntry), takeUntil(this.destroyed$));
