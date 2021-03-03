@@ -57,7 +57,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userIsSuperUser: boolean = true; // Protect permission module
     public session$: Observable<userLoginStateEnum>;
     public accountSearchValue: string = '';
-    public accountSearchControl: FormControl = new FormControl();
     public companyDomains: string[] = ['walkover.in', 'giddh.com', 'muneem.co', 'msg91.com'];
     public moment = moment;
     public imgPath: string = '';
@@ -559,23 +558,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
 
-        this.accountSearchControl.valueChanges.pipe(
-            debounceTime(300), takeUntil(this.destroyed$))
-            .subscribe((newValue) => {
-                this.accountSearchValue = newValue;
-                if (newValue.length > 0) {
-                    this.noGroups = true;
-                }
-                this.filterAccounts(newValue);
-            });
-
-        this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '') {
-                this.zone.run(() => {
-                    this.filterAccounts('');
-                });
-            }
-        });
         this.loadCompanyBranches();
 
         // region subscribe to last state for showing title of page this.selectedPage
@@ -793,11 +775,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.zone.run(() => {
                     this.router.navigate(['/new-user']);
                 });                // });
-            } else {
-                // get groups with accounts for general use
-                this.store.dispatch(this._generalActions.getGroupWithAccounts());
-                this.store.dispatch(this._generalActions.getFlattenAccount());
-                this.store.dispatch(this._generalActions.getFlattenGroupsReq());
             }
         });
         if (this.route.snapshot.url.toString() === 'new-user') {
@@ -825,11 +802,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngAfterViewChecked() {
         this.changeDetection.detectChanges();
-    }
-
-    public handleNoResultFoundEmitter(e: any) {
-        this.store.dispatch(this._generalActions.getFlattenAccount());
-        this.store.dispatch(this._generalActions.getFlattenGroupsReq());
     }
 
     public handleNewTeamCreationEmitter(e: any) {
