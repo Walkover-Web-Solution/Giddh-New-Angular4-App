@@ -552,7 +552,7 @@
 <ng-template #navigationModal>
 
     <div class="modal-body" #mdl>
-        <command-k (noResultFoundEmitter)="handleNoResultFoundEmitter($event)" (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)" [parentEle]="mdl" [isOpen]="true"
+        <command-k (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" (groupEmitter)="makeGroupEntryInDB($event)" (selectedItemEmitter)="onItemSelected($event)" [parentEle]="mdl" [isOpen]="true"
             [setParentWidth]="true" (closeEmitter)="modelRef.hide()"></command-k>
 
         <div class="shortcuts">

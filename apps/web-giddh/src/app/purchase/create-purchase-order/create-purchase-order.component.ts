@@ -3,7 +3,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf, combineLatest } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { takeUntil, filter, take, delay } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -151,8 +150,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public isMulticurrencyAccount: boolean = false;
     /* This will hold if it's mobile device*/
     public isMobileScreen: boolean = false;
-    /* Observable for list of flatten accounts */
-    public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     /* Observable for list of vendors */
     public vendorAcList$: Observable<IOption[]>;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -406,7 +403,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     ) {
         this.getInvoiceSettings();
         // this.store.dispatch(this.generalActions.getFlattenAccount());
-        this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
