@@ -5496,6 +5496,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (settings && settings.companyInventorySettings) {
                 this.inventorySettings = settings.companyInventorySettings;
             }
+            if (settings?.invoiceSettings) {
+                this.useCustomInvoiceNumber = settings.invoiceSettings.useCustomInvoiceNumber;
+            }
         });
     }
 
@@ -6237,7 +6240,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         });
-        
+
         let buildBulkDataStarted = false;
         let interval = setInterval(() => {
             if(this.linkedPoItemsAdded === entries.length) {
