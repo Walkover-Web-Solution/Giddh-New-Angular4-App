@@ -383,35 +383,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             })), takeUntil(this.destroyed$));
     }
 
-    public loadAccountData() {
-        let activeAccount: AccountResponseV2 = null;
-        this.activeAccount$.pipe(take(1)).subscribe(p => {
-            activeAccount = p;
-            if (!this.showBankDetail) {
-                if (p && p.parentGroups) {
-                    p.parentGroups.forEach(grp => {
-                        this.showBankDetail = grp.uniqueName === "sundrycreditors" ? true : false;
-                        return;
-                    });
-                }
-            }
-        });
-
-        this.accountService.getFlattenAccounts().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            let accounts: IOption[] = [];
-            if (a.status === 'success') {
-                a.body.results.map(acc => {
-                    accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
-                });
-                let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
-                if (accountIndex > -1) {
-                    accounts.splice(accountIndex, 1);
-                }
-            }
-            this.accounts$ = observableOf(accounts);
-        });
-    }
-
     public shareAccount() {
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);

@@ -22,8 +22,7 @@ import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.a
 @Component({
 	selector: 'app-manage-groups-accounts',
 	templateUrl: './manage-groups-accounts.component.html',
-    styleUrls: ['./manage-groups-accounts.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./manage-groups-accounts.component.scss']
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
 	@Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -42,7 +41,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	public searchLoad: Observable<boolean>;
     /** model reference */
     public modalRef: BsModalRef;
-	public groupList$: Observable<GroupsWithAccountsResponse[]> = of([]);
+	public groupList$: Observable<GroupsWithAccountsResponse[]>;
 	public currentColumns: GroupAccountSidebarVM;
 	public psConfig: PerfectScrollbarConfigInterface;
 	public groupAndAccountSearchString$: Observable<string>;
@@ -98,6 +97,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 		this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
 		this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
 		this.psConfig = { maxScrollbarLength: 80 };
+        this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.groupswithaccounts), takeUntil(this.destroyed$));
 	}
 
 	@HostListener('window:resize', ['$event'])
@@ -134,7 +134,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	// tslint:disable-next-line:no-empty
 	public ngOnInit() {
-        this.loadDefaultGroups();
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -146,9 +145,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 		this.groupSearchTerms.pipe(
 			debounceTime(700), takeUntil(this.destroyed$))
 			.subscribe(term => {
-                if (term) {
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
-                }
+                this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
 			});
 
 		this.groupAndAccountSearchString$.subscribe(s => {
@@ -168,6 +165,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 			}
         });
 
+        this.groupList$.subscribe(response => {
+            if(this.keyupInitialized) {
+                setTimeout(() => {
+                    this.groupSrch.nativeElement.focus();
+                }, 200);
+            }
+        });
 	}
 
 	public ngAfterViewChecked() {

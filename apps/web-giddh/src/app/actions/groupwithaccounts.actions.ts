@@ -98,9 +98,6 @@ export class GroupWithAccountsAction {
                         grouName = s.groupwithaccounts.activeGroup.uniqueName;
                     }
                 });
-
-                // get flatten accounts after group tax applied successfully
-                this.store.dispatch(this._generalActions.getFlattenAccount());
                 return this.getTaxHierarchy(grouName);
             })));
 

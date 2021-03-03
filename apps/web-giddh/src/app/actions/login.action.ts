@@ -550,7 +550,6 @@ export class LoginActions {
                 if (action.payload.status === 'success') {
                     // get groups with accounts for general use
                     this.store.dispatch(this._generalAction.getGroupWithAccounts());
-                    this.store.dispatch(this._generalAction.getFlattenAccount());
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 }
                 return { type: 'EmptyAction' };
