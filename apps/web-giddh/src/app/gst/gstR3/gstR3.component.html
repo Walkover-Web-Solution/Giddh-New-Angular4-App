@@ -343,7 +343,7 @@
                                     <!-- {{(this.gstr3BData?.sumTaxVal ? this.gstr3BData?.sumTaxVal : 0 )| giddhCurrency}} -->
                                     <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="(this.gstr3BData?.sumTaxVal ? this.gstr3BData?.sumTaxVal : 0)"
+                                            [amount]="(gstr3BData?.sumTaxVal ? gstr3BData?.sumTaxVal : 0)"
                                             [currencySymbol]="false" [currencyCode]="false">
                                         </amount-field>
                                     </span>
@@ -351,7 +351,7 @@
                                 <td class="text-right"><i class="icon-rupees font-11"></i>
                                     <!-- {{(this.gstr3BData?.sumIamtVal ? this.gstr3BData?.sumIamtVal : 0 )| giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="(this.gstr3BData?.sumIamtVal ? this.gstr3BData?.sumIamtVal : 0 )" [currencySymbol]="false"
+                                        <amount-field [amount]="(gstr3BData?.sumIamtVal ? gstr3BData?.sumIamtVal : 0 )" [currencySymbol]="false"
                                             [currencyCode]="false">
                                         </amount-field>
                                     </span>
@@ -359,7 +359,7 @@
                                 <td class="text-right"><i class="icon-rupees font-11"></i>
                                     <!-- {{(this.gstr3BData?.sumCamtval ? this.gstr3BData?.sumCamtval : 0 )| giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="(this.gstr3BData?.sumCamtval ? this.gstr3BData?.sumCamtval : 0 )" [currencySymbol]="false"
+                                        <amount-field [amount]="(gstr3BData?.sumCamtval ? gstr3BData?.sumCamtval : 0 )" [currencySymbol]="false"
                                             [currencyCode]="false">
                                         </amount-field>
                                     </span>
@@ -367,7 +367,7 @@
                                 <td class="text-right"><i class="icon-rupees font-11"></i>
                                     <!-- {{(this.gstr3BData?.sumSamtval ? this.gstr3BData?.sumSamtval : 0 )| giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="(this.gstr3BData?.sumSamtval ? this.gstr3BData?.sumSamtval : 0 )" [currencySymbol]="false"
+                                        <amount-field [amount]="(gstr3BData?.sumSamtval ? gstr3BData?.sumSamtval : 0 )" [currencySymbol]="false"
                                             [currencyCode]="false">
                                         </amount-field>
                                     </span>
@@ -375,7 +375,7 @@
                                 <td class="text-right"><i class="icon-rupees font-11"></i>
                                     <!-- {{(this.gstr3BData?.sumCsamtval ? this.gstr3BData?.sumCsamtval : 0 )| giddhCurrency}} -->
                                     <span class="d-inline-flex">
-                                        <amount-field [amount]="(this.gstr3BData?.sumCsamtval ? this.gstr3BData?.sumCsamtval : 0 )" [currencySymbol]="false"
+                                        <amount-field [amount]="(gstr3BData?.sumCsamtval ? gstr3BData?.sumCsamtval : 0 )" [currencySymbol]="false"
                                             [currencyCode]="false">
                                         </amount-field>
                                     </span>
@@ -694,7 +694,7 @@
                                             <td class="text-right "><i class="icon-rupees font-11"></i>
                                                 <!-- {{item?.samt | giddhCurrency}} -->
                                                 <span class="d-inline-flex">
-                                                    <amount-field [amount]="item?.camt" [currencySymbol]="false" [currencyCode]="false">
+                                                    <amount-field [amount]="item?.samt" [currencySymbol]="false" [currencyCode]="false">
                                                     </amount-field>
                                                 </span>
                                             </td>
@@ -854,7 +854,7 @@
                                             <td class="text-right btn-link" data-ember-action="" data-ember-action-1233="1233"><i class="icon-rupees font-11"></i>
                                                 <!-- {{item?.intra |giddhCurrency}} -->
                                                 <span class="d-inline-flex">
-                                                    <amount-field [amount]="item?.intra " [currencySymbol]="false" [currencyCode]="false">
+                                                    <amount-field [amount]="item?.intra" [currencySymbol]="false" [currencyCode]="false">
                                                     </amount-field>
                                                 </span>
                                             </td>

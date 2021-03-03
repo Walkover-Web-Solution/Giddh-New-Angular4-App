@@ -119,7 +119,7 @@
                             <td class="text-right" [attr.data-title]="localeData?.debit_amount">
                                 <!-- {{ entry.debitAmount || 0 |giddhCurrency }} -->
                                 <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="entry.debitAmount"
+                                    <amount-field [amount]="entry.debitAmount || 0"
                                         [currencySymbol]="false"
                                         [currencyCode]="false">
                                     </amount-field>
@@ -128,7 +128,7 @@
                             <td class="text-right" [attr.data-title]="localeData?.credit_amount">
                                 <!-- {{ entry.creditAmount || 0 |giddhCurrency}} -->
                                 <span class="d-flex justify-content-end">
-                                    <amount-field [amount]="entry.creditAmount" [currencySymbol]="false" [currencyCode]="false">
+                                    <amount-field [amount]="entry.creditAmount || 0" [currencySymbol]="false" [currencyCode]="false">
                                     </amount-field>
                                 </span>
                             </td>
@@ -144,7 +144,7 @@
                                     <span *ngIf="details.type === 'DEBIT'">
                                         <!-- {{ details.amount || 0 |giddhCurrency}} -->
                                         <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="details.amount" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="details.amount || 0" [currencySymbol]="false" [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </span>
@@ -154,7 +154,7 @@
                                     <span *ngIf="details.type === 'CREDIT'">
                                         <!-- {{ details.amount|| 0  |giddhCurrency}} -->
                                         <span class="d-flex justify-content-end">
-                                            <amount-field [amount]="details.amount" [currencySymbol]="false" [currencyCode]="false">
+                                            <amount-field [amount]="(details.amount || 0)" [currencySymbol]="false" [currencyCode]="false">
                                             </amount-field>
                                         </span>
                                     </span>
