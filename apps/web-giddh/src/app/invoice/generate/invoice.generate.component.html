@@ -158,12 +158,8 @@
                         </div>
 
                     </th>
-
-
                 </tr>
             </thead>
-
-
             <tbody *ngIf="!(getLedgerDataInProcess$ | async)" (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''" (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
 
                 <tr *ngFor="let item of ledgersData?.results; let i = index;"
@@ -208,11 +204,7 @@
                         <table class="table nested-table amount-nested-table">
                             <tr *ngFor="let transaction of item.transactions">
                                 <td class="text-right p-0 border-none">
-                                    <!-- {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }} -->
-                                    <amount-field [amount]="transaction.amount"
-                                        [currencySymbol]="item.accountCurrencySymbol"
-                                        [currencyCode]="invFormData.accountDetails?.currency?.code">
-                                    </amount-field>
+                                    {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
                                 </td>
                             </tr>
                         </table>
