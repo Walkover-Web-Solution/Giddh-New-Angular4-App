@@ -1287,10 +1287,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }));
     }
 
-    public filterAccounts(q: string) {
-        this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
-    }
-
     /**
      *  sidebar menu toggle
      *
