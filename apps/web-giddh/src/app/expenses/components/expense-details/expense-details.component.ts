@@ -23,6 +23,8 @@ import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/upda
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { cloneDeep } from '../../../lodash-optimized';
+import { SearchService } from '../../../services/search.service';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
     selector: 'app-expense-details',
@@ -92,20 +94,78 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         base: '',
         against: '',
         dropDownOption: [],
-        model: ''
+        model: '',
+        name: ''
     };
     public approveEntryRequestInProcess: boolean = false;
     public selectedEntryForApprove: ExpenseResults;
     /** unique name of any attached image   */
-    public imgAttachedFileName: string = '';
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public imgAttachedFileName = '';
 
-    constructor(private modalService: BsModalService,
+    /** Stores the search results pagination details for debtor dropdown */
+    public debtorAccountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for debtor dropdown */
+    public defaultDebtorAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for debtor dropdown */
+    public preventDefaultDebtorScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for debtor dropdown */
+    public defaultDebtorAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the search results pagination details for creditor dropdown */
+    public creditorAccountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for creditor dropdown */
+    public defaultCreditorAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for creditor dropdown */
+    public preventDefaultCreditorScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for creditor dropdown */
+    public defaultCreditorAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the search results pagination details for cash/bank dropdown */
+    public cashBankAccountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search for cash/bank dropdown */
+    public defaultCashBankAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list for cash/bank dropdown */
+    public preventDefaultCashBankScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details for cash/bank dropdown */
+    public defaultCashBankAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if account belongs to cash/bank account */
+    private cashOrBankEntry: any;
+    /** Stores the petty cash entry type */
+    private pettyCashEntryType: string;
+
+    constructor(
+        private accountService: AccountService,
+        private modalService: BsModalService,
         private _toasty: ToasterService,
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _expenceActions: ExpencesAction,
-        private expenseService: ExpenseService
+        private expenseService: ExpenseService,
+        private searchService: SearchService
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -123,34 +183,11 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.flattenAccountListStream$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            let debtorsAccountsOptions = [];
-            let creditorsAccountsOptions = [];
-            let cashAndBankAccountsOptions = [];
-            if (res) {
-                res.forEach(acc => {
-                    if (acc.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
-                        debtorsAccountsOptions.push({ label: acc.name, value: acc.uniqueName, additional: acc });
-                    }
-
-                    if (acc.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
-                        creditorsAccountsOptions.push({ label: acc.name, value: acc.uniqueName, additional: acc });
-                    }
-                    if (acc.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-                        cashAndBankAccountsOptions.push({ label: acc.name, value: acc.uniqueName, additional: acc });
-                    }
-                });
-            }
-
-            this.debtorsAccountsOptions = debtorsAccountsOptions;
-            this.creditorsAccountsOptions = creditorsAccountsOptions;
-            this.cashAndBankAccountsOptions = cashAndBankAccountsOptions;
-        });
 
         this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
 
         this.selectedPettycashEntry$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
+            if (res?.uniqueName !== this.accountEntryPettyCash?.uniqueName) {
                 this.actionPettyCashRequestBody = null;
                 this.accountEntryPettyCash = res;
                 this.prepareApproveRequestObject(this.accountEntryPettyCash);
@@ -186,25 +223,33 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             case 'Entry against Debtor':
                 this.entryAgainstObject.base = 'Debtor Name';
                 this.entryAgainstObject.against = 'Cash Sales';
-                this.entryAgainstObject.dropDownOption = this.debtorsAccountsOptions;
+                this.pettyCashEntryType = 'sales';
+                this.cashOrBankEntry = false;
+                this.loadDefaultDebtorAccountsSuggestions();
                 break;
 
             case 'Entry against Creditor':
                 this.entryAgainstObject.base = 'Creditor Name';
                 this.entryAgainstObject.against = 'Cash Expenses';
-                this.entryAgainstObject.dropDownOption = this.creditorsAccountsOptions;
+                this.pettyCashEntryType = 'expense';
+                this.cashOrBankEntry = false;
+                this.loadDefaultCreditorAccountsSuggestions();
                 break;
 
             case 'Cash Sales':
                 this.entryAgainstObject.base = 'Receipt Mode';
                 this.entryAgainstObject.against = 'Entry against Debtor';
-                this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
+                this.pettyCashEntryType = 'sales';
+                this.cashOrBankEntry = true;
+                this.loadDefaultCashBankAccountsSuggestions();
                 break;
 
             case 'Cash Expenses':
                 this.entryAgainstObject.base = 'Payment Mode';
                 this.entryAgainstObject.against = 'Entry against Creditor';
-                this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
+                this.pettyCashEntryType = 'expense';
+                this.cashOrBankEntry = true;
+                this.loadDefaultCashBankAccountsSuggestions();
                 break;
 
         }
@@ -436,30 +481,414 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.toggleBodyClass();
     }
 
-    private prepareEntryAgainstObject(res: PettyCashResonse) {
-        let cashOrBankEntry = this.isCashBankAccount(res.particular.uniqueName);
-
+    /**
+     * Prepares the entry
+     *
+     * @private
+     * @param {PettyCashResonse} res Petty cash details
+     * @returns {Promise<any>} Promise to carry out further operations
+     * @memberof ExpenseDetailsComponent
+     */
+    private async prepareEntryAgainstObject(res: PettyCashResonse): Promise<any> {
+        this.cashOrBankEntry = res?.particular ? this.isCashBankAccount(res.particular) : false;
+        this.pettyCashEntryType = res.pettyCashEntryStatus.entryType;
         if (res.pettyCashEntryStatus.entryType === 'sales') {
-            this.entryAgainstObject.base = cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
-            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
-            this.entryAgainstObject.dropDownOption = this.isCashBankAccount(res.particular.uniqueName) ? this.cashAndBankAccountsOptions : this.debtorsAccountsOptions;
+            this.entryAgainstObject.base = this.cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
+            this.entryAgainstObject.against = this.cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
+            if (this.cashOrBankEntry) {
+                this.loadDefaultCashBankAccountsSuggestions();
+            } else {
+                this.loadDefaultDebtorAccountsSuggestions();
+            }
         } else if (res.pettyCashEntryStatus.entryType === 'expense') {
 
-            this.entryAgainstObject.base = cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
-            this.entryAgainstObject.against = cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expenses';
-            this.entryAgainstObject.dropDownOption = this.isCashBankAccount(res.particular.uniqueName) ? this.cashAndBankAccountsOptions : this.creditorsAccountsOptions;
+            this.entryAgainstObject.base = this.cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
+            this.entryAgainstObject.against = this.cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expenses';
+            if (this.cashOrBankEntry) {
+                this.loadDefaultCashBankAccountsSuggestions();
+            } else {
+                this.loadDefaultCreditorAccountsSuggestions();
+            }
         } else {
             // deposit
             this.entryAgainstObject.base = 'Deposit To';
             this.entryAgainstObject.against = null;
-            this.entryAgainstObject.dropDownOption = this.cashAndBankAccountsOptions;
+            this.loadDefaultCashBankAccountsSuggestions();
         }
 
         this.entryAgainstObject.model = res.particular.uniqueName;
+        this.entryAgainstObject.name = res.particular.name;
     }
 
-    private isCashBankAccount(uniqueName) {
-        return this.cashAndBankAccountsOptions.some(s => s.value === uniqueName);
+    /**
+     * Returns true, if the account belongs to cash or bank account
+     *
+     * @private
+     * @param {any} particular Account unique name
+     * @returns {boolean} Promise to carry out further operations
+     * @memberof ExpenseDetailsComponent
+     */
+    private isCashBankAccount(particular: any): boolean {
+        if (particular) {
+            return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
+        }
+        return false;
+    }
+
+    /**
+     * Handle account scroll end
+     *
+     * @memberof ExpenseDetailsComponent
+     */
+    public handleAccountScrollEnd(): void {
+        if (this.pettyCashEntryType === 'sales') {
+            if (this.cashOrBankEntry) {
+                this.handleCashBankScrollEnd();
+            } else {
+                this.handleDebtorScrollEnd();
+            }
+        } else if (this.pettyCashEntryType === 'expense') {
+            if (this.cashOrBankEntry) {
+                this.handleCashBankScrollEnd();
+            } else {
+                this.handleCreditorScrollEnd();
+            }
+        } else {
+            this.handleCashBankScrollEnd();
+        }
+    }
+
+    /**
+     * Account search query handler
+     *
+     * @param {string} query Searched query
+     * @memberof ExpenseDetailsComponent
+     */
+    public onAccountSearchQueryChanged(query: string): void {
+        if (this.pettyCashEntryType === 'sales') {
+            if (this.cashOrBankEntry) {
+                this.onCashBankAccountSearchQueryChanged(query);
+            } else {
+                this.onDebtorAccountSearchQueryChanged(query);
+            }
+        } else if (this.pettyCashEntryType === 'expense') {
+            if (this.cashOrBankEntry) {
+                this.onCashBankAccountSearchQueryChanged(query);
+            } else {
+                this.onCreditorAccountSearchQueryChanged(query);
+            }
+        } else {
+            this.onCashBankAccountSearchQueryChanged(query);
+        }
+    }
+
+    /**
+     * Search query change handler for debtor dropdown
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof ExpenseDetailsComponent
+     */
+    public onDebtorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.debtorAccountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultDebtorScrollApiCall &&
+            (query || (this.defaultDebtorAccountSuggestions && this.defaultDebtorAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                group: 'sundrydebtors'
+            }
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.debtorsAccountsOptions = searchResults;
+                    } else {
+                        this.debtorsAccountsOptions = [
+                            ...this.debtorsAccountsOptions,
+                            ...searchResults
+                        ];
+                    }
+                    this.entryAgainstObject.dropDownOption = [...this.debtorsAccountsOptions];
+                    this.debtorAccountsSearchResultsPaginationData.page = data.body.page;
+                    this.debtorAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultDebtorAccountPaginationData.page = this.debtorAccountsSearchResultsPaginationData.page;
+                        this.defaultDebtorAccountPaginationData.totalPages = this.debtorAccountsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.debtorsAccountsOptions = [...this.defaultDebtorAccountSuggestions];
+            this.debtorAccountsSearchResultsPaginationData.page = this.defaultDebtorAccountPaginationData.page;
+            this.debtorAccountsSearchResultsPaginationData.totalPages = this.defaultDebtorAccountPaginationData.totalPages;
+            this.preventDefaultDebtorScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultDebtorScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for debtor
+     *
+     * @returns null
+     * @memberof ExpenseDetailsComponent
+     */
+    public handleDebtorScrollEnd(): void {
+        if (this.debtorAccountsSearchResultsPaginationData.page < this.debtorAccountsSearchResultsPaginationData.totalPages) {
+            this.onDebtorAccountSearchQueryChanged(
+                this.debtorAccountsSearchResultsPaginationData.query,
+                this.debtorAccountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.debtorAccountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultDebtorAccountSuggestions = this.defaultDebtorAccountSuggestions.concat(...results);
+                        this.defaultDebtorAccountPaginationData.page = this.debtorAccountsSearchResultsPaginationData.page;
+                        this.defaultDebtorAccountPaginationData.totalPages = this.debtorAccountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default debtor account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof ExpenseDetailsComponent
+     */
+    private loadDefaultDebtorAccountsSuggestions(): void {
+        this.onDebtorAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultDebtorAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultDebtorAccountPaginationData.page = this.debtorAccountsSearchResultsPaginationData.page;
+            this.defaultDebtorAccountPaginationData.totalPages = this.debtorAccountsSearchResultsPaginationData.totalPages;
+            this.debtorsAccountsOptions = [...this.defaultDebtorAccountSuggestions];
+        });
+    }
+
+    /**
+     * Search query change handler for creditor dropdown
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof ExpenseDetailsComponent
+     */
+    public onCreditorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.creditorAccountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultCreditorScrollApiCall &&
+            (query || (this.defaultCreditorAccountSuggestions && this.defaultCreditorAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                group: 'sundrycreditors'
+            }
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.creditorsAccountsOptions = searchResults;
+                    } else {
+                        this.creditorsAccountsOptions = [
+                            ...this.creditorsAccountsOptions,
+                            ...searchResults
+                        ];
+                    }
+                    this.entryAgainstObject.dropDownOption = [...this.creditorsAccountsOptions];
+                    this.creditorAccountsSearchResultsPaginationData.page = data.body.page;
+                    this.creditorAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultCreditorAccountPaginationData.page = this.creditorAccountsSearchResultsPaginationData.page;
+                        this.defaultCreditorAccountPaginationData.totalPages = this.creditorAccountsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.creditorsAccountsOptions = [...this.defaultCreditorAccountSuggestions];
+            this.creditorAccountsSearchResultsPaginationData.page = this.defaultCreditorAccountPaginationData.page;
+            this.creditorAccountsSearchResultsPaginationData.totalPages = this.defaultCreditorAccountPaginationData.totalPages;
+            this.preventDefaultCreditorScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultCreditorScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for creditor
+     *
+     * @returns null
+     * @memberof ExpenseDetailsComponent
+     */
+    public handleCreditorScrollEnd(): void {
+        if (this.creditorAccountsSearchResultsPaginationData.page < this.creditorAccountsSearchResultsPaginationData.totalPages) {
+            this.onDebtorAccountSearchQueryChanged(
+                this.creditorAccountsSearchResultsPaginationData.query,
+                this.creditorAccountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.creditorAccountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultCreditorAccountSuggestions = this.defaultCreditorAccountSuggestions.concat(...results);
+                        this.defaultDebtorAccountPaginationData.page = this.creditorAccountsSearchResultsPaginationData.page;
+                        this.defaultDebtorAccountPaginationData.totalPages = this.creditorAccountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default creditor account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof ExpenseDetailsComponent
+     */
+    private loadDefaultCreditorAccountsSuggestions(): void {
+        this.onCreditorAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultCreditorAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultCreditorAccountPaginationData.page = this.creditorAccountsSearchResultsPaginationData.page;
+            this.defaultCreditorAccountPaginationData.totalPages = this.creditorAccountsSearchResultsPaginationData.totalPages;
+            this.creditorsAccountsOptions = [...this.defaultCreditorAccountSuggestions];
+        });
+    }
+
+    /**
+     * Search query change handler for cash/bank dropdown
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof ExpenseDetailsComponent
+     */
+    public onCashBankAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.cashBankAccountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultCashBankScrollApiCall &&
+            (query || (this.defaultCashBankAccountSuggestions && this.defaultCashBankAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                group: encodeURIComponent('cash, bankaccounts')
+            }
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.cashAndBankAccountsOptions = searchResults;
+                    } else {
+                        this.cashAndBankAccountsOptions = [
+                            ...this.cashAndBankAccountsOptions,
+                            ...searchResults
+                        ];
+                    }
+                    this.entryAgainstObject.dropDownOption = [...this.cashAndBankAccountsOptions];
+                    this.cashBankAccountsSearchResultsPaginationData.page = data.body.page;
+                    this.cashBankAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultCashBankAccountPaginationData.page = this.cashBankAccountsSearchResultsPaginationData.page;
+                        this.defaultCashBankAccountPaginationData.totalPages = this.cashBankAccountsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.cashAndBankAccountsOptions = [...this.defaultCashBankAccountSuggestions];
+            this.cashBankAccountsSearchResultsPaginationData.page = this.defaultCashBankAccountPaginationData.page;
+            this.cashBankAccountsSearchResultsPaginationData.totalPages = this.defaultCashBankAccountPaginationData.totalPages;
+            this.preventDefaultCashBankScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultCashBankScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    /**
+     * Scroll end handler for cash/bank
+     *
+     * @returns null
+     * @memberof ExpenseDetailsComponent
+     */
+    public handleCashBankScrollEnd(): void {
+        if (this.cashBankAccountsSearchResultsPaginationData.page < this.cashBankAccountsSearchResultsPaginationData.totalPages) {
+            this.onCashBankAccountSearchQueryChanged(
+                this.cashBankAccountsSearchResultsPaginationData.query,
+                this.cashBankAccountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.cashBankAccountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultCashBankAccountSuggestions = this.defaultCashBankAccountSuggestions.concat(...results);
+                        this.defaultCashBankAccountPaginationData.page = this.cashBankAccountsSearchResultsPaginationData.page;
+                        this.defaultCashBankAccountPaginationData.totalPages = this.cashBankAccountsSearchResultsPaginationData.totalPages;
+                    }
+            });
+        }
+    }
+
+    /**
+     * Loads the default creditor account search suggestion when module is loaded
+     *
+     * @private
+     * @memberof ExpenseDetailsComponent
+     */
+    private loadDefaultCashBankAccountsSuggestions(): void {
+        this.onCashBankAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultCreditorAccountSuggestions = response.map(result => {
+                return {
+                    value: result.uniqueName,
+                    label: result.name
+                }
+            }) || [];
+            this.defaultCreditorAccountPaginationData.page = this.creditorAccountsSearchResultsPaginationData.page;
+            this.defaultCreditorAccountPaginationData.totalPages = this.creditorAccountsSearchResultsPaginationData.totalPages;
+            this.creditorsAccountsOptions = [...this.defaultCreditorAccountSuggestions];
+        });
     }
 
     /**

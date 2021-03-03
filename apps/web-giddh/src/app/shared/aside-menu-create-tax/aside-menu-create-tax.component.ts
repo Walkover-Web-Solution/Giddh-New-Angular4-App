@@ -11,6 +11,7 @@ import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxe
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import { IForceClear } from "../../models/api-models/Sales";
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
+import { SalesService } from '../../services/sales.service';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -37,7 +38,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public checkIfTdsOrTcs: boolean = false;
     public days: IOption[] = [];
     public newTaxObj: TaxResponse = new TaxResponse();
-    public flattenAccountsOptions: IOption[] = [];
+    public linkedAccountsOption: IOption[] = [];
     public isTaxCreateInProcess: boolean = false;
     public isUpdateTaxInProcess: boolean = false;
     public taxListSource$: Observable<IOption[]> = observableOf([]);
@@ -48,7 +49,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private store: Store<AppState>, private _settingsTaxesActions: SettingsTaxesActions) {
+    constructor(
+        private store: Store<AppState>,
+        private _settingsTaxesActions: SettingsTaxesActions,
+        private salesService: SalesService
+    ) {
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i.toString(), value: i.toString() });
         }
@@ -62,21 +67,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             }
         });
 
-        this.store.pipe(select(p => p.general.flattenAccounts), takeUntil(this.destroyed$)).subscribe(res => {
-            let arr: IOption[] = [];
-            if (res) {
-                let accountObject = res.filter(accountObj =>
-                    accountObj.parentGroups && accountObj.parentGroups.length > 1 &&
-                    ["currentassets", "currentliabilities"].includes(accountObj.parentGroups[0].uniqueName) &&
-                    !["cash", "bankaccounts", "sundrydebtors", "sundrycreditors", "reversecharge", "taxonadvance"].includes(accountObj.parentGroups[1].uniqueName));
-                accountObject.forEach(accountObj => {
-                    arr.push({ label: `${accountObj.name} - (${accountObj.uniqueName})`, value: accountObj.uniqueName });
-                });
-            } else {
-                arr = [];
-            }
-            this.flattenAccountsOptions = arr;
-        });
+        this.loadLinkedAccounts();
 
         this.store
             .pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$))
@@ -168,7 +159,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             if (!dataToSave.accounts) {
                 dataToSave.accounts = [];
             }
-            this.flattenAccountsOptions.forEach((obj) => {
+            this.linkedAccountsOption.forEach((obj) => {
                 if (obj.value === dataToSave.account) {
                     let accountObj = obj.label.split(' - ');
                     dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj.value });
@@ -215,6 +206,32 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         this.newTaxObj.tdsTcsTaxSubTypes = "";
         this.forceClear$ = observableOf({ status: true });
     }
+
+    /**
+     * Loads the linked accounts
+     *
+     * @private
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    private loadLinkedAccounts(): void {
+        const params = {
+            group: encodeURIComponent('currentassets, currentliabilities'),
+            exceptGroups: encodeURIComponent('cash, bankaccounts, sundrydebtors, sundrycreditors, reversecharge, taxonadvance'),
+            count: 0
+        };
+        let accounts = [];
+        this.salesService.getAccountsWithCurrency(params).subscribe(response => {
+            if (response?.body?.results) {
+                accounts = response.body.results.map(account => {
+                    return { label: `${account.name} - (${account.uniqueName})`, value: account.uniqueName };
+                });
+                this.linkedAccountsOption = accounts;
+            } else {
+                this.linkedAccountsOption = accounts;
+            }
+        });
+    }
+
 
     /**
      * Unsubscribe from all listeners

@@ -17,6 +17,7 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 
 @Component({
 	selector: 'app-manage-groups-accounts',
@@ -82,8 +83,19 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public isCustomFormValid: boolean = true;
 
 	// tslint:disable-next-line:no-empty
-    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,private breakPointObservar: BreakpointObserver,
-        private renderer: Renderer2, private _generalService: GeneralService, private modalService: BsModalService, private groupService: GroupService, private toasterService: ToasterService) {
+    constructor(
+        private store: Store<AppState>,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private formBuilder: FormBuilder,
+        private cdRef: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver,
+        private renderer: Renderer2,
+        private _generalService: GeneralService,
+        private modalService: BsModalService,
+        private groupService: GroupService,
+        private toasterService: ToasterService,
+        private generalActions: GeneralActions
+    ) {
 		this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
 		this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.groupswithaccounts), takeUntil(this.destroyed$));
 		this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
@@ -124,7 +136,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	// tslint:disable-next-line:no-empty
 	public ngOnInit() {
-
+        this.store.dispatch(this.generalActions.getFlattenAccount());
+        this.store.dispatch(this.generalActions.getFlattenGroupsReq());
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {

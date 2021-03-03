@@ -17,7 +17,7 @@ import { RATE_FIELD_PRECISION, SubVoucher } from '../../../app.constant';
 import { take } from 'rxjs/operators';
 
 export class UpdateLedgerVm {
-    public flatternAccountList: IFlattenAccountsResultItem[] = [];
+    public otherAccountList: IFlattenAccountsResultItem[] = [];
     public flatternAccountList4Select: Observable<IOption[]>;
     public flatternAccountList4BaseAccount: IOption[] = [];
     public companyTaxesList$: Observable<TaxResponse[]>;
@@ -168,29 +168,6 @@ export class UpdateLedgerVm {
             this.generateCompoundTotal();
         }
         return;
-    }
-
-    public getCategoryNameFromAccount(accountName: string): string {
-        let categoryName = '';
-        let account = find(this.flatternAccountList, (fla) => fla.uniqueName === accountName);
-        if (account && account.parentGroups && account.parentGroups.length > 0 && account.parentGroups[0]) {
-            categoryName = this.accountCatgoryGetterFunc(account, accountName);
-        } else {
-            let flatterAccounts: IFlattenAccountsResultItem[] = this.flatternAccountList;
-            flatterAccounts.map(fa => {
-                if (fa.mergedAccounts && fa.mergedAccounts !== '') {
-                    let tempMergedAccounts = fa.mergedAccounts.split(',').map(mm => mm.trim());
-                    if (tempMergedAccounts.indexOf(accountName) > -1) {
-                        categoryName = this.accountCatgoryGetterFunc(fa, accountName);
-                        if (categoryName) {
-                            return categoryName;
-                        }
-                    }
-                }
-            });
-
-        }
-        return categoryName;
     }
 
     public accountCatgoryGetterFunc(account, accountName): string {
@@ -481,18 +458,6 @@ export class UpdateLedgerVm {
                     return t;
                 });
             }
-
-            // find account that's from category income || expenses || fixed assets
-            // let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
-            //   let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
-            //   return this.isValidCategory(category);
-            // });
-            //
-            // if (trx) {
-            //   trx.amount = giddhRoundOff(Number(this.totalAmount), 2);
-            //   trx.convertedAmount = this.calculateConversionRate(trx.amount);
-            //   trx.isUpdated = true;
-            // }
         }
 
         this.getEntryTotal();
