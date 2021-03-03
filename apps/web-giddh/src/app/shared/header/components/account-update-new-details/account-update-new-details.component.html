@@ -432,7 +432,9 @@
                                 <span>
                                     <sh-select formControlName="moveto" [placeholder]="'Group name'"
                                         [options]="flatGroupsOptions" [customFilter]="customMoveGroupFilter"
-                                        class="pull-left width-select">
+                                        class="pull-left width-select"
+                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                        (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
                                         <!--template for move group typeahead-->
                                         <ng-template #optionTemplate let-model="option">
                                             <a href="javascript:void(0)" class="list-item">
@@ -461,8 +463,10 @@
                             class="primary-color">{{(activeAccount$ | async)?.name}}</span></label>
                     <div class="clearfix" #accountSelect2>
                         <span>
-                            <sh-select class="pull-left width-select" [options]="accounts$ | async" [isFilterEnabled]="true"
+                            <sh-select class="pull-left width-select" [options]="accounts" [isFilterEnabled]="true"
                                 (viewInitEvent)="loadAccountData()" [multiple]="true"
+                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                 [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"></sh-select>
                         </span>
                         <span class="pull-right">

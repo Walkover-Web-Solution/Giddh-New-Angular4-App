@@ -314,12 +314,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                         let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
                         newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
                         newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
-                        console.log("Result1", newCOL);
                     }
-                    console.log("Result:", this.mc.columns);
                     this.mc.columns.splice(1, 1, newCOL);
                     this._cdRef.detectChanges();
-                    console.log("Result", this.mc.columns);
                     return newCOL;
                 } else {
                     if (grp.groups) {

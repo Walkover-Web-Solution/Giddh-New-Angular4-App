@@ -138,7 +138,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-        // this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.groupDetailForm = this._fb.group({
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],

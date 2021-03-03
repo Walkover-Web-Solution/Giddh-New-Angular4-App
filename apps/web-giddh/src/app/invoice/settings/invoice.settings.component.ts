@@ -63,7 +63,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public paymentGatewayList: IOption[] = PaymentGateway;
     public isLockDateSet: boolean = false;
     public lockDate: Date = new Date();
-    public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
     public isGmailIntegrated: boolean;
     public gmailAuthCodeUrl$: Observable<string> = null;
     /** True, if Gmail integration is to be displayed (TODO: Should be removed once URIs become secured) */
@@ -80,7 +79,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         public _route: ActivatedRoute,
         private router: Router
     ) {
-        this.flattenAccounts$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
@@ -94,15 +92,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         });
         this.initSettingObj();
 
-        this.flattenAccounts$.subscribe(data => {
-            let linkAccount: IOption[] = [];
-            if (data) {
-                data.forEach(f => {
-                    linkAccount.push({ label: f.name, value: f.uniqueName });
-                });
-                this.linkAccountDropDown = linkAccount;
-            }
-        });
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val.code) {
                 this.saveGmailAuthCode(val.code);
