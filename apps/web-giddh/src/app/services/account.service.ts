@@ -1,4 +1,4 @@
-import { empty as observableEmpty, Observable } from 'rxjs';
+import { empty as observableEmpty, Observable, of } from 'rxjs';
 
 import { catchError, map } from 'rxjs/operators';
 import { ShareRequestForm } from '../models/api-models/Permission';
@@ -13,7 +13,7 @@ import { APPLY_TAX_API } from './apiurls/applyTax.api';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { ApplyDiscountRequest, AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
+import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import { APPLY_DISCOUNT_API } from './apiurls/applyDiscount';
 
 @Injectable()
@@ -303,11 +303,15 @@ export class AccountService implements OnInit {
     public GetAccountDetailsV2(accountUniqueName: string): Observable<BaseResponse<AccountResponseV2, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + ACCOUNTS_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<AccountResponseV2, string> = res;
-            data.queryString = { accountUniqueName };
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, string>(e)));
+        if (accountUniqueName) {
+            return this._http.get(this.config.apiUrl + ACCOUNTS_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
+                let data: BaseResponse<AccountResponseV2, string> = res;
+                data.queryString = { accountUniqueName };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, string>(e)));
+        } else {
+            return of({});
+        }
     }
 
     public CreateAccountV2(model: AccountRequestV2, groupUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
