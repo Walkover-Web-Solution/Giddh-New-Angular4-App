@@ -194,5 +194,6 @@
     ],
     "import_goods": "Import of goods",
     "import_services": "Import of services",
-    "others": "Others"
+    "others": "Others",
+    "choose_file": "Choose File"
 }
