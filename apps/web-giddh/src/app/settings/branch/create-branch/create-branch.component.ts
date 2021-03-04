@@ -325,6 +325,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     value: response.body.uniqueName
                 })
                 this.toastService.successToast('Address created successfully');
+            } else {
+                this.toastService.errorToast(response.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {
