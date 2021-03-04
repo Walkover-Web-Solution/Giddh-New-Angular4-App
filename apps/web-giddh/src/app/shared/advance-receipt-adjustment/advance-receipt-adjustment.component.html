@@ -22,7 +22,7 @@
                     <div class="col-md-4 text-right font-14 pt-2 xs-left">
                         <p>{{adjustedVoucherType === 'rcpt' ? commonLocaleData?.app_voucher_types?.receipt : (adjustedVoucherType === 'advance-receipt') ? commonLocaleData?.app_voucher_types?.advance_receipt : commonLocaleData?.app_invoice }} Total: <i class="font-10"></i>{{invoiceFormDetails.accountDetails.currencySymbol}}{{adjustPayment?.grandTotal | giddhCurrency}}
                         </p>
-                        <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ? commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span class="text-light">(Post Adj):</span> <span class="nowrap"><i class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{ getBalanceDue() | giddhCurrency}}</span>
+                        <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ? commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span class="text-light">{{localeData?.post_adj}}</span> <span class="nowrap"><i class="font-10"></i> {{invoiceFormDetails.accountDetails.currencySymbol}} {{ getBalanceDue() | giddhCurrency}}</span>
                         </p>
                     </div>
                 </div>
