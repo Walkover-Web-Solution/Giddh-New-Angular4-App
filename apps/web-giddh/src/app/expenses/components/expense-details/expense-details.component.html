@@ -102,11 +102,11 @@
 
             </div>
         </div>
-
         <div class="expense-ledger" *ngIf="ispPettycashEntrySuccess$ | async">
             <update-ledger-entry-panel [isPettyCash]="true" [pettyCashEntry]="accountEntryPettyCash"
                 [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
                 [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
+                [localeData]="localeData" [commonLocaleData]="commonLocaleData"
                 (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"></update-ledger-entry-panel>
         </div>
     </div>

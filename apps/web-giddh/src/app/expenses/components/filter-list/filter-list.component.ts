@@ -35,6 +35,8 @@ export class FilterListComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	public ngOnInit() {
+        this.monthNames = [this.commonLocaleData.app_months_full.january, this.commonLocaleData.app_months_full.february, this.commonLocaleData.app_months_full.march, this.commonLocaleData.app_months_full.april, this.commonLocaleData.app_months_full.may, this.commonLocaleData.app_months_full.june, this.commonLocaleData.app_months_full.july, this.commonLocaleData.app_months_full.august, this.commonLocaleData.app_months_full.september, this.commonLocaleData.app_months_full.october, this.commonLocaleData.app_months_full.november, this.commonLocaleData.app_months_full.december];
+        
 		this.pettyCashReportsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res) {
 				this.expensesDetailedItems = res.results;
@@ -45,8 +47,6 @@ export class FilterListComponent implements OnInit, OnChanges, OnDestroy {
 				});
 			}
         });
-        
-        this.monthNames = [this.commonLocaleData.app_months_full.january, this.commonLocaleData.app_months_full.february, this.commonLocaleData.app_months_full.march, this.commonLocaleData.app_months_full.april, this.commonLocaleData.app_months_full.may, this.commonLocaleData.app_months_full.june, this.commonLocaleData.app_months_full.july, this.commonLocaleData.app_months_full.august, this.commonLocaleData.app_months_full.september, this.commonLocaleData.app_months_full.october, this.commonLocaleData.app_months_full.november, this.commonLocaleData.app_months_full.december];
 	}
 
 	public getDateToDMY(selecteddate) {
