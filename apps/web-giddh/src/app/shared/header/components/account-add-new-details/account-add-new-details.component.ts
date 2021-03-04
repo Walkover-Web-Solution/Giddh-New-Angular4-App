@@ -535,7 +535,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                                 gstForm.get('stateCode').patchValue(null);
                                 gstForm.get('state').get('code').patchValue(null);
                             }
-                            
+
                             let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
                             invalidTaxName = invalidTaxName?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                             this._toaster.errorToast(invalidTaxName);
@@ -1178,6 +1178,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 // The result will include this group and its children
                 requestObject.includeSearchedGroup = true;
             }
+            let activeGroup;
+            this.activeGroup$.pipe(take(1)).subscribe(response => activeGroup = response);
             this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
@@ -1188,12 +1190,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }) || [];
                     if (page === 1) {
+                        if (activeGroup && searchResults.findIndex(group => group.value === activeGroup.uniqueName) === -1) {
+                            // Active group is not found in first page add it
+                            searchResults.push({
+                                value: activeGroup.uniqueName,
+                                label: `${activeGroup.name}`,
+                                additional: activeGroup.parentGroups
+                            });
+                        }
                         this.flatGroupsOptions = searchResults;
                     } else {
-                        this.flatGroupsOptions = [
+                        const results = [
                             ...this.flatGroupsOptions,
                             ...searchResults
                         ];
+                        this.flatGroupsOptions = _.uniqBy(results, 'value');
                     }
                     this.groupsSearchResultsPaginationData.page = data.body.page;
                     this.groupsSearchResultsPaginationData.totalPages = data.body.totalPages;
@@ -1261,7 +1272,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }) || [];
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
             this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
-            this.flatGroupsOptions = [...this.defaultGroupSuggestions];
         });
     }
 
