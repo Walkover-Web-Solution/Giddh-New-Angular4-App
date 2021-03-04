@@ -209,8 +209,8 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         //  accounts actions
         case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {
             let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-            if (accountData.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+            let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+            if (accountData.status === 'success' && groupArray) {
                 addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
 
                 let flattenItem = cloneDeep(accountData.body);
@@ -263,8 +263,8 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         //  add item to flatten accounts as we are adding item from side bar account
         case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
             let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-            if (accountData.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+            let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+            if (accountData.status === 'success' && groupArray) {
                 addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
 
                 let flattenItem = cloneDeep(accountData.body);
