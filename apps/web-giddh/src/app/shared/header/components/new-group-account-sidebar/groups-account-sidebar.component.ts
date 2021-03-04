@@ -518,6 +518,14 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.destroyed$.complete();
     }
 
+    /**
+     * Populates the new columns
+     *
+     * @private
+     * @param {GroupResponse} activeGroup Active group
+     * @returns {void}
+     * @memberof GroupsAccountSidebarComponent
+     */
     private populateNewColumns(activeGroup: GroupResponse): void {
         if (this.currentGroupIndex === 0) {
             this.currentGroup = {
