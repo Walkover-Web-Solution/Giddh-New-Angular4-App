@@ -629,7 +629,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                     uniqueName: accountData.body.uniqueName
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                if (groupArray) {
+                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                }
                 return Object.assign({}, state, {
                     createAccountInProcess: false,
                     createAccountIsSuccess: true,
@@ -650,7 +652,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 let result = false;
-                addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                if (groupArray) {
+                    addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
+                }
                 return Object.assign({}, state, {
                     createAccountInProcess: false,
                     createAccountIsSuccess: true,
