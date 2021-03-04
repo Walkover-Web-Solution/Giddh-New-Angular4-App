@@ -169,7 +169,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         if (companies) {
             if (companies.length > 0) {
                 this.store.dispatch(this._generalActions.getGroupWithAccounts());
-                this.store.dispatch(this._generalActions.getFlattenAccount());
                 this.closeCompanyModal.emit();
             } else {
                 this.showLogoutModal();

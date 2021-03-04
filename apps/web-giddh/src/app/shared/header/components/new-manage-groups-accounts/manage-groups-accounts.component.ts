@@ -1,10 +1,10 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
@@ -22,7 +22,7 @@ import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.a
 @Component({
 	selector: 'app-manage-groups-accounts',
 	templateUrl: './manage-groups-accounts.component.html',
-	styleUrls: ['./manage-groups-accounts.component.scss']
+    styleUrls: ['./manage-groups-accounts.component.scss']
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
 	@Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -96,9 +96,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         private generalActions: GeneralActions
     ) {
 		this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
-		this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.groupswithaccounts), takeUntil(this.destroyed$));
 		this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
 		this.psConfig = { maxScrollbarLength: 80 };
+        this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.groupswithaccounts), takeUntil(this.destroyed$));
 	}
 
 	@HostListener('window:resize', ['$event'])
@@ -148,7 +148,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 		this.groupSearchTerms.pipe(
 			debounceTime(700), takeUntil(this.destroyed$))
 			.subscribe(term => {
-				this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
 			});
 
 		this.groupAndAccountSearchString$.subscribe(s => {
@@ -449,5 +449,28 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 { label: this.commonLocaleData?.app_datatype_list?.boolean, value: "BOOLEAN" }
             ];
         }
+    }
+
+    /**
+     * Loads the default groups
+     *
+     * @private
+     * @memberof ManageGroupsAccountsComponent
+     */
+    private loadDefaultGroups(): void {
+        const requestObject: any = {
+            q: '',
+            onlyTop: true
+        }
+        this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data?.body?.results) {
+                this.groupList$ = of(data.body.results);
+                if (this.keyupInitialized) {
+                    setTimeout(() => {
+                        this.groupSrch.nativeElement.focus();
+                    }, 200);
+                }
+            }
+        });
     }
 }
