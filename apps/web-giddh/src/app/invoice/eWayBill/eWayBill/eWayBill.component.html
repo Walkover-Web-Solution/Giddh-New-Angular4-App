@@ -131,8 +131,16 @@
                                         </div>
                                     </td>
                                     <td data-title="E-way Bill Date" class="nowrap">{{item?.ewayBillDate}}</td>
-                                    <td data-title="Total" class="nowrap text-right pr-1"><i class="icon-rupees font-11"></i>
-                                        {{item?.totalValue | giddhCurrency}}</td>
+                                    <td data-title="Total" class="nowrap text-right pr-1">
+                                        <i class="icon-rupees font-11"></i>
+                                        <!-- {{item?.totalValue | giddhCurrency}} -->
+                                        <span class="d-inline-flex">
+                                            <amount-field [amount]="item?.totalValue"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </td>
                                     <td data-title="Action" class="nowrap">
                                         <div class="btn-group pull-left" dropdown>
                                             <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic"
