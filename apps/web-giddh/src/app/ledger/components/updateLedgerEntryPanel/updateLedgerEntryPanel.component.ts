@@ -2129,8 +2129,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getTotalInMultiCurrency(): string {
-        let totalInCurrency = this.localeData.total_in_currency;
-        totalInCurrency = totalInCurrency.replace("[CURRENCY]", this.vm.foreignCurrencyDetails?.code);
+        let totalInCurrency = this.localeData?.total_in_currency;
+        totalInCurrency = totalInCurrency?.replace("[CURRENCY]", this.vm.foreignCurrencyDetails?.code);
         return totalInCurrency;
     }
 
@@ -2141,8 +2141,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getAdjustVoucherType(): string {
-        let adjustVoucher = this.localeData.adjust_voucher;
-        adjustVoucher = adjustVoucher.replace("[VOUCHER_TYPE]", (this.vm.selectedLedger.voucher.shortCode === 'sal' ? this.commonLocaleData.app_voucher_types.sales : this.vm.selectedLedger.voucher.shortCode === 'pur' ? this.commonLocaleData.app_voucher_types.purchase : this.vm.selectedLedger.voucher.shortCode === 'credit note' ? this.commonLocaleData.app_voucher_types.credit_note : this.vm.selectedLedger.voucher.shortCode === 'debit note' ? this.commonLocaleData.app_voucher_types.debit_note : this.vm.selectedLedger.voucher.shortCode === 'pay' ? this.commonLocaleData.app_voucher_types.payment : ''));
+        let adjustVoucher = this.localeData?.adjust_voucher;
+        adjustVoucher = adjustVoucher?.replace("[VOUCHER_TYPE]", (this.vm.selectedLedger.voucher.shortCode === 'sal' ? this.commonLocaleData.app_voucher_types.sales : this.vm.selectedLedger.voucher.shortCode === 'pur' ? this.commonLocaleData.app_voucher_types.purchase : this.vm.selectedLedger.voucher.shortCode === 'credit note' ? this.commonLocaleData.app_voucher_types.credit_note : this.vm.selectedLedger.voucher.shortCode === 'debit note' ? this.commonLocaleData.app_voucher_types.debit_note : this.vm.selectedLedger.voucher.shortCode === 'pay' ? this.commonLocaleData.app_voucher_types.payment : ''));
 
         return adjustVoucher;
     }

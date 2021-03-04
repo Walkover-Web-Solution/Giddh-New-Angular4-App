@@ -123,7 +123,7 @@ export class BeneficiaryComponent implements OnInit, OnDestroy {
         this.settingsIntegrationService.beneficiaryValidation(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toaster.clearAllToaster();
 
-            if(response?.status === "success" && response?.body?.Status === "SUCCESS") {
+            if(response?.status === "success" && response?.body?.Response === "SUCCESS") {
                 this.toaster.successToast("Beneficiary has been validated successfully.");
             } else {
                 this.toaster.errorToast("There is some issue in beneficiary validation. Please try again.");

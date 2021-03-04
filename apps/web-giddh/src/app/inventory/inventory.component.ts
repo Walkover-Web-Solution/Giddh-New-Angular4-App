@@ -64,7 +64,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public selectedCompaniesName: any[] = [];
     public isAllSelected$: Observable<boolean> = observableOf(false);
     public confirmationMessage: string = '';
-    public parentCompanyName: string = null;
     public selectedBranch: string = null;
     public isBranchVisible$: Observable<boolean>;
     public activeStock$: Observable<StockDetailResponse>;
@@ -137,9 +136,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-        this.store.dispatch(this.settingsBranchActions.GetParentCompany());
 
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
                 if (branches.length) {
                     _.each(branches, (branch) => {
@@ -169,15 +167,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     });
                 });
                 this.companies$ = observableOf(_.orderBy(companiesWithSuperAdminRole, 'name'));
-            }
-            if (parentCompany) {
-                setTimeout(() => {
-                    this.parentCompanyName = parentCompany.name;
-                }, 10);
-            } else {
-                setTimeout(() => {
-                    this.parentCompanyName = null;
-                }, 10);
             }
         })), takeUntil(this.destroyed$)).subscribe();
 
@@ -385,7 +374,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-        this.store.dispatch(this.settingsBranchActions.GetParentCompany());
     }
 
     /**

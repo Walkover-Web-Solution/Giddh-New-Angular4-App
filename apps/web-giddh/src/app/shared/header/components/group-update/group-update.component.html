@@ -65,8 +65,9 @@
     <form name="moveGroupForm" class="col-xs-12 col-sm-12" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">{{localeData?.move_to_group}}</label>
         <span>
-            <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="localeData?.group_name_label" [options]="groupsList"
-                [isFilterEnabled]="true" class="pull-left move-group-form">
+            <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="localeData?.group_name_label" [options]="searchedGroups"
+                [isFilterEnabled]="true" class="pull-left move-group-form" [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
                 <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
                 <ng-template #optionTemplate let-option="option">
                     <a href="javascript:void(0)" class="list-item">

@@ -5,8 +5,10 @@
     color: $white !important;
     background: $primary;
 }
+
 .virtual-group-list {
     height: 100%;
+    min-height: 300px;
 }
 
 
