@@ -5,7 +5,7 @@
                 <div class="col-sm-4">
                     <div class="ng-select-wrap liq select-group disable-select-group">
                         <label>Select Group<span class="red-text">*</span> </label>
-                        <ng-select placeholder="Select Group" [disabled]="true" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" class="wd100">
+                        <ng-select placeholder="Select Group" [disabled]="true" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="activeAccountGroup" class="wd100">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
                                 <div class="account-list-item font-12">{{option?.value}}</div>

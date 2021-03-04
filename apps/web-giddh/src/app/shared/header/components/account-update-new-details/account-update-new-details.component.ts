@@ -53,6 +53,7 @@ import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
+import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 
 @Component({
     selector: 'account-update-new-details',
@@ -191,6 +192,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         totalPages: 0,
         query: ''
     };
+    /** Stores the active account group */
+    public activeAccountGroup: IOption[] | INameUniqueName[] = [];
 
     constructor(
         private _fb: FormBuilder,
@@ -254,6 +257,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let col = acc.parentGroups[0].uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+                    this.activeAccountGroup = acc.parentGroups.length > 0 ? [{
+                        label: acc.parentGroups[acc.parentGroups.length - 1].name,
+                        value: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
+                        additional: acc.parentGroups[acc.parentGroups.length - 1],
+                    }] : this.flatGroupsOptions;
                     this.activeGroupUniqueName = acc.parentGroups.length > 0 ? acc.parentGroups[acc.parentGroups.length - 1].uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
                 }
