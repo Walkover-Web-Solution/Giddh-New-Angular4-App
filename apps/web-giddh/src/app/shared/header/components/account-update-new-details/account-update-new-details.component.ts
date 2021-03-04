@@ -171,6 +171,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
+        this.store.dispatch(this._generalActions.getFlattenGroupsReq());
         this.getCompanyCustomField();
         this.getCountry();
         this.getCurrency();
