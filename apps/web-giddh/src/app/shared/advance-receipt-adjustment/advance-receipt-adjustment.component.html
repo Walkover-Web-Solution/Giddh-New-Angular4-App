@@ -38,8 +38,7 @@
                                 </span>
                         </p>
                         <p>{{(adjustedVoucherType === 'rcpt' || adjustedVoucherType === 'advance-receipt') ?
-                            commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span class="text-light">(Post
-                                Adj):</span> <span class="nowrap"><i class="font-10"></i>
+                            commonLocaleData?.app_balance : commonLocaleData?.app_due }} <span class="text-light">{{localeData?.post_adj}}</span> <span class="nowrap"><i class="font-10"></i>
                                 <!-- {{invoiceFormDetails.accountDetails.currencySymbol}} {{ getBalanceDue() |
                                 giddhCurrency}} -->
                             </span>
