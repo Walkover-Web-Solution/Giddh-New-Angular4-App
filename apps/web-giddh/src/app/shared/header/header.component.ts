@@ -212,6 +212,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public lastSessionRenewalTime: any;
     /** All modules data with routing shared with user */
     public allModulesList = [];
+    /** This will hold that how many days are left for subscription expiration */
+    public remainingSubscriptionDays: any = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -723,6 +725,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                     this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
                     this.subscribedPlan = res.subscription;
+
+                    if(this.subscribedPlan?.expiry) {
+                        let expiry = (this.subscribedPlan?.expiry)?.split("-")?.reverse()?.join("-");
+                        this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+                    } else {
+                        this.remainingSubscriptionDays = false;
+                    }
+
                     this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
                     this.selectedPlanStatus = res.subscription.status;
                 }
