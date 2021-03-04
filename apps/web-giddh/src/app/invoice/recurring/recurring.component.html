@@ -336,7 +336,15 @@
                     <td data-title="Last Invoice Date">{{ col.lastInvoiceDate || '-'  }}</td>
                     <td data-title="Next Invoice Date ">{{ col.nextCronDate || '-'  }}</td>
                     <td data-title="Status">{{ col.status || '-' | titlecase  }}</td>
-                    <td data-title="Invoice Amt" class=" text-right">{{ col.voucherTotal | giddhCurrency   }}</td>
+                    <td data-title="Invoice Amt" class=" text-right">
+                        <!-- {{ col.voucherTotal | giddhCurrency   }} -->
+                        <span class="d-inline-flex">
+                            <amount-field [amount]="col.voucherTotal"
+                                [currencySymbol]="false"
+                                [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
                 </tr>
             </tbody>
 
