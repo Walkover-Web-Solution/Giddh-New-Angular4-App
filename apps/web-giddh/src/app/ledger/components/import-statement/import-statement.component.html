@@ -8,7 +8,7 @@
             <div class="pd-b2 clearfix browse-file-btn">
                 <label class="w100 file-upload-label">{{localeData?.file}} <sup>*</sup></label>
                 <label class="radio-inline p-0 browse-file-label">
-                    Choose File
+                    {{localeData?.choose_file}}
                     <input type="file" name="file" class="form-control file-upload-field"
                     [(ngModel)]="selectedFile" (change)="onFileChange($event.target.files)" required accept="application/pdf">
                 </label>
