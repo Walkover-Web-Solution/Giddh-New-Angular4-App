@@ -16,6 +16,8 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     @Input() public currencyCode: string;
     /* true, ratePrecision value */
     @Input() public ratePrecision: boolean = true;
+    /** this will store giddhCurrency pipe value */
+    @Input() public useGiddhCurrencyPipe: boolean = true;
     /** this will store direction */
     public direction: string = "ltr";
 
