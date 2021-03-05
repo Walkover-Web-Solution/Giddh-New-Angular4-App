@@ -496,8 +496,8 @@
                                         <a (click)="removeReceiver(i)" *ngIf="branchTransfer.destinations.length > 1">
                                             <i class="fa fa-trash"></i></a>
                                     </div>
-                                    <div>
-                                        <i class="icon-info" *ngIf="destinationWarehouses[destination.uniqueName]?.length !== allWarehouses[destination.uniqueName]?.length" [tooltip]="branchTransferInfoText"></i>
+                                    <div class="icon-info-on-table">
+                                        <i class="icon-info" [ngClass]="{'change-position': branchTransfer.destinations.length > 1}" *ngIf="destinationWarehouses[destination.uniqueName]?.length !== allWarehouses[destination.uniqueName]?.length" [tooltip]="branchTransferInfoText"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -550,8 +550,9 @@
                                     <div class="trash-icon-delete">
                                         <a (click)="removeSender(i)" *ngIf="branchTransfer.sources.length > 1"> <i class="fa fa-trash"></i></a>
                                     </div>
-                                    <div>
-                                        <i class="icon-info" *ngIf="senderWarehouses[source.uniqueName]?.length !== allWarehouses[source.uniqueName]?.length" [tooltip]="branchTransferInfoText"></i>
+                                    <div class="icon-info-on-table">
+                                        <i class="icon-info" [ngClass]="{'change-position': branchTransfer.sources.length > 1}"
+                                            *ngIf="senderWarehouses[source.uniqueName]?.length !== allWarehouses[source.uniqueName]?.length" [tooltip]="branchTransferInfoText"></i>
                                     </div>
                                 </td>
                             </tr>
