@@ -806,4 +806,29 @@ export class GeneralService {
             { label: 'Hindi', value: 'hi' }
         ];
     }
+
+    /**
+     * Returns the array in priority
+     *
+     * @param {Array<string>} [stockTaxes] Taxes on stock
+     * @param {Array<string>} [stockGroupTaxes] Taxes on group to which stock belongs
+     * @param {Array<string>} [accountTaxes] Taxes on account that is linked with the stock
+     * @param {Array<string>} [accountGroupTaxes] Taxes on group of account that is linked with the stock
+     * @returns {Array<string>} Returns the taxes array in priority order
+     * @memberof GeneralService
+     */
+    public fetchTaxesOnPriority(stockTaxes?: Array<string>, stockGroupTaxes?: Array<string>,
+        accountTaxes?: Array<string>, accountGroupTaxes?: Array<string>): Array<string> {
+        if (stockTaxes?.length) {
+            return stockTaxes;
+        } else if (stockGroupTaxes?.length) {
+            return stockGroupTaxes;
+        } else if (accountTaxes?.length) {
+            return accountTaxes;
+        } else if (accountGroupTaxes?.length) {
+            return accountGroupTaxes;
+        } else {
+            return [];
+        }
+    }
 }
