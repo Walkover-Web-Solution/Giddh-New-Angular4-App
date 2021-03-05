@@ -41,11 +41,11 @@
         [hidden]="!account.isVisible" (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()"
         [exclude]="'.row-item'">
 
-        <div class="row row-item" style="height: 35px !important;"
+        <div class="row row-item"
             *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
             <div class="col-4 account no-select" [ngStyle]="{'padding-left': (padding+20)+'px'}">
 
-                <div style="padding: 0px;border-right: 0px;" [innerHTML]="account.name | lowercase | highlight:search">
+                <div class="pd-0 bd-r-right-none" [innerHTML]="account.name | lowercase | highlight:search">
                 </div>
                 <span account-detail-modal-component *ngIf="modalUniqueName && modalUniqueName === account.uniqueName"
                     [shouldShowGenerateInvoice]="false" [accountUniqueName]="account.uniqueName"
