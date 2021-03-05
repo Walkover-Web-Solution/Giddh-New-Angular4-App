@@ -28,7 +28,11 @@
                             <!-- please remove hidden attribute after functionality works -->
                             <div class="select-all-icons" *ngIf="checkedTrxWhileHovering?.length > 0 && isMobileScreen">
                                 <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering?.length > 0">
-                                    <input id="select-all-entries" type="checkbox" [(ngModel)]="debitCreditSelectAll"
+                                    <input *ngIf="visibleTransactionTypeMobile === 'all'" id="select-all-entries" type="checkbox" [(ngModel)]="debitCreditSelectAll"
+                                        (click)="selectAllEntries($event, visibleTransactionTypeMobile)">
+                                    <input *ngIf="visibleTransactionTypeMobile === 'credit'" id="select-all-entries-cr" type="checkbox" [(ngModel)]="creditSelectAll"
+                                        (click)="selectAllEntries($event, visibleTransactionTypeMobile)">
+                                    <input *ngIf="visibleTransactionTypeMobile === 'debit'" id="select-all-entries-dr" type="checkbox" [(ngModel)]="debitSelectAll"
                                         (click)="selectAllEntries($event, visibleTransactionTypeMobile)">
                                     {{commonLocaleData?.app_select_all}}
                                 </div>
@@ -697,7 +701,7 @@
                                                     <input type="checkbox" id="{{'mobile-view-select-entry-cr-' + i}}"
                                                         [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering?.length === 0)}"
                                                         class="d-none" [(ngModel)]="transactions.isChecked"
-                                                        (click)="entrySelected($event, transactions.entryUniqueName)">
+                                                        (click)="entrySelected($event, transactions.entryUniqueName, visibleTransactionTypeMobile)">
                                                 </span>
                                                 <span class="account-holder-name">
                                                     <span *ngIf="transactions.type === 'CREDIT'"
@@ -865,7 +869,7 @@
                                                 <input type="checkbox" id="{{ 'select-entry-dr-' + i}}"
                                                     [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering?.length === 0)}"
                                                     class="d-none" [(ngModel)]="txn.isChecked"
-                                                    (click)="entrySelected($event, txn.entryUniqueName)" />
+                                                    (click)="entrySelected($event, txn.entryUniqueName, 'debit')" />
                                             </span>
                                             <span>{{ txn.entryDate }}</span>
                                         </div>
@@ -1168,7 +1172,7 @@
                                                 <input type="checkbox" id="{{'select-entry-cr-' + i }}"
                                                     [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering?.length === 0)}"
                                                     class="d-none" [(ngModel)]="txn.isChecked"
-                                                    (click)="entrySelected($event, txn.entryUniqueName)" />
+                                                    (click)="entrySelected($event, txn.entryUniqueName, 'credit')" />
 
                                             </span>
                                             <span>{{ txn.entryDate }}</span>
