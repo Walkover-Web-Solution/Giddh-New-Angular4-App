@@ -857,10 +857,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         // directly assign additional property
                         if (data && data.body) {
                             // Take taxes of parent group and stock's own taxes
-                            const taxes = data.body.taxes || [];
-                            if (data.body.stock) {
-                                taxes.push(...data.body.stock.taxes);
-                            }
+                            const taxes = this.generalService.fetchTaxesOnPriority(
+                                data.body.stock?.taxes ?? [],
+                                data.body.stock?.groupTaxes ?? [],
+                                data.body.taxes ?? [],
+                                data.body.groupTaxes ?? []);
                             txn.selectedAccount = {
                                 ...e.additional,
                                 label: e.label,
@@ -941,7 +942,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // directly assign additional property
                     if (data && data.body) {
                         // Take taxes of parent group
-                        const taxes = data.body.taxes || [];
+                        const taxes = this.generalService.fetchTaxesOnPriority(
+                            data.body.stock?.taxes ?? [],
+                            data.body.stock?.groupTaxes ?? [],
+                            data.body.taxes ?? [],
+                            data.body.groupTaxes ?? []);
                         txn.selectedAccount = {
                             ...e.additional,
                             label: e.label,
