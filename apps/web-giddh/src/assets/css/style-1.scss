@@ -400,7 +400,9 @@ aside-menu-account .container-fluid {
 .pd {
     padding: 5px;
 }
-
+.pd-0{
+    padding:0;
+}
 .pd-1 {
     padding: 10px;
 }
@@ -1480,7 +1482,7 @@ li:last-child .angular-ui-tree-handle {
 
 .tb-pl-bs-data{
     height: 60vh !important;
-    font-size: 31px !important; 
+    font-size: 31px !important;
     color: $silver !important;
 }
 
