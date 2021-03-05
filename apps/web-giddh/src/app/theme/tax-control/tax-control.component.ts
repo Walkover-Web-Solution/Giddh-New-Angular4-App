@@ -322,6 +322,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         this.taxInputElement.nativeElement.classList.remove('error-box');
     }
 
+    /**
+     * Enables all the taxes if the item/particular account is changed
+     *
+     * @memberof TaxControlComponent
+     */
+    public enableAllTheTaxes(): void {
+        if (this.taxRenderData?.length) {
+            this.taxRenderData.forEach(tax => tax.isDisabled = false);
+        }
+    }
+
     private isTaxApplicable(tax): boolean {
         const today = moment(moment().format(GIDDH_DATE_FORMAT), GIDDH_DATE_FORMAT, true).valueOf();
         let isApplicable = false;
