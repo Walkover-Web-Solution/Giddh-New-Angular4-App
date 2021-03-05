@@ -126,7 +126,7 @@
                                                 <td>
                                                     <!-- {{seletedUserPlans?.planDetails?.amount | number}} -->
                                                     <span class="d-inline-flex">
-                                                        <amount-field [amount]="seletedUserPlans?.planDetails?.amount |  number}" [currencySymbol]="false" [currencyCode]="false" [useGiddhCurrencyPipe]="false">
+                                                        <amount-field [amount]="(seletedUserPlans?.planDetails?.amount |  number)" [currencySymbol]="false" [currencyCode]="false" [useGiddhCurrencyPipe]="false">
                                                         </amount-field>
                                                     </span>
                                                 </td>
