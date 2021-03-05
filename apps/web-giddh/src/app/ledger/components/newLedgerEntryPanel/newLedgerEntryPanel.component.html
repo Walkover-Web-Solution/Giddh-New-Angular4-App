@@ -242,11 +242,7 @@
         </div>
         <div [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection" class="pd-b1 in-words"
             *ngIf="currentTxn.total">
-            <!-- {{ currentTxn.total | myNumberToWordsPipe | lowercase }} -->
-            <span class="d-inline-flex">
-                <amount-field [amount]="currentTxn.total | myNumberToWordsPipe | lowercase" [currencySymbol]="false" [currencyCode]="false">
-                </amount-field>
-            </span>
+            {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
         </div>
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
