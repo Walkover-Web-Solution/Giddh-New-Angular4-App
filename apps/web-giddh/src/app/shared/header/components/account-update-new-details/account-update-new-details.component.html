@@ -460,7 +460,7 @@
                                 class="primary-color">{{(activeAccount$ | async)?.name}}</span></label>
                         <div class="clearfix" #accountSelect2>
                             <span>
-                                <sh-select class="pull-left width-select" [options]="accounts$ | async" [isFilterEnabled]="true"
+                                <sh-select class="pull-left width-select" [options]="accounts" [isFilterEnabled]="true"
                                     (viewInitEvent)="loadAccountData()" [multiple]="true"
                                     [enableDynamicSearch]="true" [isPaginationEnabled]="true"
                                     (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
