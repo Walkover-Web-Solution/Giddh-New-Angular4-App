@@ -63,7 +63,7 @@ import {
     VoucherDetailsClass,
     VoucherTypeEnum
 } from '../models/api-models/Sales';
-import {auditTime, debounceTime, delay, filter, take, takeUntil} from 'rxjs/operators';
+import {auditTime, debounceTime, delay, distinctUntilChanged, filter, take, takeUntil} from 'rxjs/operators';
 import {IOption} from '../theme/ng-select/option.interface';
 import {combineLatest, Observable, of as observableOf, ReplaySubject, Subject} from 'rxjs';
 import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -713,6 +713,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
+        this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
+            return firstItem?.first?.filter === nextItem?.first?.filter;
+        }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
+            if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
+                queryChanges?.first?.show();
+            }
+        });
     }
 
     /**
@@ -932,6 +939,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.selectedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
                 this.assignAccountDetailsValuesInForm(accountDetails);
+                this.openProductDropdown();
             }
         });
 
@@ -1325,6 +1333,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             .subscribe((st: BreakpointState) => {
                 this.isMobileView = st.matches;
                 this.isMobileScreen = st.matches;
+                if (!this.isMobileScreen && !this.container?.length &&
+                    (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName)) {
+                    this.buildBulkData(this.invFormData.entries.length, 0);
+                }
             });
 
         this.generateVoucherSuccess$.subscribe((result: any) => {
@@ -1933,8 +1945,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isVoucherDateChanged = false;
         this.assignDates();
         this.updateDueDate();
-
-        this.ngAfterViewInit();
+        if (!this.isUpdateMode) {
+            this.toggleBodyClass();
+        }
         this.allowFocus = true;
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;
@@ -2907,6 +2920,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                             this.linkedPoItemsAdded++;
                         }
+                        this.focusOnDescription();
                     }
                 }, () => {
                     txn.isStockTxn = false;
@@ -2920,13 +2934,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     txn.sacNumberExists = false;
                     txn.taxableValue = 0;
                     txn.applicableTaxes = [];
-
-                    setTimeout(() => {
-                        let description = this.description.toArray();
-                        if (description && description[this.activeIndx] && description[this.activeIndx].nativeElement) {
-                            description[this.activeIndx].nativeElement.focus();
-                        }
-                    }, 200);
+                    this.focusOnDescription();
                     return txn;
                 });
             }
@@ -2943,13 +2951,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             txn.sacNumberExists = false;
             txn.taxableValue = 0;
             txn.applicableTaxes = [];
-
-            setTimeout(() => {
-                let description = this.description.toArray();
-                if (description && description[this.activeIndx] && description[this.activeIndx].nativeElement) {
-                    description[this.activeIndx].nativeElement.focus();
-                }
-            }, 200);
+            this.focusOnDescription();
             return txn;
         }
     }
@@ -3133,13 +3135,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
         }
-
-        setTimeout(() => {
-            let description = this.description.toArray();
-            if (description && description[this.activeIndx] && description[this.activeIndx].nativeElement) {
-                description[this.activeIndx].nativeElement.focus();
-            }
-        }, 200);
+        this.focusOnDescription();
         if(calculateTransaction) {
             this.calculateStockEntryAmount(transaction);
             this.calculateWhenTrxAltered(entry, transaction);
@@ -3239,7 +3235,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.entries.push(entry);
             setTimeout(() => {
                 this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
-                this.onBlurDueDate(this.activeIndx);
             }, 200);
         } else {
             // if transaction is valid then add new row else show toasty
@@ -3251,10 +3246,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.entries.push(entry);
             setTimeout(() => {
                 this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
-                this.onBlurDueDate(this.activeIndx);
             }, 200);
         }
         this.createEmbeddedViewAtIndex(this.invFormData.entries.length - 1);
+        this.openProductDropdown();
     }
 
     public removeTransaction(entryIdx: number) {
@@ -5048,12 +5043,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public onBlurDueDate(index) {
         if (this.invFormData.voucherDetails.customerUniquename || this.invFormData.voucherDetails.customerName) {
             this.setActiveIndx(index);
-            setTimeout(() => {
-                let selectAccount = this.selectAccount.toArray();
-                if (selectAccount !== undefined && selectAccount[index] !== undefined) {
-                    selectAccount[index].show('');
-                }
-            }, 200);
         }
     }
 
@@ -5072,7 +5061,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public onBlurInvoiceDate(index) {
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
-            this.onBlurDueDate(index);
+            this.setActiveIndx(index);
+            this.openProductDropdown();
         }
     }
 
@@ -6866,5 +6856,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             const view = this.template.createEmbeddedView(context);
             this.container.insert(view);
         }
+    }
+
+    /**
+     * Opens product dropdown
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private openProductDropdown(): void {
+        if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
+            setTimeout(() => {
+                const shSelectField: ShSelectComponent = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
+                if (shSelectField) {
+                    shSelectField.show();
+                }
+            }, 200);
+        }
+    }
+
+    /**
+     * Focuses on description field
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private focusOnDescription(): void {
+        setTimeout(() => {
+            let description = !this.isMobileScreen ? this.description?.first : this.description?.last;
+            if (description) {
+                description?.nativeElement?.focus();
+            }
+        }, 200);
     }
 }
