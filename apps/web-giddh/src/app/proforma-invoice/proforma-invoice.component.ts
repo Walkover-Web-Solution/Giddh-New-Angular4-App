@@ -1333,8 +1333,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             .subscribe((st: BreakpointState) => {
                 this.isMobileView = st.matches;
                 this.isMobileScreen = st.matches;
-                if (!this.isMobileScreen) {
-                    // this.buildBulkData(this.invFormData.entries.length, 0);
+                if (!this.isMobileScreen && !this.container?.length &&
+                    (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName)) {
+                    this.buildBulkData(this.invFormData.entries.length, 0);
                 }
             });
 
@@ -6857,10 +6858,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * Opens product dropdown
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
     private openProductDropdown(): void {
         if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
             setTimeout(() => {
-                const shSelectField: ShSelectComponent = this.selectAccount?.first;
+                const shSelectField: ShSelectComponent = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
                 if (shSelectField) {
                     shSelectField.show();
                 }
@@ -6868,9 +6875,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * Focuses on description field
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
     private focusOnDescription(): void {
         setTimeout(() => {
-            let description = this.description?.first;
+            let description = !this.isMobileScreen ? this.description?.first : this.description?.last;
             if (description) {
                 description?.nativeElement?.focus();
             }
