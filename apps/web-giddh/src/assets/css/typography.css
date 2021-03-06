@@ -4,7 +4,7 @@
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix")
             format("embedded-opentype"),
         url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.svg")
-            format("woff2"),
+            format("svg"),
         url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.woff")
             format("woff"),
         url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.woff")
@@ -20,7 +20,7 @@
     src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot?#iefix")
             format("embedded-opentype"),
         url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.svg")
-            format("woff2"),
+            format("svg"),
         url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.woff")
             format("woff"),
         url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.ttf")
@@ -35,7 +35,7 @@
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
             format("embedded-opentype"),
         url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg")
-            format("woff2"),
+            format("svg"),
         url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
             format("woff"),
         url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
@@ -50,7 +50,7 @@
     src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix")
             format("embedded-opentype"),
         url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.svg")
-            format("woff2"),
+            format("svg"),
         url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.woff")
             format("woff"),
         url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.ttf")
