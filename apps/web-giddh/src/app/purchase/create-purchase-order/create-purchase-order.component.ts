@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone, AfterViewInit } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf, combineLatest } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { takeUntil, filter, take, delay } from 'rxjs/operators';
+import { takeUntil, filter, take, delay, distinctUntilChanged } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -112,7 +112,7 @@ const SEARCH_TYPE = {
     ]
 })
 
-export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
+export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('vendorNameDropDown', { static: false }) public vendorNameDropDown: SalesShSelectComponent;
     /* Billing state instance */
     @ViewChild('vendorBillingState') vendorBillingState: ElementRef;
@@ -429,6 +429,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             '(max-width: 1024px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
+            if (!this.isMobileScreen) {
+                // this.buildBulkData(this.purchaseOrder.entries.length, 0);
+            }
         });
 
         this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
@@ -523,6 +526,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     this.purchaseOrder.account.shippingDetails.panNumber = "";
                     this.copiedAccountDetails = true;
                 }
+                this.loadTaxesAndDiscounts(0);
+                this.openProductDropdown();
             }
         });
 
@@ -647,6 +652,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     this.purchaseOrder.entries[this.innerEntryIndex].transactions[0].fakeAccForSelect2 = result.value;
                     this.onSelectSalesAccount(result, this.purchaseOrder.entries[this.innerEntryIndex].transactions[0], this.purchaseOrder.entries[this.innerEntryIndex], false, this.innerEntryIndex);
                 }
+            }
+        });
+    }
+
+    public ngAfterViewInit(): void {
+        this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
+            return firstItem?.first?.filter === nextItem?.first?.filter;
+        }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
+            if (this.purchaseOrder?.account?.uniqueName) {
+                queryChanges?.first?.show();
             }
         });
     }
@@ -1330,6 +1345,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                             uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
                         txn = this.calculateItemValues(selectedAcc, txn, entry);
+                        this.focusOnDescription();
                     }
                 }, () => {
                     txn.isStockTxn = false;
@@ -1343,13 +1359,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     txn.sacNumberExists = false;
                     txn.taxableValue = 0;
                     txn.applicableTaxes = [];
-
-                    setTimeout(() => {
-                        let description = this.description.toArray();
-                        if (description && description[this.activeIndex] && description[this.activeIndex].nativeElement) {
-                            description[this.activeIndex].nativeElement.focus();
-                        }
-                    }, 200);
+                    this.focusOnDescription();
                     return txn;
                 });
             }
@@ -1882,7 +1892,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
                 this.activeIndex = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
-                this.onBlurDueDate(this.activeIndex);
             }, 200);
         } else {
             // if transaction is valid then add new row else show toasty
@@ -1894,10 +1903,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
                 this.activeIndex = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
-                this.onBlurDueDate(this.activeIndex);
             }, 200);
         }
         this.createEmbeddedViewAtIndex(this.purchaseOrder.entries.length - 1);
+        this.openProductDropdown();
     }
 
     /**
@@ -1923,24 +1932,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
-    }
-
-    /**
-     * Callback for due date
-     *
-     * @param {*} index
-     * @memberof CreatePurchaseOrderComponent
-     */
-    public onBlurDueDate(index): void {
-        if (this.purchaseOrder.voucherDetails.customerUniquename || this.purchaseOrder.voucherDetails.customerName) {
-            this.setActiveIndex(index);
-            setTimeout(() => {
-                let selectAccount = this.selectAccount.toArray();
-                if (selectAccount !== undefined && selectAccount[index] !== undefined) {
-                    selectAccount[index].show('');
-                }
-            }, 200);
-        }
     }
 
     /**
@@ -2391,6 +2382,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.vendorNameDropDown.clear();
         }
         this.purchaseOrders = [];
+        this.activeIndex = 0;
         this.isRcmEntry = false;
         this.initializeWarehouse();
         this.fillCompanyAddress("reset");
@@ -3424,13 +3416,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 transaction.showCodeType = "sac";
             }
         }
-
-        setTimeout(() => {
-            let description = this.description.toArray();
-            if (description && description[this.activeIndex] && description[this.activeIndex].nativeElement) {
-                description[this.activeIndex].nativeElement.focus();
-            }
-        }, 200);
+        this.focusOnDescription();
         this.calculateStockEntryAmount(transaction);
         this.calculateWhenTrxAltered(entry, transaction);
         return transaction;
@@ -3513,5 +3499,25 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             const view = this.template.createEmbeddedView(context);
             this.container.insert(view);
         }
+    }
+
+    private openProductDropdown(): void {
+        if (this.purchaseOrder?.account?.uniqueName) {
+            setTimeout(() => {
+                const shSelectField: ShSelectComponent = this.selectAccount?.first;
+                if (shSelectField) {
+                    shSelectField.show();
+                }
+            }, 200);
+        }
+    }
+
+    private focusOnDescription(): void {
+        setTimeout(() => {
+            let description = this.description?.first;
+            if (description) {
+                description?.nativeElement?.focus();
+            }
+        }, 200);
     }
 }
