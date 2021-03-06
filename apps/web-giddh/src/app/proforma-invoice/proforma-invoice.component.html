@@ -778,7 +778,7 @@
                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                     [(ngModel)]="invFormData.voucherDetails.dueDate"
                                                     [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                                                    (blur)="onBlurDueDate(0)" />
+                                                    (blur)="onBlurDueDate(0);openProductDropdown()" />
                                                 <p class="text-danger"
                                                     *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid
                                                     Date
@@ -2183,7 +2183,7 @@
                                                 <label class="card-label">Product/Service Description</label>
                                                 <div class="product-name">
                                                     <div class="ng-select-wrap">
-                                                        <sh-select [options]="salesAccounts$ | async"
+                                                        <sh-select [options]="salesAccounts$ | async" #selectAccount
                                                             [(ngModel)]="transaction.fakeAccForSelect2"
                                                             name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                                             (selected)="onSelectSalesAccount($event,transaction, entry, false, false, entryIdx)"
