@@ -7007,7 +7007,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {SalesTransactionItemClass} transaction Transaction instance
      * @memberof ProformaInvoiceComponent
      */
-    private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass) {
+    private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         if (this.excludeTax) {
             transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
             if (transaction.isStockTxn) {
