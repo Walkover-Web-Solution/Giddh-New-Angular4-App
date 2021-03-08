@@ -212,32 +212,10 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             if (accountData.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
-
-                let flattenItem = cloneDeep(accountData.body);
-                flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
-
-                /*
-                 check if we account have applicable taxes
-                 if yes then parse it because when we create account then we receive applicableTaxes array as INameUniqueName
-                 but in flatten accounts we only stores string array [ uniqueName of tax only ]
-                 */
-                if (flattenItem.applicableTaxes) {
-                    flattenItem.applicableTaxes = flattenItem.applicableTaxes.map(acc => acc.uniqueName);
-                }
-
-                if(state.flattenAccounts) {
-                    return {
-                        ...state,
-                        groupswithaccounts: groupArray,
-                        flattenAccounts: [...state.flattenAccounts, flattenItem]
-                    };
-                } else {
-                    return {
-                        ...state,
-                        groupswithaccounts: groupArray,
-                        flattenAccounts: [flattenItem]
-                    };
-                }
+                return {
+                    ...state,
+                    groupswithaccounts: groupArray
+                };
             }
             return state;
         }
@@ -245,16 +223,10 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
                 UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
-                let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
-                let accResp = cloneDeep(updatedAccount.body);
-                accResp.uNameStr = accResp.parentGroups.map(mp => mp.uniqueName).join(', ');
-                flattenAccountsArray[index] = accResp;
                 return {
                     ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: flattenAccountsArray
+                    groupswithaccounts: groupArray
                 };
             }
             return state;
@@ -292,14 +264,10 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
                 UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
-                let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
-                flattenAccountsArray[index] = updatedAccount.body;
                 return {
                     ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: flattenAccountsArray
+                    groupswithaccounts: groupArray
                 };
             }
             return state;
@@ -309,16 +277,10 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let d: BaseResponse<string, any> = action.payload;
             if (d.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-                let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === d.request.accountUniqueName);
-                let parentGroupsLength = (accountForDelete && accountForDelete.parentGroups) ? accountForDelete.parentGroups.length : 0;
-                removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, d.request.accountUniqueName, null);
-                let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === accountForDelete.uniqueName);
-                flattenAccountsArray.splice(index, 1);
+                removeAccountFunc(groupArray, action?.payload?.request?.groupUniqueName, d.request.accountUniqueName, null);
                 return {
                     ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: flattenAccountsArray
+                    groupswithaccounts: groupArray
                 };
             }
             return state;
@@ -327,23 +289,11 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
             if (mAcc.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-                let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === mAcc.queryString.accountUniqueName);
-                let parentGroupsLength = (accountForDelete && accountForDelete.parentGroups) ? accountForDelete.parentGroups.length : 0;
-                let deletedItem = removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, mAcc.queryString.accountUniqueName, null);
-                let parentPath = [];
-                addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false, parentPath);
-                accountForDelete.parentGroups = parentPath.reverse();
-                flattenAccountsArray.map(fa => {
-                    if (fa.uniqueName === accountForDelete.uniqueName) {
-                        fa = accountForDelete;
-                    }
-                    return fa;
-                });
+                let deletedItem = removeAccountFunc(groupArray, action?.payload?.queryString?.activeGroupUniqueName, mAcc.queryString.accountUniqueName, null);
+                addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false);
                 return {
                     ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: flattenAccountsArray
+                    groupswithaccounts: groupArray
                 };
             }
             return state;
