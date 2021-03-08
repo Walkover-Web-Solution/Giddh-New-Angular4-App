@@ -3756,11 +3756,13 @@ a.btn.btn-xs.btn-link.pull-right {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: 15px;
+    right: 0;
     color: $white;
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
+    padding: 1rem 1em;
+    line-height: 48px;
 }
 
 .pd-b5 {
@@ -5922,7 +5924,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .modal-header > .close {
     position: absolute;
     right: 20px;
-    top: 4px;
+    top: 0;
     line-height: 48px;
     color: $white;
     opacity: 1;
@@ -8443,7 +8445,7 @@ button.btn.btn-filter {
 }
 
 .modal-backdrop + .modal {
-    margin-top: 70px;
+    margin-top: 0;
     z-index: 99999;
 }
 
@@ -9673,6 +9675,9 @@ input.mat-input-element{
             width: 18px !important;
             height: 18px !important;
         }
+    }
+    .modal-header{
+        padding: .8rem 1rem !important;
     }
     /* responsive  starts here*/
 
@@ -11123,6 +11128,7 @@ input.mat-input-element{
 
     .modal.fade.giddh-calendar.show {
         z-index: 999999;
+        top: 59px !important;
     }
     *::-webkit-scrollbar {
         width: 10px;

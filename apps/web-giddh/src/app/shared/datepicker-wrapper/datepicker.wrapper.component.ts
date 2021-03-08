@@ -135,7 +135,7 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
                     positionX = positionX - (totalWidth - screenWidth) - 15;
                 }
 
-                this._renderer.setStyle(container, 'top', this.dateFieldPosition.y + 'px');
+                this._renderer.setStyle(container, 'top', (this.dateFieldPosition.y - 59)  + 'px');
                 this._renderer.setStyle(container, 'left', positionX + 'px');
                 this._renderer.setStyle(container, 'right', 'auto');
             }
