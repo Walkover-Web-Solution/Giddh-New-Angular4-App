@@ -160,7 +160,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if(event) {
-            this.monthOptions = [{ label: this.commonLocaleData.app_months_full.january, value: '01' }, { label: this.commonLocaleData.app_months_full.february, value: '02' }, { label: this.commonLocaleData.app_months_full.march, value: '03' }, { label: this.commonLocaleData.app_months_full.april, value: '04' }, { label: this.commonLocaleData.app_months_full.may, value: '05' }, { label: this.commonLocaleData.app_months_full.june, value: '06' }, { label: this.commonLocaleData.app_months_full.july, value: '07' }, { label: this.commonLocaleData.app_months_full.august, value: '08' }, { label: this.commonLocaleData.app_months_full.september, value: '09' }, { label: this.commonLocaleData.app_months_full.october, value: '10' }, { label: this.commonLocaleData.app_months_full.november, value: '11' }, { label: this.commonLocaleData.app_months_full.december, value: '12' }];
+            this.monthOptions = [{ label: this.commonLocaleData?.app_months_full.january, value: '01' }, { label: this.commonLocaleData?.app_months_full.february, value: '02' }, { label: this.commonLocaleData?.app_months_full.march, value: '03' }, { label: this.commonLocaleData?.app_months_full.april, value: '04' }, { label: this.commonLocaleData?.app_months_full.may, value: '05' }, { label: this.commonLocaleData?.app_months_full.june, value: '06' }, { label: this.commonLocaleData?.app_months_full.july, value: '07' }, { label: this.commonLocaleData?.app_months_full.august, value: '08' }, { label: this.commonLocaleData?.app_months_full.september, value: '09' }, { label: this.commonLocaleData?.app_months_full.october, value: '10' }, { label: this.commonLocaleData?.app_months_full.november, value: '11' }, { label: this.commonLocaleData?.app_months_full.december, value: '12' }];
             
             this.GetTypeOptions = [{ label: this.localeData?.get_type_options?.month, value: 'month' }, { label: this.localeData?.get_type_options?.quarter, value: 'quater' }];
             this.quaterOptions = [{ label: this.localeData?.quarters?.q1, value: '01' }, { label: this.localeData?.quarters?.q2, value: '02' }, { label: this.localeData?.quarters?.q3, value: '03' }, { label: this.localeData?.quarters?.q4, value: '04' }];
@@ -173,7 +173,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                         this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater).label;
                     }
     
-                    this.bifurcationClients = this.localeData.bifurcation_clients.replace("[COLUMN_NAME]", this.columnName);
+                    this.bifurcationClients = this.localeData?.bifurcation_clients.replace("[COLUMN_NAME]", this.columnName);
                 }
             });
         }

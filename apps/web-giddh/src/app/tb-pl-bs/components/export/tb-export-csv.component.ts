@@ -25,11 +25,11 @@ class FormatCsv implements IFormatable {
 	private title: string = '';
 
 	constructor(private request: TrialBalanceRequest, private localeData) {
-        this.title = this.localeData.csv.trial_balance.name + ',' + this.localeData.csv.trial_balance.opening_balance + ',' + this.localeData.csv.trial_balance.debit + ',' + this.localeData.csv.trial_balance.credit + ',' + this.localeData.csv.trial_balance.closing_balance + '\r\n';
+        this.title = this.localeData?.csv.trial_balance.name + ',' + this.localeData?.csv.trial_balance.opening_balance + ',' + this.localeData?.csv.trial_balance.debit + ',' + this.localeData?.csv.trial_balance.credit + ',' + this.localeData?.csv.trial_balance.closing_balance + '\r\n';
 	}
 
 	public setHeader(selectedCompany: CompanyResponse) {
-		this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\n${this.localeData.csv.trial_balance.trial_balance} ${this.request.from} ${this.localeData.csv.trial_balance.to} ${this.request.to}\r\n`;
+		this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\n${this.localeData?.csv.trial_balance.trial_balance} ${this.request.from} ${this.localeData?.csv.trial_balance.to} ${this.request.to}\r\n`;
 	}
 
 	public setRowData(data: any[], padding: number) {
@@ -39,7 +39,7 @@ class FormatCsv implements IFormatable {
 	}
 
 	public setFooter(data: any[]) {
-		this.footer += this.localeData.csv.trial_balance.total;
+		this.footer += this.localeData?.csv.trial_balance.total;
 		data.forEach(value => this.footer += `${value},`);
 		this.footer += `\r\n`;
 	}
@@ -92,17 +92,17 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
 		switch (value) {
 			case 'group-wise':
 				csv = this.dataFormatter.formatDataGroupWise(this.localeData);
-				name = this.localeData.csv.trial_balance_group_wise_report_file_name;
+				name = this.localeData?.csv.trial_balance_group_wise_report_file_name;
 				break;
 			case 'condensed':
 				this.dataFormatter.formatDataCondensed(formatCsv);
 				csv = formatCsv.csv();
-				name = this.localeData.csv.trial_balance_condensed_report_file_name;
+				name = this.localeData?.csv.trial_balance_condensed_report_file_name;
 				break;
 			case 'account-wise':
 				this.dataFormatter.formatDataAccountWise(formatCsv);
 				csv = formatCsv.csv();
-				name = this.localeData.csv.trial_balance_account_wise_report_file_name;
+				name = this.localeData?.csv.trial_balance_account_wise_report_file_name;
 				break;
 			default:
 				break;

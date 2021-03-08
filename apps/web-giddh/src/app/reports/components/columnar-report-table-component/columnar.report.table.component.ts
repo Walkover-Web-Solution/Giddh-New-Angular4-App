@@ -42,8 +42,8 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
      * @memberof ColumnarReportTableComponent
      */
     public ngOnInit(): void {
-        this.columnsName = ['#', this.localeData.name_of_ledger, this.localeData.parent_group, this.localeData.opening_balance, this.localeData.closing_balance];
-        this.months = [this.commonLocaleData.app_months_full.january, this.commonLocaleData.app_months_full.february, this.commonLocaleData.app_months_full.march, this.commonLocaleData.app_months_full.april, this.commonLocaleData.app_months_full.may, this.commonLocaleData.app_months_full.june, this.commonLocaleData.app_months_full.july, this.commonLocaleData.app_months_full.august, this.commonLocaleData.app_months_full.september, this.commonLocaleData.app_months_full.october, this.commonLocaleData.app_months_full.november, this.commonLocaleData.app_months_full.december];
+        this.columnsName = ['#', this.localeData?.name_of_ledger, this.localeData?.parent_group, this.localeData?.opening_balance, this.localeData?.closing_balance];
+        this.months = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
 
         this.columnarReportResponse = null;
     }
@@ -85,7 +85,7 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
     public reformationOfColumnarReport(columnarRes: any): void {
         this.columnsName = [];
         this.monthName = [];
-        this.columnsName = ['#', this.localeData.name_of_ledger, this.localeData.parent_group, this.localeData.opening_balance, this.localeData.closing_balance, this.localeData.grand_total];
+        this.columnsName = ['#', this.localeData?.name_of_ledger, this.localeData?.parent_group, this.localeData?.opening_balance, this.localeData?.closing_balance, this.localeData?.grand_total];
         let response = cloneDeep(columnarRes);
         if (columnarRes && columnarRes.closingBalance) {
             if (!Object.keys(columnarRes.closingBalance).length) {

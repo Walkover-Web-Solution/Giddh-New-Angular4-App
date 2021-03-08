@@ -70,13 +70,13 @@ export class MapExcelDataComponent implements OnInit {
 	public mapExcelData() {
 
 		if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel.length) {
-			this._toaster.errorToast(this.localeData.mandatory_columns_error);
+			this._toaster.errorToast(this.localeData?.mandatory_columns_error);
 			return;
 		} else {
 			// check if group have mandatory fields selected
 			if (this.mandatoryGroupModel.length) {
 				if (this.mandatoryGroupHeadersCount !== this.mandatoryGroupModel.length) {
-					this._toaster.errorToast(this.localeData.mandatory_columns_error);
+					this._toaster.errorToast(this.localeData?.mandatory_columns_error);
 					return;
 				}
 			}

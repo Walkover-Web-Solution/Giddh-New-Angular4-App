@@ -29,8 +29,8 @@ export class DataFormatter {
         };
         csv = '';
         row = '';
-        title = '' + ',' + localeData.csv.trial_balance.opening_balance + ',' + localeData.csv.trial_balance.debit + ',' + localeData.csv.trial_balance.credit + ',' + localeData.csv.trial_balance.closing_balance + '\n';
-        header = `${this.selectedCompany.name}\r\n"${this.selectedCompany.address}"\r\n${this.selectedCompany.city}-${this.selectedCompany.pincode}\r\n${localeData.csv.trial_balance.trial_balance} ${localeData.csv.trial_balance.fromDate} ${localeData.csv.trial_balance.to} ${localeData.csv.trial_balance.toDate}\r\n`;
+        title = '' + ',' + localeData?.csv.trial_balance.opening_balance + ',' + localeData?.csv.trial_balance.debit + ',' + localeData?.csv.trial_balance.credit + ',' + localeData?.csv.trial_balance.closing_balance + '\n';
+        header = `${this.selectedCompany.name}\r\n"${this.selectedCompany.address}"\r\n${this.selectedCompany.city}-${this.selectedCompany.pincode}\r\n${localeData?.csv.trial_balance.trial_balance} ${localeData?.csv.trial_balance.fromDate} ${localeData?.csv.trial_balance.to} ${localeData?.csv.trial_balance.toDate}\r\n`;
         csv += `${header}\r\n${title}`;
 
         this.exportData.forEach(obj => {
@@ -40,7 +40,7 @@ export class DataFormatter {
             // }
         });
         csv += `${row}\r\n`;
-        csv += `\r\n${localeData.csv.trial_balance.total},${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
+        csv += `\r\n${localeData?.csv.trial_balance.total},${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
         return csv;
     }
     public formatDataAccountWise = (formatable: IFormatable): void => {
