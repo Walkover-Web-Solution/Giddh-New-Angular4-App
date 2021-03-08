@@ -149,23 +149,23 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         let pdf = new jsPDF('p', 'pt') as JsPDFAutoTable;
         let columns = [
             {
-                title: 'Particular', //this.localeData.pdf.trial_balance.particular,
+                title: 'Particular', //this.localeData?.pdf.trial_balance.particular,
                 dataKey: 'name'
             },
             {
-                title: 'Opening Balance', //this.localeData.pdf.trial_balance.opening_balance,
+                title: 'Opening Balance', //this.localeData?.pdf.trial_balance.opening_balance,
                 dataKey: 'openingBalance'
             },
             {
-                title: 'Debit', //this.localeData.pdf.trial_balance.debit,
+                title: 'Debit', //this.localeData?.pdf.trial_balance.debit,
                 dataKey: 'debit'
             },
             {
-                title: 'Credit', //this.localeData.pdf.trial_balance.credit,
+                title: 'Credit', //this.localeData?.pdf.trial_balance.credit,
                 dataKey: 'credit'
             },
             {
-                title: 'Closing Balance', //this.localeData.pdf.trial_balance.closing_balance,
+                title: 'Closing Balance', //this.localeData?.pdf.trial_balance.closing_balance,
                 dataKey: 'closingBalance'
             }
         ];

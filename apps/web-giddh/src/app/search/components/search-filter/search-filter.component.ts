@@ -47,21 +47,21 @@ export class SearchFilterComponent implements OnInit {
 
 	public ngOnInit() {
 		this.queryTypes = [
-            { name: this.localeData.query_types.closing_balance, uniqueName: 'closingBalance' },
-            { name: this.localeData.query_types.opening_balance, uniqueName: 'openingBalance' },
-            { name: this.localeData.query_types.cr_total, uniqueName: 'creditTotal' },
-            { name: this.localeData.query_types.dr_total, uniqueName: 'debitTotal' }
+            { name: this.localeData?.query_types.closing_balance, uniqueName: 'closingBalance' },
+            { name: this.localeData?.query_types.opening_balance, uniqueName: 'openingBalance' },
+            { name: this.localeData?.query_types.cr_total, uniqueName: 'creditTotal' },
+            { name: this.localeData?.query_types.dr_total, uniqueName: 'debitTotal' }
         ];
 
         this.queryDiffers = [
-            this.localeData.query_differs.less,
-            this.localeData.query_differs.greater,
-            this.localeData.query_differs.equals
+            this.localeData?.query_differs.less,
+            this.localeData?.query_differs.greater,
+            this.localeData?.query_differs.equals
         ];
 
         this.balType = [
-            { name: this.localeData.balance_type.cr, uniqueName: 'CREDIT' },
-		    { name: this.localeData.balance_type.dr, uniqueName: 'DEBIT' }
+            { name: this.localeData?.balance_type.cr, uniqueName: 'CREDIT' },
+		    { name: this.localeData?.balance_type.dr, uniqueName: 'DEBIT' }
         ];
 	}
 

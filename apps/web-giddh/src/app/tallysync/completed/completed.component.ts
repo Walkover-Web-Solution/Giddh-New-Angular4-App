@@ -189,7 +189,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public getReport() {
         if (this.filterForm.invalid) {
-            this._toaster.errorToast(this.localeData.filter_criteria);
+            this._toaster.errorToast(this.localeData?.filter_criteria);
             return;
         }
 

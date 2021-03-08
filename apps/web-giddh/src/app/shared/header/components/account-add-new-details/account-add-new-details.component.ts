@@ -597,12 +597,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.isMobileNumberValid = true;
             } else {
                 this.isMobileNumberValid = false;
-                this._toaster.errorToast(this.localeData.invalid_contact_number);
+                this._toaster.errorToast(this.localeData?.invalid_contact_number);
                 ele.classList.add('error-box');
             }
         } catch (error) {
             this.isMobileNumberValid = false;
-            this._toaster.errorToast(this.localeData.invalid_contact_number);
+            this._toaster.errorToast(this.localeData?.invalid_contact_number);
             ele.classList.add('error-box');
         }
     }
@@ -628,7 +628,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             accountRequest.mobileCode = '';
         } else {
             if(!this.isMobileNumberValid) {
-                this._toaster.errorToast(this.localeData.invalid_contact_number);
+                this._toaster.errorToast(this.localeData?.invalid_contact_number);
                 return false;
             }
         }

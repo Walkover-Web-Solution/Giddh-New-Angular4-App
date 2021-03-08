@@ -24,7 +24,7 @@ export class TbExportXlsComponent implements OnInit {
     }
 
     public downloadTbXls(value: string) {
-        let request = { ...this.trialBalanceRequest, export: value, filename: this.localeData.xls.trial_balance.download_filename } as TrialBalanceExportExcelRequest;
+        let request = { ...this.trialBalanceRequest, export: value, filename: this.localeData?.xls.trial_balance.download_filename } as TrialBalanceExportExcelRequest;
         this.store.dispatch(this._tbPlActions.DownloadTrialBalanceExcel(request));
         return false;
     }

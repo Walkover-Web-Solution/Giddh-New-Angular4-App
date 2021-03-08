@@ -286,7 +286,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
     public approveEntry() {
         if (this.entryAgainstObject.base && !this.entryAgainstObject.model) {
-            let errorMessage = this.localeData.entry_against_error;
+            let errorMessage = this.localeData?.entry_against_error;
             errorMessage = errorMessage.replace("[ENTRY_AGAINST]", this.entryAgainstObject.base);
             this._toasty.errorToast(errorMessage);
             this.hideApproveConfirmPopup(false);
@@ -423,7 +423,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.imageURL.push(img);
                 this.imgAttachedFileName = output.file.response.body.name;
                 // this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
-                this._toasty.successToast(this.localeData.file_upload_success);
+                this._toasty.successToast(this.localeData?.file_upload_success);
                 // this.startUpload();
             } else {
                 this._toasty.errorToast(output.file.response.message, output.file.response.code);
@@ -916,7 +916,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public buildCreatorString(): void {
         if(this.selectedItem && this.selectedItem.createdBy) {
-            this.byCreator = this.localeData.by_creator;
+            this.byCreator = this.localeData?.by_creator;
             this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedItem.createdBy.name);
         } else {
             this.byCreator = "";
