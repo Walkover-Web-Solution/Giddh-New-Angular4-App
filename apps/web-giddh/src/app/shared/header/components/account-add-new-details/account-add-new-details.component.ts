@@ -1306,11 +1306,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }
                     if (this.formFields['taxName'] && this.formFields['taxName'].label) {
                         this.GSTIN_OR_TRN = this.formFields['taxName'].label;
+                        this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
+                        this.taxNamePlaceholder = this.taxNamePlaceholder?.replace("[TAX_NAME]", this.formFields['taxName']?.label || '');
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
-                    this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
-                    this.taxNamePlaceholder = this.taxNamePlaceholder?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                 }
             });
         }
