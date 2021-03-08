@@ -93,11 +93,12 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
 		case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
 			let res: BaseResponse<AccountResponseV2, string> = action.payload;
 			if (res.status === 'success') {
-				return Object.assign({}, state, {
+				return {
+                    ...state,
 					updatedAccountDetails: action.payload.body,
 					updateAccountInProcess: false,
 					updateAccountSuccess: true
-				});
+				};
 			}
 			return { ...state, updateAccountInProcess: false, updateAccountSuccess: false, updatedAccountDetails: null };
 		}
