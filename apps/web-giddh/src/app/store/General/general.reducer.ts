@@ -161,12 +161,14 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
             if (gData.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let myChildElementIsOpen = false;
-                AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray
-                };
+                if (groupArray) {
+                    let myChildElementIsOpen = false;
+                    AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray
+                    };
+                }
             }
             return state;
         case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
@@ -174,11 +176,13 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             if (activeGrpData.status === 'success') {
                 Object.assign({}, activeGrpData.body, {isOpen: true, isActive: true});
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray
-                };
+                if (groupArray) {
+                    updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray
+                    };
+                }
             }
             return state;
         }
@@ -186,23 +190,27 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let g: BaseResponse<string, string> = action.payload;
             if (g.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                removeGroupFunc(groupArray, g.request, null);
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray
-                };
+                if (groupArray) {
+                    removeGroupFunc(groupArray, g.request, null);
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray
+                    };
+                }
             }
             return state;
         case GroupWithAccountsAction.MOVE_GROUP_RESPONSE:
             let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
             if (m.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let deletedItem = removeGroupFunc(groupArray, m.queryString.groupUniqueName, null);
-                addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray
-                };
+                if (groupArray) {
+                    let deletedItem = removeGroupFunc(groupArray, m.queryString.groupUniqueName, null);
+                    addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray
+                    };
+                }
             }
             return state;
 
@@ -245,17 +253,20 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+
                 let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-                UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
-                let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
-                let accResp = cloneDeep(updatedAccount.body);
-                accResp.uNameStr = accResp.parentGroups.map(mp => mp.uniqueName).join(', ');
-                flattenAccountsArray[index] = accResp;
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: flattenAccountsArray
-                };
+                if (groupArray && flattenAccountsArray) {
+                    UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
+                    let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
+                    let accResp = cloneDeep(updatedAccount.body);
+                    accResp.uNameStr = accResp.parentGroups.map(mp => mp.uniqueName).join(', ');
+                    flattenAccountsArray[index] = accResp;
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: flattenAccountsArray
+                    };
+                }
             }
             return state;
         }
@@ -293,14 +304,16 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             if (updatedAccount.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-                UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
-                let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
-                flattenAccountsArray[index] = updatedAccount.body;
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: flattenAccountsArray
-                };
+                if (groupArray && flattenAccountsArray) {
+                    UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
+                    let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === updatedAccount.queryString.accountUniqueName);
+                    flattenAccountsArray[index] = updatedAccount.body;
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: flattenAccountsArray
+                    };
+                }
             }
             return state;
         }
@@ -310,16 +323,18 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             if (d.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-                let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === d.request.accountUniqueName);
-                let parentGroupsLength = (accountForDelete && accountForDelete.parentGroups) ? accountForDelete.parentGroups.length : 0;
-                removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, d.request.accountUniqueName, null);
-                let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === accountForDelete.uniqueName);
-                flattenAccountsArray.splice(index, 1);
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: flattenAccountsArray
-                };
+                if (groupArray && flattenAccountsArray) {
+                    let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === d.request.accountUniqueName);
+                    let parentGroupsLength = (accountForDelete && accountForDelete.parentGroups) ? accountForDelete.parentGroups.length : 0;
+                    removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, d.request.accountUniqueName, null);
+                    let index = flattenAccountsArray.findIndex(fa => fa.uniqueName === accountForDelete.uniqueName);
+                    flattenAccountsArray.splice(index, 1);
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: flattenAccountsArray
+                    };
+                }
             }
             return state;
         }
@@ -328,23 +343,25 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             if (mAcc.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 let flattenAccountsArray: IFlattenAccountsResultItem[] = _.cloneDeep(state.flattenAccounts);
-                let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === mAcc.queryString.accountUniqueName);
-                let parentGroupsLength = (accountForDelete && accountForDelete.parentGroups) ? accountForDelete.parentGroups.length : 0;
-                let deletedItem = removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, mAcc.queryString.accountUniqueName, null);
-                let parentPath = [];
-                addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false, parentPath);
-                accountForDelete.parentGroups = parentPath.reverse();
-                flattenAccountsArray.map(fa => {
-                    if (fa.uniqueName === accountForDelete.uniqueName) {
-                        fa = accountForDelete;
-                    }
-                    return fa;
-                });
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray,
-                    flattenAccounts: flattenAccountsArray
-                };
+                if (groupArray && flattenAccountsArray) {
+                    let accountForDelete: IFlattenAccountsResultItem = flattenAccountsArray.find(f => f.uniqueName === mAcc.queryString.accountUniqueName);
+                    let parentGroupsLength = (accountForDelete && accountForDelete.parentGroups) ? accountForDelete.parentGroups.length : 0;
+                    let deletedItem = removeAccountFunc(groupArray, accountForDelete.parentGroups[parentGroupsLength - 1].uniqueName, mAcc.queryString.accountUniqueName, null);
+                    let parentPath = [];
+                    addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false, parentPath);
+                    accountForDelete.parentGroups = parentPath.reverse();
+                    flattenAccountsArray.map(fa => {
+                        if (fa.uniqueName === accountForDelete.uniqueName) {
+                            fa = accountForDelete;
+                        }
+                        return fa;
+                    });
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray,
+                        flattenAccounts: flattenAccountsArray
+                    };
+                }
             }
             return state;
         }
@@ -352,14 +369,16 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
             if (dd.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                dd.request.forEach(f => {
-                    findAndRemoveAccountFunc(groupArray, f.uniqueName, false);
-                });
+                if (groupArray) {
+                    dd.request.forEach(f => {
+                        findAndRemoveAccountFunc(groupArray, f.uniqueName, false);
+                    });
 
-                return {
-                    ...state,
-                    groupswithaccounts: groupArray
-                };
+                    return {
+                        ...state,
+                        groupswithaccounts: groupArray
+                    };
+                }
             }
             return {
                 ...state
