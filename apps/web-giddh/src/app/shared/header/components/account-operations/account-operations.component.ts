@@ -231,10 +231,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.selectedItems = [];
         this.settings = {
             singleSelection: false,
-            text: this.localeData.select_fields,
-            selectAllText: this.commonLocaleData.app_select_all,
-            unSelectAllText: this.commonLocaleData.app_unselect_all,
-            searchPlaceholderText: this.localeData.search_fields,
+            text: this.localeData?.select_fields,
+            selectAllText: this.commonLocaleData?.app_select_all,
+            unSelectAllText: this.commonLocaleData?.app_unselect_all,
+            searchPlaceholderText: this.localeData?.search_fields,
             enableSearchFilter: true,
             badgeShowLimit: 5,
             groupBy: "category",
@@ -279,16 +279,16 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.showAddNewGroup$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf(this.commonLocaleData.app_create_group) === -1) {
-                    this.breadcrumbPath.push(this.commonLocaleData.app_create_group);
+                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_group) === -1) {
+                    this.breadcrumbPath.push(this.commonLocaleData?.app_create_group);
                 }
             }
         });
 
         this.showAddNewAccount$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf(this.commonLocaleData.app_create_account) === -1) {
-                    this.breadcrumbPath.push(this.commonLocaleData.app_create_account);
+                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_account) === -1) {
+                    this.breadcrumbPath.push(this.commonLocaleData?.app_create_account);
                 }
             }
         });
@@ -356,13 +356,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.activeGroupSharedWith$.subscribe(response => {
             if(response) {
-                this.groupSharedWith = this.localeData.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.groupSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
 
         this.activeAccountSharedWith$.subscribe(response => {
             if(response) {
-                this.accountSharedWith = this.localeData.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.accountSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
     }
@@ -604,7 +604,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge.trim();
-        this.deleteMergedAccountModalBody = this.localeData.delete_merged_account_content.replace("[MERGE]", merge);
+        this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountModal.show();
     }
@@ -655,13 +655,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
-            this._toaster.errorToast(this.localeData.merge_account_error);
+            this._toaster.errorToast(this.localeData?.merge_account_error);
             return;
         }
     }
 
     public showMoveMergedAccountModal() {
-        this.moveMergedAccountModalBody = this.localeData.move_merged_account_content
+        this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content
                                           .replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
                                           .replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();

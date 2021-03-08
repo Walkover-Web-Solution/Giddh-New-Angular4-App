@@ -259,31 +259,31 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public ngOnInit() {
         this.voucherTypeList = observableOf([{
-            label: this.commonLocaleData.app_voucher_types.sales,
+            label: this.commonLocaleData?.app_voucher_types.sales,
             value: 'sal'
         }, {
-            label: this.commonLocaleData.app_voucher_types.purchase,
+            label: this.commonLocaleData?.app_voucher_types.purchase,
             value: 'pur'
         }, {
-            label: this.commonLocaleData.app_voucher_types.receipt,
+            label: this.commonLocaleData?.app_voucher_types.receipt,
             value: 'rcpt'
         }, {
-            label: this.commonLocaleData.app_voucher_types.payment,
+            label: this.commonLocaleData?.app_voucher_types.payment,
             value: 'pay'
         }, {
-            label: this.commonLocaleData.app_voucher_types.journal,
+            label: this.commonLocaleData?.app_voucher_types.journal,
             value: 'jr'
         }, {
-            label: this.commonLocaleData.app_voucher_types.contra,
+            label: this.commonLocaleData?.app_voucher_types.contra,
             value: 'cntr'
         }, {
-            label: this.commonLocaleData.app_voucher_types.debit_note,
+            label: this.commonLocaleData?.app_voucher_types.debit_note,
             value: 'debit note'
         }, {
-            label: this.commonLocaleData.app_voucher_types.credit_note,
+            label: this.commonLocaleData?.app_voucher_types.credit_note,
             value: 'credit note'
         }, {
-            label: this.commonLocaleData.app_voucher_types.advance_receipt,
+            label: this.commonLocaleData?.app_voucher_types.advance_receipt,
             value: 'advance-receipt',
             subVoucher: SubVoucher.AdvanceReceipt
         }]);
@@ -358,9 +358,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
 
         if(this.localeData) {
-            this.availableItcList[0].label = this.localeData.import_goods;
-            this.availableItcList[1].label = this.localeData.import_services;
-            this.availableItcList[2].label = this.localeData.others;
+            this.availableItcList[0].label = this.localeData?.import_goods;
+            this.availableItcList[1].label = this.localeData?.import_services;
+            this.availableItcList[2].label = this.localeData?.others;
         }
     }
 
@@ -764,7 +764,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 })
                 .catch(e => {
                     if (e !== 'User canceled.') {
-                        this._toasty.errorToast(this.commonLocaleData.app_something_went_wrong);
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     }
                     this.isFileUploading = false;
                 });
@@ -776,7 +776,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 })
                 .catch(err => {
                     if (err !== 'canceled') {
-                        this._toasty.errorToast(this.commonLocaleData.app_something_went_wrong);
+                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     }
                     this.isFileUploading = false;
                 });
@@ -806,7 +806,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.isFileUploading = false;
                     this.blankLedger.attachedFile = result.body.uniqueName;
                     this.blankLedger.attachedFileName = result.body.uniqueName;
-                    this._toasty.successToast(this.localeData.file_uploaded);
+                    this._toasty.successToast(this.localeData?.file_uploaded);
                 }
             }, (err) => {
                 // show toaster
@@ -841,7 +841,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isFileUploading = false;
                 this.blankLedger.attachedFile = output.file.response.body.uniqueName;
                 this.blankLedger.attachedFileName = output.file.response.body.name;
-                this._toasty.successToast(this.localeData.file_uploaded);
+                this._toasty.successToast(this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this.blankLedger.attachedFile = '';
@@ -916,12 +916,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public showErrMsgOnUI() {
-        this._toasty.warningToast(this.localeData.no_matching_entry_found);
+        this._toasty.warningToast(this.localeData?.no_matching_entry_found);
     }
 
     public confirmBankTransactionMap(item: ReconcileResponse) {
         this.selectedItemToMap = item;
-        this.mapBodyContent = this.localeData.map_cheque_bank_transaction;
+        this.mapBodyContent = this.localeData?.map_cheque_bank_transaction;
         this.mapBodyContent = this.mapBodyContent.replace("[CHEQUE_NUMBER]", item.chequeNumber);
         this.confirmBankTxnMapModal.show();
     }
@@ -945,7 +945,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     if (typeof (res.body) === 'string') {
                         this._toasty.successToast(res.body);
                     } else {
-                        this._toasty.successToast(this.localeData.entry_mapped);
+                        this._toasty.successToast(this.localeData?.entry_mapped);
                     }
                     this.hideConfirmBankTxnMapModal();
                     this.clickedOutsideEvent.emit(false);
@@ -1608,7 +1608,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public getTotalInCurrency(): string {
-        let totalInCurrency = this.localeData.total_in_currency;
+        let totalInCurrency = this.localeData?.total_in_currency;
         let currency = "";
 
         if(this.selectedCurrency === 0) {
@@ -1632,7 +1632,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public getTotalInMultiCurrency(): string {
-        let totalInCurrency = this.localeData.total_in_currency;
+        let totalInCurrency = this.localeData?.total_in_currency;
         let currency = "";
 
         if(this.selectedCurrency === 0) {
@@ -1656,8 +1656,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public getAdjustVoucherType(): string {
-        let adjustVoucher = this.localeData.adjust_voucher;
-        adjustVoucher = adjustVoucher.replace("[VOUCHER_TYPE]", (this.blankLedger.voucherType === 'sal' ? this.commonLocaleData.app_voucher_types.sales : this.blankLedger.voucherType === 'pur' ? this.commonLocaleData.app_voucher_types.purchase : this.blankLedger.voucherType === 'credit note' ? this.commonLocaleData.app_voucher_types.credit_note : this.blankLedger.voucherType === 'debit note' ? this.commonLocaleData.app_voucher_types.debit_note : this.blankLedger.voucherType === 'pay' ? this.commonLocaleData.app_voucher_types.payment : ''));
+        let adjustVoucher = this.localeData?.adjust_voucher;
+        adjustVoucher = adjustVoucher.replace("[VOUCHER_TYPE]", (this.blankLedger.voucherType === 'sal' ? this.commonLocaleData?.app_voucher_types.sales : this.blankLedger.voucherType === 'pur' ? this.commonLocaleData?.app_voucher_types.purchase : this.blankLedger.voucherType === 'credit note' ? this.commonLocaleData?.app_voucher_types.credit_note : this.blankLedger.voucherType === 'debit note' ? this.commonLocaleData?.app_voucher_types.debit_note : this.blankLedger.voucherType === 'pay' ? this.commonLocaleData?.app_voucher_types.payment : ''));
 
         return adjustVoucher;
     }

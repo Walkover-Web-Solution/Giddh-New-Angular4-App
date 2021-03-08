@@ -135,7 +135,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.taxPopOverTemplate = '<div class="popover-content"><label>'+this.localeData.tax_inherited+':</label><ul><li>@inTax.name</li></ul></div>';
+        this.taxPopOverTemplate = '<div class="popover-content"><label>'+this.localeData?.tax_inherited+':</label><ul><li>@inTax.name</li></ul></div>';
         this.groupDetailForm = this._fb.group({
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],

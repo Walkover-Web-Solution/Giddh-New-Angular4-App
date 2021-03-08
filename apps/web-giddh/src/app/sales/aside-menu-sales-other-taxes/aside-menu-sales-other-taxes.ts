@@ -27,8 +27,8 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
 
     ngOnInit() {
         this.calculationMethodOptions = [
-            { label: this.commonLocaleData.app_on_taxable_value, value: 'OnTaxableAmount' },
-            { label: this.commonLocaleData.app_on_total_value, value: 'OnTotalAmount' },
+            { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
+            { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
         ];
 
         this.taxesOptions = this.taxes

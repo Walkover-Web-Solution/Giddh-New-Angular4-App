@@ -287,7 +287,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         }
         if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
-            let message = this.localeData.bank_transactions_message;
+            let message = this.localeData?.bank_transactions_message;
             message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
             message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
 
@@ -638,7 +638,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
         } else {
-            this._toaster.errorToast(this.localeData.cashfree_details_required_message, 'Validation');
+            this._toaster.errorToast(this.localeData?.cashfree_details_required_message, 'Validation');
             return;
         }
     }
@@ -806,7 +806,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         // uncomment it
         // request.data = Object.assign({} , request.data, this.formattedQuery);
 
-        if (this.messageBody.btn.set === this.commonLocaleData.app_send_email) {
+        if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
             return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
                     r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
@@ -816,7 +816,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.selectedItems = [];
                     this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
                 });
-        } else if (this.messageBody.btn.set === this.commonLocaleData.app_send_sms) {
+        } else if (this.messageBody.btn.set === this.commonLocaleData?.app_send_sms) {
             let temp = request;
             delete temp.data['subject'];
             return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
@@ -1437,43 +1437,43 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if(event) {
-            this.messageBody.header.email = this.commonLocaleData.app_send_email;
-            this.messageBody.header.sms = this.commonLocaleData.app_send_sms;
+            this.messageBody.header.email = this.commonLocaleData?.app_send_email;
+            this.messageBody.header.sms = this.commonLocaleData?.app_send_sms;
 
-            this.messageBody.btn.email = this.commonLocaleData.app_send_email;
-            this.messageBody.btn.sms = this.commonLocaleData.app_send_sms;
+            this.messageBody.btn.email = this.commonLocaleData?.app_send_email;
+            this.messageBody.btn.sms = this.commonLocaleData?.app_send_sms;
 
             this.dataVariables = [
                 {
-                    name: this.localeData.data_variables.opening_balance,
+                    name: this.localeData?.data_variables.opening_balance,
                     value: '%s_OB',
                 },
                 {
-                    name: this.localeData.data_variables.closing_balance,
+                    name: this.localeData?.data_variables.closing_balance,
                     value: '%s_CB',
                 },
                 {
-                    name: this.localeData.data_variables.credit_total,
+                    name: this.localeData?.data_variables.credit_total,
                     value: '%s_CT',
                 },
                 {
-                    name: this.localeData.data_variables.debit_total,
+                    name: this.localeData?.data_variables.debit_total,
                     value: '%s_DT',
                 },
                 {
-                    name: this.localeData.data_variables.from_date,
+                    name: this.localeData?.data_variables.from_date,
                     value: '%s_FD',
                 },
                 {
-                    name: this.localeData.data_variables.to_date,
+                    name: this.localeData?.data_variables.to_date,
                     value: '%s_TD',
                 },
                 {
-                    name: this.localeData.data_variables.magic_link,
+                    name: this.localeData?.data_variables.magic_link,
                     value: '%s_ML',
                 },
                 {
-                    name: this.localeData.data_variables.account_name,
+                    name: this.localeData?.data_variables.account_name,
                     value: '%s_AN',
                 }
             ];
