@@ -490,10 +490,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @private
      * @param {PettyCashResonse} res Petty cash details
-     * @returns {Promise<any>} Promise to carry out further operations
      * @memberof ExpenseDetailsComponent
      */
-    private async prepareEntryAgainstObject(res: PettyCashResonse): Promise<any> {
+    private prepareEntryAgainstObject(res: PettyCashResonse): void {
         this.cashOrBankEntry = res?.particular ? this.isCashBankAccount(res.particular) : false;
         this.pettyCashEntryType = res?.pettyCashEntryStatus?.entryType;
         if (res?.pettyCashEntryStatus?.entryType === 'sales') {
