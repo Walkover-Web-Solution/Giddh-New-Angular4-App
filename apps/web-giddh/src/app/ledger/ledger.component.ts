@@ -2298,7 +2298,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public bankTransactionPageChanged(event: any): void {
-        if(this.bankTransactionsResponse.page != event.page) {
+        if(this.bankTransactionsResponse.page !== event.page) {
             this.bankTransactionsResponse.page = event.page;
             this.getBankTransactions();
         }
