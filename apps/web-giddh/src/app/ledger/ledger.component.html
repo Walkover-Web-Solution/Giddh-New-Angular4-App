@@ -328,7 +328,7 @@
                                             (click)="$event.stopPropagation()">
                                             <tbody>
                                                 <ng-container
-                                                    *ngFor="let item of lc.bankTransactionsData; let i = index">
+                                                    *ngFor="let item of lc.bankTransactionsData; trackBy: trackByTransactionId; let i = index">
                                                     <ng-container *ngFor="let txn of item.transactions;">
                                                         <ng-container *ngIf="txn.type === 'DEBIT'">
                                                             <tr class="ledger-row row"
@@ -481,7 +481,7 @@
                                             (click)="$event.stopPropagation()">
                                             <tbody>
                                                 <ng-container
-                                                    *ngFor="let item of lc.bankTransactionsData; let i = index">
+                                                    *ngFor="let item of lc.bankTransactionsData; trackBy: trackByTransactionId; let i = index">
                                                     <ng-container *ngFor="let txn of item.transactions;">
                                                         <ng-container *ngIf="txn.type === 'CREDIT'">
                                                             <tr class="ledger-row row"

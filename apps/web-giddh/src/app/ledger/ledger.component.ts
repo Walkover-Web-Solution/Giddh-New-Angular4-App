@@ -2298,8 +2298,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public bankTransactionPageChanged(event: any): void {
-        this.bankTransactionsResponse.page = event.page;
-        this.getBankTransactions();
+        if(this.bankTransactionsResponse.page != event.page) {
+            this.bankTransactionsResponse.page = event.page;
+            this.getBankTransactions();
+        }
     }
 
     /**
@@ -2436,5 +2438,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * This returns the transaction id of item
+     *
+     * @param {number} index
+     * @param {*} item
+     * @returns {*}
+     * @memberof LedgerComponent
+     */
+    public trackByTransactionId(index: number, item: any): any {
+        return item.transactionId;
     }
 }
