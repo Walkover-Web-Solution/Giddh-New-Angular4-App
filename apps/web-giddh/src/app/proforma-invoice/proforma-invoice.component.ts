@@ -2636,22 +2636,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
-        if (this.excludeTax) {
-            trx.total = giddhRoundOff((trx.amount - entry.discountSum), 2);
-            if (trx.isStockTxn) {
-                trx.convertedTotal = giddhRoundOff((trx.quantity * trx.rate * this.exchangeRate) - entry.discountSum, 2);
-            } else {
-                trx.convertedTotal = giddhRoundOff(trx.total * this.exchangeRate, 2);
-            }
-        } else {
-            trx.total = giddhRoundOff((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
-            if (trx.isStockTxn) {
-                trx.convertedTotal = giddhRoundOff(((trx.quantity * trx.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
-            } else {
-                trx.convertedTotal = giddhRoundOff(trx.total * this.exchangeRate, 2);
-            }
-        }
-
+        this.calculateConvertedTotal(entry, trx);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
@@ -2905,6 +2890,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     this.calculateStockEntryAmount(transaction);
                     this.calculateWhenTrxAltered(entry, transaction)
+                } else {
+                    this.calculateConvertedTotal(entry, transaction);
                 }
             });
         }
@@ -7009,6 +6996,32 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.template) {
             const view = this.template.createEmbeddedView(context);
             this.container.insert(view);
+        }
+    }
+
+    /**
+     * Calculates converted total
+     *
+     * @private
+     * @param {SalesEntryClass} entry Entry instance
+     * @param {SalesTransactionItemClass} transaction Transaction instance
+     * @memberof ProformaInvoiceComponent
+     */
+    private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass) {
+        if (this.excludeTax) {
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
+            if (transaction.isStockTxn) {
+                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, 2);
+            } else {
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+            }
+        } else {
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            if (transaction.isStockTxn) {
+                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            } else {
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+            }
         }
     }
 }
