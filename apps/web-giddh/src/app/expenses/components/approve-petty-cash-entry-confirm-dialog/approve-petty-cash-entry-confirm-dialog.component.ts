@@ -30,7 +30,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     public buildCreatorString(): void {
         if(this.selectedEntryForApprove && this.selectedEntryForApprove.createdBy) {
-            this.byCreator = this.localeData.by_creator;
+            this.byCreator = this.localeData?.by_creator;
             this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedEntryForApprove.createdBy.name);
         } else {
             this.byCreator = "";

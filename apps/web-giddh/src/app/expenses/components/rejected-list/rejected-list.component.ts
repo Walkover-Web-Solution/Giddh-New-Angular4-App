@@ -164,8 +164,8 @@ export class RejectedListComponent implements OnInit, OnChanges {
      * @memberof RejectedListComponent
      */
     public replaceTitle(title: string): string {
-        if(this.localeData && this.localeData.search_field) {
-            return this.localeData.search_field.replace("[FIELD]", title);
+        if(this.localeData && this.localeData?.search_field) {
+            return this.localeData?.search_field.replace("[FIELD]", title);
         } else {
             return title;
         }

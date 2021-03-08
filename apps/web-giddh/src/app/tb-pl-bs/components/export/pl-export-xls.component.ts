@@ -23,7 +23,7 @@ export class PlExportXlsComponent implements OnInit {
     }
 
     public downloadPlXls() {
-        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData.xls.profit_loss.download_filename };
+        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.profit_loss.download_filename };
         this.store.dispatch(this._tbPlActions.DownloadProfitLossExcel(request));
     }
 

@@ -703,16 +703,16 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public translationComplete(event: boolean): void {
         if(event) {
             this.advanceReceiptAdvanceSearchAmountFilters = [
-                { label: this.commonLocaleData.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
-                { label: this.commonLocaleData.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
-                { label: this.commonLocaleData.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
-                { label: this.commonLocaleData.app_comparision_filters.equals, value: 'EQUALS' },
-                { label: this.commonLocaleData.app_comparision_filters.not_equals, value: 'NOT_EQUALS' }
+                { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
+                { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
+                { label: this.commonLocaleData?.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
+                { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' },
+                { label: this.commonLocaleData?.app_comparision_filters.not_equals, value: 'NOT_EQUALS' }
             ];
 
             this.receiptTypes = [
-                { label: this.localeData.receipt_types.normal_receipts, value: 'normal receipt' },
-                { label: this.localeData.receipt_types.advance_receipts, value: 'advance receipt' }
+                { label: this.localeData?.receipt_types.normal_receipts, value: 'normal receipt' },
+                { label: this.localeData?.receipt_types.advance_receipts, value: 'advance receipt' }
             ];
 
             this.receiptType = this.receiptTypes;

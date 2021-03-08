@@ -37,37 +37,37 @@ export class AuditLogsSidebarVM {
         this.options = {
             multiple: false,
             width: '100%',
-            placeholder: this.commonLocaleData.app_select_option,
+            placeholder: this.commonLocaleData?.app_select_option,
             allowClear: true
         };
 
-        this.dateOptions = [{ label: this.commonLocaleData.app_date_range, value: '1' }, { label: this.localeData.entry_log_date, value: '0' }];
+        this.dateOptions = [{ label: this.commonLocaleData?.app_date_range, value: '1' }, { label: this.localeData?.entry_log_date, value: '0' }];
 
         this.filters = [
-            { label: this.localeData.filters.all, value: 'All' },
-            { label: this.localeData.filters.create, value: 'create' },
-            { label: this.localeData.filters.delete, value: 'delete' },
-            { label: this.localeData.filters.share, value: 'share' },
-            { label: this.localeData.filters.unshare, value: 'unshare' },
-            { label: this.localeData.filters.move, value: 'move' },
-            { label: this.localeData.filters.merge, value: 'merge' },
-            { label: this.localeData.filters.unmerge, value: 'unmerge' },
-            { label: this.localeData.filters.delete_all, value: 'delete-all' },
-            { label: this.localeData.filters.update, value: 'update' },
-            { label: this.localeData.filters.master_import, value: 'master-import' },
-            { label: this.localeData.filters.daybook_import, value: 'daybook-import' },
-            { label: this.localeData.filters.ledger_excel_import, value: 'ledger-excel-import' }
+            { label: this.localeData?.filters.all, value: 'All' },
+            { label: this.localeData?.filters.create, value: 'create' },
+            { label: this.localeData?.filters.delete, value: 'delete' },
+            { label: this.localeData?.filters.share, value: 'share' },
+            { label: this.localeData?.filters.unshare, value: 'unshare' },
+            { label: this.localeData?.filters.move, value: 'move' },
+            { label: this.localeData?.filters.merge, value: 'merge' },
+            { label: this.localeData?.filters.unmerge, value: 'unmerge' },
+            { label: this.localeData?.filters.delete_all, value: 'delete-all' },
+            { label: this.localeData?.filters.update, value: 'update' },
+            { label: this.localeData?.filters.master_import, value: 'master-import' },
+            { label: this.localeData?.filters.daybook_import, value: 'daybook-import' },
+            { label: this.localeData?.filters.ledger_excel_import, value: 'ledger-excel-import' }
         ];
 
         this.entities = [
-            { label: this.localeData.entities.all, value: 'All' },
-            { label: this.localeData.entities.company, value: 'company' },
-            { label: this.localeData.entities.group, value: 'group' },
-            { label: this.localeData.entities.account, value: 'account' },
-            { label: this.localeData.entities.ledger, value: 'ledger' },
-            { label: this.localeData.entities.voucher, value: 'voucher' },
-            { label: this.localeData.entities.logs, value: 'logs' },
-            { label: this.localeData.entities.invoice, value: 'invoice' },
+            { label: this.localeData?.entities.all, value: 'All' },
+            { label: this.localeData?.entities.company, value: 'company' },
+            { label: this.localeData?.entities.group, value: 'group' },
+            { label: this.localeData?.entities.account, value: 'account' },
+            { label: this.localeData?.entities.ledger, value: 'ledger' },
+            { label: this.localeData?.entities.voucher, value: 'voucher' },
+            { label: this.localeData?.entities.logs, value: 'logs' },
+            { label: this.localeData?.entities.invoice, value: 'invoice' },
         ];
     }
 

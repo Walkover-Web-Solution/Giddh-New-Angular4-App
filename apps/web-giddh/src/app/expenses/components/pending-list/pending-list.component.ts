@@ -125,7 +125,7 @@ export class PendingListComponent implements OnInit, OnChanges {
 
     public async approveEntry() {
         if (!this.selectedEntryForApprove.baseAccount.uniqueName) {
-            this._toasty.errorToast(this.localeData.approve_entry_error);
+            this._toasty.errorToast(this.localeData?.approve_entry_error);
             this.hideApproveConfirmPopup(false);
             return;
         }
@@ -269,8 +269,8 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     public replaceTitle(title: string): string {
-        if(this.localeData && this.localeData.search_field) {
-            return this.localeData.search_field.replace("[FIELD]", title);
+        if(this.localeData && this.localeData?.search_field) {
+            return this.localeData?.search_field.replace("[FIELD]", title);
         } else {
             return title;
         }

@@ -203,7 +203,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             if (dateDiff <= 8) {
                 this.setPurchaseRegisterTotal(item);
                 this.purchaseRegisterTotal.particular = this.selectedMonth + " " + mdyFrom[2];
-                reportsModel.particular = this.commonLocaleData.app_week + weekCount++;
+                reportsModel.particular = this.commonLocaleData?.app_week + weekCount++;
                 reportModelArray.push(reportsModel);
             } else if (dateDiff <= 31) {
                 this.setPurchaseRegisterTotal(item);
@@ -219,7 +219,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 reportsModelCombined.cumulative = item.closingBalance.amount;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
-                    reportsModelCombined.particular = this.commonLocaleData.app_quarter + ' ' + indexMonths / 3;
+                    reportsModelCombined.particular = this.commonLocaleData?.app_quarter + ' ' + indexMonths / 3;
                     reportsModelCombined.reportType = 'combined';
                     reportModelArray.push(reportsModelCombined);
 
@@ -325,7 +325,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     }
 
     public formatParticular(mdyTo, mdyFrom, index, monthNames) {
-        return this.commonLocaleData.app_quarter + ' ' + index + " (" + monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2] + "-" + monthNames[parseInt(mdyTo[1]) - 1] + " " + mdyTo[2] + ")";
+        return this.commonLocaleData?.app_quarter + ' ' + index + " (" + monthNames[parseInt(mdyFrom[1]) - 1] + " " + mdyFrom[2] + "-" + monthNames[parseInt(mdyTo[1]) - 1] + " " + mdyTo[2] + ")";
     }
 
     public bsValueChange(event: any) {
@@ -430,7 +430,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if(event) {
-            this.monthNames = [this.commonLocaleData.app_months_full.january, this.commonLocaleData.app_months_full.february, this.commonLocaleData.app_months_full.march, this.commonLocaleData.app_months_full.april, this.commonLocaleData.app_months_full.may, this.commonLocaleData.app_months_full.june, this.commonLocaleData.app_months_full.july, this.commonLocaleData.app_months_full.august, this.commonLocaleData.app_months_full.september, this.commonLocaleData.app_months_full.october, this.commonLocaleData.app_months_full.november, this.commonLocaleData.app_months_full.december];
+            this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
 
             this.setCurrentFY();
         }
