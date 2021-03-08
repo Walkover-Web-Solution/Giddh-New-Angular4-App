@@ -176,14 +176,14 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
             if(res) {
                 if (res.status === "success") {
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                    return saveAs(blob, this.localeData.downloaded_filename);
+                    return saveAs(blob, this.localeData?.downloaded_filename);
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(res.message);
                 }
             } else {
                 this.toaster.clearAllToaster();
-                this.toaster.errorToast(this.commonLocaleData.app_something_went_wrong);
+                this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
             }
         });
     }

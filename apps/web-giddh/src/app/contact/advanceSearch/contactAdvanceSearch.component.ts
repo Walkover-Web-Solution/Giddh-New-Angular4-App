@@ -30,24 +30,24 @@ export class ContactAdvanceSearchComponent implements OnInit, OnChanges {
 
     public ngOnInit(): void {
         this.filtersForEntryTotal = [
-            { label: this.commonLocaleData.app_comparision_filters.equals, value: 'Equals' },
-            { label: this.commonLocaleData.app_comparision_filters.greater_than, value: 'GreaterThan' },
-            { label: this.commonLocaleData.app_comparision_filters.less_than, value: 'LessThan' },
-            { label: this.commonLocaleData.app_comparision_filters.exclude, value: 'Exclude' }
+            { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'Equals' },
+            { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GreaterThan' },
+            { label: this.commonLocaleData?.app_comparision_filters.less_than, value: 'LessThan' },
+            { label: this.commonLocaleData?.app_comparision_filters.exclude, value: 'Exclude' }
         ];
     }
 
     public ngOnChanges() {
         if(this.advanceSearch4 === 'customer') {
             this.categoryOptions = [
-                { label: this.localeData.customer_category_options.opening_balance, value: 'openingBalance' },
-                { label: this.localeData.customer_category_options.sales, value: 'sales' },
-                { label: this.localeData.customer_category_options.receipt, value: 'receipt' },
-                { label: this.localeData.customer_category_options.closing_balance, value: 'closingBalance' }
+                { label: this.localeData?.customer_category_options.opening_balance, value: 'openingBalance' },
+                { label: this.localeData?.customer_category_options.sales, value: 'sales' },
+                { label: this.localeData?.customer_category_options.receipt, value: 'receipt' },
+                { label: this.localeData?.customer_category_options.closing_balance, value: 'closingBalance' }
             ];
         } else {
             this.categoryOptions = [
-                { label: this.commonLocaleData.app_total_due, value: 'totalDue' }
+                { label: this.commonLocaleData?.app_total_due, value: 'totalDue' }
             ];
         }
     }

@@ -36,7 +36,7 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
     
 	public ngOnInit() {
 		if (this.UploadExceltableResponse) {
-			this.isAre = Number(this.UploadExceltableResponse.successCount) > 1 ? this.localeData.are : this.localeData.is;
+			this.isAre = Number(this.UploadExceltableResponse.successCount) > 1 ? this.localeData?.are : this.localeData?.is;
 		}
 		this._activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res) {
@@ -50,13 +50,13 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
 					this.selectedType = 'accounts';
                 }
                 
-                this.importedCountMessage = this.localeData.imported_count_message
+                this.importedCountMessage = this.localeData?.imported_count_message
                                             .replace("[SUCCESS_COUNT]", String(this.UploadExceltableResponse.successCount))
                                             .replace("[COUNT]", String(this.UploadExceltableResponse.failureCount + this.UploadExceltableResponse.successCount))
                                             .replace("[SELECTED_TYPE]", this.selectedType)
                                             .replace("[IS_ARE]", this.isAre);
 
-                this.failedReportMessage = this.localeData.failed_report_message.replace("[SELECTED_TYPE]", this.selectedType);
+                this.failedReportMessage = this.localeData?.failed_report_message.replace("[SELECTED_TYPE]", this.selectedType);
 			}
 		});
     }
@@ -65,7 +65,7 @@ export class UploadSuccessComponent implements OnInit, OnDestroy {
 		// rows less than 400 download report
 		if (!this.UploadExceltableResponse.message && this.UploadExceltableResponse.response) {
 			let blob = base64ToBlob(this.UploadExceltableResponse.response, 'application/vnd.ms-excel', 512);
-			return saveAs(blob, this.localeData.import_report_csv_downloaded_filename);
+			return saveAs(blob, this.localeData?.import_report_csv_downloaded_filename);
 		}
 
 		// rows grater than 400 show import report screen

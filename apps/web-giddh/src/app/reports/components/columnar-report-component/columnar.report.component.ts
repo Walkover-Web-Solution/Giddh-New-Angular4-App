@@ -169,7 +169,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                         this.columnarReportResponse = res.body;
                     } else {
                         let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                        return saveAs(blob, this.localeData.downloaded_filename);
+                        return saveAs(blob, this.localeData?.downloaded_filename);
                     }
                 } else {
                     this.toaster.clearAllToaster();

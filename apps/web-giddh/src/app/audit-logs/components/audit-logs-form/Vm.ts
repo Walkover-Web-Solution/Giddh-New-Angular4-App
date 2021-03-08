@@ -43,7 +43,7 @@ export class AuditLogsSidebarVM {
     public selectedAccountUniqueName: string = '';
 
     constructor(private localeData, private commonLocaleData) {
-        this.dateOptions = [{ label: this.commonLocaleData.app_date_range, value: '1' }, { label: this.localeData.entry_log_date, value: '0' }];
+        this.dateOptions = [{ label: this.commonLocaleData?.app_date_range, value: '1' }, { label: this.localeData?.entry_log_date, value: '0' }];
     }
 
     /**

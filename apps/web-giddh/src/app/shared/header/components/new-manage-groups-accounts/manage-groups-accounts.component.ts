@@ -238,11 +238,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                     this.updateModeLength = customFieldResponse.length;
                     this.renderCustomField(customFieldResponse);
                     if (operationType === 'create') {
-                        this.toasterService.successToast(this.localeData.custom_field_created);
+                        this.toasterService.successToast(this.localeData?.custom_field_created);
                     } else if (operationType === 'delete') {
-                        this.toasterService.successToast(this.localeData.custom_field_deleted);
+                        this.toasterService.successToast(this.localeData?.custom_field_deleted);
                     } else {
-                        this.toasterService.successToast(this.localeData.custom_field_updated);
+                        this.toasterService.successToast(this.localeData?.custom_field_updated);
                     }
                 } else {
                     this.toasterService.errorToast(response.message);
@@ -344,7 +344,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         if (this.customFieldForm.valid) {
             customRow.push(this.initNewCustomField(null));
         } else {
-            this.toasterService.warningToast(this.localeData.fill_mandatory_fields);
+            this.toasterService.warningToast(this.localeData?.fill_mandatory_fields);
         }
         return;
     }
@@ -419,16 +419,16 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.isCustomFormValid = true;
         if (type === 'name') {
             if (row.controls[index] && row.controls[index].get('key') && row.controls[index].get('key').value && row.controls[index].get('key').value.length > 50) {
-                this.toasterService.errorToast(this.localeData.name_length_validation);
+                this.toasterService.errorToast(this.localeData?.name_length_validation);
                 this.isCustomFormValid = false;
             }
         } else {
             if (row.controls[index].get('dataType').value === 'NUMERIC' && row.controls[index].get('valueLength').value > 30) {
-                this.toasterService.warningToast(this.localeData.number_length_validation);
+                this.toasterService.warningToast(this.localeData?.number_length_validation);
                 this.isCustomFormValid = false;
 
             } else if (row.controls[index].get('dataType').value === 'STRING' && row.controls[index].get('valueLength').value > 150) {
-                this.toasterService.warningToast(this.localeData.string_length_validation);
+                this.toasterService.warningToast(this.localeData?.string_length_validation);
                 this.isCustomFormValid = false;
             }
         }

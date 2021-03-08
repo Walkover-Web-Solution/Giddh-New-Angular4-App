@@ -62,7 +62,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         let isValidFileType = validExts.some(s => type === s);
 
         if (!isValidFileType) {
-            this.toasterService.errorToast(this.localeData.invalid_file_type);
+            this.toasterService.errorToast(this.localeData?.invalid_file_type);
             this.selectedFileName = '';
             this.file = null;
             return;
@@ -147,9 +147,9 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         if (this.entity === 'group' || this.entity === 'account') {
             this.title = this.entity + 's';
         } else if (this.entity === 'stock') {
-            this.title = this.localeData.inventories;
+            this.title = this.localeData?.inventories;
         } else if (this.entity === 'trial-balance') {
-            this.title = this.localeData.trial_balances;
+            this.title = this.localeData?.trial_balances;
         } else {
             this.title = this.entity;
         }

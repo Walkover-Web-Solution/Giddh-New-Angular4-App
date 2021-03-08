@@ -146,7 +146,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         let data = _.cloneDeep(this.roleObj);
         data.scopes = this.getScopeDataReadyForAPI(data);
         if (data.scopes.length < 1) {
-            return this._toaster.errorToast(this.localeData.add_role_error);
+            return this._toaster.errorToast(this.localeData?.add_role_error);
         }
         this.store.dispatch(this.permissionActions.CreateRole(data));
     }
@@ -239,29 +239,29 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public getNameByCode(code: string) {
         switch (code) {
             case 'VW':
-                return this.localeData.name_codes.view;
+                return this.localeData?.name_codes.view;
             case 'UPDT':
-                return this.localeData.name_codes.edit;
+                return this.localeData?.name_codes.edit;
             case 'DLT':
-                return this.localeData.name_codes.delete;
+                return this.localeData?.name_codes.delete;
             case 'ADD':
-                return this.localeData.name_codes.create;
+                return this.localeData?.name_codes.create;
             case 'SHR':
-                return this.localeData.name_codes.share;
+                return this.localeData?.name_codes.share;
             case 'VWDLT':
-                return this.localeData.name_codes.view_delete;
+                return this.localeData?.name_codes.view_delete;
             case 'SHRLWR':
-                return this.localeData.name_codes.share_lower;
+                return this.localeData?.name_codes.share_lower;
             case 'SHRALL':
-                return this.localeData.name_codes.share_all;
+                return this.localeData?.name_codes.share_all;
             case 'SHRSM':
-                return this.localeData.name_codes.share_same;
+                return this.localeData?.name_codes.share_same;
             case 'CMT':
-                return this.localeData.name_codes.comment;
+                return this.localeData?.name_codes.comment;
             case 'GSTVW':
-                return this.localeData.name_codes.gst_view;
+                return this.localeData?.name_codes.gst_view;
             case 'GSTFL':
-                return this.localeData.name_codes.gst_filing;
+                return this.localeData?.name_codes.gst_filing;
             default:
                 return '';
         }

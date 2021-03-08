@@ -59,7 +59,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
-        this.dropdownHeading = this.localeData.select_pages;
+        this.dropdownHeading = this.localeData?.select_pages;
 
 		this.store.dispatch(this.permissionActions.GetAllPages());
         this.newRoleObj.isFresh = true;
@@ -75,11 +75,11 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
 	}
 
 	public onDDShown() {
-		this.dropdownHeading = this.localeData.close_list;
+		this.dropdownHeading = this.localeData?.close_list;
 	}
 
 	public onDDHidden() {
-		this.dropdownHeading = this.localeData.select_pages;
+		this.dropdownHeading = this.localeData?.select_pages;
 	}
 
 	/**
