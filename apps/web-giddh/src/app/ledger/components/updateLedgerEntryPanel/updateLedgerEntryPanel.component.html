@@ -221,7 +221,7 @@
                         <tbody>
                             <tr class="total-col row">
 
-                                <td colspan="12" class="col-12 col-sm-12 text-right h32">
+                                <td colspan="12" class="col-12 col-sm-12 text-right min-h-32">
                                     <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd-2"
                                         [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
                                         C/F: CR {{ vm.baseCurrencyDetails?.symbol}} {{ vm.compoundTotal | giddhCurrency}}
@@ -232,7 +232,7 @@
 
                             <tr class="total-col row">
                                 <!-- reckoning -->
-                                <td colspan="12" class="col-12 col-sm-12 text-right h32">
+                                <td colspan="12" class="col-12 col-sm-12 text-right min-h-32">
 
                                     <span class="bd-rt pr-1 pl-1 width-200">
                                         {{ vm.baseCurrencyDetails?.symbol}} {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal)
@@ -396,7 +396,7 @@
                     <table class="ledger-footer-1">
                         <tbody>
                             <tr class="total-col row">
-                                <td colspan="12" class="col-12  col-sm-12 text-right h32">
+                                <td colspan="12" class="col-12  col-sm-12 text-right min-h-32">
                                     <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                                         <span class="primary-color pd-2"
                                             [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
@@ -407,7 +407,7 @@
                             </tr>
                             <tr class="total-col row">
                                 <!-- reckoning -->
-                                <td colspan="12" class="col-12 col-sm-12 text-right h32 pd-r1">
+                                <td colspan="12" class="col-12 col-sm-12 text-right pd-r1 min-h-32">
                                     <span class="bd-rt">
                                         {{ vm.baseCurrencyDetails?.symbol }} {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal)
                                         | giddhCurrency }}
