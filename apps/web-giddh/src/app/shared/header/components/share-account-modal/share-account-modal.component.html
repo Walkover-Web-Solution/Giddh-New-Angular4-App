@@ -12,7 +12,7 @@
                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" class="form-inline clearfix" autocomplete="off">
                     <div class="input-group form-group w-100">
                         <input name="userEmail" type="email" [(ngModel)]="email" required [placeholder]="commonLocaleData?.app_email_id" class="form-control" [pattern]="giddhEmailRegex">
-                        <div class="input-group-btn mr-l1">
+                        <div class="input-group-btn">
                             <select name="selectedPermission" class="form-control selected-permission" [(ngModel)]="selectedPermission" required>
                                 <option value="">{{localeData?.select_permission}}</option>
                                 <option [value]="permission.uniqueName"
