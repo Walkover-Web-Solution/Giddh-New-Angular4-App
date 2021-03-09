@@ -89,7 +89,9 @@ form.gstin-form {
     align-items: center;
     margin: 20px 0;
 }
-
+.add-address-btn{
+    width: 125px;
+}
 .add-address-default h3 {
     font-size: 16px;
     color: $nero;
@@ -114,7 +116,7 @@ form.gstin-form {
 }
 
 .width-select{
-    width: calc(100% - 93px);
+    width: calc(100% - 112px);
 }
 
 .move-to-group{
