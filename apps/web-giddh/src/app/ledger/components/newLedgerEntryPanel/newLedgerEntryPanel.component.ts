@@ -1266,7 +1266,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public toggleRcmCheckbox(event: any): void {
         event.preventDefault();
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
     }
 
     /**
@@ -1277,7 +1277,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public handleRcmChange(action: string): void {
-        if (action === CONFIRMATION_ACTIONS.YES) {
+        if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
         }

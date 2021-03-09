@@ -250,37 +250,37 @@ export class GeneralService {
      * @returns {ConfirmationModalConfiguration} RCM modal configuration
      * @memberof GeneralService
      */
-    public getRcmConfiguration(isRcmSelected: boolean): ConfirmationModalConfiguration {
+    public getRcmConfiguration(isRcmSelected: boolean, commonLocaleData?: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
-            text: 'Yes',
+            text: (commonLocaleData) ? commonLocaleData?.app_yes : 'Yes',
             cssClass: 'btn btn-success'
         },
         {
-            text: 'No',
+            text: (commonLocaleData) ? commonLocaleData?.app_no : 'No',
             cssClass: 'btn btn-danger'
         }];
-        const headerText: string = 'Reverse Charge Confirmation';
+        const headerText: string = (commonLocaleData) ? commonLocaleData?.app_rc_heading : 'Reverse Charge Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
         const footerCssClass: string = 'mr-b1';
         return (isRcmSelected) ? {
             headerText,
             headerCssClass,
-            messageText: `Note: If you check this transaction for Reverse Charge,
+            messageText: (commonLocaleData) ? commonLocaleData?.app_rc_selected_note : `Note: If you check this transaction for Reverse Charge,
             applied taxes will be considered under Reverse Charge taxes and
             will be added in tax report.`,
             messageCssClass,
-            footerText: 'Are you sure you want to check this transaction for Reverse Charge?',
+            footerText: (commonLocaleData) ? commonLocaleData?.app_rc_selected_footer_note : 'Are you sure you want to check this transaction for Reverse Charge?',
             footerCssClass,
             buttons
         } : {
                 headerText,
                 headerCssClass,
-                messageText: `Note: If you uncheck this transaction from Reverse Charge, applied
+                messageText: (commonLocaleData) ? commonLocaleData?.app_rc_unselected_note : `Note: If you uncheck this transaction from Reverse Charge, applied
                 taxes will be considered as normal taxes and reverse
                 charge effect will be removed from tax report.`,
                 messageCssClass,
-                footerText: 'Are you sure you want to uncheck this transaction from Reverse Charge?',
+                footerText: (commonLocaleData) ? commonLocaleData?.app_rs_unselected_footer_note : 'Are you sure you want to uncheck this transaction from Reverse Charge?',
                 footerCssClass,
                 buttons
             };
