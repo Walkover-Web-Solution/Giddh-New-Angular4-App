@@ -147,7 +147,7 @@
                 </th>
                 <th class="italic unbold underline text-right">
                     <div class="d-flex align-items-center justify-content-end"><span
-                            (click)="openAgingDropDown()">{{commonLocaleData?.app_numbers?.zero}}-{{(agingDropDownoptions$| async)?.fourth}} {{commonLocaleData?.app_days}}</span>
+                            (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} {{commonLocaleData?.app_days}}</span>
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range0'}">
                         </ng-container>
                     </div>
@@ -189,7 +189,7 @@
                     <td [attr.data-title]="commonLocaleData?.app_name">{{ entry.name }}</td>
                     <td [attr.data-title]="localeData?.group_name">{{ entry.groupName }}</td>
                     <td [attr.data-title]="commonLocaleData?.app_due_amount" class="text-right">{{ entry.futureDueAmount |giddhCurrency}}</td>
-                    <td [attr.data-title]="commonLocaleData?.app_numbers?.zero + ' - ' + (agingDropDownoptions$| async)?.fourth + ' ' + commonLocaleData?.app_days" class="text-right">
+                    <td [attr.data-title]="'0 - ' + (agingDropDownoptions$| async)?.fourth + ' ' + commonLocaleData?.app_days" class="text-right">
                         {{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }}</td>
                     <td [attr.data-title]="(agingDropDownoptions$| async)?.fourth + 1 + ' - ' + ((agingDropDownoptions$| async)?.fifth) + ' ' + commonLocaleData?.app_days"
                         class="text-right"> <span
