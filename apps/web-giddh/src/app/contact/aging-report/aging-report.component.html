@@ -161,7 +161,7 @@
                 </th>
                 <th class="italic unbold underline text-right">
                     <div class="d-flex align-items-center justify-content-end"><span
-                            (click)="openAgingDropDown()">{{commonLocaleData?.app_numbers?.zero}}-{{(agingDropDownoptions$| async)?.fourth}} {{commonLocaleData?.app_days}}</span>
+                            (click)="openAgingDropDown()">0-{{(agingDropDownoptions$| async)?.fourth}} {{commonLocaleData?.app_days}}</span>
                         <ng-container *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'range0'}">
                         </ng-container>
                     </div>
@@ -209,7 +209,7 @@
                             </amount-field>
                         </span>
                     </td>
-                    <td [attr.data-title]="commonLocaleData?.app_numbers?.zero + ' - ' + (agingDropDownoptions$| async)?.fourth + ' ' + commonLocaleData?.app_days" class="text-right">
+                    <td [attr.data-title]="'0 - ' + (agingDropDownoptions$| async)?.fourth + ' ' + commonLocaleData?.app_days" class="text-right">
                         <!-- {{ entry.currentAndPastDueAmount[0].dueAmount |giddhCurrency }} -->
                         <span class="d-flex justify-content-end">
                             <amount-field [amount]="entry.currentAndPastDueAmount[0].dueAmount" [currencySymbol]="false" [currencyCode]="false">

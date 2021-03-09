@@ -1526,7 +1526,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.currentOrganizationType === 'COMPANY' && (this.branches && this.branches.length > 1)) {
             return;
         }
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
     }
 
     /**
