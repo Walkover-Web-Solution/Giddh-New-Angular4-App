@@ -495,13 +495,12 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @private
      * @param {PettyCashResonse} res Petty cash details
-     * @returns {Promise<any>} Promise to carry out further operations
      * @memberof ExpenseDetailsComponent
      */
-    private async prepareEntryAgainstObject(res: PettyCashResonse): Promise<any> {
+    private prepareEntryAgainstObject(res: PettyCashResonse): void {
         this.cashOrBankEntry = res?.particular ? this.isCashBankAccount(res.particular) : false;
-        this.pettyCashEntryType = res.pettyCashEntryStatus.entryType;
-        if (res.pettyCashEntryStatus.entryType === 'sales') {
+        this.pettyCashEntryType = res?.pettyCashEntryStatus?.entryType;
+        if (res?.pettyCashEntryStatus?.entryType === 'sales') {
             this.entryAgainstObject.base = this.cashOrBankEntry ? 'Receipt Mode' : 'Debtor Name';
             this.entryAgainstObject.against = this.cashOrBankEntry ? 'Entry against Debtor' : 'Cash Sales';
             if (this.cashOrBankEntry) {
@@ -509,7 +508,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.loadDefaultDebtorAccountsSuggestions();
             }
-        } else if (res.pettyCashEntryStatus.entryType === 'expense') {
+        } else if (res?.pettyCashEntryStatus?.entryType === 'expense') {
 
             this.entryAgainstObject.base = this.cashOrBankEntry ? 'Payment Mode' : 'Creditor Name';
             this.entryAgainstObject.against = this.cashOrBankEntry ? 'Entry against Creditors' : 'Cash Expenses';
@@ -525,8 +524,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.loadDefaultCashBankAccountsSuggestions();
         }
 
-        this.entryAgainstObject.model = res.particular.uniqueName;
-        this.entryAgainstObject.name = res.particular.name;
+        this.entryAgainstObject.model = res?.particular?.uniqueName;
+        this.entryAgainstObject.name = res?.particular?.name;
     }
 
     /**
