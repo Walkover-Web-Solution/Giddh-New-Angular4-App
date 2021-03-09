@@ -566,7 +566,6 @@ export class AccountsAction {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     this._toasty.successToast(action.payload.body, '');
-                    this.store.dispatch(this._generalActions.getFlattenGroupsReq());
                     let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMerged, payload: data });
                     if(data.request && data.request.length) {
