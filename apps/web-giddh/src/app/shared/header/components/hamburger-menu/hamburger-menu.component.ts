@@ -17,6 +17,7 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
     /* This will show sidebar is open */
     public sideMenu: { isopen: boolean } = { isopen: true };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private generalActions: GeneralActions) {

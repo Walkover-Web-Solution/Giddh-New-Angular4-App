@@ -474,5 +474,6 @@
     "app_rc_selected_note": "Note: If you check this transaction for Reverse Charge, applied taxes will be considered under Reverse Charge taxes and will be added in tax report.",
     "app_rc_selected_footer_note": "Are you sure you want to check this transaction for Reverse Charge?",
     "app_rc_unselected_note": "Note: If you uncheck this transaction from Reverse Charge, applied taxes will be considered as normal taxes and reverse charge effect will be removed from tax report.",
-    "app_rs_unselected_footer_note": "Are you sure you want to uncheck this transaction from Reverse Charge?"
+    "app_rs_unselected_footer_note": "Are you sure you want to uncheck this transaction from Reverse Charge?",
+    "app_language_selected": "Language has been updated successfully."
 }
