@@ -967,7 +967,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody [hidden]="showBulkLoader" (clickOutside)="handleOutsideClick()" [exclude]="'.entries-tr'" >
+                        <tbody [hidden]="showBulkLoader" (clickOutside)="handleOutsideClick()" [exclude]="'.entries-tr, .add-line-bulk-item'">
                             <ng-container #itemsContainer></ng-container>
                         </tbody>
                         <tbody *ngIf="showBulkLoader">
