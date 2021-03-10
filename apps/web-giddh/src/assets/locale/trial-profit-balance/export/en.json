@@ -1,26 +1,61 @@
 {
     "xls" : {
         "main_group_report" : "Main Group Report",
-        "group_wise_report" : "Group Wise Report",
-        "condensed_report" : "Condensed Report",
-        "account_wise_report" : "Account Wise Report"
+        "all_group_report" : "All Group Report",
+        "all_account_report" : "All Account Report",
+        "complete_report" : "Complete Report",
+        "trial_balance": {
+            "download_filename": "trialbalance.xlsx"
+        },
+        "profit_loss": {
+            "download_filename": "profitloss.xlsx"
+        },
+        "balance_sheet": {
+            "download_filename": "balancesheet.xlsx"
+        }
     },
     "csv" : {
         "group_wise_report" : "Group Wise Report",
+        "trial_balance_group_wise_report_file_name": "Trial_Balance_group-wise.csv",
+        "trial_balance_condensed_report_file_name": "Trial_Balance_condensed.csv",
+        "trial_balance_account_wise_report_file_name": "Trial_Balance_account-wise.csv",
         "condensed_report" : "Condensed Report",
-        "account_wise_report" : "Account Wise Report"
+        "account_wise_report" : "Account Wise Report",
+        "trial_balance": {
+            "name" : "Name",
+            "opening_balance" : "Opening Balance",
+            "debit" : "Debit",
+            "credit" : "Credit",
+            "closing_balance" : "Closing Balance",
+            "trial_balance": "Trial Balance:",
+            "total": "Total,",
+            "to": "to",
+            "fromDate": "fromDate",
+            "toDate": "toDate"
+        }
     },
     "pdf" : {
         "group_wise_report" : "Group Wise Report",
         "condensed_report" : "Condensed Report",
         "account_wise_report" : "Account Wise Report",
-        "group_wise_report_columns" : {
+        "trial_balance": {
+            "group_wise" : {
+                "download_filename": "PdfGroupWise.pdf"
+            },
+            "condensed": {
+                "download_filename": "PdfCondensed.pdf"
+            },
+            "account_wise": {
+                "download_filename": "PdfAccountWise.pdf"
+            },
             "particular" : "Particular",
             "opening_balance" : "Opening Balance",
             "debit" : "Debit",
             "credit" : "Credit",
-            "closing_balance" : "Closing Balance"
-        },
-        "group_wise_report_total" : "Total"
+            "closing_balance" : "Closing Balance",
+            "trial_balance": "Trial Balance:",
+            "total": "Total",
+            "to": "to"
+        }
     }
 }

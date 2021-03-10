@@ -18,6 +18,8 @@ export class UpdateLedgerDiscountData {
 })
 
 export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Input() public discountAccountsDetails: LedgerDiscountClass[];
 	@Input() public ledgerAmount: number = 0;
 	@Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();

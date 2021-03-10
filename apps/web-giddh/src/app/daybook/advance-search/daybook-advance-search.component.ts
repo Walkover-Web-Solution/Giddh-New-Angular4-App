@@ -17,15 +17,6 @@ import { GeneralService } from '../../services/general.service';
 import { SearchService } from '../../services/search.service';
 import { InventoryService } from '../../services/inventory.service';
 
-const COMPARISON_FILTER = [
-    { label: 'Greater Than', value: 'greaterThan' },
-    { label: 'Less Than', value: 'lessThan' },
-    { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
-    { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
-    { label: 'Equals', value: 'equals' },
-    { label: 'Exclude', value: 'exclude' }
-];
-
 @Component({
     selector: 'daybook-advance-search-model',
     templateUrl: './daybook-advance-search.component.html',
@@ -34,7 +25,10 @@ const COMPARISON_FILTER = [
 })
 
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
-
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Input() public startDate: any;
 	@Input() public endDate: any;
 	@Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
@@ -164,9 +158,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     ) {
         this.initializeDaybookAdvanceSearchForm();
 		this.setVoucherTypes();
-		this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-
-    }
+	}
 
 	public ngOnInit() {
         this.loadDefaultAccountsSuggestions();
@@ -174,6 +166,15 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });
+
+        this.comparisonFilterDropDown$ = observableOf([
+            { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
+            { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
+            { label: this.commonLocaleData?.app_comparision_filters?.greater_than_equals, value: 'greaterThanOrEquals' },
+            { label: this.commonLocaleData?.app_comparision_filters?.less_than_equals, value: 'lessThanOrEquals' },
+            { label: this.commonLocaleData?.app_comparision_filters?.equals, value: 'equals' },
+            { label: this.commonLocaleData?.app_comparision_filters?.exclude, value: 'exclude' }
+        ]);
 	}
 
 	public ngOnChanges(changes: SimpleChanges) {

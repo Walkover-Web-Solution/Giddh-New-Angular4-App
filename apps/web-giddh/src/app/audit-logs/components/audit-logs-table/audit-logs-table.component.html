@@ -1,9 +1,6 @@
-<!-- <h1 class="page-title" *ngIf="(this.auditLogs$ | async).length > 0"> Audit Logs</h1> -->
-<!--  -->
 <section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
     <h1>{{log.operationType}}
         <ng-container *ngIf="log?.details?.voucherType && log?.operationType!=='EDIT'"> <span>  -{{log?.details?.voucherType}}</span></ng-container>
-
         <!-- For account start header -->
         <ng-container *ngIf="log?.operationType==='EDIT' && (log?.old?.details?.name !== log?.details?.name || log?.old?.details?.uniqueName !== log?.details?.uniqueName); else VoucherEntityOld ">
             <span *ngIf="log?.old && log?.old?.details"> - {{log?.old?.details?.name}}({{log?.old?.details?.uniqueName}})</span>
@@ -34,40 +31,40 @@
         </ng-template>
     </h1>
     <div class="audit-log-detail mr-t05 clearfix">
-        <label *ngIf="log?.operationType==='EDIT'">Updated</label>
+        <label *ngIf="log?.operationType==='EDIT'">{{localeData?.updated}}</label>
         <!-- User info block start-->
         <div class="d-flex user-basic-detail">
             <div *ngIf="(auditLogsRequest$ | async)">
-                <label>Entity:</label>
+                <label>{{commonLocaleData?.app_entity}}:</label>
                 <p>{{ (auditLogsRequest$ | async).entity}}</p>
             </div>
             <div *ngIf="log?.dateString">
-                <label>Date:</label>
+                <label>{{localeData?.date}}:</label>
                 <p>{{log?.dateString}}</p>
             </div>
             <div *ngIf="log?.user?.name">
-                <label>User:</label>
+                <label>{{localeData?.user}}:</label>
                 <p>{{log?.user?.name}}</p>
             </div>
             <div *ngIf="log?.user?.email">
-                <label>Email:</label>
+                <label>{{localeData?.email}}:</label>
                 <p>{{log?.user?.email}}</p>
             </div>
             <div *ngIf="log?.user?.mobile">
-                <label>Mobile No.:</label>
+                <label>{{commonLocaleData?.app_mobile_no}}:</label>
                 <p>{{log?.user?.mobile}}</p>
             </div>
             <div *ngIf="log?.details && log?.details?.group && log?.details?.group?.name != null">
-                <label>Group:</label>
+                <label>{{localeData?.group}}:</label>
                 <p>{{log?.details?.group?.name}}</p>
             </div>
             <div *ngIf="log?.details && log?.operationType !=='MERGE' && log?.details?.source != undefined">
-                <label>Source:</label>
+                <label>{{localeData?.source}}:</label>
                 <p>{{log?.details?.source?.name}}
                 </p>
             </div>
             <div *ngIf="log?.details && log?.operationType ==='MERGE' && log?.details?.source != undefined && log?.details?.source.length">
-                <label>Source:</label>
+                <label>{{localeData?.source}}:</label>
                 <ng-container *ngFor="let source of log?.details?.source">
                     <p>
                         <span *ngIf="source.name">
@@ -77,7 +74,7 @@
 
             </div>
             <div *ngIf="log?.details && log?.details?.target && log?.details?.target != undefined">
-                <label>Target:</label>
+                <label>{{localeData?.target}}:</label>
                 <p>{{log?.details.target.name}}</p>
             </div>
             <div *ngIf="log?.details && log?.details?.entity">
@@ -86,15 +83,15 @@
             </div>
 
             <div *ngIf="log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
-                <label>Stock:</label>
+                <label>{{commonLocaleData?.app_stock}}:</label>
                 <p>{{log?.details?.name}}</p>
             </div>
             <div *ngIf="log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
-                <label>Group:</label>
+                <label>{{localeData?.group}}:</label>
                 <p>{{ log?.details?.stockGroup?.name}}</p>
             </div>
             <div *ngIf="log?.details && log?.details?.stockUnit && log?.details?.stockUnit?.name != undefined">
-                <label>Unit:</label>
+                <label>{{commonLocaleData?.app_unit}}:</label>
                 <p>{{ log?.details?.stockUnit?.name}} ({{ log?.details?.stockUnit?.code}})</p>
             </div>
         </div>
@@ -104,11 +101,11 @@
             <div class="address-row mr-t05" *ngIf="log?.details?.purchases?.account">
                 <div class="single-address-row">
                     <span>
-                        Purchase:-
+                        {{commonLocaleData?.app_purchase}}:-
                     </span>
                     <div class="mr-r05">
                         <label>
-                            Account:
+                            {{commonLocaleData?.app_account}}:
                         </label>
                         <p class="address-field"> {{ log?.details?.purchases?.account?.name}}
                         </p>
@@ -116,23 +113,23 @@
                     <ng-container *ngFor="let item of log?.details?.purchases?.unitRates">
                         <div class="mr-r05">
                             <label>
-                            Unit:
+                            {{commonLocaleData?.app_unit}}:
                         </label>
                             <p class="mr-l05"> {{ item.unit?.name}}({{item.unit?.code}})</p>
                         </div>
                         <div class="mr-r05">
                             <label>
-                            Rate:
+                            {{commonLocaleData?.app_rate}}:
                         </label>
                             <p class="mr-l05">{{ item?.rate |giddhCurrency }} |</p>
                         </div>
                     </ng-container>
                     <span>
-                        Sales:-
+                        {{commonLocaleData?.app_sales}}:-
                     </span>
                     <div class="mr-r05">
                         <label>
-                            Account:
+                            {{commonLocaleData?.app_account}}:
                         </label>
                         <p class="address-field">{{ log?.details?.sales?.account?.name}}
                         </p>
@@ -140,13 +137,13 @@
                     <ng-container *ngFor="let item of log?.details?.sales?.unitRates">
                         <div class="mr-r05">
                             <label>
-                            Unit:
+                                {{commonLocaleData?.app_unit}}:
                         </label>
                             <p class="mr-l05"> {{ item.unit?.name}}({{item.unit?.code}})</p>
                         </div>
                         <div class="mr-r05">
                             <label>
-                            Rate:
+                                {{commonLocaleData?.app_rate}}:
                         </label>
                             <p class="mr-l05">{{ item?.rate |giddhCurrency }} |</p>
                         </div>
@@ -156,8 +153,6 @@
         </div>
         <!-- stocks block  end -->
 
-
-
         <div class="address-row-wrapper d-flex">
             <div class="address-row mr-t05">
                 <!-- account address block start -->
@@ -166,26 +161,26 @@
                         <div class="single-address-row" *ngIf="index===0 || index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
                             <div class="mr-r05" *ngIf="item.address">
                                 <label>
-                            Address:
+                            {{commonLocaleData?.app_address}}:
                         </label>
                                 <p class="address-field">{{item?.address}}
                                 </p>
                             </div>
                             <div class="mr-r05" *ngIf="item?.state">
                                 <label>
-                            State:
+                            {{commonLocaleData?.app_state}}:
                         </label>
                                 <p class="mr-l05">{{item?.state?.name}}</p>
                             </div>
                             <div class="mr-r05">
                                 <label>
-                            GSTIN:
+                            {{commonLocaleData?.app_gstin}}:
                         </label>
                                 <p class="mr-l05">{{item?.gstIn}}</p>
                             </div>
                             <div class="mr-r05" *ngIf="item?.country">
                                 <label>
-                            Country:
+                            {{commonLocaleData?.app_country}}:
                         </label>
                                 <p class="mr-l05">{{item?.country?.countryName}}</p>
                             </div>
@@ -199,20 +194,20 @@
                     <ng-container *ngFor="let bank of log?.details?.bankDetails; let bankIndex = index">
                         <div class="mr-r05">
                             <label>
-                            Bank Name:
+                            {{commonLocaleData?.app_bank_name}}:
                         </label>
                             <p class="address-field"> {{bank?.bankName}}
                             </p>
                         </div>
                         <div class="mr-r05">
                             <label>
-                            A/c Number:
+                            {{localeData?.account_number}}:
                         </label>
                             <p class="mr-l05">{{bank?.accountNumber}}</p>
                         </div>
                         <div class="mr-r05">
                             <label>
-                            IFSC Code:
+                            {{commonLocaleData?.app_ifsc_code}}:
                         </label>
                             <p class="mr-l05"> {{bank?.ifscCode}}</p>
                         </div>
@@ -225,39 +220,39 @@
                     <ng-container>
                         <div class="mr-r05" *ngIf="log?.details?.voucherAccount.name">
                             <label>
-                           Account:
+                           {{commonLocaleData?.app_account}}:
                         </label>
                             <p class="address-field"> {{log?.details?.voucherAccount.name}}
                             </p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.voucherType">
                             <label>
-                           Voucher:
+                           {{localeData?.voucher}}:
                         </label>
                             <p class="address-field"> {{log?.details?.voucherType}}
                             </p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.voucherNumber">
                             <label>
-                            Voucher Number:
+                            {{localeData?.voucher_number}}:
                         </label>
                             <p class="mr-l05"> {{log?.details?.voucherNumber}}</p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.subTotal">
                             <label>
-                            Sub Total:
+                            {{commonLocaleData?.app_subtotal}}:
                         </label>
                             <p class="mr-l05"> {{log?.details?.subTotal?.amountForAccount |giddhCurrency }}</p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.totalTax">
                             <label>
-                            Tax:
+                            {{commonLocaleData?.app_tax}}:
                         </label>
                             <p class="mr-l05"> {{log?.details?.totalTax?.amountForAccount |giddhCurrency }}</p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.grandTotal">
                             <label>
-                            Total:
+                            {{commonLocaleData?.app_total}}:
                         </label>
                             <p class="mr-l05"> {{log?.details?.grandTotal?.amountForAccount |giddhCurrency }}</p>
                         </div>
@@ -269,28 +264,28 @@
                     <ng-container>
                         <div class="mr-r05" *ngIf="log?.details?.voucher">
                             <label>
-                           Voucher:
+                           {{localeData?.voucher}}:
                         </label>
                             <p class="address-field"> {{log?.details?.voucher}}
                             </p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.entryDateString">
                             <label>
-                            Entry Date:
+                            {{localeData?.entry_date}}:
                         </label>
                             <p class="mr-l05"> {{log?.details?.entryDateString}}</p>
                         </div>
                         <ng-container *ngFor="let item of log?.details?.otherAccounts; let indexEntries = index; let firstEntryIndex = first; let lastEntryIndex = last">
                             <div class="mr-r05" *ngIf="firstEntryIndex">
                                 <label>
-                                      Account Name:
+                                      {{commonLocaleData?.app_account_name}}:
                                     </label>
                                 <p class="address-field"> {{item?.name}}
                                 </p>
                             </div>
                             <div class="mr-r05" *ngIf="indexEntries >0">
                                 <label *ngIf="indexEntries === 1">
-                                       Other Accounts:
+                                       {{localeData?.other_accounts}}:
                                      </label>
                                 <p class="address-field">{{item?.name}}
                                     <ng-container *ngIf="!lastEntryIndex"> |</ng-container>
@@ -299,32 +294,32 @@
                         </ng-container>
                         <div class="mr-r05" *ngIf="log?.details?.subTotal">
                             <label>
-                            Sub Total:
+                            {{commonLocaleData?.app_subtotal}}:
                         </label>
                             <p class="mr-l05"> {{log?.details?.subTotal |giddhCurrency }}</p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.taxTotal">
                             <label>
-                            Tax:
+                            {{commonLocaleData?.app_tax}}:
                         </label>
                             <p class="mr-l05"> {{log?.details?.taxTotal |giddhCurrency }}</p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.total">
                             <label>
-                            Total:
+                            {{commonLocaleData?.app_total}}:
                         </label>
                             <p class="mr-l05"> {{log?.details?.total |giddhCurrency }}</p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.description">
                             <label>
-                           Description:
+                           {{commonLocaleData?.description}}:
                         </label>
                             <p class="address-field"> {{log?.details?.description}}
                             </p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.hasAttachment">
                             <label>
-                           File Attached:
+                           {{localeData?.file_attached}}:
                         </label>
                             <p class="address-field"> {{log?.details?.hasAttachment ? 'Yes': 'No'}}
                             </p>
@@ -382,7 +377,7 @@
                     <div class="single-address-row">
                         <div class="mr-r05" *ngIf="log?.details?.name">
                             <label>
-                            Group Name:
+                            {{localeData?.group_name}}:
                         </label>
                             <p class="address-field">{{log?.details?.name}}
                             </p>
@@ -390,28 +385,28 @@
 
                         <div class="mr-r05" *ngIf="log?.details?.parentGroup?.name">
                             <label>
-                            Parent Group Name:
+                            {{localeData?.parent_group_name}}:
                         </label>
                             <p class="address-field">{{log?.details?.parentGroup?.name}}
                             </p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.hsn">
                             <label>
-                            HSN:
+                            {{commonLocaleData?.app_hsn}}:
                              </label>
                             <p class="address-field">{{log?.details?.hsn}}
                             </p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.sac">
                             <label>
-                            SAC:
+                            {{commonLocaleData?.app_sac}}:
                              </label>
                             <p class="address-field">{{log?.details?.sac}}
                             </p>
                         </div>
                         <div class="mr-r05" *ngIf="log?.details?.description">
                             <label>
-                            Description:
+                            {{localeData?.description}}:
                         </label>
                             <p class="mr-l05">{{log?.details?.description}}</p>
                         </div>
@@ -429,40 +424,40 @@
     <!-- Old log block start -->
     <ng-container *ngIf="log?.operationType==='EDIT' && log?.old">
         <div class="audit-log-detail mr-t05 clearfix">
-            <label *ngIf="log.operationType==='EDIT'">Old</label>
+            <label *ngIf="log.operationType==='EDIT'">{{localeData?.old}}</label>
             <!-- Old user info block start-->
             <div class="d-flex user-basic-detail">
                 <div *ngIf="(auditLogsRequest$ | async)">
-                    <label>Entity:</label>
+                    <label>{{commonLocaleData?.app_entity}}:</label>
                     <p>{{ (auditLogsRequest$ | async).entity}}</p>
                 </div>
                 <div *ngIf="log?.dateString">
-                    <label>Date:</label>
+                    <label>{{localeData?.date}}:</label>
                     <p>{{log?.old?.dateString}}</p>
                 </div>
                 <div *ngIf="log?.old?.user?.name">
-                    <label>User:</label>
+                    <label>{{localeData?.user}}:</label>
                     <p>{{log?.old?.user?.name}}</p>
                 </div>
                 <div *ngIf="log?.old?.user?.email">
-                    <label>Email:</label>
+                    <label>{{localeData?.email}}:</label>
                     <p>{{log?.old?.user?.email}}</p>
                 </div>
                 <div *ngIf="log?.old?.user?.mobile">
-                    <label>Mobile No.:</label>
+                    <label>{{commonLocaleData?.app_mobile_no}}:</label>
                     <p>{{log?.old?.user?.mobile}}</p>
                 </div>
                 <div *ngIf="log?.old?.details && log?.old?.details?.group && log?.old?.details?.group?.name != null">
-                    <label>Group:</label>
+                    <label>{{localeData?.group}}:</label>
                     <p>{{log?.old?.details?.group?.name}}</p>
                 </div>
                 <div *ngIf="log?.old?.details && log?.old?.operationType !=='MERGE' && log?.old?.details?.source != undefined">
-                    <label>Source:</label>
+                    <label>{{localeData?.source}}:</label>
                     <p>{{log?.old?.details?.source?.name}}
                     </p>
                 </div>
                 <div *ngIf="log?.old?.details && log?.old?.operationType ==='MERGE' && log?.old?.details?.source != undefined && log?.old?.details?.source.length">
-                    <label>Source:</label>
+                    <label>{{localeData?.source}}:</label>
                     <ng-container *ngFor="let source of log?.old?.details?.source">
                         <p>
                             <span *ngIf="source.name">
@@ -472,7 +467,7 @@
 
                 </div>
                 <div *ngIf="log?.old?.details && log?.old?.details?.target && log?.old?.details?.target != undefined">
-                    <label>Target:</label>
+                    <label>{{localeData?.target}}:</label>
                     <p>{{log?.old?.details.target.name}}</p>
                 </div>
                 <div *ngIf="log?.old?.details && log?.old?.details?.entity">
@@ -481,15 +476,15 @@
                 </div>
 
                 <div *ngIf="log?.old?.details && log?.old?.details?.stockGroup && log?.old?.details?.stockGroup?.uniqueName != undefined">
-                    <label>Stock:</label>
+                    <label>{{commonLocaleData?.app_stock}}:</label>
                     <p>{{log?.old?.details?.name}}</p>
                 </div>
                 <div *ngIf="log?.old?.details && log?.old?.details?.stockGroup && log?.old?.details?.stockGroup?.uniqueName != undefined">
-                    <label>Group:</label>
+                    <label>{{localeData?.group}}:</label>
                     <p>{{ log?.old?.details?.stockGroup?.name}}</p>
                 </div>
                 <div *ngIf="log?.old?.details && log?.old?.details?.stockUnit && log?.old?.details?.stockUnit?.name != undefined">
-                    <label>Unit:</label>
+                    <label>{{commonLocaleData?.app_unit}}:</label>
                     <p>{{ log?.old?.details?.stockUnit?.name}} ({{ log?.old?.details?.stockUnit?.code}})</p>
                 </div>
             </div>
@@ -499,11 +494,11 @@
                 <div class="address-row mr-t05" *ngIf="log?.old?.details?.purchases?.account">
                     <div class="single-address-row">
                         <span>
-                        Purchase:-
+                        {{commonLocaleData?.app_purchase}}:-
                     </span>
                         <div class="mr-r05">
                             <label>
-                            Account:
+                            {{commonLocaleData?.app_account}}:
                         </label>
                             <p class="address-field"> {{ log?.old?.details?.purchases?.account?.name}}
                             </p>
@@ -511,23 +506,23 @@
                         <ng-container *ngFor="let item of log?.old?.details?.purchases?.unitRates">
                             <div class="mr-r05">
                                 <label>
-                            Unit:
+                            {{commonLocaleData?.app_unit}}:
                         </label>
                                 <p class="mr-l05"> {{ item.unit?.name}}({{item.unit?.code}})</p>
                             </div>
                             <div class="mr-r05">
                                 <label>
-                            Rate:
+                            {{commonLocaleData?.app_rate}}:
                         </label>
                                 <p class="mr-l05">{{ item?.rate |giddhCurrency }} |</p>
                             </div>
                         </ng-container>
                         <span>
-                        Sales:-
+                        {{commonLocaleData?.app_sales}}:-
                     </span>
                         <div class="mr-r05">
                             <label>
-                            Account:
+                            {{commonLocaleData?.app_account}}:
                         </label>
                             <p class="address-field">{{ log?.old?.details?.sales?.account?.name}}
                             </p>
@@ -535,13 +530,13 @@
                         <ng-container *ngFor="let item of log?.old?.details?.sales?.unitRates">
                             <div class="mr-r05">
                                 <label>
-                            Unit:
+                            {{commonLocaleData?.app_unit}}:
                         </label>
                                 <p class="mr-l05"> {{ item.unit?.name}}({{item.unit?.code}})</p>
                             </div>
                             <div class="mr-r05">
                                 <label>
-                            Rate:
+                            {{commonLocaleData?.app_rate}}:
                         </label>
                                 <p class="mr-l05">{{ item?.rate |giddhCurrency }} |</p>
                             </div>
@@ -549,7 +544,6 @@
                     </div>
                 </div>
             </div>
-
 
             <!-- stocks end -->
 
@@ -561,26 +555,26 @@
                             <div class="single-address-row" *ngIf="index===0 || index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
                                 <div class="mr-r05" *ngIf="item.address">
                                     <label>
-                            Address:
+                            {{commonLocaleData?.app_address}}:
                         </label>
                                     <p class="address-field">{{item?.address}}
                                     </p>
                                 </div>
                                 <div class="mr-r05" *ngIf="item?.state">
                                     <label>
-                            State:
+                            {{commonLocaleData?.app_state}}:
                         </label>
                                     <p class="mr-l05">{{item?.state?.name}}</p>
                                 </div>
                                 <div class="mr-r05">
                                     <label>
-                            GSTIN:
+                            {{commonLocaleData?.app_gstin}}:
                         </label>
                                     <p class="mr-l05">{{item?.gstIn}}</p>
                                 </div>
                                 <div class="mr-r05" *ngIf="item?.country">
                                     <label>
-                            Country:
+                            {{commonLocaleData?.app_country}}:
                         </label>
                                     <p class="mr-l05">{{item?.country?.countryName}}</p>
                                 </div>
@@ -593,20 +587,20 @@
                         <ng-container *ngFor="let bank of log?.old?.details?.bankDetails; let bankIndex = index">
                             <div class="mr-r05">
                                 <label>
-                            Bank Name:
+                            {{commonLocaleData?.app_bank_name}}:
                         </label>
                                 <p class="address-field"> {{bank?.bankName}}
                                 </p>
                             </div>
                             <div class="mr-r05">
                                 <label>
-                            A/c Number:
+                            {{localeData?.account_number}}:
                         </label>
                                 <p class="mr-l05">{{bank?.accountNumber}}</p>
                             </div>
                             <div class="mr-r05">
                                 <label>
-                            IFSC Code:
+                            {{commonLocaleData?.app_ifsc_code}}:
                         </label>
                                 <p class="mr-l05"> {{bank?.ifscCode}}</p>
                             </div>
@@ -619,39 +613,39 @@
                         <ng-container>
                             <div class="mr-r05" *ngIf="log?.old?.details?.voucherAccount.name">
                                 <label>
-                           Account:
+                                    {{commonLocaleData?.app_account}}:
                         </label>
                                 <p class="address-field"> {{log?.old?.details?.voucherAccount.name}}
                                 </p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.details?.voucherType">
                                 <label>
-                           Voucher:
+                                    {{localeData?.voucher}}:
                         </label>
                                 <p class="address-field"> {{log?.old?.details?.voucherType}}
                                 </p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.voucherNumber">
                                 <label>
-                            Voucher Number:
+                                    {{localeData?.voucher_number}}:
                         </label>
                                 <p class="mr-l05"> {{log?.old?.details?.voucherNumber}}</p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.subTotal">
                                 <label>
-                            Sub Total:
+                                    {{commonLocaleData?.app_subtotal}}:
                         </label>
                                 <p class="mr-l05"> {{log?.old?.details?.subTotal?.amountForAccount |giddhCurrency }}</p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.totalTax">
                                 <label>
-                            Tax:
+                                    {{commonLocaleData?.app_tax}}:
                         </label>
                                 <p class="mr-l05"> {{log?.old?.details?.totalTax?.amountForAccount |giddhCurrency }}</p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.grandTotal">
                                 <label>
-                            Total:
+                                    {{commonLocaleData?.app_total}}:
                         </label>
                                 <p class="mr-l05"> {{log?.old?.details?.grandTotal?.amountForAccount |giddhCurrency }}</p>
                             </div>
@@ -665,28 +659,28 @@
                         <ng-container>
                             <div class="mr-r05" *ngIf="log?.old?.details?.voucher">
                                 <label>
-                           Voucher:
+                                    {{localeData?.voucher}}:
                         </label>
                                 <p class="address-field"> {{log?.old?.details?.voucher}}
                                 </p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.entryDateString">
                                 <label>
-                            Entry Date:
+                                    {{localeData?.entry_date}}:
                         </label>
                                 <p class="mr-l05"> {{log?.old?.details?.entryDateString}}</p>
                             </div>
                             <ng-container *ngFor="let item of log?.old?.details?.otherAccounts; let indexEntries = index;let firstOldEntryIndex=first; let lastOldEntryIndex= last">
                                 <div class="mr-r05" *ngIf="firstOldEntryIndex">
                                     <label>
-                                      Account Name:
+                                        {{commonLocaleData?.app_account_name}}:
                                     </label>
                                     <p class="address-field"> {{item?.name}}
                                     </p>
                                 </div>
                                 <div class="mr-r05" *ngIf="indexEntries >0">
                                     <label *ngIf="indexEntries === 1">
-                                       Other Accounts:
+                                        {{localeData?.other_accounts}}:
                                      </label>
                                     <p class="address-field">{{item?.name}}
                                         <ng-container *ngIf="!lastOldEntryIndex"> |</ng-container>
@@ -695,32 +689,32 @@
                             </ng-container>
                             <div class="mr-r05" *ngIf="log?.old?.details?.subTotal">
                                 <label>
-                            Sub Total:
+                                    {{commonLocaleData?.app_subtotal}}:
                         </label>
                                 <p class="mr-l05"> {{log?.old?.details?.subTotal |giddhCurrency }}</p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.taxTotal">
                                 <label>
-                            Tax:
+                                    {{commonLocaleData?.app_tax}}:
                         </label>
                                 <p class="mr-l05"> {{log?.old?.details?.taxTotal |giddhCurrency }}</p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.total">
                                 <label>
-                            Total:
+                                    {{commonLocaleData?.app_total}}:
                         </label>
                                 <p class="mr-l05"> {{log?.old?.details?.total |giddhCurrency }}</p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.description">
                                 <label>
-                           Description:
+                                    {{commonLocaleData?.description}}:
                         </label>
                                 <p class="address-field"> {{log?.old?.details?.description}}
                                 </p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.hasAttachment">
                                 <label>
-                           File Attached:
+                                    {{localeData?.file_attached}}:
                         </label>
                                 <p class="address-field"> {{log?.old?.details?.hasAttachment ? 'Yes': 'No'}}
                                 </p>
@@ -734,7 +728,7 @@
 
                             <div class="mr-r05" *ngIf="log?.old?.details?.name">
                                 <label>
-                            Group Name:
+                                    {{localeData?.group_name}}:
                         </label>
                                 <p class="address-field">{{log?.old?.details?.name}}
                                 </p>
@@ -742,28 +736,28 @@
 
                             <div class="mr-r05" *ngIf="log?.old?.details?.parentGroup?.name">
                                 <label>
-                            Parent Group Name:
+                                    {{localeData?.parent_group_name}}:
                              </label>
                                 <p class="address-field">{{log?.old?.details?.parentGroup?.name}}
                                 </p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.hsn">
                                 <label>
-                            HSN:
+                                    {{commonLocaleData?.app_hsn}}:
                              </label>
                                 <p class="address-field">{{log?.old?.details?.hsn}}
                                 </p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.sac">
                                 <label>
-                            SAC:
+                                    {{commonLocaleData?.app_sac}}:
                              </label>
                                 <p class="address-field">{{log?.old?.details?.sac}}
                                 </p>
                             </div>
                             <div class="mr-r05" *ngIf="log?.old?.details?.description">
                                 <label>
-                            Description:
+                                    {{localeData?.description}}:
                             </label>
                                 <p class="mr-l05">{{log?.old?.details?.description}}</p>
                             </div>
@@ -815,10 +809,10 @@
             <thead>
                 <tr>
                     <th class="col-xs-3 text-center">#</th>
-                    <th class="col-xs-3 text-center">Date</th>
-                    <th class="col-xs-3 text-center">Particular</th>
-                    <th class="col-xs-3 text-center">Amount</th>
-                    <th class="col-xs-3 text-center">Type</th>
+                    <th class="col-xs-3 text-center">{{localeData?.date}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.particular}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.amount}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.type}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -833,15 +827,15 @@
         </table>
     </div>
     <div class="mr-t05 text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
-        <label>Updated</label>
+        <label>{{localeData?.updated}}</label>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th class="col-xs-3 text-center">#</th>
-                    <th class="col-xs-3 text-center">Date</th>
-                    <th class="col-xs-3 text-center">Particular</th>
-                    <th class="col-xs-3 text-center">Amount</th>
-                    <th class="col-xs-3 text-center">Type</th>
+                    <th class="col-xs-3 text-center">{{localeData?.date}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.particular}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.amount}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.type}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -855,15 +849,15 @@
             </tbody>
         </table>
         <br>
-        <label>Old</label>
+        <label>{{localeData?.old}}</label>
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th class="col-xs-3 text-center">#</th>
-                    <th class="col-xs-3 text-center">Date</th>
-                    <th class="col-xs-3 text-center">Particular</th>
-                    <th class="col-xs-3 text-center">Amount</th>
-                    <th class="col-xs-3 text-center">Type</th>
+                    <th class="col-xs-3 text-center">{{localeData?.date}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.particular}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.amount}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.type}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -878,15 +872,15 @@
         </table>
     </div>
     <div class="mr-t05 text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
-        <label>Updated</label>
+        <label>{{localeData?.updated}}</label>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="col-xs-3 text-center">Opening Balance Date</th>
-                    <th class="col-xs-2 text-center">Opening Balance</th>
-                    <th class="col-xs-3 text-center">email</th>
-                    <th class="col-xs-3 text-center">Name</th>
-                    <th class="col-xs-4 text-center">Unique Name</th>
+                    <th class="col-xs-3 text-center">{{localeData?.opening_balance_date}}</th>
+                    <th class="col-xs-2 text-center">{{localeData?.opening_balance}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.email}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.name}}</th>
+                    <th class="col-xs-4 text-center">{{localeData?.unique_name}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -900,15 +894,15 @@
             </tbody>
         </table>
         <br>
-        <label>Old</label>
+        <label>{{localeData?.old}}</label>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="col-xs-3 text-center">Opening Balance Date</th>
-                    <th class="col-xs-2 text-center">Opening Balance</th>
-                    <th class="col-xs-3 text-center">email</th>
-                    <th class="col-xs-3 text-center">Name</th>
-                    <th class="col-xs-4 text-center">Unique Name</th>
+                    <th class="col-xs-3 text-center">{{localeData?.opening_balance_date}}</th>
+                    <th class="col-xs-2 text-center">{{localeData?.opening_balance}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.email}}</th>
+                    <th class="col-xs-3 text-center">{{localeData?.name}}</th>
+                    <th class="col-xs-4 text-center">{{localeData?.unique_name}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -925,9 +919,8 @@
 </section>
 <section class="no-logs" *ngIf="(auditLogs$ | async).length < 1">
     <div class="no-data">
-        <h1>Sorry, No Logs Found!</h1>
-        <p>You can use the filters on the left to fetch logs.</p>
+        <h1>{{localeData?.no_results_found}}</h1>
+        <p>{{localeData?.no_results_note}}</p>
     </div>
 </section>
-<button class='btn btn-success pull-left mr-t2 mr-b2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
-</button>
+<button class='btn btn-success pull-left mr-t2 mr-b2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>{{localeData?.load_more}}</button>

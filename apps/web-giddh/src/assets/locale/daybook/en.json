@@ -1,9 +1,19 @@
 {
+    "page_heading": "Daybook",
     "transaction_report": "Transaction Report",
     "voucher_name": "Vch. Name",
     "voucher_no": "Vch. No.",
     "debit_amount": "Debit Amt",
     "credit_amount": "Credit Amt",
     "product_service": "Product/Service",
-    "qty": "Qty"
+    "qty": "Qty",
+    "select_entity": "Select Entity",
+    "export_daybook": "Export Daybook",
+    "type": "Type:",
+    "order": "Order:",
+    "accounts_selected_message": "By default all accounts are selected",
+    "vouchers_selected_message": "By default all vouchers are selected",
+    "cheque_details": "Cheque Details",
+    "cheque_number": "Cheque Number",
+    "clearance_date": "Clearance Date"
 }

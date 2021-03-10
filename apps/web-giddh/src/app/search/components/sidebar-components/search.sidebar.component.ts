@@ -25,6 +25,10 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
 	@Input() public pageChangeEvent: any = null;
     @Input() public filterEventQuery: any = null;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     /** Emits the current selected branch */
     @Output() public currentBranchChanged: EventEmitter<string> = new EventEmitter();
