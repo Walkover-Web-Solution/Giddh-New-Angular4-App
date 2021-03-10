@@ -275,7 +275,6 @@ export class LedgerVM {
                     ];
                 }
                 item.entryDate = txn.date;
-                // item.entryDate = moment(txn.date).format('YYYY-MM-DD');
                 item.transactionId = txn.transactionId;
                 item.isBankTransaction = true;
                 forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {
