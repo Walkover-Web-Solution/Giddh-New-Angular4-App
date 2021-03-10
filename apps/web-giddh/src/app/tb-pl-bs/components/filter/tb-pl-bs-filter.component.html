@@ -5,7 +5,7 @@
                 <div class="col-xl-9 col-lg-12 col-md-12">
                     <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-select-year"
                         name="fromToDateForm" novalidate>
-                        <div class="form-group mr-r15 linked-entities" *ngIf="showLabels && currentCompanyBranches?.length > 2">
+                        <div class="form-group mr-r15 linked-entities" *ngIf="showLabels && currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'">
                             <div class="form-group">
                                 <sh-select [options]="currentCompanyBranches" formControlName="branchUniqueName" class="company-branch-dropdown"
                                     [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
