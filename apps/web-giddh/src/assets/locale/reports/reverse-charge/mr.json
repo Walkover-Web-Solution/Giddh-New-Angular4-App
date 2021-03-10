@@ -1,0 +1,12 @@
+{
+    "page_heading": "अहवाल > उलट शुल्क",
+    "date_filter_placeholder" : "तारीख निवडा",
+    "entry_date" : "प्रवेश तारीख",
+    "suppliers_name" : "पुरवठादार नाव",
+    "suppliers_name_placeholder" : "पुरवठादारांचे नाव",
+    "suppliers_invoice_date" : "पुरवठादाराची बीजक तारीख",
+    "suppliers_country" : "पुरवठादार देश",
+    "suppliers_country_placeholder" : "पुरवठादार देश",
+    "total_taxable_value": "एकूण करपात्र मूल्य:",
+    "total_tax_amount": "एकूण कर रक्कम:"
+}

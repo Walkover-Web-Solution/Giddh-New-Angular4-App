@@ -26,7 +26,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     /**
      * This will build the creator name string
      *
-     * @memberof ExpenseDetailsComponent
+     * @memberof ApprovePettyCashEntryConfirmDialogComponent
      */
     public buildCreatorString(): void {
         if(this.selectedEntryForApprove && this.selectedEntryForApprove.createdBy) {
