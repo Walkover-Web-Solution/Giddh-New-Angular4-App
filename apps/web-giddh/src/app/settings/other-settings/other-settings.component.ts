@@ -62,6 +62,10 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
     public translationLocales: IOption[] = [];
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if need to show message */
+    public showLanguageChangeMessage: boolean = false;
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -89,6 +93,16 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             this.activeLocale = response?.value;
+        });
+
+        this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
+            this.commonLocaleData = response;
+
+            if(this.showLanguageChangeMessage) {
+                this.toasterService.clearAllToaster();
+                this.toasterService.successToast(this.commonLocaleData?.app_language_selected);
+                this.showLanguageChangeMessage = false;
+            }
         });
     }
 
@@ -132,6 +146,6 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
      */
     public selectLocale(event?: any): void {
         this.store.dispatch(this.commonActions.setActiveLocale({label: event?.label, value: event?.value}));
-        this.toasterService.successToast("Language has been updated successfully.");
+        this.showLanguageChangeMessage = true;
     }
 }

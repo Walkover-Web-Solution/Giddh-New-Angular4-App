@@ -14,7 +14,6 @@ import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../m
 import { ICurrencyResponse } from '../models/api-models/Company';
 import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-//import { underStandingTextData } from './underStandingTextData';
 
 export class LedgerVM {
     public activeAccount$: Observable<AccountResponse | AccountResponseV2>;

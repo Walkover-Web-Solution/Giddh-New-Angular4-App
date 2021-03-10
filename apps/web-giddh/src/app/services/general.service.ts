@@ -803,7 +803,8 @@ export class GeneralService {
     public getSupportedLocales(): any {
         return [
             { label: 'English', value: 'en' },
-            { label: 'Hindi', value: 'hi' }
+            { label: 'Hindi', value: 'hi' },
+            { label: 'Marathi', value: 'mr' }
         ];
     }
 
