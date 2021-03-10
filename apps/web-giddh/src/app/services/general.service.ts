@@ -795,6 +795,20 @@ export class GeneralService {
     }
 
     /**
+     * This will return supported locales
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getSupportedLocales(): any {
+        return [
+            { label: 'English', value: 'en' },
+            { label: 'Hindi', value: 'hi' },
+            { label: 'Marathi', value: 'mr' }
+        ];
+    }
+
+    /**
      * Returns the array in priority
      *
      * @param {Array<string>} [stockTaxes] Taxes on stock
@@ -817,18 +831,5 @@ export class GeneralService {
         } else {
             return [];
         }
-    }
-
-    /**
-     * This will return supported locales
-     *
-     * @returns {*}
-     * @memberof GeneralService
-     */
-    public getSupportedLocales(): any {
-        return [
-            { label: 'English', value: 'en' },
-            { label: 'Hindi', value: 'hi' }
-        ];
     }
 }
