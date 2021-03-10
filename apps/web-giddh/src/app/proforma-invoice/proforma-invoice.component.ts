@@ -3233,9 +3233,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.entryDate = this.invFormData.voucherDetails.voucherDate;
             }
             this.invFormData.entries.push(entry);
-            setTimeout(() => {
-                this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
-            }, 200);
         } else {
             // if transaction is valid then add new row else show toasty
             if (!txn.isValid()) {
@@ -3244,12 +3241,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             let entry: SalesEntryClass = new SalesEntryClass();
             this.invFormData.entries.push(entry);
-            setTimeout(() => {
-                this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
-            }, 200);
         }
         this.createEmbeddedViewAtIndex(this.invFormData.entries.length - 1);
-        this.openProductDropdown();
+        this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
+        setTimeout(() => {
+            this.openProductDropdown();
+        }, 200);
     }
 
     public removeTransaction(entryIdx: number) {
