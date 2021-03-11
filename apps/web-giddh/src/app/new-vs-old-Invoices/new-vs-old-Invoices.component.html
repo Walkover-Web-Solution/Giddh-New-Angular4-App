@@ -1,19 +1,19 @@
 <ng-container appTranslate [file]="'new-old-invoices'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="container-fluid">
+    <div class="container-fluid" *ngIf="monthOptions?.length > 0">
         <div class="top-bar clearfix">
             <div class="form-inline">
                 <form #carried="ngForm" (ngSubmit)="go(carried)">
                     <div class="pull-left d-flex align-start select-fields">
                         <div class="form-group mr-r1 max-width-500 d-initial">
                             <label>{{localeData?.select_year_label}}</label>
-                            <sh-select [placeholder]="localeData?.select_year_placeholder" [multiple]='false' name="selectedYear" [(ngModel)]="selectedYear" #SelectYear="ngModel" [options]="yearOptions" required>
+                            <sh-select [placeholder]="localeData?.select_year_placeholder" [multiple]='false' name="selectedYear" [(ngModel)]="selectedYear" #SelectYear="ngModel" [options]="yearOptions" [fixedValue]="selectedYear" required>
                             </sh-select>
                         </div>
                         <div class="form-group mr-r1 max-width-500 d-initial">
                             <label>{{localeData?.select_type_label}}</label>
                             <sh-select [placeholder]="localeData?.select_type_placeholder" [multiple]='false' name="selectedType" [(ngModel)]="selectedType" #SelectType="ngModel" [options]="GetTypeOptions" required (selected)="ChangingValue($event)"></sh-select>
-                            <div class="height-25px"  *ngIf="SelectType.invalid">
+                            <div class="height-25px" *ngIf="SelectType.invalid">
                                 <div class="text-danger">{{localeData?.invalid_type}}</div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                     <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
                 </div>
                 <div class="div-row">
-                    <div class="div-cell">{{columnName }} {{selectedYear}}</div>
+                    <div class="div-cell">{{columnName }} {{reportYear}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.uniqueCount | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.total | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.totalSales.invoiceCount | giddhCurrency}}</div>
@@ -123,7 +123,7 @@
                     <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
                 </div>
                 <div class="div-row">
-                    <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{selectedYear}}</div>
+                    <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{reportYear}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount | giddhCurrency}}</div>
@@ -139,7 +139,7 @@
                     <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
                 </div>
                 <div class="div-row">
-                    <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{selectedYear}}</div>
+                    <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{reportYear}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount | giddhCurrency}}</div>
@@ -156,7 +156,7 @@
                     <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
                 </div>
                 <div class="div-row">
-                    <div class="div-cell">{{columnName }} {{selectedYear}}</div>
+                    <div class="div-cell">{{columnName }} {{reportYear}}</div>
                     <div class="div-cell align-end">{{clientAllTotal | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{totalAmount | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{invoiceCountAll | giddhCurrency}}</div>
@@ -209,7 +209,7 @@
                     <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
                 </div>
                 <div class="div-row">
-                    <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{selectedYear}}</div>
+                    <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.month}} {{reportYear}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.uniqueCount | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.total | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[0]?.invoiceCount | giddhCurrency}}</div>
@@ -225,15 +225,18 @@
                     <div class="div-cell align-end">{{localeData?.no_invoices}}</div>
                 </div>
                 <div class="div-row">
-                    <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{selectedYear}}</div>
+                    <div class="div-cell">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.month}} {{reportYear}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.uniqueCount | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.total | giddhCurrency}}</div>
                     <div class="div-cell align-end">{{(NewVsOldInvoicesData$ | async)?.carriedSales[1]?.invoiceCount | giddhCurrency}}</div>
                 </div>
             </div>
         </div>
+        <ng-container *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </ng-container>    
     </ng-container>
-    <ng-container *ngIf="isLoading">
+    <ng-container *ngIf="monthOptions?.length === 0">
         <giddh-page-loader></giddh-page-loader>
     </ng-container>
 </ng-container>
