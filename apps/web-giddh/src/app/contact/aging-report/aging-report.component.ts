@@ -83,6 +83,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
 
+    /** Observable if loading in process */
+    public getAgingReportRequestInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -98,6 +100,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
         this.getDueAmountreportData();
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
+        this.getAgingReportRequestInProcess$ = this.store.pipe(select(s => s.agingreport.getAgingReportRequestInFlight), takeUntil(this.destroyed$));
     }
 
     public getDueAmountreportData() {
@@ -119,7 +122,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 });
             }
             setTimeout(() => {
-                this.detetcChanges();
+                this.detectChanges();
             }, 60000);
         });
     }
@@ -128,7 +131,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest, this.currentBranch.uniqueName));
     }
 
-    public detetcChanges() {
+    public detectChanges() {
         this._cdr.detectChanges();
     }
 

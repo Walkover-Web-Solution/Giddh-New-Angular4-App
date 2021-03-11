@@ -47,7 +47,8 @@
                 </form>
             </div>
         </div>
-
+    </div>
+    <ng-container *ngIf="!isLoading">
         <div class="d-flex" *ngIf="selectedType==='month'">
             <div class="div-table">
                 <div class="head-row">
@@ -231,5 +232,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </ng-container>
+    <ng-container *ngIf="isLoading">
+        <giddh-page-loader></giddh-page-loader>
+    </ng-container>
 </ng-container>

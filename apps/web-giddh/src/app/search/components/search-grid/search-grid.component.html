@@ -1,11 +1,7 @@
-<div class="" auto-height>
+<div auto-height>
     <!--loader-->
-    <div class="loader mr-t4" *ngIf="searchLoader$ | async">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+    <div *ngIf="searchLoader$ | async">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
     <!--end loader-->
 
