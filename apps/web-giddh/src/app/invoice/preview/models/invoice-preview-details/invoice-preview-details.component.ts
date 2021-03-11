@@ -519,11 +519,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             return;
         }
         if (this.pdfContainer) {
-            const window = this.pdfContainer.nativeElement.contentWindow;
-            window.focus();
-            setTimeout(() => {
-                window.print();
-            }, 200);
+            const window = this.pdfContainer?.nativeElement?.contentWindow;
+            if (window) {
+                window.focus();
+                setTimeout(() => {
+                    window.print();
+                }, 200);
+            }
         } else if (this.attachedDocumentPreview) {
             const windowWidth = window.innerWidth
                 || document.documentElement.clientWidth
