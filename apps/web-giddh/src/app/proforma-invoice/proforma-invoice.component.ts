@@ -115,6 +115,7 @@ import { SearchService } from '../services/search.service';
 import { PURCHASE_ORDER_STATUS } from '../shared/helpers/purchaseOrderStatus';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
+import { AccountsAction } from '../actions/accounts.actions';
 
 const THEAD_ARR_READONLY = [
     {
@@ -650,7 +651,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         public purchaseOrderService: PurchaseOrderService,
         private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private accountActions: AccountsAction
     ) {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
@@ -1422,6 +1424,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.isSalesInvoice) {
                         this.loadBankCashAccounts(tempSelectedAcc.currency);
                     }
+                    this.store.dispatch(this.accountActions.resetActiveAccount());
                 }
 
                 // update account success then close sidebar, and update customer details
@@ -1447,7 +1450,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.isCustomerSelected = true;
 
                         setTimeout(() => this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName, 500);
-
+                        this.store.dispatch(this.accountActions.resetActiveAccount());
                         // reset customer details so we don't have conflicts when we create voucher second time
                         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
                     } else {
@@ -2649,22 +2652,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
-        if (this.excludeTax) {
-            trx.total = giddhRoundOff((trx.amount - entry.discountSum), 2);
-            if (trx.isStockTxn) {
-                trx.convertedTotal = giddhRoundOff((trx.quantity * trx.rate * this.exchangeRate) - entry.discountSum, 2);
-            } else {
-                trx.convertedTotal = giddhRoundOff(trx.total * this.exchangeRate, 2);
-            }
-        } else {
-            trx.total = giddhRoundOff((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
-            if (trx.isStockTxn) {
-                trx.convertedTotal = giddhRoundOff(((trx.quantity * trx.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
-            } else {
-                trx.convertedTotal = giddhRoundOff(trx.total * this.exchangeRate, 2);
-            }
-        }
-
+        this.calculateConvertedTotal(entry, trx);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
@@ -2918,6 +2906,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     this.calculateStockEntryAmount(transaction);
                     this.calculateWhenTrxAltered(entry, transaction)
+                } else {
+                    this.calculateConvertedTotal(entry, transaction);
                 }
             });
         }
@@ -3001,11 +2991,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.searchService.loadDetails(selectedAcc.additional.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data && data.body) {
                         // Take taxes of parent group and stock's own taxes
-                        const taxes = data.body.taxes || [];
-                        if (data.body.stock) {
-                            taxes.push(...data.body.stock.taxes);
+                        const taxes = this.generalService.fetchTaxesOnPriority(
+                            data.body.stock?.taxes ?? [],
+                            data.body.stock?.groupTaxes ?? [],
+                            data.body.taxes ?? [],
+                            data.body.groupTaxes ?? []);
+                        const taxComponent = this.taxControlComponent?.find((item, index) => index === entryIndex);
+                        if (taxComponent) {
+                            taxComponent.enableAllTheTaxes();
                         }
-
                         let maxQuantity = 0;
 
                         if(isLinkedPoItem) {
@@ -7029,5 +7023,31 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 description?.nativeElement?.focus();
             }
         }, 200);
+    }
+
+    /**
+     * Calculates converted total
+     *
+     * @private
+     * @param {SalesEntryClass} entry Entry instance
+     * @param {SalesTransactionItemClass} transaction Transaction instance
+     * @memberof ProformaInvoiceComponent
+     */
+    private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        if (this.excludeTax) {
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
+            if (transaction.isStockTxn) {
+                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, 2);
+            } else {
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+            }
+        } else {
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            if (transaction.isStockTxn) {
+                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            } else {
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+            }
+        }
     }
 }

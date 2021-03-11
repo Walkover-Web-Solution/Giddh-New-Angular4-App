@@ -131,7 +131,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public todaySelected: boolean = false;
     public todaySelected$: Observable<boolean> = observableOf(false);
     public selectedTrxWhileHovering: string;
-    public checkedTrxWhileHovering: string[] = [];
+    public checkedTrxWhileHovering: any[] = [];
     public ledgerTxnBalance: any = {};
     public isAdvanceSearchImplemented: boolean = false;
     public invoiceList: any[] = [];
@@ -380,18 +380,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (data && data.body) {
                 txn.showTaxationDiscountBox = false;
                 // Take taxes of parent group and stock's own taxes
-                let taxes = data.body.taxes || [];
-                if (data.body.stock) {
-                    taxes.push(...data.body.stock.taxes);
-                }
+                const taxes = this.generalService.fetchTaxesOnPriority(
+                    data.body.stock?.taxes ?? [],
+                    data.body.stock?.groupTaxes ?? [],
+                    data.body.taxes ?? [],
+                    data.body.groupTaxes ?? []);
                 if (txn.taxesVm) {
                     txn.taxesVm.forEach(tax => {
                         tax.isChecked = false;
                         tax.isDisabled = false;
                     });
-                }
-                if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
-                    taxes.unshift(data.body.applicableTaxes[0].uniqueName);
                 }
                 txn.selectedAccount = {
                     ...e.additional,
@@ -414,9 +412,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 };
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
-                }
-                if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
-                    txn.selectedAccount.particularAccountTax = data.body.applicableTaxes;
                 }
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
@@ -770,7 +765,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
                 // init transaction request and call for transaction data
                 // this.advanceSearchRequest = new AdvanceSearchRequest();
-
+                this.creditSelectAll = false;
+                this.debitSelectAll = false;
+                this.debitCreditSelectAll = false;
             }
         });
 
@@ -816,14 +813,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? 'Cr' : 'Dr';
                 }
 
-                let checkedEntriesName: string[] = uniq([
-                    ...lt.debitTransactions.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
-                    ...lt.creditTransactions.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+                let checkedEntriesName: any[] = uniq([
+                    ...lt.debitTransactions.filter(f => f.isChecked).map(dt => ({uniqueName: dt.entryUniqueName, type: 'debit'})),
+                    ...lt.creditTransactions.filter(f => f.isChecked).map(ct => ({uniqueName: ct.entryUniqueName, type: 'credit'})),
                 ]);
 
                 if (checkedEntriesName && checkedEntriesName.length) {
                     checkedEntriesName.forEach(f => {
-                        let duplicate = this.checkedTrxWhileHovering.some(s => s === f);
+                        let duplicate = this.checkedTrxWhileHovering.some(s => s.uniqueName === f.uniqueName);
                         if (!duplicate) {
                             this.checkedTrxWhileHovering.push(f);
                         }
@@ -1805,8 +1802,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.creditSelectAll = false;
             }
             this.selectedTrxWhileHovering = null;
-            this.checkedTrxWhileHovering = [];
         }
+        this.checkedTrxWhileHovering = [];
 
         this.store.dispatch(this._ledgerActions.SelectDeSelectAllEntries(type, ev.target.checked));
     }
@@ -1826,17 +1823,47 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedTrxWhileHovering = uniqueName;
     }
 
-    public entrySelected(ev: any, uniqueName: string) {
+    public entrySelected(ev: any, uniqueName: string, type: string) {
+        const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions.length :
+            (type === 'credit') ? this.ledgerTransactions.creditTransactions.length :
+            (this.ledgerTransactions.debitTransactions.length + this.ledgerTransactions.creditTransactions.length);
         if (ev.target.checked) {
-            this.checkedTrxWhileHovering.push(uniqueName);
+            this.checkedTrxWhileHovering.push({type, uniqueName});
             this.store.dispatch(this._ledgerActions.SelectGivenEntries([uniqueName]));
+            const currentLength = this.isMobileScreen ?
+                this.checkedTrxWhileHovering.length
+                : this.checkedTrxWhileHovering.filter(transaction => transaction.type === type).length;
+            if (currentLength === totalLength) {
+                if (type === 'credit') {
+                    this.creditSelectAll = true;
+                } else if (type === 'debit') {
+                    this.debitSelectAll = true;
+                } else {
+                    this.debitCreditSelectAll = true;
+                }
+            } else {
+                if (type === 'credit') {
+                    this.creditSelectAll = false;
+                } else if (type === 'debit') {
+                    this.debitSelectAll = false;
+                } else {
+                    this.debitCreditSelectAll = false;
+                }
+            }
         } else {
-            let itemIndx = this.checkedTrxWhileHovering.findIndex((item) => item === uniqueName);
+            let itemIndx = this.checkedTrxWhileHovering.findIndex((item) => item.uniqueName === uniqueName);
             this.checkedTrxWhileHovering.splice(itemIndx, 1);
-
-            if (this.checkedTrxWhileHovering && this.checkedTrxWhileHovering.length === 0) {
-                this.creditSelectAll = false;
-                this.debitSelectAll = false;
+            const currentLength = this.isMobileScreen ?
+                this.checkedTrxWhileHovering.length
+                : this.checkedTrxWhileHovering.filter(transaction => transaction.type === type).length;
+            if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
+                if (type === 'credit') {
+                    this.creditSelectAll = false;
+                } else if (type === 'debit') {
+                    this.debitSelectAll = false;
+                } else {
+                    this.debitCreditSelectAll = false;
+                }
                 this.selectedTrxWhileHovering = '';
             }
 
@@ -2207,16 +2234,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.allTransactionsList = [];
             this.allTransactionDates = [];
 
-            if (this.visibleTransactionTypeMobile !== "credit" && this.ledgerTransactions.debitTransactions) {
+            if (this.visibleTransactionTypeMobile === "debit" && this.ledgerTransactions.debitTransactions) {
                 this.ledgerTransactions.debitTransactions.forEach(transaction => {
                     if (this.allTransactionsList[transaction.entryDate] === undefined) {
                         this.allTransactionsList[transaction.entryDate] = [];
                     }
                     this.allTransactionsList[transaction.entryDate].push(transaction);
                 });
-            }
-
-            if (this.visibleTransactionTypeMobile !== "debit" && this.ledgerTransactions.creditTransactions) {
+            } else if (this.visibleTransactionTypeMobile === "credit" && this.ledgerTransactions.creditTransactions) {
+                this.ledgerTransactions.creditTransactions.forEach(transaction => {
+                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
+                    }
+                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                });
+            } else {
+                this.ledgerTransactions.debitTransactions.forEach(transaction => {
+                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
+                    }
+                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                });
                 this.ledgerTransactions.creditTransactions.forEach(transaction => {
                     if (this.allTransactionsList[transaction.entryDate] === undefined) {
                         this.allTransactionsList[transaction.entryDate] = [];
@@ -2374,7 +2412,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public bankTransactionPageChanged(event: any): void {
-        this.bankTransactionsResponse.page = event.page;
-        this.getBankTransactions();
+        if(this.bankTransactionsResponse.page !== event.page) {
+            this.bankTransactionsResponse.page = event.page;
+            this.getBankTransactions();
+        }
+    }
+
+    /**
+     * This returns the transaction id of item
+     *
+     * @param {number} index
+     * @param {*} item
+     * @returns {*}
+     * @memberof LedgerComponent
+     */
+    public trackByTransactionId(index: number, item: any): any {
+        return item.transactionId;
     }
 }
