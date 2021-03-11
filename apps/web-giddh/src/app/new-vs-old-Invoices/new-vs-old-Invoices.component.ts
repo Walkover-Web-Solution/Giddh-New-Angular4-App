@@ -19,11 +19,11 @@ import { take, takeUntil } from 'rxjs/operators';
 })
 
 export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
-    public GetTypeOptions: IOption[] = [{ label: 'Month', value: 'month' }, { label: 'Quarter', value: 'quater' }];
-    public selectedType: string;
-    public monthOptions: IOption[] = [{ label: 'January', value: '01' }, { label: 'February', value: '02' }, { label: 'March', value: '03' }, { label: 'April', value: '04' }, { label: 'May', value: '05' }, { label: 'June', value: '06' }, { label: 'July', value: '07' }, { label: 'August', value: '08' }, { label: 'September', value: '09' }, { label: 'October', value: '10' }, { label: 'November', value: '11' }, { label: 'December', value: '12' }];
+    public GetTypeOptions: IOption[] = [];
+    public selectedType: string = "month";
+    public monthOptions: IOption[] = [];
     public selectedmonth: string;
-    public quaterOptions: IOption[] = [{ label: 'Q1', value: '01' }, { label: 'Q2', value: '02' }, { label: 'Q3', value: '03' }, { label: 'Q4', value: '04' }];
+    public quaterOptions: IOption[] = [];
     public selectedQuater: string = '';
     public NewVsOldInvoicesData$: Observable<NewVsOldInvoicesResponse>;
 
@@ -47,12 +47,16 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** This will hold bifurcation of clients content */
     public bifurcationClients: string = "";
+    /** This will hold report year */
+    public reportYear: string;
 
     constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions, private _companyActions: CompanyActions,
         private _toasty: ToasterService) {
