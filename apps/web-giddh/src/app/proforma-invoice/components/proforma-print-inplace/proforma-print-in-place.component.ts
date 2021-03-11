@@ -115,11 +115,13 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
 
     public printVoucher() {
         if (this.pdfContainer) {
-            const window = this.pdfContainer.nativeElement.contentWindow;
-            window.focus();
-            setTimeout(() => {
-                window.print();
-            }, 200);
+            const window = this.pdfContainer?.nativeElement?.contentWindow;
+            if (window) {
+                window.focus();
+                setTimeout(() => {
+                    window.print();
+                }, 200);
+            }
         }
     }
 
