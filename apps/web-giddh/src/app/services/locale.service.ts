@@ -24,9 +24,9 @@ export class LocaleService {
     public getLocale(folder: string, languageCode: string): Observable<BaseResponse<any, any>> {
         let url = "";
         if(folder) {
-            url = "/assets/locale/" + folder + "/" + languageCode + ".json";
+            url = "assets/locale/" + folder + "/" + languageCode + ".json";
         } else {
-            url = "/assets/locale/" + languageCode + ".json";
+            url = "assets/locale/" + languageCode + ".json";
         }
 
         return this.http.get(url).pipe(
