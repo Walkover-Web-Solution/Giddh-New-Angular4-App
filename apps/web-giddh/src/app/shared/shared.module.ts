@@ -83,7 +83,6 @@ import { MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter }
 import { MatInputModule } from '@angular/material/input';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
-import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
@@ -223,7 +222,6 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatFormFieldModule,
         MatNativeDateModule,
         MatInputModule,
-        PdfJsViewerModule,
         CurrencyModule
     ],
     exports: [

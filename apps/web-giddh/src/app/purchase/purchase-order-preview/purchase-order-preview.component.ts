@@ -13,10 +13,10 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -37,10 +37,10 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
-    /* Instance of PDF viewer*/
-    @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
     /** Attached document preview container instance */
     @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
+    /** Instance of PDF container iframe */
+    @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold state of activity history aside pan */
@@ -73,8 +73,6 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public shouldShowTrnGstField: boolean = false;
     /* Onboarding params object */
     public onboardingFormRequest: OnboardingFormRequest = { formName: 'onboarding', country: '' };
-    /* This will hold count of pages in pdf */
-    public pageCount: number = 0;
     /* This will hold if pdf preview loaded */
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
@@ -83,8 +81,22 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     private attachedDocumentBlob: Blob;
     /** This will hold the search value */
     public poSearch: any = "";
+    /** PDF file url created with blob */
+    public sanitizedPdfFileUrl: any = '';
+    /** PDF src */
+    public pdfFileURL: any = '';
 
-    constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private purchaseOrderActions: PurchaseOrderActions) {
+    constructor(
+        private store: Store<AppState>,
+        private modalService: BsModalService,
+        public purchaseOrderService: PurchaseOrderService,
+        private toaster: ToasterService,
+        public router: Router,
+        private commonActions: CommonActions,
+        private invoiceActions: InvoiceActions,
+        private purchaseOrderActions: PurchaseOrderActions,
+        private domSanitizer: DomSanitizer
+    ) {
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
     }
@@ -446,26 +458,15 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             if (response && response.status === "success" && response.body) {
                 let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
                 this.attachedDocumentBlob = blob;
-                if(this.pdfViewer) {
-                    this.pdfViewer.pdfSrc = blob;
-                    this.pdfViewer.showSpinner = true;
-                    this.pdfViewer.refresh();
-                }
+                const file = new Blob([blob], { type: 'application/pdf' });
+                URL.revokeObjectURL(this.pdfFileURL);
+                this.pdfFileURL = URL.createObjectURL(file);
+                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                 this.pdfPreviewLoaded = true;
             } else {
                 this.pdfPreviewHasError = true;
             }
         });
-    }
-
-    /**
-     * Callback for pages loaded
-     *
-     * @param {number} count
-     * @memberof PurchaseOrderPreviewComponent
-     */
-    public pagesLoaded(count: number): void {
-        this.pageCount = count;
     }
 
     /**
@@ -491,10 +492,12 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        if (this.pdfViewer && this.pdfViewer.pdfSrc) {
-            this.pdfViewer.startPrint = true;
-            this.pdfViewer.refresh();
-            this.pdfViewer.startPrint = false;
+        if (this.pdfContainer) {
+            const window = this.pdfContainer.nativeElement.contentWindow;
+            window.focus();
+            setTimeout(() => {
+                window.print();
+            }, 200);
         } else if (this.attachedDocumentPreview) {
             const windowWidth = window.innerWidth
                 || document.documentElement.clientWidth
