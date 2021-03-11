@@ -1,6 +1,6 @@
 <span class="position-relative custom-dropdown-ledger" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true"
     (clickOutside)="toggleTaxPopup(false)">
-    <label *ngIf="showHeading">{{ customHeading ? customHeading : 'Tax' }} <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label>
+    <label *ngIf="showHeading">{{ customHeading ? customHeading : commonLocaleData?.app_tax }} <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label>
 
     <a id="tax" class="clearfix">
         <div class="multi-select adjust">

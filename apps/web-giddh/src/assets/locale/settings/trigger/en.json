@@ -15,7 +15,6 @@
     "description_label" : "Description",
     "added_triggers" : "Added Triggers",
     "entity_type" : "Entity type",
-    "entity" : "Entity",
     "entity_types" : {
         "group" : "Group",
         "account" : "Account"

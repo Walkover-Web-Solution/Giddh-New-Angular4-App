@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ReplaySubject } from 'rxjs';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 
 @Component({
     selector: 'hamburger-menu',
@@ -18,6 +18,8 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
     /* This will show sidebar is open */
     public sideMenu: { isopen: boolean } = { isopen: true };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>, private generalActions: GeneralActions) {
 
@@ -31,6 +33,10 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideMenu.isopen = response;
+        });
+
+        this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
+            this.commonLocaleData = response;
         });
     }
 

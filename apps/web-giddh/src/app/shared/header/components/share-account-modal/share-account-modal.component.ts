@@ -2,7 +2,7 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
 import { PermissionActions } from '../../../../actions/permission/permission.action';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -18,6 +18,10 @@ import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
 })
 
 export class ShareAccountModalComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public email: string;
     public selectedPermission: string;
     public activeAccount$: Observable<AccountResponseV2>;

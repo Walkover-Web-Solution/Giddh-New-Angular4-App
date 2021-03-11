@@ -48,7 +48,10 @@ export class TaxControlData {
     styleUrls: ['./tax-control.component.scss'],
     providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
+
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Input() public date: string;
     @Input() public taxes: TaxResponse[];
     @Input() public applicableTaxes: string[] = [];
@@ -320,6 +323,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         this.showTaxPopup = true;
         this.hideOtherPopups.emit(true);
         this.taxInputElement.nativeElement.classList.remove('error-box');
+    }
+
+    /**
+     * Enables all the taxes if the item/particular account is changed
+     *
+     * @memberof TaxControlComponent
+     */
+    public enableAllTheTaxes(): void {
+        if (this.taxRenderData?.length) {
+            this.taxRenderData.forEach(tax => tax.isDisabled = false);
+        }
     }
 
     private isTaxApplicable(tax): boolean {
