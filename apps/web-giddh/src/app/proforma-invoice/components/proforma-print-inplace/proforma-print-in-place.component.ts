@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { DownloadVoucherRequest } from '../../../models/api-models/recipt';
 import { ProformaDownloadRequest } from '../../../models/api-models/proforma';
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
@@ -9,6 +8,7 @@ import { ProformaService } from '../../../services/proforma.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'proforma-print-in-place-component',
@@ -19,17 +19,26 @@ import { ReplaySubject } from 'rxjs';
 export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: { voucherNumber: string, uniqueName: string, blob?: Blob };
-    @ViewChild(PdfJsViewerComponent, {static: true}) public pdfViewer: PdfJsViewerComponent;
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Instance of PDF container iframe */
+    @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
 
     public isVoucherDownloading: boolean = false;
     public isVoucherDownloadError: boolean = false;
+    /** PDF file url created with blob */
+    public sanitizedPdfFileUrl: any = '';
+    /** PDF src */
+    public pdfFileURL: any = '';
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _toasty: ToasterService, private _proformaService: ProformaService, private _receiptService: ReceiptService) {
-    }
+    constructor(
+        private _toasty: ToasterService,
+        private _proformaService: ProformaService,
+        private _receiptService: ReceiptService,
+        private domSanitizer: DomSanitizer
+    ) { }
 
     ngOnInit() {
         if (this.selectedItem) {
@@ -51,13 +60,13 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
             this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result) {
                     this.selectedItem.blob = result;
-
-                    if(this.pdfViewer) {
-                        this.pdfViewer.pdfSrc = result;
-                        this.pdfViewer.showSpinner = true;
-                        this.pdfViewer.refresh();
-                    }
-                    this.printVoucher();
+                    const file = new Blob([result], { type: 'application/pdf' });
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    setTimeout(() => {
+                        this.printVoucher();
+                    });
                     this.isVoucherDownloadError = false;
                 } else {
                     this.isVoucherDownloadError = true;
@@ -83,11 +92,13 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
             this._proformaService.download(request, this.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result && result.status === 'success') {
                     let blob: Blob = base64ToBlob(result.body, 'application/pdf', 512);
-                    this.pdfViewer.pdfSrc = blob;
-                    this.selectedItem.blob = blob;
-                    this.pdfViewer.showSpinner = true;
-                    this.pdfViewer.refresh();
-                    this.printVoucher();
+                    const file = new Blob([blob], { type: 'application/pdf' });
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    setTimeout(() => {
+                        this.printVoucher();
+                    });
                     this.isVoucherDownloadError = false;
                 } else {
                     this._toasty.errorToast(result.message, result.code);
@@ -103,10 +114,12 @@ export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
     }
 
     public printVoucher() {
-        if (this.pdfViewer && this.pdfViewer.pdfSrc) {
-            this.pdfViewer.startPrint = true;
-            this.pdfViewer.refresh();
-            this.pdfViewer.startPrint = false;
+        if (this.pdfContainer) {
+            const window = this.pdfContainer.nativeElement.contentWindow;
+            window.focus();
+            setTimeout(() => {
+                window.print();
+            }, 200);
         }
     }
 
