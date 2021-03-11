@@ -146,7 +146,7 @@ export class TlPlService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request).pipe(
                 map((res) => {
                     let data = this.b64toBlob(res.body, 'application/xml', 512);
-                    saveAs(data, 'trialbalance.xlsx');
+                    saveAs(data, request.filename);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -166,7 +166,7 @@ export class TlPlService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data = this.b64toBlob(res.body, 'application/xml', 512);
-                    saveAs(data, 'balancesheet.xlsx');
+                    saveAs(data, request.filename);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -186,7 +186,7 @@ export class TlPlService {
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data = this.b64toBlob(res.body, 'application/xml', 512);
-                    saveAs(data, 'profitloss.xlsx');
+                    saveAs(data, request.filename);
                     return res;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));

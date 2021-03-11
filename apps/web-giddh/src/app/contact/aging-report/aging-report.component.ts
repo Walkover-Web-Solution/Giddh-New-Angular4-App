@@ -1,9 +1,8 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, OnDestroy, Input } from '@angular/core';
 import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AgingReportActions } from '../../actions/aging-report.actions';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
@@ -27,7 +26,13 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
     templateUrl: 'aging-report.component.html',
     styleUrls: ['aging-report.component.scss']
 })
+
 export class AgingReportComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+
     public totalDueSelectedOption: string = '0';
     public totalDueAmount: number = 0;
     public includeName: boolean = false;

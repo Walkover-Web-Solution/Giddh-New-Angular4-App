@@ -22,14 +22,14 @@ class FormatCsv implements IFormatable {
 	private header: string = '';
 	private body: string = '';
 	private footer: string = '';
-	private title: string = 'Name' + ',' + 'Opening Balance' + ',' + 'Debit' + ',' + 'Credit' + ',' + 'Closing Balance' + '\r\n';
+	private title: string = '';
 
-	constructor(private request: TrialBalanceRequest) {
-		//
+	constructor(private request: TrialBalanceRequest, private localeData) {
+        this.title = this.localeData?.csv.trial_balance.name + ',' + this.localeData?.csv.trial_balance.opening_balance + ',' + this.localeData?.csv.trial_balance.debit + ',' + this.localeData?.csv.trial_balance.credit + ',' + this.localeData?.csv.trial_balance.closing_balance + '\r\n';
 	}
 
 	public setHeader(selectedCompany: CompanyResponse) {
-		this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\nTrial Balance: ${this.request.from} to ${this.request.to}\r\n`;
+		this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\n${this.localeData?.csv.trial_balance.trial_balance} ${this.request.from} ${this.localeData?.csv.trial_balance.to} ${this.request.to}\r\n`;
 	}
 
 	public setRowData(data: any[], padding: number) {
@@ -39,30 +39,15 @@ class FormatCsv implements IFormatable {
 	}
 
 	public setFooter(data: any[]) {
-		this.footer += `Total,`;
+		this.footer += this.localeData?.csv.trial_balance.total;
 		data.forEach(value => this.footer += `${value},`);
 		this.footer += `\r\n`;
 	}
 }
 
 @Component({
-	selector: 'tb-export-csv',  // <home></home>
-	template: `
-        <div class="btn-group" dropdown>
-        <a dropdownToggle class="cp"><img src="{{ imgPath }}"/></a>
-        <ul id="dropdown-pdf" *dropdownMenu class="dropdown-menu dropdown-menu-right cp tbpl-dropdown" role="menu" aria-labelledby="button-basic">
-            <span class="caret"></span>
-           <li><a (click)="downloadCSV('group-wise')" data-report="group-wise">Group Wise
-            Report</a></li>
-          <li><a (click)="downloadCSV('condensed')" data-report="condensed">Condensed
-            Report</a></li>
-          <li><a (click)="downloadCSV('account-wise')" data-report="account-wise">Account
-            Wise
-            Report</a></li>
-        </ul>
-      </div>
-    <!-- end form-group -->
-  `,
+	selector: 'tb-export-csv',
+	templateUrl: './tb-export-csv.component.html',
 	providers: [RecTypePipe]
 })
 
@@ -77,9 +62,11 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
 
 	private dataFormatter: DataFormatter;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-	private exportData: ChildGroup[];
-	private showOptions: boolean;
-	private csvAW: any;
+    private exportData: ChildGroup[];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
 	constructor(private store: Store<AppState>, private recType: RecTypePipe) {
 		this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
@@ -101,21 +88,21 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
 		this.showCsvDownloadOptions = false;
 		let csv = '';
 		let name = '';
-		let formatCsv = new FormatCsv(this.trialBalanceRequest);
+		let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);
 		switch (value) {
 			case 'group-wise':
-				csv = this.dataFormatter.formatDataGroupWise();
-				name = 'Trial_Balance_group-wise.csv';
+				csv = this.dataFormatter.formatDataGroupWise(this.localeData);
+				name = this.localeData?.csv.trial_balance_group_wise_report_file_name;
 				break;
 			case 'condensed':
 				this.dataFormatter.formatDataCondensed(formatCsv);
 				csv = formatCsv.csv();
-				name = 'Trial_Balance_condensed.csv';
+				name = this.localeData?.csv.trial_balance_condensed_report_file_name;
 				break;
 			case 'account-wise':
 				this.dataFormatter.formatDataAccountWise(formatCsv);
 				csv = formatCsv.csv();
-				name = 'Trial_Balance_account-wise.csv';
+				name = this.localeData?.csv.trial_balance_account_wise_report_file_name;
 				break;
 			default:
 				break;

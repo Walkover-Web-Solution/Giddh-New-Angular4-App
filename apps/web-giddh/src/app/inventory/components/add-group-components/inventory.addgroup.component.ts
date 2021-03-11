@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take, takeUntil, map } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
@@ -71,6 +71,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
             }
         });
+        this.companyTaxesList$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -93,6 +94,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             taxes: [[]],
             showCodeType: ['']
         });
+        this.taxTempArray = [];
 
         // enable disable parentGroup select
         this.addGroupForm.controls['isSubGroup'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(s => {
@@ -166,6 +168,18 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             } else {
                 this.canDeleteGroup = true;
             }
+
+            this.companyTaxesList$.subscribe((tax) => {
+                _.forEach(tax, (o) => {
+                    o.isChecked = false;
+                    o.isDisabled = false;
+                });
+            });
+
+            this.taxTempArray = [];
+            if (!this.addGroup && account && account.taxes && account.taxes.length) {
+                this.mapSavedTaxes(account.taxes);
+            }
         });
 
         // reset add form and get all groups data
@@ -173,9 +187,17 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             if (d) {
                 if (this.addGroup) {
                     this.addGroupForm.reset();
+
+                    this.getParentGroupData();
+                    this.taxTempArray = [];
+                    this.companyTaxesList$.subscribe((taxes) => {
+                        _.forEach(taxes, (o) => {
+                            o.isChecked = false;
+                            o.isDisabled = false;
+                        });
+                    });
+                    this.addGroupForm.get('taxes').patchValue('');
                 }
-                this.getParentGroupData();
-                // this.router.navigate(['/pages', 'inventory', 'add-group']);
             }
         });
 
@@ -353,6 +375,20 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     // close pane
     public closeAsidePane() {
         this.addGroupForm.reset();
+
+        this.companyTaxesList$.pipe(map((item) => {
+            return item.map(tax => {
+                if (tax) {
+                    tax.isChecked = false;
+                    tax.isDisabled = false;
+                }
+                return tax;
+            });
+        }), takeUntil(this.destroyed$)).subscribe(res => {
+            return res;
+        });
+
+        this.taxTempArray = [];
         this.closeAsideEvent.emit();
     }
 
@@ -451,7 +487,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public mapSavedTaxes(taxes): void {
         let taxToMap = [];
         let event: any = { target: { checked: true } };
-        
+
         this.companyTaxesList$.subscribe(companyTax => {
             _.filter(companyTax, (tax) => {
                 _.find(taxes, (unq) => {
@@ -461,7 +497,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 });
             });
         });
-        
+
         taxToMap.map((tax, index) => {
             this.selectTax(event, tax);
         });

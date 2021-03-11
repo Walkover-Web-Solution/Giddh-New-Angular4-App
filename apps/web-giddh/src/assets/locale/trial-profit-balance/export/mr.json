@@ -1,0 +1,61 @@
+{
+    "xls" : {
+        "main_group_report" : "मुख्य गट अहवाल",
+        "all_group_report" : "सर्व गट अहवाल",
+        "all_account_report" : "सर्व खाते अहवाल",
+        "complete_report" : "पूर्ण अहवाल",
+        "trial_balance": {
+            "download_filename": "चाचणी शिल्लक.xlsx"
+        },
+        "profit_loss": {
+            "download_filename": "नफा तोटा.xlsx"
+        },
+        "balance_sheet": {
+            "download_filename": "बॅलन्सशीट.xlsx"
+        }
+    },
+    "csv" : {
+        "group_wise_report" : "गटवार अहवाल",
+        "trial_balance_group_wise_report_file_name": "ट्रायल_बॅलेन्स_समूहनिहाय.csv",
+        "trial_balance_condensed_report_file_name": "ट्रायल_बॅलेन्स_कँन्डेन्स्ड.csv",
+        "trial_balance_account_wise_report_file_name": "ट्रायल_बॅलेंस_ अकाऊंट-वार.csv",
+        "condensed_report" : "कंडेन्डेड रिपोर्ट",
+        "account_wise_report" : "खातेनिहाय अहवाल",
+        "trial_balance": {
+            "name" : "Name",
+            "opening_balance" : "प्रारंभिक शिल्लक",
+            "debit" : "डेबिट",
+            "credit" : "जमा",
+            "closing_balance" : "अंतिम शिल्लक",
+            "trial_balance": "चाचणी शिल्लक:",
+            "total": "एकूण,",
+            "to": "करण्यासाठी",
+            "fromDate": "या तारखेपासून",
+            "toDate": "आजपर्यंत"
+        }
+    },
+    "pdf" : {
+        "group_wise_report" : "गटवार अहवाल",
+        "condensed_report" : "घन अहवाल",
+        "account_wise_report" : "खातेनिहाय अहवाल",
+        "trial_balance": {
+            "group_wise" : {
+                "download_filename": "पीडीएफ ग्रुपवाईज.pdf"
+            },
+            "condensed": {
+                "download_filename": "पीडीएफ कंडेन्स्ड.pdf"
+            },
+            "account_wise": {
+                "download_filename": "पीडीएफएकउंट वाइज.pdf"
+            },
+            "particular" : "विशेष",
+            "opening_balance" : "प्रारंभिक शिल्लक",
+            "debit" : "डेबिट",
+            "credit" : "जमा",
+            "closing_balance" : "अंतिम शिल्लक",
+            "trial_balance": "चाचणी शिल्लक:",
+            "total": "एकूण",
+            "to": "करण्यासाठी"
+        }
+    }
+}
