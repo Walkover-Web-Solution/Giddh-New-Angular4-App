@@ -1,4 +1,4 @@
-<ng-container appTranslate [file]="'new-old-invoices'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+<ng-container appTranslate [file]="'new-old-invoices'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid" *ngIf="monthOptions?.length > 0">
         <div class="top-bar clearfix">
