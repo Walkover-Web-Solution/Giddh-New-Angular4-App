@@ -1,6 +1,5 @@
-import { combineLatest, Observable, of as observableOf, of, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
-import { IOption } from '../../theme/ng-select/option.interface';
 import {
     ChangeDetectorRef,
     Component,
@@ -21,7 +20,7 @@ import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
-import { cloneDeep, orderBy, uniqBy } from '../../lodash-optimized';
+import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
@@ -29,8 +28,6 @@ import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
-import { DownloadOrSendInvoiceOnMailComponent } from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
@@ -57,7 +54,6 @@ import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
-const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote];
@@ -803,22 +799,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this._invoiceService.selectedInvoicesLists = [];
         this._invoiceService.VoucherType = this.selectedVoucher;
         this._invoiceService.setSelectedInvoicesList(this.selectedInvoicesList);
-    }
-
-    public loadDownloadOrSendMailComponent() {
-        let transactionData = null;
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
-        let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
-        viewContainerRef.remove();
-
-        let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-        viewContainerRef.insert(componentInstanceView.hostView);
-
-        let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
-        componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
-        componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
-        componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
-        componentInstance.showPdfWrap = false;
     }
 
     public getInvoiceTemplateDetails(templateUniqueName: string) {
