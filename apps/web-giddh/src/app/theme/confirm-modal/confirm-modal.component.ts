@@ -30,17 +30,19 @@ export class ConfirmModalComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
-            if (!this.title) {
-                this.title = response.app_confirmation;
-            }
-            if (!this.ok) {
-                this.ok = response.app_yes;
-            }
-            if (!this.cancel) {
-                this.cancel = response.app_no;
-            }
+            if(response) {
+                if (!this.title) {
+                    this.title = response.app_confirmation;
+                }
+                if (!this.ok) {
+                    this.ok = response.app_yes;
+                }
+                if (!this.cancel) {
+                    this.cancel = response.app_no;
+                }
 
-            this.permanentlyDeleteMessage = response.app_permanently_delete_message;
+                this.permanentlyDeleteMessage = response.app_permanently_delete_message;
+            }
         });
     }
 
