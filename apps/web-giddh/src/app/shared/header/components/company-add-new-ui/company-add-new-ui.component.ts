@@ -195,7 +195,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
      * createCompany
      */
     public createCompany(mobileNoEl) {
-        this.checkMobileNo(mobileNoEl);
+        this.isValidMobileNumber();
 
         if (!this.isMobileNumberValid) {
             if (mobileNoEl) {

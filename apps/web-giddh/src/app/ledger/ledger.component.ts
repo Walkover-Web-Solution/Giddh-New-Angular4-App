@@ -380,18 +380,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (data && data.body) {
                 txn.showTaxationDiscountBox = false;
                 // Take taxes of parent group and stock's own taxes
-                let taxes = data.body.taxes || [];
-                if (data.body.stock) {
-                    taxes.push(...data.body.stock.taxes);
-                }
+                const taxes = this.generalService.fetchTaxesOnPriority(
+                    data.body.stock?.taxes ?? [],
+                    data.body.stock?.groupTaxes ?? [],
+                    data.body.taxes ?? [],
+                    data.body.groupTaxes ?? []);
                 if (txn.taxesVm) {
                     txn.taxesVm.forEach(tax => {
                         tax.isChecked = false;
                         tax.isDisabled = false;
                     });
-                }
-                if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
-                    taxes.unshift(data.body.applicableTaxes[0].uniqueName);
                 }
                 txn.selectedAccount = {
                     ...e.additional,
@@ -414,9 +412,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 };
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
-                }
-                if (data.body.applicableTaxes && data.body.applicableTaxes.length) {
-                    txn.selectedAccount.particularAccountTax = data.body.applicableTaxes;
                 }
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
@@ -2374,7 +2369,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public bankTransactionPageChanged(event: any): void {
-        this.bankTransactionsResponse.page = event.page;
-        this.getBankTransactions();
+        if(this.bankTransactionsResponse.page !== event.page) {
+            this.bankTransactionsResponse.page = event.page;
+            this.getBankTransactions();
+        }
+    }
+
+    /**
+     * This returns the transaction id of item
+     *
+     * @param {number} index
+     * @param {*} item
+     * @returns {*}
+     * @memberof LedgerComponent
+     */
+    public trackByTransactionId(index: number, item: any): any {
+        return item.transactionId;
     }
 }
