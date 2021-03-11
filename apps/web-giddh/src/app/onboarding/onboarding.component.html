@@ -48,57 +48,52 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-12 col-md-5 col-sm-6">
-                <div class="right-section">
-                    <h1 class="border-btm">{{commonLocaleData?.app_select_inventory_type}}</h1>
-                    <span>{{commonLocaleData?.app_inventory_type}}</span>
-                    <div class="pd-b1 clearfix">
-
-                        <span class="p-0 mr-r3 d-inline-block">
-                            <input id="product" class="radio-custom cp ml-0" type="radio" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                            (change)="updateInventorySetting(true)" name="inventoryType">
-                            <label for="product" class="radio-custom-label">{{commonLocaleData?.app_product}}</label>
-                        </span>
-
-                        <span class="p-0 mr-r3 d-inline-block">
-                            <input id="service" class="radio-custom cp ml-0" type="radio" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
-                            (change)="updateInventorySetting(false)" name="inventoryType">
-                            <label for="service" class="radio-custom-label">{{commonLocaleData?.app_service}}</label>
-                        </span>
-
-                    </div>
-                    <br><br><br>
-
-                    <div class="import-data">
-                        <h1 class="border-btm">{{localeData?.import_data}}</h1>
-                        <span>{{localeData?.data_available}}</span>
-
-                        <div class="import-data-blocks">
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','account']"> <img src="assets/images/new/acc-import.svg">
-                                    <p>{{commonLocaleData?.app_import_type?.accounts}}</p>
-                                </a>
-                            </div>
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','group']"> <img src="assets/images/new/group-import.svg">
-                                    <p>{{commonLocaleData?.app_import_type?.groups}}</p>
-                                </a>
-                            </div>
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','stock']"> <img src="assets/images/new/Inventory-13.svg">
-                                    <p>{{commonLocaleData?.app_import_type?.inventory}}</p>
-                                </a>
-                            </div>
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','entries']"><img src="assets/images/new/entries-import.svg">
-                                    <p>{{commonLocaleData?.app_import_type?.entries}}</p>
-                                </a>
-                            </div>
-                            <div class="d-inline-flex">
-                                <a [routerLink]="['/pages','import','trial-balance']"><img src="assets/images/new/tb-import.svg">
-                                    <p>{{commonLocaleData?.app_import_type?.trial_balance}}</p>
-                                </a>
+                <div class="col-xs-12 col-md-5 col-sm-6">
+                    <div class="right-section">
+                        <h1 class="border-btm">{{commonLocaleData?.app_select_inventory_type}}</h1>
+                        <span>{{commonLocaleData?.app_inventory_type}}</span>
+                        <div class="pd-b1 clearfix">
+                            <span class="p-0 mr-r3 d-inline-block">
+                                <input id="product" class="radio-custom cp ml-0" type="radio" [checked]="CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                (change)="updateInventorySetting(true)" name="inventoryType">
+                                <label for="product" class="radio-custom-label">{{commonLocaleData?.app_product}}</label>
+                            </span>
+                            <span class="p-0 mr-r3 d-inline-block">
+                                <input id="service" class="radio-custom cp ml-0" type="radio" [checked]="!CompanySettingsObj?.companyInventorySettings?.manageInventory"
+                                (change)="updateInventorySetting(false)" name="inventoryType">
+                                <label for="service" class="radio-custom-label">{{commonLocaleData?.app_service}}</label>
+                            </span>
+                        </div>
+                        <br><br><br>
+                        <div class="import-data">
+                            <h1 class="border-btm">{{localeData?.import_data}}</h1>
+                            <span>{{localeData?.data_available}}</span>
+                            <div class="import-data-blocks">
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','account']"> <img src="assets/images/new/acc-import.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.accounts}}</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','group']"> <img src="assets/images/new/group-import.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.groups}}</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','stock']"> <img src="assets/images/new/Inventory-13.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.inventory}}</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','entries']"><img src="assets/images/new/entries-import.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.entries}}</p>
+                                    </a>
+                                </div>
+                                <div class="d-inline-flex">
+                                    <a [routerLink]="['/pages','import','trial-balance']"><img src="assets/images/new/tb-import.svg">
+                                        <p>{{commonLocaleData?.app_import_type?.trial_balance}}</p>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
