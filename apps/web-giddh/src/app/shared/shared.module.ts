@@ -90,6 +90,7 @@ import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.
 import { TranslateDirective } from '../theme/translate/translate.directive';
 import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -183,7 +184,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDaterangepickerComponent,
         GiddhPageLoaderComponent,
         TranslateDirective,
-        AmountFieldComponent
+        AmountFieldComponent,
+        ScheduleNowComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -281,7 +283,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhPageLoaderComponent,
         TranslateDirective,
         AmountFieldComponent,
-        CurrencyModule
+        CurrencyModule,
+        ScheduleNowComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
