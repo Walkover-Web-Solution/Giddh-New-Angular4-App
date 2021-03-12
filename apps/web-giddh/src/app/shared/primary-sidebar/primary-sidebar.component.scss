@@ -24,6 +24,13 @@
                 }
             }
         }
+        .branch-connection{
+            position: absolute;
+            top: 32px;
+            font-size: 24px;
+            left: 20px;
+            color: $grey-chateau;
+        }
     }
     .search-box {
         .input-group-text {
@@ -45,6 +52,7 @@
             line-height: 36px;
             color: $trout;
             z-index: 1;
+            color: $grey-chateau;
         }
     }
     .wrap-menus{
@@ -52,7 +60,6 @@
         overflow-y: auto;
         padding-bottom: 120px;
     }
-
     .account-block {
         p {
             color: $black-pearl;
@@ -63,6 +70,10 @@
                 a {
                     color: $trout;
                     line-height: 16px;
+                    &.show-more{
+                        color: $midnight-blue;
+                        text-decoration: underline;
+                    }
                 }
             }
         }
@@ -160,6 +171,22 @@
         }
     }
     }
-
+    .toogle-sidebar{
+        i{
+            width: 20px;
+            height: 20px;
+            background-color: $white;
+            border-radius: 50%;
+            border: 1px solid $gainsboro;
+            transform: rotate(90deg);
+            position: absolute;
+            top: 60px;
+            right: -10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 
 }
