@@ -6,6 +6,7 @@ import { ToasterService } from "../../services/toaster.service";
 import * as moment from 'moment/moment';
 import { EcommerceService } from "../../services/ecommerce.service";
 import { GIDDH_DATE_FORMAT } from "../helpers/defaultDateFormat";
+import { IForceClear } from "../../models/api-models/Sales";
 
 @Component({
     selector: 'schedule-now',
@@ -28,6 +29,8 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
     public moment = moment;
     /** This will hold minimum date user can select in datepicker */
     public minDate: Date = new Date();
+    /* Observable for force clear sh-select */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
         private fb: FormBuilder,
@@ -43,8 +46,6 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
      * @memberof ScheduleNowComponent
      */
     public ngOnInit(): void {
-        this.createTimeSlots();
-
         this.scheduleNowForm = this.fb.group({
             name: ['', Validators.required],
             email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -53,6 +54,8 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
             date: ['', Validators.required],
             time: ['']
         });
+
+        this.createTimeSlots();
     }
 
     /**
@@ -117,12 +120,41 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
      */
     public createTimeSlots(): void {
         let start = moment("09:00 am", 'hh:mm a');
+        let selectedDate = (this.scheduleNowForm?.get('date')?.value) ? moment(this.scheduleNowForm.get('date').value) : moment();
+        let current = moment(start);
+        let tomorrow = moment().add(1, 'days').hours(9).minutes(0);
         let end = moment("09:00 pm", 'hh:mm a');
-        let current = (moment() <= start) ? moment(start) : moment();
+
+        if(selectedDate.format(GIDDH_DATE_FORMAT) >= tomorrow.format(GIDDH_DATE_FORMAT)) {
+            selectedDate = selectedDate.hours(9);
+            selectedDate = selectedDate.minutes(0);
+        } else {
+            selectedDate.hours(moment().hour());
+            selectedDate.minutes(moment().minute());
+            current = moment(this.roundTimeQuarterHour(selectedDate));
+        }
+
+        this.forceClear$ = observableOf({ status: true });
+        this.timeSlots = [];
 
         while (current <= end) {
             this.timeSlots.push({ label: current.format('hh:mm a'), value: current.format('hh:mm a') });
             current.add(15, 'minutes');
         }
+    }
+
+    /**
+     * This will give the closest 15 minute time interval
+     *
+     * @returns {Date}
+     * @memberof ScheduleNowComponent
+     */
+    public roundTimeQuarterHour(selectedDate: moment.Moment): Date {
+        var timeToReturn = moment(selectedDate).toDate()
+    
+        timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
+        timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
+        timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes() / 15) * 15);
+        return timeToReturn;
     }
 }
