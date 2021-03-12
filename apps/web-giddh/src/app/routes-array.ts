@@ -16,6 +16,7 @@ export const ROUTES = [
     { path: 'manufacturing', redirectTo: 'pages/manufacturing', pathMatch: 'full' },
     { path: 'about', redirectTo: 'pages/about', pathMatch: 'full' },
     { path: 'trial-balance-and-profit-loss', redirectTo: 'pages/trial-balance-and-profit-loss', pathMatch: 'full' },
+    { path: 'giddh-all-items', redirectTo: 'pages/giddh-all-items', pathMatch: 'full' },
     { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full' },
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy' },

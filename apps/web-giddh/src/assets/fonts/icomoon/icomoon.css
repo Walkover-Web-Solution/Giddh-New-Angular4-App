@@ -28,14 +28,104 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-branch-indicator:before {
-  content: "\e900";
-}
 .icon-customer:before {
   content: "\e901";
 }
-.icon-down:before {
+.icon-trial-balance-new:before {
+  content: "\e9b9";
+}
+.icon-tally-import:before {
+  content: "\e9ba";
+}
+.icon-sale-bifurcation:before {
+  content: "\e9bb";
+}
+.icon-reverse-charge:before {
+  content: "\e9bc";
+}
+.icon-petty-cash:before {
+  content: "\e9bd";
+}
+.icon-onboarding-new:before {
+  content: "\e9be";
+}
+.icon-monthly-columnar-report:before {
+  content: "\e9bf";
+}
+.icon-journal-voucher-new:before {
+  content: "\e9c0";
+}
+.icon-group-new:before {
+  content: "\e9c1";
+}
+.icon-dashboard-new:before {
+  content: "\e9c2";
+}
+.icon-cash-flow-statement:before {
+  content: "\e9c3";
+}
+.icon-audit-log:before {
+  content: "\e9c4";
+}
+.icon-accounts-new:before {
+  content: "\e900";
+}
+.icon-aging-report-new:before {
   content: "\e902";
+}
+.icon-balance-sheet-new:before {
+  content: "\e9a7";
+}
+.icon-branch-connection:before {
+  content: "\e9a8";
+}
+.icon-credit-note-new:before {
+  content: "\e9a9";
+}
+.icon-daybook-new:before {
+  content: "\e9aa";
+}
+.icon-debit-note-new:before {
+  content: "\e9ab";
+}
+.icon-down-new:before {
+  content: "\e9ac";
+}
+.icon-estimate-new:before {
+  content: "\e9ad";
+}
+.icon-eway-bill-new:before {
+  content: "\e9ae";
+}
+.icon-invoice-new:before {
+  content: "\e9af";
+}
+.icon-master-new:before {
+  content: "\e9b0";
+}
+.icon-payment-new:before {
+  content: "\e9b1";
+}
+.icon-proft-loss-new:before {
+  content: "\e9b2";
+}
+.icon-reciept-new:before {
+  content: "\e9b3";
+}
+.icon-register-new:before {
+  content: "\e9b4";
+}
+.icon-sales-order1:before {
+  content: "\e9b5";
+}
+.icon-search-new:before {
+  content: "\e9b6";
+}
+.icon-tax-new:before {
+  content: "\e9b7";
+}
+.icon-template-new:before {
+  content: "\e9b8";
 }
 .icon-import:before {
   content: "\e903";
