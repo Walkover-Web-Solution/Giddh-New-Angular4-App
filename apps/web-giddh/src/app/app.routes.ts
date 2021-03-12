@@ -24,6 +24,7 @@ import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mo
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { DownloadComponent } from './download/download.component';
+import { AllGiddhItemComponent } from './all-items/all-item.component';
 
 export const ROUTES: Routes = [
     { path: 'download', component: DownloadComponent },
@@ -38,6 +39,7 @@ export const ROUTES: Routes = [
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
     { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
+
     { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
     { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },
     { path: 'settings', redirectTo: 'pages/settings', pathMatch: 'full' },
@@ -70,10 +72,15 @@ export const ROUTES: Routes = [
     { path: 'select-plan', component: SelectPlanComponent },
     { path: 'billing-detail', component: BillingDetailComponent },
     { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
+   // { path: 'giddh-all-items', redirectTo: 'pages/giddh-all-items', pathMatch: 'full', component: AllGiddhItemComponent  },
+    //{ path: 'new-inventory/create-group', component: InventoryCreateGroupComponent },
     {
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
+
+            // { path: 'giddh-all-items', loadChildren: () => import('./giddh-all-items/giddh-all-items.module').then(module => module.AllItemModule)  },
+
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
             {
                 path: 'daybook',
@@ -84,6 +91,7 @@ export const ROUTES: Routes = [
                 path: 'purchase',
                 redirectTo: 'purchase-management'
             },
+
             { path: 'about', loadChildren: () => import('./about/about.module').then(module => module.AboutModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule), canActivate: [NeedsAuthorization] },
             { path: 'inventory-in-out', loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule), canActivate: [NeedsAuthorization] },
@@ -113,6 +121,7 @@ export const ROUTES: Routes = [
             { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-branch', component: MobileSearchBranchComponent, canActivate: [NeedsAuthorization] },
+            { path: 'giddh-all-items', component: AllGiddhItemComponent, canActivate: [NeedsAuthorization] },
             { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vatReport.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },
