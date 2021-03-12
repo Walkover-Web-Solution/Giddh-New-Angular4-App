@@ -27,13 +27,13 @@
             </div>
             <div class="form-group col-sm-6">
                 <label>Date</label>
-                <giddh-datepicker [minDate]="minDate" name="date" formControlName="date" placeholder="Date">
+                <giddh-datepicker [minDate]="minDate" name="date" formControlName="date" placeholder="Date" (dateSelected)="createTimeSlots()">
                 </giddh-datepicker>
             </div>
             <div class="form-group col-sm-6">
                 <label>Time</label>
                 <sh-select [options]="timeSlots" name="time" formControlName="time" [isFilterEnabled]="true"
-                    [ItemHeight]="67"></sh-select>
+                    [ItemHeight]="67" [forceClearReactive]="forceClear$ | async"></sh-select>
             </div>
             <div class="col-sm-12">
                 <div class="button-group">
