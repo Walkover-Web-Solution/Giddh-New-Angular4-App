@@ -763,7 +763,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
                 // init transaction request and call for transaction data
                 // this.advanceSearchRequest = new AdvanceSearchRequest();
-
+                this.creditSelectAll = false;
+                this.debitSelectAll = false;
+                this.debitCreditSelectAll = false;
             }
         });
 

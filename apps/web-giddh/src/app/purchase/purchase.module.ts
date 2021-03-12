@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -80,7 +79,6 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         TaxControlModule,
         DiscountControlModule,
         ProformaInvoiceModule,
-        PdfJsViewerModule
     ],
     entryComponents: [],
     exports: [

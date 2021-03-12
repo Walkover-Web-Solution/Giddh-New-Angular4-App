@@ -42,7 +42,7 @@ export class AuditLogsGridComponent implements OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.pipe(select(state => state.auditlog.getLogInProcess)).subscribe(response => {
+        this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = response;
         });
     }
