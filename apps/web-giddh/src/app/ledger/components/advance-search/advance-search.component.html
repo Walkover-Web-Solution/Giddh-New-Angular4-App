@@ -79,12 +79,14 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-9 col-8">
-                                <div class="form-group">
-                                    <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'particulars')" formControlName="particulars" [isFilterEnabled]="true" [multiple]="true
-                                " [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
-                                (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
+                                <div class="col-sm-9 col-8">
+                                    <div class="form-group">
+                                        <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'particulars')"
+                                            formControlName="particulars" [isFilterEnabled]="true" [multiple]="true
+                                                                " [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true" [doNotResetSelectedValues]="true" (scrollEnd)="handleScrollEnd()"
+                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -112,10 +114,12 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-9 col-8">
-                                <div class="form-group">
-                                    <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear( 'vouchers')" formControlName="vouchers" [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
+                                <div class="col-sm-9 col-8">
+                                    <div class="form-group">
+                                        <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear( 'vouchers')"
+                                            formControlName="vouchers" [isFilterEnabled]="true" [multiple]="true"
+                                            [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -179,7 +183,6 @@
                             <div class="col-sm-7" formGroupName="inventory">
                                 <div class="row">
                                     <div class="pr-0 col-sm-3 col-xs-4">
-
                                             <div class="checkbox square-switch">
                                                 <input type="checkbox" id="includeInventory" formControlName="includeInventory" />
                                                 <label for="includeInventory">
@@ -190,12 +193,14 @@
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-9 col-xs-8">
-                                        <div class="form-group">
-                                            <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear( 'inventory')" formControlName="inventories" [isFilterEnabled]="true" [multiple]="true
-                                            " [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
-                                            (scrollEnd)="handleStockScrollEnd()" (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"></sh-select>
+                                        <div class="col-sm-9 col-xs-8">
+                                            <div class="form-group">
+                                                <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear( 'inventory')"
+                                                    formControlName="inventories" [isFilterEnabled]="true" [multiple]="true
+                                                                                    " [placeholder]="commonLocaleData?.app_select_accounts"
+                                                    [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                                    (scrollEnd)="handleStockScrollEnd()" (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"></sh-select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
