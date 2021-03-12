@@ -1667,10 +1667,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         switch (actionType) {
             case 'delete':
-                this.bulkActionConfirmationModal.show();
+                this.bulkActionConfirmationModal?.show();
                 break;
             case 'generate':
-                this.bulkActionGenerateVoucherModal.show();
+                this.bulkActionGenerateVoucherModal?.show();
                 break;
             case 'upload':
                 fileInput.click();
