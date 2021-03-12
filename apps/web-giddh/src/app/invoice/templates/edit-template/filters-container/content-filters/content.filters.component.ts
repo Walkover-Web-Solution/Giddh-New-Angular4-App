@@ -146,18 +146,12 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         //   template.sections.header.data.billingState.display = true;
         // }
         if (!template.sections.header.data.shippingAddress.display) {
-            template.sections.header.data.shippingDate.display = false;
             template.sections.header.data.shippingGstin.display = false;
             template.sections.header.data.shippingState.display = false;
-            template.sections.header.data.trackingNumber.display = false;
-            template.sections.header.data.shippedVia.display = false;
 
         } else {
-            template.sections.header.data.shippingDate.display = true;
             template.sections.header.data.shippingGstin.display = true;
             template.sections.header.data.shippingState.display = true;
-            template.sections.header.data.trackingNumber.display = true;
-            template.sections.header.data.shippedVia.display = true;
         }
 
         this._invoiceUiDataService.setCustomTemplate(template);
