@@ -235,7 +235,7 @@
 
     <div class="menu-wrapper">
         <!-- switch branch start -->
-        <div *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="switch-branch-wrapper" [exclude]="'.switch-branch-section'" [attachOutsideOnClick]="true" (clickOutside)="subBranchDropdown.hide()">
+        <div hidden *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="switch-branch-wrapper" [exclude]="'.switch-branch-section'" [attachOutsideOnClick]="true" (clickOutside)="subBranchDropdown.hide()">
             <div class="btn-group" dropdown placement="bottom right" #subBranchDropdown="bs-dropdown" [autoClose]="false" (onShown)="loadCompanyBranches()">
                 <a id="button-basic" dropdownToggle class="dropdown-toggle cursor-pointer switch-branch-section" aria-controls="dropdown-basic">
                     <ng-container *ngIf="currentBranch">{{currentBranch?.alias}}</ng-container>
@@ -318,7 +318,7 @@
 
         </ul>
 
-        <div class="nav-wrapper">
+        <div hidden class="nav-wrapper">
 
             <perfect-scrollbar class="scroll-class" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="false">
 
@@ -380,6 +380,9 @@
                 </ul>
             </perfect-scrollbar>
         </div>
+        <primary-sidebar></primary-sidebar>
+
+
     </div>
     <div class="mobile-menu-icon" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
         <span class="icon-bar" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right"></span>
