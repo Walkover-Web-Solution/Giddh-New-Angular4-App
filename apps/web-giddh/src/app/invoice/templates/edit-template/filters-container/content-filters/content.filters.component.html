@@ -183,7 +183,7 @@
                     <i class="cp collapse-icons" aria-hidden="true" (click)="showTransportField = !showTransportField" [ngClass]="{'icon-minus': showTransportField, 'icon-plus': !showTransportField}"></i> Transport Details</h3>
                 <div class="clearfix" [collapse]="!showTransportField">
                     <div class="form-group" *ngIf="fieldsAndVisibility.header.shippingDate">
-                        <input type="checkbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display && customTemplate.sections['header'].data['shippingDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         /> Ship Date
                         <div class="ml-3">
                             <input type="text" [maxlength]="15" class="form-control" name="shp" [(ngModel)]="customTemplate.sections['header'].data['shippingDate'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['shippingDate'].display"
@@ -191,7 +191,7 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="fieldsAndVisibility.header.shippedVia">
-                        <input type="checkbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display && customTemplate.sections['header'].data['shippedVia'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked /> Ship Via
                         <div class="ml-3">
                             <input type="text" [maxlength]="15" class="form-control" name="shpvi" [(ngModel)]="customTemplate.sections['header'].data['shippedVia'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['shippedVia'].display"
@@ -199,7 +199,7 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="fieldsAndVisibility.header.trackingNumber">
-                        <input type="checkbox" [disabled]="!customTemplate.sections['header'].data['shippingAddress'].display" [(ngModel)]="customTemplate.sections['header'].data['shippingAddress'].display && customTemplate.sections['header'].data['trackingNumber'].display"
+                        <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Tracking No.
                         <div class="ml-3">
                             <input type="text" [maxlength]="15" class="form-control" name="tra" [(ngModel)]="customTemplate.sections['header'].data['trackingNumber'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['trackingNumber'].display"

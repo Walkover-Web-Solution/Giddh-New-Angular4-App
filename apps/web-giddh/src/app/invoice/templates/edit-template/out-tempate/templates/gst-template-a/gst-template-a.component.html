@@ -222,19 +222,19 @@
                 <tbody>
                     <tr>
                         <td
-                            *ngIf="fieldsAndVisibility.header.shippingDate?.display && fieldsAndVisibility.header.shippingAddress?.display ">
+                            *ngIf="fieldsAndVisibility.header.shippingDate?.display">
                             <p>{{(fieldsAndVisibility.header.shippingDate?.label?.length > 0) ? fieldsAndVisibility.header.shippingDate?.label : 'Ship Date'}}
                             </p>
                             <p>10/09/2018</p>
                         </td>
                         <td
-                            *ngIf="fieldsAndVisibility.header.shippedVia?.display && fieldsAndVisibility.header.shippingAddress?.display ">
+                            *ngIf="fieldsAndVisibility.header.shippedVia?.display">
                             <p>{{(fieldsAndVisibility.header.shippedVia?.label?.length > 0) ? fieldsAndVisibility.header.shippedVia?.label : 'Ship Via'}}
                             </p>
                             <p>FedEx</p>
                         </td>
                         <td
-                            *ngIf="fieldsAndVisibility.header.trackingNumber?.display && fieldsAndVisibility.header.shippingAddress?.display ">
+                            *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
                             <p>{{(fieldsAndVisibility.header.trackingNumber?.label?.length > 0) ? fieldsAndVisibility.header.trackingNumber?.label : 'Tracking No'}}
                             </p>
                             <p>00115467</p>
