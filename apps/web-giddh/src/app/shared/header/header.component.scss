@@ -13,14 +13,16 @@
     bottom: 0;
     min-height: 100vh;
     background-color: $solitude;
-    width: 215px;
-    left: -215px;
+    width: 240px;
+    left: -240px;
     z-index: 991;
 }
-
+/*
+Comment for now
 .nav-left-bar.open {
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
 }
+*/
 
 .account-search .input-group-addon {
     color: $charcoal;
@@ -733,7 +735,7 @@ ul.sub-list {
     }
 }
 .white-row.menu_open {
-    margin-left: 215px;
+    margin-left: 240px;
 }
 .setting-sidebar {
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
