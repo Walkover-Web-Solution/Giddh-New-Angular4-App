@@ -1,0 +1,165 @@
+@import "../../../assets/css/color.scss";
+
+.primary-sidebar {
+    background-color: $solitude;
+    .company-branch-block {
+        h3 {
+            font-family: "opensans-semibold";
+            color: $black-pearl;
+            .company-alice {
+                width: 30px;
+                height: 30px;
+                border: 2px solid $black-pearl;
+                padding: 5px;
+                border-radius: 50px;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+        .current-branch-name {
+            li {
+                a {
+                    color: $trout;
+                }
+            }
+        }
+    }
+    .search-box {
+        .input-group-text {
+            background-color: $white;
+            padding: 8px !important;
+        }
+        input {
+            border-left: none;
+            padding-left: 0 !important;
+        }
+        &:after {
+            content: "Cmd + G ";
+            position: absolute;
+            display: block;
+            clear: both;
+            top: 0;
+            right: 10px;
+            font-size: 12px;
+            line-height: 36px;
+            color: $trout;
+            z-index: 1;
+        }
+    }
+    .wrap-menus{
+        height: 700px;
+        overflow-y: auto;
+        padding-bottom: 120px;
+    }
+
+    .account-block {
+        p {
+            color: $black-pearl;
+            font-family: "opensans-semibold";
+        }
+        ul {
+            li {
+                a {
+                    color: $trout;
+                    line-height: 16px;
+                }
+            }
+        }
+    }
+    .menu-block {
+        .menu-item {
+            font-family: "opensans-semibold";
+            p {
+                display: flex;
+                justify-content: space-between;
+                span {
+                    .icon-arrow-down {
+                        transform: rotate(-85deg);
+                    }
+                }
+            }
+        }
+         .menu-item-wrapper {
+        line-height: 40px;
+        ul {
+            .main-item {
+                display: flex;
+                align-items: flex-start;
+                flex-direction: column;
+                a {
+                    color: $trout;
+                    font-family: "opensans-semibold";
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    &.dropdown-toggle{
+                        padding: 0 15px;
+                    }
+                    span{
+                        min-width: 140px;
+                        display: flex;
+                        align-items: center;
+                        i {
+                            font-size: 20px;
+                            margin-right: 10px;
+                        }
+                    }
+                }
+                li {
+                    .icon-arrow-down {
+                        transform: rotate(-85deg);
+                    }
+                    a {
+                        color: $trout;
+                        align-items: center;
+                        display: flex;
+                        font-family: "opensans-regular";
+                    }
+                }
+                .sub-menu {
+                    &.show{
+                        position: static;
+                            box-shadow: none;
+                            border: none;
+                            background-color: transparent;
+                            width: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            padding-left: 0 !important;
+                            margin-top: 0;
+                            padding-top: 0;
+                    }
+                    li {
+                            padding: 0;
+                        a {
+                            color: $trout;
+                            align-items: center;
+                            display: flex;
+                            font-family: "opensans-regular";
+                            background-color: transparent;
+                            justify-content: flex-start;
+                            padding: 10px 0 10px 50px;
+
+                            i {
+                                font-size: 20px;
+                                margin-right: 10px;
+                            }
+                        }
+                        &:hover{
+                            a{
+                                background-color: $cornflower !important;
+                                color: $white !important;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+    }
+
+
+}

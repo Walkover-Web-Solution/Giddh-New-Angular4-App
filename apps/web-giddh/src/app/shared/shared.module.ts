@@ -41,6 +41,7 @@ import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-t
 import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header'
+import { PrimarySidebarComponent } from './primary-sidebar/primary-sidebar.component';
 import {
     AccountOperationsComponent,
     AccountsSideBarComponent,
@@ -184,8 +185,10 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDaterangepickerComponent,
         AmountFieldComponent,
         TranslateDirective,
+        GiddhPageLoaderComponent,
+        AmountFieldComponent,
         ScheduleNowComponent,
-        GiddhPageLoaderComponent
+        PrimarySidebarComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -284,7 +287,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         CurrencyModule,
         TranslateDirective,
         ScheduleNowComponent,
-        GiddhPageLoaderComponent
+        GiddhPageLoaderComponent,
+        PrimarySidebarComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
