@@ -740,9 +740,8 @@
                             <tr>
                                 <td class="accc " [ngStyle]="{ 'font-size' : inputTemplate.fontMedium + 'px' } ">
                                     <ng-container *ngIf="fieldsAndVisibility.footer.message1?.display ">
-                                        {{inputTemplate.fontMedium}}
                                         <p *ngIf="fieldsAndVisibility.footer.message1?.display ">
-                                            <span>*Tax to be paid on Reverse Charge.<br>
+                                            <span><br>
                                                 <strong>Notes</strong> <br>
                                                 <span style="white-space:pre-line; ">
                                                     <ng-container *ngIf="fieldsAndVisibility?.footer?.message1?.label ">
@@ -750,6 +749,7 @@
                                                     </ng-container>
                                                 </span>
                                                 <ng-container *ngIf="!fieldsAndVisibility?.footer?.message1?.label ">
+                                                    *Tax to be paid on Reverse Charge.<br>
                                                     All payments to be made in cash. <br> Contact us for queries on
                                                     these quotations. <br>
                                                 </ng-container>

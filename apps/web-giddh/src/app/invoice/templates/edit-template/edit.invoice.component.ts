@@ -798,6 +798,10 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 data.fontDefault = data.fontSize;
                 data.fontMedium = data.fontSize - 2;
             }
+            if (data.sections['footer'].data['message1'].display && !data?.sections['footer']?.data['message1']?.label) {
+                // If user checks the checkbox but didn't provide label then remove the selection
+                data.sections['footer'].data['message1'].display = false;
+            }
             data = this.newLineToBR(data);
             this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
