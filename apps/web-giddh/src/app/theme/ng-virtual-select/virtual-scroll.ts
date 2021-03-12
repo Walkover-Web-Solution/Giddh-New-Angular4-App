@@ -54,6 +54,7 @@ export interface ChangeEvent {
     .total-padding {
       width: 1px;
       opacity: 0;
+      height: 50px !important;
     }
   `]
 })
