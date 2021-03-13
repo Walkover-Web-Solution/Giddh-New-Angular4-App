@@ -91,6 +91,7 @@ import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirective } from '../theme/translate/translate.directive';
 
+import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
 
@@ -182,7 +183,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
         AmountFieldComponent,
-        TranslateDirective
+        TranslateDirective,
+        ScheduleNowComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -280,7 +282,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         HamburgerMenuComponent,
         AmountFieldComponent,
         CurrencyModule,
-        TranslateDirective
+        TranslateDirective,
+        ScheduleNowComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

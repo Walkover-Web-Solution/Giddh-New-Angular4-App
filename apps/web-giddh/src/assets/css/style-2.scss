@@ -9584,6 +9584,15 @@ input.mat-input-element{
         height: 18px !important;
     }
 }
+.time-selection , .language-selection{
+    .menu{
+        min-height: 120px !important;
+        .total-padding{
+            min-height: 120px !important;
+            height: 120px !important;
+        }
+    }
+}
 /* responsive  starts here */
 
 @media (max-width: 1440px) {
