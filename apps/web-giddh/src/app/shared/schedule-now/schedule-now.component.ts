@@ -7,6 +7,7 @@ import * as moment from 'moment/moment';
 import { EcommerceService } from "../../services/ecommerce.service";
 import { GIDDH_DATE_FORMAT } from "../helpers/defaultDateFormat";
 import { IForceClear } from "../../models/api-models/Sales";
+import { EMAIL_VALIDATION_REGEX } from "../../app.constant";
 
 @Component({
     selector: 'schedule-now',
@@ -48,7 +49,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.scheduleNowForm = this.fb.group({
             name: ['', Validators.required],
-            email: ['', Validators.compose([Validators.required, Validators.email])],
+            email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(EMAIL_VALIDATION_REGEX)])],
             mobileNo: ['', Validators.required],
             description: [''],
             date: ['', Validators.required],
@@ -125,12 +126,19 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
         let tomorrow = moment().add(1, 'days').hours(9).minutes(0);
         let end = moment("09:00 pm", 'hh:mm a');
 
+        /** If the date is greater than or equals to tomorrow, we will start hours from 9 am */
         if(selectedDate.format(GIDDH_DATE_FORMAT) >= tomorrow.format(GIDDH_DATE_FORMAT)) {
             selectedDate = selectedDate.hours(9);
             selectedDate = selectedDate.minutes(0);
         } else {
-            selectedDate.hours(moment().hour());
-            selectedDate.minutes(moment().minute());
+            /** If the date is today, we will check current hours, if greater than 9, we will start from current time otherwise we will start from 9 am */
+            if(moment().hour() >= 9) {
+                selectedDate.hours(moment().hour());
+                selectedDate.minutes(moment().minute());
+            } else {
+                selectedDate = selectedDate.hours(9);
+                selectedDate = selectedDate.minutes(0);
+            }
             current = moment(this.roundTimeQuarterHour(selectedDate));
         }
 
@@ -150,7 +158,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
      * @memberof ScheduleNowComponent
      */
     public roundTimeQuarterHour(selectedDate: moment.Moment): Date {
-        var timeToReturn = moment(selectedDate).toDate()
+        let timeToReturn = moment(selectedDate).toDate()
     
         timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
         timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
