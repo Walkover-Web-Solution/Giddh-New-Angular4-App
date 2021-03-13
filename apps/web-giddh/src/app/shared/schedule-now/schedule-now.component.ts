@@ -93,7 +93,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
                 subject: "Giddh - Schedule Now",
                 sendFrom: "noreply@giddh.com",
                 sendTo: {
-                    recipients: ["ravinder@walkover.in"]
+                    recipients: ["support@giddh.com"]
                 },
                 sendCc: {
                     recipients: []
