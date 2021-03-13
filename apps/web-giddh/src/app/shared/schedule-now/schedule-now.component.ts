@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -8,6 +8,11 @@ import { EcommerceService } from "../../services/ecommerce.service";
 import { GIDDH_DATE_FORMAT } from "../helpers/defaultDateFormat";
 import { IForceClear } from "../../models/api-models/Sales";
 import { EMAIL_VALIDATION_REGEX } from "../../app.constant";
+import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
+import { select, Store } from "@ngrx/store";
+import { AppState } from "../../store";
+import { CommonActions } from "../../actions/common.actions";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
     selector: 'schedule-now',
@@ -17,7 +22,6 @@ import { EMAIL_VALIDATION_REGEX } from "../../app.constant";
 export class ScheduleNowComponent implements OnInit, OnDestroy {
     /* Emitting the close popup event */
     @Output() public closeModal: EventEmitter<boolean> = new EventEmitter(true);
-
     /** Schedule Now Form Group */
     public scheduleNowForm: FormGroup;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -32,11 +36,16 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
     public minDate: Date = new Date();
     /* Observable for force clear sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** This will hold country codes */
+    public callingCodes$: Observable<IOption[]> = observableOf([]);
 
     constructor(
         private fb: FormBuilder,
         private toaster: ToasterService,
-        private ecommerceService: EcommerceService
+        private ecommerceService: EcommerceService,
+        private store: Store<AppState>,
+        private commonActions: CommonActions,
+        private generalService: GeneralService
     ) {
 
     }
@@ -50,12 +59,14 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
         this.scheduleNowForm = this.fb.group({
             name: ['', Validators.required],
             email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(EMAIL_VALIDATION_REGEX)])],
+            phoneCode: ['91', Validators.required],
             mobileNo: ['', Validators.required],
             description: [''],
-            date: ['', Validators.required],
+            date: [''],
             time: ['']
         });
 
+        this.getCallingCodes();
         this.createTimeSlots();
     }
 
@@ -73,7 +84,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
             let content = "";
             content += "<b>Name:</b>&nbsp;" + this.scheduleNowForm.get('name').value + "<br>";
             content += "<b>Email:</b>&nbsp;" + this.scheduleNowForm.get('email').value + "<br>";
-            content += "<b>Mobile Number:</b>&nbsp;" + this.scheduleNowForm.get('mobileNo').value + "<br>";
+            content += "<b>Mobile Number:</b>&nbsp;+" + this.scheduleNowForm.get('phoneCode').value + "" +this.scheduleNowForm.get('mobileNo').value + "<br>";
             content += "<b>Description:</b>&nbsp;" + this.scheduleNowForm.get('description').value + "<br>";
             content += "<b>Date:</b>&nbsp;" + date + "<br>";
             content += "<b>Time:</b>&nbsp;" + this.scheduleNowForm.get('time').value + "<br>";
@@ -96,7 +107,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
 
                 if (response?.status === "success") {
                     this.closeModal.emit(true);
-                    this.toaster.successToast(response?.body);
+                    this.toaster.successToast("Your call has been scheduled successfully.");
                 } else {
                     this.toaster.errorToast(response?.message);
                 }
@@ -161,5 +172,35 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
         let timeToReturn = moment(selectedDate).toDate()
         timeToReturn.setMinutes(Math.ceil(timeToReturn.getMinutes() / 15) * 15);
         return timeToReturn;
+    }
+
+    /**
+     * This will create list of calling code
+     *
+     * @memberof ScheduleNowComponent
+     */
+    public getCallingCodes(): void {
+        this.store.pipe(select(s => s.common.callingcodes), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                let countryPhoneCode = [];
+                Object.keys(res.callingCodes).forEach(key => {
+                    countryPhoneCode.push({label: res.callingCodes[key], value: res.callingCodes[key]});
+                });
+                this.callingCodes$ = observableOf(countryPhoneCode);
+            } else {
+                this.store.dispatch(this.commonActions.GetCallingCodes());
+            }
+        });
+    }
+
+    /**
+     * This is to allow only digits
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof ScheduleNowComponent
+     */
+    public allowOnlyNumbers(event: any): boolean {
+        return this.generalService.allowOnlyNumbers(event);
     }
 }
