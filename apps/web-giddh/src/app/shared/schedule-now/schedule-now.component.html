@@ -9,21 +9,22 @@
         <div class="row">
             <div class="form-group col-sm-12">
                 <label>Name <sup class="text-danger">*</sup></label>
-                <input type="text" class="form-control" placeholder="Name" name="name" formControlName="name" />
+                <input type="text" class="form-control" placeholder="Name" name="name" formControlName="name" maxlength="100" />
             </div>
             <div class="form-group col-sm-12">
                 <label>Email <sup class="text-danger">*</sup></label>
-                <input type="email" class="form-control" placeholder="Email" name="email" formControlName="email" />
+                <input type="email" class="form-control" placeholder="example@gmail.com" name="email" formControlName="email" maxlength="100" />
+                <span class="error-msg" *ngIf="scheduleNowForm.get('email').dirty && scheduleNowForm.get('email').errors">Invalid Email Address</span>
             </div>
             <div class="form-group col-sm-12">
                 <label>Mobile Number <sup class="text-danger">*</sup></label>
                 <input type="text" class="form-control" placeholder="Mobile Number" name="mobileNo"
-                    formControlName="mobileNo" />
+                    formControlName="mobileNo" maxlength="10" />
             </div>
             <div class="form-group col-sm-12">
                 <label>Description</label>
                 <textarea class="form-control" placeholder="Description" name="description"
-                    formControlName="description"></textarea>
+                    formControlName="description" maxlength="2000"></textarea>
             </div>
             <div class="form-group col-sm-6">
                 <label>Date</label>
