@@ -248,7 +248,7 @@
                                                 <ng-container *ngFor="let item of lc.bankTransactionsData; trackBy: trackByTransactionId; let i = index">
                                                     <ng-container *ngFor="let txn of item.transactions;">
                                                         <ng-container *ngIf="txn.type === 'DEBIT'">
-                                                            <tr class="ledger-row row" (mouseenter)="txn.showDropdown = true;" (mouseleave)="txn.showDropdown = false;" [ngClass]="{'compoundEntry': txn.id === lc.selectedBankTxnUniqueName}">
+                                                            <tr class="ledger-row row" (mouseenter)="txn.showDropdown = true;" (mouseleave)="txn.showDropdown = false;" [ngClass]="{'compound-entry': txn.id === lc.selectedBankTxnUniqueName}">
                                                                 <td class="col-3 col-md-3 col-lg-3">
                                                                     <div class="d-flex align-items-center">
                                                                         <span class="pd-l05 checkbox-span">
