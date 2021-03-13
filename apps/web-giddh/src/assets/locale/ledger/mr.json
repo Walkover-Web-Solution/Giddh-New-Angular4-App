@@ -104,7 +104,7 @@
     "account_entry_error": "कृपया प्रविष्टीसाठी [ACCOUNT] निवडा..",
     "text_data": [
         {
-            "accountType": "कर्जदार",
+            "accountType": "Debtors",
             "text": {
                 "cr": "<accountName> देणारा आहे?",
                 "dr": "<accountName> प्राप्तकर्ता आहे?"
@@ -115,7 +115,7 @@
             }
         },
         {
-            "accountType": "लेनदार",
+            "accountType": "Creditors",
             "text": {
                 "cr": "<accountName> देणारा आहे?",
                 "dr": "<accountName> प्राप्तकर्ता आहे?"
@@ -126,7 +126,7 @@
             }
         },
         {
-            "accountType": "महसूल",
+            "accountType": "Revenue",
             "text": {
                 "cr": "+ <accountName> (वाढत आहे)",
                 "dr": "- <accountName> (घटत आहे)"
@@ -137,7 +137,7 @@
             }
         },
         {
-            "accountType": "खर्च",
+            "accountType": "Expense",
             "text": {
                 "cr": "<accountName> ↓ (कमी होत आहे)",
                 "dr": "<accountName> ↑ (वाढत आहे)"
@@ -148,7 +148,7 @@
             }
         },
         {
-            "accountType": "मालमत्ता",
+            "accountType": "Asset",
             "text": {
                 "cr": "<accountName> जात आहे (-)",
                 "dr": "<accountName> मध्ये येत आहे (+)"
@@ -159,7 +159,7 @@
             }
         },
         {
-            "accountType": "उत्तरदायित्व",
+            "accountType": "Liability",
             "text": {
                 "cr": "<accountName> वाढत आहे ↑",
                 "dr": "<accountName> कमी होत आहे ↓"
@@ -170,7 +170,7 @@
             }
         },
         {
-            "accountType": "उलट शुल्क",
+            "accountType": "ReverseCharge",
             "text": {
                 "cr": "<accountName> कमी होत आहे ↓",
                 "dr": "<accountName> वाढत आहे ↑"
@@ -181,7 +181,7 @@
             }
         },
         {
-            "accountType": "निरर्थक",
+            "accountType": "null",
             "text": {
                 "cr": "<accountName> उत्तरदायित्व निघत आहे",
                 "dr": "<accountName> उत्तरदायित्व येत आहे"

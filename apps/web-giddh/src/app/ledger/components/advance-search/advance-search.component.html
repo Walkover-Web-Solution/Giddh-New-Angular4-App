@@ -79,12 +79,12 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-9 col-8">
-                                <div class="form-group">
-                                    <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'particulars')" formControlName="particulars" [isFilterEnabled]="true" [multiple]="true
-                                " [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
-                                (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
+                                <div class="col-sm-9 col-8">
+                                    <div class="form-group">
+                                        <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'particulars')" formControlName="particulars" [isFilterEnabled]="true" [multiple]="true
+                                    " [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                    (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"></sh-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -112,73 +112,76 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-9 col-8">
-                                <div class="form-group">
-                                    <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear( 'vouchers')" formControlName="vouchers" [isFilterEnabled]="true" [multiple]="true" [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
+                                <div class="col-sm-9 col-8">
+                                    <div class="form-group">
+                                        <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear( 'vouchers')" formControlName="vouchers" [isFilterEnabled]="true" [multiple]="true
+                                    " [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-            <div class="clearfix mr-b1">
-                <div class="row">
-                    <div class="col-sm-5">
-                        <label for="">{{commonLocaleData?.app_amount}}</label>
-                    </div>
-                    <div class="col-sm-7">
-                        <div class="row">
-                            <div class="col-xs-6 col-md-6">
-                                <div class="form-group">
-                                    <sh-select [showClear]="false" [width]=" '100%'" (selected)="onRangeSelect( 'amount', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="commonLocaleData?.app_select_range"></sh-select>
+                <div class="clearfix mr-b1">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for="">{{commonLocaleData?.app_amount}}</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="row">
+                                <div class="col-6 col-md-6">
+                                    <div class="form-group">
+                                        <sh-select [showClear]="false" [width]=" '100%'" (selected)="onRangeSelect( 'amount', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="commonLocaleData?.app_select_range"></sh-select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-xs-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="text" decimalDigitsDirective [DecimalPlaces]="2" formControlName="amount" class="form-control" aria-label="Text input with dropdown button">
+                                <div class="col-6 col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" decimalDigitsDirective [DecimalPlaces]="2" formControlName="amount" class="form-control">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="clearfix mr-b1">
-                <div class="row">
-                    <div class="col-sm-5">
-                        <label for="">{{localeData?.show_cancelled_entries}}</label>
-                    </div>
-                    <div class="col-sm-7">
-                        <div class="row">
-                            <div class="col-xs-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="checkbox" formControlName="cancelledEntries">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="clearfix mr-b1">
-                <div class="form-group toggle-btn mr-b05">
-                    <label class="cp" (click)="toggleOtherDetails()">
-                        <i class="cp collapse-icons" aria-hidden="true"
-                            [ngClass]="{ 'icon-minus': showOtherDetails, 'icon-plus': !showOtherDetails}"></i>{{commonLocaleData?.app_other_details}}
-                    </label>
-                </div>
-            </div>
 
-            <!-- other details container -->
-            <ng-container *ngIf="advanceSearchForm.get( 'includeDescription').value">
-                <div class="clearfix mt-2">
-                    <div class=" mr-b1 clearfix">
-                        <div class="row">
-                            <div class="col-sm-5">
-                                <label for="">{{commonLocaleData?.app_inventory}}</label>
+                <div class="clearfix mr-b1">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <label for="">{{localeData?.show_cancelled_entries}}</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="row">
+                                <div class="col-6 col-md-6">
+                                    <div class="form-group">
+                                        <input type="checkbox" formControlName="cancelledEntries">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-sm-7" formGroupName="inventory">
-                                <div class="row">
-                                    <div class="pr-0 col-sm-3 col-xs-4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix mr-b1">
+                    <div class="form-group toggle-btn mr-b05">
+                        <label class="cp" (click)="toggleOtherDetails()">
+                            <i class="cp collapse-icons" aria-hidden="true"
+                                [ngClass]="{ 'icon-minus': showOtherDetails, 'icon-plus': !showOtherDetails}"></i>{{commonLocaleData?.app_other_details}}
+                        </label>
+                    </div>
+                </div>
+
+                <!-- other details container -->
+                <ng-container *ngIf="advanceSearchForm.get( 'includeDescription').value">
+                    <div class="clearfix mt-2">
+                        <div class=" mr-b1 clearfix">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <label for="">{{commonLocaleData?.app_inventory}}</label>
+                                </div>
+                                <div class="col-sm-7" formGroupName="inventory">
+                                    <div class="row">
+                                        <div class="pr-0 col-sm-3 col-4">
 
                                             <div class="checkbox square-switch">
                                                 <input type="checkbox" id="includeInventory" formControlName="includeInventory" />
@@ -190,36 +193,36 @@
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-9 col-xs-8">
-                                        <div class="form-group">
-                                            <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear( 'inventory')" formControlName="inventories" [isFilterEnabled]="true" [multiple]="true
-                                            " [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
-                                            (scrollEnd)="handleStockScrollEnd()" (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"></sh-select>
+                                        <div class="col-sm-9 col-xs-8">
+                                            <div class="form-group">
+                                                <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear( 'inventory')" formControlName="inventories" [isFilterEnabled]="true" [multiple]="true
+                                                " [placeholder]="commonLocaleData?.app_select_accounts" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [doNotResetSelectedValues]="true"
+                                                (scrollEnd)="handleStockScrollEnd()" (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"></sh-select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-6 col-md-6">
-                                        <div class="form-group">
-                                            <sh-select [showClear]="false" [width]=" '100%'" (selected)="onRangeSelect( 'inventoryQty', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="commonLocaleData?.app_select_range"></sh-select>
+                                    <div class="row">
+                                        <div class="col-6 col-md-6">
+                                            <div class="form-group">
+                                                <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect( 'inventoryQty', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="commonLocaleData?.app_select_range"></sh-select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6 col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="quantity" [placeholder]="commonLocaleData?.app_quantity">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6 col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="quantity" [placeholder]="commonLocaleData?.app_quantity">
+                                    <div class="row">
+                                        <div class="col-6 col-md-6">
+                                            <div class="form-group">
+                                                <sh-select [showClear]="false" [width]=" '100%'" (selected)="onRangeSelect( 'inventoryVal', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="commonLocaleData?.app_select_range"></sh-select>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6 col-md-6">
-                                        <div class="form-group">
-                                            <sh-select [showClear]="false" [width]=" '100%'" (selected)="onRangeSelect( 'inventoryVal', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="commonLocaleData?.app_select_range"></sh-select>
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-md-6">
-                                        <div class="form-group">
-                                            <input type="text" decimalDigitsDirective [DecimalPlaces]="3" class="form-control" formControlName="itemValue" [placeholder]="commonLocaleData?.app_value">
+                                        <div class="col-6 col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" decimalDigitsDirective [DecimalPlaces]="3" class="form-control" formControlName="itemValue" [placeholder]="commonLocaleData?.app_value">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -257,7 +260,7 @@
                     </div>
                 </ng-container>
                 <div class="text-right mb-3 mt-2">
-                    <button class="btn btn-success m0" type="button" (click)="onSearch()">{{commonLocaleData?.app_search}}</button>
+                    <button class="btn btn-success m-0" type="button" (click)="onSearch()">{{commonLocaleData?.app_search}}</button>
                 </div>
             </form>
         </div>
