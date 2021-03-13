@@ -82,7 +82,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
                 subject: "Giddh - Schedule Now",
                 sendFrom: "noreply@giddh.com",
                 sendTo: {
-                    recipients: ["ravinder@walkover.in"]
+                    recipients: ["support@giddh.com"]
                 },
                 sendCc: {
                     recipients: []
@@ -159,10 +159,7 @@ export class ScheduleNowComponent implements OnInit, OnDestroy {
      */
     public roundTimeQuarterHour(selectedDate: moment.Moment): Date {
         let timeToReturn = moment(selectedDate).toDate()
-    
-        timeToReturn.setMilliseconds(Math.round(timeToReturn.getMilliseconds() / 1000) * 1000);
-        timeToReturn.setSeconds(Math.round(timeToReturn.getSeconds() / 60) * 60);
-        timeToReturn.setMinutes(Math.round(timeToReturn.getMinutes() / 15) * 15);
+        timeToReturn.setMinutes(Math.ceil(timeToReturn.getMinutes() / 15) * 15);
         return timeToReturn;
     }
 }
