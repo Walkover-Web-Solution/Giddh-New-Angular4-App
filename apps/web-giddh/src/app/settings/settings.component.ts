@@ -259,13 +259,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         options.headers = {} as any;
 
-        this.http.post("https://accounts.google.com/o/oauth2/token", getAccessTokenData, options).pipe(takeUntil(this.destroyed$)).subscribe((p: any) => {
+        this.http.post("https://accounts.google.com/o/oauth2/token", getAccessTokenData, options).pipe(take(1)).subscribe((p: any) => {
             const dataToSave = {
                 "access_token": p.access_token,
                 "expires_in": p.expires_in,
                 "refresh_token": p.refresh_token
             };
-            this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this._authenticationService.saveGmailToken(dataToSave).pipe(take(1)).subscribe((res) => {
 
                 if (res.status === 'success') {
                     this._toast.successToast('Gmail account added successfully.', 'Success');
