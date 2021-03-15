@@ -23,6 +23,9 @@
                     color: $trout;
                 }
             }
+            .branch-alice{
+                display: none;
+            }
         }
         .branch-connection{
             position: absolute;
@@ -59,6 +62,7 @@
         height: 700px;
         overflow-y: auto;
         padding-bottom: 120px;
+        overflow-x: hidden;
     }
     .account-block {
         p {
@@ -76,6 +80,9 @@
                     }
                 }
             }
+        }
+        .account-dropdown{
+            display: none;
         }
     }
     .menu-block {
@@ -180,7 +187,7 @@
             border: 1px solid $gainsboro;
             transform: rotate(90deg);
             position: absolute;
-            top: 60px;
+            top: 70px;
             right: -10px;
             font-size: 12px;
             display: flex;
@@ -188,5 +195,154 @@
             align-items: center;
         }
     }
+    &.sidebar-collapse{
+        .company-name{
+            display: none !important;
+        }
+        .company-branch-block{
+            padding: 0 10px !important;
+            h3{
+                justify-content: center;
+                .company-alice{
+                    margin-right: 0;
+                }
+            }
+        }
+        .current-branch-name {
+            margin-top: 0;
+            margin-left: 0;
+             .branch-name{
+                display: none;
+            }
+            .branch-alice{
+                display: flex !important;
+                justify-content: center;
+                align-items: center;
+                padding: 0;
+                margin-top: 15px;
+                font-family: 'opensans-semibold';
+            }
 
+        }
+        .branch-connection{
+                display: none;
+            }
+        .search-block{
+            padding: 0 10px !important;
+            .search-box{
+                margin-top: 15px !important;
+                 .input-group{
+                     .input-group-prepend{
+                         .input-group-text{
+                            border-radius: 50%;
+                            width: 38px;
+                            height: 38px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                         }
+                     }
+                    input{
+                        display: none;
+                    }
+                }
+                &:after{
+                    display: none;
+                }
+            }
+
+        }
+        .menu-block{
+            .menu-item{
+                display: none;
+            }
+            .menu-item-wrapper {
+                .giddh-primary-items{
+                    margin-top: 80px;
+                }
+                .main-item{
+                    margin-bottom: 20px;
+                    a{
+                        span{
+                            i{
+                                font-size: 20px;
+                                margin-right: 0px !important;
+                                width: 22px !important;
+                                height: 20px;
+                            }
+                        }
+                        a.dropdown-toggle{
+                            padding: 0 10px;
+                        }
+                        padding: 0 10px !important;
+                        span{
+                            min-width: auto !important;
+                            .item-name{
+                                display: none;
+                            }
+                            i{
+                                margin-right: 10px;
+                                margin-bottom: 0;
+                                margin-left: 0;
+                                transform: none;
+                            }
+                        }
+                        i{
+                            height: 30px;
+                            margin-bottom: 0;
+                            transform: rotate( -90deg );
+                        }
+                    }
+                }
+            }
+            .sub-menu{
+                background-color: $white;
+                li{
+                    a{
+                        i{
+                            margin-bottom: 0;
+                            height: auto;
+                        }
+                    }
+                }
+            }
+        }
+        .account-block{
+            padding-left: 0 !important;
+            margin-top: 15px;
+            .account-collapse{
+                display: none;
+            }
+            .account-dropdown{
+                display: flex !important;
+                padding: 0 10px;
+                a{
+                    &.dropdown-toggle{
+                            display: flex;
+                            span{
+                                display: flex;
+                            }
+                    }
+                    span{
+                        i{
+                            font-size: 20px;
+                            color: $trout;
+                            transform: none;
+                        }
+                    }
+                    i{
+                        font-size: 14px;
+                        transform: rotate( -90deg );
+                        display: inline-flex;
+                        color: $trout;
+                    }
+                }
+            }
+        }
+        .toogle-sidebar{
+            i{
+                transform: rotate(-90deg);
+            }
+        }
+    }
 }

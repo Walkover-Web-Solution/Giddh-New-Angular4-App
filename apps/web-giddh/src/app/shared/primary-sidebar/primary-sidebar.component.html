@@ -5,13 +5,16 @@
                 <h3 class="font-16 d-flex align-items-center">
                     <img src="" hidden class="company-icon mr-r05">
                     <span class="company-alice font-14 mr-r05">WP</span>
-                    <span class="d-flex justify-content-between w-100 align-items-center">Walkover Pvt Ltd
+                    <span class="d-flex justify-content-between w-100 align-items-center company-name">Walkover Pvt Ltd
                     <span class="d-flex"> <i class="icon-down-new"></i> </span></span>
                 </h3>
             </li>
             <ul class="list-style-none current-branch-name mr-t15 mr-l3">
                 <li>
-                    <a href="javascript:void(0)" class="font-14">Walkover Bangalore</a>
+                    <a href="javascript:void(0)" class="font-14 branch-name">Walkover Bangalore</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="font-14 branch-alice">WB</a>
                 </li>
             </ul>
         </ul>
@@ -34,15 +37,36 @@
     </div>
     <div class="wrap-menus">
         <div class="account-block mr-t2 mr-b2 px-3">
-            <p class="font-12">Accounts</p>
-            <ul class="list-style-none font-14 lh33 mr-t05">
-                <li><a href="#">Cash A/c</a></li>
-                <li><a href="#">Cash</a></li>
-                <li><a href="#">General Reserves A/c</a></li>
-                <li><a href="#">Purchases A/c</a></li>
-                <li><a href="#">Sales A/c</a></li>
-                <li><a href="#" class="show-more">Show more</a></li>
-            </ul>
+            <div class="account-collapse">
+                <p class="font-12">Accounts</p>
+                <ul class="list-style-none font-14 lh33 mr-t05">
+                    <li><a href="#">Cash A/c</a></li>
+                    <li><a href="#">Cash</a></li>
+                    <li><a href="#">General Reserves A/c</a></li>
+                    <li><a href="#">Purchases A/c</a></li>
+                    <li><a href="#">Sales A/c</a></li>
+                    <li><a href="#" class="show-more">Show more</a></li>
+                </ul>
+            </div>
+            <div class="account-dropdown btn-group" dropdown>
+                <a href="javascript:void(0);" id="button-basic" dropdownToggle type="button" class="dropdown-toggle"
+                    aria-controls="dropdown-basic">
+                    <span><i class="icon-accounts-new"></i> </span>
+                    <i class="icon-down-new mr-l1 font-14"></i>
+                </a>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
+                    aria-labelledby="button-basic">
+                    <li><a href="#"><i class="icon-invoice-new"></i> Invoice</a></li>
+                    <li><a href="#"><i class="icon-estimate-new"></i> Estimate</a></li>
+                    <li><a href="#"><i class="icon-sales-order1"></i> Sales Order</a></li>
+                    <li><a href="#"><i class="icon-customer"></i> Customer</a></li>
+                    <li><a href="#"><i class="icon-aging-report-new"></i> Aging Report</a></li>
+                    <li><a href="#"><i class="icon-register-new"></i> Sales Register</a></li>
+                    <li><a href="#"><i class="icon-template-new"></i> Template</a></li>
+                    <li><a href="#"><i class="icon-credit-new"></i> Credit Note</a></li>
+                </ul>
+            </div>
+
         </div>
         <div class="menu-block">
             <div class="menu-item  px-3 mr-b1">
@@ -51,12 +75,12 @@
                     <span class="text-gray">Cmd + G</span> </p>
             </div>
             <div class="menu-item-wrapper font-14">
-                <ul class="list-style-none">
+                <ul class="list-style-none giddh-primary-items">
 
-                    <li class="main-item btn-group" dropdown>
+                    <li class="main-item btn-group" dropdown [attr.container]="(!sideMenu.isopen) ? 'body' : ''">
                         <a href="javascript:void(0);" id="button-basic" dropdownToggle type="button" class="dropdown-toggle"
             aria-controls="dropdown-basic">
-                        <span><i class="icon-customer"></i> Customer </span>
+                        <span><i class="icon-customer"></i> <span class="item-name"> Customer </span> </span>
                             <i class="icon-down-new mr-l1 font-14"></i>
                         </a>
                         <ul
@@ -74,7 +98,7 @@
                     <li class="main-item btn-group" dropdown>
                         <a href="javascript:void(0);" id="button-basic" dropdownToggle type="button" class="dropdown-toggle"
                             aria-controls="dropdown-basic">
-                            <span><i class="icon-vendor"></i> Vendor </span>
+                            <span><i class="icon-vendor"></i> <span class="item-name">Vendor </span> </span>
                             <i class="icon-down-new mr-l1 font-14"></i>
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
@@ -92,7 +116,7 @@
                     <li class="main-item btn-group" dropdown>
                         <a href="javascript:void(0);" id="button-basic" dropdownToggle type="button" class="dropdown-toggle"
                             aria-controls="dropdown-basic">
-                            <span><i class="icon-voucher"></i> Other Voucher </span>
+                            <span><i class="icon-voucher"></i> <span class="item-name">Other Voucher</span> </span>
                             <i class="icon-down-new mr-l1 font-14"></i>
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
@@ -106,12 +130,12 @@
                         </ul>
                     </li>
                     <li class="main-item">
-                        <a href="javascript:void(0);" class="px-3"><span><i class="icon-inventory"></i> Inventory</span></a>
+                        <a href="javascript:void(0);" class="px-3"><span><i class="icon-inventory"></i> <span class="item-name">Inventory</span></span></a>
                     </li>
                     <li class="main-item btn-group" dropdown>
                         <a href="javascript:void(0);" id="button-reports" dropdownToggle type="button" class="dropdown-toggle"
                             aria-controls="dropdown-basic">
-                            <span><i class="icon-voucher"></i>Reports</span>
+                            <span><i class="icon-voucher"></i><span class="item-name">Reports</span></span>
                             <i class="icon-down-new mr-l1 font-14"></i>
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
@@ -128,7 +152,7 @@
                     <li class="main-item btn-group" dropdown>
                         <a href="javascript:void(0);" id="button-reports" dropdownToggle type="button" class="dropdown-toggle"
                             aria-controls="dropdown-basic">
-                            <span><i class="icon-import"></i>Import</span>
+                            <span><i class="icon-import"></i><span class="item-name">Import</span></span>
                             <i class="icon-down-new mr-l1 font-14"></i>
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
@@ -143,7 +167,7 @@
                     <li class="main-item btn-group" dropdown>
                         <a href="javascript:void(0);" id="button-reports" dropdownToggle type="button" class="dropdown-toggle"
                             aria-controls="dropdown-basic">
-                            <span><i class="icon-other"></i>Other</span>
+                            <span><i class="icon-other"></i><span class="item-name">Other</span></span>
                             <i class="icon-down-new mr-l1 font-14"></i>
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
