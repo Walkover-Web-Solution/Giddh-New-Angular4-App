@@ -520,7 +520,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     */
     public isDebtorCreditorGroup(activeGroup: GroupResponse): boolean {
         let isTaxableGroup: boolean = false;
-        if (activeGroup) {
+        if (activeGroup && activeGroup.parentGroups) {
             isTaxableGroup = activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
         return isTaxableGroup;
