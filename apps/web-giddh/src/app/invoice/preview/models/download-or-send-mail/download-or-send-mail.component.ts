@@ -1,5 +1,5 @@
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -21,16 +21,15 @@ import { Router } from '@angular/router';
 
 export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
-    @Input() public base64Data: string;
+    @Input() public base64Data: any;
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
     @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
     @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
     @Output() public downloadInvoiceEvent: EventEmitter<object> = new EventEmitter();
-    @ViewChild('pdfViewer', {static: false}) public pdfViewer;
+    /** Instance of PDF container iframe */
+    @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
 
     public showEmailTextarea: boolean = false;
-    public base64StringForModel: any;
-    public unSafeBase64StringForModel: any;
     public showPdfWrap: boolean = false;
     public showEsign: boolean = false;
     public showEditButton: boolean = false;
@@ -48,13 +47,18 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public accountUniqueName: string = '';
     public selectedInvoiceNo: string = '';
     public selectedVoucherType: string = null;
-
+    /** PDF file url created with blob */
+    public sanitizedPdfFileUrl: any = '';
+    /** PDF src */
+    public pdfFileURL: any = '';
     public voucherPreview$: Observable<any> = of(null);
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _toasty: ToasterService, private sanitizer: DomSanitizer,
-        private store: Store<AppState>, private _invoiceActions: InvoiceActions,
+        private _toasty: ToasterService,
+        private sanitizer: DomSanitizer,
+        private store: Store<AppState>,
+        private _invoiceActions: InvoiceActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private _router: Router
     ) {
@@ -88,16 +92,12 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
                 reader.addEventListener('loadend', (e: any) => {
                     let str = 'data:application/pdf;base64,' + e.srcElement.result.split(',')[1];
-                    this.unSafeBase64StringForModel = _.clone(str);
-
-                    this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
-                    this.base64Data = this.base64StringForModel;
                     const blob = b64toBlob(e.srcElement.result.split(',')[1], 'application/pdf');
-                    if (this.isElectron && this.pdfViewer) {
-                        this.pdfViewer.pdfSrc = blob; // pdfSrc can be Blob or Uint8Array
-                        this.pdfViewer.refresh();
-                    }
-                    else if (this.isCordova) {
+                    const file = new Blob([blob], { type: 'application/pdf' });
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    if (this.isCordova) {
                         // todo: show PDF
                     }
                     //   this.pdfViewer.pdfSrc =  new Blob([ e.srcElement.result], { type: "application/pdf" }); // pdfSrc can be Blob or Uint8Array
