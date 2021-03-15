@@ -442,7 +442,7 @@
                                     </sh-select>
                                 </span>
                                 <span class="pull-right">
-                                    <button type="submit" class="btn btn-primary merge-btn"
+                                    <button type="submit" class="btn btn-primary merge-btn mr-0"
                                         [disabled]="moveAccountForm.invalid">{{localeData?.move}}</button>
                                 </span>
                             </div>
@@ -463,7 +463,7 @@
                                 [(ngModel)]="selectedaccountForMerge" [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
                         </span>
                         <span class="pull-right">
-                            <button type="submit" class="btn btn-primary merge-btn"
+                            <button type="submit" class="btn btn-primary merge-btn mr-0"
                                 (click)="mergeAccounts()">{{localeData?.merge}}</button>
                         </span>
                     </div>
@@ -491,7 +491,7 @@
                             <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" (selected)="discountSelected()" [placeholder]="localeData?.select_discounts" ></sh-select>
                         </span>
                         <span class="pull-right">
-                            <button  class="btn btn-primary merge-btn" [disabled]="(isDiscountSaveDisable$ | async)"  (click)="applyDiscounts()">{{commonLocaleData?.app_apply}}</button>
+                            <button  class="btn btn-primary merge-btn mr-0" [disabled]="(isDiscountSaveDisable$ | async)"  (click)="applyDiscounts()">{{commonLocaleData?.app_apply}}</button>
                         </span>
                     </div>
                 </div>
@@ -533,7 +533,7 @@
                                     </sh-select>
                                 </span>
                                 <span class="pull-right">
-                                    <button [disabled]="(isTaxesSaveDisable$ | async)" type="submit" class="btn btn-success">{{commonLocaleData?.app_save}}</button>
+                                    <button [disabled]="(isTaxesSaveDisable$ | async)" type="submit" class="btn btn-success save-btn mr-0">{{commonLocaleData?.app_save}}</button>
                                 </span>
                             </div>
                         </div>
