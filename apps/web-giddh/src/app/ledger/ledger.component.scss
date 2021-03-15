@@ -546,11 +546,16 @@ sh-select:focus {
     font-size: 14px;
     border: 1px solid $midnight-blue;
     border-radius: 20px;
-    padding: 0 15px;
+    padding: 0;
     background-color: $white;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .clear-filter-btn i {
-    font-size: 12px;
+    font-size: 16px;
 }
 .search-ledger-field {
     .btn-danger,
@@ -984,7 +989,7 @@ sh-select:focus {
                 width: 100%;
             }
             .default-width-input {
-                width: calc(100% - 115px);
+                width: calc(100% - 36px);
             }
             input[type="search"] {
                 min-width: 150px;
@@ -992,11 +997,12 @@ sh-select:focus {
             }
             .clear-filter-btn {
                 text-align: center;
-                width: 110px;
+                width: 36px;
                 padding: 0;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                height: 35px;
                 i {
                     left: -3px;
                     top: 0;
