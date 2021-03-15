@@ -49,9 +49,12 @@
                                     <i class="icon-search1 pos-abs"></i>
                                 </span>
                                 <a class="cp mr-l1 clear-filter-btn"
-                                    *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen" href="javascript:;"
-                                    (click)="resetAdvanceSearch()" [tooltip]="commonLocaleData?.app_reset_advance_search">
-                                    <i aria-hidden="true" class="icon-refresh"></i> {{commonLocaleData?.app_clear_filter}}
+                                    *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen"
+                                    href="javascript:;" (click)="resetAdvanceSearch()"
+                                    [tooltip]="commonLocaleData?.app_reset_advance_search">
+                                    <i aria-hidden="true" class="icon-refresh"></i>
+                                    <!-- remove text as per shubhendr sir -->
+                                    <!-- {{commonLocaleData?.app_clear_filter}} -->
                                 </a>
                             </div>
 
@@ -69,9 +72,12 @@
                                 [ngStyle]="{'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px': '0px'}">
                                 <span class="icon-advance-filter"></span>
                             </span>
-                            <a class="cp mr-l1 clear-filter-btn" id="clear-filter" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
-                                href="javascript:;" (click)="resetAdvanceSearch()" [tooltip]="commonLocaleData?.app_reset_advance_search">
-                                <i aria-hidden="true" class="icon-refresh"></i> {{commonLocaleData?.app_clear_filter}}
+                            <a class="cp clear-filter-btn" id="clear-filter"
+                                *ngIf="isAdvanceSearchImplemented && !isMobileScreen" href="javascript:;"
+                                (click)="resetAdvanceSearch()" [tooltip]="commonLocaleData?.app_reset_advance_search">
+                                <i aria-hidden="true" class="icon-refresh"></i>
+                                 <!-- remove as per shubhendra sir comment -->
+                                 <!-- {{commonLocaleData?.app_clear_filter}} -->
                             </a>
                             <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen">
 
@@ -660,7 +666,7 @@
                                                     <td class="col-xs-3 col-md-3 col-lg-3" [attr.data-title]="commonLocaleData?.app_date">
                                                         <div class="d-flex align-items-center">
                                                             <span class="ledger-checkbox pull-left">
-                                                                
+
                                                             </span>
                                                             <input type="text" name="ledgDate" [maxlength]="10"
                                                                 #bs="bsDatepicker" class="form-control date-step focus-unset"
@@ -912,7 +918,7 @@
                                                     <td class="col-xs-3 col-md-3 col-lg-3" [attr.data-title]="commonLocaleData?.app_date">
                                                         <div class="d-flex align-items-center">
                                                             <span class="ledger-checkbox pull-left">
-                                                                
+
                                                             </span>
                                                             <input type="text" name="bsdateledger" [maxlength]="10"
                                                                 #bsd='bsDatepicker' class="form-control date-step focus-unset"
