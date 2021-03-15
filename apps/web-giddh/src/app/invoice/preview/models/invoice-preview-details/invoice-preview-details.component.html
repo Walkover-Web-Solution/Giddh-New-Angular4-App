@@ -368,7 +368,7 @@
                                 </div>
                             </div>
                             <div #attachedDocumentPreview
-                                class="pdf-preview">
+                                class="fixed-ng2pdfview pdf-preview">
                                 <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl && !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)" width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
                             </div>
                             <div class="expand-file" *ngIf="selectedItem?.voucherType === 'purchase' && imagePreviewSource">
