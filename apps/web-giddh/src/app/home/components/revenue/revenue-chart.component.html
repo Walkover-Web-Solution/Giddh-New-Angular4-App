@@ -40,7 +40,7 @@
                                     <div id="leftIncomeChart">
                                         <highcharts-chart *ngIf="chartOptions" [Highcharts]="revenueChart" [options]="chartOptions"></highcharts-chart>
                                     </div>
-                                </perfect-scrollbar>    
+                                </perfect-scrollbar>
                             </div>
                         </div>
                     </div>
@@ -150,19 +150,19 @@
                                     <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.totalLast | giddhCurrency}}</h3>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3 single-sale-data">
-                            <div>
-                                <p>{{localeData?.highest}} {{activeGraphType['uniqueName']}}</p>
-                                    <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.highest | giddhCurrency}}</h3>
-                                <span class="date-wise-sale">{{summaryData.highestLabel}}</span>
+                            <div class="col-sm-3 single-sale-data">
+                                <div>
+                                    <p>{{localeData?.highest}} {{activeGraphType['uniqueName']}}</p>
+                                        <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.highest | giddhCurrency}}</h3>
+                                    <span class="date-wise-sale">{{summaryData.highestLabel}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-3 single-sale-data">
-                            <div>
-                                <p>{{localeData?.lowest}} {{activeGraphType['uniqueName']}}</p>
-                                <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.lowest | giddhCurrency}}</h3>
-                                <span class="date-wise-sale">{{summaryData.lowestLabel}}</span>
+                            <div class="col-sm-3 single-sale-data">
+                                <div>
+                                    <p>{{localeData?.lowest}} {{activeGraphType['uniqueName']}}</p>
+                                    <h3>{{activeCompany.baseCurrencySymbol}} {{summaryData.lowest | giddhCurrency}}</h3>
+                                    <span class="date-wise-sale">{{summaryData.lowestLabel}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
