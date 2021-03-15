@@ -36,6 +36,8 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public rationResponse$: Observable<any>;
     public ratioObj: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
         this.rationResponse$ = this.store.pipe(select(p => p.home.RatioAnalysis), takeUntil(this.destroyed$));
@@ -64,12 +66,6 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                     this.lastFinancialYear = financialYears[0];
                 }
             }
-        });
-
-        this.rationResponse$.pipe(skipWhile(p => (isNullOrUndefined(p)))).subscribe(p => {
-            this.ratioObj = p;
-            this.generateCharts();
-            this.requestInFlight = false;
         });
     }
 
@@ -147,10 +143,10 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 useHTML: true
             },
             series: [{
-                name: 'Current Ratio',
+                name: this.localeData?.current_ratio,
                 type: undefined,
                 // showInLegend: false,
-                data: [['Current Assets', this.ratioObj.currentRatio * 100], ['Current Liabilities', 100]],
+                data: [[this.localeData?.current_assets, this.ratioObj.currentRatio * 100], [this.localeData?.current_liabilities, 100]],
             }],
         };
 
@@ -219,7 +215,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             series: [{
                 // name: 'Debt Equity Ratio',
                 type: 'pie',
-                data: [['Current Liab + NonCurrent Liab', this.ratioObj.debtEquityRatio * 100], ['Shareholders fund', 100]],
+                data: [[this.localeData?.current_liability + ' + ' + this.localeData?.noncurrent_liability, this.ratioObj.debtEquityRatio * 100], [this.localeData?.shareholders_fund, 100]],
 
             }]
         };
@@ -287,9 +283,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 useHTML: true
             },
             series: [{
-                name: 'Proprietary Ratio',
+                name: this.localeData?.proprietary_ratio,
                 type: 'pie',
-                data: [['Shareholders fund', this.ratioObj.proprietaryRatio * 100], ['Total Assets', 100]],
+                data: [[this.localeData?.shareholders_fund, this.ratioObj.proprietaryRatio * 100], [this.localeData?.total_assets, 100]],
 
             }]
         };
@@ -356,9 +352,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 useHTML: true
             },
             series: [{
-                name: 'Fixed Assets Ratio',
+                name: this.localeData?.fixed_assets_ratio,
                 type: 'pie',
-                data: [['Fixed Assets / NonCurrent Liab', this.ratioObj.fixedAssetRatio * 100], ['Shareholders fund', 100]],
+                data: [[this.localeData?.fixed_assets + ' / ' + this.localeData?.noncurrent_liability, this.ratioObj.fixedAssetRatio * 100], [this.localeData?.shareholders_fund, 100]],
             }]
         };
     }
@@ -366,5 +362,21 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof RatioAnalysisChartComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            this.rationResponse$.pipe(skipWhile(response => (isNullOrUndefined(response)))).subscribe(response => {
+                this.ratioObj = response;
+                this.generateCharts();
+                this.requestInFlight = false;
+            });
+        }
     }
 }

@@ -88,6 +88,8 @@ import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/gi
 import { HamburgerMenuComponent } from './header/components/hamburger-menu/hamburger-menu.component';
 import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { TranslateDirective } from '../theme/translate/translate.directive';
+
 import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -180,6 +182,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         HamburgerMenuComponent,
         GiddhDaterangepickerComponent,
         AmountFieldComponent,
+        TranslateDirective,
         ScheduleNowComponent
     ],
     imports: [
@@ -277,6 +280,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         HamburgerMenuComponent,
         AmountFieldComponent,
         CurrencyModule,
+        TranslateDirective,
         ScheduleNowComponent
     ],
     entryComponents: [

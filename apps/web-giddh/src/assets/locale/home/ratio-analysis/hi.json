@@ -1,14 +1,14 @@
 {
-    "chart_title" : "Ratio Analysis",
-    "current_ratio" : "Current Ratio",
-    "current_assets" : "Current Assets",
-    "current_liabilities" : "Current Liabilities",
-    "debt_equity_ratio" : "Debt Equity Ratio",
-    "current_liability" : "Current Liab.",
-    "noncurrent_liability" : "NonCurrent Liab.",
-    "shareholders_fund" : "Shareholder's fund",
-    "proprietary_ratio" : "Proprietary Ratio",
-    "total_assets" : "Total Assets",
-    "fixed_assets_ratio" : "Fixed Assets Ratio",
-    "fixed_assets" : "Fixed Assets"
+    "chart_title": "अनुपात विश्लेषण",
+    "current_ratio": "वर्तमान अनुपात",
+    "current_assets": "वर्तमान संपत्ति",
+    "current_liabilities": "वर्तमान देनदारियां",
+    "debt_equity_ratio": "ऋण इक्विटी अनुपात",
+    "current_liability": "वर्तमान देनदारियां",
+    "noncurrent_liability": "गैर मौजूदा देनदारियों",
+    "shareholders_fund": "शेयरधारक का फंड",
+    "proprietary_ratio": "मालिकाना अनुपात",
+    "total_assets": "कुल संपत्ति",
+    "fixed_assets_ratio": "निश्चित संपत्ति अनुपात",
+    "fixed_assets": "अचल सम्पत्ति"
 }

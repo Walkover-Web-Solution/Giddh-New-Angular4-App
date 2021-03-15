@@ -1,0 +1,12 @@
+{
+    "no_data_found" : "क्षमस्व, कोणताही डेटा सापडला नाही!",
+    "account" : "खाते",
+    "total_cost_of_goods_sold" : "विक्री केलेल्या वस्तूंची एकूण किंमत",
+    "gross_profit" : "निव्वळ नफा",
+    "total_revenue" : "एकूण महसूल",
+    "total_operating_expenses" : "एकूण परिचालन खर्च",
+    "operating_profit_loss" : "ऑपरेटिंग नफा / तोटा (EBIT)",
+    "total_other_expense" : "एकूण इतर खर्च",
+    "income_before_taxes" : "करापूर्वी उत्पन्न (EBT)",
+    "taxes_30" : "कर (30%)"
+}

@@ -17,6 +17,8 @@ import { AccountAddNewDetailsComponent } from '../../shared/header/components';
     templateUrl: './aside.menu.account.component.html'
 })
 export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     @Input() public activeGroupUniqueName: string;
     @Input() public isUpdateAccount: boolean;

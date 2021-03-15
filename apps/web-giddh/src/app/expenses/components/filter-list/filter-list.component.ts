@@ -13,11 +13,11 @@ import { takeUntil } from 'rxjs/operators';
 })
 
 export class FilterListComponent implements OnInit, OnChanges, OnDestroy {
-
-	public monthNames = ["January", "February", "March", "April", "May", "June",
-		"July", "August", "September", "October", "November", "December"
-	];
-
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+	public monthNames = [];
 	public pettyCashReportsResponse$: Observable<PettyCashReportResponse>;
 	public getPettycashReportInprocess$: Observable<boolean>;
 	public expensesDetailedItems: ExpenseResults[];
@@ -35,6 +35,8 @@ export class FilterListComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	public ngOnInit() {
+        this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
+        
 		this.pettyCashReportsResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
 			if (res) {
 				this.expensesDetailedItems = res.results;
@@ -44,7 +46,7 @@ export class FilterListComponent implements OnInit, OnChanges, OnDestroy {
 					resp.entryDate = this.getDateToDMY(resp.entryDate);
 				});
 			}
-		});
+        });
 	}
 
 	public getDateToDMY(selecteddate) {
