@@ -54,7 +54,7 @@
                                 <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
                                     [ngStyle]="{ 'height': inputTemplate.logoSize+'px'}" />
                             </figure>
-                            <p class="bold">Walkover Web Solutions Pvt Ltd.</p>
+                            <p *ngIf="fieldsAndVisibility.header.companyName?.display" class="bold">{{fieldsAndVisibility.header.companyName?.label}}</p>
                             <!-- <p class="font-12" *ngIf="(fieldsAndVisibility.header.customField1?.display && fieldsAndVisibility.header.customField2?.display && fieldsAndVisibility.header.customField3?.display && fieldsAndVisibility.header.dueDate?.display )">{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due on '}} 30/08/2017</p> -->
                         </td>
                     </tr>
