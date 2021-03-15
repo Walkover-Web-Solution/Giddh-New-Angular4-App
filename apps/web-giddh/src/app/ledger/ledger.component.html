@@ -77,7 +77,8 @@
                                     href="javascript:;" (click)="resetAdvanceSearch()"
                                     [tooltip]="commonLocaleData?.app_reset_advance_search">
                                     <i aria-hidden="true" class="icon-refresh"></i>
-                                    {{commonLocaleData?.app_clear_filter}}
+                                    <!-- remove text as per shubhendr sir -->
+                                    <!-- {{commonLocaleData?.app_clear_filter}} -->
                                 </a>
                             </div>
 
@@ -98,10 +99,12 @@
                                 [ngStyle]="{'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px': '0px'}">
                                 <span class="icon-advance-filter"></span>
                             </span>
-                            <a class="cp mr-l1 clear-filter-btn" id="clear-filter"
+                            <a class="cp clear-filter-btn" id="clear-filter"
                                 *ngIf="isAdvanceSearchImplemented && !isMobileScreen" href="javascript:;"
                                 (click)="resetAdvanceSearch()" [tooltip]="commonLocaleData?.app_reset_advance_search">
-                                <i aria-hidden="true" class="icon-refresh"></i> {{commonLocaleData?.app_clear_filter}}
+                                <i aria-hidden="true" class="icon-refresh"></i>
+                                 <!-- remove as per shubhendra sir comment -->
+                                 <!-- {{commonLocaleData?.app_clear_filter}} -->
                             </a>
                             <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen">
 
