@@ -317,13 +317,13 @@
 
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
     <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-        <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState" [commonLocaleData]="commonLocaleData" (closeAsideEvent)="toggleAccountAsidePane($event)" (getUpdateList)="getUpdatedList($event)">
+        <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state  transform-inherit" [@slideInOut]="accountAsideMenuState" [commonLocaleData]="commonLocaleData" (closeAsideEvent)="toggleAccountAsidePane($event)" (getUpdateList)="getUpdatedList($event)">
         </aside-menu-account>
     </div>
 
     <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-    <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-        <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+    <div class="abc vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
+        <payment-aside class="account-aside-menu-state transform-inherit" [selectedAccForPayment]="selectedAccForPayment" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
         </payment-aside>
     </div>
 
@@ -452,7 +452,7 @@
                                     <label></label>
                                     <input type="checkbox" (click)="selectAccount($event, account)"
                                         [(ngModel)]="account.isSelected"
-                                        [ngClass]="{'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length}" />
+                                        [ngClass]="{'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'position-absolute': !selectedCheckedContacts.length}" />
                                 </span>
                                     <span class="account-name-customer"> {{account.name}} </span>
                                     <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
@@ -621,7 +621,7 @@
                                         <label></label>
                                         <input type="checkbox" (click)="selectAccount($event, account) "
                                             [(ngModel)]="account.isSelected "
-                                            [ngClass]="{ 'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'pos-abs': !selectedCheckedContacts.length} " />
+                                            [ngClass]="{ 'checkbox-visible': (selectedCheckedContacts.length || isMobileScreen), 'position-absolute': !selectedCheckedContacts.length} " />
                                     </span>
                                     <span>{{account.name}}</span>
                                     <div dropdown #dropdown="bs-dropdown" container="body" [autoClose]="false" class="icon-ellipse">
@@ -773,7 +773,7 @@
                                 <td *ngIf="item?.uniqueName && showFieldFilter[item?.uniqueName]" class="word-wrap" [attr.data-title]="item.key">
                                     {{item.value || '-' }}</td>
                             </ng-container>
-                            <td data-title="Action" *ngIf="isICICIIntegrated">
+                            <td [attr.data-title]="commonLocaleData?.app_action" *ngIf="isICICIIntegrated">
                                 <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                                 {{commonLocaleData?.app_pay_now}} </button>
                                 <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">{{commonLocaleData?.app_add_bank_details}}
