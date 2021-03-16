@@ -602,13 +602,7 @@
                 <tbody *ngIf="(isGetAllRequestInProcess$ | async)">
                     <tr>
                         <td colspan="8">
-                            <!--loading-->
-                            <div class="no-data mr-t2 loader-main">
-                                <div class="spinner2">
-                                    <div class="cube1"></div>
-                                    <div class="cube2"></div>
-                                </div>
-                            </div>
+                            <giddh-page-loader></giddh-page-loader>
                         </td>
                     </tr>
                 </tbody>
@@ -776,7 +770,7 @@
                 </table>
             </div>
         </ng-container>
-        <div *ngIf="voucherData && voucherData?.totalItems > paginationLimit" class="pagination-wrapper">
+        <div *ngIf="voucherData && voucherData?.totalItems > paginationLimit" [hidden]="(isGetAllRequestInProcess$ | async)" class="pagination-wrapper">
             <pagination [totalItems]="voucherData.totalItems" [(ngModel)]="voucherData.page" [maxSize]="5"
                 class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false"
                 previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>

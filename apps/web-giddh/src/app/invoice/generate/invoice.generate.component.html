@@ -66,7 +66,7 @@
 
             <thead class="thead-background1">
                 <tr>
-                    <th width="4%" *ngIf="selectedLedgerItems.length > 0">
+                    <th width="4%" *ngIf="selectedInvoices.length > 0">
 
                         <div class="check-image d-flex justify-content-center">
                             <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
@@ -76,7 +76,7 @@
                         </div>
                     </th>
 
-                    <th *ngIf="selectedLedgerItems.length === 0" width="4%">
+                    <th *ngIf="selectedInvoices.length === 0" width="4%">
                         <div class="check-image d-flex justify-content-center">
                             #
                         </div>
@@ -170,7 +170,7 @@
                     [ngClass]="{'danger': item.hasGenerationErr}" (mouseover)="hoveredItemForAction = item.uniqueName">
 
                     <td class="check-image" data-title="#"
-                        *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
+                        *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedInvoices.length > 0">
                         <div class="check-image d-flex justify-content-center"
                             data-title="#">
                             <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
@@ -183,7 +183,7 @@
                         </div>
                     </td>
 
-                    <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0"
+                    <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedInvoices.length === 0"
                         data-title="#">
                         <div class="d-flex justify-content-center">
                             {{ i + 1}}
@@ -259,21 +259,14 @@
             <tbody *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)" id="centerAlign">
                 <tr>
                     <td colspan="8">
-                        <!--loading-->
-                        <div class="no-data mr-t2 loader-main">
-                            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                            <div class="spinner2">
-                                <div class="cube1"></div>
-                                <div class="cube2"></div>
-                            </div>
-                        </div>
+                        <giddh-page-loader></giddh-page-loader>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div *ngIf="ledgersData?.totalItems > 20" class="pagination-wrapper">
+    <div *ngIf="ledgersData?.totalItems > 20" [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)" class="pagination-wrapper">
         <div class="text-center">
             <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5"
                 class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"

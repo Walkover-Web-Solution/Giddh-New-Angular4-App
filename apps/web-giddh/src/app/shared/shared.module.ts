@@ -89,6 +89,7 @@ import { HamburgerMenuComponent } from './header/components/hamburger-menu/hambu
 import { AmountFieldComponent } from './amount-field/amount-field.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirective } from '../theme/translate/translate.directive';
+import { GiddhPageLoaderComponent } from './giddh-page-loader/giddh-page-loader.component';
 
 import { ScheduleNowComponent } from './schedule-now/schedule-now.component';
 // social login injection
@@ -183,7 +184,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         GiddhDaterangepickerComponent,
         AmountFieldComponent,
         TranslateDirective,
-        ScheduleNowComponent
+        ScheduleNowComponent,
+        GiddhPageLoaderComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -281,7 +283,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         AmountFieldComponent,
         CurrencyModule,
         TranslateDirective,
-        ScheduleNowComponent
+        ScheduleNowComponent,
+        GiddhPageLoaderComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

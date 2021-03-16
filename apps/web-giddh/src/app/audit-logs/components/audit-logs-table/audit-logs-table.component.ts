@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Input } from '@angular/core';
+import { Component, OnDestroy, Input, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { AppState } from '../../../store/roots';
     styleUrls: ['audit-logs-table.component.scss']
 })
 
-export class AuditLogsTableComponent implements OnDestroy {
+export class AuditLogsTableComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -34,6 +34,8 @@ export class AuditLogsTableComponent implements OnDestroy {
     public isShowMultipleDataIndex: number = null;
     /** To destroy observers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(private store: Store<AppState>, private auditLogsActions: AuditLogsActions) {
         this.loadMoreInProcess$ = this.store.pipe(select(state => state.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
@@ -41,6 +43,17 @@ export class AuditLogsTableComponent implements OnDestroy {
         this.page$ = this.store.pipe(select(state => state.auditlog.currentPage), takeUntil(this.destroyed$));
         this.auditLogs$ = this.store.pipe(select(state => state.auditlog.auditLogs), takeUntil(this.destroyed$));
         this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
+    }
+
+    /**
+     *  Component lifecycle call stack
+     *
+     * @memberof AuditLogsTableComponent
+     */
+    public ngOnInit(): void {
+        this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = response;
+        });
     }
 
     /**

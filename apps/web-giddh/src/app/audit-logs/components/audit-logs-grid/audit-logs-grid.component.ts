@@ -26,6 +26,8 @@ export class AuditLogsGridComponent implements OnDestroy {
     public logs$: Observable<ILogsItem[]>;
     public loadMoreInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     /**
      * TypeScript public modifiers
@@ -37,6 +39,12 @@ export class AuditLogsGridComponent implements OnDestroy {
         this.totalElements$ = this.store.pipe(select(p => p.auditlog.totalElements), takeUntil(this.destroyed$));
         this.totalPages$ = this.store.pipe(select(p => p.auditlog.totalPages), takeUntil(this.destroyed$));
         this.page$ = this.store.pipe(select(p => p.auditlog.currentPage), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit() {
+        this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = response;
+        });
     }
 
     public ngOnDestroy() {

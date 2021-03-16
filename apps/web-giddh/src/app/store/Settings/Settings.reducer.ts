@@ -109,6 +109,8 @@ export interface SettingsState {
     branchRemoved: boolean;
     financialYearLimits: any;
     freePlanSubscribed: boolean;
+    isGetAllTagsInProcess: boolean;
+    isGetAllTriggersInProcess: boolean;
 }
 
 export const initialState: SettingsState = {
@@ -137,7 +139,9 @@ export const initialState: SettingsState = {
     // Get profile API call in process
     getProfileInProgress: false,
     financialYearLimits: null,
-    freePlanSubscribed: false
+    freePlanSubscribed: false,
+    isGetAllTagsInProcess: false,
+    isGetAllTriggersInProcess: false
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -447,17 +451,30 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             }
             return Object.assign({}, state, newState);
         }
+        case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS: {
+            return {
+                ...state,
+                isGetAllTagsInProcess: true
+            };
+        }
         case SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
             return {
                 ...state,
-                tags: response.status === 'success' ? response.body : null
+                isGetAllTagsInProcess: false, tags: response.status === 'success' ? response.body : null
+            };
+        }
+        case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS: {
+            return {
+                ...state,
+                isGetAllTriggersInProcess: true
             };
         }
         case SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
             if (response.status === 'success') {
                 newState.triggers = response.body;
+                newState.isGetAllTriggersInProcess = false;
                 return Object.assign({}, state, newState);
             }
             return state;
