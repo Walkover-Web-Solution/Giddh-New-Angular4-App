@@ -1,26 +1,29 @@
 <div class="bd-rr row view-forms m-0" id="middleBody" [perfectScrollbar]="config" *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
     <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100" *ngIf="breadcrumbPath?.length > 0">
-        <div class="col-sm-8">
+        <div class="col-xl-8 col-lg-7">
             <ol class="breadcrumb row">
                 <li *ngFor="let value of breadcrumbPath;let last = last;" [ngClass]="{'active': last}">
                     <a href="javascript:void(0)"> {{ value }}</a>
                 </li>
             </ol>
         </div>
-        <div class="pull-right col-sm-4 pr-0 pl-0 text-right" *ngIf="(showEditGroup$ | async)">
-            <button class="btn btn-share export-group-ledger" (click)="exportGroupLedger()">
-                {{commonLocaleData?.app_export}}
-            </button>
-            <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">{{commonLocaleData?.app_share}}
-            </button>
-            <div class="primary-color text-right pull-right mr-t1 clearfix"
-                *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
-                {{groupSharedWith}}
+        <!--share group/account-->
+        <div class=" col-xl-4 col-lg-5 pr-0 pl-0" *ngIf="(showEditGroup$ | async)">
+            <!--group-->
+            <div class="pull-right text-right">
+                <button class="btn btn-share mr-r1"  (click)="exportGroupLedger()">
+                    {{commonLocaleData?.app_export}}
+                </button>
+                <button class="btn btn-share pull-right" (click)="showShareGroupModal()">{{commonLocaleData?.app_share}}
+                </button>
+                <div class="primary-color text-right pull-right mr-t1 clearfix" *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
+                    {{groupSharedWith}}
+                </div>
             </div>
         </div>
         <!--account-->
-        <div class="pull-right col-sm-4 pr-0 pl-0" *ngIf="(showEditAccount$ | async)">
+        <div class="pull-right col-xl-4 col-lg-5 pr-0 pl-0" *ngIf="(showEditAccount$ | async)">
             <button class="btn btn-share pull-right" (click)="showShareAccountModal()">
                 {{commonLocaleData?.app_share}}
             </button>
