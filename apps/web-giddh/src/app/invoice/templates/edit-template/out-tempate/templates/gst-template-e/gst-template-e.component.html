@@ -105,15 +105,16 @@
                             11AAAAAA000Z0A1
                         </p>
                     </td>
-                    <td>
+                    <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
                         <p>
                             <strong>Shipping Address:</strong>
                         </p>
                         <p>Green Soft Solutions</p>
                         <p class="address">
                             24 Buidling Name <br /> 3rd Floor, 15 A.B. Road<br> Indore (M.P.) 452000</p>
-                        <p>
-                            GSTIN: 11AAAAAA000Z0A1
+                        <p *ngIf="fieldsAndVisibility.header.shippingAddress?.display && fieldsAndVisibility.header.shippingGstin?.display">
+                            {{(fieldsAndVisibility.header.shippingGstin?.label?.length > 0) ? fieldsAndVisibility.header.shippingGstin?.label : 'GSTIN'}}:
+                            11AAAAAA000Z0A1
                         </p>
                     </td>
                     <td>
