@@ -1529,11 +1529,10 @@
                                 </h3>
                             </div>
                         </div>
-                        <button [hidden]="closingBalanceBeforeReconcile || showLoader"
-                            class="btn btn-primary btn-sm mr-0"
-                            (click)="getReconciliation();">{{localeData?.reconciliation}}
-                        </button>
                     </div>
+                    <button [hidden]="closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm mr-0"
+                        (click)="getReconciliation();">{{localeData?.reconciliation}}
+                    </button>
                 </div>
             </div>
         </div>
