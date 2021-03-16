@@ -162,14 +162,12 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
             if(response) {
                 this.isGroupMoved = true;
                 this.store.dispatch(this.groupWithAccountsAction.moveGroupComplete());
-                this.getGroupDetails();
             }
         });
 
         this.isDeleteGroupSuccess$.subscribe(response => {
             if(response) {
                 this.isGroupDeleted = true;
-                this.getGroupDetails();
             }
         });
 
