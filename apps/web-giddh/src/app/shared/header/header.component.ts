@@ -3,7 +3,7 @@ import { AuthService } from '../../theme/ng-social-login-module/index';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, Input, TemplateRef, ViewChild} from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
