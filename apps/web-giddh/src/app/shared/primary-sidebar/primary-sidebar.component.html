@@ -1,4 +1,4 @@
-<div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': isOpen}">
+<div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !isOpen}">
     <div class="company-branch-block px-3 position-relative">
         <ul class="list-style-none">
             <li>
@@ -12,7 +12,57 @@
             <ul class="list-style-none current-branch-name mr-t15 mr-l3">
                 <li>
                     <a href="javascript:void(0)" class="font-14 branch-name">Walkover Bangalore</a>
+                    <!-- switch branch start -->
+                    <!-- <div  *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="switch-branch-wrapper"
+                                        [exclude]="'.switch-branch-section'" [attachOutsideOnClick]="true" (clickOutside)="subBranchDropdown.hide()">
+                                        <div class="btn-group" dropdown placement="bottom right" #subBranchDropdown="bs-dropdown" [autoClose]="false"
+                                            (onShown)="loadCompanyBranches()">
+                                            <a id="button-basic" dropdownToggle class="dropdown-toggle cursor-pointer switch-branch-section"
+                                                aria-controls="dropdown-basic">
+                                                <ng-container *ngIf="currentBranch">{{currentBranch?.alias}}</ng-container>
+                                                <ng-container *ngIf="!currentBranch">Switch Branch</ng-container>
+                                                <span class="icon-arrow-down"></span>
+                                            </a>
+                                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                                                <div class="input-group mr-b1" container="body">
+                                                    <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
+                                                        class="form-control" placeholder="Search Branch here" autocomplete="off" />
+                                                    <span (click)="loadCompanyBranches()" tooltip="Refresh" placement="left" class="input-group-addon">
+                                                        <i class="icon-refresh cp"></i>
+                                                    </span>
+                                                </div>
+                                                <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
+                                                    <a href="javascript:void(0);" class="dropdown-item"
+                                                        [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName"
+                                                        (click)="switchToBranch(branch?.uniqueName, $event)">
+                                                        <span class="branch-alias-name">
+                                                            <a tooltip="{{branch?.alias}}" href="javascript:void(0);">
+                                                                <span class="pr-3">{{branch?.alias}}</span>
+                                                            </a>
+                                                        </span>
+                                                        <span>
+                                                            <i class="icon-branch-icon pull-right branch-icon-tooltip" containerClass="branch-ho-tooltip"
+                                                                tooltip="Branch"></i>
+                                                        </span>
+                                                    </a>
+
+                                                </li>
+                                                <li class="divider dropdown-divider"></li>
+                                                <li *ngIf="currentBranch" (click)="goToCompany()" role="menuitem">
+                                                    <a class="dropdown-item go-to-company company-label" href="javascript:void(0);">Go to company
+                                                        <p class="font-10 grey-color">({{selectedCompanyDetails.name}})</p>
+                                                    </a>
+                                                </li>
+                                                <li *ngIf="!currentBranch" (click)="subBranchDropdown.hide()"
+                                                    [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a
+                                                        class="dropdown-item go-to-company company-create" href="javascript:void(0);">Create Branch</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div> -->
+                    <!-- Switch branch end -->
                 </li>
+
                 <li>
                     <a href="javascript:void(0)" class="font-14 branch-alice">WB</a>
                 </li>
@@ -76,7 +126,7 @@
             </div>
             <div class="menu-item-wrapper font-14">
                 <ul class="list-style-none giddh-primary-items">
-                    <li class="main-item btn-group" dropdown [attr.container]="(!sideMenu.isopen) ? 'body' : ''">
+                    <li class="main-item btn-group" dropdown [attr.container]="!isOpen ? 'body' : ''">
                         <a href="javascript:void(0);" id="button-basic" dropdownToggle type="button" class="dropdown-toggle"
             aria-controls="dropdown-basic">
                         <span><i class="icon-customer"></i> <span class="item-name"> Customer </span> </span>
