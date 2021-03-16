@@ -1500,7 +1500,7 @@
 
         <div class="container" *ngIf="!isShowLedgerColumnarReportTable">
             <div>
-                <div class="text-right mr-t1" [hidden]="!isBankOrCashAccount">
+                <div class="text-right mr-t1 mr-b1" [hidden]="!isBankOrCashAccount">
                     <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm mr-0"
                         (click)="getReconciledBack();">{{commonLocaleData?.app_back}}
                     </button>
