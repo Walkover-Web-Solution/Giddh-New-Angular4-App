@@ -1111,7 +1111,7 @@
                                         *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
                                         <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
                                         <label class="remove cp pl-1 text-danger"
-                                            (click)="showDeleteAttachedFileModal()">({{localeData?.app_remove | lowercase}})</label>
+                                            (click)="showDeleteAttachedFileModal()">({{commonLocaleData?.app_remove | lowercase}})</label>
                                     </div>
 
                                     <label class="upload-div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
