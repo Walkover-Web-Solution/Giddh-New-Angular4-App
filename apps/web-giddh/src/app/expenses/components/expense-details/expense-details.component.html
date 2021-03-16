@@ -106,7 +106,6 @@
             <update-ledger-entry-panel [isPettyCash]="true" [pettyCashEntry]="accountEntryPettyCash"
                 [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
                 [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
-                [localeData]="localeData" [commonLocaleData]="commonLocaleData"
                 (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"></update-ledger-entry-panel>
         </div>
     </div>
@@ -186,7 +185,7 @@
 <div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
 <app-aside-menu-sales-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
     [taxes]="companyTaxesList" [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
-    [@slideInOut]="asideMenuStateForOtherTaxes" (closeModal)="toggleOtherTaxesAsidePane(null)"
+    [@slideInOut]="asideMenuStateForOtherTaxes" [commonLocaleData]="commonLocaleData" (closeModal)="toggleOtherTaxesAsidePane(null)"
     (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event);toggleOtherTaxesAsidePane(null);">
 </app-aside-menu-sales-other-taxes>
 <!-- endregion -->
