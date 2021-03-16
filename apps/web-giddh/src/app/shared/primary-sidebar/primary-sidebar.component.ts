@@ -41,7 +41,7 @@ export class PrimarySidebarComponent implements OnInit {
     public currentBranch: any;
     public isMobileSite: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1)
-
+    private activeCompanyForDb: ICompAidata
 
     @Input() public isOpen: boolean = false;
     @ViewChild('dropdown', { static: true }) public companyDropdown: BsDropdownDirective;
@@ -49,7 +49,6 @@ export class PrimarySidebarComponent implements OnInit {
     constructor(
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private activeCompanyForDb: ICompAidata,
         private companyService: CompanyService,
         private companyActions: CompanyActions,
         private router: Router
