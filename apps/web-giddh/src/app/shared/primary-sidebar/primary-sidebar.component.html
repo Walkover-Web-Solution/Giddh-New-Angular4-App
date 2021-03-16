@@ -1,4 +1,4 @@
-<div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': !sideMenu.isopen}">
+<div class="primary-sidebar py-3 position-relative" [ngClass]="{'sidebar-collapse': isOpen}">
     <div class="company-branch-block px-3 position-relative">
         <ul class="list-style-none">
             <li>
@@ -40,12 +40,12 @@
             <div class="account-collapse">
                 <p class="font-12">Accounts</p>
                 <ul class="list-style-none font-14 lh33 mr-t05">
-                    <li><a href="#">Cash A/c</a></li>
+                    <li><a href="javascript:void(0);" [routerLink]="['/pages/ledger/cash']">Cash A/c</a></li>
                     <li><a href="#">Cash</a></li>
-                    <li><a href="#">General Reserves A/c</a></li>
-                    <li><a href="#">Purchases A/c</a></li>
-                    <li><a href="#">Sales A/c</a></li>
-                    <li><a href="#" class="show-more">Show more</a></li>
+                    <li><a  href="javascript:void(0);" [routerLink]="['/pages/ledger/reversecharge']">General Reserves A/c</a></li>
+                    <li><a  href="javascript:void(0);" [routerLink]="['/pages/ledger/purchases']">Purchases A/c</a></li>
+                    <li><a  href="javascript:void(0);" [routerLink]="['/pages/ledger/sales']">Sales A/c</a></li>
+                    <li><a  class="show-more">Show more</a></li>
                 </ul>
             </div>
             <div class="account-dropdown btn-group" dropdown>
@@ -56,7 +56,7 @@
                 </a>
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
                     aria-labelledby="button-basic">
-                    <li><a href="#"><i class="icon-invoice-new"></i> Invoice</a></li>
+                    <li><a href="javascript:void(0);" [routerLink]="['pages/ledger/cash']"><i class="icon-invoice-new"></i> Invoice</a></li>
                     <li><a href="#"><i class="icon-estimate-new"></i> Estimate</a></li>
                     <li><a href="#"><i class="icon-sales-order1"></i> Sales Order</a></li>
                     <li><a href="#"><i class="icon-customer"></i> Customer</a></li>
@@ -76,7 +76,6 @@
             </div>
             <div class="menu-item-wrapper font-14">
                 <ul class="list-style-none giddh-primary-items">
-
                     <li class="main-item btn-group" dropdown [attr.container]="(!sideMenu.isopen) ? 'body' : ''">
                         <a href="javascript:void(0);" id="button-basic" dropdownToggle type="button" class="dropdown-toggle"
             aria-controls="dropdown-basic">
@@ -85,14 +84,15 @@
                         </a>
                         <ul
                         id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu" aria-labelledby="button-basic">
-                            <li><a href="#"><i class="icon-invoice-new"></i> Invoice</a></li>
-                            <li><a href="#"><i class="icon-estimate-new"></i> Estimate</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/sales']"><i class="icon-invoice-new"></i> Invoice</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/estimates']"><i class="icon-estimate-new"></i> Estimate</a></li>
                             <li><a href="#"><i class="icon-sales-order1"></i> Sales Order</a></li>
-                            <li><a href="#"><i class="icon-customer"></i> Customer</a></li>
-                            <li><a href="#"><i class="icon-aging-report-new"></i> Aging Report</a></li>
-                            <li><a href="#"><i class="icon-register-new"></i> Sales Register</a></li>
-                            <li><a href="#"><i class="icon-template-new"></i> Template</a></li>
-                            <li><a href="#"><i class="icon-credit-new"></i> Credit Note</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/contact/customer']"><i class="icon-customer"></i> Customer</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/contact/aging-report']"><i class="icon-aging-report-new"></i> Aging Report</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/sales-register']"><i class="icon-register-new"></i> Sales Register</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/templates/sales']"><i class="icon-template-new"></i> Template</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/credit%20note']"><i class="icon-credit-new"></i> Credit Note</a></li>
+
                         </ul>
                     </li>
                     <li class="main-item btn-group" dropdown>
@@ -103,15 +103,16 @@
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
                             aria-labelledby="button-basic">
-                            <li><a href="#"><i class="icon-purchase"></i> Purchase</a></li>
-                            <li><a href="#"><i class="icon-cash"></i> Cash Purchase</a></li>
-                            <li><a href="#"><i class="icon-sales-order1"></i> Purchase Order</a></li>
-                            <li><a href="#"><i class="icon-vendor"></i> Vendor</a></li>
-                            <li><a href="#"><i class="icon-aging-report-new"></i> Aging Report</a></li>
-                            <li><a href="#"><i class="icon-register-new"></i> Purchase Register</a></li>
-                            <li><a href="#"><i class="icon-template-new"></i> Template</a></li>
-                            <li><a href="#"><i class="icon-credit-note-new"></i> Credit Note</a></li>
+                            <li><a href="javascript:void(0);"><i class="icon-purchase"></i> Purchase</a></li>
+                            <li><a href="javascript:void(0);"><i class="icon-cash"></i> Cash Purchase</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/purchase-management/purchase/order']"><i class="icon-sales-order1"></i> Purchase Order</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/contact/vendor']"><i class="icon-vendor"></i> Vendor</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/contact/aging-report']"><i class="icon-aging-report-new"></i> Aging Report</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/purchase-register']"><i class="icon-register-new"></i> Purchase Register</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/templates/sales']"><i class="icon-template-new"></i> Template</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/credit%20note']"><i class="icon-credit-note-new"></i> Credit Note</a></li>
                         </ul>
+
                     </li>
                     <li class="main-item btn-group" dropdown>
                         <a href="javascript:void(0);" id="button-basic" dropdownToggle type="button" class="dropdown-toggle"
@@ -121,12 +122,12 @@
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
                             aria-labelledby="button-basic">
-                            <li><a href="#"><i class="icon-credit-note-new"></i> Credit Note</a></li>
-                            <li><a href="#"><i class="icon-debit-note-new"></i> Debit Note</a></li>
-                            <li><a href="#"><i class="icon-sales-order1"></i> Purchase Order</a></li>
-                            <li><a href="#"><i class="icon-reciept-new"></i> Reciept</a></li>
-                            <li><a href="#"><i class="icon-payment-new"></i> Payment</a></li>
-                            <li><a href="#"><i class="icon-template-new"></i> Template</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/credit%20note']"><i class="icon-credit-note-new"></i> Credit Note</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/debit%20note']"><i class="icon-debit-note-new"></i> Debit Note</a></li>
+                            <li><a  href="javascript:void(0);" [routerLink]="['/pages/purchase-management/purchase/order']"><i class="icon-sales-order1"></i> Purchase Order</a></li>
+                            <li><a  href="javascript:void(0);" [routerLink]="['/pages/reports/receipt']"><i class="icon-reciept-new"></i> Reciept</a></li>
+                            <li><a  href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/debit%20note']"><i class="icon-payment-new"></i> Payment</a></li>
+                            <li><a  href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/templates/sales']"><i class="icon-template-new"></i> Template</a></li>
                         </ul>
                     </li>
                     <li class="main-item">
@@ -140,13 +141,13 @@
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
                             aria-labelledby="button-basic">
-                            <li><a href="#"><i class="icon-balance-sheet-new"></i>Balance Sheet</a></li>
-                            <li><a href="#"><i class="icon-proft-loss-new"></i>Profit and Loss</a></li>
-                            <li><a href="#"><i class="icon-trial-balance-new"></i>Trial Balance</a></li>
-                            <li><a href="#"><i class="icon-sale-bifurcation"></i>Sales Bifurcation</a></li>
-                            <li><a href="#"><i class="icon-daybook-new"></i> Daybook</a></li>
-                            <li><a href="#"><i class="icon-tax-new"></i> TAX (GST)</a></li>
-                            <li><a href="#"><i class="icon-eway-bill-new"></i> E-way Bill</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/trial-balance-and-profit-loss?tab=balance-sheet&tabIndex=2']"><i class="icon-balance-sheet-new"></i>Balance Sheet</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/trial-balance-and-profit-loss?tab=profit-loss&tabIndex=1']"><i class="icon-proft-loss-new"></i>Profit and Loss</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/trial-balance-and-profit-loss?tab=trial-balance&tabIndex=0']"><i class="icon-trial-balance-new"></i>Trial Balance</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/new-vs-old-invoices']"><i class="icon-sale-bifurcation"></i>Sales Bifurcation</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/daybook']"><i class="icon-daybook-new"></i> Daybook</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/settings/taxes']"><i class="icon-tax-new"></i> TAX (GST)</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/ewaybill']"><i class="icon-eway-bill-new"></i> E-way Bill</a></li>
                         </ul>
                     </li>
                     <li class="main-item btn-group" dropdown>
@@ -157,11 +158,14 @@
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
                             aria-labelledby="button-basic">
-                            <li><a href="#"><i class="icon-master-new"></i>Master</a></li>
-                            <li><a href="#"><i class="icon-accounts-new"></i>Accounts</a></li>
-                            <li><a href="#"><i class="icon-invoice-new"></i>Invoice</a></li>
-                            <li><a href="#"><i class="icon-group-new"></i>Group</a></li>
-                            <li><a href="#"><i class="icon-trial-balance-new"></i>Trial Balance</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/ewaybill']"><i class="icon-master-new"></i>Master</a></li>
+                            <li><a href="javascript:void(0);"><i class="icon-accounts-new"></i>Accounts</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/invoice/preview/sales']"><i class="icon-invoice-new"></i>Invoice</a></li>
+                            <li>
+                                <a  href="javascript:void(0);" [routerLink]="['/pages/import/group']">
+                                <i class="icon-group-new"></i>Group</a>
+                            </li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/trial-balance-and-profit-loss']"><i class="icon-trial-balance-new"></i>Trial Balance</a></li>
                         </ul>
                     </li>
                     <li class="main-item btn-group" dropdown>
@@ -172,17 +176,17 @@
                         </a>
                         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu"
                             aria-labelledby="button-basic">
-                            <li><a href="#"><i class="icon-petty-cash"></i>Petty Cash</a></li>
+                            <li><a  href="javascript:void(0);" [routerLink]="['/pages/expenses-manager?tab=pending&tabIndex=0']"><i class="icon-petty-cash"></i>Petty Cash</a></li>
                             <li><a href="#"><i class="icon-journal-voucher-new"></i>JV</a></li>
-                            <li><a href="#"><i class="icon-dashboard-new"></i>Dashboard</a></li>
-                            <li><a href="#"><i class="icon-cash-flow-statement"></i>Cash Flow</a></li>
-                            <li><a href="#"><i class="icon-monthly-columnar-report"></i>Columnar Report</a></li>
-                            <li><a href="#"><i class="icon-reverse-charge"></i>Reverse Charge</a></li>
-                            <li><a href="#"><i class="icon-audit-log"></i>Audit Log</a></li>
-                            <li><a href="#"><i class="icon-search-new"></i>Search</a></li>
-                            <li><a href="#"><i class="icon-onboarding-new"></i>Onboarding</a></li>
-                            <li><a href="#"><i class="icon-tally-import"></i>Tally Import</a></li>
-                            <li><a href="#"><i class="icon-voucher"></i>Walkover</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/home']"><i class="icon-dashboard-new"></i>Dashboard</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/cash-flow-statement']"><i class="icon-cash-flow-statement"></i>Cash Flow</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/monthly-columnar-report']"><i class="icon-monthly-columnar-report"></i>Columnar Report</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/reverse-charge']"><i class="icon-reverse-charge"></i>Reverse Charge</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/audit-logs']"><i class="icon-audit-log"></i>Audit Log</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/search']"><i class="icon-search-new"></i>Search</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/onboarding']"><i class="icon-onboarding-new"></i>Onboarding</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/tallysync']"><i class="icon-tally-import"></i>Tally Import</a></li>
+                            <li><a href="javascript:void(0);" [routerLink]="['/pages/reports/monthly-columnar-report']"><i class="icon-voucher"></i>Walkover</a></li>
                         </ul>
                     </li>
 
@@ -190,7 +194,7 @@
             </div>
         </div>
     </div>
-    <div class="toogle-sidebar" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+    <!-- <div class="toogle-sidebar" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
         <i class="icon-down-new"></i>
-    </div>
+    </div> -->
 </div>
