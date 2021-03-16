@@ -171,7 +171,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.groupDetailForm.get('uniqueName').enable();
                     this.groupDetailForm.get('description').enable();
                 }
-                if (!activeGroup.fixed) {
+                if (!activeGroup.fixed && activeGroup?.category) {
+                    // Again load the group suggestions for Move to group operations when activeGroup has all the details
+                    // done to avoid redundant API calls
                     this.loadDefaultGroupsSuggestions();
                 }
             }
