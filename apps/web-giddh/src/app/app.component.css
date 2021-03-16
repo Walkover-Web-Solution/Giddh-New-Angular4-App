@@ -27,3 +27,8 @@ footer#footer.sticky-footer {
 #content-wrapper.menu_open{
     padding-left: 240px;
 }
+@media(max-width:767px){
+   #content-wrapper{
+        padding-left: 0;
+    }
+}
