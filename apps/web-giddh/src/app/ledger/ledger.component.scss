@@ -817,6 +817,10 @@ sh-select:focus {
     .show-if-update-ledger-open{
         height: 230px;
     }
+    .debit-credit-amount{
+        display: flex !important;
+        flex-direction: column !important;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -841,6 +845,7 @@ sh-select:focus {
             display: none;
         }
     }
+
 }
 @media only screen and (max-width: 1024px) {
     .container {
