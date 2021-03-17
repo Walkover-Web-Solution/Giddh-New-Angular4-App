@@ -18,5 +18,6 @@ export const SETTINGS_INTEGRATION_API = {
     BANK_INTERATION_VALIDATION_FORM: 'ui/bank/integration/form?bankName=:bankName',
     BENEFICIARY_REGISTRATION: 'company/:companyUniqueName/bank/bene-registration?urn=:urn',
     BENEFICIARY_VALIDATION: 'company/:companyUniqueName/bank/bene-validation?urn=:urn&bnfAccNo=:bnfAccNo',
-    GET_BENEFICIARIES: 'company/:companyUniqueName/bank/get-beneficiaries?urn=:urn'
+    GET_BENEFICIARIES: 'company/:companyUniqueName/bank/get-beneficiaries?urn=:urn',
+    GET_REGISTRATION_STATUS: 'company/:companyUniqueName/bank/get-registration-status?urn=:urn',
 };
