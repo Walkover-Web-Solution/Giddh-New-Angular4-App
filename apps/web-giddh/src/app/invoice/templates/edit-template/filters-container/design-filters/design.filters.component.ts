@@ -83,6 +83,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     @ViewChild('fileInput', {static: true}) logoFile: ElementRef;
     public selectedFont: string = "";
     public selectedFontSize: string = "";
+    /** Default image size */
+    public defaultImageSize: string = 'S';
 
     constructor(
         private _invoiceUiDataService: InvoiceUiDataService,
@@ -140,28 +142,15 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             });
 
             if (this.customTemplate && this.customTemplate.sections) {
-                // _.forIn(this.customTemplate.sections, (section, ind) => {
-                //   let out = section.data;
-                //   for (let o of section.data) {
-                //     if (ind === 'header') {
-                //       // op.header[o.field] = o.display ? 'y' : 'n';
-                //       op.header[o.field] = o;
-                //     }
-                //     if (ind === 'table') {
-                //       op.table[o.field] = o;
-                //     }
-                //     if (ind === 'footer') {
-                //       op.footer[o.field] = o;
-                //     }
-                //   }
-                // });
-                // debugger;
                 op.header = this.customTemplate.sections.header.data;
                 op.table = this.customTemplate.sections.table.data;
                 op.footer = this.customTemplate.sections.footer.data;
 
                 this._invoiceUiDataService.setFieldsAndVisibility(op);
-
+                if (this.customTemplate.logoSize) {
+                    this.defaultImageSize = this.customTemplate.logoSize === '60' ? 'L' :
+                        this.customTemplate.logoSize === '50' ? 'M' : 'S';
+                }
                 if (this.customTemplate.logoUniqueName) {
                     this.showDeleteButton = true;
                     this.showUploadButton = false;
@@ -172,6 +161,18 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this._invoiceUiDataService.logoPath.pipe(takeUntil(this.destroyed$)).subscribe((path: string) => {
+			if (!path) {
+                this.showDeleteButton = false;
+                this.showUploadButton = true;
+                this.logoAttached = false;
+                this.isFileUploaded = false;
+                this.defaultImageSize = 'S';
+                const preview: any = document.getElementById('logoImage');
+                preview.setAttribute('src', '');
+            }
+		});
 
     }
 
