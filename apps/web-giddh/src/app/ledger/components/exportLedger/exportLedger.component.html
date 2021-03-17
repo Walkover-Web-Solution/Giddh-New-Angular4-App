@@ -8,7 +8,7 @@
         <div class="modal-body mr-b4" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
                 <div class="pd-b2 clearfix export-type">
-                    <label class="w120">{{commonLocaleData?.app_type}}:</label>
+                    <label class="w125">{{commonLocaleData?.app_type}}:</label>
                     <div>
                         <span class="p-0 mr-3">
                             <input id="mini" class="radio-custom cp ml-0" type="radio" name="emailTypeSelected"
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="pd-b2 clearfix export-type">
-                    <label class="w120">{{commonLocaleData?.app_export_as}}:</label>
+                    <label class="w125">{{commonLocaleData?.app_export_as}}:</label>
                     <div>
                         <span class="p-0 mr-3" [hidden]="emailTypeSelected === 'columnar'">
                             <input id="pdf" class="radio-custom cp ml-0" type="radio" name="exportAs" [(ngModel)]="exportAs"
@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <div class="pd-b2 clearfix export-type">
-                    <label class="w120">{{commonLocaleData?.app_order}}:</label>
+                    <label class="w125">{{commonLocaleData?.app_order}}:</label>
                     <div>
                         <span class="p-0 mr-3">
                             <input id="ascending" class="radio-custom cp ml-0" type="radio" name="order" [(ngModel)]="order"
@@ -66,13 +66,13 @@
                 </div>
                 <div class="pd-b2 clearfix"
                     [hidden]="emailTypeSelected === 'admin-condensed' || emailTypeSelected === 'columnar'">
-                    <label class="w120">{{commonLocaleData?.app_invoice_no}}:</label>
+                    <label class="w125">{{commonLocaleData?.app_invoice_no}}:</label>
                     <label class="radio-inline p-0">
                         <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
                     </label>
                 </div>
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
-                    <label class="w120">{{localeData?.cr_dr}}</label>
+                    <label class="w125">{{localeData?.cr_dr}}</label>
                     <label class="radio-inline p-0">
                         <input type="checkbox" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">
                     </label>
