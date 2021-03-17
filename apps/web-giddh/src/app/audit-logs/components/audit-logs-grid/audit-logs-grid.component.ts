@@ -3,7 +3,7 @@ import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions
 import { ILogsItem } from '../../../models/interfaces/logs.interface';
 import { Store, select } from '@ngrx/store';
 import { cloneDeep } from '../../../lodash-optimized';
-import { Component, OnDestroy, Input } from '@angular/core';
+import { Component, OnDestroy, Input, OnInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
 
@@ -13,7 +13,7 @@ import { AppState } from '../../../store/roots';
     styleUrls: [`./audit-logs-grid.component.scss`]
 })
 
-export class AuditLogsGridComponent implements OnDestroy {
+export class AuditLogsGridComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -41,6 +41,11 @@ export class AuditLogsGridComponent implements OnDestroy {
         this.page$ = this.store.pipe(select(p => p.auditlog.currentPage), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof AuditLogsGridComponent
+     */
     public ngOnInit() {
         this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = response;
