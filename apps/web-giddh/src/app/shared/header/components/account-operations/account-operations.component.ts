@@ -20,7 +20,7 @@ import * as _ from '../../../../lodash-optimized';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
+import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -92,12 +92,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public activeGroupUniqueName$: Observable<string>;
     public activeGroupInProgress$: Observable<boolean>;
     public activeGroupSharedWith$: Observable<ShareRequestForm[]>;
-    public groupList$: Observable<GroupsWithAccountsResponse[]>;
     public isRootLevelGroup: boolean = false;
     public companyTaxes$: Observable<TaxResponse[]>;
     public companyTaxDropDown: Observable<IOption[]>;
     public companyDiscountDropDown: IOption[] = [];
-    public groupsList: IOption[];
     public accounts$: Observable<IOption[]>;
     public groupExportLedgerQueryRequest: DaybookQueryRequest = new DaybookQueryRequest();
     public showTaxDropDown: boolean = false;
@@ -136,7 +134,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public accountDetails: any = '';
     @ViewChild('discountShSelect', {static: true}) public discountShSelect: ShSelectComponent;
     public selectedCompany: Observable<CompanyResponse>;
-    private groupsListBackUp: IOption[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     dropdownList = [];
@@ -212,7 +209,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeGroupInProgress$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupInProgress), takeUntil(this.destroyed$));
         this.activeGroupSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupSharedWith), takeUntil(this.destroyed$));
         this.activeAccountSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountSharedWith), takeUntil(this.destroyed$));
-        this.groupList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
         this.activeGroupTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupTaxHierarchy), takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
         this.companyTaxes$ = this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$));
@@ -281,32 +277,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             userEmail: ['', [Validators.required, Validators.email]]
         });
 
-        this.groupList$.subscribe((a) => {
-            if (a) {
-                // this.groupsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
-                let grpsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
-                let flattenGroupsList: IOption[] = [];
-
-                grpsList.forEach(grp => {
-                    flattenGroupsList.push({ label: grp.name, value: grp.uniqueName, additional: grp.parentGroups });
-                });
-                this.groupsList = flattenGroupsList;
-                this.groupsListBackUp = flattenGroupsList;
-            }
-        });
-        // this.flattenGroups$.subscribe(flattenGroups => {
-        //     if (flattenGroups) {
-        //         let items: IOption[] = flattenGroups.filter(grps => {
-        //             return grps.groupUniqueName === this.activeGroupUniqueName || grps.parentGroups.some(s => s.uniqueName === this.activeGroupUniqueName);
-        //         }).map(m => {
-        //             return {
-        //                 value: m.groupUniqueName, label: m.groupName
-        //             }
-        //         });
-        //         this.flatGroupsOptions = items;
-        //     }
-        // });
-
         this.showAddNewGroup$.subscribe(s => {
             if (s) {
                 if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_group) === -1) {
@@ -325,27 +295,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.activeGroup$.subscribe((a) => {
             if (a) {
-                this.groupsList = _.filter(this.groupsListBackUp, (l => l.value !== a.uniqueName));
                 if (a.uniqueName === 'sundrycreditors' || a.uniqueName === 'sundrydebtors') {
                     this.showGroupLedgerExportButton$ = observableOf(true);
                     this.isDebtorCreditor = true;
                 } else {
                     this.showGroupLedgerExportButton$ = observableOf(false);
-                    // this.isDebtorCreditor = false;
                 }
-                // this.taxGroupForm.get('taxes').reset();
-                // let showAddForm: boolean = null;
-                // this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
-                // if (!showAddForm) {
-                //   this.showGroupForm = true;
-                //   this.ShowForm.emit(true);
-                //   this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
-                //
-                //   let taxes = a.applicableTaxes.map(acc => acc.uniqueName);
-                //   this.taxGroupForm.get('taxes').setValue(taxes);
-                //   this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
-                // }
-
                 this.virtualAccountEnable$.subscribe(s => {
                     if (s && s.companyCashFreeSettings && s.companyCashFreeSettings.autoCreateVirtualAccountsForDebtors && this.breadcrumbUniquePath[1] === 'sundrydebtors') {
                         this.showVirtualAccount = true;
@@ -376,10 +331,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             if (a) {
                 this.isRootLevelGroupFunc(a);
             }
-        });
-
-        this.showNewForm$.subscribe(s => {
-
         });
 
         this.moveAccountSuccess$.subscribe(p => {
@@ -419,47 +370,17 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public ngAfterViewInit() {
 
         this.isTaxableAccount$ = this.store.pipe(select(createSelector([
-            (state: AppState) => state.groupwithaccounts.groupswithaccounts,
             (state: AppState) => state.groupwithaccounts.activeAccount],
-            (groupswithaccounts, activeAccount) => {
+            (activeAccount) => {
                 let result: boolean = false;
                 let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
-                if (groupswithaccounts && activeGroupUniqueName && activeAccount) {
-                    result = this.getAccountFromGroup(groupswithaccounts, activeGroupUniqueName, false);
+                if (activeGroupUniqueName && activeAccount) {
+                    result = this.getAccountFromGroup(activeAccount, false);
                 } else {
                     result = false;
                 }
                 return result;
             })), takeUntil(this.destroyed$));
-    }
-
-    public loadAccountData() {
-        let activeAccount: AccountResponseV2 = null;
-        this.activeAccount$.pipe(take(1)).subscribe(p => {
-            activeAccount = p;
-            if (!this.showBankDetail) {
-                if (p && p.parentGroups) {
-                    p.parentGroups.forEach(grp => {
-                        this.showBankDetail = grp.uniqueName === "sundrycreditors" ? true : false;
-                        return;
-                    });
-                }
-            }
-        });
-
-        this.accountService.getFlattenAccounts().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            let accounts: IOption[] = [];
-            if (a.status === 'success') {
-                a.body.results.map(acc => {
-                    accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
-                });
-                let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
-                if (accountIndex > -1) {
-                    accounts.splice(accountIndex, 1);
-                }
-            }
-            this.accounts$ = observableOf(accounts);
-        });
     }
 
     public shareAccount() {
@@ -526,16 +447,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public isRootLevelGroupFunc(uniqueName: string) {
-        this.groupList$.pipe(take(1)).subscribe(list => {
-            for (let grp of list) {
-                if (grp.uniqueName === uniqueName) {
-                    this.isRootLevelGroup = true;
-                    return;
-                } else {
-                    this.isRootLevelGroup = false;
-                }
+        const rootLevelGroups: ColumnGroupsAccountVM[] | any[] = this.columnsRef?.columns[0]?.groups || [];
+        for (let grp of rootLevelGroups) {
+            if (grp.uniqueName === uniqueName) {
+                this.isRootLevelGroup = true;
+                return;
+            } else {
+                this.isRootLevelGroup = false;
             }
-        });
+        }
     }
 
     public flattenAccounts(groups: GroupsWithAccountsResponse[] = [], accounts: IAccountsInfo[]): IAccountsInfo[] {
@@ -590,23 +510,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     }
 
-    public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
-        if (result) {
-            return result;
-        }
-        for (const el of groupList) {
-            if (el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
-                    result = true;
-                    break;
-                }
-            }
-            if (el.groups) {
-                result = this.getAccountFromGroup(el.groups, uniqueName, result);
-                if (result) {
-                    break;
-                }
-            }
+    public getAccountFromGroup(activeGroup: AccountResponseV2, result: boolean): boolean {
+        if (activeGroup.category === 'income' || activeGroup.category === 'expenses') {
+            result = true;
         }
         return result;
     }

@@ -98,9 +98,6 @@ export class GroupWithAccountsAction {
                         grouName = s.groupwithaccounts.activeGroup.uniqueName;
                     }
                 });
-
-                // get flatten accounts after group tax applied successfully
-                this.store.dispatch(this._generalActions.getFlattenAccount());
                 return this.getTaxHierarchy(grouName);
             })));
 
@@ -185,7 +182,6 @@ export class GroupWithAccountsAction {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this.store.dispatch(this._generalActions.getFlattenGroupsReq());
                     this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
                     this._toasty.successToast('Sub group added successfully', 'Success');
                 }
