@@ -46,9 +46,9 @@
                                 </ng-container>
                             </p>
                         </td>
-                        <td class="text-center img-duplicate" *ngIf="voucherType==='sales'">
+                        <!--<td class="text-center img-duplicate" *ngIf="voucherType==='sales'">
                             <img src="assets/images/duplicate.svg" alt="">
-                        </td>
+                        </td>-->
                         <td class="text-right" *ngIf="showLogo">
                             <figure class="col-xs-12">
                                 <img [hidden]='!showLogo' [src]="logoSrc" class="text-left max-width-180" alt=""
@@ -83,11 +83,34 @@
         <table class="meta">
             <tbody>
                 <tr>
-                    <td colspan="2">
-                        <figure>
-                            <p class="pd-t05 pd-b05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
-                                <strong>Attention to: </strong> Alok Gangrade</p>
-                        </figure>
+                    <td colspan="3">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="align-top">
+                                        <figure>
+                                                <p class="pd-t05 pd-b05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                                <strong>Attention to: </strong><br/>
+                                                Alok Gangrade</p>
+                                        </figure>
+                                    </td>
+                                    <td class="align-top"> 
+                                        <figure>
+                                                <p class="pd-t05 pd-b05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                                <strong>Email Id: </strong><br/>
+                                                aaaa@gmail.com</p>
+                                        </figure>
+                                    </td>
+                                    <td class="align-top">
+                                        <figure>
+                                                <p class="pd-t05 pd-b05" *ngIf="fieldsAndVisibility.header.attentionTo?.display">
+                                                <strong>Mobile Number: </strong><br/>
+                                                9876543210</p>
+                                        </figure>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </td>
                 </tr>
                 <tr class="secondry_clr">
