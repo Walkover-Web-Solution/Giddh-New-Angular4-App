@@ -24,7 +24,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 	@Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
 	@Output() public updateEvent: EventEmitter<UpdateAccountRequest> = new EventEmitter();
 
-	private flattenGroups$: Observable<IFlattenGroupsAccountsDetail[]>;
 	public flatAccountWGroupsList$: Observable<IOption[]>;
 	public flatAccountWGroupsList: IOption[];
 	public activeGroupUniqueName: string;
@@ -72,7 +71,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 		private accountsAction: AccountsAction
 	) {
 		// account-add component's property
-		this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 		this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
 		this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
 		this.createAccountInProcess$ = this.store.pipe(select(state => state.sales.createAccountInProcess), takeUntil(this.destroyed$));
@@ -96,21 +94,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 		this.closeAsideEvent.emit(event);
 	}
 
-	public getGroups(grpUniqueName) {
-		let flattenGroups: IFlattenGroupsAccountsDetail[] = [];
-		this.flattenGroups$.pipe(take(1)).subscribe(data => flattenGroups = data || []);
-		let items = flattenGroups.filter(grps => {
-			return grps.groupUniqueName === grpUniqueName || grps.parentGroups.some(s => s.uniqueName === grpUniqueName);
-		});
-
-		let flatGrps: IOption[] = items.map(m => {
-			return { label: m.groupName, value: m.groupUniqueName, additional: m.parentGroups };
-		});
-
-		this.flatAccountWGroupsList$ = of(flatGrps);
-		this.flatAccountWGroupsList = flatGrps;
-		this.activeGroupUniqueName = grpUniqueName;
-	}
 	public isGroupSelected(event) {
 		if (event) {
 			this.activeGroupUniqueName = event.value;

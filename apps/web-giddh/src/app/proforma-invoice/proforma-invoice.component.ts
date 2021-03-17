@@ -1894,7 +1894,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public getAllFlattenAc() {
         // call to get flatten account from store
-        // this.store.dispatch(this._generalActions.getFlattenAccount());
     }
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {

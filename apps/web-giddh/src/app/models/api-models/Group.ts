@@ -33,6 +33,7 @@ export class GroupResponse implements ICreateGroup {
     public applicableDiscounts?: any[];
     public parentGroups?: any;
     public inheritedDiscounts?: any;
+    public category?: string;
 }
 
 /**
