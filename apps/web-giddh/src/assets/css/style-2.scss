@@ -3570,6 +3570,12 @@ a.btn.btn-xs.btn-link.pull-right {
 .w100 {
     width: 100px;
 }
+.w120{
+    width: 120px;
+}
+.w125{
+    width: 125px;
+}
 
 .multi-select {
     position: relative;
@@ -9658,6 +9664,15 @@ input.mat-input-element{
         input{
             width: 18px !important;
             height: 18px !important;
+        }
+    }
+    .time-selection , .language-selection{
+        .menu{
+            min-height: 120px !important;
+            .total-padding{
+                min-height: 120px !important;
+                height: 120px !important;
+            }
         }
     }
     /* responsive  starts here*/

@@ -1433,8 +1433,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.updateLedgerComponentInstance.defaultSuggestions = [...this.defaultSuggestions];
         this.updateLedgerComponentInstance.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
         this.updateLedgerComponentInstance.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
-        this.updateLedgerComponentInstance.localeData = this.localeData;
-        this.updateLedgerComponentInstance.commonLocaleData = this.commonLocaleData;
         componentInstance.toggleOtherTaxesAsideMenu.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.toggleOtherTaxesAsidePane(res);
         });
@@ -1667,10 +1665,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         switch (actionType) {
             case 'delete':
-                this.bulkActionConfirmationModal.show();
+                this.bulkActionConfirmationModal?.show();
                 break;
             case 'generate':
-                this.bulkActionGenerateVoucherModal.show();
+                this.bulkActionGenerateVoucherModal?.show();
                 break;
             case 'upload':
                 fileInput.click();

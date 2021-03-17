@@ -133,17 +133,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onFieldChange(sectionName: string, fieldName: string, value: string) {
         let template = _.cloneDeep(this.customTemplate);
-        // if (sectionName && sectionName && value) {
-        //   let sectionIndx = template.sections.findIndex((sect) => sect.sectionName === sectionName);
-        //   if (sectionIndx > -1) {
-
-        //     template.sections[sectionIndx].content[fieldName] = value;
-        //     let fieldIndx = template.sections[sectionIndx].content.findIndex((fieldObj) => fieldObj.field === fieldName);
-        //     if (fieldIndx > -1) {
-        //       template.sections[sectionIndx].content[fieldIndx].label = value;
-        //     }
-        //   }
-        // }
         this._invoiceUiDataService.setCustomTemplate(template);
     }
 
@@ -157,18 +146,12 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         //   template.sections.header.data.billingState.display = true;
         // }
         if (!template.sections.header.data.shippingAddress.display) {
-            template.sections.header.data.shippingDate.display = false;
             template.sections.header.data.shippingGstin.display = false;
             template.sections.header.data.shippingState.display = false;
-            template.sections.header.data.trackingNumber.display = false;
-            template.sections.header.data.shippedVia.display = false;
 
         } else {
-            template.sections.header.data.shippingDate.display = true;
             template.sections.header.data.shippingGstin.display = true;
             template.sections.header.data.shippingState.display = true;
-            template.sections.header.data.trackingNumber.display = true;
-            template.sections.header.data.shippedVia.display = true;
         }
 
         this._invoiceUiDataService.setCustomTemplate(template);

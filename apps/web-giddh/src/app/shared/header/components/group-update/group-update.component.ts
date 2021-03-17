@@ -169,7 +169,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.groupDetailForm.get('uniqueName').enable();
                     this.groupDetailForm.get('description').enable();
                 }
-                if (!activeGroup.fixed) {
+                if (!activeGroup.fixed && activeGroup?.category) {
+                    // Again load the group suggestions for Move to group operations when activeGroup has all the details
+                    // done to avoid redundant API calls
                     this.loadDefaultGroupsSuggestions();
                 }
             }
@@ -517,7 +519,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     */
     public isDebtorCreditorGroup(activeGroup: GroupResponse): boolean {
         let isTaxableGroup: boolean = false;
-        if (activeGroup) {
+        if (activeGroup && activeGroup.parentGroups) {
             isTaxableGroup = activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
         return isTaxableGroup;
