@@ -516,7 +516,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             request.data = Object.assign({}, request.data, this.formattedQuery);
 
             if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
-                return this._companyServices.sendEmail(request)
+                return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
                         r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
                         this.checkboxInfo = {
