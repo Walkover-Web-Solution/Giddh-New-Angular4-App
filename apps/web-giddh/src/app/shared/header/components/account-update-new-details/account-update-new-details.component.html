@@ -6,7 +6,7 @@
                 <div class="col-sm-4">
                     <div class="ng-select-wrap select-list select-group disable-select-group">
                         <label>{{localeData?.select_group_label}}<span class="red-text">*</span> </label>
-                        <ng-select [placeholder]="localeData?.select_group_label" [disabled]="true" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" class="wd100">
+                        <ng-select [placeholder]="localeData?.select_group_label" [disabled]="true" [filterPlaceholder]="localeData?.select_group_label" (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="activeAccountGroup" class="wd100">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
                                 <div class="account-list-item font-12">{{option?.value}}</div>
@@ -429,7 +429,9 @@
                                 <span>
                                     <sh-select formControlName="moveto" [placeholder]="localeData?.group_name_label"
                                         [options]="flatGroupsOptions" [customFilter]="customMoveGroupFilter"
-                                        class="pull-left width-select">
+                                        class="pull-left width-select"
+                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                        (scrollEnd)="handleGroupScrollEnd()" (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
                                         <!--template for move group typeahead-->
                                         <ng-template #optionTemplate let-model="option">
                                             <a href="javascript:void(0)" class="list-item">
@@ -458,8 +460,10 @@
                             class="primary-color">{{(activeAccount$ | async)?.name}}</span></label>
                     <div class="clearfix" #accountSelect2>
                         <span>
-                            <sh-select class="pull-left width-select" [options]="accounts$ | async" [isFilterEnabled]="true"
+                            <sh-select class="pull-left width-select" [options]="accounts" [isFilterEnabled]="true"
                                 (viewInitEvent)="loadAccountData()" [multiple]="true"
+                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                 [(ngModel)]="selectedaccountForMerge" [placeholder]="commonLocaleData?.app_select_accounts"></sh-select>
                         </span>
                         <span class="pull-right">

@@ -1074,7 +1074,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public showManageGroupsModal() {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         this.loadAddManageComponent();
         this.manageGroupsAccountsModal.show();
     }
@@ -1286,10 +1285,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
             (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
         }));
-    }
-
-    public filterAccounts(q: string) {
-        this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
     }
 
     /**
