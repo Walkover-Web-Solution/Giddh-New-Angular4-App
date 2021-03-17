@@ -1,28 +1,28 @@
-<section>
+<section appTranslate [file]="'vat-report'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <nav class="navbar">
         <div class="relative w-100">
-            <hamburger-menu></hamburger-menu>
+            <hamburger-menu [pageHeading]="localeData?.tab_heading"></hamburger-menu>
             <div class="invoice-control w-100">
                 <div class="row mr-0 ml-0">
                     <div class="vat-report w-100" id="setting-tab">
                         <tabset #staticTabs>
-                            <tab heading="VAT Report">
+                            <tab heading="{{commonLocaleData?.tab_heading}}">
                                 <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'" class="row mb-3 mt-3">
                                     <div class="tax-heading col-md-3 col-sm-3 col-12">
-                                        <label>Entity:</label>
+                                        <label>{{commonLocaleData?.entity}}:</label>
                                     </div>
                                     <div class="tax-dropdown col-md-9 col-sm-9 col-12 linked-entities">
                                         <div class="form-group">
                                             <sh-select [options]="currentCompanyBranches" [(ngModel)]="currentBranch.uniqueName"
                                                 [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
-                                                [isFilterEnabled]="true" placeholder="Select Entity" [fixedValue]="currentBranch?.alias">
+                                                [isFilterEnabled]="true" [placeholder]="localeData?.select_entity" [fixedValue]="currentBranch?.alias">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
                                                         <a href="javascript:void(0)" class="list-item d-flex">
                                                             <span class="entity-icon">
                                                                 <i class="icon-branch-icon pull-right" *ngIf="!option.isCompany"
-                                                                    tooltip="Branch"></i>
-                                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="Company"></i>
+                                                                    tooltip="{{commonLocaleData?.app_branch}}"></i>
+                                                                <i class="icon-company-profile pull-right" *ngIf="option.isCompany" tooltip="{{commonLocaleData?.app_company}}"></i>
                                                             </span>
                                                             <span class="entity-details">
                                                                 <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
@@ -39,14 +39,14 @@
                                 </div>
                                 <div *ngIf="taxes?.length" class="row mb-3 mt-2">
                                     <div class="tax-heading col-md-3 col-sm-3 col-12">
-                                        <label>TRN:</label>
+                                        <label>{{commonLocaleData?.app_trn}}:</label>
                                     </div>
                                     <div class="tax-dropdown col-md-9 col-sm-9 col-12">
                                         <sh-select [options]="taxes"
                                             [(ngModel)]="taxNumber"
                                             (selected)="getVatReport()"
                                             [defaultValue]="taxNumber"
-                                            placeholder="Select TRN"
+                                            [placeholder]="localeData?.select_trn"
                                             [showClear]="false" [multiple]="false"
                                             [ItemHeight]="67"
                                             [isRequired]="true">
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="navbar-header mb-3 mt-3">
                                     <div class="d-flex align-items-center tax-engine">
-                                        <span class="d-inline-block mr-2">VAT Report for period</span>
+                                        <span class="d-inline-block mr-2">{{localeData?.vat_report_period}}</span>
 
                                         <div class="advance-search-by-date date-advance-search">
                                             <span class="input-wrapper">
@@ -80,7 +80,7 @@
                                                         <li role="menuitem" dropdown placement="right" [autoClose]="false"
                                                             #monthWise="bs-dropdown">
                                                             <a dropdownToggle class="dropdown-item dropdown-toggle cp">
-                                                                Month Wise
+                                                                {{commonLocaleData?.app_month_wise}}
                                                                 <div class="pull-right">
                                                                     <span class="caret rotate-90"></span>
                                                                 </div>
@@ -104,7 +104,7 @@
                                                         <li role="menuitem">
                                                             <a class="dropdown-item" href="javascript:void(0)"
                                                                 (click)="updateDatepickerVisibility('visible'); monthWise.hide()">
-                                                                <label for="daterangeInput" class="d-block cp">Custom Range
+                                                                <label for="daterangeInput" class="d-block cp">{{commonLocaleData?.app_custom_range}}
                                                                     <div class="pull-right">
                                                                         <span class="caret rotate-90"></span>
                                                                     </div>
@@ -124,7 +124,7 @@
                                     <div class="clearfix" *ngIf="taxNumber">
                                         <button type="button" class="btn btn-default" (click)="downloadVatReport()"><i
                                                 class=" icon-download1"></i>
-                                            Download
+                                                {{commonLocaleData?.app_download}}
                                         </button>
                                     </div>
                                 </div>
@@ -140,11 +140,11 @@
                                                         <th width="5%"></th>
                                                         <th width="40%"></th>
                                                         <th width="10%"></th>
-                                                        <th width="15%" class="text-right">Amount
+                                                        <th width="15%" class="text-right">{{commonLocaleData?.app_amount}}
                                                             ({{activeCompany.baseCurrency}})</th>
-                                                        <th width="15%" class="text-right">VAT Amount
+                                                        <th width="15%" class="text-right">{{localeData?.vat_amount}}
                                                             ({{activeCompany.baseCurrency}})</th>
-                                                        <th width="15%" class="text-right">Adjustment
+                                                        <th width="15%" class="text-right">{{localeData?.adjustment}}
                                                             ({{activeCompany.baseCurrency}})</th>
                                                     </tr>
                                                 </thead>
@@ -158,19 +158,19 @@
                                                                 tooltip="{{reportSections.toolTip}}"><span
                                                                     class="icon-info text-light"></span></a>
                                                         </td>
-                                                        <td data-title="Amount ({{activeCompany.baseCurrencySymbol}})"
+                                                        <td data-title="{{commonLocaleData?.app_amount}} ({{activeCompany.baseCurrencySymbol}})"
                                                             class="text-right">{{activeCompany.baseCurrencySymbol}}
                                                             {{reportSections.amount | giddhCurrency}}</td>
-                                                        <td data-title="VAT Amount ({{activeCompany.baseCurrencySymbol}})"
+                                                        <td data-title="{{localeData?.vat_amount}} ({{activeCompany.baseCurrencySymbol}})"
                                                             class="text-right">{{activeCompany.baseCurrencySymbol}}
                                                             {{reportSections.vatAmount | giddhCurrency}}</td>
-                                                        <td data-title="Adjustment ({{activeCompany.baseCurrencySymbol}})"
+                                                        <td data-title="{{localeData?.adjustment}} ({{activeCompany.baseCurrencySymbol}})"
                                                             class="text-right">{{activeCompany.baseCurrencySymbol}}
                                                             {{reportSections.adjustmentAmount | giddhCurrency}}</td>
                                                     </tr>
                                                     <tr class="last-row">
                                                         <td>&nbsp;</td>
-                                                        <td>Total</td>
+                                                        <td>{{commonLocaleData?.app_total}}</td>
                                                         <td>
                                                             <a href="javascript:void(0)" class="text-light"
                                                                 *ngIf="report.toolTip" tooltip="{{report.toolTip}}"><span
@@ -178,12 +178,12 @@
                                                         </td>
                                                         <td class="text-right">{{activeCompany.baseCurrencySymbol}}
                                                             {{report.totalAmount | giddhCurrency}}</td>
-                                                        <td class="text-right"><span *ngIf="i === 0">A =</span><span
-                                                                *ngIf="i === 1">C =</span>
+                                                        <td class="text-right"><span *ngIf="i === 0">{{localeData?.a}}</span><span
+                                                                *ngIf="i === 1">{{localeData?.c}}</span>
                                                             {{activeCompany.baseCurrencySymbol}}
                                                             {{report.totalVatAmount | giddhCurrency}}</td>
-                                                        <td class="text-right"><span *ngIf="i === 0">B =</span><span
-                                                                *ngIf="i === 1">D =</span>
+                                                        <td class="text-right"><span *ngIf="i === 0">{{localeData?.b}}</span><span
+                                                                *ngIf="i === 1">{{localeData?.d}}</span>
                                                             {{activeCompany.baseCurrencySymbol}}
                                                             {{report.totalAdjustmentAmount | giddhCurrency}}</td>
                                                     </tr>
@@ -214,7 +214,7 @@
                                     </div>
                                 </div>
                                 <div *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length" class="no-data no-report">
-                                    <h1>Please add TRN to your default address in order to view report.</h1>
+                                    <h1>{{localeData?.no_trn_available}}</h1>
                                 </div>
                             </tab>
                         </tabset>

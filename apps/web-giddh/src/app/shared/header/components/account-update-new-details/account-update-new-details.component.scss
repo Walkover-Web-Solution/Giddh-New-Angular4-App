@@ -89,7 +89,15 @@ form.gstin-form {
     align-items: center;
     margin: 20px 0;
 }
-
+.add-address-btn{
+     width: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .icon-plus{
+        margin-right: 10px;
+    }
+}
 .add-address-default h3 {
     font-size: 16px;
     color: $nero;
@@ -114,7 +122,7 @@ form.gstin-form {
 }
 
 .width-select{
-    width: calc(100% - 93px);
+    width: calc(100% - 112px);
 }
 
 .move-to-group{
@@ -140,4 +148,7 @@ form.gstin-form {
 .contact-number-select{
     width: 60px;
     margin-right: 10px;
-} 
+}
+.merge-btn, .save-btn{
+    min-width: 100px;
+}

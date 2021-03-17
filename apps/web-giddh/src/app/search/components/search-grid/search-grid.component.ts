@@ -21,6 +21,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     @Output() public FilterByAPIEvent: EventEmitter<any> = new EventEmitter(null);
     /** Stores the current branch unique name */
     @Input() public currentBranchUniqueName: string;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 
     public moment = moment;
     public companyUniqueName: string;
@@ -143,6 +147,57 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.messageBody = {
+            header: {
+                email: this.commonLocaleData?.app_send_email,
+                sms: this.commonLocaleData?.app_send_sms,
+                set: ''
+            },
+            btn: {
+                email: this.commonLocaleData?.app_send_email,
+                sms: this.commonLocaleData?.app_send_sms,
+                set: '',
+            },
+            type: '',
+            msg: '',
+            subject: ''
+        }
+
+        this.dataVariables = [
+            {
+                name: this.localeData?.email_variables.opening_balance,
+                value: '%s_OB',
+            },
+            {
+                name: this.localeData?.email_variables.closing_balance,
+                value: '%s_CB',
+            },
+            {
+                name: this.localeData?.email_variables.credit_total,
+                value: '%s_CT',
+            },
+            {
+                name: this.localeData?.email_variables.debit_total,
+                value: '%s_DT',
+            },
+            {
+                name: this.localeData?.email_variables.from_date,
+                value: '%s_FD',
+            },
+            {
+                name: this.localeData?.email_variables.to_date,
+                value: '%s_TD',
+            },
+            {
+                name: this.localeData?.email_variables.magic_link,
+                value: '%s_ML',
+            },
+            {
+                name: this.localeData?.email_variables.account_name,
+                value: '%s_AN',
+            },
+        ];
     }
 
     public toggleSelectAll(ev) {
@@ -460,7 +515,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
             request.data = Object.assign({}, request.data, this.formattedQuery);
 
-            if (this.messageBody.btn.set === 'Send Email') {
+            if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
                 return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
                         r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
@@ -468,7 +523,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                             selectedPage: 1
                         };
                     });
-            } else if (this.messageBody.btn.set === 'Send Sms') {
+            } else if (this.messageBody.btn.set === this.commonLocaleData?.app_send_sms) {
                 let temp = request;
                 delete temp.data['subject'];
                 return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))

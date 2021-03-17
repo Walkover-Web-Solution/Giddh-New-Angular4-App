@@ -89,6 +89,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public isAdvanceSearchOpened: boolean = false;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,

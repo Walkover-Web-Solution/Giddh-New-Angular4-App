@@ -3,11 +3,10 @@ import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Eve
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
-import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import {PaginationComponent} from 'ngx-bootstrap/pagination';
@@ -17,20 +16,18 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { v4 as uuidv4 } from 'uuid';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
-import { GeneralActions } from '../actions/general/general.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { SettingsDiscountActions } from '../actions/settings/discount/settings.discount.action';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 import { LoaderService } from '../loader/loader.service';
-import { cloneDeep, filter, find, orderBy, uniq } from '../lodash-optimized';
+import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
-import { SalesOtherTaxesModal, VoucherTypeEnum } from '../models/api-models/Sales';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
+import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
@@ -50,7 +47,6 @@ import { download } from "@giddh-workspaces/utils";
 import { SearchService } from '../services/search.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
-import { UploadBankStatementComponent } from './components/upload-bank-statement/upload-bank-statement.component';
 
 @Component({
     selector: 'ledger',
@@ -69,10 +65,11 @@ import { UploadBankStatementComponent } from './components/upload-bank-statement
         ]),
     ]
 })
+
 export class LedgerComponent implements OnInit, OnDestroy {
-    @ViewChild('updateledgercomponent', {static: true}) public updateledgercomponent: ElementViewContainerRef;
+    @ViewChild('updateledgercomponent', {static: false}) public updateledgercomponent: ElementViewContainerRef;
     @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
-    @ViewChild('sharLedger', {static: true}) public sharLedger: ShareLedgerComponent;
+    @ViewChild('sharLedger', {static: false}) public sharLedger: ShareLedgerComponent;
     @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
 
     @ViewChild('advanceSearchComp', {static: false}) public advanceSearchComp: AdvanceSearchModelComponent;
@@ -88,17 +85,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
     @ViewChild('newLedPanel', {static: false}) public newLedgerComponent: NewLedgerEntryPanelComponent;
-    @ViewChild('updateLedgerModal', {static: true}) public updateLedgerModal: ModalDirective;
-    @ViewChild('exportLedgerModal', {static: true}) public exportLedgerModal: ModalDirective;
-    @ViewChild('shareLedgerModal', {static: true}) public shareLedgerModal: ModalDirective;
-    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
-    @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
-    @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
+    @ViewChild('updateLedgerModal', {static: false}) public updateLedgerModal: ModalDirective;
+    @ViewChild('exportLedgerModal', {static: false}) public exportLedgerModal: ModalDirective;
+    @ViewChild('shareLedgerModal', {static: false}) public shareLedgerModal: ModalDirective;
+    @ViewChild('advanceSearchModel', {static: false}) public advanceSearchModel: ModalDirective;
+    @ViewChild('bulkActionConfirmationModal', {static: false}) public bulkActionConfirmationModal: ModalDirective;
+    @ViewChild('bulkActionGenerateVoucherModal', {static: false}) public bulkActionGenerateVoucherModal: ModalDirective;
     @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
     /** upload bank statement modal instance */
-    @ViewChild('importStatementModal', {static: true}) public importStatementModal: ModalDirective;
+    @ViewChild('importStatementModal', {static: false}) public importStatementModal: ModalDirective;
     /** datepicker element reference  */
-    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: false}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
@@ -246,6 +243,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * by user and not when the user visits the page
      */
     public isAdvanceSearchOpened: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private store: Store<AppState>,
@@ -256,7 +257,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _companyActions: CompanyActions,
         private _settingsTagActions: SettingsTagActions,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private _generalActions: GeneralActions,
         private generalService: GeneralService,
         private _loginActions: LoginActions,
         private _loaderService: LoaderService,
@@ -806,11 +806,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                 if (lt.periodClosingBalance) {
                     this.closingBalanceBeforeReconcile = lt.periodClosingBalance;
-                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
+                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
                 }
                 if (lt.closingBalanceForBank) {
                     this.reconcileClosingBalanceForBank = lt.closingBalanceForBank;
-                    this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? 'Cr' : 'Dr';
+                    this.reconcileClosingBalanceForBank.type = this.reconcileClosingBalanceForBank.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
                 }
 
                 let checkedEntriesName: any[] = uniq([
@@ -862,7 +862,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.isLedgerCreateSuccess$.subscribe(s => {
             if (s) {
-                this._toaster.successToast('Entry created successfully', 'Success');
+                this._toaster.successToast(this.localeData?.entry_created, 'Success');
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
                 this.isMoreDetailsOpened = false;
@@ -875,118 +875,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this._loaderService.show();
                     this.getBankTransactions();
                 });
-            }
-        });
-
-        observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-
-            if (data[0] && data[1]) {
-                let profile = cloneDeep(data[1]);
-                this.lc.activeAccount = data[0];
-                this.loadDefaultSearchSuggestions();
-                this.profileObj = profile;
-                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
-                this.entryUniqueNamesForBulkAction = [];
-                this.needToShowLoader = true;
-                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-
-                // let stockListFormFlattenAccount: IFlattenAccountsResultItem;
-                // if (data[1]) {
-                //     stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
-                // }
-
-                let accountDetails: AccountResponse | AccountResponseV2 = data[0];
-                let parentOfAccount = accountDetails.parentGroups[0];
-
-                this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name, accountDetails.parentGroups);
-                this.accountUniquename = accountDetails.uniqueName;
-
-                if (this.advanceSearchComp) {
-                    this.advanceSearchComp.resetAdvanceSearchModal();
-                }
-
-                this.getBankTransactions();
-
-                this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
-                if (accountDetails.currency && profile.baseCurrency) {
-                    this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
-                } else {
-                    this.isLedgerAccountAllowsMultiCurrency = false;
-                }
-                this.foreignCurrencyDetails = { code: profile.baseCurrency, symbol: profile.baseCurrencySymbol };
-                if (this.isLedgerAccountAllowsMultiCurrency) {
-                    this.baseCurrencyDetails = { code: accountDetails.currency, symbol: accountDetails.currencySymbol };
-                    this.getCurrencyRate();
-                } else {
-                    this.baseCurrencyDetails = this.foreignCurrencyDetails;
-                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
-                }
-                this.selectedCurrency = 0;
-                this.assignPrefixAndSuffixForCurrency();
-
-                // assign multi currency details to new ledger component
-                this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
-                this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
-                this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
-
-                // tcs tds identification
-                if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount.uniqueName)) {
-                    this.tcsOrTds = ['indirectexpenses', 'operatingcost'].includes(parentOfAccount.uniqueName) ? 'tds' : 'tcs';
-
-                    // for tcs and tds identification
-                    if (this.tcsOrTds === 'tcs') {
-                        this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
-                    } else {
-                        this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
-                    }
-                }
-
-                // check if account is stockable
-                // let isStockableAccount = parentOfAccount ?
-                //     (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
-                //         parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
-                // let accountsArray: IOption[] = [];
-                // if (isStockableAccount) {
-                //     // stocks from ledger account
-                //     data[1].map(acc => {
-                //         // normal entry
-                //         accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
-                //         // check if taxable or roundoff account then don't assign stocks
-                //         let notRoundOff = acc.uniqueName === 'roundoff';
-                //         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
-                //         // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-                //         if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
-                //             stockListFormFlattenAccount.stocks.map(as => {
-                //                 // stock entry
-                //                 accountsArray.push({
-                //                     value: uuid.v4(),
-                //                     label: `${acc.name}` + ` (${as.name})`,
-                //                     additional: Object.assign({}, acc, { stock: as })
-                //                 });
-                //             });
-                //         }
-                //     });
-                // } else {
-                //     // stocks from account itself
-                //     data[1].map(acc => {
-                //         if (acc.stocks) {
-                //             // normal entry
-                //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
-                //             // stock entry
-                //             acc.stocks.map(as => {
-                //                 accountsArray.push({
-                //                     value: uuid.v4(),
-                //                     // label: acc.name + '(' + as.uniqueName + ')',
-                //                     label: `${acc.name}` + ` (${as.name})`,
-                //                     additional: Object.assign({}, acc, { stock: as })
-                //                 });
-                //             });
-                //         } else {
-                //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
-                //         }
-                //     });
-                // }
-                // this.lc.flattenAccountList = observableOf(orderBy(accountsArray, 'label'));
             }
         });
 
@@ -1131,7 +1019,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
             this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
-            this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
+            this._toaster.errorToast(this.localeData?.transaction_required, this.commonLocaleData?.app_error);
         }
     }
 
@@ -1438,7 +1326,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (this.lc.blankLedger.entryDate) {
             if (!moment(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
-                this._toaster.errorToast('Invalid Date Selected.Please Select Valid Date');
+                this._toaster.errorToast(this.localeData?.invalid_date);
                 this._loaderService.hide();
                 return;
             } else {
@@ -1448,7 +1336,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (this.lc.blankLedger.chequeClearanceDate) {
             if (!moment(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
-                this._toaster.errorToast('Invalid Date Selected In Cheque Clearance Date.Please Select Valid Date');
+                this._toaster.errorToast(this.localeData?.invalid_cheque_clearance_date);
                 this._loaderService.hide();
                 return;
             } else {
@@ -1464,7 +1352,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
             this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
-            this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
+            this._toaster.errorToast(this.localeData?.transaction_required, this.commonLocaleData?.app_error);
             this._loaderService.hide();
         }
     }
@@ -1734,7 +1622,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (val) {
                 this.closingBalanceBeforeReconcile = val.periodClosingBalance;
                 if (this.closingBalanceBeforeReconcile) {
-                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? 'Cr' : 'Dr';
+                    this.closingBalanceBeforeReconcile.type = this.closingBalanceBeforeReconcile.type === 'CREDIT' ? this.localeData?.cr : this.localeData?.dr;
                 }
             }
         });
@@ -1774,21 +1662,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ]);
         // }
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
-            this._toaster.errorToast('Please select at least one entry.', 'Error');
+            this._toaster.errorToast(this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
             return;
         }
         switch (actionType) {
             case 'delete':
-                this.bulkActionConfirmationModal.show();
+                this.bulkActionConfirmationModal?.show();
                 break;
             case 'generate':
-                this.bulkActionGenerateVoucherModal.show();
+                this.bulkActionGenerateVoucherModal?.show();
                 break;
             case 'upload':
                 fileInput.click();
                 break;
             default:
-                this._toaster.warningToast('Please select a valid action.', 'Warning');
+                this._toaster.warningToast(this.localeData?.select_valid_action, this.commonLocaleData?.app_warning);
         }
     }
 
@@ -1907,7 +1795,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction = [];
                 this.getTransactionData();
                 this.isFileUploading = false;
-                this._toaster.successToast('file uploaded successfully');
+                this._toaster.successToast(this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this._toaster.errorToast(output.file.response.message);
@@ -1927,7 +1815,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public openSelectFilePopup(fileInput: any) {
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
-            this._toaster.errorToast('Please select at least one entry.', 'Error');
+            this._toaster.errorToast(this.localeData?.select_one_entry, this.commonLocaleData?.app_error);
             return;
         }
         fileInput.click();
@@ -1979,7 +1867,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public deleteBankTxn(transactionId) {
         this._ledgerService.DeleteBankTransaction(transactionId).pipe(takeUntil(this.destroyed$)).subscribe((res: BaseResponse<any, string>) => {
             if (res.status === 'success') {
-                this._toaster.successToast('Bank transaction deleted Successfully');
+                this._toaster.successToast(this.localeData?.bank_transaction_deleted);
             }
         });
     }
@@ -1989,7 +1877,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public toggleCurrency(event) {
         let isThereBlankEntry = this.lc.blankLedger.transactions.some(s => s.selectedAccount);
         if (isThereBlankEntry) {
-            this._toaster.errorToast('please save unfinished entry first...');
+            this._toaster.errorToast(this.localeData?.save_unfinished_entry);
             event.preventDefault();
             return false;
         }
@@ -2428,5 +2316,141 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public trackByTransactionId(index: number, item: any): any {
         return item.transactionId;
+    }
+
+    /**
+     * This will return particular name
+     *
+     * @param {*} transaction
+     * @param {string} toBy
+     * @returns {string}
+     * @memberof LedgerComponent
+     */
+    public getParticular(transaction: any, toBy: string): string {
+        let particular = (toBy === "by") ? this.localeData?.by_particular : this.localeData?.to_particular;
+        particular = particular.replace("[PARTICULAR]", transaction.inventory ? transaction.particular.name + ' (' + transaction.inventory.stock.name + ')' : transaction.particular.name);
+        return particular;
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof LedgerComponent
+     */
+    public translationComplete(event: boolean): void {
+        if(event) {
+            observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+
+                if (data[0] && data[1]) {
+                    let profile = cloneDeep(data[1]);
+                    this.lc.activeAccount = data[0];
+                    this.loadDefaultSearchSuggestions();
+                    this.profileObj = profile;
+                    this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+                    this.entryUniqueNamesForBulkAction = [];
+                    this.needToShowLoader = true;
+                    this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+
+                    // let stockListFormFlattenAccount: IFlattenAccountsResultItem;
+                    // if (data[1]) {
+                    //     stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
+                    // }
+
+                    let accountDetails: AccountResponse | AccountResponseV2 = data[0];
+                    let parentOfAccount = accountDetails.parentGroups[0];
+
+                    this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name, accountDetails.parentGroups, this.localeData);
+                    this.accountUniquename = accountDetails.uniqueName;
+
+                    if (this.advanceSearchComp) {
+                        this.advanceSearchComp.resetAdvanceSearchModal();
+                    }
+
+                    this.getBankTransactions();
+
+                    this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
+                    if (accountDetails.currency && profile.baseCurrency) {
+                        this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
+                    } else {
+                        this.isLedgerAccountAllowsMultiCurrency = false;
+                    }
+                    this.foreignCurrencyDetails = { code: profile.baseCurrency, symbol: profile.baseCurrencySymbol };
+                    if (this.isLedgerAccountAllowsMultiCurrency) {
+                        this.baseCurrencyDetails = { code: accountDetails.currency, symbol: accountDetails.currencySymbol };
+                        this.getCurrencyRate();
+                    } else {
+                        this.baseCurrencyDetails = this.foreignCurrencyDetails;
+                        this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
+                    }
+                    this.selectedCurrency = 0;
+                    this.assignPrefixAndSuffixForCurrency();
+
+                    // assign multi currency details to new ledger component
+                    this.lc.blankLedger.selectedCurrencyToDisplay = this.selectedCurrency;
+                    this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                    this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+
+                    // tcs tds identification
+                    if (['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'currentassets', 'noncurrentassets', 'fixedassets'].includes(parentOfAccount.uniqueName)) {
+                        this.tcsOrTds = ['indirectexpenses', 'operatingcost'].includes(parentOfAccount.uniqueName) ? 'tds' : 'tcs';
+
+                        // for tcs and tds identification
+                        if (this.tcsOrTds === 'tcs') {
+                            this.tdsTcsTaxTypes = ['tcspay', 'tcsrc'];
+                        } else {
+                            this.tdsTcsTaxTypes = ['tdspay', 'tdsrc'];
+                        }
+                    }
+
+                    // check if account is stockable
+                    // let isStockableAccount = parentOfAccount ?
+                    //     (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
+                    //         parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
+                    // let accountsArray: IOption[] = [];
+                    // if (isStockableAccount) {
+                    //     // stocks from ledger account
+                    //     data[1].map(acc => {
+                    //         // normal entry
+                    //         accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                    //         // check if taxable or roundoff account then don't assign stocks
+                    //         let notRoundOff = acc.uniqueName === 'roundoff';
+                    //         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
+                    //         // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
+                    //         if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+                    //             stockListFormFlattenAccount.stocks.map(as => {
+                    //                 // stock entry
+                    //                 accountsArray.push({
+                    //                     value: uuid.v4(),
+                    //                     label: `${acc.name}` + ` (${as.name})`,
+                    //                     additional: Object.assign({}, acc, { stock: as })
+                    //                 });
+                    //             });
+                    //         }
+                    //     });
+                    // } else {
+                    //     // stocks from account itself
+                    //     data[1].map(acc => {
+                    //         if (acc.stocks) {
+                    //             // normal entry
+                    //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                    //             // stock entry
+                    //             acc.stocks.map(as => {
+                    //                 accountsArray.push({
+                    //                     value: uuid.v4(),
+                    //                     // label: acc.name + '(' + as.uniqueName + ')',
+                    //                     label: `${acc.name}` + ` (${as.name})`,
+                    //                     additional: Object.assign({}, acc, { stock: as })
+                    //                 });
+                    //             });
+                    //         } else {
+                    //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                    //         }
+                    //     });
+                    // }
+                    // this.lc.flattenAccountList = observableOf(orderBy(accountsArray, 'label'));
+                }
+            });
+        }
     }
 }

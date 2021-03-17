@@ -29,6 +29,10 @@ export class TbGridComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public searchChange = new EventEmitter<string>();
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
         

@@ -15,6 +15,8 @@ export class TallysyncComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private _activatedRoute: ActivatedRoute) {
         

@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
@@ -12,6 +12,10 @@ import { Observable, ReplaySubject } from 'rxjs';
 })
 
 export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     public isAddStockOpen: boolean = false;
