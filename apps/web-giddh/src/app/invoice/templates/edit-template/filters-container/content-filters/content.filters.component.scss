@@ -49,3 +49,14 @@ label.upload-button {
     padding: 2px;
     top: 0 !important;
 }
+.start-upload-btn {
+    position: relative;
+}
+
+@media (min-width:1024px) and (max-width:1266px){
+    .start-upload-btn {
+        position: relative;
+        top: 115px;
+        left: -100px;
+    }
+}
