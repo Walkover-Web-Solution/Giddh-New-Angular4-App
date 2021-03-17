@@ -491,6 +491,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
+            } else {
+                let supportedLocales = this.generalService.getSupportedLocales();
+                this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));
+            }
+        });
+
         this.getCurrentCompanyData();
         this._breakpointObserver.observe([
             '(max-width: 767px)'
@@ -1065,7 +1074,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public showManageGroupsModal() {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         this.loadAddManageComponent();
         this.manageGroupsAccountsModal.show();
     }
@@ -1277,10 +1285,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
             (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
         }));
-    }
-
-    public filterAccounts(q: string) {
-        this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
     }
 
     /**

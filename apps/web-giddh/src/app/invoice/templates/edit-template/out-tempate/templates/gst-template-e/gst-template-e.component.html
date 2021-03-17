@@ -30,18 +30,18 @@
                             <p class="mr-t05" *ngIf="showGstComposition && fieldsAndVisibility.header.gstComposition?.display">{{(fieldsAndVisibility.header.gstComposition?.label) ? fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition Scheme"}}</p>
                             <p class="mr-t05">
                                 <ng-container *ngIf="voucherType==='sales'">
-                                    <span *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
+                                    <span class="d-block" *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
                                     : 'Number'}}: 20170911-1</span>
-                                    <span *ngIf="fieldsAndVisibility.header.invoiceDate?.display"
-                                        [class.mr-l2]="fieldsAndVisibility.header.invoiceNumber?.display">{{fieldsAndVisibility.header.invoiceDate?.label ? fieldsAndVisibility.header.invoiceDate?.label
+                                    <span class="d-block" *ngIf="fieldsAndVisibility.header.invoiceDate?.display"
+                                        [class.ml-0]="fieldsAndVisibility.header.invoiceNumber?.display">{{fieldsAndVisibility.header.invoiceDate?.label ? fieldsAndVisibility.header.invoiceDate?.label
                                     : 'Date'}}: 11/09/2017</span>
                                 </ng-container>
 
                                 <ng-container *ngIf="voucherType!='sales'">
-                                    <span *ngIf="fieldsAndVisibility.header.voucherNumber?.display">{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label
+                                    <span class="d-block" *ngIf="fieldsAndVisibility.header.voucherNumber?.display">{{(fieldsAndVisibility.header.voucherNumber?.label?.length > 0) ? fieldsAndVisibility.header.voucherNumber?.label
                                                 : 'Voucher Number'}}: 20170911-1</span>
-                                    <span *ngIf="fieldsAndVisibility.header.voucherDate?.display"
-                                        [class.mr-l2]="fieldsAndVisibility.header.voucherNumber?.display">{{fieldsAndVisibility.header.voucherDate?.label ? fieldsAndVisibility.header.voucherDate?.label
+                                    <span class="d-block" *ngIf="fieldsAndVisibility.header.voucherDate?.display"
+                                        [class.ml-0]="fieldsAndVisibility.header.voucherNumber?.display">{{fieldsAndVisibility.header.voucherDate?.label ? fieldsAndVisibility.header.voucherDate?.label
                                                 : 'Voucher Date'}}: 11/09/2017</span>
                                 </ng-container>
                             </p>

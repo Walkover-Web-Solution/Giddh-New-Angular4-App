@@ -21,21 +21,6 @@
                                     Invoices) </span>
                             </h4>
 
-                            <div class="clearfix" *ngIf="false">
-
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 "><label>Default payment gateway</label></div>
-
-                                    <div class="col-sm-6 col-md-9">
-                                        <div class="form-group clearfix max-width-150">
-                                            <sh-select placeholder="Payment Gateway" name="defaultPaymentGateway" [(ngModel)]="invoiceSetting.defaultPaymentGateway" [options]="paymentGatewayList"></sh-select>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
                             <div class="clearfix pd-t1">
 
                                 <div class="row">
@@ -68,87 +53,6 @@
                                 </div>
 
                             </div> -->
-
-                            <!-- region razor-pay-->
-                            <div class="clearfix pd-t1" *ngIf="false">
-
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3">
-                                        <input type="checkbox" [(ngModel)]="invoiceSetting.createPaymentEntry" class="pull-left" name="invoiceCreatePaymentEntry" class="show-on-mobile" />
-                                        <label>Create entry after payment using any payment gateway
-                                            (Razorpay)</label>
-                                    </div>
-
-                                    <div class="col-sm-12 col-md-12 col-lg-9">
-
-                                        <div class="form-group payment-gateway clearfix">
-
-                                            <input type="checkbox" [(ngModel)]="invoiceSetting.createPaymentEntry" class="pull-left" name="invoiceCreatePaymentEntry" class="hide-on-mobile" />
-
-                                            <div class="" [hidden]="!invoiceSetting.createPaymentEntry">
-
-                                                <div class="col-sm-12 col-md-3">
-                                                    <label>Key ID<span class="req">*</span></label>
-                                                    <input type="text" class="form-control" [(ngModel)]="razorpayObj.userName" name="keyID" />
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-4">
-                                                    <label>Secret ID<span class="req">*</span></label>
-                                                    <input type="password" class="form-control" [(ngModel)]="razorpayObj.password" name="secretKey" />
-                                                </div>
-
-                                                <div class="col-sm-12 col-md-4">
-                                                    <label>Link Account</label>
-                                                    <div class="ng-select-wrap">
-                                                        <sh-select placeholder="Select Account" name="linkedaccount" [(ngModel)]="razorpayObj.account" [options]="linkAccountDropDown"></sh-select>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <button class=" btn btn-danger mr-t1 pull-right " *ngIf="updateRazor" (click)="deleteRazorPay() ">
-                                                Delete
-                                            </button>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                            <!-- endregion -->
-
-                            <div class="clearfix pd-t1" *ngIf="false">
-
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-3">
-                                        <input type="checkbox" [(ngModel)]="estimateSetting.enableEstimate" class="pull-left" name="enableEstimate" class="show-on-mobile" />
-                                        <label>Enable Estimates/Quotations</label></div>
-
-                                    <div class="col-sm-6 col-md-9">
-                                        <div class="form-group clearfix">
-                                            <input type="checkbox" [(ngModel)]="estimateSetting.enableEstimate" class="pull-left" name="enableEstimate" class="hide-on-mobile" />
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="clearfix pd-t1" *ngIf="false">
-
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-3">
-                                        <input type="checkbox" [(ngModel)]="proformaSetting.enableProforma" class="pull-left" name="enableProforma" class="show-on-mobile" />
-                                        <label>Enable Proforma Invoices</label></div>
-
-                                    <div class="col-sm-6 col-md-9">
-                                        <div class="form-group clearfix">
-                                            <input type="checkbox" [(ngModel)]="proformaSetting.enableProforma" class="pull-left" name="enableProforma" class="hide-on-mobile" />
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
 
                             <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
 

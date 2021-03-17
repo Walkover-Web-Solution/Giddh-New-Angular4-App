@@ -12,8 +12,9 @@ import { AccountRequestV2 } from '../../../../../models/api-models/Account';
 	styleUrls: ['./ledger-aside.pane.account.component.scss'],
 	templateUrl: './ledger-aside.pane.account.component.html'
 })
-export class LedgerAsidePaneAccountComponent implements OnDestroy {
-
+export class LedgerAsidePaneAccountComponent implements OnInit, OnDestroy {
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
 	@Input() public activeGroupUniqueName: string;
 	@Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 	public select2Options: Select2Options = {
@@ -41,7 +42,16 @@ export class LedgerAsidePaneAccountComponent implements OnDestroy {
 		this.fetchingAccUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.fetchingAccUniqueName), takeUntil(this.destroyed$));
 		this.isAccountNameAvailable$ = this.store.pipe(select(state => state.groupwithaccounts.isAccountNameAvailable), takeUntil(this.destroyed$));
 		this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
-	}
+    }
+    
+    /**
+     * Initializes the component
+     *
+     * @memberof LedgerAsidePaneAccountComponent
+     */
+    public ngOnInit(): void {
+        this.select2Options.placeholder = this.commonLocaleData?.app_select_group;
+    }
 
 	public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
 		this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
