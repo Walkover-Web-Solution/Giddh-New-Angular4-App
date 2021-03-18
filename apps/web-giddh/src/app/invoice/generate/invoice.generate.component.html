@@ -158,12 +158,8 @@
                         </div>
 
                     </th>
-
-
                 </tr>
             </thead>
-
-
             <tbody *ngIf="!(getLedgerDataInProcess$ | async)" (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''" (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
 
                 <tr *ngFor="let item of ledgersData?.results; let i = index;"
