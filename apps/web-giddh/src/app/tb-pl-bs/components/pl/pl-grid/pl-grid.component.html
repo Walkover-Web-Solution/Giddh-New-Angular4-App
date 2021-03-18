@@ -1,3 +1,4 @@
+
 <ng-container appTranslate [file]="'trial-profit-balance/profit-loss/grid'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <!-- no data start -->
     <div class="no-data" *ngIf="noData">
@@ -16,7 +17,7 @@
                             <table class="table basic pl-table-grid">
                                 <thead>
                                     <tr>
-                                        <th class="pd-0" width="60%">
+                                        <th class="p-0" width="60%">
                                             <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
                                                 <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}" class="align-items-center">
                                                     <span class="mr-l15 mr-1">{{localeData?.account}}</span>
@@ -62,7 +63,13 @@
                                         <div class="col-8  group pd-l1">{{localeData?.total_cost_of_goods_sold}}
                                         </div>
                                         <div class="col-4  bd-rl group text-right pull-right">
-                                            <span> {{ cogsData?.closingBalance.amount | giddhCurrency }} </span>
+                                            <span>
+                                                 <!-- {{ cogsData?.closingBalance.amount | giddhCurrency }}  -->
+                                                <span class="d-inline-flex">
+                                                    <amount-field [amount]="cogsData?.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false">
+                                                    </amount-field>
+                                                </span>
+                                            </span>
                                         </div>
                                     </div>
                                 </section>
@@ -73,7 +80,13 @@
                                     <strong>{{localeData?.gross_profit}}</strong>
                                 </div>
                                 <div class="col-4  group text-right pull-right bd-rl pd-1">
-                                    <strong>{{ plData?.incomeStatment.grossProfit.amount | giddhCurrency }}</strong>
+                                    <strong>
+                                        <!-- {{ plData?.incomeStatment.grossProfit.amount | giddhCurrency }} -->
+                                        <span class="d-inline-flex">
+                                            <amount-field [amount]="plData?.incomeStatment.grossProfit.amount" [currencySymbol]="false" [currencyCode]="false">
+                                            </amount-field>
+                                        </span>
+                                    </strong>
                                 </div>
                             </div>
                             <!-- <hr class="bd-rt" /> -->
@@ -97,7 +110,12 @@
                                             <div class="pl-grid-row row">
                                                 <div class="col-8  group pd-l1">{{localeData?.total_revenue}}</div>
                                                 <div class="col-4  bd-rl group text-right pull-right pd-l1">
-                                                    <span> {{ plData?.incomeStatment.revenue.amount | giddhCurrency }}
+                                                    <span>
+                                                        <!-- {{ plData?.incomeStatment.revenue.amount | giddhCurrency }} -->
+                                                        <span class="d-inline-flex">
+                                                            <amount-field [amount]="plData?.incomeStatment.revenue.amount" [currencySymbol]="false" [currencyCode]="false">
+                                                            </amount-field>
+                                                        </span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -108,7 +126,11 @@
                                                 {{localeData?.total_operating_expenses}}
                                             </div>
                                             <div class="col-4  group text-right pull-right bd-rl pd-l1">
-                                                {{ plData?.incomeStatment.operatingExpenses.amount | giddhCurrency }}
+                                                <!-- {{ plData?.incomeStatment.operatingExpenses.amount | giddhCurrency }} -->
+                                                <span class="d-inline-flex">
+                                                    <amount-field [amount]="plData?.incomeStatment.operatingExpenses.amount" [currencySymbol]="false" [currencyCode]="false">
+                                                    </amount-field>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="account clearfix font-16 row"
@@ -118,14 +140,27 @@
                                             </div>
                                             <div class="col-4  group text-right pull-right bd-rl pd-1">
                                                 <strong
-                                                    class="font-16">{{ plData?.incomeStatment.operatingProfit.amount | giddhCurrency }}</strong>
+                                                    class="font-16">
+                                                    <!-- {{ plData?.incomeStatment.operatingProfit.amount | giddhCurrency }} -->
+                                                    <span class="d-inline-flex">
+                                                        <amount-field [amount]="plData?.incomeStatment.operatingProfit.amount" [currencySymbol]="false"
+                                                            [currencyCode]="false">
+                                                        </amount-field>
+                                                    </span>
+                                             </strong>
                                             </div>
                                         </div>
                                         <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
                                             <div class="pl-grid-row row">
                                                 <div class="col-8  group pd-l1">{{localeData?.total_other_expense}}</div>
                                                 <div class="col-4  bd-rl group text-right pull-right pd-l1">
-                                                    <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }}
+                                                    <span>
+                                                        <!-- {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} -->
+                                                        <span class="d-inline-flex">
+                                                            <amount-field [amount]="plData?.incomeStatment.otherExpenses.amount" [currencySymbol]="false"
+                                                                [currencyCode]="false">
+                                                            </amount-field>
+                                                        </span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -153,7 +188,12 @@
                             <strong>
                                 <span
                                     *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' && plData?.incomeStatment.incomeBeforeTaxes.amount !== 0">-</span>
-                                {{ plData?.incomeStatment.incomeBeforeTaxes.amount | giddhCurrency }}
+                                <!-- {{ plData?.incomeStatment.incomeBeforeTaxes.amount | giddhCurrency }} -->
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="plData?.incomeStatment.incomeBeforeTaxes.amount" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </strong>
                         </div>
                     </div>
@@ -164,7 +204,12 @@
                                 {{localeData?.taxes_30}}
                             </div>
                             <div class="col-4  group text-right pull-right bd-rl pd-l1">
-                                {{ plData?.incomeStatment.appliedTax | giddhCurrency }}
+                                <!-- {{ plData?.incomeStatment.appliedTax | giddhCurrency }} -->
+                                <span class="d-inline-flex">
+                                    <amount-field [amount]="plData?.incomeStatment.appliedTax" [currencySymbol]="false"
+                                        [currencyCode]="false">
+                                    </amount-field>
+                                </span>
                             </div>
                         </div>
                     </ng-template>
