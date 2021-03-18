@@ -178,21 +178,22 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="mr-t2 text-center">
+                        <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}}
+                            {{commonLocaleData?.app_transactions}}
+                            | {{(daybookData$ | async)?.totalPages}} {{commonLocaleData?.app_pages}}
+                        </small>
+                        <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0 {{commonLocaleData?.app_transactions}} | 0 {{commonLocaleData?.app_pages}}</small>
+                    </div>
+                    <!-- pagination -->
+                    <div class="mt-1">
+                        <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count" [rotate]="false" (pageChanged)="pageChanged($event)">
+                        </pagination>
+                    </div>
+                    <!-- pagination -->
                 </div>
-                <div class="mr-t2 text-center">
-                    <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}}
-                        {{commonLocaleData?.app_transactions}}
-                        | {{(daybookData$ | async)?.totalPages}} {{commonLocaleData?.app_pages}}
-                    </small>
-                    <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0 {{commonLocaleData?.app_transactions}} | 0 {{commonLocaleData?.app_pages}}</small>
-                </div>
-                <!-- pagination -->
-                <div class="mt-1">
-                    <pagination [totalItems]="daybookData?.totalItems" [(ngModel)]="daybookData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="daybookData?.count" [rotate]="false" (pageChanged)="pageChanged($event)">
-                    </pagination>
-                </div>
-                <!-- pagination -->
-                </div>
+            </div>
         </div>
     </ng-container>
 
