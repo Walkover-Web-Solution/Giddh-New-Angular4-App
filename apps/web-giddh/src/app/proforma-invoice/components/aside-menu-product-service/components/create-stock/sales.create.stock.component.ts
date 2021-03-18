@@ -888,7 +888,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     // group selected
     public groupSelected(event: IOption) {
         setTimeout(() => {
-            this.stockName.nativeElement.focus();
+            this.stockName?.nativeElement.focus();
         }, 200);
     }
 
@@ -1087,7 +1087,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public openShowOtherDetailsSection() {
         this.toggleOtherDetails();
         setTimeout(() => {
-            this.uniqueName.nativeElement.focus();
+            this.uniqueName?.nativeElement.focus();
         }, 200);
     }
 
@@ -1117,20 +1117,20 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
     public onSelectPurchaseStockUnitCode() {
         setTimeout(() => {
-            this.purchaseRate.nativeElement.focus();
+            this.purchaseRate?.nativeElement.focus();
         }, 200);
     }
 
     public onSelectSalesStockUnitCode() {
         setTimeout(() => {
-            this.salesRate.nativeElement.focus();
+            this.salesRate?.nativeElement.focus();
         }, 200);
     }
 
     public showManufacturingQuantitySection() {
         if (this.addStockForm.value.isFsStock) {
             setTimeout(() => {
-                this.manufacturingQuantity.nativeElement.focus();
+                this.manufacturingQuantity?.nativeElement.focus();
             }, 200);
         }
     }

@@ -131,7 +131,7 @@ export class SalesTaxListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public taxInputBlur(event) {
-        if (event && event.relatedTarget && !this.taxListUl.nativeElement.contains(event.relatedTarget)) {
+        if (event && event.relatedTarget && !this.taxListUl?.nativeElement.contains(event.relatedTarget)) {
             this.toggleTaxPopup(false);
         }
     }

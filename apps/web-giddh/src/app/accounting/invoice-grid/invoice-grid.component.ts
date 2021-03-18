@@ -166,7 +166,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 				this.data.voucherType = d.page;
 				this.gridType = d.gridType;
 				setTimeout(() => {
-					this.dateField.nativeElement.focus();
+					this.dateField?.nativeElement.focus();
 				}, 50);
 				if (d.page === 'Debit note' || d.page === 'Credit note') {
 					this.invoiceNoHeading = 'Original invoice number';
@@ -224,7 +224,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 				this._toaster.successToast('Entry created successfully', 'Success');
 				this.refreshEntry();
 				this.data.description = '';
-				this.dateField.nativeElement.focus();
+				this.dateField?.nativeElement.focus();
 				this.taxesToRemember = [];
 			}
 		});
@@ -259,7 +259,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
 	public ngOnChanges(c: SimpleChanges) {
 		if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
-			this.dateField.nativeElement.focus();
+			this.dateField?.nativeElement.focus();
 		}
 		if ('newSelectedAccount' in c && c.newSelectedAccount.currentValue !== c.newSelectedAccount.previousValue) {
 			this.setAccount(c.newSelectedAccount.currentValue);
@@ -520,7 +520,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		this.stockTotal = null;
 		this.accountsTotal = null;
 		this.data.description = '';
-		this.dateField.nativeElement.focus();
+		this.dateField?.nativeElement.focus();
 		this.data.invoiceNumberAgainstVoucher = null;
 	}
 
@@ -705,7 +705,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	public saveEntry() {
 		if (!this.creditorAcc.uniqueName) {
 			this._toaster.errorToast("Party A/c Name can't be blank.");
-			return setTimeout(() => this.partyAccNameInputField.nativeElement.focus(), 200);
+			return setTimeout(() => this.partyAccNameInputField?.nativeElement.focus(), 200);
 		}
 		let data = cloneDeep(this.data);
 		data.generateInvoice = data.invoiceNumberAgainstVoucher ? !!data.invoiceNumberAgainstVoucher.trim() : false;
@@ -968,7 +968,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			componentInstance.newAccountForm.reset();
 			componentInstance.destroyed$.next(true);
 			componentInstance.destroyed$.complete();
-			this.dateField.nativeElement.focus();
+			this.dateField?.nativeElement.focus();
 			if (this.selectedAccountInputField) {
 				this.selectedAccountInputField.value = '';
 			}
@@ -1048,7 +1048,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		this.selectedStockInputField.value = '';
 		this.filterByText = '';
 		// this.partyAccNameInputField.nativeElement.focus();
-		this.dateField.nativeElement.focus();
+		this.dateField?.nativeElement.focus();
 		this.getFlattenGrpofAccounts(null, null, true, true);
 	}
 
@@ -1062,7 +1062,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		if (!Number(amount)) {
 			if (transactionType === 'stock') {
 				if (indx === 0) {
-					this.dateField.nativeElement.focus();
+					this.dateField?.nativeElement.focus();
 				} else {
 					let stockEle = document.getElementById(`stock_${indx - 1}`);
 					stockEle.focus();
@@ -1070,7 +1070,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 				this.stocksTransaction.splice(indx, 1);
 			} else if (transactionType === 'account') {
 				if (indx === 0) {
-					this.dateField.nativeElement.focus();
+					this.dateField?.nativeElement.focus();
 				} else {
 					let accountEle = document.getElementById(`account_${indx - 1}`);
 					accountEle.focus();
@@ -1082,21 +1082,21 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
 	public keyUpOnSubmitButton(e) {
 		if (e && (e.keyCode === 39 || e.which === 39) || (e.keyCode === 78 || e.which === 78)) {
-			return setTimeout(() => this.resetButton.nativeElement.focus(), 50);
+			return setTimeout(() => this.resetButton?.nativeElement.focus(), 50);
 		}
 		if (e && (e.keyCode === 8 || e.which === 8)) {
 			this.showConfirmationBox = false;
-			return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+			return setTimeout(() => this.narrationBox?.nativeElement.focus(), 50);
 		}
 	}
 
 	public keyUpOnResetButton(e) {
 		if (e && (e.keyCode === 37 || e.which === 37) || (e.keyCode === 89 || e.which === 89)) {
-			return setTimeout(() => this.submitButton.nativeElement.focus(), 50);
+			return setTimeout(() => this.submitButton?.nativeElement.focus(), 50);
 		}
 		if (e && (e.keyCode === 13 || e.which === 13)) {
 			this.showConfirmationBox = false;
-			return setTimeout(() => this.narrationBox.nativeElement.focus(), 50);
+			return setTimeout(() => this.narrationBox?.nativeElement.focus(), 50);
 		}
 	}
 
