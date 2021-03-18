@@ -37,9 +37,27 @@
                 <tbody>
                     <tr *ngFor="let item of nilSummary.inv">
                         <td data-title="Supply Type"> {{item.sply_ty ? item.sply_ty : '-'}} </td>
-                        <td data-title="Nil Amount" class="text-right"> {{item.nil_amt | giddhCurrency}} </td>
-                        <td data-title="Exempt Amount" class="text-right"> {{item.expt_amt | giddhCurrency}} </td>
-                        <td data-title="Non GST Amount" class="text-right"> {{item.ngsup_amt | giddhCurrency}} </td>
+                        <td data-title="Nil Amount" class="text-right">
+                            <!-- {{item.nil_amt | giddhCurrency} -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.nil_amt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td data-title="Exempt Amount" class="text-right">
+                            <!-- {{item.expt_amt | giddhCurrency}}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.expt_amt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td data-title="Non GST Amount" class="text-right">
+                            <!-- {{item.ngsup_amt | giddhCurrency}}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.ngsup_amt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
                     </tr>
 
                 </tbody>
