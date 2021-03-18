@@ -514,6 +514,9 @@
                         </div> -->
                                 <div class="form-group">
                                     <div class="empty-label">
+                                        <ng-container *ngIf="regAcc.registrationStatus">
+                                            {{regAcc.registrationStatus}}<br>
+                                        </ng-container>
                                         <br>
                                         <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid" class="btn btn-success mr-r1">Update</button>
                                     </div>
@@ -622,9 +625,13 @@
                             <!-- New code -->
                             <div>
                                 <div class="form-group update-btn-wrapper">
-                                    <label *ngIf="isBankUpdateInEdit === parentIndex">&nbsp;</label>
-                                    <br *ngIf="isBankUpdateInEdit === parentIndex">
-                                    {{regAcc.registrationStatus}}<br *ngIf="regAcc.registrationStatus">
+                                    <ng-container *ngIf="isBankUpdateInEdit === parentIndex">
+                                        <label>&nbsp;</label>
+                                        <br>
+                                    </ng-container>
+                                    <ng-container *ngIf="regAcc.registrationStatus">
+                                        {{regAcc.registrationStatus}}<br>
+                                    </ng-container>
                                     <ng-container *ngIf="isBankUpdateInEdit === parentIndex">
                                         <button type="button" class="btn btn-success mr-r1" [disabled]="!paymentFormUpdate.form.valid" (click)="updateIciciDetails(regAcc, parentIndex)">Update</button>
                                     </ng-container>
