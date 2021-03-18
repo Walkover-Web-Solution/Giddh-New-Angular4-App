@@ -96,7 +96,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     public ngAfterViewInit() {
         if (this.needAutoFocus) {
             setTimeout(() => {
-                this.groupDDList.inputFilter.nativeElement.click();
+                this.groupDDList.inputFilter?.nativeElement.click();
             }, 500);
         }
     }

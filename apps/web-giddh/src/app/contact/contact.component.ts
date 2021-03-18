@@ -755,7 +755,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public typeInTextarea(newText) {
-        let el: HTMLInputElement = this.messageBox.nativeElement;
+        let el: HTMLInputElement = this.messageBox?.nativeElement;
         let start = el.selectionStart;
         let end = el.selectionEnd;
         let text = el.value;

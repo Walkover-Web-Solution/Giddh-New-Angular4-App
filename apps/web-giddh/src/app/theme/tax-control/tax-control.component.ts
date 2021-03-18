@@ -322,7 +322,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public handleInputFocus(): void {
         this.showTaxPopup = true;
         this.hideOtherPopups.emit(true);
-        this.taxInputElement.nativeElement.classList.remove('error-box');
+        this.taxInputElement?.nativeElement.classList.remove('error-box');
     }
 
     /**
@@ -366,7 +366,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public taxInputBlur(event) {
-        if (event && event.relatedTarget && this.taxInputElement && !this.taxInputElement.nativeElement.contains(event.relatedTarget)) {
+        if (event && event.relatedTarget && this.taxInputElement && !this.taxInputElement?.nativeElement.contains(event.relatedTarget)) {
             // this.toggleTaxPopup(false);
         }
     }

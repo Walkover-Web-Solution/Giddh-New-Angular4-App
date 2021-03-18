@@ -366,7 +366,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     @HostListener('click', ['$event'])
     public clicked(e) {
-        if (this.sh && e.path && !this.sh.ele.nativeElement.contains(e.path[3])) {
+        if (this.sh && e.path && !this.sh.ele?.nativeElement.contains(e.path[3])) {
             this.sh.hide();
         }
     }
@@ -463,7 +463,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.isRcmEntry && !this.validateTaxes()) {
             if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
                 // Taxes are mandatory for RCM and Advance Receipt entries
-                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                this.taxControll.taxInputElement?.nativeElement.classList.add('error-box');
                 return;
             }
         }
@@ -735,7 +735,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if ((this.isRcmEntry) && !this.validateTaxes()) {
             if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
                 // Taxes are mandatory for RCM and Advance Receipt entries
-                this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
+                this.taxControll.taxInputElement?.nativeElement.classList.add('error-box');
                 return;
             }
         }
@@ -789,7 +789,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
         } else {
             // web
-            this.webFileInput.nativeElement.click();
+            this.webFileInput?.nativeElement.click();
         }
     }
 
@@ -1023,7 +1023,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 return;
             }
         }
-        if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {
+        if (!e.relatedTarget || !this.entryContent?.nativeElement.contains(e.relatedTarget)) {
             this.clickedOutsideEvent.emit(e);
         }
     }

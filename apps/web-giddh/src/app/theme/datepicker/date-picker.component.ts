@@ -83,7 +83,7 @@ export class DatePickerComponent implements AfterViewInit, OnChanges, OnDestroy,
 			return;
 		}
 
-		const clickedInside = this._elementRef.nativeElement.contains(targetElement);
+		const clickedInside = this._elementRef?.nativeElement.contains(targetElement);
 		if (!clickedInside) {
 			this.showToDatePicker = false;
 		}
