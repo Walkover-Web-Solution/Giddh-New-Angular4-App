@@ -629,7 +629,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public showProductSearchBox() {
         this.showProductSearch = !this.showProductSearch;
         setTimeout(() => {
-            this.productName.nativeElement.focus();
+            this.productName?.nativeElement.focus();
             this.productName.nativeElement.value = null;
         }, 200);
     }
@@ -637,7 +637,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public showSourceSearchBox() {
         this.showSourceSearch = !this.showSourceSearch;
         setTimeout(() => {
-            this.sourceName.nativeElement.focus();
+            this.sourceName?.nativeElement.focus();
             this.sourceName.nativeElement.value = null;
         }, 200);
     }
@@ -716,7 +716,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
             this.GroupStockReportRequest.number = null;
             this.getGroupReport(true);
         }
-        if (this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName.nativeElement.value) {
+        if (this.GroupStockReportRequest.sortBy || this.GroupStockReportRequest.stockName || this.GroupStockReportRequest.source || this.productName?.nativeElement.value) {
             // do something...
         } else {
             this.isFilterCorrect = false;
@@ -798,7 +798,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         } else {
             this.GroupStockReportRequest.number = null;
         }
-        if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || this.productName.nativeElement.value || this.GroupStockReportRequest.entity || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.number) {
+        if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || this.productName?.nativeElement.value || this.GroupStockReportRequest.entity || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.number) {
             this.isFilterCorrect = true;
         } else {
             this.isFilterCorrect = false;
