@@ -546,7 +546,7 @@
                 <div *ngIf="fieldsAndVisibility.footer.companyAddress" class="form-group">
                     <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
                     <div class="ml-3">
-                        <textarea class="form-control" placeholder="Company Address" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].label" name="cmpAdd" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['companyAddress'].display"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Company Address" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].label" name="cmpAdd" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['companyAddress'].display"></textarea>
                     </div>
                 </div>
                 <!-- *ngIf="customTemplate?.templateType !== 'gst_template_c' && customTemplate?.templateType !== 'gst_template_f' && customTemplate?.templateType !== 'gst_template_g'" -->
@@ -587,7 +587,7 @@
                     <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 clearfix">
                         <div class="row">
                             <div class="col-12">
-                                <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]="customTemplate.sections['footer'].data['message1'].label" name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
+                                <textarea class="form-control" rows="3" placeholder="Enter any other text you would like in the footer. " [(ngModel)]="customTemplate.sections['footer'].data['message1'].label" name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
                             </div>
                         </div>
                     </div>
