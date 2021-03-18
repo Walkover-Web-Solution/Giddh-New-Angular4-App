@@ -263,7 +263,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             // this.updateFilter(this.filter);
         }
         setTimeout(() => {
-            (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
+            (this.inputFilter?.nativeElement as any)['focus'].apply(this.inputFilter?.nativeElement);
         }, 0);
     }
 
@@ -337,7 +337,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public hide(event?) {
         if (event) {
-            if (event.relatedTarget && (!this.ele.nativeElement.contains(event.relatedTarget))) {
+            if (event.relatedTarget && (!this.ele?.nativeElement.contains(event.relatedTarget))) {
                 this.isOpen = false;
                 if (this.selectedValues && this.selectedValues.length === 1) {
                     this.filter = this.selectedValues[0].label;
@@ -370,8 +370,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     }
 
     public filterInputBlur(event) {
-        if (event.relatedTarget && this.ele.nativeElement) {
-            if (this.ele.nativeElement.contains(event.relatedTarget)) {
+        if (event.relatedTarget && this.ele?.nativeElement) {
+            if (this.ele?.nativeElement.contains(event.relatedTarget)) {
                 return false;
             } else if (this.doNotReset && event && event.target && event.target.value) {
                 return false;

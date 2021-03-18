@@ -323,7 +323,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     setPosition() {
         const container = document.getElementsByTagName("ngx-daterangepicker-material")[0] as HTMLElement;
         if(container) {
-            const element = this._el.nativeElement;
+            const element = this._el?.nativeElement;
             let position = this.getPosition(element);
             let screenWidth = window.innerWidth;
             let totalWidth = container.offsetWidth + position.x;
@@ -352,7 +352,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         if (targetElement.classList.contains('ngx-daterangepicker-action')) {
             return;
         }
-        const clickedInside = this._el.nativeElement.contains(targetElement);
+        const clickedInside = this._el?.nativeElement.contains(targetElement);
         if (!clickedInside) {
             this.hide();
         }

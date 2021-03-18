@@ -510,7 +510,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
      * @param navigation instance of NavigationWalker
      */
     public onColAdd(el, navigation) {
-        navigation.add(el.nativeElement);
+        navigation.add(el?.nativeElement);
         navigation.nextVertical();
     }
 

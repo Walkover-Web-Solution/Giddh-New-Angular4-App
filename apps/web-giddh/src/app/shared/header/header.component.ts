@@ -1282,8 +1282,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             viewContainerRef.remove();
         });
         this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
-            (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
-            (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
+            (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header?.nativeElement.getBoundingClientRect();
+            (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel?.nativeElement.getBoundingClientRect();
         }));
     }
 
@@ -1420,9 +1420,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public filterCompanyList(ev) {
         let companies: CompanyResponse[] = [];
-        this.companies$.pipe(take(1)).subscribe(cmps => companies = cmps);
+        this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
-        this.companyListForFilter = companies.filter((cmp) => {
+        this.companyListForFilter = companies?.filter((cmp) => {
             if (!cmp.alias) {
                 return cmp.name.toLowerCase().includes(ev.toLowerCase());
             } else {
