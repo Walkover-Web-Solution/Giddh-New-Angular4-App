@@ -16,6 +16,9 @@
                 justify-content: center;
                 align-items: center;
             }
+            img.company-icon {
+                width: 28px;
+            }
         }
         .current-branch-name {
             li {
@@ -61,7 +64,6 @@
     .wrap-menus {
         height: 700px;
         overflow-y: auto;
-        padding-bottom: 120px;
         overflow-x: hidden;
     }
     .account-block {
@@ -194,105 +196,104 @@
             align-items: center;
         }
     }
-    // .switch-branch-wrapper {
-    //     .btn-group {
-    //         display: flex;
-    //         a.dropdown-toggle {
-    //             font-size: 16px;
-    //             display: flex;
-    //             padding: 15px;
-    //             font-family: "opensans-bold";
-    //             color: $nero;
-    //             border-bottom: 1px solid $gainsboro;
-    //             width: 100%;
-    //             align-items: center;
-    //             justify-content: space-between;
-    //             word-break: break-word;
-    //             white-space: inherit;
-    //             span {
-    //                 font-size: 9px;
-    //                 float: right;
-    //                 padding-top: 4px;
-    //                 transform: rotate(270deg);
-    //                 border: 2px solid $gray;
-    //                 padding: 3px;
-    //                 border-radius: 50%;
-    //                 justify-content: center;
-    //                 align-items: center;
-    //                 display: flex;
-    //                 color: $gray;
-    //             }
-    //         }
-    //         .dropdown-menu {
-    //             left: auto !important;
-    //             right: -270px !important;
-    //             top: 17px !important;
-    //             transform: translateY(0px);
-    //             bottom: auto;
-    //             border: 1px solid $gainsboro;
-    //             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    //             min-width: 270px;
-    //             max-width: 270px;
-    //             max-height: 315px;
-    //             overflow-y: auto;
-    //             padding-top: 0;
-    //             border-top: none;
-    //             overflow-x: hidden;
-    //             li {
-    //                 a {
-    //                     padding: 6px 10px;
-    //                     white-space: normal;
-    //                     word-break: break-word;
-    //                     display: flex;
-    //                     align-items: center;
-    //                     justify-content: space-between;
-    //                     color: $nero !important;
-    //                     cursor: pointer;
-    //                     &.dropdown-item.active-branch {
-    //                         color: $chetwode-blue;
-    //                         font-weight: bold;
-    //                     }
-    //                     &.company-create {
-    //                         color: $chetwode-blue !important;
-    //                     }
-    //                     &:hover {
-    //                         color: $chetwode-blue !important;
-    //                     }
-    //                 }
-    //                 span {
-    //                     a {
-    //                         padding: 0;
-    //                     }
-    //                 }
-    //                 .branch-alias-name {
-    //                     width: 90%;
-    //                 }
-    //             }
-    //             .go-to-company {
-    //                 color: $deep-sky-blue;
-    //                 &.company-label {
-    //                     flex-direction: column;
-    //                     justify-content: flex-start;
-    //                     align-items: flex-start;
-    //                 }
-    //             }
-    //             .company-create {
-    //                 color: $chetwode-blue;
-    //             }
-    //             div {
-    //                 input {
-    //                     padding-left: 30px;
-    //                     border-left: none;
-    //                     // background-image: url(../../../assets/images/Search.svg);
-    //                 }
-    //                 .input-group-addon {
-    //                     display: flex;
-    //                     align-items: center;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    .switch-branch-wrapper {
+        .btn-group {
+            display: flex;
+            a.dropdown-toggle {
+                font-size: 16px;
+                display: flex;
+                padding: 0;
+                font-family: "opensans-regular";
+                color: $nero;
+                width: 100%;
+                align-items: center;
+                justify-content: space-between;
+                word-break: break-word;
+                white-space: inherit;
+                span {
+                    font-size: 9px;
+                    float: right;
+                    padding-top: 4px;
+                    transform: rotate(270deg);
+                    border: 2px solid $gray;
+                    padding: 3px;
+                    border-radius: 50%;
+                    justify-content: center;
+                    align-items: center;
+                    display: flex;
+                    color: $gray;
+                }
+            }
+            .dropdown-menu {
+                left: auto !important;
+                right: -270px !important;
+                top: 17px !important;
+                transform: translateY(0px);
+                bottom: auto;
+                border: 1px solid $gainsboro;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+                min-width: 270px;
+                max-width: 270px;
+                max-height: 315px;
+                overflow-y: auto;
+                padding-top: 0;
+                border-top: none;
+                overflow-x: hidden;
+                li {
+                    a {
+                        padding: 6px 10px;
+                        white-space: normal;
+                        word-break: break-word;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        color: $nero !important;
+                        cursor: pointer;
+                        &.dropdown-item.active-branch {
+                            color: $chetwode-blue;
+                            font-weight: bold;
+                        }
+                        &.company-create {
+                            color: $chetwode-blue !important;
+                        }
+                        &:hover {
+                            color: $chetwode-blue !important;
+                        }
+                    }
+                    span {
+                        a {
+                            padding: 0;
+                        }
+                    }
+                    .branch-alias-name {
+                        width: 90%;
+                    }
+                }
+                .go-to-company {
+                    color: $deep-sky-blue;
+                    &.company-label {
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                    }
+                }
+                .company-create {
+                    color: $chetwode-blue;
+                }
+                div {
+                    input {
+                        padding-left: 30px;
+                        border-left: none;
+                        // background-image: url(../../../assets/images/Search.svg);
+                    }
+                    .input-group-addon {
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+            }
+        }
+    }
     &.sidebar-collapse {
         .company-name {
             display: none !important;
@@ -303,6 +304,8 @@
                 justify-content: center;
                 .company-alice {
                     margin-right: 0;
+                    width: 34px;
+                    height: 34px;
                 }
             }
              .current-branch-name {
@@ -321,8 +324,29 @@
                 }
              }
         }
-
-
+        .account-dropdown-collapse {
+                            position: absolute !important;
+                            left: 60px !important;
+                            z-index: 9999999 !important;
+                            background-color: $white !important;
+                            border: 1px solid $cornflower !important;
+                            border-radius: 0;
+                            width: 180px;
+                            top: 0px !important;
+                            padding-bottom: 0 !important;
+                            li {
+                                a {
+                                    padding: 10px 10px !important;
+                                    line-height: 20px;
+                                    display: flex;
+                                    i {
+                                        transform: none !important;
+                                        height: auto !important;
+                                        margin-bottom: 0;
+                                    }
+                                }
+                            }
+                        }
         .branch-connection {
             display: none;
         }
@@ -334,8 +358,8 @@
                     .input-group-prepend {
                         .input-group-text {
                             border-radius: 50%;
-                            width: 38px;
-                            height: 38px;
+                            width: 36px;
+                            height: 36px;
                             display: flex;
                             justify-content: center;
                             align-items: center;
@@ -364,6 +388,9 @@
                         margin-bottom: 0;
                         a {
                             padding: 10px 10px !important;
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
                             &:hover {
                                 background-color: $cornflower;
                                 color: $white;
@@ -381,10 +408,17 @@
                                     margin-right: 0px !important;
                                     width: 22px !important;
                                     height: 20px;
+                                    transform: none;
                                 }
                             }
+                            i{
+                                transform: rotate(-90deg);
+                                margin-left: 0;
+                                width: 15px;
+                                height: 10px;
+                                display: flex;
+                            }
                         }
-
                         .sub-menu {
                             position: absolute !important;
                             left: 60px !important;
@@ -411,8 +445,6 @@
                     }
                 }
             }
-
-
             .account-block {
                 padding-left: 0 !important;
                 margin-top: 15px;
@@ -441,6 +473,8 @@
                             transform: rotate(-90deg);
                             display: inline-flex;
                             color: $trout;
+                            width: 16px;
+                            height: 19px;
                         }
                     }
                 }
@@ -451,5 +485,20 @@
                 }
             }
         }
+    }
+}
+/*responsive starts here*/
+@media(max-height:800px){
+    .sidebar-collapse{
+         .other-sub-menu-item{
+            height: 200px;
+            overflow-y: auto;
+        }
+    }
+    .menu-block{
+        padding-bottom: 40px;
+    }
+    .wrap-menus{
+          padding-bottom: 120px;
     }
 }
