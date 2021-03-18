@@ -81,7 +81,7 @@
                         </div>
                         <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
                             <div class="single-menu-item mr-b1">
-                                <h4> <i class="icon-cash mr-r1"></i> Cash Purchase </h4>
+                                <h4> <i class="icon-cash-purchase mr-r1"></i> Cash Purchase </h4>
                                 <p>Lorem ipsum dolor sit amet, consectetur</p>
                             </div>
                         </div>
@@ -169,19 +169,20 @@
                     <div class="row">
                         <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
                             <div class="single-menu-item mr-b1">
-                                <h4> <i class="icon-balance-sheet-new mr-r1"></i>Balance Sheet </h4>
+                                <h4 [routerLink]="['/pages/trial-balance-and-profit-loss']"
+                                [queryParams]="{ tab: 'trial-balance', tabIndex: 2 }"> <i class="icon-balance-sheet-new mr-r1"></i>Balance Sheet </h4>
                                 <p>Lorem ipsum dolor sit amet, consectetur</p>
                             </div>
                         </div>
                         <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
                             <div class="single-menu-item mr-b1">
-                                <h4> <i class="icon-proft-loss-new mr-r1"></i>Profit and Loss </h4>
+                                <h4 [routerLink]="['/pages/trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 1 }"> <i class="icon-proft-loss-new mr-r1"></i>Profit and Loss </h4>
                                 <p>Lorem ipsum dolor sit amet, consectetur</p>
                             </div>
                         </div>
                         <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
                             <div class="single-menu-item mr-b1">
-                                <h4> <i class="icon-trial-balance-new mr-r1"></i>Trial Balance </h4>
+                                <h4 [routerLink]="['/pages/trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }"> <i class="icon-trial-balance-new mr-r1"></i>Trial Balance </h4>
                                 <p>Lorem ipsum dolor sit amet, consectetur</p>
                             </div>
                         </div>
@@ -225,7 +226,7 @@
                         </div>
                         <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
                             <div class="single-menu-item mr-b1">
-                                <h4> <i class="icon-accounts-new mr-r1"></i>Accounts </h4>
+                                <h4 [routerLink]="['/pages/import/account']"> <i class="icon-accounts-new mr-r1"></i>Accounts </h4>
                                 <p>Lorem ipsum dolor sit amet, consectetur</p>
                             </div>
                         </div>
@@ -243,7 +244,7 @@
                         </div>
                         <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
                             <div class="single-menu-item mr-b1">
-                                <h4 [routerLink]="['/pages/trial-balance-and-profit-loss']"> <i class="icon-trial-balance-new mr-r1"></i>Trial Balance</h4>
+                                <h4 [routerLink]="['/pages/trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }"> <i class="icon-trial-balance-new mr-r1"></i>Trial Balance</h4>
                                 <p>Lorem ipsum dolor sit amet, consectetur</p>
                             </div>
                         </div>
@@ -316,7 +317,8 @@
                         </div>
                         <div class="col-xl-2 col-lg-4 col-md-3 col-sm-6 col-12">
                             <div class="single-menu-item mr-b1">
-                                <h4> <i class="icon-voucher mr-r1"></i>Walkover</h4>
+                                <h4 [routerLink]="['/pages/reports/company-import-export']">
+                                    <i class="icon-company-import mr-r1"></i>Company Import </h4>
                                 <p>Lorem ipsum dolor sit amet, consectetur</p>
                             </div>
                         </div>

@@ -28,6 +28,18 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-walkover-logo .path1:before {
+  content: "\e9c5";
+  color: rgb(230, 69, 86);
+}
+.icon-walkover-logo .path2:before {
+  content: "\e9c6";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-cash-purchase:before {
+  content: "\e9c7";
+}
 .icon-customer:before {
   content: "\e901";
 }
