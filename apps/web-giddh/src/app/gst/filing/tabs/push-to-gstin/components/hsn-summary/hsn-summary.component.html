@@ -73,12 +73,48 @@
 						<td data-title="Description"> {{item.desc ? item.desc : '-'}} </td>
 						<td data-title="Quantity"> {{item.qty ? item.qty : '-'}} </td>
 						<td data-title="Unit"> {{item.uqc ? item.uqc : '-'}} </td>
-						<td data-title="Taxable Amount" class="text-right"> {{item.txval | giddhCurrency }} </td>
-						<td data-title="IGST Amount" class="text-right"> {{item.iamt | giddhCurrency }} </td>
-						<td data-title="CGST Amount" class="text-right"> {{item.camt | giddhCurrency }} </td>
-						<td data-title="SGST Amount" class="text-right"> {{item.samt | giddhCurrency }} </td>
-						<td data-title="CESS" class="text-right"> {{item.csamt | giddhCurrency }} </td>
-						<td data-title="Total Amount" class="text-right"> {{item.val | giddhCurrency }} </td>
+						<td data-title="Taxable Amount" class="text-right">
+                            <!-- {{item.txval | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="IGST Amount" class="text-right">
+                            <!-- {{item.iamt | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.iamt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="CGST Amount" class="text-right">
+                            <!-- {{item.camt | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.camt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="SGST Amount" class="text-right">
+                            <!-- {{item.samt | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.samt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="CESS" class="text-right">
+                            <!-- {{item.csamt | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.csamt" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+						<td data-title="Total Amount" class="text-right">
+                            <!-- {{item.val | giddhCurrency }}  -->
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.val" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
 					</tr>
 				</tbody>
 
