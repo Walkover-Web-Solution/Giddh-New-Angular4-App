@@ -38,6 +38,7 @@ import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ESCAPE } from '@angular/cdk/keycodes';
+import { isEqual } from '../../lodash-optimized';
 
 export declare const gapi: any;
 
@@ -287,25 +288,28 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && o.account) {
-                this.registeredAccount = o.account;
-                if (this.registeredAccount && this.registeredAccount.length === 0) {
-                    this.openNewRegistration = true;
-                }
-                if (this.registeredAccount && this.registeredAccount.length) {
-                    this.registeredAccount.map(item => {
-                        if (item && !item.userAmountRanges) {
-                            item.userAmountRanges = [this.getBlankAmountRangeRow()]
-                        }
-                    });
-                }
-                if (this.registeredAccount) {
-                    this.registeredAccount.map(item => {
-                        item.userAmountRanges.map(element => {
-                            if (typeof element.maxBankLimit === "boolean") {
-                                element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
+                if(!isEqual(this.registeredAccount, o.account)) {
+                    this.registeredAccount = o.account;
+                    if (this.registeredAccount && this.registeredAccount.length === 0) {
+                        this.openNewRegistration = true;
+                    }
+                    if (this.registeredAccount && this.registeredAccount.length) {
+                        this.registeredAccount.map(item => {
+                            if (item && !item.userAmountRanges) {
+                                item.userAmountRanges = [this.getBlankAmountRangeRow()]
                             }
                         });
-                    });
+                    }
+                    if (this.registeredAccount) {
+                        this.registeredAccount.map(item => {
+                            this.getRegistrationStatus(item);
+                            item.userAmountRanges.map(element => {
+                                if (typeof element.maxBankLimit === "boolean") {
+                                    element.maxBankLimit = element.maxBankLimit ? 'max' : 'custom';
+                                }
+                            });
+                        });
+                    }
                 }
                 if (this.addBankForm) {
                     this.addBankForm.reset();
@@ -1583,5 +1587,21 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (event.keyCode === ESCAPE) {
             this.hideBeneficiaryModal();
         }
+    }
+
+    /**
+     * This will get the account registration status
+     *
+     * @param {*} account
+     * @memberof SettingIntegrationComponent
+     */
+    public getRegistrationStatus(account: any): void {
+        this.settingsIntegrationService.getRegistrationStatus(account.URN).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.body) {
+                account.registrationStatus = response?.body?.Status;
+            } else {
+                account.registrationStatus = "";
+            }
+        });
     }
 }

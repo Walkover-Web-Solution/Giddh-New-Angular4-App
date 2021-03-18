@@ -406,4 +406,22 @@ export class SettingsIntegrationService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
+
+    /**
+     * Get account registration status
+     *
+     * @param {*} urn
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getRegistrationStatus(urn: any): Observable<BaseResponse<any, string>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+
+        return this._http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_REGISTRATION_STATUS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn)).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.queryString = { urn };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
 }
