@@ -42,9 +42,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
     @Input() public ItemHeight: number = 41;
-    @Input() public NoFoundMsgHeight: number = 50;
-    @Input() public NoFoundLinkHeight: number = 50;
-    @Input() public dropdownMinHeight: number = 50;
+    @Input() public NoFoundMsgHeight: number = 35;
+    @Input() public NoFoundLinkHeight: number = 35;
+    @Input() public dropdownMinHeight: number = 35;
     @Input() public customFilter: (term: string, options: IOption) => boolean;
     @Input() public customSorting: (a: IOption, b: IOption) => number;
     @Input() public useInBuiltFilterForFlattenAc: boolean = false;
