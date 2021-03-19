@@ -1093,7 +1093,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             }
         }
         if (s.autoFocusInChild && s.autoFocusInChild.currentValue) {
-            this.groupDDList.inputFilter.nativeElement.click();
+            this.groupDDList.inputFilter?.nativeElement.click();
         }
     }
 

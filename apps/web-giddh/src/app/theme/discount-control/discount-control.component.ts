@@ -164,7 +164,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public discountInputBlur(event) {
-        if (event && event.relatedTarget && this.disInptEle && !this.disInptEle.nativeElement.contains(event.relatedTarget)) {
+        if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
             this.hideDiscountMenu();
         }
     }
