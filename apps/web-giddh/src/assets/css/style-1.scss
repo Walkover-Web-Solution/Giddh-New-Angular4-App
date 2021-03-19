@@ -401,7 +401,6 @@ aside-menu-account .container-fluid {
 .pd {
     padding: 5px;
 }
-
 .pd-1 {
     padding: 10px;
 }
@@ -700,6 +699,10 @@ aside-menu-account .container-fluid {
 
 .overflow-hidden {
     overflow: hidden;
+}
+
+.overflow-visible{
+    overflow: visible;
 }
 
 .overflow-y-auto {
@@ -1480,6 +1483,12 @@ li:last-child .angular-ui-tree-handle {
 
 .pl-bs-tb tfoot {
     background: $gray-95;
+}
+
+.tb-pl-bs-data{
+    height: 60vh !important;
+    font-size: 31px !important;
+    color: $silver !important;
 }
 
 .circle {
